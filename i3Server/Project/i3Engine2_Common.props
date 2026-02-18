@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../../Include;../../../PhysX/common/include;../../../PhysX/SDKs/Physics/include;../../../PhysX/SDKs/PhysXLoader/include;../../../PhysX\SDKs/Foundation/include;../../../PhysX/SDKs/Framework/include;../../../PhysX/SDKs/Cooking/include;../../../PhysX/SDKs/NxCharacter/include;../../../FMOD/fmoddesignerapi/api\inc;../../../FMOD/api/inc;../../../PhysX/Tools/NxuStream2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <BrowseInformation>true</BrowseInformation>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;Iphlpapi.lib;Winmm.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <Version>2.0</Version>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+</Project>

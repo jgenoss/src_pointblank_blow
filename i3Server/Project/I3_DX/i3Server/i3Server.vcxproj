@@ -1,0 +1,1438 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9351551B-71B9-4000-AC64-F55678384ABF}</ProjectGuid>
+    <RootNamespace>i3BaseDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <ProjectName>i3Server</ProjectName>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">x86\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">x86\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">false</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">x64\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|x64'">x64\$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</LinkIncremental>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">x86\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">x86\$(Configuration)\</IntDir>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</EmbedManifest>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">x64\$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">x64\$(Configuration)\</IntDir>
+    <GenerateManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</GenerateManifest>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EmbedManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">i3Server_32bit_Debug</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">i3Server_32bit</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">i3Server_64bit_Debug</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">i3Server_64bit</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>..\..\..\Include;..\..\..\include\i3Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DLL;I3_BASE_BUILD;WIN32;NDEBUG;_LIB;USE_THREAD_ID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3CommonType.h</PrecompiledHeaderFile>
+      <AssemblerOutput>All</AssemblerOutput>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;wininet.lib;iphlpapi.lib;Winmm.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <MapExports>true</MapExports>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\ReleaseDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <FavorSizeOrSpeed>Speed</FavorSizeOrSpeed>
+      <AdditionalIncludeDirectories>..\..\..\Include;..\..\..\include\i3Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DLL;I3_BASE_BUILD;NDEBUG;_LIB;USE_THREAD_ID;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3CommonType.h</PrecompiledHeaderFile>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;wininet.lib;iphlpapi.lib;Winmm.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\ReleaseDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\Include;..\..\..\include\i3Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DEBUG;I3_DLL;I3_BASE_BUILD;WIN32;_DEBUG;_LIB;_AFXDLL;USE_THREAD_ID;_ALLOW_RTCc_IN_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3CommonType.h</PrecompiledHeaderFile>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;wininet.lib;Iphlpapi.lib;Winmm.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <Version>2.0</Version>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\..\Include;..\..\..\include\i3Base;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WIN64;I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DEBUG;I3_DLL;I3_BASE_BUILD;_DEBUG;_LIB;USE_THREAD_ID;_ALLOW_RTCc_IN_STL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>true</StringPooling>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3CommonType.h</PrecompiledHeaderFile>
+      <BrowseInformation>true</BrowseInformation>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <RegisterOutput>false</RegisterOutput>
+      <AdditionalDependencies>ws2_32.lib;wininet.lib;Iphlpapi.lib;Winmm.lib;Dbghelp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <Version>2.0</Version>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX64</TargetMachine>
+    </Link>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DebugDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DebugDLL\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\DATE32.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3DateTime.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3LinearRand.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3LogFileA.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3LogFileBase.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3LogFileW.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkAcceptor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkClientSocket.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkClientSocket2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkCompletionHandler.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkDB.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkFTP.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkHTTP.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkIocpWorker.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkPacket.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkServerContext.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkServerSocket.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkSession.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkSessionManager.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkTCPSocket.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NetworkUDPSocket.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PDH.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Warning.h" />
+    <ClInclude Include="..\..\..\src\i3Base\res\resource.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PackFile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PackFileSystem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PackNode.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PackVolume.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3XML.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3XMLElement.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3XMLFile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\tinystr.h" />
+    <ClInclude Include="..\..\..\include\i3Base\tinyxml.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3CPUID.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Memory.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Mutex.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Platform.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Signal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3System.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Thread.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Timer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\Linpack.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Stream.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StreamFile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StreamFileAsync.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StreamMem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StreamNull.h" />
+    <ClInclude Include="..\..\..\include\i3Base\inst\ginst.h" />
+    <ClInclude Include="..\..\..\include\i3Base\inst\inst_memory.h" />
+    <ClInclude Include="..\..\..\include\i3Base\inst\detail\inst_memory_mgr.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\algorithm.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\allocator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\compressed_pair.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\ebo.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\functional.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\hash.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\iterator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\memory.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\noncopyable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\null_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\pair.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\swap.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\undef_minmax_begin.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\undef_minmax_end.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_map.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_map_basic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_map_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_set.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_set_basic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\unordered_set_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector_basic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector_map.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector_set.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\vector_util.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\xmemory.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\xutility.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\algorithm_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\hash_table.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\sorted_vector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\sorted_vector_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\static_log2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\temp_iterator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\unordered_map.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\unordered_set.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\detail\vector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_accumulate.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_advance.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_advance_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_always.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_and.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_apply_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_apply_wrap.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_arg.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_arg_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_arithmetic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_as_sequence.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_at.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_at_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_at_x.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_back_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_back_inserter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_begin_end.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_begin_end_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bind.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bind_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bitand.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bitor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bitwise.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bitxor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_bool_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_char.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_char_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_clear.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_clear_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_comparison.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_contains.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_contains_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_contains_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_copy.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_copy_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_count.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_count_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_count_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_deref.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_deref_x.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_distance.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_distance_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_divides.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_empty.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_empty_base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_empty_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_empty_sequence.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_equal_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_erase.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_erase_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_erase_key.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_erase_key_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_filter_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_find.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_find_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_find_of_default_index.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_find_of_ntype_index.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_fold.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_for_each.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_front_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_front_inserter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_greater.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_greater_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_has_key.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_has_key_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_identity.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_idx_ntlist.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_idx_ntlist_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_idx_ntvector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_idx_ntvector_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_idx_ntype.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_index_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_index_if_x.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_index_of.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_index_of_x.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_inherit.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_inherit_linearly.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_insert.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_insert_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_insert_range.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_insert_range_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_inserter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_int.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_int_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_integral_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_integral_c_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_integral_c_tag.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_is_nt_sequence.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_is_placeholder.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_is_sequence.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_iter_fold.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_iter_fold_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_iterator_category.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_iterator_range.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_iterator_tags.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_joint_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_key_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_key_type_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_lambda.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_lambda_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_less.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_less_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_limit.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_linear_hierarchy.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_list.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_list_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_list_core.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_list_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_list_n_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_logical.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_long.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_long_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_lower_bound.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_map.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_map_core.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_map_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_max_element.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_min_element.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_min_max.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_minus.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_modulus.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_multi_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_na.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_negate.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_next_prior.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_not.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_not_equal_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_nt_capacity.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_nt_less.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_nt_max_element.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_ntlist.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_ntlist_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_ntvector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_ntvector_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_ntype.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_numeric_cast.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_O1_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_O1_size_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_or.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_order.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_order_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pair.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pair_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_partition.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_placeholders.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_plus.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pop_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pop_back_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pop_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_pop_front_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_print.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_protect.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_push_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_push_back_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_push_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_push_front_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_quote.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_range_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_range_c_core.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_remove.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_remove_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_replace.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_replace_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_reverse.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_reverse_fold.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_reverse_iter_fold.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_same_as.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_sequence_tag.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_sequence_tag_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_set.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_set_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_set_core.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_set_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_set_n_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_shift_left.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_shift_right.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_single_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_size_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_size_t.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_size_t_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_sizeof.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_sort.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_stable_partition.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_string.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_switch.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_tag.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_times.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_transform.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_transform_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_unique.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_unpack_args.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_unprotect.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_upper_bound.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_value_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_value_type_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_vector.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_vector_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_vector_core.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_vector_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_vector_n_c.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_void.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_void_fwd.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\mpl_zip_view.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_advance_backward.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_advance_forward.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_arithmetic_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_comparison_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_filter_iter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_find_if_pred.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_fold_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_iter_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_iter_fold_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_iter_fold_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_iter_push_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_joint_iter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_lambda_spec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_largest_int.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_na_spec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_na_spec_lambda.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_numeric_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_partition_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_ptr_to_ref.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_reverse_fold_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_reverse_iter_fold_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_shift_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_single_element_iter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_transform_iter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\mpl\aux_\mpl_unwrap.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_arithmetic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_array.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_assert_msg.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_comma.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_comma_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_comparison.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_control.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_debug.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_dec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_empty.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum_params_with_a_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum_params_with_defaults.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum_shifted.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_enum_shifted_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_expand.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_expr_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_facilities.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_for.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_identity.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_inc.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_iterate.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_iteration.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_library.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_limits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_list.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_logical.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_max.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_min.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_punctuation.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_repeat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_repeat_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_repetition.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_selection.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_seq.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_slot.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_stringize.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_tuple.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_while.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\pp_wstringize.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_add.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_dec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_div.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_inc.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_mod.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_mul.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\pp_sub.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_add_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_dec_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_div_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_inc_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_mod_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_mul_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\arithmetic\detail\pp_sub_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_data.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_elem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_insert.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_pop_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_pop_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_push_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_push_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_remove.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_replace.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_reverse.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\pp_array_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_data_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_elem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_insert_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_pop_back_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_pop_front_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_push_back_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_push_front_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_remove_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_replace_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_reverse_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\array\detail\pp_array_size_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_greater.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_greater_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_less.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_less_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\pp_not_equal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_equal_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_greater_equal_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_greater_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_less_equal_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_less_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\comparison\detail\pp_not_equal_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_deduce_d.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_expr_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_expr_iif.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_iif.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\pp_while.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_deduce_d_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_expr_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_expr_iif_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_iif_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\control\detail\pp_while_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\debug\pp_assert.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\debug\pp_error.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\debug\detail\pp_assert_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\debug\detail\pp_error_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_auto_rec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_check.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_is_binary.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_is_unary.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_split.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_stringize_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\detail\pp_wstringize_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_binary_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_binary_params_1_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_binary_params_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_datas.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_cat_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_from_to_defaults.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_from_to_with_a_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_spec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_with_a_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_with_a_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_with_a_partial_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_1_with_defaults.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_cat_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_from_to_defaults.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_from_to_with_a_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_spec.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_with_a_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_params_with_a_partial_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_shifted_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_trailing_binary_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_enum_trailing_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_binary_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_binary_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_binary_params_1_with_a_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_binary_params_with_a_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_repeat_params_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_typename.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\pp_typename_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_binary_params_1_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_binary_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_binary_params_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_datas_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_cat_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_from_to_with_a_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_from_to_with_defaults_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_spec_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_with_a_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_with_a_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_with_a_partial_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_1_with_defaults_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_cat_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_from_to_with_a_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_from_to_with_defaults_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_spec_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_with_a_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_params_with_a_partial_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_shifted_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_trailing_binary_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_enum_trailing_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_binary_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_binary_params_1_with_a_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_binary_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_binary_params_with_a_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_params_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_repeat_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\ext\detail\pp_typename_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_empty.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_expand.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_identity.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_intercept.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_is_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_is_empty.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\pp_is_empty_or_1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_apply_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_expand_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_intercept_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_is_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_is_empty_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\facilities\detail\pp_is_empty_or_1_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\preprocessor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\arithmetic\pp_dec_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\arithmetic\pp_inc_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\comparison\pp_not_equal_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\control\pp_while_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\detail\pp_auto_rec_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\detail\pp_check.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\facilities\pp_intercept_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_forward1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_forward2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_forward3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_forward4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_forward5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_lower1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_lower2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_lower3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_lower4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_lower5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_reverse1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_reverse2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_reverse3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_reverse4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_reverse5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_upper1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_upper2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_upper3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_upper4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\iteration\pp_upper5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\list\pp_list_adt.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\list\pp_list_fold_left_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\list\pp_list_fold_right_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\logical\pp_bool_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\repetition\pp_repeat_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\repetition\pp_repeat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\slot\pp_slot_shared.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\tuple\pp_tuple_eat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\tuple\pp_tuple_elem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\impl\tuple\pp_tuple_rem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\pp_iterate.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\pp_local.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\pp_self.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\pp_local.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\pp_rlocal.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\pp_self.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_lower1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_lower2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_lower3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_lower4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_lower5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_upper1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_upper2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_upper3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_upper4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\bounds\pp_upper5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_forward1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_forward2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_forward3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_forward4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_forward5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_reverse1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_reverse2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_reverse3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_reverse4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\iteration\detail\iter\pp_reverse5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_adt.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_append.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_at.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_enum.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_filter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_first_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_fold_left.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_fold_right.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_for_each.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_for_each_i.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_for_each_product.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_rest_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_reverse.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_to_tuple.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\pp_list_transform.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_adt_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_append_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_at_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_enum_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_filter_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_first_n_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_fold_left_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_fold_right_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_for_each_i_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_for_each_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_for_each_product_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_rest_n_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_reverse_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_size_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_to_tuple_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\list\detail\pp_list_transform_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_and.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_bitand.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_bitnor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_bitor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_bitxor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_bool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_compl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_nor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_not.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_or.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\pp_xor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_and_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_bitand_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_bitnor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_bitor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_bitxor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_bool_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_compl_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_nor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_not_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_or_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\logical\detail\pp_xor_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\pp_comma.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\pp_comma_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\pp_paren.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\pp_paren_if.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\detail\pp_comma_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\punctuation\detail\pp_paren_if_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_deduce_r.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_deduce_z.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_binary_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_params_with_a_default.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_params_with_defaults.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_shifted.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_shifted_binary_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_shifted_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_trailing.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_trailing_binary_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_enum_trailing_params.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_for.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_repeat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\pp_repeat_from_to.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_deduce_r_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_deduce_z_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_binary_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_params_with_a_default_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_params_with_defaults_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_shifted_binary_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_shifted_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_shifted_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_trailing_binary_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_trailing_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_enum_trailing_params_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_for_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_repeat_from_to_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\repetition\detail\pp_repeat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\selection\pp_max.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\selection\pp_min.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\selection\detail\pp_max_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\selection\detail\pp_min_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_cat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_elem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_enum.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_filter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_first_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_fold_left.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_fold_right.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_for_each.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_for_each_i.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_for_each_product.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_insert.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_pop_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_pop_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_push_back.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_push_front.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_remove.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_replace.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_rest_n.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_reverse.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_subseq.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_to_array.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_to_tuple.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\pp_seq_transform.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_cat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_elem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_enum_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_filter_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_first_n_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_fold_left_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_fold_right_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_for_each_i_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_for_each_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_for_each_product_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_insert_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_pop_back_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_pop_front_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_push_back_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_push_front_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_remove_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_replace_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_rest_n_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_reverse_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_size_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_split.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_subseq_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_to_array_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_to_tuple_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\seq\detail\pp_seq_transform_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\pp_counter.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\pp_slot.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_counter_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot2.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot3.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot4.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot_def.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\slot\detail\pp_slot_shared.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_eat.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_elem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_rem.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_reverse.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_to_list.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\pp_tuple_to_seq.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_eat_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_elem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_rem_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_reverse_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_to_list_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\preprocessor\tuple\detail\pp_tuple_to_seq_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\add_const.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\add_cv.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\add_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\add_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\add_volatile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\aligned_storage.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\alignment_of.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\alignment_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\arithmetic_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\array_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\call_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\composite_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\conversion_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\cv_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\cv_traits_impl.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\decay.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\extent.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\floating_point_promotion.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\function_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\functor_can_be_called.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_begin.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_functor_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_mem_eq_op.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_mem_fun_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_mem_op_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_mem_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_new_operator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_nothrow_assign.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_nothrow_constructor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_nothrow_copy.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_nothrow_destructor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_result_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_tag.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_trivial_assign.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_trivial_constructor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_trivial_copy.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_trivial_destructor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_value.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_value_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_virtual_destructor.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\has_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\ice.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\ice_and.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\ice_eq.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\ice_not.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\ice_or.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\integral_constant.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\integral_promotion.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_abstract.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_arithmetic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_array.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_base_and_derived.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_base_of.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_binary_op_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_class.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_complex.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_compound.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_const.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_container_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_convertible.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_cv.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_empty.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_enum.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_equal_to_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_equivalent.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_floating_point.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_fun_call_possible_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_fun_eq_op_call_possible.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_fun_op_call_possible_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_function.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_function_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_function_pointer_helper.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_function_pointer_tester.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_function_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_functor_call_possible.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_fundamental.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_greater_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_greater_equal_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_integral.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_less_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_less_equal_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_mem_call_possible_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_mem_eq_op_call_possible.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_mem_op_call_possible_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_member_function_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_member_function_pointer_helper.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_member_function_pointer_tester.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_member_object_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_member_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_not_equal_to_comparable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_object.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_pod.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_polymorphic.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_same.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_scalar.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_signed.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_stateless.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_std_auto_ptr.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_template_base_of.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_template_base_xxx.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_union.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_unsigned.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_virtual_base_of.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_void.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\is_volatile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_const_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_const_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_const_reference_result.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_member_value_result.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_nonconst_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_nonconst_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_nonconst_referred.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_reference_result.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_signed.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\make_unsigned.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\object_generator_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\object_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\promote.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\rank.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\reference_traits.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_all_extents.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_const.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_cv.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_extent.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_pointer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_reference.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\remove_volatile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\template_arity.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\type_with_alignment.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\yes_no_type.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\detail\is_base_of_common.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\detail\is_call_possible_common.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\detail\is_fun_call_possible_common.h" />
+    <ClInclude Include="..\..\..\include\i3Base\itl\type_traits\detail\is_mem_call_possible_common.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\calculate_adjusted_align.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\calculate_adjusted_size.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\delayed_atexit.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\heap_allocator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\memory_aligned_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\memory\memory_alloc.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\align_up_down.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\cas.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\create_by_thread.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\cs.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\enable_pool_dbg.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\free_object.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\large_object_cache_base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\large_object_cache_dispatch.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\mem_block_header.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\mem_stack_lock_free.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\msb.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_allocator.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_by_thread.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_dbg.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_dbg_apply.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_dbg_block.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_dbg_user_config.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\pool_size_helper.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_adjust_align_for_pool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_adjust_size_for_pool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_calculate_pool_data_size_dbg.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_large_object_cache.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_msb.h" />
+    <ClInclude Include="..\..\..\include\i3Base\pool\static_pool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\tls\tls_ptr.h" />
+    <ClInclude Include="..\..\..\include\i3Base\tls\detail\tls_base.h" />
+    <ClInclude Include="..\..\..\include\i3Base\tls\detail\tls_mgr.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Action.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3AVLTree.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3AVLTree.hpp" />
+    <ClInclude Include="..\..\..\include\i3Base\i3BaseMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3BaseUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3BinList.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ClassMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3CommonType.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3CompressHuffman.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3CRC32.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Debug.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3DefExternRefResolveWin32.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ElementBase.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ErrorHandler.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ErrorHandlerWindows.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ErrorUnExpectionWindows.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3EventDef.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3EventReceiver.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3FixedMemoryPool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3FixedPoint.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Hash.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Inet.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3IniParser.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3InstanceProxy.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Language.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Lexer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3List.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3LRUQueue.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Macro.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3MapFileParser.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3MD5.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3MemoryBuffer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3MemoryPool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3MetaTemplate.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NamedElement.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3NamedResourceManager.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ObjectPool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ParserHelper.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Performance.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PersistantElement.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PointerStack.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3PropertyGridDefines.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3RealTimeProfile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3RefStack.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ResourceFile.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3ResourceObject.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3RingBuffer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3SHA1.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3SMTPMail.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StackMemoryPool.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3String.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3StringTable.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TBandBuffer.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TimeEventGen.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TimeEventInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TObjectArray.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TreeNode.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3TStack.h" />
+    <ClInclude Include="..\..\..\include\i3Base\i3Version.h" />
+    <ClInclude Include="..\..\..\include\i3Base\REAL16.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\i3Base\res\i3BaseDx.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\i3Base\res\i3Icon16.bmp" />
+    <None Include="..\..\..\src\i3Base\res\i3Icon16.ico" />
+    <None Include="..\..\..\src\i3Base\res\i3Icon32.bmp" />
+    <None Include="..\..\..\src\i3Base\res\i3Icon32.ico" />
+    <None Include="..\..\..\src\i3Base\res\i3Icon48.bmp" />
+    <None Include="..\..\..\src\i3Base\res\i3Icon48.ico" />
+    <None Include="..\..\..\Documents\xml\changes.txt" />
+    <None Include="..\..\..\Documents\xml\ReadMe.txt" />
+    <None Include="..\..\..\Documents\xml\Xml 문법.txt" />
+    <None Include="..\..\..\Documents\xml\annotated.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlAttribute-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlAttribute.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlBase-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlBase.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlComment-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlComment.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlDeclaration-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlDeclaration.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlDocument-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlDocument.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlElement-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlElement.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlHandle-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlHandle.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlNode-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlNode.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlPrinter-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlPrinter.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlText-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlText.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlUnknown-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlUnknown.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlVisitor-members.html" />
+    <None Include="..\..\..\Documents\xml\classTiXmlVisitor.html" />
+    <None Include="..\..\..\Documents\xml\deprecated.html" />
+    <None Include="..\..\..\Documents\xml\files.html" />
+    <None Include="..\..\..\Documents\xml\functions.html" />
+    <None Include="..\..\..\Documents\xml\functions_enum.html" />
+    <None Include="..\..\..\Documents\xml\functions_func.html" />
+    <None Include="..\..\..\Documents\xml\functions_rela.html" />
+    <None Include="..\..\..\Documents\xml\functions_vars.html" />
+    <None Include="..\..\..\Documents\xml\hierarchy.html" />
+    <None Include="..\..\..\Documents\xml\index.html" />
+    <None Include="..\..\..\Documents\xml\pages.html" />
+    <None Include="..\..\..\Documents\xml\tinystr_8h-source.html" />
+    <None Include="..\..\..\Documents\xml\tinyxml_8h-source.html" />
+    <None Include="..\..\..\Documents\xml\tutorial0.html" />
+    <None Include="..\..\..\include\i3Base\inst\ginst.inl" />
+    <None Include="..\..\..\include\i3Base\inst\inst_memory.inl" />
+    <None Include="..\..\..\include\i3Base\inst\detail\inst_memory_mgr.inl" />
+    <None Include="..\..\..\include\i3Base\itl\detail\vector_util.inl" />
+    <None Include="..\..\..\include\i3Base\memory\memory_alloc.inl" />
+    <None Include="..\..\..\include\i3Base\pool\large_object_cache_base.inl" />
+    <None Include="..\..\..\include\i3Base\pool\large_object_cache_dispatch.inl" />
+    <None Include="..\..\..\include\i3Base\pool\mem_stack_lock_free.inl" />
+    <None Include="..\..\..\include\i3Base\pool\pool_base.inl" />
+    <None Include="..\..\..\include\i3Base\pool\pool_size_helper.inl" />
+    <None Include="..\..\..\include\i3Base\pool\static_pool.inl" />
+    <None Include="..\..\..\include\i3Base\tls\tls_ptr.inl" />
+    <None Include="..\..\..\include\i3Base\tls\detail\tls_mgr.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\include\i3Base\i3PDH.cpp" />
+    <ClCompile Include="..\..\..\include\i3Base\i3Warning.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\DATE32.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3DateTime.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3LinearRand.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3LogFileA.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3LogFileBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3LogFileW.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkAcceptor.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkClientSocket.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkClientSocket2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkCompletionHandler.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkDB.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkFTP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkHTTP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkIocpWorker.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkPacket.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkServerContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkServerSocket.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkSession.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkSessionManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkTCPSocket.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NetworkUDPSocket.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PackFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PackFileSystem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PackNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PackVolume.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3XMLElement.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3XMLFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\tinystr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\tinyxml.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\tinyxmlparser.cpp" />
+    <ClCompile Include="..\..\..\include\i3Base\i3CPUID.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Memory.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Mutex.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Signal.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3System.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Thread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Timer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\Linpack.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Stream.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StreamFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StreamFileAsync.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StreamMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StreamNull.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\inst\detail\inst_memory_mgr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\memory\init_custom_memory.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\pool\large_object_cache.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\pool\pool_base.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\pool\pool_by_thread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\pool\pool_dbg.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\tls\detail\tls_mgr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Action.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3BaseMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3BaseUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3BinList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ClassMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3CommonType.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Base\i3CompressHuffman.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3CRC32.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Debug.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3DefExternRefResolveWin32.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ElementBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ErrorHandler.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ErrorHandlerWindows.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ErrorUnExpectionWindows.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3EventReceiver.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3FixedMemoryPool.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Hash.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Inet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3IniParser.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3InstanceProxy.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Language.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Lexer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3List.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3LRUQueue.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3MapFileParser.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3MD5.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3MemoryBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3MemoryPool.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3MetaTemplate.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NamedElement.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3NamedResourceManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ObjectPool.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3Performance.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PersistantElement.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PointerStack.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3PropertyGridDefines.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3RealTimeProfile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3RefStack.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ResourceFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3ResourceObject.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3RingBuffer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3SHA1.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3SMTPMail.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StackMemoryPool.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3String.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3StringTable.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3TimeEventGen.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3TimeEventInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\i3TreeNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Base\REAL16.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

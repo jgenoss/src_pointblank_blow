@@ -1,0 +1,39 @@
+#ifndef __I3WARNING__
+#define __I3WARNING__
+
+enum WARNING_LEVEL
+{
+	WARNING_LEVEL_NO,
+	WARNING_LEVEL_PERFOMANCE,
+	WARNING_LEVEL_NETWORK,
+	WARNING_LEVEL_DB,
+	WARNING_LEVEL_GAME_GUARD,
+	WARNING_LEVEL_CRASH,
+	WARNING_LEVEL_COUNT
+};
+
+enum WARNING_TYPE
+{
+	WARNING_TYPE_NORMAL,
+	WARNING_TYPE_NOTICE,
+	WARNING_TYPE_COUNT
+};
+
+class I3_EXPORT_BASE i3Warning
+{
+private:
+	UINT32	m_ui32WriteTime[WARNING_TYPE_COUNT][WARNING_LEVEL_COUNT];
+	UINT32	m_ui32ReadTime[WARNING_TYPE_COUNT][WARNING_LEVEL_COUNT];
+
+public:
+	i3Warning(void);
+	~i3Warning(void);
+
+public:
+	UINT32	GetWarningInfo( INT32 i32WarningType );
+	BOOL	SetWarningInfo( INT32 i32WarningType, INT32 i32WarningLevel );
+	UINT32	GetFlagWarningLevel( INT32 i32WarningLevel );
+
+};	
+
+#endif

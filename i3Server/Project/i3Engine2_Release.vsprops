@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3Engine2_Release"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		InlineFunctionExpansion="2"
+		EnableIntrinsicFunctions="true"
+		FavorSizeOrSpeed="1"
+		StringPooling="true"
+		EnableFunctionLevelLinking="true"
+		WarningLevel="3"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalLibraryDirectories="&quot;../../../lib/DirectX/ReleaseDLL&quot;"
+		GenerateDebugInformation="true"
+		GenerateMapFile="true"
+		MapFileName="$(OutDir)/$(TargetName).map"
+		MapExports="true"
+		RandomizedBaseAddress="1"
+		DataExecutionPrevention="0"
+	/>
+</VisualStudioPropertySheet>

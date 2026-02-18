@@ -1,0 +1,820 @@
+#ifndef __COMMONDEF_ITEM_H__
+#define __COMMONDEF_ITEM_H__
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Define
+
+#define	DEFAULT_PARTS_ITEM_ID			0
+
+// 기본 지급 아이템 DBIDX 기준값. 10억. DB에서 이거 넘으면 PB 2만듭시다.
+#define DEFAULT_ITEM_DBIDX_MIN			0x40000000		 
+
+#define DEFAULT_PARTS_ITEM_ID_MIN		1000000000		 
+
+#define DEFAULT_ITEM_ID_FLAG			0x1FFFFFF
+#define DEFAULT_EQUIP_FLAG				0x3F		// 최대값은 64
+
+// 기본 아이템 Item ID 추출
+#define GET_DEFAULT_ITEM_ID( DBIDX )		DBIDX & DEFAULT_ITEM_ID_FLAG
+
+// 기본 파츠 Equip(ITEM_TYPE) 
+#define GET_DEFAULT_EQUIP_TYPE( DBIDX )	DBIDX & DEFAULT_EQUIP_FLAG
+
+// 기본 아이템 DB IDX 생성( 파츠 제외 )
+#define MAKE_DEFAULT_ITEM_DBIDX( ItemID )	DEFAULT_ITEM_DBIDX_MIN | ItemID
+
+// 기본 파츠 DB IDX 생성
+#define MAKE_DEFAULT_EQUIP_DBIDX( Equip )	DEFAULT_ITEM_DBIDX_MIN |  Equip // ( Chara << DEFAULT_CHARA_BIT_ORDER ) |
+
+// 기본 파츠 Item ID 생성
+#define MAKE_DEFAULT_PARTS_ITEMID( EquipType )	DEFAULT_PARTS_ITEM_ID_MIN + (  (EquipType) * 100000 ) // ( Chara << DEFAULT_CHARA_BIT_ORDER ) |
+
+ 
+// 미사용
+//#define DEFAULT_CHARA_BIT_ORDER			6		// 	7번재~15 비트 
+// 기본 지급 캐릭터는 25~29번째 5개 비트를 슬롯 인덱스로 사용합니다.
+//#define DEFAULT_CHARA_BIT_ORDER		25
+//#define DEFAULT_CHARA_FLAG			0x1FF		// 최대값은 512
+//#define GET_DEFAULT_CHARA_TYPE( DBIDX )	(DBIDX >> DEFAULT_CHARA_BIT_ORDER ) & (DEFAULT_CHARA_FLAG ) 
+//#define MAKE_DEFAULT_CHARA_DBIDX( ItemID, Slot ) MAKE_DEFAULT_ITEM_DBIDX(ItemID) | (Slot << DEFAULT_CHARA_BIT_ORDER)
+//#define GET_DEFAULT_CHARA_SLOT( DBIDX )	( DBIDX >> DEFAULT_CHARA_BIT_ORDER ) & (0x1F) 
+
+
+#define USE_BASKET_COUNT			8 // 장바구니 최대 아이템 개수
+#define MAX_INVEN_COUNT				450			// 인벤토리 제한
+
+#define MAX_SHOP_USER_GIFT_COUNT	100					// 선물받은 아이템 카운트
+
+#define GET_ITEM_EVENT_VALUE(Itemflag)					(((Itemflag) % 100000000) / 10000000)
+#define GET_ITEM_TYPE(Itemflag)							(((Itemflag) % 10000000) / 100000)
+#define GET_ITEM_SUBTYPE(Itemflag)						(((Itemflag) % 100000) / 1000)
+#define GET_ITEM_NUMBER(Itemflag)						( (Itemflag) % 1000 )
+
+#define GET_GOODSID_FROM_ITEMID(ItemID)					( ItemID * 100 )
+#define GET_ITEMID_FROM_GOODSID(GoodsID)				( GoodsID / 100 )
+
+#define GET_GOODS_TYPE(GoodsID)							( (GoodsID) / 10000000 )
+#define GET_GOODS_SUBTYPE(GoodsID)						(((GoodsID) % 10000000) / 100000)
+#define GET_GOODS_NUMBER(GoodsID)						(((GoodsID) % 100000) / 100)
+#define GET_GOODS_ARG(GoodsID)							( (GoodsID) % 100 )
+
+
+// Item Extension State 관련 함수 
+#define SET_ITEM_EXT_STATE(extflag, Itemid)				(((extflag) * 100000000) + Itemid) 
+#define GET_ITEM_EXT_STATE(Itemflag)					((Itemflag) / 100000000)
+#define REMOVE_ITEM_EXT_STATE(Itemflag)					((Itemflag) % 100000000)
+
+//case 문에 사용하기 위한 ItemID 생성 Define
+//case 문에서는 함수를 바로 호출할수 없기때문에 Define을 사용합니다.
+//case 문 외에서는 밑의 인라인 함수를 사용합시다.
+#define ITEM_ID( type, subtype, num )	( (type) * 100000 + (subtype) * 1000 + (num) )
+#define MAKE_GOODS_ID( type, subtype, num, Arg )	( (type) * 10000000 + (subtype) * 100000 + (num) * 100 + (Arg) )
+
+#define INVENTORY_FLAG_CHARACTER		0x00000001
+#define INVENTORY_FLAG_WEAPON			0x00000002
+#define INVENTORY_FLAG_ITEM				0x00000004
+
+#define GET_POINTITEM(ItemID)			((ItemID % 100000) * 100)
+
+#define CAPSULE_REWARD_ITEM_COUNT			10
+////////////////////////////////////////////////////////////////////////////////
+// Shop 관련
+////////////////////////////////////////////////////////////////////////////////
+
+// Field Shop
+#define MAX_FIELDSHOP_CATEGORYNAMESIZE 		44
+#define MAX_FIELDSHOP_CATEGORYCOUNT 		6
+#define MAX_FIELDSHOP_GOODSLISTCOUNT		9
+#define MAX_FIELDSHOP_GOODSPERIODCOUNT		4
+
+////////////////////////////////////////////////////////////////
+// RS. 뽑기 상점 관련
+
+#define MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT 	6   		// 클라이언트에서 보여지는 탭당 등급별 아이템 갯수.
+#define MAX_RS_TAB_SHOW_ALL_ITEM_COUNT		18			// 클라이언트에서 보여지는 탭당 총 아이템 갯수.
+#define MIN_RS_TAB_ITEM_COUNT 				10			// 웹툴에서 설정하는 한 탭의 등급별 아이템 최소갯수
+#define MAX_RS_TAB_ITEM_COUNT 				25			// 웹툴에서 설정하는 한 탭의 등급별 아이템 최대 갯수. 
+#define MAX_RS_TAB_COUNT 					3			// 최대 탭 갯수
+#define MAX_RS_ROULETTE_ITEM_COUNT			12			// 한 룰렛판이 가지는 최대 아이템 수. 대박 미포함.
+#define MIN_RS_TAB_GRADE_COUNT				3			// 한 탭에서 구성할수 있는 별 갯수 합의 최소값.
+#define MAX_RS_TAB_GRADE_COUNT				10			// 한 탭에서 구성할수 있는 별 갯수 합의 최대값.
+#define MAX_RS_AD_MESSAGE_SIZE				101			// 광고 메시지 길이.
+#define MAX_RS_AD_MESSAGE_COUNT				3			// 광고 메시지 갯수.
+#define MAX_RS_HIDDEN_ITEM_COUNT			10			// 하나의 히든 세트가 가지는 아이템 개수.
+#define	MAX_RS_BONUS_COUNT					5			// 보너스 판수.(기준)
+#define RS_ITEM_INFO_UPDATE_TIME			2			// Game 서버에 뽑기상점 상품 구성을 업데이트 해주는 시간
+
+#define MAKE_RS_TAB_GOODSID(tabidx,playcount)	(((GOODS_TYPE_RSPRICE)*10000000 )+((tabidx)*100)+(playcount))	// TabGoodsID 생성. 탭 번호, 이용 횟수
+
+#define GET_GOODS_FLAG_RS_TAB_IDX(Goodsflag)			(((Goodsflag) % 10000000) / 100)	// 굿즈 아이디로 뽑기 상점 탭번호 추출.
+
+#define DEFAULT_WEAPON_ASSAULT							MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, 	WEAPON_CLASS_ASSAULT,			4)			//  103004 : K-2
+#define DEFAULT_WEAPON_SNIPER							MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, 	WEAPON_CLASS_SNIPER,			3)			//  105003 : SSG-69	
+#define DEFAULT_WEAPON_SMG								MAKE_ITEM_ID(ITEM_TYPE_PRIMARY,		WEAPON_CLASS_SMG,				6)			//  104006 : K-1
+#define DEFAULT_WEAPON_SHOTGUN							MAKE_ITEM_ID(ITEM_TYPE_PRIMARY,		WEAPON_CLASS_SHOTGUN,			1)			//  106001 : 870MCS
+#define DEFAULT_WEAPON_HANDGUN							MAKE_ITEM_ID(ITEM_TYPE_SECONDARY,	WEAPON_CLASS_HANDGUN, 			3)			//  202003 : K5
+#define DEFAULT_WEAPON_KNIFE							MAKE_ITEM_ID(ITEM_TYPE_MELEE,		WEAPON_CLASS_KNIFE,				1)			//  301001 : M7		
+#define DEFAULT_WEAPON_ITEM								MAKE_ITEM_ID(ITEM_TYPE_THROWING2,	WEAPON_CLASS_THROWING_CONTAIN,	1)			//  508001 : SMOKE		
+#define DEFAULT_WEAPON_MG								MAKE_ITEM_ID(ITEM_TYPE_PRIMARY,		WEAPON_CLASS_MG,				9)			//  110009 : MK.46.Non.Ext
+#define DEFAULT_WEAPON_THROWING1						MAKE_ITEM_ID(ITEM_TYPE_THROWING1,	WEAPON_CLASS_THROWING_GRENADE,	1)			//  407001 : K400
+#define DEFAULT_WEAPON_THROWING2						MAKE_ITEM_ID(ITEM_TYPE_THROWING2,	WEAPON_CLASS_THROWING_CONTAIN,	1)			//  508001 : SMOKE
+#define DEFAULT_WEAPON_MISSON							MAKE_ITEM_ID(ITEM_TYPE_MISSION,		WEAPON_CLASS_MISSION,			1)
+
+#define DEFAULT_CHARA_RED_TEAM							MAKE_ITEM_ID(ITEM_TYPE_CHARA, CHARACTER_TEAM_RED,	CHARA_RES_ID_RED_BULLS)
+#define DEFAULT_CHARA_BLUE_TEAM							MAKE_ITEM_ID(ITEM_TYPE_CHARA, CHARACTER_TEAM_BLUE,	CHARA_RES_ID_ACID_POLE)
+#define DEFAULT_CHARA_DINO								MAKE_ITEM_ID(ITEM_TYPE_DINO,  CHARACTER_TEAM_NONE,	CHARA_RES_ID_DINO_RAPTOR)
+
+#define DEFAULT_EQUIP_HEAD								MAKE_ITEM_ID(ITEM_TYPE_HEADGEAR, 0, HEADGEAR_RES_ID_DEFAULT)
+
+// 아이템 아이디 네번째에 들어갑니다. ( 4 )
+//
+#define MAX_RAND_COUNT			10000 // 뽑기상점 확률 최대값
+
+// 쿠폰번호길이
+#define GIFTCOUPON_LENGTH					16
+// 쿠폰 한장으로 받을 수 있는 최대 Goods 갯수
+#define MAX_GIFTCOUPON_COUNT				4
+
+#define BERET_ASSAULT_ITEMID		2700014
+#define BERET_HANDGUN_ITEMID		2700015
+#define BERET_RIFLE_ITEMID			2700016
+#define BERET_SMG_ITEMID			2700017
+#define BERET_SHOTGUN_ITEMID		2700018
+
+#define BERET_ASSAULT_TITLE			13
+#define BERET_RIFLE_TITLE			19
+#define BERET_SMG_TITLE				25
+#define BERET_HANDGUN_TITLE			34
+#define BERET_SHOTGUN_TITLE			39
+
+// 헤드 기어 장착 타입
+enum HEAD_PARTS_EQUIP_TYPE
+{
+	HEAD_PARTS_EQUIP_TYPE_DEFAULT	=	0,	// 헤드기어만 착용가능
+	HEAD_PARTS_EQUIP_TYPE_BERET,			// 베레모와 중복 장착 가능
+};
+
+// 캐쉬 아이템 슬롯에 담긴 정보
+enum SLOT_ITEM_FLAG {																	
+	SLOT_ITEM_BULLET_PROOF_VEST_GM			=	0x00000001,
+	SLOT_ITEM_KETUPAT						=	0x00000002,
+	SLOT_ITEM_BULLET_PROOF_VEST_METAL		=	0x00000004,
+	SLOT_ITEM_HOLLOW_POINT_AMMO_PLUS		=	0x00000008,
+
+	SLOT_ITEM_BULLET_PROOF_VEST_PLUS		=	0x00000010,
+	SLOT_ITEM_MEGA_HP5						=	0x00000020,
+	SLOT_ITEM_JACKETED_HELLOW_POINT_AMMO	=	0x00000040,
+	SLOT_ITEM_INCREASE_GRENADE_SLOT			=	0x00000080,
+
+	SLOT_ITEM_C4_SPEED_KIT					=	0x00000100,
+	SLOT_ITEM_HOLLOW_POINT_AMMO				=	0x00000200,
+	SLOT_ITEM_FULLMETALJACKETAMMO			=	0x00000400,
+	SLOT_ITEM_BULLET_PROOF_VEST				=	0x00000800,
+
+	SLOT_ITEM_INCREASE_INVINCIBLE_TIME		=	0x00001000,
+	SLOT_ITEM_MEGA_HP10						=	0x00002000,
+	SLOT_ITEM_QUICK_CHANGE_MAGAZINE			=	0x00004000,
+	SLOT_ITEM_QUICK_CHANGE_WEAPON			=	0x00008000,
+
+	SLOT_ITEM_VALENTINE_CHOCOLATE			=	0x00010000,			// 발렌타인 초코렛 (HP+10)
+	SLOT_ITEM_PICKUP_WEAPON					=	0x00020000,
+	SLOT_ITEM_AMMO_UP						=	0x00040000,			// Extended Magazines
+	SLOT_ITEM_SHORT_RESPAWN_20				=	0x00080000,
+
+	SLOT_ITEM_SHORT_RESPAWN_30				=	0x00100000,
+	SLOT_ITEM_SHORT_RESPAWN_50				=	0x00200000,
+	SLOT_ITEM_SHORT_RESPAWN_100				=	0x00400000,
+	SLOT_ITEM_UPGRADE_REINFORCED			=	0x00800000,			// HP, 이동속도, 반응속도 + 20%
+	
+	SLOT_ITEM_UPGRADE_DAMAGE				=	0x01000000,			// 데미지 + 5%
+	SLOT_ITEM_UPGRADE_DEFENSE				=	0x02000000,			// 방어력 + 10%
+	SLOT_ITEM_INCREASE_THR2_SLOT			=	0x04000000,			// 특수무기 슬롯 증가
+};
+
+#define HP_RATE_MEGA_HP10						0.1f
+#define HP_RATE_MEGA_HP5						0.05f
+#define HP_RATE_UPGRADE_REINFORCED				0.2f	// 20%
+#define HP_UP_VALENTINE_CHOCOLATE				10
+#define HP_UP_KETUPAT							10
+
+#define DEFENCE_RATE_VEST						0.05f
+#define DEFENCE_RATE_VEST_PLUS					0.10f
+#define DEFENCE_RATE_VEST_METAL					0.20f
+#define DEFENCE_RATE_VEST_GM					0.90f
+#define DEFENCE_RATE_UPGRADE_DEFENSE			0.10f	// 10%
+
+#define DAMAGE_RATE_ARMOR_PIERCING				0.1f					// 철갑탄
+#define DAMAGE_RATE_HOLLOW_POINT				-0.1f				// 할로우 포인트탄
+#define DAMAGE_RATE_ENHANCED_HOLLOW_POINT		0.1f
+#define DAMAGE_RATE_JACKETED_HOLLOW_POINT		0.05f	
+#define DAMAGE_RATE_UPGRADE_DAMAGE				0.05f	// 5%
+
+// 능력치 UP 최대치( 데미지, 방어력, HP 등 )
+#define MAX_RATE_UPGREADE_STATS					0.2f	// 20%
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Enum
+enum WEAPON_SLOT_TYPE
+{
+	WEAPON_SLOT_UNKNOWN		= -1,
+	WEAPON_SLOT_ALL			= WEAPON_SLOT_UNKNOWN,
+	WEAPON_SLOT_PRIMARY		= 0,	//	주무기
+	WEAPON_SLOT_SECONDARY	= 1,	//	보조무기
+	WEAPON_SLOT_MELEE		= 2,	//	근접무기
+	WEAPON_SLOT_THROWING1	= 3,	//	투척무기	
+	WEAPON_SLOT_THROWING2	= 4,	//	특수 아이템
+	WEAPON_SLOT_MISSION		= 5,	//	미션 아이템
+
+	WEAPON_SLOT_COUNT,
+
+	//캐릭터 뷰 변경시에 사용되는 enum 이다. (WEAPON_SLOT_PRIMARY ~ WEAPON_SLOT_MISSION)
+	WEAPON_CHARA_SLOT_MAX = WEAPON_SLOT_MISSION,
+}; // 인게임에서 사용할 무기 슬롯 배열 인덱스(PLAY_MULTI_SLOT)
+
+enum AUTH_TYPE
+{
+	AUTH_UNKNWON	= 0,
+	AUTH_COUNT		= 1,	// 개수제 인증
+	AUTH_SEC				// 기간제 인증
+};
+
+// 아이템 지급 타입. Client - All Server( Game, Trans, SIA, ZLog ) 용.
+enum ITEM_INSERT_REQUEST_TYPE
+{
+	ITEM_INSERT_REQUEST_UNKNOWN			= -1,
+	ITEM_INSERT_REQUEST_BUY				= 0,	// 상점 구매
+	ITEM_INSERT_REQUEST_TS_BONUS		= 1,	// TS 보너스
+	ITEM_INSERT_REQUEST_CAPSULE			= 2,	// 캡슐 아이템 인증
+	ITEM_INSERT_REQUEST_RANKUP			= 3,	// 레벨 업
+	ITEM_INSERT_REQUEST_MISSION_CARD	= 4,	// 임무카드 보상
+	ITEM_INSERT_REQUEST_GET_TITLE		= 5,	// 호칭획득 보상
+	ITEM_INSERT_REQUEST_GIFT_AUTH		= 6,	// 선물 인증
+	ITEM_INSERT_REQUEST_AUTH			= 7,	// 아이템 인증.(유저)
+	ITEM_INSERT_REQUEST_ATTENDANCE		= 8,	// 출석체크.
+	ITEM_INSERT_REQUEST_CREATE_NEWUSER	= 9,	// 계정 생성
+	ITEM_INSERT_REQUEST_EVENT_CONNECT	= 10,	// 기존 유저 이벤트 아이템.
+	ITEM_INSERT_REQUEST_EVENT_NEWUSER	= 11,	// 신규 유저 이벤트 아이템
+	ITEM_INSERT_REQUEST_GACHA			= 12,	// 뽑기 상점(Renewal)
+	ITEM_INSERT_REQUEST_MEDAL_REWARD	= 13,	// 메달 보상
+	ITEM_INSERT_REQUEST_DOMI_REWARD		= 14,	// 제압 보상
+	ITEM_INSERT_REQUEST_WEB_GIFT		= 15,	// Web Gift
+	ITEM_INSERT_REQUEST_GENERAL			= 16,	// 장성급 전용 아이템 지급
+	ITEM_INSERT_REQUEST_USER_GIFT		= 17,	// 유저 선물 구매 지급
+	ITEM_INSERT_REQUEST_WEB_SHOP		= 18,	// 웹상점 구매 지급
+	ITEM_INSERT_REQUEST_DORMANT			= 19,	// 휴먼 유저 출첵 보상 아이템 지급
+};
+
+enum GET_EXP_ROUTE
+{
+	GET_EXP_ROUTE_GAMEPLAY = 1,
+	GET_EXP_ROUTE_MEDAL_REWARD,
+	GET_EXP_ROUTE_MAX
+};
+
+
+enum GET_POINT_ROUTE
+{
+	GET_POINT_ROUTE_GAMEPLAY = 1,
+	GET_POINT_ROUTE_QUEST,
+	GET_POINT_ROUTE_ITEM,
+	GET_POINT_ROUTE_CREATE_CHARA,
+	GET_POINT_ROUTE_RANKUP,
+	GET_POINT_ROUTE_EVENT,
+	GET_POINT_ROUTE_MEDAL_REWARD,
+	GET_POINT_ROUTE_RS_JACKPOT,
+	GET_POINT_ROUTE_GUIDE,				// Guide
+	GET_POINT_ROUTE_DOMI_REWARD,		// 제압 실시간 보상.	
+	GET_POINT_ROUTE_MAX
+};
+
+enum CHARACTER_CLASS_TYPE
+{
+	CHARACTER_CLASS_UNKNOWN = -1,
+	CHARACTER_CLASS_ALL = 0,
+
+	CHARACTER_CLASS_CHARA_TYPE,		//	캐릭터
+	CHARACTER_CLASS_HEADGEAR,		//	헬멧
+	CHARACTER_CLASS_FACEGEAR,		//	FaceGear
+	CHARACTER_CLASS_UPPER,			//	상의
+	CHARACTER_CLASS_LOWER,			//	하의
+	CHARACTER_CLASS_GLOVE,			//	장갑
+	CHARACTER_CLASS_BELT,			//	벨트
+	CHARACTER_CLASS_HOLSTER,		//	권총집
+	CHARACTER_CLASS_SKIN,			//	SKIN
+	CHARACTER_CLASS_CHARA_DINO,		//	공룡
+	CHARACTER_CLASS_RESERVED,		//	(제압설치용무기)
+	CHARACTER_CLASS_BERET,			//	베레모
+
+	CHARACTER_CLASS_COUNT
+};
+
+enum SKIN_CLASS_TYPE
+{
+	SKIN_CLASS_UNKNOWN = 0,
+	SKIN_CLASS_COMMON,
+	SKIN_CLASS_MAN,
+	SKIN_CLASS_WOMAN,
+
+	SKIN_CLASS_COUNT
+};
+
+enum CASHITEM_USAGE_TYPE
+{
+	CASHITEM_USAGE_UNKNOWN		= -1,
+	CASHITEM_USAGE_ALL			= CASHITEM_USAGE_UNKNOWN,
+	CASHITEM_USAGE_MAINTENANCE	= 0,	//	지속성 아이템
+	CASHITEM_USAGE_EXPENDABLES	= 1,	//	소모성 아이템
+
+	CASHITEM_USAGE_COUNT,
+};
+
+enum CASHITEM_CLASS_TYPE
+{
+	CASHITEM_DAY_NO		= 0,	//	소모성 아이템(ITEM_TYPE_WRAP_COUNT 인경우)
+	CASHITEM_DAY_1		= 1,	// 
+	CASHITEM_DAY_3		= 3,	//
+	CASHITEM_DAY_7		= 7,	//
+	CASHITEM_DAY_10		= 10,	//
+	CASHITEM_DAY_15		= 15,	//
+	CASHITEM_DAY_30		= 30,	//
+	CASHITEM_DAY_90		= 90,	//
+};
+
+//
+// Item Event Type
+//
+// 아이템 아이디 첫번째에 들어갑니다. ( 1 )
+//
+// 이벤트 총기 구분을 할 경우 사용합니다.
+//
+enum WEAPON_CLASS_TYPE
+{
+	WEAPON_CLASS_UNKNOWN	= 0,
+
+	WEAPON_CLASS_KNIFE,				//	나이프
+	WEAPON_CLASS_HANDGUN,			//	권총
+	WEAPON_CLASS_ASSAULT,			//	소총
+	WEAPON_CLASS_SMG,				//	서브머신건
+	WEAPON_CLASS_SNIPER,			//	저격총
+	WEAPON_CLASS_SHOTGUN,			//	산탄총
+	WEAPON_CLASS_THROWING_GRENADE,	//	폭발형 투척 무기 (ex. K400, K-413, C5..) 
+	WEAPON_CLASS_THROWING_CONTAIN,	//	견제형 투척 무기 (ex. Smoke, Flash Bang..)
+	WEAPON_CLASS_MISSION,			//	미션 아이템
+	WEAPON_CLASS_MG,				//	머신건
+
+	// 게임에서만 사용하는 클래스 ( 서버에는 없습니다.)
+	WEAPON_CLASS_GRENADESHELL,		// 유탄
+	WEAPON_CLASS_BOMBTRIGGER,		// 폭탄 스위치
+
+	// 새로 추가되는 무기 2008.07.09
+	WEAPON_CLASS_CIC,
+	WEAPON_CLASS_DUALHANDGUN,		// Dual HandGun
+	WEAPON_CLASS_DUALKNIFE,			// Dual Knife
+
+	WEAPON_CLASS_ROCKET_LAUNCHER,
+	WEAPON_CLASS_OBJECT_GUN,		// 특정 오브젝트에 붙어 있는 총 ( M197....)
+
+	WEAPON_CLASS_DUALSMG,			// Dual SMG
+
+	WEAPON_CLASS_DINO,		
+	WEAPON_CLASS_DINO_LEFT_SCRATCH,	// 왼쪽 손 할퀴기 이펙트를 위해 만듬.
+	WEAPON_CLASS_TREX,				// 왼쪽 손 할퀴기 이펙트를 위해 만듬.
+	WEAPON_CLASS_STING,
+	WEAPON_CLASS_KNUCKLE,			// 너클
+	WEAPON_CLASS_ELITE_RIGHT_SCRATCH,
+	WEAPON_CLASS_ELITE_LEFT_SCRATCH,
+	WEAPON_CLASS_BOW,
+
+	WEAPON_CLASS_THROWING_ATTACK,	// 공격형 투척 무기 (ex. WP Smoke..)
+	WEAPON_CLASS_THROWING_HEAL,		// 회복형 투척 무기 (ex. Medical Kit..)
+
+	WEAPON_SUBCLASS_ASSAULT,		// 보조무기형 어설트
+	WEAPON_SUBCLASS_SHOTGUN,		// 보조무기형 샷건
+	WEAPON_SUBCLASS_SNIPER,			// 보조무기형 스나
+	WEAPON_SUBCLASS_SMG,			// 보조무기형 SMG
+	WEAPON_SUBCLASS_G_LAUNCHER,		// 보조무기형 유탄 발사기
+	WEAPON_SUBCLASS_BOW,
+
+	WEAPON_CLASS_DUALSHOTGUN,		// Dual ShotGun 
+
+	WEAPON_CLASS_COUNT
+};
+
+enum ITEM_EVENT_TYPE
+{
+	ITEM_EVENT_TYPE_NONE = 0,
+	ITEM_EVENT_TYPE_EVENT_ITEM,
+
+	MAX_ITEM_EVENT_TYPE
+};
+
+// v1.5 ItemID 첫번째.
+enum ITEM_TYPE
+{
+	ITEM_TYPE_UNKNOWN	= 0,
+
+	// 무기
+	ITEM_TYPE_PRIMARY	= 1,	// 주무기
+	ITEM_TYPE_SECONDARY,		// 보조무기
+	ITEM_TYPE_MELEE,			// 근접무기
+	ITEM_TYPE_THROWING1,		// 수류탄
+	ITEM_TYPE_THROWING2,		// 특수무기(연막)
+
+	// 파츠
+	ITEM_TYPE_CHARA,			// 캐릭터 몸체
+	ITEM_TYPE_HEADGEAR,			// HeadGear
+	ITEM_TYPE_FACEGEAR,			// FaceGear
+	ITEM_TYPE_UPPER,			// 상의
+	ITEM_TYPE_LOWER,			// 하의 10
+	ITEM_TYPE_GLOVE,			// 장갑
+	ITEM_TYPE_BELT,				// 벨트
+	ITEM_TYPE_HOLSTER,			// 권총집 
+	ITEM_TYPE_SKIN,				// 스킨
+
+	ITEM_TYPE_DINO,				// 공룡
+
+	// ITEM_TYPE_WRAP_PERIOD 이 ITEM_TYPE_MAINTENANCE을 담고 있는 형태입니다.
+	ITEM_TYPE_MAINTENANCE,		// 기간제 아이템 - 소모용(Expendable)
+	ITEM_TYPE_WRAP_PERIOD,		// 갯수제 아이템(기간제아이템의 포장지로 사용가능) - 지속용(Maintenance)
+
+	// 이놈은 그냥 갯수제. 독고다이.
+	ITEM_TYPE_WRAP_COUNT,		// 갯수제 아이템 - 소모용(Expendable)
+
+	ITEM_TYPE_COUPON,			// 라이센스(?)
+	ITEM_TYPE_POINT,			// 포인트 아이템(20)
+	
+	ITEM_TYPE_SALECOUPON,		// 할인쿠폰
+	ITEM_TYPE_RSCOUPON,			// 뽑기이용권
+
+	ITEM_TYPE_INGAMEITEM,		// 배틀내 효과 아이템 (제압미션 야전상점 아이템)
+	ITEM_TYPE_DOMIITEM,			// 배틀외 효과 아이템 (제압미션)
+
+	ITEM_TYPE_GACHA_TICKET,		// 뽑기이용권
+	ITEM_TYPE_QUESTCARD,		// 임무카드
+
+	ITEM_TYPE_BERET,			// 베레모
+
+	//////////////////////////////////////////////////////////////////////////
+	// 아래는 클라이언트에서 사용( DB에 있을 경우 있음)
+	ITEM_TYPE_MISSION	= 50,	// 설치 오브젝트 무기 (WEAPON_SLOT_MISSION), C4,센트리건 등
+
+	//////////////////////////////////////////////////////////////////////////
+	// 아래는  DB에서는 사용안함	
+	ITEM_TYPE_TEMP,				// RocketLauncher
+
+	//////////////////////////////////////////////////////////////////////////
+	ITEM_TYPE_SET		= 99,	// 굿즈 아이디로 99는 세트 아이템입니다
+	
+	//////////////////////////////////////////////////////////////////////////
+	MAX_ITEM_TYPE_COUNT			// (DB에서는 사용안함)
+};
+
+//////////////////////////////////////////////////////////////////////////////////////
+//
+//	유료 아이템중에서 같은 계열 상품을 하나로 묶기 위한 그룹 idx (인덱스 바뀌면 안됨)
+//
+// 아이템 아이디 세번째에 들어갑니다. ( 3 )
+//
+//	Group Index를 버리고 ItemID로 통합합니다.
+enum CASHITEM_ITEMID_TYPE
+{
+	CASHITEM_ITEMID_UNKNOWN = 0,
+
+	CASHITEM_ITEMID_XP_PLUS_110								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 1),
+	CASHITEM_ITEMID_XP_PLUS_130								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 2),
+	CASHITEM_ITEMID_XP_PLUS_150								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 3),
+	CASHITEM_ITEMID_PT_PLUS_130								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 4),
+	CASHITEM_ITEMID_COLOR_CLAN								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 5),
+
+	CASHITEM_ITEMID_COLOR_NICK								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 6),
+	CASHITEM_ITEMID_SHORT_RESPAWN							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 7),
+	CASHITEM_ITEMID_AMMO_UP									= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 8),
+	CASHITEM_ITEMID_DISGUISE_RANK							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 9),
+	CASHITEM_ITEMID_DISGUISE_NICK							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 10),
+
+	CASHITEM_ITEMID_FREE_MOVE								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 11),
+	CASHITEM_ITEMID_CLAN_XP_PLUS_150						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 12),
+	CASHITEM_ITEMID_CUSTOM_CROSSHAIR = 13,
+	CASHITEM_ITEMID_COLOR_CROSSHAIR							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 14),
+	CASHITEM_ITEMID_COLOR_CHATTING							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 15),
+
+	CASHITEM_ITEMID_BATTLEFIELD_MOVE						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 16),
+	CASHITEM_ITEMID_GET_DROPPED_WEAPON						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 17),
+	CASHITEM_ITEMID_XP_PLUS_X2_12PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 18),
+	CASHITEM_ITEMID_XP_PLUS_X2_3PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 19),
+	CASHITEM_ITEMID_XP_PLUS_X2_6PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 20),
+
+	CASHITEM_ITEMID_XP_PLUS_X2_9PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 21),
+	CASHITEM_ITEMID_PT_PLUS_X2_12PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 22),
+	CASHITEM_ITEMID_PT_PLUS_X2_3PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 23),
+	CASHITEM_ITEMID_PT_PLUS_X2_6PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 24),
+	CASHITEM_ITEMID_PT_PLUS_X2_9PM							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 25),
+
+	CASHITEM_ITEMID_QUICK_CHANGE_WEAPON						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 26),
+	CASHITEM_ITEMID_QUICK_CHANGE_MAGAZINE					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 27),
+	CASHITEM_ITEMID_MEGA_HP10								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 28),
+	CASHITEM_ITEMID_INCREASE_INVINCIBLE_TIME				= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 29),
+	CASHITEM_ITEMID_BULLET_PROOF_VEST						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 30),
+
+	CASHITEM_ITEMID_FULLMETALJACKETAMMO						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 31),
+	CASHITEM_ITEMID_HOLLOW_POINT_AMMO						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 32),
+	CASHITEM_ITEMID_ANTI_FLASHBANG_MASK						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 33),
+	CASHITEM_ITEMID_C4_SPEED_KIT							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 34),
+	CASHITEM_ITEMID_INCREASE_GRENADE_SLOT					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 35),
+
+	CASHITEM_ITEMID_JACKETED_HELLOW_POINT_AMMO				= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 36),
+	CASHITEM_ITEMID_XP_PLUS_200								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 37),
+	CASHITEM_ITEMID_PT_PLUS_200								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 38),
+	CASHITEM_ITEMID_MEGA_HP5								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 40),
+
+	CASHITEM_ITEMID_BULLET_PROOF_VEST_PLUS					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 44),
+	
+	CASHITEM_ITEMID_CHANGE_NICK								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 47),
+	CASHITEM_ITEMID_CLR_HISTORY								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 48),
+	CASHITEM_ITEMID_CLR_SCORE								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 49),
+	CASHITEM_ITEMID_CLR_ESCAPE								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 50),
+
+	CASHITEM_ITEMID_CHANGE_CLAN_NAME						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 51),
+	CASHITEM_ITEMID_CHANGE_CLAN_MARK						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 52),
+	CASHITEM_ITEMID_CLR_CLAN_HISTORY						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 53),
+	CASHITEM_ITEMID_CLAN_PERSON_PLUS_50						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 55),
+
+	CASHITEM_ITEMID_CLAN_POINT_RESET						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 56),
+	
+	CASHITEM_ITEMID_XP_PLUS_200_0AM_6AM						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 62),
+	CASHITEM_ITEMID_XP_PLUS_200_6AM_12PM					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 63),
+	CASHITEM_ITEMID_SHORT_RESPAWN_50						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 64),
+	CASHITEM_ITEMID_BULLET_PROOF_VEST_GM					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 65),
+
+	CASHITEM_ITEMID_SHORT_RESPAWN_20						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 77),
+	CASHITEM_ITEMID_HOLLOW_POINT_AMMO_PLUS					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 78),
+	CASHITEM_ITEMID_BULLET_PROOF_VEST_METAL					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 79),
+	CASHITEM_ITEMID_SHORT_RESPAWN_100						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 80),
+
+	CASHITEM_ITEMID_VIEW_OTHER_USER_ITEM_INFO				= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 85),
+	
+	CASHITEM_ITEMID_PT_PLUS_150								= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 119),	// Point 150%	
+	
+	// 대만 이벤트 아이템.
+	CASHITEM_ITEMID_PT_PLUS_130_EV							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 159),
+	CASHITEM_ITEMID_XP_PLUS_130_EV							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 160),
+	CASHITEM_ITEMID_CLAN_XP_PLUS_150_EV						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 161),
+	CASHITEM_ITEMID_FREE_MOVE_EV							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 162),
+	CASHITEM_ITEMID_SHORT_RESPAWN_30_EV						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 163),
+	CASHITEM_ITEMID_SHORT_RESPAWN_20_EV						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 164),
+	CASHITEM_ITEMID_QUICK_CHANGE_WEAPON_EV					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 165),
+	CASHITEM_ITEMID_QUICK_CHANGE_MAGAZINE_EV				= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 166),
+	CASHITEM_ITEMID_INCREASE_INVINCIBLE_TIME_EV				= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 167),
+	CASHITEM_ITEMID_GET_DROPPED_WEAPON_EV					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 168),
+	CASHITEM_ITEMID_HOLLOW_POINT_AMMO_EV					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 169),
+	CASHITEM_ITEMID_FULLMETALJACKETAMMO_EV					= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 170),
+
+	CASHITEM_ITEMID_CLAN_PERSON_PLUS_10						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 171),	//2013.12.04 싱말 요청에 의한 클랜원 10명증가 아이템
+
+	//Reinforced 캐릭터 환급 아이템, Mask 환급 아이템 - 2014.04.23
+	CASHITEM_ITEMID_UPGRADE_REINFORCED						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 172),	//캐릭터강화아이템(HP,이속,반응속도 증가)
+	CASHITEM_ITEMID_UPGRADE_DAMAGE							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 177),	//데미지 강화 아이템
+	CASHITEM_ITEMID_UPGRADE_DEFENSE							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 178),	//방어력 강화 아이템
+
+	//캐릭터 스킬 개방권, 스킬 경험치 부스터 아이템 - 2014.04.23
+	CASHITEM_ITEMID_MAIN_SKILL_ALLOPEN						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 179),	//메인스킬 개방 아이템
+	CASHITEM_ITEMID_MAIN_SKILL_BOOSTER						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 180),	//메인스킬 부스터 아이템
+
+	CASHITEM_ITEMID_CAPTAIN_ARMBAND							= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 181),	//2014월드컵 이벤트 아이템 주장완장(EXP130% + Point130% 효과 - 장착아이템아님!!)
+	CASHITEM_ITEMID_MEGAPHONE								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 183),	//확성기 아이템
+
+	CASHITEM_ITEMID_DISGUISE_RANK_APRIL_FOOL				= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 186),	//만우절 위장계급
+	CASHITEM_ITEMID_DISGUISE_RANK_APRIL_FOOL_CLIENT			= ITEM_ID(ITEM_TYPE_WRAP_PERIOD, CASHITEM_DAY_1, 186),
+	CASHITEM_ITEMID_COLOR_MUZZLE_FLASH						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 187),  // Color Fire Muzzle Effect 기간제
+
+	CASHITEM_ITEMID_INCREASE_THR2_SLOT						= ITEM_ID(ITEM_TYPE_MAINTENANCE, CASHITEM_DAY_NO, 191),	// 특수무기 슬롯 증가 아이템
+
+	// 브라질 군번줄 아이템 - 상점 미판매, 인벤 직접지급
+	CASHITEM_ITEMID_BRAZIL_CHAIN_GOLD						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 666),
+	CASHITEM_ITEMID_BRAZIL_CHAIN_BLACK						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 667),
+	CASHITEM_ITEMID_BRAZIL_CHAIN_RED						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 668),
+
+	CASHITEM_ITEMID_PBWC_COUPON								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 896),
+
+	CASHITEM_ITEMID_HP_RECOVERY								= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 1051),
+	CASHITEM_ITEMID_GRAVITY_RESOTRE							= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 1052),
+	CASHITEM_ITEMID_CHARA_UNBEATABLE						= ITEM_ID(ITEM_TYPE_WRAP_COUNT, CASHITEM_DAY_NO, 1053),
+};
+
+// 뽑기 상점
+enum RS_ITEM_GRADE			// 아이템 등급
+{
+	RS_ITEM_GRADE_NOT_SETTING =-1,
+	RS_ITEM_GRADE_LOSE		= 0,		// 꽝 상품
+	RS_ITEM_GRADE_1			= 1,		// 별 1개
+	RS_ITEM_GRADE_2			= 2,		// 별 2개 	
+	RS_ITEM_GRADE_3			= 3,		// 별 3개 
+	RS_ITEM_GRADE_JACKPOT	= 100,		// 대박 
+};
+
+enum RS_TAB			// 탭 번호.
+{
+	RS_TAB_1				= 0,		// 1번 탭
+	RS_TAB_2				= 1,		// 2번 탭
+	RS_TAB_3				= 2,		// 3번 탭
+	RS_TAB_MAX				= RS_TAB_3,		// 3번 탭
+	RS_TAB_COUNT	
+};
+
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Function
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+inline UINT32 MAKE_ITEM_ID( UINT8 ui8Type, UINT8 ui8SubType, UINT16 ui16Num, ITEM_EVENT_TYPE eEventType = ITEM_EVENT_TYPE_NONE )
+{
+	return eEventType * 10000000 + ui8Type * 100000 + ui8SubType * 1000 + ui16Num;
+}
+
+namespace Weapon
+{
+	ITEM_TYPE			GetItemTypeFromClass(WEAPON_CLASS_TYPE WeaponClass);
+	WEAPON_SLOT_TYPE	GetUsageFromItemID(UINT32 ui32ItemID);
+	WEAPON_SLOT_TYPE	GetUsageFromItemType(INT32 ItemType);
+
+	inline T_ItemID		GetItemID(const UINT32 ui32SubType, const UINT32 ui32Number)
+	{
+		UINT8 ui8ItemType  = (UINT8)GetItemTypeFromClass( (WEAPON_CLASS_TYPE)ui32SubType  );
+		return  MAKE_ITEM_ID( ui8ItemType, (UINT8)ui32SubType, (UINT16)ui32Number );
+	}
+};
+
+namespace CashItem
+{
+	CASHITEM_USAGE_TYPE GetUsageFromItemType(INT32 ItemType);
+	CASHITEM_USAGE_TYPE GetUsageFromItemID( T_ItemID ItemID );
+};
+
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Struct
+#pragma pack( push, 1)
+
+struct ST_ITEM
+{
+	T_ItemID				m_TItemID = 0;
+	T_ItemArg				m_TItemArg = 0;
+};
+
+
+// 구매할 상품의 상세 데이터
+struct BUY_BASKET
+{
+	UINT32					m_ui32GoodsID = 0;
+	UINT8					m_ui8BuyType = 0;
+	UINT32					m_ui32CouponID = 0;
+	T_ItemDBIdx				m_TCouponIdx = 0;
+};
+
+struct EXTEND_BASKET
+{
+	T_ItemDBIdx	m_TWareDBIdx = 0;		// 기간 연장할 아이템의 DB 인덱스(고유번호)
+	BUY_BASKET	m_Basket;				// 연장할 기간에 대한 상세 데이터(상품을 던지면 구매와 동일하게 처리)
+};
+
+// 야전 상점
+struct Category
+{
+	wchar_t	m_strCategoryName[MAX_FIELDSHOP_CATEGORYNAMESIZE] = { 0 };
+
+	UINT32	m_ui32GoodsIDList[MAX_FIELDSHOP_GOODSLISTCOUNT][MAX_FIELDSHOP_GOODSPERIODCOUNT] = { 0 };
+};
+
+struct 	FieldShopInfo 
+{
+	// Field_Shop version information
+	UINT32	m_ui32Version = 0;
+
+	// Category List
+ 	Category  m_CategoryList[MAX_FIELDSHOP_CATEGORYCOUNT];  
+};
+
+// 뽑기 상점
+
+// Type of a category
+
+
+struct RS_ITEM_INFO	// 뽑기 상점 아이템 정보. 클라이언트 용.
+{       
+	UINT8			_ui8RsIndex = 0;		// 해당 탭의 등급에서 고유 인덱스. 0~24
+	RS_ITEM_GRADE	_eItemGrade = RS_ITEM_GRADE_LOSE;		// 등급. 별 갯수. 0 : 꽝, 1~3 : 각 등급
+	UINT32			_ui32GoodsID = 0;		// GoodsID
+
+	UINT32 			_ui32MaxUnit = 0;		// 아이템 최대 수량.
+	UINT32 			_ui32CurUnit = 0;		// 아이템 현재 수량 .
+
+	void Reset()
+	{
+		 _ui8RsIndex		= 0;
+		 _eItemGrade 		= RS_ITEM_GRADE_LOSE;
+		 _ui32GoodsID		= 0;
+		 _ui32MaxUnit		= 0;
+		 _ui32CurUnit		= 0;
+	}
+};
+
+struct  RS_HIDDEN	// 히든 구성
+{
+	RS_ITEM_INFO	_aRSItemInfo[MAX_RS_HIDDEN_ITEM_COUNT]; // 아이템 정보
+};
+
+struct  RS_TAB_INFO	 // 뽑기 상점 탭 아이템(당첨&꽝) 정보. Game서버 - 클라이언트 간 사용.
+{
+	UINT8			_ui8TotalItemGrade = 0;	// 구성할수 있는 최대 별 갯수. 3 ~ 10.
+	UINT32			_ui32Price = 0;			// 탭 가격( cash )
+	RS_ITEM_INFO	_aRSItemInfoG1[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별1개 등급 아이템 정보.
+	RS_ITEM_INFO	_aRSItemInfoG2[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별2개 등급 아이템 정보.
+	RS_ITEM_INFO	_aRSItemInfoG3[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별3개 등급 아이템 정보.	
+	RS_HIDDEN 		_aRSHidden; // 히든 세트
+};
+
+struct	RS_RAND_ITEM_INFO
+{
+	UINT32			m_ui32Roulette[MAX_RAND_COUNT] = { 0 };
+	UINT8			m_ui8Idx[MAX_RAND_COUNT] = { 0 };
+	RS_ITEM_GRADE	m_eGrade[ MAX_RAND_COUNT ];
+};
+
+struct  RS_TAB_INFO_TRANS	// 뽑기 상점 탭 정보 - 트랜스서버가 가지고 있는것으로 꽝 목록까지 들고 있습니다.
+{
+	UINT8			_ui8TotalItemGrade = { 0 };	// 구성할수 있는 최대 별 갯수. 3 ~ 10.
+	UINT32			_ui32Price = { 0 };			// 탭 가격( cash )
+	RS_ITEM_INFO	_aRSItemInfoG1[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별1개 등급 아이템 정보.
+	RS_ITEM_INFO	_aRSItemInfoG2[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별2개 등급 아이템 정보.
+	RS_ITEM_INFO	_aRSItemInfoG3[MAX_RS_TAB_SHOW_GRADE_ITEM_COUNT]; // 별3개 등급 아이템 정보.
+	RS_ITEM_INFO	_aRSItemInfoGLot[ 10 ]; // 꽝 등급 아이템 정보.
+	RS_HIDDEN 		_aRSHidden; // 히든 세트
+};
+
+struct  RS_R_ITEM_INFO	// 룰렛판을 구성하는 아이템 정보.
+{
+	RS_ITEM_GRADE	_eItemGrade = RS_ITEM_GRADE_LOSE;		// 등급. 별 갯수. 0 : 꽝, 1~3 : 각 등급
+	UINT8			_ui8RsIndex = 0xFF;		// 해당 탭의 등급에서 고유 인덱스. 0~24
+
+	void Reset()
+	{
+		 _ui8RsIndex		= 0xFF;
+		 _eItemGrade 		= RS_ITEM_GRADE_LOSE;
+	}
+};
+
+
+struct  RS_ROULETTE_INFO	// 룰렛판 정보
+{
+	RS_TAB			_eTab = RS_TAB_1;				// 탭 번호. 1~3.
+	UINT8			_ui8ItemCount = 0;		// 룰렛판에 들어가는 아이템(꽝템제외) 갯수. 
+	RS_R_ITEM_INFO	_RSRitemInfo[MAX_RS_ROULETTE_ITEM_COUNT];	
+
+	void Reset()
+	{
+		_eTab			= RS_TAB_1;
+		_ui8ItemCount 	= 0;
+		for(INT32 i=0; i<MAX_RS_ROULETTE_ITEM_COUNT ; i++)	
+		{
+			_RSRitemInfo[i]._eItemGrade = RS_ITEM_GRADE_LOSE;
+			_RSRitemInfo[i]._ui8RsIndex	= 0;
+		}
+
+	}
+};
+
+struct RS_AD_MESSAGE	// 광고 메시지
+{
+	wchar_t		_strMessage[MAX_RS_AD_MESSAGE_SIZE] = { 0 };
+};
+
+struct RS_BASE_INFO	// 뽑기 상점 기본 정보. 
+{
+	UINT32			_ui32JackPotGoodsID = 0;	// 잭팟 아이템 GoodsID.
+	wchar_t			_strJackPotNick[NET_NICK_NAME_SIZE] = { 0 }; // 가장최근 대박 당첨 유저 닉네임
+	RS_AD_MESSAGE	_aRSAdMessage[MAX_RS_AD_MESSAGE_COUNT]; //광고 메시지.
+};
+
+struct RS_ALL_ITEM_INFO	// 뽑기 상점 전체 아이템 정보.
+{
+	RS_TAB_INFO		_aRSTabInfo[MAX_RS_TAB_COUNT];	// 3개 고정.
+};
+
+struct RS_JACKPOT_INFO	// 뽑기 상점 잭팟 당첨 정보
+{
+	BOOL	bIsJackPot = FALSE;						// 잭팟 당첨 여부. 패킷 전송 실패시 FALSE.
+	wchar_t	strNick[NET_NICK_NAME_SIZE] = { 0 };	// 잭팟 당첨 유저 닉네임 
+	UINT32	ui32GoodsID = 0;					// 잭팟 GoodsID
+};
+
+
+#pragma pack( pop )
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#endif
+
+
