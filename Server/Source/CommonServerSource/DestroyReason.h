@@ -1,0 +1,188 @@
+
+/*
+모든 서버의 Destroy Reason을 모아둔 Header 입니다.
+*/
+#pragma once
+#define MAX_MESSAGE_SIZE	256
+
+enum DESTROY_REASON
+{
+	SERVER_ERROR_NO										= 1,
+	SERVER_ERROR_TASK,
+	SERVER_ERROR_INIT,
+	SERVER_ERROR_DATABASE,					
+	SERVER_ERROR_CONFIGINI,					
+	SERVER_ERROR_LOGFILE,					
+	SERVER_ERROR_SYSTEMLOG,
+	SERVER_ERROR_SERVICELOG,
+	SERVER_ERROR_LOG,
+	SERVER_ERROR_INI_VALUE,								// 10
+	SERVER_ERROR_NETWORK,
+	SERVER_ERROR_LINK,
+	SERVER_ERROR_CONTROLSERVER,
+	SERVER_ERROR_DIFFERENT_BUILD_VERSION,
+	SERVER_ERROR_CREATE_FIELDSHOP,
+	SERVER_ERROR_RUSSA_INI,
+	SERVER_ERROR_LOAD_SIA_DATABASE,
+	SERVER_ERROR_LOAD_OPTION_DATABASE,
+	SERVER_ERROR_DATABASE_SQL,
+	SERVER_ERROR_CONTEXT,								// 20
+	SERVER_ERROR_NCUBS,
+	SERVER_ERROR_PATH,
+	SERVER_ERROR_USERLIST,
+	SERVER_ERROR_LOGD,
+	SERVER_ERROR_IBGAME,
+	SERVER_ERROR_SHOP,
+	SERVER_ERROR_AGW,
+	SERVER_ERROR_PCROOM,
+	SERVER_ERROR_SIA,
+	SERVER_ERROR_ANTIGAME,								// 30
+	SERVER_ERROR_BRAZILBILLING,
+	SERVER_ERROR_DB_WORKER,
+	SERVER_ERROR_LOAD_OPTION,
+	SERVER_ERROR_GENERAL_RANKUP,
+	SERVER_ERROR_TIME_OUT,
+	SERVER_ERROR_GIP,
+	SERVER_ERROR_CLAN,
+	SERVER_ERROR_GATEWAY,
+	SERVER_ERROR_TASKPROCESSOR,
+	SERVER_ERROR_CONTENT,								// 40
+	SERVER_ERROR_PACKETLOCKER,
+	SERVER_ERROR_HOLE,
+	SERVER_ERROR_AUTH,
+	SERVER_ERROR_GAMEGUARD,
+	SERVER_ERROR_GAME_GUARD,
+	SERVER_ERROR_LOAD_QUEST,
+	SERVER_ERROR_MESSENGER,
+	SERVER_ERROR_RELAY_SERVER,
+	SERVER_ERROR_SHOP_CONTEXT,
+	SERVER_ERROR_MODULE_DATABASE,						// 50
+	SERVER_ERROR_GROUPMAKER,
+	SERVER_ERROR_IOCPSERVER,
+	SERVER_ERROR_TASKMANAGER,
+	SERVER_ERROR_STATISTICS,
+	SERVER_ERROR_RESOURCE,
+	SERVER_ERROR_PHYSICS,
+	SERVER_ERROR_CONTROL,
+	SERVER_ERROR_HACK_CHECKER,
+	SERVER_ERROR_XMLFILELOADING,
+	SERVER_ERROR_XMLFILENATIONALCODE,					// 60
+	SERVER_ERROR_UPDATE,
+	SERVER_UPDATE_LOGFILE,
+	SERVER_ERROR_UDPMODULE,
+	SERVER_ERROR_MODULE_NETWORK,
+	SERVER_ERROR_CAPSULE,
+	SERVER_ERROR_GEIP,
+	SERVER_ERROR_GEOIP2,
+	SERVER_ERROR_BILLING,
+	SERVER_ERROR_SIABUFFER,
+	SERVER_ERROR_WEB_BUFFER,
+	SERVER_ERROR_THREAD,								// 70
+	SERVER_ERROR_LOGPATH,
+	SERVER_ERROR_NOT_ENOUGH_HACK_NAME,
+	SERVER_ERROR_ZLOG_INIT_FAIL,
+	SERVER_ERROR_CAST,
+
+	SERVER_ERROR_RSA,
+
+	//Control Server 전용
+	SERVER_ERROR_SESSION_MANAGER,
+	SERVER_ERROR_WEB_MANAGER,
+	SERVER_ERROR_EMAIL,
+	SERVER_ERROR_SERVERLOG,
+	SERVER_ERROR_WATCH,
+	SERVER_ERROR_KNOCK,
+
+	SERVER_ERROR_LOAD_MEDAL,
+	SERVER_ERROR_RSA_MODULE,
+
+	SERVER_ERROR_EVENT_MEDAL_SEARCH_FAIL,
+
+	SERVER_ERROR_DATABASE_SHOP,
+	SERVER_ERROR_LOAD_CASH,
+
+	SERVER_ERROR_MATCHING_MANAGER,
+	SERVER_ERROR_TIMER,
+	
+	SERVER_ERROR_MAX,
+};
+
+
+const wchar_t g_DestroyServerMessage[SERVER_ERROR_MAX][MAX_MESSAGE_SIZE] = 
+{
+	L"Not Use",//Not use
+	L"Success",
+	L"Error, Create Task Processor.",						//  2. SERVER_ERROR_TASK
+	L"Error, Server Initailization.",						//  3. SERVER_ERROR_INIT
+	L"Error, Create DataBase.",								//  4. SERVER_ERROR_DATABASE
+	L"Error, Read Config.ini.",								//  5. SERVER_ERROR_CONFIGINI
+	L"Error, Create Log File.",								//  6. SERVER_ERROR_LOGFILE
+	L"Error, Create System Log File.",						//  7. SERVER_ERROR_SYSTEMLOG
+	L"Error, Create Service Log File.",						//  8. SERVER_ERROR_SERVICELOG
+	L"Error, Connect ZLog Server.",							//  9. SERVER_ERROR_LOG
+	L"Error, Creat INI Value",								// 10. SERVER_ERROR_INI_VALUE
+	L"Error, Create Netowork",								// 11. SERVER_ERROR_NETWORK
+	L"Error, Create Link",									// 12. SERVER_ERROR_LINK
+	L"Error, Connect Control Server",						// 13. SERVER_ERROR_CONTROLSERVER
+	L"Error, Versions are Different",						// 14. SERVER_ERROR_DIFFERENT_BUILD_VERSION
+	L"Error, Create FielShop",								// 15. SERVER_ERROR_CREATE_FIELDSHOP
+	L"Error, Create Russia INI file",						// 16. SERVER_ERROR_RUSSA_INI
+	L"Error, Load SIA DataBase",								// 17. SERVER_ERROR_LOAD_SIA_DATABASE
+	L"Error, Load Option Database",							// 18. SERVER_ERROR_LOAD_OPTION_DATABASE
+	L"Error, Database SQL.",									// 19. SERVER_ERROR_DATABASE_SQL
+	L"Error, Create Context.",								// 20. SERVER_ERROR_CONTEXT
+	L"Error, Create NC_UBS.",								// 21. SERVER_ERROR_NCUBS
+	L"Error, Initailize Current Path.",						// 22. SERVER_ERROR_PATH
+	L"Error, Load User List.",								// 23. SERVER_ERROR_USERLIST
+	L"Error, Initialize NC Log D.",							// 24. SERVER_ERROR_LOGD
+	L"Error, Initialize IBGame Interface.",					// 25. SERVER_ERROR_IBGAME
+	L"Error, Initialize Shop.",								// 26. SERVER_ERROR_SHOP
+	L"Error, Admin Gate Way.",								// 27. SERVER_ERROR_AGW
+	L"Error, Create PC Room Module.",						// 28. SERVER_ERROR_PCROOM
+	L"Error, Connect SIA.",									// 29. SERVER_ERROR_SIA
+	L"Error, Load Anti Game info.",							// 30. SERVER_ERROR_ANTIGAME
+	L"Error, Connect Brazil Billing.",						// 31. SERVER_ERROR_BRAZILBILLING
+	L"Error, Initialize DB Worker.",							// 32. SERVER_ERROR_DB_WORKER
+	L"Error, Create LoadOptionDB Module.",					// 33. SERVER_ERROR_LOAD_OPTION
+	L"Error, Create GeneralRankUp Module.",					// 34. SERVER_ERROR_GENERAL_RANKUP
+	L"Error, Server Initialize Time Out.",					// 35. SERVER_ERROR_TIME_OUT
+	L"Error, Connect GIP.",									// 36. SERVER_ERROR_GIP
+	L"Error, Connect CLAN.",									// 37. SERVER_ERROR_CLAN
+	L"Error, Initialize GateWay.",							// 38. SERVER_ERROR_GATEWAY
+	L"Error, Create Task Processor.",						// 39. SERVER_ERROR_TASKPROCESSOR
+	L"Error, Initailize Contents.",							// 40. SERVER_ERROR_CONTENT
+	L"Error, Initailize PacketLocker.",						// 41. SERVER_ERROR_PACKETLOCKER
+	L"Error, Create UDP Hole.",								// 42. SERVER_ERROR_HOLE
+	L"Error, Connect AUTH Server.",							// 43. SERVER_ERROR_AUTH
+	L"Error, Sync GameGuard.",								// 44. SERVER_ERROR_GAMEGUARD
+	L"Error, Load GameGuard.",								// 45. SERVER_ERROR_GAME_GUARD
+	L"Error, Load Quest.",									// 46. SERVER_ERROR_LOAD_QUEST
+	L"Error, Connect Messenger Server.",						// 47. SERVER_ERROR_MESSENGER
+	L"Error, Connect Relay Server.",							// 48. SERVER_ERROR_RELAY_SERVER
+	L"Error, Initailize Shop.",								// 49. SERVER_ERROR_SHOP_CONTEXT
+	L"Error, Create Database Module.",						// 50. SERVER_ERROR_MODULE_DATABASE
+	L"Error, Initailize GroupMaker.",						// 51. SERVER_ERROR_GROUPMAKER
+	L"Error, Connect IOCP Server.",							// 52. SERVER_ERROR_IOCPSERVER
+	L"Error, Create Task Manager.",							// 53. SERVER_ERROR_TASKMANAGER
+	L"Error, Create Statistics.",							// 54. SERVER_ERROR_STATISTICS
+	L"Error, Initialize Resource.",							// 55. SERVER_ERROR_RESOURCE
+	L"Error, Initialize PhysX.",								// 56. SERVER_ERROR_PHYSICS
+	L"Error, Create Control Module.",						// 57. SERVER_ERROR_CONTROL
+	L"Error, Hack Checker.",									// 58. SERVER_ERROR_HACK_CHECKER
+	L"Error, Load XML File.",								// 59. SERVER_ERROR_XMLFILELOADING
+	L"Error, TransMethod Value.",							// 60. SERVER_ERROR_XMLFILENATIONALCODE
+	L"Error, Server Updating.",								// 61. SERVER_ERROR_UPDATE
+	L"Error, Server Updating LogFile.",						// 62. SERVER_UPDATE_LOGFILE
+	L"Error, Udp Modeul.",									// 63. SERVER_ERROR_UDPMODULE
+	L"Error, Create Network Module.",						// 64. SERVER_ERROR_MODULE_NETWORK
+	L"Error, Create Capsule Data.",							// 65. SERVER_ERROR_CAPSULE
+	L"Error, Create Geometri IP Setting.",					// 66. SERVER_ERROR_GEIP
+	L"Error, ModuleCash & Billing Create.",					// 67. SERVER_ERROR_BILLING
+	L"Error, Create SIA Buffer.",							// 68. SERVER_ERROR_SIABUFFER
+	L"Error, Create Web Buffer.",							// 69. SERVER_ERROR_WEB_BUFFER
+	L"Error, Create Thread.",								// 70. SERVER_ERROR_THREAD
+	L"Error, Check the Log File Path.",						// 71. SERVER_ERROR_LOGPATH
+	L"Error, NOT_ENOUGH_HACK_NAME.",							// 72. SERVER_ERROR_NOT_ENOUGH_HACK_NAME
+	L"Error, ZLog File Transfer Creation Fail"				// 73. SERVER_ERROR_ZLOG_INIT_FAIL
+
+};

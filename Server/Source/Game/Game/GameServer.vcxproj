@@ -1,0 +1,394 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{42278C2F-DB89-4818-A38A-D3B1AF8DF422}</ProjectGuid>
+    <RootNamespace>GameServer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x86.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PBGames</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PBGameDlg</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>A:\Game\SRC\PointBlank\Server\i3Server\lib\ReleaseDLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>../../../../../i3Server/include;$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;I3_COMPILER_VC;I3_DEBUG;I3_WINDOWS;I3G_DX;I3_DLL;SERVER_DEBUG;GIRAN_ENABLE;BUILDMODE_DLG;LOCALE_KOREA;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;Pdh.lib;i3BaseDx_32bit_Debug.lib;i3NetworkDx_32bit_Debug.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)GameDlg_Korea.exe</OutputFile>
+      <AdditionalLibraryDirectories>../../../../../i3Server/lib/DirectX/DebugDLL;$(ProjectDir)\..;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreAllDefaultLibraries>false</IgnoreAllDefaultLibraries>
+      <IgnoreSpecificDefaultLibraries>LIBCMT.LIB;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) "../"
+copy $(TargetPath) "../Bin/"
+copy $(TargetPath) "../../Bin/"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>LOCALE_TOTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+      <AdditionalOptions>/Zm150  -Zm150 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>S2MOd_32bit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../../Common/Library/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILD_DIST_VERSION;LOCALE_TOTAL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>S2MO_32bit.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../../Common/Library/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\Game\Config.ini" />
+    <None Include="res\BAServer.ico" />
+    <None Include="res\GameDlg.ico" />
+    <None Include="res\GameDlg.rc2" />
+    <None Include="ReadMe.txt" />
+    <None Include="WorkReport.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameDlg.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\QuestDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp" />
+    <ClCompile Include="ContextMain.cpp" />
+    <ClCompile Include="DataBase.cpp" />
+    <ClCompile Include="Design\DesignBase.cpp" />
+    <ClCompile Include="Design\DesignV1.cpp" />
+    <ClCompile Include="Design\DesignV2.cpp" />
+    <ClCompile Include="GameLogFile.cpp" />
+    <ClCompile Include="KickVote.cpp" />
+    <ClCompile Include="ModuleCast.cpp" />
+    <ClCompile Include="ModuleCastSocket.cpp" />
+    <ClCompile Include="RingBuffer.cpp" />
+    <ClCompile Include="Room.cpp" />
+    <ClCompile Include="RoomInChallenge.cpp" />
+    <ClCompile Include="RoomInConvoy.cpp" />
+    <ClCompile Include="RoomInRunAway.cpp" />
+    <ClCompile Include="RoomInSpace.cpp" />
+    <ClCompile Include="RoomManager.cpp" />
+    <ClCompile Include="ServerContext.cpp" />
+    <ClCompile Include="ServerDef.cpp" />
+    <ClCompile Include="UserEvent.cpp" />
+    <ClCompile Include="UserManager.cpp" />
+    <ClCompile Include="UserSession.cpp" />
+    <ClCompile Include="UserSessionAuthServer.cpp" />
+    <ClCompile Include="UserSessionBase.cpp" />
+    <ClCompile Include="UserSessionBattle.cpp" />
+    <ClCompile Include="UserSessionChar.cpp" />
+    <ClCompile Include="UserSessionCheat.cpp" />
+    <ClCompile Include="UserSessionClan.cpp" />
+    <ClCompile Include="UserSessionClanBattle.cpp" />
+    <ClCompile Include="UserSessionClanWar.cpp" />
+    <ClCompile Include="UserSessionException.cpp" />
+    <ClCompile Include="UserSessionGacha.cpp" />
+    <ClCompile Include="UserSessionGMChat.cpp" />
+    <ClCompile Include="UserSessionInventory.cpp" />
+    <ClCompile Include="UserSessionLobby.cpp" />
+    <ClCompile Include="UserSessionLogin.cpp" />
+    <ClCompile Include="UserSessionMedal.cpp" />
+    <ClCompile Include="UserSessionMyInfo.cpp" />
+    <ClCompile Include="UserSessionProtocol.cpp" />
+    <ClCompile Include="UserSessionQuickJoin.cpp" />
+    <ClCompile Include="UserSessionRoom.cpp" />
+    <ClCompile Include="UserSessionRsIgs.cpp" />
+    <ClCompile Include="UserSessionShop.cpp" />
+    <ClCompile Include="UserSessionSkill.cpp" />
+    <ClCompile Include="CapsuleItem.cpp" />
+    <ClCompile Include="CapsuleRand.cpp" />
+    <ClCompile Include="ModuleClan.cpp" />
+    <ClCompile Include="ModuleClanSocket.cpp" />
+    <ClCompile Include="ModuleContextNc.cpp" />
+    <ClCompile Include="ModuleControl.cpp" />
+    <ClCompile Include="ModuleControlSocket.cpp" />
+    <ClCompile Include="ModuleMessenger.cpp" />
+    <ClCompile Include="ModuleMessengerSocket.cpp" />
+    <ClCompile Include="ModuleTrans.cpp" />
+    <ClCompile Include="ModuleTransSocket.cpp" />
+    <ClCompile Include="ModuleZLog.cpp" />
+    <ClCompile Include="ModuleZLogSocket.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Character.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Inventory.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\MultiSlot.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MedalServer\MedalServerDef.cpp" />
+    <ClCompile Include="XignCode.cpp" />
+    <ClCompile Include="Xtrap_S_Interface.cpp" />
+    <ClCompile Include="XTrapModule.cpp" />
+    <ClCompile Include="RoomBase.cpp" />
+    <ClCompile Include="RoomInAnnihilation.cpp" />
+    <ClCompile Include="RoomInBomb.cpp" />
+    <ClCompile Include="RoomInCrossCount.cpp" />
+    <ClCompile Include="RoomInDeathmatch.cpp" />
+    <ClCompile Include="RoomInDefence.cpp" />
+    <ClCompile Include="RoomInDestroy.cpp" />
+    <ClCompile Include="RoomInEscape.cpp" />
+    <ClCompile Include="RoomInTutorial.cpp" />
+    <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="GameDlg.cpp" />
+    <ClCompile Include="GameDlgDlg.cpp" />
+    <ClCompile Include="GameServerSev.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\QuestDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructBase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructBattle.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructChar.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructClanWar.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructGacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructGMChat.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructInventory.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructLobby.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructLogin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructMessage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructRoom.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructShop.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOSysDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\SIA_Define.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\UlSanGuard\USG_Global.h" />
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h" />
+    <ClInclude Include="ContextMain.h" />
+    <ClInclude Include="DataBase.h" />
+    <ClInclude Include="DataBase_Script.h" />
+    <ClInclude Include="Design\DesignBase.h" />
+    <ClInclude Include="Design\DesignV1.h" />
+    <ClInclude Include="Design\DesignV2.h" />
+    <ClInclude Include="GameLogFile.h" />
+    <ClInclude Include="ModuleCast.h" />
+    <ClInclude Include="ModuleCastSocket.h" />
+    <ClInclude Include="RingBuffer.h" />
+    <ClInclude Include="Room.h" />
+    <ClInclude Include="RoomInChallenge.h" />
+    <ClInclude Include="RoomInConvoy.h" />
+    <ClInclude Include="RoomInRunAway.h" />
+    <ClInclude Include="RoomInSpace.h" />
+    <ClInclude Include="RoomManager.h" />
+    <ClInclude Include="ServerContext.h" />
+    <ClInclude Include="ServerDef.h" />
+    <ClInclude Include="UserEvent.h" />
+    <ClInclude Include="UserManager.h" />
+    <ClInclude Include="UserSession.h" />
+    <ClInclude Include="CapsuleItem.h" />
+    <ClInclude Include="CapsuleRand.h" />
+    <ClInclude Include="ModuleClan.h" />
+    <ClInclude Include="ModuleClanSocket.h" />
+    <ClInclude Include="ModuleContextNc.h" />
+    <ClInclude Include="ModuleControl.h" />
+    <ClInclude Include="ModuleControlSocket.h" />
+    <ClInclude Include="ModuleMessenger.h" />
+    <ClInclude Include="ModuleMessengerSocket.h" />
+    <ClInclude Include="ModuleTrans.h" />
+    <ClInclude Include="ModuleTransSocket.h" />
+    <ClInclude Include="ModuleZLog.h" />
+    <ClInclude Include="ModuleZLogSocket.h" />
+    <ClInclude Include="..\..\CommonServerSource\Ado.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonStructure\ShareClient\ProtocolStruct.h" />
+    <ClInclude Include="..\..\CommonSource\Watch\CountryIP.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolMedalStruct.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolSkillStruct.h" />
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Character.h" />
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Inventory.h" />
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\MultiSlot.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerMedalStruct.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h" />
+    <ClInclude Include="..\..\CommonServerSource\MedalServer\MedalServerDef.h" />
+    <ClInclude Include="AntiCpXSvr.h" />
+    <ClInclude Include="DllInjection_AhnHS.h" />
+    <ClInclude Include="DllInjection_NProtect.h" />
+    <ClInclude Include="ggsrv30.h" />
+    <ClInclude Include="GPK\Include\GPKitSvr.h" />
+    <ClInclude Include="XignCode.h" />
+    <ClInclude Include="Xtrap_S_Interface.h" />
+    <ClInclude Include="XTrapModule.h" />
+    <ClInclude Include="RoomBase.h" />
+    <ClInclude Include="RoomInAnnihilation.h" />
+    <ClInclude Include="RoomInBomb.h" />
+    <ClInclude Include="RoomInCrossCount.h" />
+    <ClInclude Include="RoomInDeathmatch.h" />
+    <ClInclude Include="RoomInDefence.h" />
+    <ClInclude Include="RoomInDestroy.h" />
+    <ClInclude Include="RoomInEscape.h" />
+    <ClInclude Include="RoomInTutorial.h" />
+    <ClInclude Include="Shop.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="GameDlg.h" />
+    <ClInclude Include="GameDlgDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\GameDlg.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="GameDlg.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

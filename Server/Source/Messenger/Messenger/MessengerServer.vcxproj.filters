@@ -1,0 +1,270 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="DataBase">
+      <UniqueIdentifier>{0f268d61-df91-48d3-876d-865309a7da6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataBase\Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="CommonDef">
+      <UniqueIdentifier>{5b044db4-e66f-4f22-9ecb-0901b1cbfedb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef\CommonStructure">
+      <UniqueIdentifier>{9a8bcd58-0cef-431a-83c4-658623a3958c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef\CommonStructure\ShareClient">
+      <UniqueIdentifier>{cf6f58d7-e999-4b0d-91b0-326425e9c132}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef\CommonStructure\ShareServer">
+      <UniqueIdentifier>{26752e63-d230-4d18-9e45-1df910449602}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef\CommonStructure\ShareServer\GameMessengerServer">
+      <UniqueIdentifier>{e68cbeac-4f3f-4395-9d41-c5209cf487ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef\CommonStructure\ShareServer\1.CommonServer">
+      <UniqueIdentifier>{0a73e2d2-13da-4025-942d-50d0c6276576}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Net">
+      <UniqueIdentifier>{27a4cd44-8b56-4a15-b477-c6a30d48097e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task">
+      <UniqueIdentifier>{82a26852-0a47-4370-8911-222a81d31443}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module_LOG&amp;CONTROL">
+      <UniqueIdentifier>{36cea3f0-fac0-4521-bf5e-03c40f1986aa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="User">
+      <UniqueIdentifier>{189d516c-5be8-419f-a2fc-468b4eab0dd6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{7e5a6012-0ec7-47c7-aeef-5cb1a9fd8a4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{5181720f-bcf9-4219-9a19-5bf705925f07}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{9d7dbba7-07fe-4eb8-b09c-d7d12714d3f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\MessengerDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\MessengerDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\Bin\Messenger\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MessengerDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase_Thread_Block.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase_Thread_friend.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase_Thread_Note.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerPacketFuction.cpp">
+      <Filter>CommonDef\CommonStructure\ShareServer\GameMessengerServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerPacketFuction.cpp">
+      <Filter>CommonDef\CommonStructure\ShareServer\1.CommonServer</Filter>
+    </ClCompile>
+    <ClCompile Include="Gateway.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalRingBuffer.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketCombiner.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketLocker.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Receiver.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackBuffer.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor_Block.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor_friend.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor_Note.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module_LOG&amp;CONTROL</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Module_LOG&amp;CONTROL</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularIndex.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTable.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="UserFinder.cpp">
+      <Filter>User</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MessengerDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="MessengerDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="MessengerServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorPacketParsing.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase_Script.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareDB2MessServerProtocolStructure.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\GameMessengerServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerPacketFuction.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\GameMessengerServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerProtocol.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\GameMessengerServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerProtocolStructure.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\GameMessengerServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerPacketFuction.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\1.CommonServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerProtocolStructure.h">
+      <Filter>CommonDef\CommonStructure\ShareServer\1.CommonServer</Filter>
+    </ClInclude>
+    <ClInclude Include="Gateway.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalRingBuffer.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketCombiner.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketLocker.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Receiver.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackBuffer.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskProcessor.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module_LOG&amp;CONTROL</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Module_LOG&amp;CONTROL</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularIndex.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="UserFinder.h">
+      <Filter>User</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MessengerDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="MessengerDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h">
+      <Filter>DataBase\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h">
+      <Filter>DataBase\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h">
+      <Filter>DataBase\Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h">
+      <Filter>DataBase\Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\MessengerDlg.manifest" />
+  </ItemGroup>
+</Project>

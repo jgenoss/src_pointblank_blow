@@ -1,0 +1,558 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Algorithm">
+      <UniqueIdentifier>{5317c2bd-a12b-4af9-9669-681a9d144421}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{73a182a7-fee8-4359-bbec-345912e9801b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{9c64cd96-a02f-4c67-9f0f-1eebc123141a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{9ee4c9aa-538d-48eb-818c-48364b6fb39c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Context">
+      <UniqueIdentifier>{c5aae592-ccc9-4a60-8dab-2d66a7301739}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef">
+      <UniqueIdentifier>{b0cd4476-8f0f-4fa9-8a1b-9009751e0a6f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\CommonStructure">
+      <UniqueIdentifier>{50eb7799-e1cd-4900-96e6-0f6d5f0e7e64}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\CommonStructure\ShareClient">
+      <UniqueIdentifier>{a92fb76e-d979-42fd-b6ad-38237e1baeac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\CommonStructure\ShareServer">
+      <UniqueIdentifier>{d92563b2-baef-4837-ab22-7c45b1643aef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\Medal">
+      <UniqueIdentifier>{f45bb098-de3d-4115-9cf3-cfdbe11a0110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IpBlock">
+      <UniqueIdentifier>{8b856ab7-8497-46cd-a5c4-1c0d9ff1795c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module_Thread">
+      <UniqueIdentifier>{149641a0-e208-477f-924c-d6e7e2ee8cf8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="S2Engine">
+      <UniqueIdentifier>{ae9aa212-b9fb-493a-a08e-8a8ea686d164}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task_Thread">
+      <UniqueIdentifier>{4af9abbd-1c62-4966-b188-e72114a55580}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task_Thread\TaskThread_UserList">
+      <UniqueIdentifier>{45562293-1766-43bc-8eae-7572700fc66c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IOCP">
+      <UniqueIdentifier>{06b695e4-d8c7-4d1f-933a-e3b2af1d893d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\Gacha">
+      <UniqueIdentifier>{617cbe92-e762-49bb-91d3-21c86c93d98c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\Common">
+      <UniqueIdentifier>{1c957500-7679-4f77-99eb-596cdccbac0b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\ContentsMgr">
+      <UniqueIdentifier>{a2de57d0-43dd-47da-ad39-245e3476eade}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\ClanMatch">
+      <UniqueIdentifier>{fa1141c8-8b78-4d19-b87a-00f35deabd61}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\S2MO">
+      <UniqueIdentifier>{6d630a8c-38ca-40c8-a8cb-543c1f9fb3b1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GlobalDef\Design">
+      <UniqueIdentifier>{02d4bef4-10ec-4b69-b5e1-606382c5eabf}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\TransDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\TransDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\Bin\Trans\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TransDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ListIndexing.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="ListIndexingLink.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TransDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="TransDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="TranServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="GeneralRankup.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalRingBuffer.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="SystemTimer.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>GlobalDef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>GlobalDef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Character.cpp">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\MultiSlot.cpp">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\UserInven.cpp">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MedalServer\MedalServerDef.cpp">
+      <Filter>GlobalDef\Medal</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBNick.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBShop_SP.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBShop_WebGift.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBStats.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUID.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserInfo.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserLoad.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserSave.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserSaveCreateChar.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserSaveCreateNick.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUserSaveExitSave.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleLog.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleServiceLogFile.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSIA.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSIASocket.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleSocket.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleThaiPc.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="S2ContainerList.cpp">
+      <Filter>S2Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="S2RingBuffer.cpp">
+      <Filter>S2Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="CapsuleItem.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="CapsuleRand.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorCapsule.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorDBUserInfo.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorNick.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorPacketParsing.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorShop.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorSIA.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorUID.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorUserLoad.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorUserSave.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorWeb.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackBuffer.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="CircularIndex.cpp">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTable.cpp">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClCompile>
+    <ClCompile Include="UserFinder.cpp">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerContext.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSession.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="GeoIP2.cpp">
+      <Filter>IpBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="IPChecker.cpp">
+      <Filter>IpBlock</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleZLog.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleZLogSocket.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="UserEvent.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeInfo.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>GlobalDef</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignBase.cpp">
+      <Filter>GlobalDef\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignV2.cpp">
+      <Filter>GlobalDef\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignV1.cpp">
+      <Filter>GlobalDef\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorDBKickList.cpp">
+      <Filter>Task_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBKickList.cpp">
+      <Filter>Module_Thread</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\ServerStatistics.cpp">
+      <Filter>GlobalDef</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ListIndexing.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="ListIndexingLink.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TransDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="TransDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase_Script.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneralRankup.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalRingBuffer.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="SystemTimer.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="TransDefine.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\S2DB.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\SIA_Protocol.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\CommonStructure\ShareClient\ProtocolMedalStruct.h">
+      <Filter>GlobalDef\CommonStructure\ShareClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\CommonStructure\ShareClient\ProtocolStruct.h">
+      <Filter>GlobalDef\CommonStructure\ShareClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Character.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\MultiSlot.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\UserInven.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MedalServer\MedalServerDef.h">
+      <Filter>GlobalDef\Medal</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBNick.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBShop.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBShop_Script.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBStats.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBUID.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBUserInfo.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBUserLoad.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBUserSave.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleLog.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleServiceLogFile.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSIA.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSIASocket.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleSocket.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleThaiPc.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="S2ContainerList.h">
+      <Filter>S2Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="S2RingBuffer.h">
+      <Filter>S2Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleItem.h">
+      <Filter>Task_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleRand.h">
+      <Filter>Task_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackBuffer.h">
+      <Filter>Task_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="CircularIndex.h">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClInclude>
+    <ClInclude Include="UserFinder.h">
+      <Filter>Task_Thread\TaskThread_UserList</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerContext.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="UserSession.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="GeoIP2.h">
+      <Filter>IpBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="IPChecker.h">
+      <Filter>IpBlock</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskProcessor.h">
+      <Filter>Task_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerGacha.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleZLog.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleZLogSocket.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolGacha.h">
+      <Filter>GlobalDef\CommonStructure\ShareClient</Filter>
+    </ClInclude>
+    <ClInclude Include="UserEvent.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeInfo.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignBase.h">
+      <Filter>GlobalDef\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignV2.h">
+      <Filter>GlobalDef\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignV1.h">
+      <Filter>GlobalDef\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerMedalStruct.h">
+      <Filter>GlobalDef\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBKickList.h">
+      <Filter>Module_Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOSysDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\SIA_Define.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\CommonServerSource\ServerStatistics.h">
+      <Filter>GlobalDef</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

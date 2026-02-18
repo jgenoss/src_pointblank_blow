@@ -1,0 +1,581 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{264d897c-0174-4443-9b2e-c362a76d9ee5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{ac4b8a4b-c925-4e77-b21f-56bd3c2f1ca8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Data Structure">
+      <UniqueIdentifier>{9f3e300c-0d3a-4443-a58e-3b4ca5cfa9ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework\Task Processor">
+      <UniqueIdentifier>{aa4a17e6-2ae3-4491-9b94-d9b1a46575cc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Map">
+      <UniqueIdentifier>{3abb7050-a9fa-4d28-a841-284ebd7c79a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{3bc53537-4ead-4469-bbaa-b3868e0cd7c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{43452998-a26c-4952-82df-f593a4b9f8df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{2817e03a-d3f3-4c28-be67-bfff352b195b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{b5c05606-3416-4134-9442-a5cf9e363046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Server">
+      <UniqueIdentifier>{566408f5-2009-48e5-bd06-1347c2e41ef7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Client">
+      <UniqueIdentifier>{eca268fb-20dd-44eb-ae6b-d12539ace62c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Skill">
+      <UniqueIdentifier>{a656f52e-ec5b-47e6-ab43-bb9afd7b1917}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\User">
+      <UniqueIdentifier>{3428204f-4413-4196-a149-97b7f8d3faa5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Room">
+      <UniqueIdentifier>{dbe12517-1915-4a4e-9a70-eeca79e9258a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="WorldObject">
+      <UniqueIdentifier>{360b0ad6-2fea-416c-a6d2-d106da89c659}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\TCP%28Control_Server%29">
+      <UniqueIdentifier>{dd1088da-5c6c-45a1-b2db-cd6f888bac68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network\UDP%28Client%29">
+      <UniqueIdentifier>{86db8ee2-073f-4bc7-acc4-7d6b706c7ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physics">
+      <UniqueIdentifier>{96ca7f1b-7cac-4044-ae5d-b0cc3fbe95e8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HackChecker">
+      <UniqueIdentifier>{64a490e8-8a30-4c81-be2c-589599d7d067}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DediMember.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="DroppedWeaponMgr.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="GroupMaker.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="InBattleDef.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RespawnMgr.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="StageInfoTimer.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Skill.cpp">
+      <Filter>Base Files\Skill</Filter>
+    </ClCompile>
+    <ClCompile Include="Character.cpp">
+      <Filter>Base Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="iocpServer.cpp">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClCompile>
+    <ClCompile Include="iocpWorker.cpp">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClCompile>
+    <ClCompile Include="iocpWorkerImpl.cpp">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpBuffer.cpp">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClCompile>
+    <ClCompile Include="UdpBufferPool.cpp">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClCompile>
+    <ClCompile Include="InterlockedList.cpp">
+      <Filter>Framework\Data Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketLocker.cpp">
+      <Filter>Framework\Data Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackBuffer.cpp">
+      <Filter>Framework\Data Structure</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskMgr.cpp">
+      <Filter>Framework\Task Processor</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor.cpp">
+      <Filter>Framework\Task Processor</Filter>
+    </ClCompile>
+    <ClCompile Include="CharacterTable.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipmentTable.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="GrenadeState.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="hms.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="HMSParser.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="HMSParser_HackCheck.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="HMSParser_Rollback.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="RespawnState.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="SkillTable.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="SpeedState.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponTable.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="XmlWrapper.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClCompile>
+    <ClCompile Include="i3scolFile_s.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="i3sobjFile_s.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="i3sRpnFile_s.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="MapData.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="MapManager.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="DediUdpBuilder.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="DediUdpChecker.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="DediUdpParser.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysX\DebugRenderer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysX\DrawObjects.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysX\glRenderer.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="NxGlobal.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysX\Stream.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="PhysX\UserAllocator.cpp">
+      <Filter>Physics</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DediDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DediDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DediServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalRingBuffer.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>Common\Server</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="LogFile.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerStatistics.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="resolve.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor_RelayRoom.cpp">
+      <Filter>Framework\Task Processor</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor_Room.cpp">
+      <Filter>Framework\Task Processor</Filter>
+    </ClCompile>
+    <ClCompile Include="DediRoom.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="StageTable.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="COctreeNode.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="CCollisionData.cpp">
+      <Filter>Map</Filter>
+    </ClCompile>
+    <ClCompile Include="DSObject.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DSObjectGroup.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="DSObjectManager.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponInfo.cpp">
+      <Filter>HackChecker</Filter>
+    </ClCompile>
+    <ClCompile Include="DediDef.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ThrowWeaponMgr.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Weapon.cpp">
+      <Filter>Base Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="DediRoom_UDPCheck.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCast.cpp">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCastSocket.cpp">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\GameP2PDef.cpp" />
+    <ClCompile Include="DSObjectUseItemManager.cpp">
+      <Filter>WorldObject</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponSlot.cpp">
+      <Filter>Base Files\User</Filter>
+    </ClCompile>
+    <ClCompile Include="MultiWeaponSlot.cpp">
+      <Filter>Base Files\User</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DediMember.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="DroppedWeaponMgr.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="GroupMaker.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="InBattleDef.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RespawnMgr.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="StageInfoTimer.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonSource\CountryIP.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Skill.h">
+      <Filter>Base Files\Skill</Filter>
+    </ClInclude>
+    <ClInclude Include="Character.h">
+      <Filter>Base Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="iocpServer.h">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClInclude>
+    <ClInclude Include="iocpWorker.h">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClInclude>
+    <ClInclude Include="iocpWorkerImpl.h">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClInclude>
+    <ClInclude Include="UdpBuffer.h">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClInclude>
+    <ClInclude Include="UdpBufferPool.h">
+      <Filter>Network\UDP%28Client%29</Filter>
+    </ClInclude>
+    <ClInclude Include="InterlockedList.h">
+      <Filter>Framework\Data Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketLocker.h">
+      <Filter>Framework\Data Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackBuffer.h">
+      <Filter>Framework\Data Structure</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskMgr.h">
+      <Filter>Framework\Task Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskProcessor.h">
+      <Filter>Framework\Task Processor</Filter>
+    </ClInclude>
+    <ClInclude Include="CharacterTable.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipmentTable.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="GrenadeState.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="hms.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="HMSParser.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="NationalCodeDef.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="RespawnState.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="SkillTable.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="SpeedState.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponTable.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="XmlWrapper.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClInclude>
+    <ClInclude Include="i3scolFile_s.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="i3sobjFile_s.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="i3sRpnFile_s.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="MapData.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="MapManager.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="DediUdpBuilder.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="DediUdpChecker.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="DediUdpParser.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\DebugRenderer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\DrawObjects.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\ErrorStream.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\glRenderer.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="NxGlobal.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\Stream.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\UserAllocator.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="PhysX\VRDSettings.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DediDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DediDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Physics_Protocol.h">
+      <Filter>Physics</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalRingBuffer.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DediDef.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>Common\Server</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerStatistics.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="LogFile.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="S2CriticalSection.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="resolve.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="DediRoom.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="COctreeNode.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="CCollisionData.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="DediMath.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="StageTable.h">
+      <Filter>Map</Filter>
+    </ClInclude>
+    <ClInclude Include="DSObject.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DSObjectBase.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DSObjectGroup.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="DSObjectManager.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponInfo.h">
+      <Filter>HackChecker</Filter>
+    </ClInclude>
+    <ClInclude Include="ThrowWeaponMgr.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Weapon.h">
+      <Filter>Base Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCast.h">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCastSocket.h">
+      <Filter>Network\TCP%28Control_Server%29</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\GameP2PDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\NetworkP2PDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\WeaponDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\WeaponNumber.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="DSObjectUseItemManager.h">
+      <Filter>WorldObject</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponSlotBase.h">
+      <Filter>Base Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponSlot.h">
+      <Filter>Base Files\User</Filter>
+    </ClInclude>
+    <ClInclude Include="MultiWeaponSlot.h">
+      <Filter>Base Files\User</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\DediDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\DediDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="XML\Character.i3RegXML" />
+    <None Include="ReadMe.txt" />
+    <None Include="XML\Weapon.i3RegXML" />
+    <None Include="..\..\Bin\Dedi\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DediDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

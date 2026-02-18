@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service  name="VerifyServer" id="24">
+    <type name="App-Id-IN" class="int" code="2401"/>
+    <type name="Area-Id-IN" class="int" code="2402"/>
+	<type name="App-Id-OUT" class="string" code="2401"/>
+    <type name="Area-Id-OUT" class="string" code="2402"/>
+	<type name="Session-Id" class="string" code="2403"/>
+    <type name="Verify-Cost" class="string" code="2404"/>
+	<type name="Idcard-Checked" class="string" code="2405"/>
+	<type name="PGT-Type" class="string" code="2406"/>
+    <type name="Pt-Id" class="string" code="1"/>
+    <type name="Snda-Id" class="string" code="2"/>
+    <type name="U-Id" class="string" code="3"/>
+    <type name="Id-Card" class="string" code="4"/>
+    <type name="Identity-State" class="string" code="5"/>
+    <type name="Client-IP" class="string" code="6"/>
+	<type name="Sub-App" class="string" code="7"/>
+	<type name="Forbidden-Account" class="string" code="100"/>
+	<type name="qinzi" class="string" code="101"/>
+	<type name="Golden-Account" class="string" code="102"/>
+	<type name="CdLock-Account" class="string" code="103"/>
+	<type name="CdLock-Storage" class="string" code="104"/>
+	<type name="Adult" class="string" code="105"/>
+	<type name="Appling-Adult" class="string" code="106"/>
+	<type name="Spreaded-User" class="string" code="107"/>
+	<type name="OnlineSMS-Notice" class="string" code="108"/>
+	<type name="Spreader" class="string" code="109"/>
+	<type name="Wealth-Card" class="string" code="110"/>
+	<type name="Item-Transfer" class="string" code="111"/>
+    <type name="Game-Account" class="string" code="8"/>
+	<type name="Ekey-Type" class="string" code="9"/>
+	<type name="Ekey-Bind-Flag" class="string" code="10"/>	
+    <type name="Client-Signature" class="string" code="11"/>
+	<type name="Ekey-SN" class="string" code="12"/>
+	<type name="Ecard-Type" class="string" code="13" />
+    <type name="Ecard-SN" class="string" code="14"/>
+	<type name="Input-Account" class="string" code="15"/>
+	<type name="Ecard-Bind-Flag" class="string" code="16"/>
+    <type name="Auto-Login-Flag" class="string" code="17"/>
+	<type name="Voice-Bind-Flag" class="string" code="18"/>
+	<type name="Voice-SN" class="string" code="19"/>
+	
+
+    <message name="ReserveNotify" id="101">
+        <requestParameter>
+            <field name="appId" type="App-Id-IN" />
+            <field name="areaId" type="Area-Id-IN" />
+			<field name="sessionId" type="Session-Id" />
+        </requestParameter>
+
+        <responseParameter>
+			<field name="appId" type="App-Id-OUT" />
+            <field name="areaId" type="Area-Id-OUT" />
+            <field name="verifyCost" type="Verify-Cost" />
+			<field name="idcardChecked" type="Idcard-Checked" />
+			<field name="proxyTicket" type="PGT-Type" />
+            <field name="ptId" type="Pt-Id" />
+            <field name="sndaId" type="Snda-Id" />
+            <field name="uId" type="U-Id" />
+            <field name="idCard" type="Id-Card" />
+            <field name="identityState" type="Identity-State" />
+			<field name="clientIp" type="Client-IP" />
+			<field name="subApp" type="Sub-App" /> 
+			<field name="forbiddenAccount" type="Forbidden-Account" />
+            <field name="goldenAccount" type="Golden-Account" />
+            <field name="cdLockAccount" type="CdLock-Account" />
+            <field name="cdLockStorage" type="CdLock-Storage" />
+            <field name="adult" type="Adult" />
+            <field name="applingAdult" type="Appling-Adult" />
+            <field name="spreadedUser" type="Spreaded-User" />
+            <field name="onlineSMSNotice" type="OnlineSMS-Notice" />
+            <field name="spreader" type="Spreader" />
+            <field name="wealthCard" type="Wealth-Card" />
+            <field name="itemTransfer" type="Item-Transfer" />
+            <field name="gameAccount" type="Game-Account" />
+            <field name="ekeyType" type="Ekey-Type" />
+            <field name="ekeyBindFlag" type="Ekey-Bind-Flag" />
+            <field name="clientSignature" type="Client-Signature" />
+			<field name="ekeySN" type="Ekey-SN" />
+			<field name="ecardType" type="Ecard-Type" />
+			<field name="ecardSN" type="Ecard-SN" />
+			<field name="inputAccount" type="Input-Account" />
+			<field name="ecardBindFlag" type="Ecard-Bind-Flag" />
+			<field name="autoLoginFlag" type="Auto-Login-Flag" />
+			<field name="voiceBindFlag" type="Voice-Bind-Flag" />
+			<field name="voiceSN" type="Voice-SN" />
+        </responseParameter>
+    </message>
+</service>

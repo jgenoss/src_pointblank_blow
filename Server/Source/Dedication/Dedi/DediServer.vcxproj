@@ -1,0 +1,410 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_MapTest|Win32">
+      <Configuration>Debug_MapTest</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{935831DA-118D-4FF1-BE84-5F71FC6BB611}</ProjectGuid>
+    <RootNamespace>DediServer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x86.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PBDediDlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">PBDediDlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PBDedis</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <IncludePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2008)\Include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\include\win32;$(IncludePath)</IncludePath>
+    <ReferencePath>C:\Program Files (x86)\Microsoft DirectX SDK (June 2008)\Lib\x86;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\Graphics\lib\win32\glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\lib\Win32;$(ReferencePath)</ReferencePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>A:\Game\SRC\PointBlank\Server\i3Server\lib\ReleaseDLL;$(LibraryPath)</LibraryPath>
+    <IncludePath>A:\Game\SRC\PointBlank\Client\i3\Info\Graphics\Shadow\Shadow Map\shadowcast\shadowcast;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\PhysXLoader\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Foundation\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Physics\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\NxCharacter\include;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1\SDKs\Cooking\include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.0A\Include;$(ProjectDir);$(ProjectDir)/PhysX/Shared_Source;$(FrameworkSdkDir);$(DXSDK_DIR)include;$(PHYSX_SDK_ROOT)\SDKs\Physics\include;$(PHYSX_SDK_ROOT)\SDKs\Cooking\include;$(PHYSX_SDK_ROOT)\SDKs\PhysXLoader\include;$(PHYSX_SDK_ROOT)\SDKs\NxCharacter\include;$(PHYSX_SDK_ROOT)\SDKs\Foundation\include;$(PHYSX_SDK_ROOT)\Graphics\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLUT_BUILDING_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT /NODEFAULTLIB:LIBCMTD
+  %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>NxuLibd.lib;nxCooking.lib;PhysXLoader.lib;glut32.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..;$(DXSDK_DIR)Lib\x86;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/Graphics/lib/win32/glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/SDKs/lib/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateMapFile>false</GenerateMapFile>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.0A\Include;$(ProjectDir);$(ProjectDir)/PhysX/Shared_Source;$(FrameworkSdkDir);$(DXSDK_DIR)include;$(PHYSX_SDK_ROOT)\SDKs\Physics\include;$(PHYSX_SDK_ROOT)\SDKs\Cooking\include;$(PHYSX_SDK_ROOT)\SDKs\PhysXLoader\include;$(PHYSX_SDK_ROOT)\SDKs\NxCharacter\include;$(PHYSX_SDK_ROOT)\SDKs\Foundation\include;$(PHYSX_SDK_ROOT)\Graphics\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>GLUT_BUILDING_LIB;NEW_MAP_TEST;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT /NODEFAULTLIB:LIBCMTD
+  %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>NxuLibd.lib;nxCooking.lib;PhysXLoader.lib;glut32.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..;$(DXSDK_DIR)Lib\x86;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/Graphics/lib/win32/glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/SDKs/lib/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) "../../Bin/Dedi"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>C:\Program Files %28x86%29\Microsoft SDKs\Windows\v7.0A\Include;$(ProjectDir);$(ProjectDir)/PhysX/Shared_Source;$(FrameworkSdkDir);$(DXSDK_DIR)include;$(PHYSX_SDK_ROOT)\SDKs\Physics\include;$(PHYSX_SDK_ROOT)\SDKs\Cooking\include;$(PHYSX_SDK_ROOT)\SDKs\PhysXLoader\include;$(PHYSX_SDK_ROOT)\SDKs\NxCharacter\include;$(PHYSX_SDK_ROOT)\SDKs\Foundation\include;$(PHYSX_SDK_ROOT)\Graphics\include\win32;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalOptions>/LTCG %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalDependencies>NxuLib.lib;glut32.lib;opengl32.lib;glu32.lib;nxCooking.lib;PhysXLoader.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\..;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/Graphics/lib/win32/glut;C:\Program Files (x86)\NVIDIA Corporation\NVIDIA PhysX SDK\v2.8.1/SDKs/lib/Win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\GameP2PDef.cpp" />
+    <ClCompile Include="CCollisionData.cpp" />
+    <ClCompile Include="COctreeNode.cpp" />
+    <ClCompile Include="DediDef.cpp" />
+    <ClCompile Include="DediRoom_UDPCheck.cpp" />
+    <ClCompile Include="DSObject.cpp" />
+    <ClCompile Include="DediRoom.cpp" />
+    <ClCompile Include="DSObjectGroup.cpp" />
+    <ClCompile Include="DSObjectManager.cpp" />
+    <ClCompile Include="DSObjectUseItemManager.cpp" />
+    <ClCompile Include="ModuleCast.cpp" />
+    <ClCompile Include="ModuleCastSocket.cpp" />
+    <ClCompile Include="MultiWeaponSlot.cpp" />
+    <ClCompile Include="resolve.cpp" />
+    <ClCompile Include="DediMember.cpp" />
+    <ClCompile Include="DroppedWeaponMgr.cpp" />
+    <ClCompile Include="GroupMaker.cpp" />
+    <ClCompile Include="InBattleDef.cpp" />
+    <ClCompile Include="RespawnMgr.cpp" />
+    <ClCompile Include="StageInfoTimer.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp" />
+    <ClCompile Include="LocalRingBuffer.cpp" />
+    <ClCompile Include="Skill.cpp" />
+    <ClCompile Include="Character.cpp" />
+    <ClCompile Include="ServerDef.cpp" />
+    <ClCompile Include="iocpServer.cpp" />
+    <ClCompile Include="iocpWorker.cpp" />
+    <ClCompile Include="iocpWorkerImpl.cpp" />
+    <ClCompile Include="StageTable.cpp" />
+    <ClCompile Include="TaskProcessor_RelayRoom.cpp" />
+    <ClCompile Include="TaskProcessor_Room.cpp" />
+    <ClCompile Include="ThrowWeaponMgr.cpp" />
+    <ClCompile Include="UdpBuffer.cpp" />
+    <ClCompile Include="UdpBufferPool.cpp" />
+    <ClCompile Include="InterlockedList.cpp" />
+    <ClCompile Include="PacketLocker.cpp" />
+    <ClCompile Include="TrackBuffer.cpp" />
+    <ClCompile Include="TaskMgr.cpp" />
+    <ClCompile Include="TaskProcessor.cpp" />
+    <ClCompile Include="CharacterTable.cpp" />
+    <ClCompile Include="EquipmentTable.cpp" />
+    <ClCompile Include="GrenadeState.cpp" />
+    <ClCompile Include="hms.cpp" />
+    <ClCompile Include="HMSParser.cpp" />
+    <ClCompile Include="HMSParser_HackCheck.cpp" />
+    <ClCompile Include="HMSParser_Rollback.cpp" />
+    <ClCompile Include="RespawnState.cpp" />
+    <ClCompile Include="SkillTable.cpp" />
+    <ClCompile Include="SpeedState.cpp" />
+    <ClCompile Include="Weapon.cpp" />
+    <ClCompile Include="WeaponInfo.cpp" />
+    <ClCompile Include="WeaponSlot.cpp" />
+    <ClCompile Include="WeaponTable.cpp" />
+    <ClCompile Include="XmlWrapper.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="LogFile.cpp" />
+    <ClCompile Include="ServerStatistics.cpp" />
+    <ClCompile Include="ModuleControl.cpp" />
+    <ClCompile Include="ModuleControlSocket.cpp" />
+    <ClCompile Include="i3scolFile_s.cpp" />
+    <ClCompile Include="i3sobjFile_s.cpp" />
+    <ClCompile Include="i3sRpnFile_s.cpp" />
+    <ClCompile Include="MapData.cpp" />
+    <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="DediUdpBuilder.cpp" />
+    <ClCompile Include="DediUdpChecker.cpp" />
+    <ClCompile Include="DediUdpParser.cpp" />
+    <ClCompile Include="PhysX\DebugRenderer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PhysX\DrawObjects.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PhysX\glRenderer.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="NxGlobal.cpp" />
+    <ClCompile Include="PhysX\Stream.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+      </PrecompiledHeader>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Level3</WarningLevel>
+      <WarningLevel Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">Level3</WarningLevel>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="PhysX\UserAllocator.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MapTest|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="DediDlg.cpp" />
+    <ClCompile Include="DediDlgDlg.cpp" />
+    <ClCompile Include="DediServerSev.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\GameP2PDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\NetworkP2PDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\WeaponDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\WeaponNumber.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="CCollisionData.h" />
+    <ClInclude Include="COctreeNode.h" />
+    <ClInclude Include="DediMath.h" />
+    <ClInclude Include="DSObject.h" />
+    <ClInclude Include="DediRoom.h" />
+    <ClInclude Include="DSObjectBase.h" />
+    <ClInclude Include="DSObjectGroup.h" />
+    <ClInclude Include="DSObjectManager.h" />
+    <ClInclude Include="DSObjectUseItemManager.h" />
+    <ClInclude Include="ModuleCast.h" />
+    <ClInclude Include="ModuleCastSocket.h" />
+    <ClInclude Include="MultiWeaponSlot.h" />
+    <ClInclude Include="resolve.h" />
+    <ClInclude Include="DediMember.h" />
+    <ClInclude Include="DroppedWeaponMgr.h" />
+    <ClInclude Include="GroupMaker.h" />
+    <ClInclude Include="InBattleDef.h" />
+    <ClInclude Include="RespawnMgr.h" />
+    <ClInclude Include="StageInfoTimer.h" />
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h" />
+    <ClInclude Include="..\..\CommonSource\CountryIP.h" />
+    <ClInclude Include="DediDef.h" />
+    <ClInclude Include="LocalRingBuffer.h" />
+    <ClInclude Include="..\..\CommonServerSource\Physics_Protocol.h" />
+    <ClInclude Include="Skill.h" />
+    <ClInclude Include="Character.h" />
+    <ClInclude Include="ServerDef.h" />
+    <ClInclude Include="iocpServer.h" />
+    <ClInclude Include="iocpWorker.h" />
+    <ClInclude Include="iocpWorkerImpl.h" />
+    <ClInclude Include="StageTable.h" />
+    <ClInclude Include="ThrowWeaponMgr.h" />
+    <ClInclude Include="UdpBuffer.h" />
+    <ClInclude Include="UdpBufferPool.h" />
+    <ClInclude Include="InterlockedList.h" />
+    <ClInclude Include="PacketLocker.h" />
+    <ClInclude Include="TrackBuffer.h" />
+    <ClInclude Include="TaskMgr.h" />
+    <ClInclude Include="TaskProcessor.h" />
+    <ClInclude Include="CharacterTable.h" />
+    <ClInclude Include="EquipmentTable.h" />
+    <ClInclude Include="GrenadeState.h" />
+    <ClInclude Include="hms.h" />
+    <ClInclude Include="HMSParser.h" />
+    <ClInclude Include="NationalCodeDef.h" />
+    <ClInclude Include="RespawnState.h" />
+    <ClInclude Include="SkillTable.h" />
+    <ClInclude Include="SpeedState.h" />
+    <ClInclude Include="Weapon.h" />
+    <ClInclude Include="WeaponInfo.h" />
+    <ClInclude Include="WeaponSlot.h" />
+    <ClInclude Include="WeaponSlotBase.h" />
+    <ClInclude Include="WeaponTable.h" />
+    <ClInclude Include="XmlWrapper.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="LogFile.h" />
+    <ClInclude Include="S2CriticalSection.h" />
+    <ClInclude Include="ServerStatistics.h" />
+    <ClInclude Include="ModuleControl.h" />
+    <ClInclude Include="ModuleControlSocket.h" />
+    <ClInclude Include="i3scolFile_s.h" />
+    <ClInclude Include="i3sobjFile_s.h" />
+    <ClInclude Include="i3sRpnFile_s.h" />
+    <ClInclude Include="MapData.h" />
+    <ClInclude Include="MapManager.h" />
+    <ClInclude Include="DediUdpBuilder.h" />
+    <ClInclude Include="DediUdpChecker.h" />
+    <ClInclude Include="DediUdpParser.h" />
+    <ClInclude Include="PhysX\DebugRenderer.h" />
+    <ClInclude Include="PhysX\DrawObjects.h" />
+    <ClInclude Include="PhysX\ErrorStream.h" />
+    <ClInclude Include="PhysX\glRenderer.h" />
+    <ClInclude Include="NxGlobal.h" />
+    <ClInclude Include="PhysX\Stream.h" />
+    <ClInclude Include="PhysX\UserAllocator.h" />
+    <ClInclude Include="PhysX\VRDSettings.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="DediDlg.h" />
+    <ClInclude Include="DediDlgDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\Dedi\Config.ini" />
+    <None Include="res\DediDlg.ico" />
+    <None Include="res\DediDlg.rc2" />
+    <None Include="XML\Character.i3RegXML" />
+    <None Include="ReadMe.txt" />
+    <None Include="XML\Weapon.i3RegXML" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="DediDlg.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="DediDlg.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{e07438d3-1c39-455c-8fcb-3baeae60ca27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{472886a9-3799-470f-acb3-574f9b1e15c7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{efebe93d-7847-4797-b2b9-1340ad17c504}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{ab97128d-9d20-4c34-b5e5-1c074b43beb1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{d335128b-0cf0-46f1-a4a7-19649568a033}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleConfig.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleDBUploader.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleFileManager.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleNetManager.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleNetServer.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLogdlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLogdlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ZLogServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleConfig.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleDBUploader.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleFileManager.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleNetManager.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleNetServer.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTask.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ZLogdlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ZLogdlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\ZLogdlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ZLogdlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\Bin\ZLog\ZLogConfig.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ZLogdlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\ZLogdlg.manifest" />
+  </ItemGroup>
+</Project>

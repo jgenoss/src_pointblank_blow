@@ -1,0 +1,954 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\ControlTool.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#if !defined(_AFXDLL)\r\n"
+    "#include ""afxprint.rc""               // printing/print preview resources\r\n"
+    "#include ""afxribbon.rc""              // MFC ribbon and control bar resources\r\n"
+    "#endif\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLG_LOGIN DIALOGEX 0, 0, 219, 88
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Login"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_ED_ID,27,7,127,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_PASS,27,27,127,14,ES_PASSWORD | ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "Login",IDOK,162,7,50,15
+    PUSHBUTTON      "Cancel",IDCANCEL,162,27,50,15
+    CONTROL         "",IDC_IPADDRESS,"SysIPAddress32",WS_TABSTOP,27,47,185,14
+    EDITTEXT        IDC_ED_PORT,27,67,81,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "ID",IDC_STATIC,7,10,12,9
+    LTEXT           "Pass",IDC_STATIC,7,29,15,9
+    LTEXT           "IP",IDC_STATIC,7,52,15,9
+    LTEXT           "Port",IDC_STATIC,7,71,15,9
+    CONTROL         "Check Warning",IDC_CH_CHECK_WARNING,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,136,70,65,10
+END
+
+IDD_DLG_NOTICE DIALOGEX 0, 0, 440, 73
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Notice"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Send",IDOK,328,52,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,383,52,50,14
+    EDITTEXT        IDC_ED_NOTICE,7,7,425,41,ES_AUTOHSCROLL
+END
+
+IDD_DLG_MD5KEY DIALOGEX 0, 0, 316, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "MD5K"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,259,7,50,17
+    PUSHBUTTON      "Cancel",IDCANCEL,259,25,50,17
+    EDITTEXT        IDC_ED_MD5_00,45,7,209,16,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_MD5_01,45,26,209,16,ES_AUTOHSCROLL
+    LTEXT           "MD5Key 1",IDC_STATIC,7,10,36,10
+    LTEXT           "MD5Key 2",IDC_STATIC,7,28,36,10
+END
+
+IDD_DLG_AUTH DIALOGEX 0, 0, 217, 47
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Auth"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_ED_ID,27,7,127,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_PASS,27,25,127,14,ES_PASSWORD | ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "Auth",IDOK,160,7,50,16
+    PUSHBUTTON      "Cancel",IDCANCEL,160,24,50,16
+    LTEXT           "ID",IDC_STATIC,7,8,12,9
+    LTEXT           "Pass",IDC_STATIC,7,27,15,9
+END
+
+IDD_DLG_ERROR DIALOGEX 0, 0, 141, 63
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Error"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,84,42,50,14
+    LTEXT           "Server Idx : ",IDC_STATIC,7,8,42,8
+    LTEXT           "Error Num : ",IDC_STATIC,10,26,40,8
+    EDITTEXT        IDC_EDIT2,51,7,83,14,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_EDIT3,51,25,83,14,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_DLG_CONNECT_SCM DIALOGEX 0, 0, 218, 58
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Connect"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "CONNECT",IDOK,118,32,43,14
+    PUSHBUTTON      "CANCEL",IDCANCEL,162,32,43,14
+    CONTROL         "",IDC_IPADDRESS,"SysIPAddress32",WS_TABSTOP,27,12,177,14
+    EDITTEXT        IDC_ED_PORT,27,32,85,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "IP",IDC_STATIC,7,17,15,9
+    LTEXT           "Port",IDC_STATIC,7,36,15,9
+END
+
+IDD_DLG_UPDATE DIALOGEX 0, 0, 333, 106
+STYLE DS_SETFONT | DS_MODALFRAME | DS_SETFOREGROUND | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION
+CAPTION "Updating"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "완료",IDOK,271,80,50,14
+    CONTROL         "",IDC_PROGRESS_CURRENT,"msctls_progress32",WS_BORDER,10,63,312,14
+    CONTROL         "",IDC_PROGRESS_TOTAL,"msctls_progress32",WS_BORDER,10,29,312,14
+    EDITTEXT        IDC_CURRENT_UPDATE,163,15,150,12,ES_RIGHT | ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
+    EDITTEXT        IDC_TOTAL_UPDATE,163,49,150,12,ES_RIGHT | ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
+    EDITTEXT        IDC_UPDATE_DISPLAY,13,15,70,12,ES_READONLY | NOT WS_BORDER | NOT WS_TABSTOP
+END
+
+IDD_DLG_UPDATE_LIST DIALOGEX 0, 0, 337, 234
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Update List"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "START",ID_UPDATE_START,242,12,74,16
+    PUSHBUTTON      "FINISH",IDOK,219,210,48,16
+    PUSHBUTTON      "CANCEL",IDCANCLE,271,210,48,16
+    CONTROL         "",IDC_LIST_SERVERLIST2,"SysListView32",LVS_REPORT | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,14,31,309,172
+    EDITTEXT        IDC_UPDATE_RUN,16,213,70,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER
+    PUSHBUTTON      "AllCheck",IDC_BUTTON_ALLCHECK,15,15,34,14
+    PUSHBUTTON      "UnCheck",IDC_BUTTON_UNCHECK,52,15,34,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DLG_LOGIN, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 212
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 81
+    END
+
+    IDD_DLG_NOTICE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 433
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 66
+    END
+
+    IDD_DLG_MD5KEY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
+
+    IDD_DLG_AUTH, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 210
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 40
+    END
+
+    IDD_DLG_ERROR, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 134
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 56
+    END
+
+    IDD_DLG_CONNECT_SCM, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 211
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 51
+    END
+
+    IDD_DLG_UPDATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 326
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 99
+    END
+
+    IDD_DLG_UPDATE_LIST, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 330
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 226
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_BITMAP_SMALL        BITMAP                  "res\\bitmap_small.bmp"
+IDB_BITMAP_NORMAL       BITMAP                  "res\\bitmap_normal.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_POP MENU
+BEGIN
+    POPUP "pop"
+    BEGIN
+        MENUITEM "Connect Control Server",      ID_POP_CONNECT_CONTROL
+        MENUITEM "Start Server",                ID_POP_STARTSERVER
+        MENUITEM "Stop Server",                 ID_POP_STOPSERVER
+        MENUITEM "User Kick",                   ID_POP_USERKICK
+        MENUITEM "Trans User Kick",             ID_POP_TRANSUSERKICK
+        MENUITEM "Warning Clear",               ID_POP_WARNINGCLEAR
+        MENUITEM "Not Allow Room Creation",     ID_POP_NOTALLOWROOMCREATION
+        POPUP "Check Hacking"
+        BEGIN
+            MENUITEM "All Disable",                 ID_CHECKHACKING_DISABLE
+            POPUP "Dll Cheat"
+            BEGIN
+                MENUITEM "0 %",                         ID_DLLCHEAT_0
+                MENUITEM "10 %",                        ID_DLLCHEAT_10
+                MENUITEM "20 %",                        ID_DLLCHEAT_20
+                MENUITEM "30 %",                        ID_DLLCHEAT_30
+                MENUITEM "40 %",                        ID_DLLCHEAT_40
+                MENUITEM "50 %",                        ID_DLLCHEAT_50
+                MENUITEM "60 %",                        ID_DLLCHEAT_60
+                MENUITEM "70 %",                        ID_DLLCHEAT_70
+                MENUITEM "80 %",                        ID_DLLCHEAT_80
+                MENUITEM "90 %",                        ID_DLLCHEAT_90
+                MENUITEM "100 %",                       ID_DLLCHEAT_100
+            END
+        END
+    END
+    POPUP "POP2"
+    BEGIN
+        POPUP "Check Hacking"
+        BEGIN
+            POPUP "Gravity"
+            BEGIN
+                MENUITEM "   0% (OFF)",                 ID_GRAVITYHACK_OFF
+                MENUITEM "100% (ON)",                   ID_GRAVITYHACK_ON
+            END
+            POPUP "Escape"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_POP_CHANGE_ESCAPEHACK_Off
+                MENUITEM "100% (ON)",                   ID_POP_CHANGE_ESCAPEHACK_On
+            END
+            POPUP "Range"
+            BEGIN
+                MENUITEM "   0% (OFF)",                 ID_RANGEHACK_OFF
+                MENUITEM "100% (ON)",                   ID_RANGEHACK_ON
+            END
+            POPUP "Speed"
+            BEGIN
+                MENUITEM "0%",                          ID_POP_CHANGE_SPEEDHACK_0
+                MENUITEM "10%",                         ID_POP_CHANGE_SPEEDHACK_10
+                MENUITEM "20%",                         ID_POP_CHANGE_SPEEDHACK_20
+                MENUITEM "30%",                         ID_POP_CHANGE_SPEEDHACK_30
+                MENUITEM "40%",                         ID_POP_CHANGE_SPEEDHACK_40
+                MENUITEM "50%",                         ID_POP_CHANGE_SPEEDHACK_50
+                MENUITEM "60%",                         ID_POP_CHANGE_SPEEDHACK_60
+                MENUITEM "70%",                         ID_POP_CHANGE_SPEEDHACK_70
+                MENUITEM "80%",                         ID_POP_CHANGE_SPEEDHACK_80
+                MENUITEM "90%",                         ID_POP_CHANGE_SPEEDHACK_90
+                MENUITEM "100%",                        ID_POP_CHANGE_SPEEDHACK_100
+                MENUITEM "Log",                         ID_POP_CHANGE_SPEEDHACK_LOG
+            END
+            POPUP "Wall Shot"
+            BEGIN
+                MENUITEM "0%",                          ID_POP_CHANGE_WALLHACK_0
+                MENUITEM "10%",                         ID_POP_CHANGE_WALLHACK_10
+                MENUITEM "20%",                         ID_POP_CHANGE_WALLHACK_20
+                MENUITEM "30%",                         ID_POP_CHANGE_WALLHACK_30
+                MENUITEM "40%",                         ID_POP_CHANGE_WALLHACK_40
+                MENUITEM "50%",                         ID_POP_CHANGE_WALLHACK_50
+                MENUITEM "60%",                         ID_POP_CHANGE_WALLHACK_60
+                MENUITEM "70%",                         ID_POP_CHANGE_WALLHACK_70
+                MENUITEM "80%",                         ID_POP_CHANGE_WALLHACK_80
+                MENUITEM "90%",                         ID_POP_CHANGE_WALLHACK_90
+                MENUITEM "100%",                        ID_POP_CHANGE_WALLHACK_100
+            END
+            POPUP "Grenade"
+            BEGIN
+                MENUITEM "   0% (OFF)",                 ID_GRENADEHACK_OFF
+                MENUITEM "100% (ON)",                   ID_GRENADEHACK_ON
+            END
+            POPUP "Magazine"
+            BEGIN
+                MENUITEM "  0% (OFF)",                  ID_BULLETHACK_OFF
+                MENUITEM "100% (ON)",                   ID_BULLETHACK_ON
+            END
+            POPUP "Recall(Magnet)"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_RECALLHACKCHECKRATIO_0
+                MENUITEM "100% (ON)",                   ID_RECALLHACKCHECKRATIO_100
+            END
+            POPUP "Weapon Change"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_WEAPONHACK_OFF
+                MENUITEM "100% (ON)",                   ID_WEAPONHACK_ON
+            END
+            POPUP "Training Mode"
+            BEGIN
+                MENUITEM "0%(OFF)",                     ID_TRAININGMAP_OFF
+                MENUITEM "100%(ON)",                    ID_TRAININGMAP_ON
+            END
+            POPUP "Fire Speed"
+            BEGIN
+                MENUITEM "0%(OFF)",                     ID_POP_CHANGE_FIRESPEED_0
+                MENUITEM "50%",                         ID_POP_CHANGE_FIRESPEED_50
+                MENUITEM "100%(ON)",                    ID_POP_CHANGE_FIRESPEED_100
+                MENUITEM "LOG",                         ID_POP_CHANGE_FIRESPEED_LOG
+                MENUITEM "PacketDrop",                  ID_POP_CHANGE_FIRESPEED_PACKET_DROP
+            END
+            POPUP "GravityMove"
+            BEGIN
+                MENUITEM "0%",                          ID_POP_CHANGE_GRAVITY_MOVE_0
+                MENUITEM "10%",                         ID_POP_CHANGE_GRAVITY_MOVE_10
+                MENUITEM "20%",                         ID_POP_CHANGE_GRAVITY_MOVE_20
+                MENUITEM "30%",                         ID_POP_CHANGE_GRAVITY_MOVE_30
+                MENUITEM "40%",                         ID_POP_CHANGE_GRAVITY_MOVE_40
+                MENUITEM "50%",                         ID_POP_CHANGE_GRAVITY_MOVE_50
+                MENUITEM "60%",                         ID_POP_CHANGE_GRAVITY_MOVE_60
+                MENUITEM "70%",                         ID_POP_CHANGE_GRAVITY_MOVE_70
+                MENUITEM "80%",                         ID_POP_CHANGE_GRAVITY_MOVE_80
+                MENUITEM "90%",                         ID_POP_CHANGE_GRAVITY_MOVE_90
+                MENUITEM "100%",                        ID_POP_CHANGE_GRAVITY_MOVE_100
+            END
+            POPUP "Respawn Time"
+            BEGIN
+                MENUITEM "0%(OFF)",                     ID_RESPAWNTIME_0
+                MENUITEM "100%(ON)",                    ID_RESPAWNTIME_100
+            END
+            POPUP "Respawn Position"
+            BEGIN
+                MENUITEM "0%(OFF)",                     ID_RESPAWNPOSITION_0
+                MENUITEM "100%(ON)",                    ID_RESPAWNPOSITION_100
+            END
+            POPUP "C4 Installation"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_C4INSTALLATIONCHECK_0
+                MENUITEM "100% (ON)",                   ID_C4INSTALLATIONCHECK_100
+            END
+            POPUP "Client Time"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_CLIENTTIME_0
+                MENUITEM "100% (ON)",                   ID_CLIENTTIME_100
+            END
+            POPUP "Head Shot"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_HEADSHOT_0
+                MENUITEM "100% (ON)",                   ID_HEADSHOT_100
+            END
+            POPUP "Item"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_ITEM_0
+                MENUITEM "100% (ON)",                   ID_ITEM_100
+            END
+            POPUP "Weapon Parameter"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_WEAPONPARAM_0
+                MENUITEM "100% (ON)",                   ID_WEAPONPARAM_100
+            END
+            POPUP "Weapon N Found"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_WEAPONNFOUND_0
+                MENUITEM "100% (ON)",                   ID_WEAPONNFOUND_100
+            END
+            POPUP "UDP Version"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_UDPVERSION_0
+                MENUITEM "100% (ON)",                   ID_UDPVERSION_100
+            END
+            POPUP "Pause Move"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_PAUSEMOVE_0
+                MENUITEM "100% (ON)",                   ID_PAUSEMOVE_100
+            END
+            POPUP "Pause Shoot"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_PAUSESHOOT_0
+                MENUITEM "100% (ON)",                   ID_PAUSESHOOT_100
+            END
+            POPUP "Usurpation"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_POP_CHANGE_USURPATION_OFF
+                MENUITEM "100% (ON)",                   ID_POP_CHANGE_USURPATION_ON
+            END
+            POPUP "GrenadePos"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_POP_CHANGE_GRENADE_POS_OFF
+                MENUITEM "100% (ON)",                   ID_POP_CHANGE_GRENADE_POS_ON
+            END
+            POPUP "RPG Cheat"
+            BEGIN
+                MENUITEM "0% (OFF)",                    ID_RPG_CHEAT_0
+                MENUITEM "100% (ON)",                   ID_RPG_CHEAT_100
+            END
+            MENUITEM SEPARATOR
+            MENUITEM "Disable_All_Check",           ID_CHECKHACKING_DISABLE
+        END
+    END
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 영어(미국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About ControlTool"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,20,20
+    LTEXT           "ControlTool, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2010",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+    CONTROL         "Radio1",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,0,0,38,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+IDB_INFO                BITMAP                  "res\\info.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "Server"
+    BEGIN
+        MENUITEM "All Start Server",            ID_ALL_SERVER_START
+        MENUITEM "All Stop Server",             ID_ALL_SERVER_STOP
+        MENUITEM SEPARATOR
+        MENUITEM "All User Kick",               ID_ALL_USERKICK
+        MENUITEM SEPARATOR
+        MENUITEM "Set MD5 Key",                 ID_SET_MD5KEY
+        MENUITEM SEPARATOR
+        MENUITEM "All Warning Clear",           ID_ALL_WARNING_CLEAR
+        MENUITEM SEPARATOR
+        MENUITEM "Update",                      ID_UPDATE
+    END
+    POPUP "Notice"
+    BEGIN
+        MENUITEM "Lobby Notice",                ID_NOTICE_LOBBYNOTICE
+        MENUITEM "Emergency Notice",            ID_NOTICE_EMERGENCRYNOTICE
+    END
+    POPUP "&View"
+    BEGIN
+        POPUP "&Toolbars and Docking Windows"
+        BEGIN
+            MENUITEM "<placeholder>",               ID_VIEW_TOOLBAR
+        END
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        MENUITEM "&Caption Bar",                ID_VIEW_CAPTION_BAR
+        POPUP "&Application Look"
+        BEGIN
+            MENUITEM "Windows &2000",               ID_VIEW_APPLOOK_WIN_2000
+            MENUITEM "Office &XP",                  ID_VIEW_APPLOOK_OFF_XP
+            MENUITEM "&Windows XP",                 ID_VIEW_APPLOOK_WIN_XP
+            MENUITEM "Office 200&3",                ID_VIEW_APPLOOK_OFF_2003
+            MENUITEM "Visual Studio.NET 200&5",     ID_VIEW_APPLOOK_VS_2005
+            POPUP "Office 200&7"
+            BEGIN
+                MENUITEM "&Blue Style",                 ID_VIEW_APPLOOK_OFF_2007_BLUE
+                MENUITEM "B&lack Style",                ID_VIEW_APPLOOK_OFF_2007_BLACK
+                MENUITEM "&Silver Style",               ID_VIEW_APPLOOK_OFF_2007_SILVER
+                MENUITEM "&Aqua Style",                 ID_VIEW_APPLOOK_OFF_2007_AQUA
+            END
+        END
+        MENUITEM "S&plit",                      ID_WINDOW_SPLIT
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About ControlTool...",       ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_EDIT MENU
+BEGIN
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+END
+
+IDR_OUTPUT_POPUP MENU
+BEGIN
+    POPUP "Popup"
+    BEGIN
+        MENUITEM "&Copy",                       ID_EDIT_COPY
+        MENUITEM "&Clear",                      ID_EDIT_CLEAR
+        MENUITEM SEPARATOR
+        MENUITEM "&Hide",                       ID_VIEW_OUTPUTWND
+    END
+END
+
+IDR_THEME_MENU MENU
+BEGIN
+    MENUITEM "Office 2007 (&Blue Style)",   ID_VIEW_APPLOOK_OFF_2007_BLUE
+    MENUITEM "Office 2007 (B&lack Style)",  ID_VIEW_APPLOOK_OFF_2007_BLACK
+    MENUITEM "Office 2007 (&Silver Style)", ID_VIEW_APPLOOK_OFF_2007_SILVER
+    MENUITEM "Office 2007 (&Aqua Style)",   ID_VIEW_APPLOOK_OFF_2007_AQUA
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\ControlTool.ico"
+IDR_ControlToolTYPE     ICON                    "res\\ControlToolDoc.ico"
+IDI_OUTPUT_WND          ICON                    "res\\output_wnd.ico"
+IDI_OUTPUT_WND_HC       ICON                    "res\\output_wnd_hc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_ALL_SERVER_START
+    BUTTON      ID_ALL_SERVER_STOP
+    SEPARATOR
+    BUTTON      ID_ALL_USERKICK
+    SEPARATOR
+    BUTTON      ID_NOTICE_EMERGENCRYNOTICE
+    BUTTON      ID_NOTICE_LOBBYNOTICE
+    SEPARATOR
+    BUTTON      ID_SET_MD5KEY
+    BUTTON      ID_SET_TEMP
+    SEPARATOR
+    BUTTON      ID_VIEW_LARGEICON
+    BUTTON      ID_VIEW_SMALLICON
+    BUTTON      ID_VIEW_LIST
+    BUTTON      ID_VIEW_DETAILS
+    BUTTON      ID_APP_ABOUT
+    SEPARATOR
+    BUTTON      ID_ALL_WARNING_CLEAR
+    SEPARATOR
+    BUTTON      ID_UPDATE
+END
+
+IDR_MAINFRAME_256 TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_ALL_SERVER_START
+    BUTTON      ID_ALL_SERVER_STOP
+    SEPARATOR
+    BUTTON      ID_ALL_USERKICK
+    SEPARATOR
+    BUTTON      ID_NOTICE_EMERGENCRYNOTICE
+    BUTTON      ID_NOTICE_LOBBYNOTICE
+    SEPARATOR
+    BUTTON      ID_SET_MD5KEY
+    BUTTON      ID_SET_TEMP
+    SEPARATOR
+    BUTTON      ID_VIEW_LARGEICON
+    BUTTON      ID_VIEW_SMALLICON
+    BUTTON      ID_VIEW_LIST
+    BUTTON      ID_VIEW_DETAILS
+    BUTTON      ID_APP_ABOUT
+    SEPARATOR
+    BUTTON      ID_ALL_WARNING_CLEAR
+    SEPARATOR
+    BUTTON      ID_UPDATE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY 
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,3,1602,53
+ PRODUCTVERSION 3,1,1502,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "Zepetto Co."
+            VALUE "FileDescription", "master <2016-02-15 13-09-32.1>"
+            VALUE "FileVersion", 3, 3, 1602, 53
+            VALUE "InternalName", "ControlTool.exe"
+            VALUE "LegalCopyright", "Zepetto Co.  All rights reserved."
+            VALUE "OriginalFilename", "ControlTool.exe"
+            VALUE "ProductName", "Control Tool"
+            VALUE "ProductVersion", "3.1.1502.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "ControlTool\n\nControlTool\n\n\nControlTool.Document\nControlTool.Document"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "ControlTool"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle Status Bar"
+    ID_VIEW_AUTOARRANGE     "Arrange icons on a grid."
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_CAPTION_BAR     "Show or hide the caption bar\nToggle Caption Bar"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_SMALLICON       "Display items by using small icons.\nSmall Icons"
+    ID_VIEW_LARGEICON       "Display items by using large icons.\nLarge Icons"
+    ID_VIEW_LIST            "Displays items in a list.\nList"
+    ID_VIEW_DETAILS         "Displays detailed information about each item in the window.\nDetails"
+    ID_VIEW_LINEUP          "Arranges icons in a grid."
+    ID_VIEW_BYNAME          "Sorts the icons alphabetically."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_STATUS_PANE1        "Pane 1"
+    IDS_STATUS_PANE2        "Pane 2"
+    IDS_TOOLBAR_STANDARD    "Standard"
+    IDS_TOOLBAR_CUSTOMIZE   "Customize..."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_OUTPUT_WND          "Output"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RIBBON_CAPTIONBAR   "Caption Bar"
+    IDS_BUILD_TAB           "LOG"
+    IDS_DEBUG_TAB           "CCU"
+    IDS_FIND_TAB            "HACK"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_CAPTION_BUTTON      "Options..."
+    IDS_CAPTION_BUTTON_TIP  "Click here to see more options"
+    IDS_CAPTION_TEXT        "This is a caption bar where a message can be presented to the user."
+    IDS_CAPTION_IMAGE_TIP   "Important"
+    IDS_CAPTION_IMAGE_TEXT  "Here is an informational message for the user."
+END
+
+STRINGTABLE
+BEGIN
+    IDS_EDIT_MENU           "Edit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NOTICE_LOBBYNOTICE   "Lobby Notice\nLobby Notice"
+    ID_NOTICE_EMERGENCRYNOTICE "Emergencry Notice\nEmergencry Notice"
+    ID_ALL_USERKICK         "All User Kick\nAll User Kick"
+    ID_ALL_SERVER_STOP      "All Server Stop\nAll Server Stop"
+END
+
+STRINGTABLE
+BEGIN
+    ID_SET_MD5KEY           "adasd\nSet MD5Key"
+    ID_ALL_SERVER_START     "All Server Start\nAll Server Start"
+END
+
+STRINGTABLE
+BEGIN
+    ID_UPDATE               "Server Update\nUpdate"
+END
+
+#endif    // 영어(미국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\ControlTool.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#if !defined(_AFXDLL)
+#include "afxprint.rc"               // printing/print preview resources
+#include "afxribbon.rc"              // MFC ribbon and control bar resources
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

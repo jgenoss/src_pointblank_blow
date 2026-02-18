@@ -1,0 +1,602 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{3ca304a4-18a6-4b32-8229-4199ec2c1e8f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content\Rand">
+      <UniqueIdentifier>{6ee0d9e2-e828-4cc2-8273-b2ac75262859}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{de6f1be2-5968-4e8e-bfa8-c722d0f3859f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base">
+      <UniqueIdentifier>{7e1858a0-818e-4823-8abd-2f8d69c794ee}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\Watch">
+      <UniqueIdentifier>{1b496566-e73f-4ae4-a7b5-fa681ccbae99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\CommonStructure">
+      <UniqueIdentifier>{e7c9bb7f-7def-4e78-99bf-c8eb61c64096}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\CommonStructure\ShareClient">
+      <UniqueIdentifier>{2cfa1de1-f008-4fce-ab6c-33e4190bf0f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\CommonStructure\ShareServer">
+      <UniqueIdentifier>{b8afe52a-aac3-4dcd-9945-96edb69778fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\Medal">
+      <UniqueIdentifier>{699af208-eeb6-4879-9e67-6b1096fa5ee6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\S2MO">
+      <UniqueIdentifier>{d93d0b9c-e234-4e63-b1bb-70e158842f83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameGuard">
+      <UniqueIdentifier>{9a5c2501-b421-4bbd-966d-68ecf1b0ebc3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Room">
+      <UniqueIdentifier>{c063d4d2-8fdd-484f-b7dc-f306deb6cecb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shop">
+      <UniqueIdentifier>{f5c293e5-2bea-44ad-a76d-aacacd44bc30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{9567b71d-262d-470b-ba00-f49de084251d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{bc5c41ad-0f41-4580-9c03-d1f90e3af8ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{8fb004a1-f521-477e-9879-d0bf1d5f0e32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\Gacha">
+      <UniqueIdentifier>{8048e2a5-c7d9-4f2d-b5df-ad9ce9473da3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\Common">
+      <UniqueIdentifier>{013bc929-d149-42bb-b4ea-5bf281e5f136}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\ContentsMgr">
+      <UniqueIdentifier>{357bac7e-ba32-4c26-87ad-b0b835427781}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\ClanMatch">
+      <UniqueIdentifier>{2c650584-031d-447f-88fd-f6b2c6b287e1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base\Design">
+      <UniqueIdentifier>{63e88822-dbf3-4a2c-9112-72254dd01b9a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\BAServer.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\GameDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\GameDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+    <None Include="WorkReport.txt" />
+    <None Include="..\..\Bin\Game\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="GameDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ContextMain.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="KickVote.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="RingBuffer.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Room.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomManager.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerContext.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSession.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionAuthServer.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionBase.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionBattle.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionChar.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionClan.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionException.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionInventory.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionLobby.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionLogin.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionMedal.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionProtocol.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionQuickJoin.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionRoom.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionRsIgs.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionShop.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionSkill.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="CapsuleItem.cpp">
+      <Filter>Content\Rand</Filter>
+    </ClCompile>
+    <ClCompile Include="CapsuleRand.cpp">
+      <Filter>Content\Rand</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleClan.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleClanSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleContextNc.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleMessenger.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleMessengerSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTrans.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTransSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleZLog.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleZLogSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>Common &amp; Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Character.cpp">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Inventory.cpp">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\MultiSlot.cpp">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\MedalServer\MedalServerDef.cpp">
+      <Filter>Common &amp; Base\Medal</Filter>
+    </ClCompile>
+    <ClCompile Include="Xtrap_S_Interface.cpp">
+      <Filter>GameGuard</Filter>
+    </ClCompile>
+    <ClCompile Include="XTrapModule.cpp">
+      <Filter>GameGuard</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomBase.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInAnnihilation.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInBomb.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInCrossCount.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInDeathmatch.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInDefence.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInDestroy.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInEscape.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInTutorial.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="Shop.cpp">
+      <Filter>Shop</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="GameDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="GameServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionMyInfo.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>Common &amp; Base</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionGMChat.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionCheat.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInChallenge.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="UserEvent.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionGacha.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionClanWar.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSessionClanBattle.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInConvoy.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="RoomInRunAway.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>Common &amp; Base</Filter>
+    </ClCompile>
+    <ClCompile Include="XignCode.cpp">
+      <Filter>GameGuard</Filter>
+    </ClCompile>
+    <ClCompile Include="GameLogFile.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignBase.cpp">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignV1.cpp">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="Design\DesignV2.cpp">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCast.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleCastSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\QuestDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.cpp" />
+    <ClCompile Include="RoomInSpace.cpp">
+      <Filter>Room</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ContextMain.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase_Script.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="RingBuffer.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Room.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerContext.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="UserSession.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleItem.h">
+      <Filter>Content\Rand</Filter>
+    </ClInclude>
+    <ClInclude Include="CapsuleRand.h">
+      <Filter>Content\Rand</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleClan.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleClanSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleContextNc.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleMessenger.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleMessengerSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTrans.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTransSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleZLog.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleZLogSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonSource\Watch\CountryIP.h">
+      <Filter>Common &amp; Base\Watch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolMedalStruct.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolSkillStruct.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareClient</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Character.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Inventory.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\MultiSlot.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerMedalStruct.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h">
+      <Filter>Common &amp; Base\CommonStructure\ShareServer</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\MedalServer\MedalServerDef.h">
+      <Filter>Common &amp; Base\Medal</Filter>
+    </ClInclude>
+    <ClInclude Include="AntiCpXSvr.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="DllInjection_AhnHS.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="DllInjection_NProtect.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="ggsrv30.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="GPK\Include\GPKitSvr.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="Xtrap_S_Interface.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="XTrapModule.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomBase.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInAnnihilation.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInBomb.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInCrossCount.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInDeathmatch.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInDefence.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInDestroy.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInEscape.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInTutorial.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="Shop.h">
+      <Filter>Shop</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="GameDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInChallenge.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="UserEvent.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInConvoy.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInRunAway.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="XignCode.h">
+      <Filter>GameGuard</Filter>
+    </ClInclude>
+    <ClInclude Include="GameLogFile.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignBase.h">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignV1.h">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="Design\DesignV2.h">
+      <Filter>Common &amp; Base\Design</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCast.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleCastSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\QuestDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructBase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructBattle.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructChar.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructClanWar.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructGacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructGMChat.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructInventory.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructLobby.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructLogin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructMessage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructRoom.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOStructShop.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOSysDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\SIA_Define.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonStructure\ShareClient\ProtocolStruct.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\UlSanGuard\USG_Global.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="RoomInSpace.h">
+      <Filter>Room</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\GameDlg.manifest" />
+  </ItemGroup>
+</Project>

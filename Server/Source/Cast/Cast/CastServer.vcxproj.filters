@@ -1,0 +1,164 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="CastDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CastDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CastServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerContext.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSession.cpp">
+      <Filter>IOCP</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorPacket.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonBattleDef.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="MapLoadManager.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskProcessor.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="CastDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CastDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="CastDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerContext.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="UserSession.h">
+      <Filter>IOCP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonBattleDef.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="MapLoadManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="res\CastDlg.ico" />
+    <None Include="res\CastDlg.rc2" />
+    <None Include="..\..\Bin\Cast\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{1cdde7c5-b910-4c07-b3c8-7d45d4d2d32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{a318f355-9901-4119-a6a6-f2892c38a2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{948d399b-724b-47ea-98d3-0c3e2cafc086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef">
+      <UniqueIdentifier>{4173ae4f-ee57-476a-a10b-29ae31cccdc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5a65eae9-342a-43c3-bcc8-d67c564c67e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{bbd7cb59-304b-4133-97c1-6ddb7cb77a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task">
+      <UniqueIdentifier>{205336ff-7084-4d8a-941d-1bfcb1be9c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{56af4f3f-322f-4532-b9a3-01d27e788338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IOCP">
+      <UniqueIdentifier>{ca0a5d64-f448-4114-bfb8-627c3b687469}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="CastDlg.rc">
+      <Filter>Base Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

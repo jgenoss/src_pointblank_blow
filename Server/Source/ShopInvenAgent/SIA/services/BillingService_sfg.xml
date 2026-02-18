@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<service  name="Billing" id="17" serviceencoding="utf-8" sdkencoding="gbk">
+	
+	<type name="Context-Id" class="string" code="998"/>
+    <type name="Sequence-Id" class="string" code="999"/>
+    <type name="Proxy-Ticket" class="string" code="1000"/>
+    <type name="Order-Id" class="string" code="1001"/>
+    <type name="Business-Code" class="string" code="1002" default="1"/>
+    <type name="Freeze-Period" class="int" code="1003"/>
+    <type name="Auth-Model" class="int" code="1004"/>
+    <type name="Event-Timestamp" class="string" code="1005"/>
+    <type name="Order-Create-Timestamp" class="string" code="1006"/>
+
+    <type name="Usage-Amount" class="int" code="1007" default="1"/>
+    <type name="Usage-Unit" class="int" code="1097" default="1"/>
+    <type name="Usage-Type" class="int" code="1008" default="1"/>
+    <type name="Props-Id" class="string" code="1009" default="1"/>
+    <type name="Props-Name" class="string" code="1099" default="virtual"/>
+
+    <type name="Cost" class="int" code="1010" default="0"/>
+    <type name="Cost-Type" class="int" code="1011" default="3"/>
+
+    <type name="SP-Id" class="int" code="1012"/>
+    <type name="SP-Code" class="int" code="1013"/>
+    <type name="SP-Name" class="string" code="1014"/>
+    <type name="App-Id" class="int" code="1015"/>
+    <type name="Area-Id" class="int" code="1016"/>
+    <type name="Group-Id" class="int" code="1017"/>
+
+    <type name="User-Id" class="string" code="1018"/>
+    <type name="User-Type" class="int" code="1019"/>
+
+    <type name="Terminal-Address" class="string" code="1020" default="127.0.0.1"/>
+    <type name="Terminal-Type" class="int" code="1021" default="1"/>
+    <type name="Terminal-Platform" class="string" code="1022" default="1"/>
+    <type name="Reserve-Order-Id" class="string" code="1023"/>
+    <type name="Fail-Reason" class="string" code="1024"/>
+    <type name="Result-Code" class="int" code="1025"/>
+    <type name="Pay-Type" class="int" code="1026"/>
+    <type name="Account-Available-Balance" class="int" code="1027"/>
+    <type name="Account-Total-Balance" class="int" code="1028"/>
+    <type name="Account-Item-Balance" class="int" code="1029"/>
+    <type name="Account-Balance-Actived-Timestamp" class="string" code="1030"/>
+    <type name="Account-Balance-Expired-Timestamp" class="string" code="1031"/>
+    <type name="Account-Balance-Status" class="int" code="1032"/>
+    <type name="Redirect-URL" class="string" code="1033"/>
+    <type name="Transaction-Timestamp" class="string" code="1034"/>
+    <type name="Terminal-Code" class="int" code="1035"/>
+    <type name="Request-Action" class="int" code="1036"/>
+    <type name="Biz-Type" class="int" code="1037"/>
+    <type name="Biz-Status" class="int" code="1038"/>
+    <type name="Charge-Amount" class="int" code="1039"/>
+    <type name="Charge-Type" class="int" code="1040"/>
+    <type name="Channel-Area" class="int" code="1041"/>
+    <type name="Channel-Id" class="string" code="1042"/>
+    <type name="Channel-Type" class="string" code="1043"/>
+    <type name="Card-Num" class="string" code="1044"/>
+    <type name="Card-Scope" class="int" code="1045"/>
+    <type name="Related-Number-Info" class="string" code="1046"/>
+    <type name="Retail-Price" class="int" code="1047"/>
+    <type name="Dealer-Price" class="int" code="1048"/>
+    <type name="Create-Time" class="string" code="1049"/>
+    <type name="Active-Time" class="string" code="1050"/>
+    <type name="Card-Version" class="int" code="1051"/>
+    <type name="Simulate" class="string" code="1052"/>
+	
+    <type name="Version" class="string" code="1200" default="1.0"/>
+    <type name="Appendix" class="string" code="1201"/>
+    <type name="Couple-Type" class="int" code="1202"/>
+    <type name="Account-Auth-Type" class="int" code="1203"/>
+    <type name="Grade" class="string" code="1205"/>
+    <type name="Endpoint-Ip" class="string" code="1208"/>
+    <type name="Indication" class="int" code="1212"/>
+	<type name="Monthly-Begin-Time" class="string" code="1213"/>
+    <type name="Monthly-End-Time" class="string" code="1214"/>
+	<type name="Valid-Period" class="int" code="1215"/>
+
+    <type name="Customer-Order-Id" class="string" code="1300"/>
+    <type name="Sub-Customer-Order-Id" class="string" code="1301"/>
+    <type name="Pos-Code" class="string" code="1303"/>
+    <type name="CCA-Description" class="string" code="1304"/>
+		<type name="Trace-Msg" class="string" code="1305"/>
+
+
+    <type name="Account-Balance" class="tlv" code="1510">
+        <field name="balance" type="Account-Item-Balance"/>
+		<field name="type" type="Pay-Type"/>
+        <field name="activeTimestamp" type="Account-Balance-Actived-Timestamp"/>
+        <field name="expireTimestamp" type="Account-Balance-Expired-Timestamp"/>
+        <field name="status" type="Account-Balance-Status"/>
+    </type>
+	<type name="Account-Balance-Array-Tlv" class="tlv" arrayfield="true" code="1511">
+		<field name="accountBalanceArray" type="Account-Balance"/>
+	</type>
+
+    <type name="Account" class="tlv" code="1512">
+        <field name="type" type="Pay-Type"/>
+        <field name="availableBalance" type="Account-Available-Balance"/>
+        <field name="totalBalance" type="Account-Total-Balance"/>
+        <field name="balances" type="Account-Balance-Array-Tlv"/>
+    </type>
+
+    <type name="Account-Array-Tlv" class="tlv" arrayfield="true" code="1513">
+		<field name="accountArray" type="Account"/>
+	</type>
+
+    <type name="Usage-Information" class="tlv" code="1500" default="true">
+        <field name="amount" type="Usage-Amount"/>
+        <field name="unit" type="Usage-Unit"/>
+        <field name="propsId" type="Props-Id"/>
+        <field name="propsName" type="Props-Name"/>
+    </type>
+
+    <type name="User-Terminal" class="tlv" code="1503" default="true">
+        <field name="address" type="Terminal-Address"/>
+        <field name="type" type="Terminal-Type"/>
+        <field name="platform" type="Terminal-Platform"/>
+    </type>
+
+    <type name="Cost-Information" class="tlv" code="1501" default="true">
+        <field name="amount" type="Cost"/>
+        <field name="type" type="Cost-Type"/>
+    </type>
+	<type name="Cost-Informations-Array-Tlv" class="tlv" arrayfield="true" code="1509" default="true">
+		<field name="costInformationArray" type="Cost-Information"/>
+	</type>
+	
+    <type name="User-Identifier" class="tlv" code="1507">
+        <field name="id" type="User-Id"/>
+        <field name="type" type="User-Type"/>
+    </type>
+	
+    <type name="SP-Identifier" class="tlv" code="1502">
+		<field name="spId" type="SP-Id" configField="SpId" /> 
+		<field name="appId" type="App-Id" configField="ServerId" /> 
+		<field name="areaId" type="Area-Id" configField="AreaId" /> 
+		<field name="groupId" type="Group-Id" configField="GroupId" /> 
+    </type>
+
+    <type name="Billing-Order-Item" class="tlv" code="1504" default="true">
+		<field name="type" type="Usage-Type"/>
+        <field name="subCustomerOrderId" type="Sub-Customer-Order-Id"/>
+        <field name="usage" type="Usage-Information"/>
+        <field name="cost" type="Cost-Informations-Array-Tlv"/>
+        <field name="supplier" type="SP-Identifier"/>
+        <field name="receiver" type="User-Identifier"/>
+    </type>
+
+   <type name="Billing-Order-Item-Array-Tlv" class="tlv" arrayfield="true" code="1505" default="true">
+		<field name="billingOrderItemArray" type="Billing-Order-Item"/>
+	</type>
+
+    <type name="Billing-Order" class="tlv" code="1506" default="true">
+        <field name="createTimestamp" type="Order-Create-Timestamp"/>
+        <field name="customerOrderId" type="Customer-Order-Id"/>
+        <field name="item" type="Billing-Order-Item-Array-Tlv"/>
+        <field name="totalCost" type="Cost-Informations-Array-Tlv"/>
+    </type>
+
+
+    <type name="Biz-Result" class="tlv" code="1514">
+        <field name="bizType" type="Biz-Type"/>
+        <field name="bizStatus" type="Biz-Status"/>
+    </type>
+	<type name="Biz-Result-Array-Tlv" class="tlv" arrayfield="true" code="1515">
+		<field name="bizresultarray" type="Biz-Result"/>
+	</type>
+	
+    <type name="Pos-Identifier" class="tlv" code="1516">
+        <field name="code" type="Pos-Code" configField="siteCode"/>
+    </type>
+
+    <type name="Charge-Card" class="tlv" code="3000">
+        <field name="amount" type="Charge-Amount"/>
+        <field name="payType" type="Charge-Type"/>
+        <field name="channelArea" type="Channel-Area"/>
+        <field name="channelId" type="Channel-Id"/>
+        <field name="channelType" type="Channel-Type"/>
+        <field name="cardNum" type="Card-Num"/>
+        <field name="cardScope" type="Card-Scope"/>
+        <field name="relatedNumberInfo" type="Related-Number-Info"/>
+        <field name="retailPrice" type="Retail-Price"/>
+        <field name="dealerPrice" type="Dealer-Price"/>
+        <field name="createTime" type="Create-Time"/>
+        <field name="activeTime" type="Active-Time"/>
+        <field name="cardVersion" type="Card-Version"/>
+    </type>
+
+    <type name="Attributes" class="tlv" code="1508">
+        <field name="authModel" type="Auth-Model"/>
+        <field name="accounts" type="Account-Array-Tlv"/>
+        <field name="terminalCode" type="Terminal-Code"/>
+        <field name="currentBizStatus" type="Biz-Result"/>
+        <field name="relatedBizStatus" type="Biz-Result-Array-Tlv"/>
+        <field name="transferDestInfo" type="ccr_type"/>
+        <field name="transferDestResponse" type="cca_type"/>
+        <field name="simulate" type="Simulate"/>
+		<field name="accountAuthType" type="Account-Auth-Type"/>
+        <field name="coupleType" type="Couple-Type"/>
+        <field name="appendix" type="Appendix"/>
+        <field name="grade" type="Grade"/>
+        <field name="endpointIp" type="Endpoint-Ip"/>
+		<field name="indication" type="Indication"/>
+		<field name="exchangedFund" type="Cost-Information"/>
+		<field name="monthlyBeginTime" type="Monthly-Begin-Time"/>
+        <field name="monthlyEndTime" type="Monthly-End-Time"/>
+      <field name="validPeriod" type="Valid-Period"/>
+        <field name="traceMsg" type="Trace-Msg"/>
+    </type>
+
+    <type name="Transfer" code="1517" class="tlv">
+        <field name="userIdentifier" type="User-Identifier"/>
+        <field name="fee" type="Cost-Information"/>
+    </type>
+
+    <type name="TransferResponse" code="1518" class="tlv">
+        <field name="userIdentifier" type="User-Identifier"/>
+        <field name="accounts" type="Account-Array-Tlv"/>
+    </type>
+    <type name="ccr_type" code="2000" class="tlv" default="true">
+        <field name="version" type="Version"/>
+        <field name="freezePeriod" type="Freeze-Period"/>
+        <field name="sequenceId" type="Sequence-Id"/>
+		<field name="posIdentifier" type="Pos-Identifier" autoSet="true"/>
+        <field name="proxyTicket" type="Proxy-Ticket"/>
+        <field name="contextId" type="Context-Id"/>
+        <field name="eventTimestamp" type="Event-Timestamp"/>
+        <field name="purchaseSiteIdentifier" type="SP-Identifier" autoSet="true"/>
+        <field name="userIdentifier" type="User-Identifier"/>
+        <field name="terminalIdentifier" type="User-Terminal"/>
+        <field name="accountType" type="Pay-Type"/>
+        <field name="billingOrder" type="Billing-Order"/>
+        <field name="chargeCard" type="Charge-Card"/>
+        <field name="businessCode" type="Business-Code"/>
+		<field name="transfer" type="Transfer"/>
+        <field name="attributes" type="Attributes"/>
+    </type>
+
+    <type name="cca_type" code="2001" class="tlv">
+        <field name="proxyTicket" type="Proxy-Ticket"/>
+		<field name="contextId" type="Context-Id"/>
+        <field name="sequenceId" type="Sequence-Id"/>
+        <field name="orderId" type="Order-Id"/>
+        <field name="requestAction" type="Request-Action"/>
+        <field name="failReason" type="Fail-Reason"/>
+        <field name="resultCode" type="Result-Code"/>
+        <field name="description" type="CCA-Description"/>
+        <field name="userIdentifier" type="User-Identifier"/>
+		<field name="redirectURL" type="Redirect-URL"/>
+        <field name="transactionTimestamp" type="Transaction-Timestamp"/>
+		<field name="transferResponse" type="TransferResponse"/>    
+		<field name="remainedFrozenFund" type="Cost-Informations-Array-Tlv"/>
+		<field name="attributes" type="Attributes"/>
+    </type>
+	
+	<message name="AccountLock" id="1102">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	<message name="CommitAccountUnLock" id="1202" isAck="true">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	<message name="CancelAccountUnLock" id="1302" isAck="true">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	
+	<message name="TradeLock" id="12">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	<message name="CommitTradeUnLock" id="22" isAck="true">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	<message name="CancelTradeUnLock" id="32" isAck="true">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+	
+	<message name="CheckBalance" id="1800">
+		<requestParameter>
+			<field name="ccr" type="ccr_type" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="cca" type="cca_type" />
+		</responseParameter>
+	</message>
+</service>

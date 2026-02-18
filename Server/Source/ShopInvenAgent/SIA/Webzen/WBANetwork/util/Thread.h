@@ -1,0 +1,30 @@
+#ifndef  __WBANetwork_Thread_H
+#define  __WBANetwork_Thread_H
+
+
+namespace WBANetwork
+{
+	class Thread
+	{
+	public:
+		Thread();
+		virtual ~Thread();
+
+	protected:
+		HANDLE			m_handleThread;
+		unsigned int	m_threadID;
+
+	public:
+		HANDLE			Start();
+		bool			Terminate(DWORD exitCode);
+		bool			WaitForTerminate(DWORD timeout = INFINITE);
+
+	protected:
+		virtual	void	Run() = 0;
+
+	private:
+		static unsigned int __stdcall	Runner(LPVOID parameter);
+	};
+}
+
+#endif

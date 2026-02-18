@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<service name="Award" id="26" serviceencoding="utf-8" sdkencoding="gbk">
+
+	<type name="Host_Id" class="int" code="1" />
+	<type name="Gs_Ip" class="int" code="2" />
+	<type name="Flag" class="int" code="3" />
+	
+	<type name="Sp_Id" class="int" code="4" />
+	<type name="Site_Code" class="int" code="5" />
+	<type name="User_Type" class="int" code="6" />
+	<type name="Couple_Type" class="int" code="7" />
+	<type name="Award_Type" class="int" code="8" />
+	<type name="Uid_Type" class="int" code="9" />
+	<type name="User_Id" class="string" code="10" />
+	<type name="Sess_Id" class="string" code="11" />
+	<type name="Context_Id" class="string" code="12" />
+	<type name="Order_Id" class="string" code="13" />
+	<type name="Award_Num" class="string" code="14" />
+	<type name="Award_Patchid" class="string" code="15" />
+	<type name="Serv_Id_Player" class="int" code="16" />
+	<type name="Area_Id_Player" class="int" code="17" />
+	<type name="Group_Id_Player" class="int" code="18" />
+	<type name="Endpoint_Type" class="int" code="19" />
+	<type name="Endpoint_Ip" class="string" code="20" />
+	<type name="Platform_Type" class="int" code="21" />
+	<type name="Call_Time" class="string" code="22" />
+	<type name="Role_Name" class="string" code="23" />
+	<type name="Current_Level" class="int" code="24" />
+	<type name="Award_Level" class="int" code="25" />
+	<type name="Ind_Msg" class="string" code="26" />
+	
+	<type name="Result" class="int" code="27" />
+	<type name="Bind_User" class="int" code="28" />
+	<type name="Appendix" class="string" code="29" />
+	<type name="Awaard_Item_Num" class="int" code="30" />
+	
+	<type name="Item_Id" class="int" code="31" />
+	<type name="Item_Num" class="int" code="32" />
+	<type name="Item_Property" class="string" code="33" />
+	<type name="Award_Item" class="tlv" code="34">
+		<field name="itemId" type="Item_Id"/>
+		<field name="itemNum" type="Item_Num"/>
+		<field name="itemProperty" type="Item_Property"/>
+	</type>
+	<type name="Item_Property_Tlv_Array" class="tlv" arrayfield="true" code="35">
+		<field name="awardItem" type="Award_Item"/>
+	</type>
+	
+	<type name="Confirm" class="int" code="36" />
+	<type name="Award_Time" class="int" code="37" />
+	<type name="Pay_Type" class="int" code="38" />
+	<type name="Balance" class="int" code="39" />
+	
+	<message name="Authen" id="1">
+		<requestParameter>
+			<field name="hostId" type="Host_Id" />
+			<field name="gsIp" type="Gs_Ip" />
+			
+			<field name="spId" type="Sp_Id" />
+			<field name="siteCode" type="Site_Code" />
+			<field name="userType" type="User_Type" />
+			<field name="coupleType" type="Couple_Type" />
+			<field name="awardType" type="Award_Type" />
+			<field name="uidType" type="Uid_Type" />
+			<field name="userId" type="User_Id" />
+			<field name="sessId" type="Sess_Id" />
+			<field name="contextId" type="Context_Id" />
+			<field name="ordertId" type="Order_Id" />
+			<field name="awardNum" type="Award_Num" />
+			<field name="awardPatchid" type="Award_Patchid" />
+			<field name="servIdPlayer" type="Serv_Id_Player" />
+			<field name="areaIdPlayer" type="Area_Id_Player" />
+			<field name="groupIdPlayer" type="Group_Id_Player" />
+			<field name="endpointType" type="Endpoint_Type" />
+			<field name="endpointIp" type="Endpoint_Ip" />
+			<field name="platformType" type="Platform_Type" />
+			<field name="callTime" type="Call_Time" />
+			<field name="roleName" type="Role_Name" />
+			<field name="currentLevel" type="Current_Level" />
+			<field name="awardLevel" type="Award_Level" />
+			<field name="indMsg" type="Ind_Msg" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="result" type="Result" />
+			<field name="coupleType" type="Couple_Type" />
+			<field name="bindUser" type="Bind_User" />
+			<field name="uidType" type="Uid_Type" />
+			<field name="userId" type="User_Id" />
+			<field name="sessId" type="Sess_Id" />
+			<field name="contextId" type="Context_Id" />
+			<field name="ordertId" type="Order_Id" />
+			<field name="endpointIp" type="Endpoint_Ip" />
+			<field name="awardNum" type="Award_Num" />
+			<field name="appendix" type="Appendix" />
+			<field name="awardItemNum" type="Awaard_Item_Num" />
+			<field name="awardItem" type="Item_Property_Tlv_Array" />
+		</responseParameter>
+	</message>
+	
+	<message name="Ack" id="2" isAck="true">
+		<requestParameter>
+			<field name="hostId" type="Host_Id" />
+			<field name="gsIp" type="Gs_Ip" />
+			<field name="flag" type="Flag" />
+			
+			<field name="spId" type="Sp_Id" />
+			<field name="siteCode" type="Site_Code" />
+			<field name="confirm" type="Confirm" />
+			<field name="awardType" type="Award_Type" />
+			<field name="uidType" type="Uid_Type" />
+			<field name="userId" type="User_Id" />
+			<field name="sessId" type="Sess_Id" />
+			<field name="contextId" type="Context_Id" />
+			<field name="ordertId" type="Order_Id" />
+			<field name="awardNum" type="Award_Num" />
+			<field name="awardTime" type="Award_Time" />
+			<field name="servIdPlayer" type="Serv_Id_Player" />
+			<field name="areaIdPlayer" type="Area_Id_Player" />
+			<field name="groupIdPlayer" type="Group_Id_Player" />
+			<field name="endpointType" type="Endpoint_Type" />
+			<field name="endpointIp" type="Endpoint_Ip" />
+			<field name="platformType" type="Platform_Type" />
+			<field name="callTime" type="Call_Time" />
+		</requestParameter>
+		
+		<responseParameter>
+			<field name="result" type="Result" />
+			<field name="coupleType" type="Couple_Type" />
+			<field name="awardType" type="Award_Type" />
+			<field name="payType" type="Pay_Type" />
+			<field name="balance" type="Balance" />
+			<field name="uidType" type="Uid_Type" />
+			<field name="userId" type="User_Id" />
+			<field name="sessId" type="Sess_Id" />
+			<field name="contextId" type="Context_Id" />
+			<field name="ordertId" type="Order_Id" />
+			<field name="endpointIp" type="Endpoint_Ip" />
+			<field name="appendix" type="Appendix" />
+		</responseParameter>
+	</message>
+	
+</service>

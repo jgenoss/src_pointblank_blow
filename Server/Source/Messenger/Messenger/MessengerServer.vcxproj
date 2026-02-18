@@ -1,0 +1,206 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0853F3A3-84CB-49D9-97F2-18EB2C28F5BF}</ProjectGuid>
+    <RootNamespace>MessengerServer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x86.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PBMessengerDlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PBMessengers</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>A:\Game\SRC\PointBlank\Server\i3Server\lib\ReleaseDLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\Messenger\Config.ini" />
+    <None Include="res\MessengerDlg.ico" />
+    <None Include="res\MessengerDlg.rc2" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="MessengerDlg.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp" />
+    <ClCompile Include="DataBase.cpp" />
+    <ClCompile Include="DataBase_Thread_Block.cpp" />
+    <ClCompile Include="DataBase_Thread_friend.cpp" />
+    <ClCompile Include="DataBase_Thread_Note.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="ServerDef.cpp" />
+    <ClCompile Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerPacketFuction.cpp" />
+    <ClCompile Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerPacketFuction.cpp" />
+    <ClCompile Include="Gateway.cpp" />
+    <ClCompile Include="LocalRingBuffer.cpp" />
+    <ClCompile Include="PacketCombiner.cpp" />
+    <ClCompile Include="PacketLocker.cpp" />
+    <ClCompile Include="Receiver.cpp" />
+    <ClCompile Include="TaskProcessorPacketParsing.cpp" />
+    <ClCompile Include="TrackBuffer.cpp" />
+    <ClCompile Include="TaskProcessor.cpp" />
+    <ClCompile Include="TaskProcessor_Block.cpp" />
+    <ClCompile Include="TaskProcessor_friend.cpp" />
+    <ClCompile Include="TaskProcessor_Note.cpp" />
+    <ClCompile Include="ModuleControl.cpp" />
+    <ClCompile Include="ModuleControlSocket.cpp" />
+    <ClCompile Include="CircularIndex.cpp" />
+    <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="UserFinder.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="MessengerDlg.cpp" />
+    <ClCompile Include="MessengerDlgDlg.cpp" />
+    <ClCompile Include="MessengerServerSev.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\CommonServerSource\Ado.h" />
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h" />
+    <ClInclude Include="DataBase.h" />
+    <ClInclude Include="DataBase_Script.h" />
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="ServerDef.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareDB2MessServerProtocolStructure.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerPacketFuction.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerProtocol.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\GameMessegerServer\ShareGame2MessServerProtocolStructure.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerPacketFuction.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\1.CommonServer\ShareCommonServerProtocolStructure.h" />
+    <ClInclude Include="Gateway.h" />
+    <ClInclude Include="LocalRingBuffer.h" />
+    <ClInclude Include="PacketCombiner.h" />
+    <ClInclude Include="PacketLocker.h" />
+    <ClInclude Include="Receiver.h" />
+    <ClInclude Include="TrackBuffer.h" />
+    <ClInclude Include="TaskProcessor.h" />
+    <ClInclude Include="ModuleControl.h" />
+    <ClInclude Include="ModuleControlSocket.h" />
+    <ClInclude Include="CircularIndex.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="UserFinder.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="MessengerDlg.h" />
+    <ClInclude Include="MessengerDlgDlg.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\MessengerDlg.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="MessengerDlg.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

@@ -1,0 +1,203 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ControlServerDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlServerDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ControlServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>Common &amp; Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>Common &amp; Base</Filter>
+    </ClCompile>
+    <ClCompile Include="Control.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="HackLogFile.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadOptionDB.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="LocalRingBuffer.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Protocol_Main.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="UserManager.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="UserSession.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="Watch.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="WatchUDPSocket.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="WebManager.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="WebSession.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleKnock.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleKnockSoket.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Watch\CountryIP.cpp" />
+    <ClCompile Include="ServerLogFile.cpp">
+      <Filter>Contents</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ControlServerDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlServerDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>Common &amp; Base</Filter>
+    </ClInclude>
+    <ClInclude Include="WebSession.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Control.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="HackLogFile.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadOptionDB.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="LocalRingBuffer.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolGacha.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerGacha.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="UserManager.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="UserSession.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="Watch.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="WatchUDPSocket.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="WebManager.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleKnockSoket.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleKnock.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlServerDll.h">
+      <Filter>Base Files\Dll</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Watch\CountryIP.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaDefine.h" />
+    <ClInclude Include="ServerLogFile.h">
+      <Filter>Contents</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\Control\Config.ini" />
+    <None Include="ReadMe.txt" />
+    <None Include="res\ControlServerDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ControlServerDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\ControlServerDlg.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{3fffc357-35ad-447b-ac8d-ec0d944a93f5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{f0d5fbcb-4000-40b3-acc9-35cadbd61ab4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{610ccf67-3c01-43f6-b53c-7bda2b44e08c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common &amp; Base">
+      <UniqueIdentifier>{22d8e7bd-f9fe-4907-95a5-c9191007ba95}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{50dc5327-2e3a-4f9b-96a2-379654be2694}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Contents">
+      <UniqueIdentifier>{e918da3c-dba0-4c5b-b931-678c3db89763}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dll">
+      <UniqueIdentifier>{8bdf85d6-e676-474f-9f8d-de34c19f57a3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ControlServerDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

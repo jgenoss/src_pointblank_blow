@@ -1,0 +1,600 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{677b8979-7bb1-41fc-a6d5-6a737f1d9b20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Algorithm">
+      <UniqueIdentifier>{44fb691b-f8ec-479a-9be1-1899d11bbd8e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coupler">
+      <UniqueIdentifier>{f193bfbc-bc12-41c1-b6ec-3ecb8395b498}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coupler\Login">
+      <UniqueIdentifier>{6c3c3129-338a-4bd5-99ea-a4332edc1d32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coupler\Billing">
+      <UniqueIdentifier>{39bc4e36-2a34-4508-a2e4-55a8a4490feb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{e1fec974-317f-4ff0-84e0-a46b4ba94428}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{557cf423-5481-4718-a709-0630f9ea05dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{a79b62e8-58ed-4635-8ff7-2e2596ef4dd4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{a6ef21b7-b7eb-4179-9b54-2eaa6d9d1552}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coupler\Login\Garena">
+      <UniqueIdentifier>{31245e52-ef28-458b-b3af-751ea83e8675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Coupler\PCCafe">
+      <UniqueIdentifier>{59fc6604-f156-449f-99be-5261449362e6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MainBuffer">
+      <UniqueIdentifier>{417cb459-df29-4430-bd3d-7fa184cad6fe}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="_GameProtocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\BillingDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ControlProtocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="integration_api.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NCSA.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Payletter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\PointBlank\Source_New\CommonSource\ProtocolDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleNet.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleNet_Server.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleTask.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="HtmlParser.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginBase.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginCreator.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginDB.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginHTTP.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginManager.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_NO.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_SM.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Thai.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_ZPT.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingBase.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingCreator.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingDB.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingHTTP.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingManager.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingTCP.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_NO.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_SM.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Thai.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_ZPT.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="siadlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="siadlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Vietnam.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Vietnam.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Korea.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Korea.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="Garena\z_base64.h">
+      <Filter>Coupler\Login\Garena</Filter>
+    </ClInclude>
+    <ClInclude Include="Garena\z_OpensslRSA.h">
+      <Filter>Coupler\Login\Garena</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_NorthA.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_NorthA.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\SIA_Protocol.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AccountTrans.h">
+      <Filter>Coupler</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Philippines.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Philippines.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeManager.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeBase.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeTCP.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeCreator.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeDB.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_ZPT.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="HashTable.h">
+      <Filter>Algorithm</Filter>
+    </ClInclude>
+    <ClInclude Include="MainStreamBuffer_Buy.h">
+      <Filter>MainBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="MainStreamBuffer_Login.h">
+      <Filter>MainBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="WorkerStreamBuffer_PCCafe.h">
+      <Filter>MainBuffer</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Korea.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_NO.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_NorthA.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Philippines.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_SM.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Thai.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Vietnam.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Italy.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Italy.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Italy.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\CommonSource\Common\CommonDef_Item.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\Common\CommonSource\SIA_Define.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_NorthA_Steam.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_NorthA_Steam.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="SteamAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Brazil.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Brazil.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Russia.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Russia.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="IntegrationAPI.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PCCafeWorker_Russia.h">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClInclude>
+    <ClInclude Include="BillingWorker_Latin.h">
+      <Filter>Coupler\Billing</Filter>
+    </ClInclude>
+    <ClInclude Include="CTPacket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_Latin.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="LoginTCP.h">
+      <Filter>Coupler\Login</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\ServerStatistics.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleNet.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleNet_Server.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask_Link.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask_Login.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask_Shop.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="HtmlParser.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginBase.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginCreator.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginDB.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginHTTP.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginManager.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_NO.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_SM.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Thai.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_ZPT.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingBase.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingCreator.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingDB.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingHTTP.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingManager.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingTCP.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_NO.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_SM.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Thai.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_ZPT.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="siadlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="siadlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SIAServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Vietnam.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Vietnam.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Korea.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Korea.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="Garena\z_base64.cpp">
+      <Filter>Coupler\Login\Garena</Filter>
+    </ClCompile>
+    <ClCompile Include="Garena\z_OpensslRSA.cpp">
+      <Filter>Coupler\Login\Garena</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_NorthA.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_NorthA.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="AccountTrans.cpp">
+      <Filter>Coupler</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Philippines.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Philippines.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeManager.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeBase.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeTCP.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeCreator.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeDB.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_ZPT.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="HashTable.cpp">
+      <Filter>Algorithm</Filter>
+    </ClCompile>
+    <ClCompile Include="MainStreamBuffer_Buy.cpp">
+      <Filter>MainBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="MainStreamBuffer_Login.cpp">
+      <Filter>MainBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="WorkerStreamBuffer_PCCafe.cpp">
+      <Filter>MainBuffer</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Korea.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_NO.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_NorthA.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Philippines.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_SM.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Thai.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Vietnam.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleTask_PCCafe.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Italy.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Italy.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Italy.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_NorthA_Steam.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_NorthA_Steam.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="SteamAPI.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Brazil.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Brazil.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Russia.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Russia.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="IntegrationAPI.cpp">
+      <Filter>Header Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PCCafeWorker_Russia.cpp">
+      <Filter>Coupler\PCCafe</Filter>
+    </ClCompile>
+    <ClCompile Include="BillingWorker_Latin.cpp">
+      <Filter>Coupler\Billing</Filter>
+    </ClCompile>
+    <ClCompile Include="CTPacket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_Latin.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="LoginTCP.cpp">
+      <Filter>Coupler\Login</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\ServerStatistics.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\siadlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\siadlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ReadMe.txt" />
+    <None Include="..\..\Bin\SIA\SIAConfig.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="siadlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\siadlg.manifest" />
+  </ItemGroup>
+</Project>

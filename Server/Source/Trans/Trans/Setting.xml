@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Configs>
+<Config id=5 name=ServerId>11121</Config>
+<Config id=6 name=AreaId>1</Config>
+<Config id=7 name=GroupId>1</Config>
+<Config id=8 name=HostId>2</Config>
+<Config id=9 name=SiteCode>100321</Config>
+<Config id=1 name=ServerAddr>61.172.252.237:8095</Config>
+<Config id=2 name=SignKey>test</Config>
+<Config id=10 name=Ip>122.199.144.231</Config>
+<Config id=3 name=SocPwd>shanda</Config>
+<Config id=11 name=Port>10086</Config>
+<Config id=4 name=SpId>1</Config>
+</Configs>
+

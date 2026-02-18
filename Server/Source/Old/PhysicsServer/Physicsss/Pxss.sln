@@ -1,0 +1,19 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{B2857954-AA2E-48dc-B759-AFBF20483D62}") = "Pxss", "Pxss.vcproj", "{BE57DD40-195A-4163-A6AC-515135415AF5}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BE57DD40-195A-4163-A6AC-515135415AF5}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BE57DD40-195A-4163-A6AC-515135415AF5}.Debug|Win32.Build.0 = Debug|Win32
+		{BE57DD40-195A-4163-A6AC-515135415AF5}.Release|Win32.ActiveCfg = Release|Win32
+		{BE57DD40-195A-4163-A6AC-515135415AF5}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

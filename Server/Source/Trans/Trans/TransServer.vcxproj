@@ -1,0 +1,321 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{43BAAE7B-E07D-41D3-B8FF-F11101E32FFA}</ProjectGuid>
+    <RootNamespace>TransServer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x64.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x64.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <EmbedManifest Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</EmbedManifest>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">PBTransDlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|x64'">PBTranss</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LibraryPath>A:\Game\SRC\PointBlank\Server\i3Server\lib\ReleaseDLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <StackReserveSize>4194304</StackReserveSize>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <TargetEnvironment>X64</TargetEnvironment>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>false</TreatWarningAsError>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <StackReserveSize>4194304</StackReserveSize>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\Trans\Config.ini" />
+    <None Include="res\TransDlg.ico" />
+    <None Include="res\TransDlg.rc2" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="TransDlg.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\ServerStatistics.cpp" />
+    <ClCompile Include="Design\DesignBase.cpp" />
+    <ClCompile Include="Design\DesignV1.cpp" />
+    <ClCompile Include="Design\DesignV2.cpp" />
+    <ClCompile Include="GeoIP2.cpp" />
+    <ClCompile Include="IPChecker.cpp" />
+    <ClCompile Include="ListIndexing.cpp" />
+    <ClCompile Include="ListIndexingLink.cpp" />
+    <ClCompile Include="ModuleDBKickList.cpp" />
+    <ClCompile Include="ModuleZLog.cpp" />
+    <ClCompile Include="ModuleZLogSocket.cpp" />
+    <ClCompile Include="PCCafeInfo.cpp" />
+    <ClCompile Include="TaskProcessor.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorDBKickList.cpp" />
+    <ClCompile Include="TransDlg.cpp" />
+    <ClCompile Include="TransDlgDlg.cpp" />
+    <ClCompile Include="TranServerSev.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="GeneralRankup.cpp" />
+    <ClCompile Include="LocalRingBuffer.cpp" />
+    <ClCompile Include="ServerDef.cpp" />
+    <ClCompile Include="Shop.cpp" />
+    <ClCompile Include="SystemTimer.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\Character.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MultiSlot\MultiSlot.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\UserInven.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\MedalServer\MedalServerDef.cpp" />
+    <ClCompile Include="ModuleControl.cpp" />
+    <ClCompile Include="ModuleControlSocket.cpp" />
+    <ClCompile Include="ModuleDBNick.cpp" />
+    <ClCompile Include="ModuleDBShop_SP.cpp" />
+    <ClCompile Include="ModuleDBShop_WebGift.cpp" />
+    <ClCompile Include="ModuleDBStats.cpp" />
+    <ClCompile Include="ModuleDBUID.cpp" />
+    <ClCompile Include="ModuleDBUserInfo.cpp" />
+    <ClCompile Include="ModuleDBUserLoad.cpp" />
+    <ClCompile Include="ModuleDBUserSave.cpp" />
+    <ClCompile Include="ModuleDBUserSaveCreateChar.cpp" />
+    <ClCompile Include="ModuleDBUserSaveCreateNick.cpp" />
+    <ClCompile Include="ModuleDBUserSaveExitSave.cpp" />
+    <ClCompile Include="ModuleLog.cpp" />
+    <ClCompile Include="ModuleServiceLogFile.cpp" />
+    <ClCompile Include="ModuleSIA.cpp" />
+    <ClCompile Include="ModuleSIASocket.cpp" />
+    <ClCompile Include="ModuleSocket.cpp" />
+    <ClCompile Include="ModuleThaiPc.cpp" />
+    <ClCompile Include="S2ContainerList.cpp" />
+    <ClCompile Include="S2RingBuffer.cpp" />
+    <ClCompile Include="CapsuleItem.cpp" />
+    <ClCompile Include="CapsuleRand.cpp" />
+    <ClCompile Include="TaskProcessorCapsule.cpp" />
+    <ClCompile Include="TaskProcessorDBUserInfo.cpp" />
+    <ClCompile Include="TaskProcessorNick.cpp" />
+    <ClCompile Include="TaskProcessorPacketParsing.cpp" />
+    <ClCompile Include="TaskProcessorShop.cpp" />
+    <ClCompile Include="TaskProcessorSIA.cpp" />
+    <ClCompile Include="TaskProcessorUID.cpp" />
+    <ClCompile Include="TaskProcessorUserLoad.cpp" />
+    <ClCompile Include="TaskProcessorUserSave.cpp" />
+    <ClCompile Include="TaskProcessorWeb.cpp" />
+    <ClCompile Include="TrackBuffer.cpp" />
+    <ClCompile Include="CircularIndex.cpp" />
+    <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="UserEvent.cpp" />
+    <ClCompile Include="UserFinder.cpp" />
+    <ClCompile Include="ServerContext.cpp" />
+    <ClCompile Include="UserManager.cpp" />
+    <ClCompile Include="UserSession.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Base.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Char.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Community.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Domination.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Event.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Quest.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_QuickJoin.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Room.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Skill.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_System.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\Gacha.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Gacha\GachaPurchase.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Medal\MedalDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MO.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MODefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\S2MO\S2MOSysDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\SIA_Define.h" />
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+    <ClInclude Include="..\..\CommonServerSource\ServerStatistics.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareClient\ProtocolGacha.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerGacha.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerMedalStruct.h" />
+    <ClInclude Include="Design\DesignBase.h" />
+    <ClInclude Include="Design\DesignV1.h" />
+    <ClInclude Include="Design\DesignV2.h" />
+    <ClInclude Include="GeoIP2.h" />
+    <ClInclude Include="IPChecker.h" />
+    <ClInclude Include="ListIndexing.h" />
+    <ClInclude Include="ListIndexingLink.h" />
+    <ClInclude Include="ModuleDBKickList.h" />
+    <ClInclude Include="ModuleZLog.h" />
+    <ClInclude Include="ModuleZLogSocket.h" />
+    <ClInclude Include="PCCafeInfo.h" />
+    <ClInclude Include="TaskProcessor.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TransDlg.h" />
+    <ClInclude Include="TransDlgDlg.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="DataBase_Script.h" />
+    <ClInclude Include="GeneralRankup.h" />
+    <ClInclude Include="LocalRingBuffer.h" />
+    <ClInclude Include="ServerDef.h" />
+    <ClInclude Include="Shop.h" />
+    <ClInclude Include="SystemTimer.h" />
+    <ClInclude Include="TransDefine.h" />
+    <ClInclude Include="..\..\CommonServerSource\Ado.h" />
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h" />
+    <ClInclude Include="..\..\CommonServerSource\S2DB.h" />
+    <ClInclude Include="..\..\CommonServerSource\SIA_Protocol.h" />
+    <ClInclude Include="..\..\..\CommonStructure\ShareClient\ProtocolMedalStruct.h" />
+    <ClInclude Include="..\..\..\CommonStructure\ShareClient\ProtocolStruct.h" />
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\Character.h" />
+    <ClInclude Include="..\..\CommonServerSource\MultiSlot\MultiSlot.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h" />
+    <ClInclude Include="..\..\CommonServerSource\UserInven.h" />
+    <ClInclude Include="..\..\CommonServerSource\MedalServer\MedalServerDef.h" />
+    <ClInclude Include="ModuleControl.h" />
+    <ClInclude Include="ModuleControlSocket.h" />
+    <ClInclude Include="ModuleDBNick.h" />
+    <ClInclude Include="ModuleDBShop.h" />
+    <ClInclude Include="ModuleDBShop_Script.h" />
+    <ClInclude Include="ModuleDBStats.h" />
+    <ClInclude Include="ModuleDBUID.h" />
+    <ClInclude Include="ModuleDBUserInfo.h" />
+    <ClInclude Include="ModuleDBUserLoad.h" />
+    <ClInclude Include="ModuleDBUserSave.h" />
+    <ClInclude Include="ModuleLog.h" />
+    <ClInclude Include="ModuleServiceLogFile.h" />
+    <ClInclude Include="ModuleSIA.h" />
+    <ClInclude Include="ModuleSIASocket.h" />
+    <ClInclude Include="ModuleSocket.h" />
+    <ClInclude Include="ModuleThaiPc.h" />
+    <ClInclude Include="S2ContainerList.h" />
+    <ClInclude Include="S2RingBuffer.h" />
+    <ClInclude Include="CapsuleItem.h" />
+    <ClInclude Include="CapsuleRand.h" />
+    <ClInclude Include="TrackBuffer.h" />
+    <ClInclude Include="CircularIndex.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="UserEvent.h" />
+    <ClInclude Include="UserFinder.h" />
+    <ClInclude Include="ServerContext.h" />
+    <ClInclude Include="UserManager.h" />
+    <ClInclude Include="UserSession.h" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="TransDlg.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

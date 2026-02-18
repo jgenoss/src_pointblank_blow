@@ -1,0 +1,273 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="ClanDlgDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ClanDlg.cpp">
+      <Filter>Base Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ClanServerSev.cpp">
+      <Filter>Base Files\Service</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Base Files</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleTeam.cpp">
+      <Filter>ClanContext</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp">
+      <Filter>CommonDef</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControl.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="ModuleControlSocket.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="DataBase.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchingManager.cpp">
+      <Filter>ClanMatch</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchManager.cpp">
+      <Filter>ClanMatch</Filter>
+    </ClCompile>
+    <ClCompile Include="MatchTeam.cpp">
+      <Filter>ClanMatch</Filter>
+    </ClCompile>
+    <ClCompile Include="MercenaryMgr.cpp">
+      <Filter>ClanMatch</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\TrueSkill\GaussianDistribution.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\TrueSkill\TrueSkill.cpp">
+      <Filter>Library</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessor.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorUser.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorBattle.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorClan.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorDB.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="TeamMember.cpp">
+      <Filter>ClanMatch</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="ServerDef.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Gateway.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="i3BinListEx.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketCombiner.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="PacketLocker.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="Receiver.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="RingBuffer.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="TrackBuffer.cpp">
+      <Filter>TaskPump</Filter>
+    </ClCompile>
+    <ClCompile Include="TaskProcessorClanWar.cpp">
+      <Filter>Task</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp">
+      <Filter>DataBase</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\ClanMatch\Ranking.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\CommonDef.cpp" />
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ClanDlgDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="ClanDlg.h">
+      <Filter>Base Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Base Files</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleTeam.h">
+      <Filter>ClanContext</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h">
+      <Filter>CommonDef</Filter>
+    </ClInclude>
+    <ClInclude Include="ClanDefine.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControlSocket.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="ModuleControl.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="DataBase_Script.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\Ado.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchTeam.h">
+      <Filter>ClanMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchingManager.h">
+      <Filter>ClanMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="MatchManager.h">
+      <Filter>ClanMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="MercenaryMgr.h">
+      <Filter>ClanMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\TrueSkill\GaussianDistribution.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\TrueSkill\TrueSkill.h">
+      <Filter>Library</Filter>
+    </ClInclude>
+    <ClInclude Include="TaskProcessor.h">
+      <Filter>Task</Filter>
+    </ClInclude>
+    <ClInclude Include="TeamMember.h">
+      <Filter>ClanMatch</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketLocker.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="Gateway.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="i3BinListEx.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="PacketCombiner.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="TrackBuffer.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="Receiver.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="RingBuffer.h">
+      <Filter>TaskPump</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h">
+      <Filter>DataBase</Filter>
+    </ClInclude>
+    <ClInclude Include="ServerDef.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanManager.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchRecord.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\ClanMatchSeason.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\Ranking.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\ClanMatch\Rating.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\CommonDef.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Clan.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\S2MO.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+    <None Include="res\ClanDlg.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\ClanDlg.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\..\Bin\Clan\Config.ini" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Base Files">
+      <UniqueIdentifier>{1cdde7c5-b910-4c07-b3c8-7d45d4d2d32f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Dialog">
+      <UniqueIdentifier>{a318f355-9901-4119-a6a6-f2892c38a2b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Base Files\Service">
+      <UniqueIdentifier>{948d399b-724b-47ea-98d3-0c3e2cafc086}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ClanContext">
+      <UniqueIdentifier>{87746e3a-2746-4a62-9b82-58911d9c0adf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonDef">
+      <UniqueIdentifier>{4173ae4f-ee57-476a-a10b-29ae31cccdc0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{5a65eae9-342a-43c3-bcc8-d67c564c67e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{bbd7cb59-304b-4133-97c1-6ddb7cb77a68}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{5e7fc0a1-859e-479d-af18-575330b94311}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DataBase">
+      <UniqueIdentifier>{779e633d-46c5-4cd6-9963-1a63b1344496}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ClanMatch">
+      <UniqueIdentifier>{892383f2-909b-4ff2-aa6f-82bb0ccd57bc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Library">
+      <UniqueIdentifier>{8bf78299-93a4-4063-8cfb-e13aa2cad348}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Task">
+      <UniqueIdentifier>{205336ff-7084-4d8a-941d-1bfcb1be9c83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{56af4f3f-322f-4532-b9a3-01d27e788338}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="TaskPump">
+      <UniqueIdentifier>{da637fc5-226f-4acf-a745-4f5fae5d0258}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="ClanDlg.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,24 @@
+#ifndef __HACK_CHECK_MENU_H__
+#define __HACK_CHECK_MENU_H__
+
+#define HACK_CHECK_MENU_NAME	64
+
+enum HACK_CHECK_ACTIVE_TYPE
+{
+	HACK_CHECK_ACTIVE_ONOFF,		// On / OFF
+	HACK_CHECK_ACTIVE_RATIO,		// ∫Ò¿≤
+
+	HACK_CHECK_ACTIVE_MAX,
+};
+
+struct HACK_CHECK_MENU
+{
+	DS_HACK_TYPE				eHackType;
+	TCHAR						m_strName[ HACK_CHECK_MENU_NAME ];
+	HACK_CHECK_ACTIVE_TYPE		m_eActiveType;
+	BOOL						m_bLog;
+};
+
+
+
+#endif

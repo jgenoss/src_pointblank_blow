@@ -1,0 +1,444 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_Korea|Win32">
+      <Configuration>Debug_Korea</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release_Korea|Win32">
+      <Configuration>Release_Korea</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BBA0AFE8-1A66-45DA-B272-56E376DB0BCB}</ProjectGuid>
+    <RootNamespace>SIAServer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v145</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Release.props" />
+    <Import Project="..\..\Props\Release_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+    <Import Project="..\..\Props\Debug_x86.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\Props\Debug.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.40219.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">$(Configuration)\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">true</LinkIncremental>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">Release\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">Release\</IntDir>
+    <LinkIncremental Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">false</LinkIncremental>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">PBSIADlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">PBSIADlg</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">PBSIAs</TargetName>
+    <TargetName Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">PBSIAs</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LibraryPath>A:\Game\SRC\PointBlank\Server\i3Server\lib\ReleaseDLL;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>./Garena;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_STEAM_API;%(PreprocessorDefinitions);_SIA_SERVER</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+    <PostBuildEvent>
+      <Command>
+      </Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(ProjectDir);./Garena;./Webzen;./Webzen/WBANetwork;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_WINDOWS;GAMEPORTAL_BUILD;BUILDMODE_DLG;BUILDMODE_KOREA;%(PreprocessorDefinitions);_SIA_SERVER</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderOutputFile>$(IntDir)$(TargetName).pch</PrecompiledHeaderOutputFile>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;Pdh.lib;Version.lib;Webzen/PCBillAdapter_VS2010_MB_MT_d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>
+      </OptimizeReferences>
+      <EnableCOMDATFolding>
+      </EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy $(TargetPath) "../../Bin/SIA"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>./Garena;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_STEAM_API;%(PreprocessorDefinitions);_SIA_SERVER</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir);./Garena;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>BUILDMODE_SEV;BUILDMODE_KOREA;%(PreprocessorDefinitions);_SIA_SERVER</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <TreatWChar_tAsBuiltInType>false</TreatWChar_tAsBuiltInType>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AssemblerOutput>All</AssemblerOutput>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <TreatWarningAsError>true</TreatWarningAsError>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>ws2_32.lib;winmm.lib;Pdh.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(TargetFileName)</OutputFile>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Console</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkStatus>false</LinkStatus>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\Contents.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Contents\ContentsDefine.h" />
+    <ClInclude Include="..\..\..\..\Common\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\..\CommonServerSource\Ado.h" />
+    <ClInclude Include="..\..\CommonServerSource\CommonServerDef.h" />
+    <ClInclude Include="..\..\CommonServerSource\DatabaseConfig.h" />
+    <ClInclude Include="..\..\CommonServerSource\ServerStatistics.h" />
+    <ClInclude Include="..\..\CommonServerSource\SIA_Protocol.h" />
+    <ClInclude Include="..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\Common\CommonSource\SIA_Define.h" />
+    <ClInclude Include="AccountTrans.h" />
+    <ClInclude Include="BillingWorker_Brazil.h" />
+    <ClInclude Include="BillingWorker_Italy.h" />
+    <ClInclude Include="BillingWorker_Korea.h" />
+    <ClInclude Include="BillingWorker_Latin.h" />
+    <ClInclude Include="BillingWorker_NorthA.h" />
+    <ClInclude Include="BillingWorker_NorthA_Steam.h" />
+    <ClInclude Include="BillingWorker_Philippines.h" />
+    <ClInclude Include="BillingWorker_Russia.h" />
+    <ClInclude Include="BillingWorker_Vietnam.h" />
+    <ClInclude Include="Config.h" />
+    <ClInclude Include="CTPacket.h" />
+    <ClInclude Include="Garena\z_base64.h" />
+    <ClInclude Include="Garena\z_OpensslRSA.h" />
+    <ClInclude Include="HashTable.h" />
+    <ClInclude Include="IntegrationAPI.h" />
+    <ClInclude Include="LoginTCP.h" />
+    <ClInclude Include="LoginWorker_Brazil.h" />
+    <ClInclude Include="LoginWorker_Italy.h" />
+    <ClInclude Include="LoginWorker_Korea.h" />
+    <ClInclude Include="LoginWorker_Latin.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClInclude>
+    <ClInclude Include="LoginWorker_NorthA.h" />
+    <ClInclude Include="LoginWorker_NorthA_Steam.h" />
+    <ClInclude Include="LoginWorker_Philippines.h" />
+    <ClInclude Include="LoginWorker_Russia.h" />
+    <ClInclude Include="LoginWorker_Vietnam.h" />
+    <ClInclude Include="MainStreamBuffer_Buy.h" />
+    <ClInclude Include="MainStreamBuffer_Login.h" />
+    <ClInclude Include="PCCafeBase.h" />
+    <ClInclude Include="PCCafeCreator.h" />
+    <ClInclude Include="PCCafeDB.h" />
+    <ClInclude Include="PCCafeManager.h" />
+    <ClInclude Include="PCCafeTCP.h" />
+    <ClInclude Include="PCCafeWorker_Italy.h" />
+    <ClInclude Include="PCCafeWorker_Korea.h" />
+    <ClInclude Include="PCCafeWorker_NO.h" />
+    <ClInclude Include="PCCafeWorker_NorthA.h" />
+    <ClInclude Include="PCCafeWorker_Philippines.h" />
+    <ClInclude Include="PCCafeWorker_Russia.h" />
+    <ClInclude Include="PCCafeWorker_SM.h" />
+    <ClInclude Include="PCCafeWorker_Thai.h" />
+    <ClInclude Include="PCCafeWorker_Vietnam.h" />
+    <ClInclude Include="PCCafeWorker_ZPT.h" />
+    <ClInclude Include="SteamAPI.h" />
+    <ClInclude Include="WorkerStreamBuffer_PCCafe.h" />
+    <ClInclude Include="_GameProtocol.h" />
+    <ClInclude Include="..\..\CommonServerSource\BillingDefine.h" />
+    <ClInclude Include="ControlProtocol.h" />
+    <ClInclude Include="integration_api.h" />
+    <ClInclude Include="NCSA.h" />
+    <ClInclude Include="Payletter.h" />
+    <ClInclude Include="..\..\..\PointBlank\Source_New\CommonSource\ProtocolDef.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ServerDef.h" />
+    <ClInclude Include="ModuleControl.h" />
+    <ClInclude Include="ModuleNet.h" />
+    <ClInclude Include="ModuleNet_Server.h" />
+    <ClInclude Include="ModuleTask.h" />
+    <ClInclude Include="HtmlParser.h" />
+    <ClInclude Include="LoginBase.h" />
+    <ClInclude Include="LoginCreator.h" />
+    <ClInclude Include="LoginDB.h" />
+    <ClInclude Include="LoginHTTP.h" />
+    <ClInclude Include="LoginManager.h" />
+    <ClInclude Include="LoginWorker_NO.h" />
+    <ClInclude Include="LoginWorker_SM.h" />
+    <ClInclude Include="LoginWorker_Thai.h" />
+    <ClInclude Include="LoginWorker_ZPT.h" />
+    <ClInclude Include="BillingBase.h" />
+    <ClInclude Include="BillingCreator.h" />
+    <ClInclude Include="BillingDB.h" />
+    <ClInclude Include="BillingHTTP.h" />
+    <ClInclude Include="BillingManager.h" />
+    <ClInclude Include="BillingTCP.h" />
+    <ClInclude Include="BillingWorker_NO.h" />
+    <ClInclude Include="BillingWorker_SM.h" />
+    <ClInclude Include="BillingWorker_Thai.h" />
+    <ClInclude Include="BillingWorker_ZPT.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="siadlg.h" />
+    <ClInclude Include="siadlgDlg.h" />
+    <ClInclude Include="..\..\CommonStructure\ShareServer\ProtocolServerStruct.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Contents\Contents.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\Ado.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\CommonServerDef.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\DatabaseConfig.cpp" />
+    <ClCompile Include="..\..\CommonServerSource\ServerStatistics.cpp" />
+    <ClCompile Include="AccountTrans.cpp" />
+    <ClCompile Include="BillingWorker_Brazil.cpp" />
+    <ClCompile Include="BillingWorker_Italy.cpp" />
+    <ClCompile Include="BillingWorker_Korea.cpp" />
+    <ClCompile Include="BillingWorker_Latin.cpp" />
+    <ClCompile Include="BillingWorker_NorthA.cpp" />
+    <ClCompile Include="BillingWorker_NorthA_Steam.cpp" />
+    <ClCompile Include="BillingWorker_Philippines.cpp" />
+    <ClCompile Include="BillingWorker_Russia.cpp" />
+    <ClCompile Include="BillingWorker_Vietnam.cpp" />
+    <ClCompile Include="Config.cpp" />
+    <ClCompile Include="CTPacket.cpp" />
+    <ClCompile Include="Garena\z_base64.cpp" />
+    <ClCompile Include="Garena\z_OpensslRSA.cpp" />
+    <ClCompile Include="HashTable.cpp" />
+    <ClCompile Include="IntegrationAPI.cpp" />
+    <ClCompile Include="LoginTCP.cpp" />
+    <ClCompile Include="LoginWorker_Brazil.cpp" />
+    <ClCompile Include="LoginWorker_Italy.cpp" />
+    <ClCompile Include="LoginWorker_Korea.cpp" />
+    <ClCompile Include="LoginWorker_Latin.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">false</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="LoginWorker_NorthA.cpp" />
+    <ClCompile Include="LoginWorker_NorthA_Steam.cpp" />
+    <ClCompile Include="LoginWorker_Philippines.cpp" />
+    <ClCompile Include="LoginWorker_Russia.cpp" />
+    <ClCompile Include="LoginWorker_Vietnam.cpp" />
+    <ClCompile Include="MainStreamBuffer_Buy.cpp" />
+    <ClCompile Include="MainStreamBuffer_Login.cpp" />
+    <ClCompile Include="ModuleTask_PCCafe.cpp" />
+    <ClCompile Include="PCCafeBase.cpp" />
+    <ClCompile Include="PCCafeCreator.cpp" />
+    <ClCompile Include="PCCafeDB.cpp" />
+    <ClCompile Include="PCCafeManager.cpp" />
+    <ClCompile Include="PCCafeTCP.cpp" />
+    <ClCompile Include="PCCafeWorker_Italy.cpp" />
+    <ClCompile Include="PCCafeWorker_Korea.cpp" />
+    <ClCompile Include="PCCafeWorker_NO.cpp" />
+    <ClCompile Include="PCCafeWorker_NorthA.cpp" />
+    <ClCompile Include="PCCafeWorker_Philippines.cpp" />
+    <ClCompile Include="PCCafeWorker_Russia.cpp" />
+    <ClCompile Include="PCCafeWorker_SM.cpp" />
+    <ClCompile Include="PCCafeWorker_Thai.cpp" />
+    <ClCompile Include="PCCafeWorker_Vietnam.cpp" />
+    <ClCompile Include="PCCafeWorker_ZPT.cpp" />
+    <ClCompile Include="ServerDef.cpp" />
+    <ClCompile Include="ModuleControl.cpp" />
+    <ClCompile Include="ModuleNet.cpp" />
+    <ClCompile Include="ModuleNet_Server.cpp" />
+    <ClCompile Include="ModuleTask.cpp" />
+    <ClCompile Include="ModuleTask_Link.cpp" />
+    <ClCompile Include="ModuleTask_Login.cpp" />
+    <ClCompile Include="ModuleTask_Shop.cpp" />
+    <ClCompile Include="HtmlParser.cpp" />
+    <ClCompile Include="LoginBase.cpp" />
+    <ClCompile Include="LoginCreator.cpp" />
+    <ClCompile Include="LoginDB.cpp" />
+    <ClCompile Include="LoginHTTP.cpp" />
+    <ClCompile Include="LoginManager.cpp" />
+    <ClCompile Include="LoginWorker_NO.cpp" />
+    <ClCompile Include="LoginWorker_SM.cpp" />
+    <ClCompile Include="LoginWorker_Thai.cpp" />
+    <ClCompile Include="LoginWorker_ZPT.cpp" />
+    <ClCompile Include="BillingBase.cpp" />
+    <ClCompile Include="BillingCreator.cpp" />
+    <ClCompile Include="BillingDB.cpp" />
+    <ClCompile Include="BillingHTTP.cpp" />
+    <ClCompile Include="BillingManager.cpp" />
+    <ClCompile Include="BillingTCP.cpp" />
+    <ClCompile Include="BillingWorker_NO.cpp" />
+    <ClCompile Include="BillingWorker_SM.cpp" />
+    <ClCompile Include="BillingWorker_Thai.cpp" />
+    <ClCompile Include="BillingWorker_ZPT.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Korea|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release_Korea|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="siadlg.cpp" />
+    <ClCompile Include="siadlgDlg.cpp" />
+    <ClCompile Include="SIAServerSev.cpp" />
+    <ClCompile Include="SteamAPI.cpp" />
+    <ClCompile Include="WorkerStreamBuffer_PCCafe.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\Bin\SIA\SIAConfig.ini" />
+    <None Include="res\siadlg.ico" />
+    <None Include="res\siadlg.rc2" />
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="siadlg.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\siadlg.manifest" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="siadlg.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>
