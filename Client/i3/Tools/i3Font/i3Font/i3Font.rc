@@ -1,0 +1,312 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3Font.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3Font.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "i3Font 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3Font Version 1.1",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005    Zepetto Inc.",IDC_STATIC,40,25,
+                    119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_I3FONT_DIALOG DIALOGEX 0, 0, 403, 332
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "i3Font"
+MENU IDR_MENU_MAIN
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "E&xit",IDOK,346,311,50,14
+    EDITTEXT        IDC_EDIT_NAME,81,32,93,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FONTNAME,81,55,93,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FONTSIZE,205,55,40,14,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    PUSHBUTTON      "Select Font",IDC_BUT_SELECT_FONT,336,51,51,37
+    EDITTEXT        IDC_EDIT_IMG_WIDTH,81,102,48,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_IMG_HEIGHT,81,123,48,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SPACE_X,205,102,48,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SPACE_Y,205,123,48,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_TXTFILE,81,172,276,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_TXTFILE,357,173,13,14
+    EDITTEXT        IDC_EDIT_LABELFILE,81,193,276,14,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_EDIT_OUTDIR,81,214,276,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_OUTDIR,357,214,13,14
+    PUSHBUTTON      "&Auto",IDC_BUTTON_AUTO_OUTDIR,373,214,23,14
+    EDITTEXT        IDC_EDIT_DICFILE,81,235,276,14,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_EDIT_IMGINFOFILE,81,256,276,14,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    EDITTEXT        IDC_EDIT_STRFILE,81,277,276,14,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    CONTROL         "Dump Debug Files",IDC_CHECK_DUMP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,324,296,72,10
+    PUSHBUTTON      "&Make *.i3fnt, *.dic, *.tga",IDC_BUTTON_MAKEIMAGE,7,295,
+                    153,14
+    PUSHBUTTON      "Make *.&str",IDC_BUTTON_GEN_STR,162,295,153,14
+    PUSHBUTTON      "Open &Output Directory",IDC_BUTTON_OPENOUTDIR,162,311,
+                    153,14
+    LTEXT           "Unicode Text (In):",IDC_STATIC,18,174,60,8
+    LTEXT           "Output Folder (Out):",IDC_STATIC,11,216,67,8
+    LTEXT           "Label File (In):",IDC_STATIC,32,195,46,8
+    LTEXT           "Dictionary File(I/O):",IDC_STATIC,16,237,62,8
+    LTEXT           "i3Font File (O):",IDC_STATIC,29,258,48,8
+    LTEXT           "STR file (O):",IDC_STATIC,38,279,40,8
+    LTEXT           "Font Name :",IDC_STATIC,38,57,40,8
+    LTEXT           "Name :",IDC_STATIC,55,34,23,8
+    LTEXT           "Size :",IDC_STATIC,186,57,18,8
+    GROUPBOX        "Font Info.",IDC_STATIC,7,46,389,44
+    GROUPBOX        "Image Info.",IDC_STATIC,7,92,389,53
+    LTEXT           "Width :",IDC_STATIC,54,105,24,8
+    LTEXT           "Height :",IDC_STATIC,52,126,26,8
+    LTEXT           "Space X :",IDC_STATIC,173,105,31,8
+    LTEXT           "Space Y :",IDC_STATIC,173,126,31,8
+    COMBOBOX        IDC_COMBO_QUALITY,81,73,93,71,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Quality :",IDC_STATIC,51,73,27,8
+    LTEXT           "Media Folder :",IDC_STATIC,34,12,44,8
+    EDITTEXT        IDC_EDIT_MEDIA_DIR,81,9,298,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_MEDIA_DIR,383,9,13,14
+    COMBOBOX        IDC_CB_IMAGE_FORMAT,296,102,91,91,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Format :",IDC_STATIC,269,105,27,8
+    PUSHBUTTON      "Ma&ke *.i3font ( Need *.i3fnt, *.dic, *.i3i )",
+                    IDC_BUTTON_MAKE_I3FONT,7,311,153,14
+    CONTROL         "",IDC_RADIO_TXT1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,
+                    378,176,9,8
+    CONTROL         "",IDC_RADIO_TXT2,"Button",BS_AUTORADIOBUTTON,379,155,9,
+                    8
+    LTEXT           "Text Directory (In):",IDC_STATIC,15,154,63,8
+    EDITTEXT        IDC_EDIT_TXT_DIR,81,151,276,14,ES_AUTOHSCROLL | 
+                    WS_DISABLED
+    PUSHBUTTON      "...",IDC_BUTTON_TXT_DIR,357,151,13,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "TODO: <회사 이름>"
+            VALUE "FileDescription", "TODO: <파일 설명>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3Font.exe"
+            VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
+            VALUE "OriginalFilename", "i3Font.exe"
+            VALUE "ProductName", "TODO: <제품 이름>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "변환", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_I3FONT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 396
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 325
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_MAIN MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New",                        ID_FILE_NEW
+        MENUITEM "&Open",                       ID_FILE_OPEN
+        MENUITEM "&Save",                       ID_FILE_SAVE
+        MENUITEM "Save &As",                    ID_FILE_SAVEAS
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_I3FONT_DIALOG DLGINIT
+BEGIN
+    IDC_COMBO_QUALITY, 0x403, 8, 0
+0x6544, 0x6166, 0x6c75, 0x0074, 
+    IDC_COMBO_QUALITY, 0x403, 6, 0
+0x7244, 0x6661, 0x0074, 
+    IDC_COMBO_QUALITY, 0x403, 6, 0
+0x7250, 0x6f6f, 0x0066, 
+    IDC_COMBO_QUALITY, 0x403, 16, 0
+0x6f4e, 0x2d6e, 0x6e41, 0x6974, 0x6c61, 0x6169, 0x6573, 0x0064, 
+    IDC_COMBO_QUALITY, 0x403, 12, 0
+0x6e41, 0x6974, 0x6c61, 0x6169, 0x6573, 0x0064, 
+    IDC_COMBO_QUALITY, 0x403, 10, 0
+0x6c43, 0x6165, 0x5472, 0x7079, 0x0065, 
+    IDC_CB_IMAGE_FORMAT, 0x403, 10, 0
+0x3432, 0x7062, 0x2070, 0x4754, 0x0041, 
+    IDC_CB_IMAGE_FORMAT, 0x403, 10, 0
+0x3233, 0x7062, 0x2070, 0x4754, 0x0041, 
+    IDC_CB_IMAGE_FORMAT, 0x403, 16, 0
+0x6857, 0x7469, 0x2065, 0x3233, 0x7062, 0x2070, 0x4754, 0x0041, 
+    IDC_CB_IMAGE_FORMAT, 0x403, 14, 0
+0x6234, 0x7070, 0x4920, 0x4933, 0x5028, 0x5053, 0x0029, 
+    IDC_CB_IMAGE_FORMAT, 0x403, 9, 0
+0x6234, 0x7070, 0x4920, 0x4933, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "i3Font 정보(&A)..."
+END
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3Font.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

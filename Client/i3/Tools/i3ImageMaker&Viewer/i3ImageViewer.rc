@@ -1,0 +1,449 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3ImageViewer.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3ImageViewer.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "i3ImageViewer 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3ImageViewer Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_I3IMAGEVIEWER_DIALOG DIALOGEX 0, 0, 366, 231
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_ACCEPTFILES | WS_EX_APPWINDOW
+CAPTION "i3ImageMaker & Viewer"
+MENU IDR_MENU2
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+END
+
+IDD_CLUT_TABLE DIALOGEX 0, 0, 197, 202
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Clut Table"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           " 0    1   2   3   4   5   6   7    8   9   10  11 12 13 14 15",IDC_STATIC,22,0,168,8
+    CONTROL         "",IDC_CLUT,"Static",SS_BLACKFRAME,18,10,172,159
+    LTEXT           "16",IDC_STATIC,9,21,8,9
+    LTEXT           "32",IDC_STATIC,8,31,8,8
+    LTEXT           "48",IDC_STATIC,8,41,8,9
+    LTEXT           "64",IDC_STATIC,8,50,8,8
+    LTEXT           "80",IDC_STATIC,8,60,8,8
+    LTEXT           "96",IDC_STATIC,8,70,8,8
+    LTEXT           "112",IDC_STATIC,4,80,11,8
+    LTEXT           "128",IDC_STATIC,4,89,11,8
+    LTEXT           "144",IDC_STATIC,4,99,11,9
+    LTEXT           "160",IDC_STATIC,4,109,11,9
+    LTEXT           "176",IDC_STATIC,4,119,11,9
+    LTEXT           "192",IDC_STATIC,4,129,11,9
+    LTEXT           "208",IDC_STATIC,4,139,11,9
+    LTEXT           "224",IDC_STATIC,4,149,11,9
+    LTEXT           "240",IDC_STATIC,4,159,11,9
+    EDITTEXT        IDC_EDIT_RED,56,182,27,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_GREEN,92,183,27,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_BLUE,128,183,27,12,ES_CENTER | ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_ALPHA,163,183,26,12,ES_CENTER | ES_AUTOHSCROLL
+    LTEXT           "RED",IDC_STATIC,63,172,14,9
+    LTEXT           "GREEN",IDC_STATIC,95,172,22,9
+    LTEXT           "BLUE",IDC_STATIC,133,172,17,9
+    LTEXT           "ALPHA",IDC_STATIC,165,172,22,9
+END
+
+IDD_DLG_MIPMAP_OPTION DIALOGEX 0, 0, 289, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,234,4,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,234,24,50,14
+    LTEXT           "Export Folder",IDC_STATIC,4,4,44,8
+    EDITTEXT        IDC_ED_EXPORTPATH,4,15,200,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BTN_EXPORTPATH,205,15,15,12
+    LTEXT           "Mininum resolusion",IDC_STATIC,4,33,60,8
+    EDITTEXT        IDC_ED_MINCX,19,44,29,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_MINCY,64,44,29,12,ES_AUTOHSCROLL
+    LTEXT           "X",IDC_STATIC,10,46,8,8
+    LTEXT           "Y",IDC_STATIC,54,46,8,8
+    LTEXT           "Filter",IDC_STATIC,4,64,17,8
+    COMBOBOX        IDC_CB_FILTER,25,62,67,80,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Dither",IDC_CHK_DITHER,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,81,35,10
+    CONTROL         "SRGB In",IDC_CHK_SRGB_IN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,93,42,10
+    CONTROL         "SRGB Out",IDC_CHK_SRGB_OUT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,105,47,10
+    CONTROL         "Export with I3I format",IDC_CHK_EXPORT_I3I,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,118,85,10
+END
+
+IDD_GRID_SETTING_DIALOG DIALOGEX 0, 0, 186, 110
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Grid Setting"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,72,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,129,89,50,14
+    EDITTEXT        IDC_EDIT_VERT_COUNT,96,17,68,14,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_EDIT_HORI_COUNT,96,38,68,14,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "vert block count",IDC_STATIC,17,20,59,8
+    LTEXT           "hori block count",IDC_STATIC,17,40,59,8
+    CONTROL         "black",IDC_RADIO_PEN_BLACK,"Button",BS_AUTORADIOBUTTON | WS_GROUP,17,73,59,10
+    CONTROL         "white",IDC_RADIO_PEN_WHITE,"Button",BS_AUTORADIOBUTTON,17,86,59,10
+    GROUPBOX        "line color",IDC_STATIC,7,60,114,43
+END
+
+IDD_i3ImageMaker_DIALOG DIALOGEX 0, 0, 299, 96
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_ACCEPTFILES | WS_EX_APPWINDOW
+CAPTION "저장옵션설정"
+FONT 8, "Microsoft Sans Serif", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "SAVE",IDOK,94,67,110,26
+    LTEXT           "Drag and Drop Image File... (Output : *.i3i)",IDC_STATIC,188,10,108,18
+    GROUPBOX        "",IDC_STATIC,181,3,115,29
+    COMBOBOX        IDC_COMBO_PLATFORM,57,3,113,180,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Target Platform",IDC_STATIC,3,5,49,8
+    LTEXT           "Compress",IDC_STATIC,3,22,32,8
+    COMBOBOX        IDC_CB_COMPRESS,57,19,113,222,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Generate Mipmap",IDC_CHECK_MIPMAP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,43,74,18
+    EDITTEXT        IDC_EDIT_MIPMAP_CX,129,46,46,12,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    EDITTEXT        IDC_EDIT_MIPMAP_CY,224,46,44,12,ES_AUTOHSCROLL | ES_NUMBER | WS_DISABLED
+    GROUPBOX        "",IDC_STATIC,3,38,293,26
+    LTEXT           "MinY",IDC_STATIC,198,47,23,10
+    LTEXT           "MinX",IDC_STATIC,106,47,20,11
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,1,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "제페토"
+            VALUE "FileDescription", "i3ImageViewer"
+            VALUE "FileVersion", "0.1.0.1"
+            VALUE "InternalName", "i3ImageViewer.exe"
+            VALUE "LegalCopyright", "CopyRight <Zepetto>.  All rights reserved."
+            VALUE "OriginalFilename", "i3ImageViewer.exe"
+            VALUE "ProductName", "i3ImageViewer"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_I3IMAGEVIEWER_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 359
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
+    IDD_CLUT_TABLE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 190
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 195
+    END
+
+    IDD_DLG_MIPMAP_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 284
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 130
+    END
+
+    IDD_GRID_SETTING_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        VERTGUIDE, 17
+        VERTGUIDE, 76
+        VERTGUIDE, 96
+        VERTGUIDE, 164
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 103
+    END
+
+    IDD_i3ImageMaker_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 296
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 93
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// HTML
+//
+
+IDR_HTML_IMAGEVIEWCTRL  HTML                    "ImageViewCtrl.htm"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU MENU 
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "Open    CTRL+O",              ID_FILE_OPEN
+        MENUITEM "&Save    CTRL+S",             ID_FILE_SAVE32823
+        MENUITEM "Save As...    CTRL+SHIFT+S",  ID_FILE_SAVEAS
+        MENUITEM SEPARATOR
+        MENUITEM "Export Mipmaps...",           ID_FILE_EXPORTMIPMAPS
+        MENUITEM "Generate Mipmaps...",         ID_FILE_GENERATEMIPMAPS
+        MENUITEM "Load Mipmaps...",             ID_FILE_LOADMIPMAPS
+        MENUITEM SEPARATOR
+        MENUITEM "Exit",                        ID_FILE_EXIT
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "PROPERTY",                    ID_VIEW_PROPERTY
+        POPUP "GRID", GRAYED
+        BEGIN
+            MENUITEM "NORMAL",                      ID_GRID_NORMAL
+            MENUITEM "LINE",                        ID_GRID_LINE
+            MENUITEM "WHITE",                       ID_GRID_WHITE
+        END
+        POPUP "MIPMAP"
+        BEGIN
+            MENUITEM "ALL",                         ID_MIPMAP_ALL
+            POPUP "LEVEL"
+            BEGIN
+                MENUITEM "LEVEL_0",                     ID_LEVEL_0
+                MENUITEM "LEVEL_1",                     ID_LEVEL_1
+                MENUITEM "LEVEL_2",                     ID_LEVEL_2
+                MENUITEM "LEVEL_3",                     ID_LEVEL_3
+                MENUITEM "LEVEL_4",                     ID_LEVEL_4
+                MENUITEM "LEVEL_5",                     ID_LEVEL_5
+                MENUITEM "LEVEL_6",                     ID_LEVEL_6
+                MENUITEM "LEVEL_7",                     ID_LEVEL_7
+            END
+            MENUITEM SEPARATOR
+            MENUITEM "NONE",                        ID_MIPMAP_NONE
+        END
+    END
+    MENUITEM "RGBA",                        ID_MODE_ALL
+    MENUITEM "&RGB",                        ID_MODE_RGB
+    MENUITEM "&ALPHA",                      ID_MODE_ALPHA
+    POPUP "GRID"
+    BEGIN
+        MENUITEM "Draw Grid",                   ID_GRID_DRAWGRID, GRAYED
+        MENUITEM "Grid Setting",                ID_GRID_GRIDSETTING
+    END
+END
+
+IDR_MENU2 MENU 
+BEGIN
+    POPUP "File"
+    BEGIN
+        MENUITEM "&Open    CTRL+O",             ID_FILE_OPEN_2
+        MENUITEM "&Save && Convert    CTRL+S",  ID_FILE_SAVE_2
+        MENUITEM "E&xit    CTRL+X",             ID_FILE_EXIT_2
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_DLG_MIPMAP_OPTION DLGINIT
+BEGIN
+    IDC_CB_FILTER, 0x403, 5, 0
+0x6f4e, 0x656e, "\000" 
+    IDC_CB_FILTER, 0x403, 6, 0
+0x6f50, 0x6e69, 0x0074, 
+    IDC_CB_FILTER, 0x403, 7, 0
+0x694c, 0x656e, 0x7261, "\000" 
+    IDC_CB_FILTER, 0x403, 9, 0
+0x7254, 0x6169, 0x676e, 0x656c, "\000" 
+    IDC_CB_FILTER, 0x403, 4, 0
+0x6f42, 0x0078, 
+    0
+END
+
+IDD_i3ImageMaker_DIALOG DLGINIT
+BEGIN
+    IDC_CB_COMPRESS, 0x403, 5, 0
+0x6f4e, 0x656e, "\000" 
+    IDC_CB_COMPRESS, 0x403, 4, 0
+0x495a, 0x0050, 
+    IDC_CB_COMPRESS, 0x403, 15, 0
+0x5844, 0x3154, 0x2820, 0x6f4e, 0x6c41, 0x6870, 0x2961, "\000" 
+    IDC_CB_COMPRESS, 0x403, 5, 0
+0x5844, 0x3154, "\000" 
+    IDC_CB_COMPRESS, 0x403, 5, 0
+0x5844, 0x3354, "\000" 
+    IDC_CB_COMPRESS, 0x403, 5, 0
+0x5844, 0x3554, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATOR1 ACCELERATORS 
+BEGIN
+    "O",            ID_FILE_OPEN_2,         VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE_2,         VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVEAS,         VIRTKEY, SHIFT, CONTROL, NOINVERT
+    "X",            ID_FILE_EXIT_2,         VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "i3ImageViewer 정보(&A)..."
+END
+
+#endif    // 한국어 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3ImageViewer.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

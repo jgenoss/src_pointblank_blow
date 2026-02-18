@@ -1,0 +1,202 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{6306eff6-b192-4834-9907-e32744ad7a60}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{4af62ef3-dc4a-401f-93ea-c859481e11c0}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DlgRefObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3ObjectEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3ObjectEditorFramework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ObjectTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeEventCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelSceneGraph.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelSpec.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelState.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelTimeEvent.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelViewer.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgBuildConvex.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgOption.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionDisable.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionDynamicState.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionEmitEffect.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionExplosion.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionPath.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionSound.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecActionVisible.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecObject.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecState.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DlgRefObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3ObjectEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3ObjectEditorFramework.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectState.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ObjectTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeEventCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelSceneGraph.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelSpec.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelState.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelTimeEvent.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelViewer.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgBuildConvex.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgOption.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionDisable.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionDynamicState.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionEmitEffect.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionExplosion.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionPath.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionSound.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecActionVisible.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecObject.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecState.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\i3ObjectEditor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="Object.ICO">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3ObjectEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

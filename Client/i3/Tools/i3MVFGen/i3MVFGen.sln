@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3MVFGen", "i3MVFGen.vcproj", "{407AD09A-2D65-40EB-8D83-E0D19A98EB28}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {EB35C8B6-5B2E-4ACE-994B-7071B69F770B}
+		SccProjectUniqueName1 = i3MVFGen.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{407AD09A-2D65-40EB-8D83-E0D19A98EB28}.Debug.ActiveCfg = Debug|Win32
+		{407AD09A-2D65-40EB-8D83-E0D19A98EB28}.Debug.Build.0 = Debug|Win32
+		{407AD09A-2D65-40EB-8D83-E0D19A98EB28}.Release.ActiveCfg = Release|Win32
+		{407AD09A-2D65-40EB-8D83-E0D19A98EB28}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,266 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A3924753-4549-423A-812B-FB8B1581B050}</ProjectGuid>
+    <RootNamespace>i3CharaEditor</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <CLRSupport>false</CLRSupport>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3TDK_Distribute.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\i3TDK.props" />
+    <Import Project="..\..\i3GIC.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./;../ToolAutomation/Comm;./Automate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;D3D_DEBUG_INFO;_USE_TOOLAM_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <ExceptionHandling>Sync</ExceptionHandling>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <XMLDocumentationFileName>Docs\</XMLDocumentationFileName>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib/DirectX/DebugDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <Xdcmake>
+      <AdditionalDocumentFile>$(ProjectDir)\*.xdc</AdditionalDocumentFile>
+    </Xdcmake>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./;../../i3GIC;../ToolAutomation/Comm;./automate;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;I3_COMPILER_VC;I3_WINDOWS;I3G_DX;I3_DEBUG;I3_DLL;D3D_DEBUG_INFO;_USE_TOOLAM_;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;i3SoundDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3FrameworkDx.lib;i3TDK.lib;i3OptDx.lib;i3GIC.lib;d3dx9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../lib/DirectX/DistributeDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AI.cpp" />
+    <ClCompile Include="AIGraphView.cpp" />
+    <ClCompile Include="Automate\AIStateEditor_Ctl.cpp" />
+    <ClCompile Include="Automate\AIStateEditor_Def.cpp" />
+    <ClCompile Include="Automate\CtlLVI3AMapper.cpp" />
+    <ClCompile Include="Automate\DlgNogadaAIState.cpp" />
+    <ClCompile Include="Automate\DlgNogadaMask.cpp" />
+    <ClCompile Include="Automate\ToolAM_I3CharaEditor.cpp" />
+    <ClCompile Include="Chara.cpp" />
+    <ClCompile Include="CharaAnim.cpp" />
+    <ClCompile Include="DlgAddAIStateToChilds.cpp" />
+    <ClCompile Include="DlgAiAni.cpp" />
+    <ClCompile Include="DlgDumpAnim.cpp" />
+    <ClCompile Include="DlgExport.cpp" />
+    <ClCompile Include="DlgOption.cpp" />
+    <ClCompile Include="DlgRefResCpy.cpp" />
+    <ClCompile Include="DlgRenameFolder.cpp" />
+    <ClCompile Include="DlgSelectSound.cpp" />
+    <ClCompile Include="Dlg_Merge_1PV_3PV.cpp" />
+    <ClCompile Include="Dlg_Replace.cpp" />
+    <ClCompile Include="GICDiagramAI.cpp" />
+    <ClCompile Include="GICShapeAI.cpp" />
+    <ClCompile Include="GlobalVar.cpp" />
+    <ClCompile Include="i3CharaEditor.cpp" />
+    <ClCompile Include="i3CharaEditorFramework.cpp" />
+    <ClCompile Include="LOD.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="OptionInfo.cpp" />
+    <ClCompile Include="PanelAIGraph.cpp" />
+    <ClCompile Include="PanelLog.cpp" />
+    <ClCompile Include="PanelLuaEditor.cpp" />
+    <ClCompile Include="PanelRender.cpp" />
+    <ClCompile Include="PanelResource.cpp" />
+    <ClCompile Include="PanelSceneGraph.cpp" />
+    <ClCompile Include="PanelSpec.cpp" />
+    <ClCompile Include="PanelTimeTrack.cpp" />
+    <ClCompile Include="SpecAI.cpp" />
+    <ClCompile Include="SpecAIState.cpp" />
+    <ClCompile Include="SpecAnim.cpp" />
+    <ClCompile Include="SpecChara.cpp" />
+    <ClCompile Include="SpecLOD.cpp" />
+    <ClCompile Include="SpecSoundNode.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TimeSeqCtrl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AI.h" />
+    <ClInclude Include="AIGraphView.h" />
+    <ClInclude Include="Automate\AIStateEditor_Ctl.h" />
+    <ClInclude Include="Automate\AIStateEditor_Def.h" />
+    <ClInclude Include="Automate\CtlLVI3AMapper.h" />
+    <ClInclude Include="Automate\DlgNogadaAIState.h" />
+    <ClInclude Include="Automate\DlgNogadaMask.h" />
+    <ClInclude Include="Chara.h" />
+    <ClInclude Include="DlgAddAIStateToChilds.h" />
+    <ClInclude Include="DlgAiAni.h" />
+    <ClInclude Include="DlgDumpAnim.h" />
+    <ClInclude Include="DlgExport.h" />
+    <ClInclude Include="DlgOption.h" />
+    <ClInclude Include="DlgRefResCpy.h" />
+    <ClInclude Include="DlgRenameFolder.h" />
+    <ClInclude Include="DlgSelectSound.h" />
+    <ClInclude Include="Dlg_Merge_1PV_3PV.h" />
+    <ClInclude Include="Dlg_Replace.h" />
+    <ClInclude Include="GICDiagramAI.h" />
+    <ClInclude Include="GICShapeAI.h" />
+    <ClInclude Include="GlobalVar.h" />
+    <ClInclude Include="i3CharaEditor.h" />
+    <ClInclude Include="i3CharaEditorFramework.h" />
+    <ClInclude Include="LOD.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="OptionInfo.h" />
+    <ClInclude Include="PanelAIGraph.h" />
+    <ClInclude Include="PanelLog.h" />
+    <ClInclude Include="PanelLuaEditor.h" />
+    <ClInclude Include="PanelRender.h" />
+    <ClInclude Include="PanelResource.h" />
+    <ClInclude Include="PanelSceneGraph.h" />
+    <ClInclude Include="PanelSpec.h" />
+    <ClInclude Include="PanelTimeTrack.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SpecAI.h" />
+    <ClInclude Include="SpecAIState.h" />
+    <ClInclude Include="SpecAnim.h" />
+    <ClInclude Include="SpecChara.h" />
+    <ClInclude Include="SpecLOD.h" />
+    <ClInclude Include="SpecSoundNode.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TimeSeqCtrl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\aistate_edit_stateImg.bmp" />
+    <Image Include="res\i3Character.ICO" />
+    <Image Include="res\i3CharaEditor.ico" />
+    <Image Include="res\ico00001.ico" />
+    <Image Include="res\ico00002.ico" />
+    <Image Include="res\icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3CharaEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\i3CharaEditor.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3CharaEditor.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ToolAutomation\ToolAM.vcxproj">
+      <Project>{4ed271b0-8c15-4816-809e-3a9fb53cae17}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3CharaEditor.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

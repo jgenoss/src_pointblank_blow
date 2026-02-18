@@ -1,0 +1,624 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+// Generated Help ID header file
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "resource.hm"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DIALOG_ABOUT DIALOGEX 0, 0, 266, 50
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "This program is..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,213,3,50,14
+    LTEXT           "i3Engine Scene Exporter for 3DRMAX 8\r\nVersion 2.0\r\n\r\nCopyright Zepetto Co.LTD.\r\n",IDC_STATIC,53,3,149,35
+    CONTROL         105,IDC_STATIC,"Static",SS_BITMAP,3,3,32,30
+END
+
+IDD_OPTION DIALOGEX 0, 0, 346, 301
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Export Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,293,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,293,24,50,14
+    CONTROL         "Export selected object only",IDC_CHK_SELECTONLY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,38,103,10
+    CONTROL         "Light",IDC_CHK_EXPORT_LIGHT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,158,34,31,10
+    CONTROL         "Camera",IDC_CHK_EXPORT_CAMERA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,158,45,41,10
+    CONTROL         "Mesh",IDC_CHK_EXPORT_MESH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,158,23,33,10
+    GROUPBOX        "Object Type",IDC_STATIC,152,9,67,50
+    CONTROL         "Report warnings",IDC_CHK_REPORTERR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,49,69,10
+    CONTROL         "Export Animation",IDC_CHK_EXPORT_ANIM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,131,71,10
+    GROUPBOX        "Keyframe Sampling Method",IDC_STATIC,31,157,176,37
+    LTEXT           "Basic",IDC_STATIC,3,4,17,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,3,239,1
+    LTEXT           "Animation",IDC_STATIC,3,119,32,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,116,239,1
+    CONTROL         "Save picked keyframes only",IDC_RAD_KEY_PICKED,"Button",BS_AUTORADIOBUTTON | WS_GROUP,38,168,105,10
+    CONTROL         "Dump keyframes in same interval",IDC_RAD_KEY_SAMPLE,
+                    "Button",BS_AUTORADIOBUTTON,38,180,121,10
+    LTEXT           "Select Bone",IDC_STATIC,175,132,38,8
+    PUSHBUTTON      "...",IDC_BTN_SELBONE,215,131,25,11
+    LTEXT           "Sampling Interval",IDC_STATIC,45,199,56,8
+    EDITTEXT        IDC_ED_INTERVAL,105,197,31,12,ES_AUTOHSCROLL
+    LTEXT           "Frame(s)",IDC_STATIC,140,199,30,8
+    CONTROL         "Export I3S",IDC_CHK_EXPORT_I3S,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,16,50,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,86,239,1
+    LTEXT           "Exceptions",IDC_STATIC,3,88,36,8
+    LTEXT           "Excluded Node",IDC_STATIC,32,100,48,8
+    EDITTEXT        IDC_ED_EXCLUDE_NODENAME,86,99,94,12,ES_AUTOHSCROLL
+    CONTROL         "Force Export Animation",IDC_CHK_FORCE_EXPORT_ANIM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,143,91,10
+    CONTROL         "Viewer",IDC_CHK_PREVIEW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,293,42,37,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,213,238,1
+    LTEXT           "Physics",IDC_STATIC,3,216,24,8
+    LTEXT           "Skin width",IDC_STATIC,32,282,33,8
+    EDITTEXT        IDC_ED_SKINWIDTH,69,280,40,12,ES_AUTOHSCROLL
+    CONTROL         "Export Physics Geometry for rendering",IDC_CHK_EXPORT_PHYSICSGEOM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,32,225,140,10
+    CONTROL         "Rotate axis to i3Engine",IDC_CHK_ROTATEAXIS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,27,90,10
+    CONTROL         "Export Collision shapes as convex",IDC_CHK_EXPORT_SHAPE_AS_CONVEX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,32,237,124,10
+    CONTROL         "Create Rapping Convex",IDC_CHK_CREATE_RAPPING_CONVEX,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,32,250,93,10
+    CONTROL         "Create Simulation Mesh",IDC_CHECK_OPTION_SM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,32,263,91,10
+    CONTROL         "Treat Transform Controls as Bone",IDC_CHK_TREATASBONE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,61,124,10
+    CONTROL         "Node Name from Material Names",IDC_CHK_NODENAMEFM,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,31,72,120,10
+END
+
+IDD_TOOLBAR DIALOGEX 0, 0, 555, 18
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Path",IDC_STATIC,20,3,16,8
+    LTEXT           "Name",IDC_STATIC,192,3,19,8
+    EDITTEXT        IDC_ED_PATH,38,2,148,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_NAME,213,2,61,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Export",IDC_BTN_EXPORT,290,2,41,12
+    PUSHBUTTON      "Option",IDC_BTN_OPTION,343,2,27,12
+    PUSHBUTTON      "…",IDC_BTN_PATH,276,3,12,10
+    CONTROL         110,IDC_STATIC,"Static",SS_BITMAP,3,3,11,10
+    PUSHBUTTON      "Log",IDC_BTN_LOG,373,2,18,13
+    PUSHBUTTON      "Multi...",IDC_BTN_MULTIEXPORT,395,2,38,12
+    PUSHBUTTON      "▼",IDC_BTN_POPUP,439,2,14,12
+    PUSHBUTTON      "Help",IDC_BTN_HELP,458,2,22,12
+    PUSHBUTTON      "Opti Export",IDC_BTN_OPTIEXPORT,492,2,47,12
+END
+
+IDD_SELECTBONE DIALOGEX 0, 0, 275, 191
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Select Bone"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,222,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,222,20,50,14
+    CONTROL         "",IDC_BONETREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_CHECKBOXES | TVS_INFOTIP | WS_HSCROLL | WS_TABSTOP,3,3,137,95,WS_EX_CLIENTEDGE,HIDC_BONETREE
+    PUSHBUTTON      "Select &All",ID_SELALL,222,58,50,14
+    PUSHBUTTON      "&Unselect All",ID_UNSELALL,222,75,50,14
+    PUSHBUTTON      "Inverse",ID_REVSEL,222,92,50,14
+    PUSHBUTTON      "Update",ID_UPDATE,222,41,50,14
+    PUSHBUTTON      "Upper",IDC_BTN_UPPER,222,130,50,14
+    PUSHBUTTON      "Lower",IDC_BTN_LOWER,222,147,50,14
+    PUSHBUTTON      "All Bipeds",IDC_BTN_ALLBIPED,222,113,50,14
+END
+
+IDD_DIALOG_LOG DIALOGEX 0, 0, 350, 160
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_MAXIMIZEBOX | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "Log"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST_LOG,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,3,60,50
+END
+
+IDD_MULTI_EXPORT DIALOGEX 0, 0, 309, 76
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Multi-Export"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDCANCEL,256,3,50,14
+    LTEXT           "Selected Files : ",IDC_STATIC,3,6,51,8
+    LTEXT           "Static",IDC_FILECOUNT,57,6,42,8
+    PUSHBUTTON      "Select...",IDC_BTN_SELECT,110,3,50,14
+    LTEXT           "Export Path",IDC_STATIC,3,24,39,8
+    EDITTEXT        IDC_ED_EXPORT_PATH,51,22,169,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BTN_EXPORT_PATH,223,22,14,13
+    PUSHBUTTON      "Go",IDC_BTN_GO,112,59,50,14
+    LTEXT           "Prefix",IDC_STATIC,23,40,20,8
+    EDITTEXT        IDC_ED_PREFIX,51,38,59,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Options...",IDC_BTN_OPTION,256,20,50,14
+END
+
+IDD_DLG_ADJUSTMATERIAL DIALOGEX 0, 0, 257, 113
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Adjust all materials"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,204,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,204,24,50,14
+    CONTROL         "",IDC_ST_A,"Static",SS_BLACKRECT | SS_SUNKEN,57,14,20,20
+    LTEXT           "Ambient",IDC_STATIC,23,21,27,8
+    LTEXT           "Diffuse",IDC_STATIC,27,42,24,8
+    LTEXT           "Specular",IDC_STATIC,23,63,28,8
+    LTEXT           "Specular Level",IDC_STATIC,3,83,47,8
+    CONTROL         "",IDC_ST_D,"Static",SS_BLACKRECT | SS_SUNKEN,57,36,20,20
+    CONTROL         "",IDC_ST_S,"Static",SS_BLACKRECT | SS_SUNKEN,57,58,20,20
+    LTEXT           "R",IDC_STATIC,93,3,8,8
+    LTEXT           "G",IDC_STATIC,116,3,8,8
+    LTEXT           "B",IDC_STATIC,140,3,8,8
+    LTEXT           "A",IDC_STATIC,165,3,8,8
+    EDITTEXT        IDC_ED_A_R,82,18,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_A_G,107,18,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_A_B,132,18,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_A_A,157,18,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_D_R,82,40,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_D_G,107,40,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_D_B,132,40,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_D_A,157,40,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_S_R,82,61,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_S_G,108,61,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_S_B,132,61,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_S_A,158,61,22,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_S_LEVEL,57,81,33,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Glossiness",IDC_STATIC,17,96,34,8
+    EDITTEXT        IDC_ED_GLOSS,57,95,33,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "(0 ~ 1000)",IDC_STATIC,98,82,36,8
+    LTEXT           "(0 ~ 100)",IDC_STATIC,98,96,32,8
+END
+
+IDD_DLG_IMAGEABOUT DIALOGEX 0, 0, 255, 70
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "i3Image I/O"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,99,53,50,14
+    CONTROL         109,IDC_STATIC,"Static",SS_BITMAP,14,10,21,20
+    LTEXT           "i3Engine Image File I/O plugin for 3DSMAX",IDC_STATIC,58,10,136,8
+    LTEXT           "version 1.0",IDC_STATIC,101,20,37,8
+    LTEXT           "Copyright 2007 Zepetto Corp.",IDC_STATIC,72,31,98,8
+END
+
+IDD_DLG_HELP DIALOGEX 0, 0, 484, 441
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Help"
+FONT 9, "굴림체", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,431,3,50,14
+    LTEXT           "Terrain Types",IDC_STATIC,3,3,101,8
+    LTEXT           "Static",IDC_STATIC_HELP,18,22,451,407
+END
+
+IDD_ROLLUP_PROPERTIES DIALOGEX 0, 0, 127, 187
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Sound settings",IDC_STATIC,3,2,48,8
+    LTEXT           "Reverb",IDC_STATIC,13,16,24,8
+    COMBOBOX        IDC_CB_REVERBTYPE,41,14,62,222,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Attach Point Dummy",IDC_CHK_FORCEEXPORT,"Button",BS_AUTOCHECKBOX | BS_FLAT | WS_TABSTOP,3,36,81,10
+    LTEXT           "Terrain Thickness",IDC_STATIC,3,54,56,8
+    LTEXT           "_________________________",IDC_STATIC,6,45,101,8
+    EDITTEXT        IDC_EDIT_THICKNESS,41,65,64,12,ES_AUTOHSCROLL
+    LTEXT           "Portal",IDC_STATIC,18,84,20,8
+    EDITTEXT        IDC_EDIT_PORTAL,41,82,64,12,ES_AUTOHSCROLL
+    LTEXT           "_________________________",IDC_STATIC,3,96,101,8
+    LTEXT           "PhysX setting",IDC_STATIC,3,105,44,8
+    LTEXT           "Dynamic Type",IDC_STATIC,20,119,46,8
+    COMBOBOX        IDC_CB_PHYSICSTYPE,20,129,82,30,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Proxy",IDC_STATIC,21,149,20,8
+    CONTROL         "Pick Proxy",IDC_BTN_PROXY,"CustButton",WS_GROUP | WS_TABSTOP,21,159,79,13
+END
+
+IDD_DLG_CONVERT_TGA DIALOGEX 0, 0, 398, 194
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Convert Texture to TGA"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,345,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,345,24,50,14
+    CONTROL         "",IDC_TEX_LIST,"SysListView32",LVS_REPORT | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_TABSTOP,3,3,336,187,WS_EX_STATICEDGE
+END
+
+IDD_DLG_OPTIEXP DIALOGEX 0, 0, 492, 206
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Export with Optimizing"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,220,185,50,14
+    GROUPBOX        " Operations ",IDC_STATIC,7,30,478,128
+    CONTROL         "",IDC_OPTIEXP_LV_OPER,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,13,43,465,95
+    PUSHBUTTON      "setup",IDC_OPTIEXP_BT_OPER_SETUP,14,140,37,11
+    LTEXT           "Export Settings",IDC_STATIC,15,10,60,8
+    PUSHBUTTON      "Export",IDC_OPTIEXP_BT_EXPORT,429,161,50,14
+    COMBOBOX        IDC_OPTIEXP_CB_EXPSETTINGS,81,8,130,40,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Logging To file 'i3Export.log'",IDC_OPTIEXP_CK_LOGGINGTOFILE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,164,132,10
+    LTEXT           "Static",IDC_OPTIEXP_ST_PHYSX_COOKLIB,255,8,229,12,SS_SUNKEN
+    LTEXT           "Version",IDC_OPTIEXP_ST_VER,327,189,154,10,0,WS_EX_RIGHT
+END
+
+IDD_DLG_OPTIEXP_SETUPOPER DIALOGEX 0, 0, 664, 309
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Setup Operation"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,307,288,50,14
+    GROUPBOX        "",IDC_OPTIEXP_SETUPOPER_ST_AREA,7,7,650,272
+END
+
+IDD_DLG_OPTIEXP_TASKPROGRESS DIALOGEX 0, 0, 399, 63
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Progress..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "취소",IDCANCEL,342,43,50,14
+    CONTROL         "",IDC_OPTIEXPTP_PB_00,"msctls_progress32",WS_BORDER,7,46,326,9
+    LTEXT           "Static",IDC_OPTIEXPTP_ST_00,65,7,327,13,SS_SUNKEN
+    LTEXT           "Static",IDC_OPTIEXPTP_ST_01,7,24,385,16,SS_SUNKEN
+    LTEXT           "Working file",IDC_STATIC,7,8,45,12
+END
+
+IDD_DLG_OPTIEXP_SETUP_PARAM DIALOGEX 0, 0, 511, 380
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Setup"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,397,359,50,14
+    PUSHBUTTON      "취소",IDCANCEL,454,359,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DIALOG_ABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 263
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 47
+    END
+
+    IDD_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 343
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 298
+    END
+
+    IDD_TOOLBAR, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 554
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 16
+    END
+
+    IDD_SELECTBONE, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 272
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 189
+    END
+
+    IDD_DIALOG_LOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 343
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 153
+    END
+
+    IDD_MULTI_EXPORT, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 306
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 73
+    END
+
+    IDD_DLG_ADJUSTMATERIAL, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 254
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 110
+    END
+
+    IDD_DLG_IMAGEABOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 252
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_DLG_HELP, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 481
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 439
+    END
+
+    IDD_ROLLUP_PROPERTIES, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 124
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 184
+    END
+
+    IDD_DLG_CONVERT_TGA, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 395
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 190
+    END
+
+    IDD_DLG_OPTIEXP, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 485
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 199
+    END
+
+    IDD_DLG_OPTIEXP_SETUPOPER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 657
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 302
+    END
+
+    IDD_DLG_OPTIEXP_TASKPROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 392
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 56
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_I3LOGO              BITMAP                  "i3Icon48.bmp"
+IDB_I3LOGO32            BITMAP                  "i3Icon32.bmp"
+IDB_I3LOGO16            BITMAP                  "i3Icon16.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_I3ICON              ICON                    "i3Icon16.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_POPUP_SELBONE MENU 
+BEGIN
+    POPUP "SELBONE"
+    BEGIN
+        MENUITEM "Select All Children",         ID_SELBONE_SELECTALLCHILDREN
+        MENUITEM "Unselect All Children",       ID_SELBONE_UNSELECTALLCHILDREN
+    END
+END
+
+IDR_POPUP_TOOLS MENU 
+BEGIN
+    POPUP "TOOLS"
+    BEGIN
+        MENUITEM "Adjust all materials...",     ID_TOOLS_ADJUSTALLMATERIALS
+        MENUITEM "Convert Texture to TGA format", ID_TOOLS_CONVERTTEXTURETOTGAFORMAT
+        MENUITEM "Match Material names with textures", ID_TOOLS_MATCHMATERIALNAMESWITHTEXTURES
+        MENUITEM "Check Collision Meshes",      ID_TOOLS_CHECKCOLLISIONMESHES
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_ROLLUP_PROPERTIES DLGINIT
+BEGIN
+    IDC_CB_REVERBTYPE, 0x403, 7, 0
+0xbe28, 0xc0f8, 0x29bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xcfc0, 0xddb9, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 7, 0
+0xe6b9, 0xbdc0, 0xc7bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 3, 0
+0xe6b9, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xe5bf, 0xc7bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xc5b0, 0xc7bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xaebc, 0xc7bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 7, 0
+0xe6b9, 0xbbc3, 0xaebc, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 7, 0
+0xf8b0, 0xacbf, 0xe5c0, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xbfb5, 0xbcb1, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 7, 0
+0xc6be, 0xb9b7, 0xaab3, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 12, 0
+0xabc4, 0xeac6, 0xa5b0, 0xb0b8, 0xc820, 0x00a6, 
+    IDC_CB_REVERBTYPE, 0x403, 3, 0
+0xa3bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xb5b5, 0xc3bd, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xeabb, 0xd3bc, "\000" 
+    IDC_CB_REVERBTYPE, 0x403, 5, 0
+0xb0b9, 0xd3bc, "\000" 
+    IDC_CB_PHYSICSTYPE, 0x403, 8, 0
+0x7944, 0x616e, 0x696d, 0x0063, 
+    IDC_CB_PHYSICSTYPE, 0x403, 10, 0
+0x694b, 0x656e, 0x616d, 0x6974, 0x0063, 
+    IDC_CB_PHYSICSTYPE, 0x403, 7, 0
+0x7453, 0x7461, 0x6369, "\000" 
+    IDC_CB_PHYSICSTYPE, 0x403, 7, 0
+0x4e28, 0x6e6f, 0x2965, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 2014,1,16,0
+ PRODUCTVERSION 2014,1,16,0
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041204b0"
+        BEGIN
+            VALUE "Comments", "i3Export2"
+            VALUE "CompanyName", "Zepetto"
+            VALUE "FileDescription", "i3Export2"
+            VALUE "FileVersion", "2014, 1, 16, 0"
+            VALUE "InternalName", "i3Export"
+            VALUE "LegalCopyright", "Copyright (C) 2013 Zepetto"
+            VALUE "OriginalFilename", "i3Export.dll"
+            VALUE "ProductName", "i3Export2"
+            VALUE "ProductVersion", "2014, 1, 16, 0"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_LIBDESC             "i3Engine Exporter version 2.0 for 3DSMAX 8"
+    IDS_CLASSNAME           "i3Engine Scene Exporter version 2.0"
+    IDS_CATEGORY            "Tools"
+    IDS_FRAME_NAME          "i3Engine Exporter"
+    IDS_IMAGE_CLASSNAME     "i3Engine Image I/O version 1.0"
+    IDS_IMAGE_CATEGORY      "Bitmap I/O"
+END
+
+#endif    // 한국어 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 영어(미국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // 영어(미국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

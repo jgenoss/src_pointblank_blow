@@ -1,0 +1,4 @@
+// Microsoft Visual C++ generated Help ID include file.
+// Used by i3LevelDesign.rc
+//
+#define HIDC_BTN_NEWLAYER               0x80c30462    // IDD_DLG_LAYER

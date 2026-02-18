@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3PSPCompiler", "i3PSPCompiler\i3PSPCompiler.vcproj", "{5EF12206-A3D8-407A-AF8B-7B7705336958}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {33C7FA81-DECF-4D37-AFC2-E7ECC706ADA1}
+		SccProjectUniqueName1 = i3PSPCompiler\\i3PSPCompiler.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection1 = i3PSPCompiler\\
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{5EF12206-A3D8-407A-AF8B-7B7705336958}.Debug.ActiveCfg = Debug|Win32
+		{5EF12206-A3D8-407A-AF8B-7B7705336958}.Debug.Build.0 = Debug|Win32
+		{5EF12206-A3D8-407A-AF8B-7B7705336958}.Release.ActiveCfg = Release|Win32
+		{5EF12206-A3D8-407A-AF8B-7B7705336958}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,611 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3PackTool.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3PackTool.ico"
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "&New",                        ID_FILE_NEW
+        MENUITEM "&Open",                       ID_FILE_OPEN
+        MENUITEM "&Save",                       ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVEAS
+        MENUITEM "Export to..",                 ID_FILE_EXPORT
+        MENUITEM SEPARATOR
+        MENUITEM "Op&tion...",                  ID_FILE_OPTION
+        MENUITEM SEPARATOR
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소\tCtrl+Z(&U)",           ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기\tCtrl+X(&T)",            ID_EDIT_CUT
+        MENUITEM "복사\tCtrl+C(&C)",              ID_EDIT_COPY
+        MENUITEM "붙여넣기\tCtrl+V(&P)",            ID_EDIT_PASTE
+    END
+    POPUP "보기(&V)"
+    BEGIN
+        MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "i3PackTool 정보(&A)...",        ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_PACKNODE MENU
+BEGIN
+    POPUP "PACKNODE"
+    BEGIN
+        MENUITEM "&Delete",                     ID_PACKNODE_DELETE
+        MENUITEM "E&xport to...",               ID_PACKNODE_EXPORTTO
+    END
+END
+
+IDR_POPUP_PACKFILE MENU
+BEGIN
+    POPUP "PACKFILE"
+    BEGIN
+        MENUITEM "Export to",                   ID_PACKFILE_EXPORTTO
+    END
+END
+
+IDR_POPUP_PROJECT MENU
+BEGIN
+    POPUP "NEWPATH"
+    BEGIN
+        MENUITEM "New Path",                    ID_NEW_PROJECT
+        MENUITEM "Delete",                      ID_DELETE_PROJECT
+        MENUITEM "Edit",                        ID_EDIT_PROJECT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "i3PackTool 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3PackTool Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2007",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_PANEL_TREE DIALOGEX 0, 0, 190, 226
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PACK_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | WS_HSCROLL | WS_TABSTOP,2,3,101,155,WS_EX_STATICEDGE
+END
+
+IDD_PANEL_FILELIST DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_FILE_LIST,"SysListView32",LVS_REPORT | LVS_SORTASCENDING | LVS_SHAREIMAGELISTS | LVS_EDITLABELS | LVS_ALIGNLEFT | WS_TABSTOP,3,3,128,78,WS_EX_STATICEDGE
+END
+
+IDD_PANEL_FILEINFO DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Attributes",IDC_STATIC,3,3,33,8
+    CONTROL         "Security",IDC_CHK_SECURITY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,14,42,10
+END
+
+IDD_PANEL_LOG DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_OPTION DIALOGEX 0, 0, 241, 205
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Option"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "OK",IDOK,132,189,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,188,189,50,14
+    LTEXT           "Working Directory",IDC_STATIC,3,3,58,8
+    EDITTEXT        IDC_ED_WORKDIR,3,13,212,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_TRANSPARENT | WS_EX_STATICEDGE
+    PUSHBUTTON      "...",IDC_BTN_WORKDIR,217,12,15,12
+    LTEXT           "Exceptions",IDC_STATIC,3,33,36,8
+    EDITTEXT        IDC_ED_EXCEPT,3,44,235,99,ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+END
+
+IDD_PANEL_TREE1 DIALOGEX 0, 0, 190, 226
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PACK_TREE1,"SysTreeView32",WS_BORDER | WS_HSCROLL | WS_TABSTOP,0,0,122,147
+END
+
+IDD_PANEL_PROPERTY DIALOGEX 0, 0, 254, 164
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_EDIT1,52,18,146,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "WorkDir",IDC_STATIC,17,21,26,8
+    PUSHBUTTON      "...",IDC_BUTTON1,206,18,18,14
+    EDITTEXT        IDC_EDIT2,53,39,146,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "LiveDir",IDC_STATIC,18,42,22,8
+    PUSHBUTTON      "...",IDC_BUTTON2,206,38,18,14
+    EDITTEXT        IDC_EDIT3,53,65,146,14,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "ScriptDir",IDC_STATIC,18,65,28,8
+    PUSHBUTTON      "...",IDC_BUTTON3,206,62,18,14
+END
+
+IDD_PANEL_TREE2 DIALOGEX 0, 0, 191, 219
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PACK_TREE2,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | TVS_CHECKBOXES | WS_HSCROLL | WS_TABSTOP,3,3,108,137,WS_EX_STATICEDGE
+END
+
+IDD_PANEL_PROJECT_DIR DIALOGEX 0, 0, 217, 236
+STYLE DS_SETFONT | WS_CHILD
+FONT 9, "굴림", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST_PROJECT,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,10,9,189,213,WS_EX_STATICEDGE
+END
+
+IDD_DLG_NEW_PROJECT DIALOGEX 0, 0, 309, 98
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,198,77,50,14
+    PUSHBUTTON      "취소",IDCANCEL,252,77,50,14
+    EDITTEXT        IDC_EDIT_QADIR,47,35,217,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_QA,267,35,21,14
+    EDITTEXT        IDC_EDIT_LIVEDIR,47,51,217,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BUTTON_LIVE,267,51,21,14
+    LTEXT           "WorkDir",IDC_STATIC,20,37,26,8
+    LTEXT           "LiveDir",IDC_STATIC,20,54,22,8
+    EDITTEXT        IDC_EDIT_PROJECTNAME,47,13,217,14,ES_AUTOHSCROLL
+    LTEXT           "Name",IDC_STATIC,19,15,26,8
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "TODO: <회사 이름>"
+            VALUE "FileDescription", "TODO: <파일 설명>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3PackTool.exe"
+            VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
+            VALUE "OriginalFilename", "i3PackTool.exe"
+            VALUE "ProductName", "TODO: <제품 이름>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_PANEL_TREE, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 187
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 223
+    END
+
+    IDD_PANEL_FILELIST, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 183
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_PANEL_FILEINFO, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 183
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_PANEL_LOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 183
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_DLG_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 238
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 203
+    END
+
+    IDD_PANEL_TREE1, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 187
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 223
+    END
+
+    IDD_PANEL_PROPERTY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 247
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_PANEL_TREE2, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 188
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 216
+    END
+
+    IDD_PANEL_PROJECT_DIR, DIALOG
+    BEGIN
+        RIGHTMARGIN, 216
+    END
+
+    IDD_DLG_NEW_PROJECT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 302
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_PANEL_PROJECT_DIR AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+IDD_DLG_NEW_PROJECT AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "i3PackTool"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "i3PackTool"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호, 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모든 것을 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_STATUS_BAR      "상태 표시줄을 표시하거나 숨깁니다.\n상태 표시줄 설정/해제"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록 활성화"
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 러시아어(러시아) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_STATE               BITMAP                  "res\\state_images.bmp"
+
+#endif    // 러시아어(러시아) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 영어(미국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_FILETREEDIALOG_DIALOG DIALOGEX 0, 0, 264, 572
+STYLE DS_SETFONT | WS_POPUP | WS_VISIBLE | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+FONT 8, "MS Sans Serif", 0, 0, 0x1
+BEGIN
+    CONTROL         "Tree1",IDD_PANEL_TREE1,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_CHECKBOXES | WS_BORDER | WS_HSCROLL | WS_TABSTOP,7,84,246,150
+    PUSHBUTTON      "Start Pack",IDC_GETLIST,212,240,41,66
+    EDITTEXT        IDC_SCRIPTEDIT1,38,64,155,17
+    EDITTEXT        IDC_EDIT1,38,7,186,17,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "WorkDir",IDC_STATIC,7,11,22,9
+    PUSHBUTTON      "...",IDC_BUTTON1,235,7,18,17,NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT2,38,26,174,17,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "LiveDir",IDC_STATIC,7,31,19,9
+    PUSHBUTTON      "...",IDC_BUTTON2,235,26,18,17,NOT WS_VISIBLE
+    EDITTEXT        IDC_EDIT3,38,45,194,17,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "ScriptDir",IDC_STATIC,7,49,19,9
+    PUSHBUTTON      "...",IDC_BUTTON3,235,46,18,17
+    CONTROL         "Script",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON | WS_GROUP,196,67,31,10
+    CONTROL         "Bat",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON | WS_TABSTOP,229,67,22,10
+    LTEXT           "Find",IDC_STATIC,7,68,19,9
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,7,312,246,14
+    EDITTEXT        IDC_SCRIPTEDIT3,7,324,246,76,ES_MULTILINE | ES_READONLY | WS_VSCROLL
+    PUSHBUTTON      "Run",IDC_BUTTON5,215,26,18,17
+    CONTROL         "",IDC_SPIN1,"msctls_updown32",UDS_ARROWKEYS | NOT WS_VISIBLE,225,6,9,19
+    LISTBOX         IDC_LIST1,7,239,202,69,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_FILETREEDIALOG_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 253
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 565
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_FILETREEDIALOG_DIALOG AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // 영어(미국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3PackTool.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

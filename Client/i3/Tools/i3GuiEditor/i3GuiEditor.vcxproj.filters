@@ -1,0 +1,233 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="App">
+      <UniqueIdentifier>{fb652589-f45c-4174-92bb-1965a8bd7cbb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{c1b6a68f-18fb-451a-83f4-7599b8c88e6d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{1b0642a0-83e2-49fd-9404-c9d0893bfbfe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{d1919ee2-2c61-4eb3-a7e9-9626a42bc50f}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\cursor1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\i3GuiEditor.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="nodrop.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\i3GuiEditor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3GuiEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EditDlgAction_MoveTo.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="EditDlgAction_PlaySound.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="EditDlgAction_RotateTo.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="EditDlgAction_ScaleTo.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="PropCommon.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectTemplateDialog.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectTextureDialog.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="SingleSelectControlTypeDialog.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="GetStringDlg.cpp" />
+    <ClCompile Include="SpreadPropertyDlg.cpp" />
+    <ClCompile Include="GlobalVariable.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiEditorProfile.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiToolProject.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GuiEditor.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GuiEditorDef.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GuiToolResManager.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>App</Filter>
+    </ClCompile>
+    <ClCompile Include="GuiTreeCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="UVEditCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GuiEditorFramework.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneControlShape.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneEventnAction.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneGuiTreeView.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneLayOut.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanePreviewer.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneProperty.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneResList.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneTreeView.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneUVEdit.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditDlgAction_MoveTo.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="EditDlgAction_PlaySound.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="EditDlgAction_RotateTo.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="EditDlgAction_ScaleTo.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="PropCommon.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectTemplateDialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectTextureDialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="SingleSelectControlTypeDialog.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="GetStringDlg.h" />
+    <ClInclude Include="SpreadPropertyDlg.h" />
+    <ClInclude Include="GuiToolProject.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariable.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiEditorProfile.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GuiEditor.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GuiEditorDef.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GuiToolResManager.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>App</Filter>
+    </ClInclude>
+    <ClInclude Include="UVEditCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="GuiTreeCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneUVEdit.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GuiEditorFramework.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneControlShape.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneEventnAction.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneGuiTreeView.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneLayOut.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanePreviewer.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneProperty.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneResList.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneTreeView.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3GuiEditor.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

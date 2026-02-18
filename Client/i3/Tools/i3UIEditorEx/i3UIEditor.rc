@@ -1,0 +1,1219 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#ifndef APSTUDIO_INVOKED
+#include "targetver.h"
+#endif
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#ifndef APSTUDIO_INVOKED\r\n"
+    "#include ""targetver.h""\r\n"
+    "#endif\r\n"
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)\r\n"
+    "LANGUAGE 9, 1\r\n"
+    "#pragma code_page(1252)\r\n"
+    "#include ""res\\i3UIEditor.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""         // Standard components\r\n"
+    "#if !defined(_AFXDLL)\r\n"
+    "#include ""afxribbon.rc""              // MFC ribbon and control bar resources\r\n"
+    "#endif\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_SCREEN_RESOLUTION MENU
+BEGIN
+    MENUITEM "800 * 600",                   32771
+    MENUITEM "1024 * 768",                  32772
+    MENUITEM "1280 * 800",                  32773
+    MENUITEM "1280 * 1024",                 32774
+    MENUITEM "1600 * 1080",                 32775
+    MENUITEM "1920 * 1080",                 32776
+    MENUITEM "1920 * 1200",                 32777
+END
+
+IDR_MENU_TEMPLATE MENU
+BEGIN
+    POPUP "Selected"
+    BEGIN
+        MENUITEM "Edit",                        ID_TEMPLATE_EDIT
+        POPUP "&New"
+        BEGIN
+            MENUITEM "Filter",                      32778
+            MENUITEM "Template",                    32779
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Copy",                       32780
+        MENUITEM "Cut",                         32781
+        MENUITEM "Paste",                       32782
+        MENUITEM "&Rename",                     32783
+        MENUITEM "Delete",                      ID_SELECTED_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Collapse",                    32784
+        MENUITEM "Expand",                      32785
+        MENUITEM "SelectAll",                   32786
+        MENUITEM "UnSelectAll",                 32787
+    END
+    POPUP "View"
+    BEGIN
+        MENUITEM "Select Texture",              ID_VIEW_SELECTTEXTURE
+        MENUITEM "Select UV",                   ID_VIEW_SELECTUV
+        MENUITEM "Spread Layout",               ID_VIEW_SPREADLAYOUT
+        MENUITEM "Adjust Layout",               ID_VIEW_ADJUSTLAYOUT
+        MENUITEM "Select All Shapes",           ID_VIEW_SELECTALLSHAPES
+        MENUITEM SEPARATOR
+        MENUITEM "Align LeftTop To",            ID_VIEW_ALIGNLEFTTOP
+        MENUITEM "Spread",                      ID_VIEW_SPREAD
+    END
+END
+
+IDR_MENU_SCREEN MENU
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "Move UP",                     ID_MOVEUP
+        MENUITEM "Move Down",                   ID_MOVEDOWN
+        MENUITEM "View Template",               ID__VIEWTEMPLATE
+        MENUITEM "Import UI Scene",             ID__IMPORTUISCENE
+        MENUITEM "Export UI Scene",             ID__EXPORTUISCENE
+        MENUITEM SEPARATOR
+        MENUITEM "&Set Script",                 ID_SCREEN_SETSCRIPT
+        MENUITEM "Re&move Script",              ID_SCREEN_REMOVESCRIPT
+        MENUITEM "&Edit Script",                ID_SCREEN_EDITSCRIPT
+        MENUITEM "&Insert Event Handler",       ID__SCREEN_IEH
+        MENUITEM SEPARATOR
+        MENUITEM "&Delete",                     ID_SCREEN_DELCTRL
+        MENUITEM "&Rename\tF2",                 ID_SCREEN_RENCTRL
+        MENUITEM "ListBoxOn&&Off",              ID_LISTBOXONOFF
+        MENUITEM "ListBoxDummyLine",            ID_LISTBOXDUMMYLINE
+    END
+    POPUP "MultipleSelect"
+    BEGIN
+        MENUITEM "Spread Controls",             ID_VIEW_SPREADCONTROL
+        MENUITEM "Align Left",                  ID_VIEW_LEFTALIGN
+        MENUITEM "Align Right",                 ID_VIEW_RIGHTALIGN
+        MENUITEM "Align Top",                   ID_VIEW_TOPALIGN
+        MENUITEM "Align Bottom",                ID_VIEW_ALIGNBOTTOM
+        MENUITEM "Align Center",                ID_VIEW_CENTERALIGN
+        MENUITEM SEPARATOR
+        MENUITEM "Copy",                        ID_VIEW_COPY
+        MENUITEM "Cut",                         ID_VIEW_CUT
+        MENUITEM "Paste",                       ID_VIEW_PASTE
+        MENUITEM "Delete",                      ID_VIEW_DELETE
+        MENUITEM "SelectAll",                   ID_MULTIPLESELECT_SELECTALL, INACTIVE
+    END
+    POPUP "SingleSelect"
+    BEGIN
+        MENUITEM "View Template",               ID_SINGLESELECT_VIEWTEMPLATE
+        MENUITEM "Insert Event Handler",        ID_VIEW_INSERTEVENTHANDLER
+        MENUITEM SEPARATOR
+        MENUITEM "Align Center",                ID_VIEW_CENTERALIGN
+        MENUITEM SEPARATOR
+        MENUITEM "Copy",                        ID_VIEW_COPY
+        MENUITEM "Cut",                         ID_VIEW_CUT
+        MENUITEM "Paste",                       ID_VIEW_PASTE
+        MENUITEM "Delete",                      ID_VIEW_DELETE
+        MENUITEM "Select All Children",         ID_VIEW_SELECTALL
+        MENUITEM "ListBoxDummyLine",            ID_LISTBOXDUMMYLINE
+        MENUITEM "ListBoxOn&&Off",              ID_LISTBOXONOFF
+    END
+    POPUP "NoneSelect"
+    BEGIN
+        MENUITEM "Copy",                        ID_NONESELECT_COPY, INACTIVE
+        MENUITEM "Cut",                         ID_NONESELECT_CUT, INACTIVE
+        MENUITEM "Paste",                       ID_NONESELECT_PASTE
+        MENUITEM "Delete",                      ID_NONESELECT_DELETE, INACTIVE
+        MENUITEM "Select All",                  ID_VIEW_SELECTALL
+    END
+END
+
+IDR_MENU_PROJECT MENU
+BEGIN
+    POPUP "Project"
+    BEGIN
+        MENUITEM "Working Folder",              ID_PROJECT_WORKINGFOLDER
+        MENUITEM "Import Template Library",     ID_PROJECT_IMPORTTEMPLATELIBRARY
+        MENUITEM "Export Template Library",     ID_PROJECT_EXPORTTEMPLATELIBRARY
+        MENUITEM "Select Screen Resolution",    ID_PROJECT_SELECTSCREENRESOLUTION
+        MENUITEM "Screen Edit Mode",            ID_PROJECT_SCREENEDITMODE
+        MENUITEM "Template Edit Mode",          ID_PROJECT_TEMPLATEEDITMODE
+        MENUITEM "Preview Mode",                ID_PROJECT_PREVIEWMODE
+        MENUITEM "Create Virtual Texture",      ID_PROJECT_CREATEVIRTUALTEXTURE
+        MENUITEM "Create VTexList (New Format)", ID_PROJECT_CREATEVTEXLIST
+        MENUITEM "Open Virtual Texture",        ID_PROJECT_OPENVIRTUALTEXTURE
+        MENUITEM "Modify Virtual Texture",      ID_PROJECT_MODIFYVIRTUALTEXTURE
+        MENUITEM "Adjust Virtual Texture",      ID_PROJECT_ADJUSTVIRTUALTEXTURE
+        MENUITEM "Adjust VTexList (New Format)", ID_PROJECT_ADJUSTVTEXLIST
+        MENUITEM "Extract Ref Texture",         ID_PROJECT_EXTRACTREFTEXTURE
+        MENUITEM "Save Template Library (OLD)", ID_PROJECT_SAVETEMPLATELIBRARY
+        MENUITEM "Save Template Library (NEW)", ID_PROJECT_SAVETEMPLATELIBRARY_NEW
+        MENUITEM "Run",                         ID_PROJECT_RUN
+        MENUITEM "Stop",                        ID_PROJECT_STOP
+        MENUITEM "Save Script",                 ID_PROJECT_SAVESCRIPT
+        MENUITEM "Compile Script",              ID_PROJECT_COMPILESCRIPT
+        MENUITEM "Select Scene From Client",    ID_PROJECT_SELECTSCENEFROMCLIENT
+        MENUITEM "Nation",                      ID_PROJECT_NATION
+    END
+END
+
+IDR_MENU_UVSELECTOR MENU
+BEGIN
+    POPUP "View Option"
+    BEGIN
+        MENUITEM "A",                           ID_VIEWOPTION_A
+        MENUITEM "R",                           ID_VIEWOPTION_R
+        MENUITEM "G",                           ID_VIEWOPTION_G
+        MENUITEM "B",                           ID_VIEWOPTION_B
+        MENUITEM "RGB",                         ID_VIEWOPTION_RGB
+        MENUITEM "RGBA",                        ID_VIEWOPTION_RGBA
+    END
+END
+
+IDR_RIBBON_TEMPLATE MENU
+BEGIN
+    POPUP "Template"
+    BEGIN
+        MENUITEM "Add a new template",          ID_TEMPLATE_ADDANEWTEMPLATE
+    END
+END
+
+IDR_RIBBON_DEBUG MENU
+BEGIN
+    POPUP "Debug"
+    BEGIN
+        MENUITEM "Dump Virtual Texture",        ID_DEBUG_DUMPVIRTUALTEXTURE
+        MENUITEM "Texture List",                ID_DEBUG_TEXTURELIST
+        MENUITEM "Export All",                  ID_DEBUG_EXPORTALL
+    END
+END
+
+IDR_MENU_SHAPELIST MENU
+BEGIN
+    POPUP "shapelist"
+    BEGIN
+        MENUITEM "Select Texture",              ID_SHAPELIST_SELECTTEXTURE
+        MENUITEM "Select UV",                   ID_SHAPELIST_SELECTUV
+        MENUITEM SEPARATOR
+        MENUITEM "MakeClone",                   ID_SHAPELIST_MAKECLONE
+        MENUITEM "AddShape",                    ID_SHAPELIST_ADDSHAPE
+        MENUITEM "RemoveShape",                 ID_SHAPELIST_REMOVESHAPE
+        MENUITEM "Edit Shape Info",             ID_SHAPELIST_EDITSHAPEINFO
+    END
+END
+
+IDR_MENU_OUTPUT MENU
+BEGIN
+    POPUP " "
+    BEGIN
+        MENUITEM "ClearAll",                    ID__CLEARALL
+    END
+END
+
+IDR_MENU_SCRIPT MENU
+BEGIN
+    POPUP "A"
+    BEGIN
+        MENUITEM "Insert Event Handler",        ID__INSERTEVENTHANDLER
+        MENUITEM SEPARATOR
+        MENUITEM "Find\tCtrl+F",                ID__FIND
+        MENUITEM "Go To Line\tCtrl+G",          ID__GOTOLINE
+        MENUITEM SEPARATOR
+        MENUITEM "Copy\tCtrl+C",                ID__COPY
+        MENUITEM "Cut\tCtrl+X",                 ID__CUT
+        MENUITEM "Paste\tCtrl+V",               ID__PASTE
+    END
+    POPUP "B"
+    BEGIN
+        MENUITEM "Insert Event Handler",        ID__INSERTEVENTHANDLER
+    END
+    POPUP "C"
+    BEGIN
+        MENUITEM "Select All",                  ID__SELECTALL
+    END
+END
+
+IDR_RIBBON_HOME MENU
+BEGIN
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Copy",                        ID_EDIT_COPY
+        MENUITEM "Cut",                         ID_EDIT_CUT
+        MENUITEM "Paste",                       ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Undo",                        ID_EDIT_UNDO
+        MENUITEM "Redo",                        ID_EDIT_REDO
+        MENUITEM SEPARATOR
+        MENUITEM "Align Left",                  ID_EDIT_ALIGNLEFT
+        MENUITEM "Align Right",                 ID_EDIT_ALIGNRIGHT
+        MENUITEM "Align Top",                   ID_EDIT_ALIGNTOP
+        MENUITEM "Align Bottom",                ID_EDIT_ALIGNBOTTOM
+        MENUITEM "Align Center",                ID_EDIT_ALIGNCENTER
+        MENUITEM SEPARATOR
+        MENUITEM "Relocation Horz",             ID_EDIT_RELOCATIONHORZ
+        MENUITEM "Relocation Vert",             ID_EDIT_RELOCATIONVERT
+        MENUITEM SEPARATOR
+        MENUITEM "Same Width",                  ID_EDIT_SAMEWIDTH
+        MENUITEM "Same Height",                 ID_EDIT_SAMEHEIGHT
+        MENUITEM SEPARATOR
+        MENUITEM "Snap Size",                   ID_EDIT_SNAPSIZE
+    END
+    POPUP "File"
+    BEGIN
+        MENUITEM "Export",                      ID_FILE_EXPORT
+        MENUITEM "ExportLibrary",               ID_FILE_EXPORTLIBRARY
+    END
+END
+
+IDR_MENU_TEMPLATE_EXPLORER MENU
+BEGIN
+    POPUP "ListView_BG"
+    BEGIN
+        POPUP "View"
+        BEGIN
+            MENUITEM "Tree View",                   ID_VIEW_TREEVIEW
+            MENUITEM "Icon View",                   ID_VIEW_ICONVIEW
+            MENUITEM "Report View",                 ID_VIEW_REPORTVIEW
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "New Filter",                  ID_LISTVIEW_NEWFILTER
+        MENUITEM "New Template",                ID_LISTVIEW_NEWTEMPLATE
+        MENUITEM SEPARATOR
+        MENUITEM "Delete",                      ID_LISTVIEW_DELETE
+        MENUITEM "Copy",                        ID_LISTVIEW_COPY
+        MENUITEM "Cut",                         ID_LISTVIEW_CUT
+        MENUITEM "Paste",                       ID_LISTVIEW_PASTE
+    END
+    POPUP "ListView_Item"
+    BEGIN
+        MENUITEM "Edit",                        ID_LISTVIEW_EDIT
+        MENUITEM "Set Script",                  ID_LISTVIEW_SETSCRIPT
+        MENUITEM "Remove Script",               ID_LISTVIEW_REMOVESCRIPT
+        MENUITEM "Edit Script",                 ID_LISTVIEW_EDITSCRIPT
+        MENUITEM SEPARATOR
+        MENUITEM "Delete",                      ID_LISTVIEW_DELETE
+        MENUITEM "Copy",                        ID_LISTVIEW_COPY
+        MENUITEM "Cut",                         ID_LISTVIEW_CUT
+        MENUITEM "Paste",                       ID_LISTVIEW_PASTE
+        MENUITEM "Export Template",             ID_LISTVIEW_EXPORTTEMPLATE
+    END
+END
+
+IDR_POPUP_SUBSET MENU
+BEGIN
+    POPUP "SUBSET"
+    BEGIN
+        MENUITEM "New Subset",                  ID_SUBSET_NEWSUBSET
+        MENUITEM "Delete Subsets...",           ID_SUBSET_DELETESUBSETS
+        MENUITEM "Property",                    ID_SUBSET_PROPERTY
+    END
+END
+
+IDR_NATION MENU
+BEGIN
+    MENUITEM "Dev",                         ID_LANGUAGE_DEV
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_DLG_SELECTMETA_TEMPLATE DIALOGEX 0, 0, 327, 200
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Template Type"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,221,183,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,274,183,50,14
+    CONTROL         "",IDC_TEMPLATE_LIST,"SysListView32",LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_AUTOARRANGE | LVS_ALIGNLEFT | WS_TABSTOP,3,3,321,177,WS_EX_STATICEDGE
+END
+
+IDD_UV_SELECTOR DIALOGEX 0, 0, 367, 290
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CLIPCHILDREN | WS_CAPTION | WS_VSCROLL | WS_HSCROLL | WS_SYSMENU | WS_THICKFRAME
+CAPTION "UV Select"
+MENU IDR_MENU_UVSELECTOR
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "OK",IDOK,9,119,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,9,134,50,14
+    CONTROL         "",IDC_ST_COLORKEY,"Static",SS_BLACKFRAME,22,71,36,11
+    PUSHBUTTON      "Pick Key",ID_SELKEY,9,84,50,14
+    EDITTEXT        IDC_UVLEFT,31,4,27,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_UVTOP,31,19,27,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_UVRIGHT,31,34,27,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_UVBOTTOM,31,49,27,12,ES_AUTOHSCROLL
+    LTEXT           "left",IDC_STATIC,15,6,13,10
+    LTEXT           "top",IDC_STATIC,14,21,14,10
+    LTEXT           "right",IDC_STATIC,10,35,17,10
+    LTEXT           "bottom",IDC_STATIC,6,50,26,10
+END
+
+IDD_SELECT_TEXTURE DIALOGEX 0, 0, 529, 295
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Textures"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,475,0,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,475,21,50,14
+    PUSHBUTTON      "Add Texture",IDC_BTN_ADD,475,47,50,14
+    CONTROL         "",IDC_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | TVS_SHOWSELALWAYS | WS_HSCROLL | WS_TABSTOP,4,0,144,249,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_SEARCH,154,2,292,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "Delete",IDC_BTN_DELETE_TEXTURE,475,65,50,14
+    PUSHBUTTON      "OLD Adjust",IDC_BTN_SELECT_ADJUST_TEXTURE,475,82,50,13
+    PUSHBUTTON      "Compress",IDC_BTN_CHANGE_FORMAT,475,116,50,14
+    CONTROL         "",IDC_ADJUST_PROGRESS,"msctls_progress32",WS_BORDER,4,271,521,21
+    PUSHBUTTON      "NEW Adjust",IDC_BTN_SELECT_ADJUST_VTEXLIST,475,99,50,13
+    PUSHBUTTON      "Copy&&Reload",IDC_BTN_COPY_N_RELOAD_VTEXINFO,475,136,50,13
+END
+
+IDD_DLG_GOTOLINE DIALOGEX 0, 0, 168, 65
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Go To Line"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,57,44,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,111,44,50,14
+    LTEXT           "Static",IDC_ST_GOTOLINE,7,7,84,12
+    EDITTEXT        IDC_ED_GOTOLINE,7,19,154,15,ES_AUTOHSCROLL | ES_NUMBER
+END
+
+IDD_DLG_FIND DIALOGEX 0, 0, 219, 98
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Find"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Find",IDOK,107,77,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,162,77,50,14
+    LTEXT           "Fi&nd what:",IDC_STATIC,7,17,35,8
+    COMBOBOX        IDC_COMBO1,52,15,160,115,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Match &case",IDC_CHECK1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,37,52,10
+    CONTROL         "Match &whole word",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,52,74,10
+    CONTROL         "Search &up",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,68,48,10
+END
+
+IDD_DLG_SHAPEINFO DIALOGEX 0, 0, 314, 85
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Shape Property"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_EDIT_SHAPEINFO_STRING,61,8,243,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHAPEINFO_POSX,61,27,56,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHAPEINFO_POSY,61,45,56,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHAPEINFO_WIDTH,163,25,56,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHAPEINFO_HEIGHT,163,43,56,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SHAPE_COUNT,61,61,56,13,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "OK",IDOK,257,26,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,257,41,50,14
+    LTEXT           "summary",IDC_STATIC,21,10,29,10
+    LTEXT           "width",IDC_STATIC,133,27,20,10
+    LTEXT           "Height",IDC_STATIC,130,44,21,10
+    LTEXT           "x position",IDC_STATIC,30,29,31,10
+    LTEXT           "y position",IDC_STATIC,29,46,31,10
+    LTEXT           "Count",IDC_STATIC,29,63,31,10
+END
+
+IDD_DLG_LEFTALIGN_VALUE DIALOGEX 0, 0, 165, 49
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Align LeftTop"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,103,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,103,25,50,14
+    EDITTEXT        IDC_EDIT_POS_LEFT,46,7,50,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_POS_TOP,46,25,50,14,ES_AUTOHSCROLL
+    LTEXT           "Left",IDC_STATIC,15,9,14,8
+    LTEXT           "Top",IDC_STATIC,15,26,13,8
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 119, 74
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,53,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,61,53,50,14
+    EDITTEXT        IDC_EDIT_COLUMN_COUNT,46,7,52,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_MARGIN_VALUE,46,27,51,16,ES_AUTOHSCROLL
+    LTEXT           "Column ",IDC_STATIC,12,10,28,8
+    LTEXT           "Margin",IDC_STATIC,12,30,28,8
+END
+
+IDD_DLG_SELECT_RUNMODULE DIALOGEX 0, 0, 288, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Module"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_ED_MODULENAME,68,22,207,12,ES_AUTOHSCROLL
+    CONTROL         "Run Module",IDC_CHK_MODULERUN_ENABLE,"Button",BS_AUTOCHECKBOX | BS_LEFTTEXT | WS_TABSTOP,9,7,67,12
+    DEFPUSHBUTTON   "OK",IDOK,174,41,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,231,41,50,14
+    LTEXT           "Module Name",IDC_STATIC,9,24,51,8
+END
+
+IDD_DRAGDROP_OPTION DIALOGEX 0, 0, 139, 83
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "DragDrop"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,17,62,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,74,62,50,14
+    CONTROL         "덮어 쓰기",IDC_RADIO1,"Button",BS_AUTORADIOBUTTON,7,9,92,9
+    CONTROL         "SubTemplate로 추가",IDC_RADIO2,"Button",BS_AUTORADIOBUTTON,7,25,92,9
+    CONTROL         "취소",IDC_RADIO3,"Button",BS_AUTORADIOBUTTON,7,42,92,9
+END
+
+IDD_DLG_SELECTSCENE DIALOGEX 0, 0, 442, 188
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Scene From Client"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,369,166,66,14
+    PUSHBUTTON      "Set Active Scene",ID_BTN_SETACTIVE,369,7,66,14
+    DEFPUSHBUTTON   "OK",IDOK,369,146,66,14
+    PUSHBUTTON      "Show/Hide",ID_BTN_SHOWHIDE,369,26,66,14
+    PUSHBUTTON      "Close Scene",ID_BTN_CLOSESCENE,369,46,66,14
+    CONTROL         "",IDC_LV_SCENELIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,7,355,174
+END
+
+IDD_DLG_INSERTEVENTHANDLER DIALOGEX 0, 0, 316, 231
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Insert Event Handler"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,210,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,259,210,50,14
+    LISTBOX         IDC_LB_IEH_CLASSES,19,30,103,119,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Classes",IDC_STATIC,26,17,58,10
+    CONTROL         "",IDC_TAB_IEH_CATEGORY,"SysTabControl32",0x0,136,29,133,120
+    LTEXT           "Functions",IDC_STATIC,140,18,46,8
+    LISTBOX         IDC_LB_IEH_HANDLERS,139,45,125,100,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Description",IDC_STATIC,22,156,81,8
+    EDITTEXT        IDC_ED_IEH_DESC,19,170,248,34,ES_MULTILINE | ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_DLG_SUBSET_SPEC DIALOGEX 0, 0, 244, 71
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Subset setting"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,133,53,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,191,53,50,14
+    LTEXT           "Path",IDC_STATIC,45,6,16,8
+    LTEXT           "Subset File Name",IDC_STATIC,6,20,56,8
+    LTEXT           "Partition Size",IDC_STATIC,20,35,42,8
+    EDITTEXT        IDC_ED_PATH,65,4,175,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_FILE,65,19,89,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_SIZE,65,34,51,12,ES_AUTOHSCROLL
+    LTEXT           "(Filename only)",IDC_STATIC,158,20,50,8
+    LTEXT           "(in MB)",IDC_STATIC,119,35,23,8
+END
+
+IDD_DLG_PROGRESS DIALOGEX 0, 0, 491, 241
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_PROGRESS1,"msctls_progress32",WS_BORDER,1,0,490,41
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_DLG_SELECTMETA_TEMPLATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 324
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 197
+    END
+
+    IDD_UV_SELECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 352
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 275
+    END
+
+    IDD_SELECT_TEXTURE, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 525
+        BOTTOMMARGIN, 292
+    END
+
+    IDD_DLG_GOTOLINE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 161
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 58
+    END
+
+    IDD_DLG_FIND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 212
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 91
+    END
+
+    IDD_DLG_SHAPEINFO, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 307
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 58
+    END
+
+    IDD_DLG_LEFTALIGN_VALUE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 158
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 42
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 112
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_DLG_SELECT_RUNMODULE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 281
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_DRAGDROP_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 132
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 76
+    END
+
+    IDD_DLG_SELECTSCENE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 435
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 181
+    END
+
+    IDD_DLG_INSERTEVENTHANDLER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 309
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 224
+    END
+
+    IDD_DLG_SUBSET_SPEC, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 240
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 67
+    END
+
+    IDD_DLG_PROGRESS, DIALOG
+    BEGIN
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON_BTN            ICON                    "res\\Controls\\Button.ico"
+IDI_ICON_BTN_SEL        ICON                    "res\\Controls\\Button_Sel.ico"
+IDI_ICON_CHECK          ICON                    "res\\Controls\\Check.ico"
+IDI_ICON_CHECK_SEL      ICON                    "res\\Controls\\Check_Sel.ico"
+IDI_ICON_COMBO          ICON                    "res\\Controls\\Combo.ico"
+IDI_ICON_COMBO_SEL      ICON                    "res\\Controls\\Combo_Sel.ico"
+IDI_ICON_EDIT           ICON                    "res\\Controls\\Edit.ico"
+IDI_ICON_EDIT_SEL       ICON                    "res\\Controls\\Edit_Sel.ico"
+IDI_ICON_FRAMEWND       ICON                    "res\\Controls\\framewnd.ico"
+IDI_ICON_FRAMEWND_SEL   ICON                    "res\\Controls\\framewnd_Sel.ico"
+IDI_ICON_GROUPCTRL      ICON                    "res\\Controls\\GroupCtrl.ico"
+IDI_ICON_GROUPCTRL_SEL  ICON                    "res\\Controls\\GroupCtrl_Sel.ico"
+IDI_ICON_HSCROLLBAR     ICON                    "res\\Controls\\HScrollbar.ico"
+IDI_ICON_HSCROLLBAR_SEL ICON                    "res\\Controls\\HScrollbar_Sel.ico"
+IDI_ICON_LISTBOX        ICON                    "res\\Controls\\ListBox.ico"
+IDI_ICON_LISTBOX_SEL    ICON                    "res\\Controls\\ListBox_Sel.ico"
+IDI_ICON_PROGRESS       ICON                    "res\\Controls\\Progress.ico"
+IDI_ICON_PROGRESS_SEL   ICON                    "res\\Controls\\Progress_Sel.ico"
+IDI_ICON_RADIO          ICON                    "res\\Controls\\Radio.ico"
+IDI_ICON_RADIO_SEL      ICON                    "res\\Controls\\Radio_Sel.ico"
+IDI_ICON_STATICIMAGE    ICON                    "res\\Controls\\SImage.ico"
+IDI_ICON_STATICIMAGE_SEL ICON                    "res\\Controls\\SImage_Sel.ico"
+IDI_ICON_SLIDER         ICON                    "res\\Controls\\Slider.ico"
+IDI_ICON_SLIDER_SEL     ICON                    "res\\Controls\\Slider_Sel.ico"
+IDI_ICON_SPIN           ICON                    "res\\Controls\\Spin.ico"
+IDI_ICON_SPIN_SEL       ICON                    "res\\Controls\\Spin_Sel.ico"
+IDI_ICON_STATICTEXT     ICON                    "res\\Controls\\SText.ico"
+IDI_ICON_STATICTEXT_SEL ICON                    "res\\Controls\\SText_Sel.ico"
+IDI_ICON_TABCTRL        ICON                    "res\\Controls\\TabCtrl.ico"
+IDI_ICON_TABCTRL_SEL    ICON                    "res\\Controls\\TabCtrl_Sel.ico"
+IDI_ICON_TREECTRL       ICON                    "res\\Controls\\TreeCtrl.ico"
+IDI_ICON_TREECTRL_SEL   ICON                    "res\\Controls\\TreeCtrl_Sel.ico"
+IDI_ICON_UIFILTER       ICON                    "res\\Controls\\UIFilter.ico"
+IDI_ICON_UIFILTER_SEL   ICON                    "res\\Controls\\UIFilter_Sel.ico"
+IDI_ICON_UIHIDE         ICON                    "res\\Controls\\UIHide.ico"
+IDI_ICON_UILOCK         ICON                    "res\\Controls\\UILock.ico"
+IDI_ICON_UIUNLOCK       ICON                    "res\\Controls\\UInlock.ico"
+IDI_ICON_UISCREEN       ICON                    "res\\Controls\\UIScreen.ico"
+IDI_ICON_UISCREEN_SEL   ICON                    "res\\Controls\\UIScreen_Sel.ico"
+IDI_ICON_UISHOW         ICON                    "res\\Controls\\UIShow.ico"
+IDI_ICON_VSCROLLBAR     ICON                    "res\\Controls\\VScrollbar.ico"
+IDI_ICON_VSCROLLBAR_SEL ICON                    "res\\Controls\\VScrollbar_Sel.ico"
+IDI_ICON_SUBSET         ICON                    "res\\controls\\icon1.ico"
+IDI_ICON_PROGRESS_IMAGE ICON                    "res\\controls\\Progress_Image.ico"
+IDI_ICON_PROGRESS_IMAGE_SEL ICON                    "res\\controls\\Progress_Image_Sel.ico"
+IDI_ICON_PROGRESS_SPLIT_SEL ICON                    "res\\controls\\progress_split_sel.ico"
+IDI_ICON_PROGRESS_SPLIT ICON                    "res\\controls\\progress_split.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_TB_SM               BITMAP                  "res\\ToolbarSmall.bmp"
+IDB_TB_LA               BITMAP                  "res\\ToolbarLarge.bmp"
+IDB_PANEL_BACKGROUND    BITMAP                  "res\\bitmap1.bmp"
+IDB_BITMAP1             BITMAP                  "res\\bmp00001.bmp"
+IDB_TEMPLATE_EXPLORER_TOOLBAR BITMAP                  "res\\TemplateExplorer_ToolBar.bmp"
+IDB_TEMPLATE_EXPLORER_REPORT BITMAP                  "res\\TemplateExplorer_Icon.bmp"
+IDB_TEMPLATE_EXPLORER_ICON BITMAP                  "res\\TemplateExplorer_IconBig.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+IDD_SELECT_TEXTURE AFX_DIALOG_LAYOUT
+BEGIN
+    0
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 영어(미국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&New\tCtrl+N",                ID_FILE_NEW
+        MENUITEM "&Open...\tCtrl+O",            ID_FILE_OPEN
+        MENUITEM "&Save\tCtrl+S",               ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVE_AS
+        MENUITEM SEPARATOR
+        MENUITEM "Recent File",                 ID_FILE_MRU_FILE1
+        MENUITEM SEPARATOR
+        MENUITEM "E&xit",                       ID_APP_EXIT
+    END
+    POPUP "&Edit"
+    BEGIN
+        MENUITEM SEPARATOR
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Status Bar",                 ID_VIEW_STATUS_BAR
+        POPUP "&Application Look"
+        BEGIN
+            MENUITEM "Windows &2000",               ID_VIEW_APPLOOK_WIN_2000
+            MENUITEM "Office &XP",                  ID_VIEW_APPLOOK_OFF_XP
+            MENUITEM "&Windows XP",                 ID_VIEW_APPLOOK_WIN_XP
+            MENUITEM "Office 200&3",                ID_VIEW_APPLOOK_OFF_2003
+            MENUITEM "Visual Studio.NET 200&5",     ID_VIEW_APPLOOK_VS_2005
+            POPUP "Office 200&7"
+            BEGIN
+                MENUITEM "&Blue Style",                 ID_VIEW_APPLOOK_OFF_2007_BLUE
+                MENUITEM "B&lack Style",                ID_VIEW_APPLOOK_OFF_2007_BLACK
+                MENUITEM "&Silver Style",               ID_VIEW_APPLOOK_OFF_2007_SILVER
+                MENUITEM "&Aqua Style",                 ID_VIEW_APPLOOK_OFF_2007_AQUA
+            END
+        END
+    END
+    POPUP "&Help"
+    BEGIN
+        MENUITEM "&About i3UIEditor...",        ID_APP_ABOUT
+    END
+    POPUP "Option"
+    BEGIN
+        MENUITEM "Editor Option",               ID_OPTION_EDITOROPTION
+    END
+END
+
+IDR_POPUP_EDIT MENU
+BEGIN
+    POPUP "Edit"
+    BEGIN
+        MENUITEM "Cu&t\tCtrl+X",                ID_EDIT_CUT
+        MENUITEM "&Copy\tCtrl+C",               ID_EDIT_COPY
+        MENUITEM "&Paste\tCtrl+V",              ID_EDIT_PASTE
+    END
+END
+
+IDR_WINDOWS_MENU MENU
+BEGIN
+    MENUITEM "&New Window",                 ID_WINDOW_NEW
+END
+
+IDR_THEME_MENU MENU
+BEGIN
+    MENUITEM "Office 2007 (&Blue Style)",   ID_VIEW_APPLOOK_OFF_2007_BLUE
+    MENUITEM "Office 2007 (B&lack Style)",  ID_VIEW_APPLOOK_OFF_2007_BLACK
+    MENUITEM "Office 2007 (&Silver Style)", ID_VIEW_APPLOOK_OFF_2007_SILVER
+    MENUITEM "Office 2007 (&Aqua Style)",   ID_VIEW_APPLOOK_OFF_2007_AQUA
+END
+
+IDR_RIBBON_VIEW MENU
+BEGIN
+    POPUP "View"
+    BEGIN
+        MENUITEM "Script Pane",                 ID_VIEW_SCRIPT_PANE
+        MENUITEM "Screen Pane",                 ID_VIEW_SCREEN_PANE
+        MENUITEM "Template Pane",               ID_VIEW_TEMPLATE_PANE
+        MENUITEM "Timeline Pane",               ID_VIEW_TIMELINE_PANE
+        MENUITEM "Properties Pane",             ID_VIEW_PROPERTIES_PANE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 170, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "About i3UIEditor"
+FONT 8, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,14,14,21,20
+    LTEXT           "i3UIEditor, Version 1.0",IDC_STATIC,42,14,114,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2010",IDC_STATIC,42,26,114,8
+    DEFPUSHBUTTON   "OK",IDOK,113,41,50,14,WS_GROUP
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 163
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3UIEditor.ico"
+IDR_i3UIEditorTYPE      ICON                    "res\\i3UIEditorDoc.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+IDR_MAINFRAME_256       BITMAP                  "res\\Toolbar256.bmp"
+IDB_MAIN                BITMAP                  "res\\main.bmp"
+IDB_FILELARGE           BITMAP                  "res\\filelarge.bmp"
+IDB_FILESMALL           BITMAP                  "res\\filesmall.bmp"
+IDB_WRITELARGE          BITMAP                  "res\\writelarge.bmp"
+IDB_WRITESMALL          BITMAP                  "res\\writesmall.bmp"
+IDB_BUTTONS             BITMAP                  "res\\buttons.bmp"
+IDB_SCREEN_SMALL        BITMAP                  "res\\screensmall.bmp"
+IDB_SCREEN_LARGE        BITMAP                  "res\\screenlarge.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+IDR_MAINFRAME_256 TOOLBAR 16, 16
+BEGIN
+    BUTTON      ID_FILE_NEW
+    BUTTON      ID_FILE_OPEN
+    BUTTON      ID_FILE_SAVE
+    SEPARATOR
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_FILE_PRINT
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS
+BEGIN
+    "N",            ID_FILE_NEW,            VIRTKEY, CONTROL, NOINVERT
+    "O",            ID_FILE_OPEN,           VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_FILE_SAVE,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    "Y",            ID_EDIT_REDO,           VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "040904e4"
+        BEGIN
+            VALUE "CompanyName", "TODO: <Company name>"
+            VALUE "FileDescription", "TODO: <File description>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3UIEditor.exe"
+            VALUE "LegalCopyright", "TODO: (c) <Company name>.  All rights reserved."
+            VALUE "OriginalFilename", "i3UIEditor.exe"
+            VALUE "ProductName", "TODO: <Product name>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x409, 1252
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
+    IDS_PANE_WORKSPACE      "WorkSpace"
+    IDS_PANE_SCREEN         "Screen"
+    IDS_PANE_TEMPLATE       "Selected Template"
+    IDS_PANE_PROPERTIES     "Properties"
+    IDS_PANE_TIMELINE       "Time Line"
+    IDS_PANE_SCRIPT         "Script"
+    IDS_PANE_OUTPUT         "Output"
+    ID_TEMPLATE_SCRIPT      "Script"
+    IDS_PANE_TEMPLATEEXPLORER "Template Explorer"
+    IDS_TREEVIEW            "Tree"
+    IDS_ICONVIEW            "Icon"
+END
+
+STRINGTABLE
+BEGIN
+    IDR_MAINFRAME           "i3UIEditor\n\ni3UIEditor\ni3UIEditor Files (*.i3UIe)\n.i3UIe\ni3UIEditor.Document\ni3UIEditor.Document"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_APP_TITLE       "Mind World UI Editor"
+    AFX_IDS_IDLEMESSAGE     "Ready"
+END
+
+STRINGTABLE
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_NEW             "Create a new document\nNew"
+    ID_FILE_OPEN            "Open an existing document\nOpen"
+    ID_FILE_CLOSE           "Close the active document\nClose"
+    ID_FILE_SAVE            "Save the active document\nSave"
+    ID_FILE_SAVE_AS         "Save the active document with a new name\nSave As"
+END
+
+STRINGTABLE
+BEGIN
+    ID_APP_ABOUT            "Display program information, version number and copyright\nAbout"
+    ID_APP_EXIT             "Quit the application; prompts to save documents\nExit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_FILE_MRU_FILE1       "Open this document"
+    ID_FILE_MRU_FILE2       "Open this document"
+    ID_FILE_MRU_FILE3       "Open this document"
+    ID_FILE_MRU_FILE4       "Open this document"
+    ID_FILE_MRU_FILE5       "Open this document"
+    ID_FILE_MRU_FILE6       "Open this document"
+    ID_FILE_MRU_FILE7       "Open this document"
+    ID_FILE_MRU_FILE8       "Open this document"
+    ID_FILE_MRU_FILE9       "Open this document"
+    ID_FILE_MRU_FILE10      "Open this document"
+    ID_FILE_MRU_FILE11      "Open this document"
+    ID_FILE_MRU_FILE12      "Open this document"
+    ID_FILE_MRU_FILE13      "Open this document"
+    ID_FILE_MRU_FILE14      "Open this document"
+    ID_FILE_MRU_FILE15      "Open this document"
+    ID_FILE_MRU_FILE16      "Open this document"
+END
+
+STRINGTABLE
+BEGIN
+    ID_NEXT_PANE            "Switch to the next window pane\nNext Pane"
+    ID_PREV_PANE            "Switch back to the previous window pane\nPrevious Pane"
+END
+
+STRINGTABLE
+BEGIN
+    ID_WINDOW_SPLIT         "Split the active window into panes\nSplit"
+END
+
+STRINGTABLE
+BEGIN
+    ID_EDIT_CLEAR           "Erase the selection\nErase"
+    ID_EDIT_CLEAR_ALL       "Erase everything\nErase All"
+    ID_EDIT_COPY            "Copy the selection and put it on the Clipboard\nCopy"
+    ID_EDIT_CUT             "Cut the selection and put it on the Clipboard\nCut"
+    ID_EDIT_FIND            "Find the specified text\nFind"
+    ID_EDIT_PASTE           "Insert Clipboard contents\nPaste"
+    ID_EDIT_REPEAT          "Repeat the last action\nRepeat"
+    ID_EDIT_REPLACE         "Replace specific text with different text\nReplace"
+    ID_EDIT_SELECT_ALL      "Select the entire document\nSelect All"
+    ID_EDIT_UNDO            "Undo the last action\nUndo"
+    ID_EDIT_REDO            "Redo the previously undone action\nRedo"
+END
+
+STRINGTABLE
+BEGIN
+    ID_VIEW_TOOLBAR         "Show or hide the toolbar\nToggle ToolBar"
+    ID_VIEW_STATUS_BAR      "Show or hide the status bar\nToggle Status Bar"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCSIZE          "Change the window size"
+    AFX_IDS_SCMOVE          "Change the window position"
+    AFX_IDS_SCMINIMIZE      "Reduce the window to an icon"
+    AFX_IDS_SCMAXIMIZE      "Enlarge the window to full size"
+    AFX_IDS_SCNEXTWINDOW    "Switch to the next document window"
+    AFX_IDS_SCPREVWINDOW    "Switch to the previous document window"
+    AFX_IDS_SCCLOSE         "Close the active window and prompts to save the documents"
+END
+
+STRINGTABLE
+BEGIN
+    AFX_IDS_SCRESTORE       "Restore the window to normal size"
+    AFX_IDS_SCTASKLIST      "Activate Task List"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_REPORTVIEW          "Report"
+    IDS_STATUS_PANE1        "Pane 1"
+    IDS_STATUS_PANE2        "Pane 2"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RIBBON_FILE         "File"
+    IDS_RIBBON_NEW          "&New"
+    IDS_RIBBON_OPEN         "&Open..."
+    IDS_RIBBON_SAVE         "&Save"
+    IDS_RIBBON_SAVEAS       "Save &As..."
+    IDS_RIBBON_PRINT        "Print"
+    IDS_RIBBON_PRINT_LABEL  "Preview and print the document"
+    IDS_RIBBON_PRINT_QUICK  "&Quick Print"
+    IDS_RIBBON_PRINT_PREVIEW "Print Pre&view"
+    IDS_RIBBON_PRINT_SETUP  "Print Set&up"
+    IDS_RIBBON_CLOSE        "&Close"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RIBBON_RECENT_DOCS  "Recent Documents"
+    IDS_RIBBON_EXIT         "E&xit"
+    IDS_RIBBON_HOME         "&Home"
+    IDS_RIBBON_CLIPBOARD    "Clipboard\nd"
+    IDS_RIBBON_PASTE        "Paste\nv"
+    IDS_RIBBON_CUT          "Cut\nx"
+    IDS_RIBBON_COPY         "Copy\nc"
+    IDS_RIBBON_SELECTALL    "Select All\na"
+    IDS_RIBBON_WINDOW       "Window\nw"
+    IDS_RIBBON_WINDOWS      "Windows\ni"
+    IDS_RIBBON_STYLE        "Style"
+    IDS_RIBBON_STYLE_TIP    "Modify Visual Style"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_RIBBON_STYLE_DESC   "Choose one of the Office 2007 themes"
+    IDS_RIBBON_STATUSBAR    "Status Bar"
+    IDS_RIBBON_VIEW         "View"
+END
+
+STRINGTABLE
+BEGIN
+    IDS_EDIT_MENU           "Edit"
+END
+
+#endif    // 영어(미국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE 9, 1
+#pragma code_page(1252)
+#include "res\i3UIEditor.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"         // Standard components
+#if !defined(_AFXDLL)
+#include "afxribbon.rc"              // MFC ribbon and control bar resources
+#endif
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

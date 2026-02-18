@@ -1,0 +1,22 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Viewer2", "i3Viewer2.vcproj", "{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		DebugOpt|Win32 = DebugOpt|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.Debug|Win32.Build.0 = Debug|Win32
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.DebugOpt|Win32.ActiveCfg = DebugOpt|Win32
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.DebugOpt|Win32.Build.0 = DebugOpt|Win32
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.Release|Win32.ActiveCfg = Release|Win32
+		{BDE87ABA-D7EE-4BC5-A9B0-9CBAE7A5DE7A}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

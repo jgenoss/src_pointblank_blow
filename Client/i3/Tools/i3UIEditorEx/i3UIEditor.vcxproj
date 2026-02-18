@@ -1,0 +1,352 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>i3UIEditorEx</ProjectName>
+    <ProjectGuid>{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}</ProjectGuid>
+    <RootNamespace>i3UIEditor</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3TDK_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3TDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <PreBuildEvent>
+      <Command />
+    </PreBuildEvent>
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;BUG_TRAP;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_SECURE_NO_WARNINGS;_CRT_NON_CONFORMING_SWPRINTFS;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link />
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+    <Link />
+    <Link>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="CEdit_Output.cpp" />
+    <ClCompile Include="Control\TemplateTree.cpp" />
+    <ClCompile Include="Control\UIGripCtrl.cpp" />
+    <ClCompile Include="Control\UIGripCtrlPoint.cpp" />
+    <ClCompile Include="Control\UIGripCtrlRect.cpp" />
+    <ClCompile Include="Control\UIGripObjHandler.cpp" />
+    <ClCompile Include="DlgProgress.cpp" />
+    <ClCompile Include="Dlg_Find.cpp" />
+    <ClCompile Include="Dlg_GoToLine.cpp" />
+    <ClCompile Include="Dlg_InsertEventHandler.cpp" />
+    <ClCompile Include="Dlg_SelectTexture.cpp" />
+    <ClCompile Include="Dlg_SelTemplateType.cpp" />
+    <ClCompile Include="Dlg_SplitValue.cpp" />
+    <ClCompile Include="Dlg_SubsetSpec.cpp" />
+    <ClCompile Include="DragDropOptionDlg.cpp" />
+    <ClCompile Include="FileWatcher.cpp" />
+    <ClCompile Include="FileWatcher2.cpp" />
+    <ClCompile Include="GameStringTable.cpp" />
+    <ClCompile Include="GlobalVariables.cpp" />
+    <ClCompile Include="i3TDKDlg_SelectVirtualTexture.cpp" />
+    <ClCompile Include="i3TDK_DrawBoard.cpp" />
+    <ClCompile Include="i3UIEditor.cpp" />
+    <ClCompile Include="i3UIEditorDoc.cpp" />
+    <ClCompile Include="i3UIEditorView.cpp" />
+    <ClCompile Include="i3UIEditorView_Template.cpp" />
+    <ClCompile Include="i3UIEFramework.cpp" />
+    <ClCompile Include="i3UIEMeta.cpp" />
+    <ClCompile Include="i3UIShapeListCtrl.cpp">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">true</ExcludedFromBuild>
+    </ClCompile>
+    <ClCompile Include="ImageChecker.cpp" />
+    <ClCompile Include="LeftAlignValueDlg.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MainFrm_Home.cpp" />
+    <ClCompile Include="MainFrm_Project.cpp" />
+    <ClCompile Include="MainFrm_Template.cpp" />
+    <ClCompile Include="Panel\UIPaneBase.cpp" />
+    <ClCompile Include="Panel\UIPaneOutput.cpp" />
+    <ClCompile Include="Panel\UIPaneProperties.cpp" />
+    <ClCompile Include="Panel\UIPaneScreen.cpp" />
+    <ClCompile Include="Panel\UIPaneScriptList.cpp" />
+    <ClCompile Include="Panel\UIPaneTemplate.cpp" />
+    <ClCompile Include="Panel\UIPaneTemplateExplorer.cpp" />
+    <ClCompile Include="Panel\UIPaneTimeLine.cpp" />
+    <ClCompile Include="Panel\UIPaneWorkSpace.cpp" />
+    <ClCompile Include="ScriptManager.cpp" />
+    <ClCompile Include="ScriptPane.cpp" />
+    <ClCompile Include="ScriptWnd.cpp" />
+    <ClCompile Include="SelectModuleDlg.cpp" />
+    <ClCompile Include="SelectSceneDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="UIEShapePropertyDlg.cpp" />
+    <ClCompile Include="UIGlobalRes.cpp" />
+    <ClCompile Include="UIMergedTexture.cpp" />
+    <ClCompile Include="UIProject.cpp" />
+    <ClCompile Include="UIShapeGripManager.cpp" />
+    <ClCompile Include="UIShapeListCtrl.cpp" />
+    <ClCompile Include="UITemplate_Editor.cpp" />
+    <ClCompile Include="UIToolFileMgr.cpp" />
+    <ClCompile Include="UIUVSelectorDlg.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoInfo.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoInfoCreate.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoInfoDelete.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoInfoEdit.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoInfoTransform.cpp" />
+    <ClCompile Include="UndoSystem2\UIUndoSystem.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="CEdit_Output.h" />
+    <ClInclude Include="Control\TemplateTree.h" />
+    <ClInclude Include="Control\UIGripCtrl.h" />
+    <ClInclude Include="Control\UIGripCtrlPoint.h" />
+    <ClInclude Include="Control\UIGripCtrlRect.h" />
+    <ClInclude Include="Control\UIGripObjHandler.h" />
+    <ClInclude Include="DlgProgress.h" />
+    <ClInclude Include="Dlg_Find.h" />
+    <ClInclude Include="Dlg_GoToLine.h" />
+    <ClInclude Include="Dlg_InsertEventHandler.h" />
+    <ClInclude Include="Dlg_SelectTexture.h" />
+    <ClInclude Include="Dlg_SelTemplateType.h" />
+    <ClInclude Include="Dlg_SplitValue.h" />
+    <ClInclude Include="Dlg_SubsetSpec.h" />
+    <ClInclude Include="DragDropOptionDlg.h" />
+    <ClInclude Include="FileWatcher.h" />
+    <ClInclude Include="FileWatcher2.h" />
+    <ClInclude Include="GameStringTable.h" />
+    <ClInclude Include="GlobalVariables.h" />
+    <ClInclude Include="i3TDKDlg_SelectVirtualTexture.h" />
+    <ClInclude Include="i3TDK_DrawBoard.h" />
+    <ClInclude Include="i3UIEditor.h" />
+    <ClInclude Include="i3UIEditorDoc.h" />
+    <ClInclude Include="i3UIEditorView.h" />
+    <ClInclude Include="i3UIEditorView_Template.h" />
+    <ClInclude Include="i3UIEFramework.h" />
+    <ClInclude Include="i3UIEMeta.h" />
+    <CustomBuild Include="i3UIShapeListCtrl.h">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">true</ExcludedFromBuild>
+    </CustomBuild>
+    <ClInclude Include="ImageChecker.h" />
+    <ClInclude Include="LeftAlignValueDlg.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Panel\UIPaneBase.h" />
+    <ClInclude Include="Panel\UIPaneOutput.h" />
+    <ClInclude Include="Panel\UIPaneProperties.h" />
+    <ClInclude Include="Panel\UIPaneScreen.h" />
+    <ClInclude Include="Panel\UIPaneScriptList.h" />
+    <ClInclude Include="Panel\UIPaneTemplate.h" />
+    <ClInclude Include="Panel\UIPaneTemplateExplorer.h" />
+    <ClInclude Include="Panel\UIPaneTimeLine.h" />
+    <ClInclude Include="Panel\UIPaneWorkSpace.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ScriptDefines.h" />
+    <ClInclude Include="ScriptManager.h" />
+    <ClInclude Include="ScriptPane.h" />
+    <ClInclude Include="ScriptWnd.h" />
+    <ClInclude Include="SelectModuleDlg.h" />
+    <ClInclude Include="SelectSceneDlg.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="UIEShapePropertyDlg.h" />
+    <ClInclude Include="UIGlobalRes.h" />
+    <ClInclude Include="UIMergedTexture.h" />
+    <ClInclude Include="UIPaneDefines.h" />
+    <ClInclude Include="UIProject.h" />
+    <ClInclude Include="UIShapeGripManager.h" />
+    <ClInclude Include="UIShapeListCtrl.h" />
+    <ClInclude Include="UITemplate_Editor.h" />
+    <ClInclude Include="UIToolFileMgr.h" />
+    <ClInclude Include="UIUVSelectorDlg.h" />
+    <ClInclude Include="UndoSystem2\UIUndoInfo.h" />
+    <ClInclude Include="UndoSystem2\UIUndoInfoCreate.h" />
+    <ClInclude Include="UndoSystem2\UIUndoInfoDelete.h" />
+    <CustomBuild Include="UndoSystem2\UIUndoInfoEdit.h" />
+    <CustomBuild Include="UndoSystem2\UIUndoInfoTransform.h" />
+    <ClInclude Include="UndoSystem2\UIUndoSystem.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrow.cur" />
+    <None Include="i3UIEditor.reg" />
+    <None Include="res\i3UIEditor.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\bitmap3.bmp" />
+    <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\buttons.bmp" />
+    <Image Include="res\Controls\Button.ico" />
+    <Image Include="res\Controls\Button_Sel.ico" />
+    <Image Include="res\Controls\Check.ico" />
+    <Image Include="res\Controls\Check_Sel.ico" />
+    <Image Include="res\Controls\Combo.ico" />
+    <Image Include="res\Controls\Combo_Sel.ico" />
+    <Image Include="res\Controls\Edit.ico" />
+    <Image Include="res\Controls\Edit_Sel.ico" />
+    <Image Include="res\Controls\framewnd.ico" />
+    <Image Include="res\Controls\framewnd_Sel.ico" />
+    <Image Include="res\Controls\GroupCtrl.ico" />
+    <Image Include="res\Controls\GroupCtrl_Sel.ico" />
+    <Image Include="res\Controls\HScrollbar.ico" />
+    <Image Include="res\Controls\HScrollbar_Sel.ico" />
+    <Image Include="res\Controls\ico00001.ico" />
+    <Image Include="res\Controls\icon1.ico" />
+    <Image Include="res\Controls\icon_pro.ico" />
+    <Image Include="res\Controls\ListBox.ico" />
+    <Image Include="res\Controls\ListBox_Sel.ico" />
+    <Image Include="res\Controls\Progress.ico" />
+    <Image Include="res\Controls\progress_image.ico" />
+    <Image Include="res\Controls\Progress_Image_Sel.ico" />
+    <Image Include="res\Controls\Progress_Sel.ico" />
+    <Image Include="res\Controls\progress_split.ico" />
+    <Image Include="res\Controls\progress_split_sel.ico" />
+    <Image Include="res\Controls\Radio.ico" />
+    <Image Include="res\Controls\Radio_Sel.ico" />
+    <Image Include="res\Controls\SImage.ico" />
+    <Image Include="res\Controls\SImage_Sel.ico" />
+    <Image Include="res\Controls\Slider.ico" />
+    <Image Include="res\Controls\Slider_Sel.ico" />
+    <Image Include="res\Controls\Spin.ico" />
+    <Image Include="res\Controls\Spin_Sel.ico" />
+    <Image Include="res\Controls\SText.ico" />
+    <Image Include="res\Controls\SText_Sel.ico" />
+    <Image Include="res\Controls\TabCtrl.ico" />
+    <Image Include="res\Controls\TabCtrl_Sel.ico" />
+    <Image Include="res\Controls\TreeCtrl.ico" />
+    <Image Include="res\Controls\TreeCtrl_Sel.ico" />
+    <Image Include="res\Controls\UIFilter.ico" />
+    <Image Include="res\Controls\UIFilter_Sel.ico" />
+    <Image Include="res\Controls\UIHide.ico" />
+    <Image Include="res\Controls\UILock.ico" />
+    <Image Include="res\Controls\UInlock.ico" />
+    <Image Include="res\Controls\UIScreen.ico" />
+    <Image Include="res\Controls\UIScreen_Sel.ico" />
+    <Image Include="res\Controls\UIShow.ico" />
+    <Image Include="res\Controls\VScrollbar.ico" />
+    <Image Include="res\Controls\VScrollbar_Sel.ico" />
+    <Image Include="res\filelarge.bmp" />
+    <Image Include="res\filesmall.bmp" />
+    <Image Include="res\i3UIEditor.ico" />
+    <Image Include="res\i3UIEditorDoc.ico" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\main.bmp" />
+    <Image Include="res\Res_TemplateExplorer.bmp" />
+    <Image Include="res\screenlarge.bmp" />
+    <Image Include="res\screensmall.bmp" />
+    <Image Include="res\TemplateExplorer_Icon.bmp" />
+    <Image Include="res\TemplateExplorer_IconBig.bmp" />
+    <Image Include="res\TemplateExplorer_ToolBar.bmp" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\toolbar1.bmp" />
+    <Image Include="res\Toolbar256.bmp" />
+    <Image Include="res\ToolbarLarge.bmp" />
+    <Image Include="res\ToolbarSmall.bmp" />
+    <Image Include="res\writelarge.bmp" />
+    <Image Include="res\writesmall.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3UIEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3UIEditor.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

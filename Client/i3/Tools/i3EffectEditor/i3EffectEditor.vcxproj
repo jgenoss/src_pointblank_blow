@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{306110D9-BE8A-4790-8D2C-84B46C4421F9}</ProjectGuid>
+    <RootNamespace>i3EffectEditor</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3TDK_Distribute.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\i3TDK.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <IgnoreSpecificDefaultLibraries>libci.lib;libcd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+    <Link>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="ColorKeyCtrl.cpp" />
+    <ClCompile Include="ColorKeyEditDialog.cpp" />
+    <ClCompile Include="ColorPickCtrl.cpp" />
+    <ClCompile Include="DlgOption.cpp" />
+    <ClCompile Include="DummyWnd.cpp" />
+    <ClCompile Include="EditEffectSound.cpp" />
+    <ClCompile Include="ExportOptionDialog.cpp" />
+    <ClCompile Include="GlobalVariable.cpp" />
+    <ClCompile Include="GraphEditCtrl.cpp" />
+    <ClCompile Include="GraphViewCtrl.cpp" />
+    <ClCompile Include="i3EditCtrl.cpp" />
+    <ClCompile Include="i3EffectEditor.cpp" />
+    <ClCompile Include="i3EffectEditorDlg.cpp" />
+    <ClCompile Include="i3EffectProject.cpp" />
+    <ClCompile Include="i3PropertySheetCtrl.cpp" />
+    <ClCompile Include="OptionInfo.cpp" />
+    <ClCompile Include="ParticleSpecColor.cpp" />
+    <ClCompile Include="ParticleSpecEmitter.cpp" />
+    <ClCompile Include="ParticleSpecObject.cpp" />
+    <ClCompile Include="ParticleSpecParticle.cpp" />
+    <ClCompile Include="ParticleSpecPosition.cpp" />
+    <ClCompile Include="ParticleSpecRotate.cpp" />
+    <ClCompile Include="ParticleSpecScale.cpp" />
+    <ClCompile Include="PlayControlDlg.cpp" />
+    <ClCompile Include="PropertyKeyframe.cpp" />
+    <ClCompile Include="SelectBoneDialog.cpp" />
+    <ClCompile Include="SpaceConvertConfirmDialog.cpp" />
+    <ClCompile Include="SpecTextureSequence.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="TimeTrackCtrl.cpp" />
+    <ClCompile Include="TimeTrackSpec.cpp" />
+    <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ColorKeyCtrl.h" />
+    <ClInclude Include="ColorKeyEditDialog.h" />
+    <ClInclude Include="ColorPickCtrl.h" />
+    <ClInclude Include="DlgOption.h" />
+    <ClInclude Include="DummyWnd.h" />
+    <ClInclude Include="EditEffectSound.h" />
+    <ClInclude Include="ExportOptionDialog.h" />
+    <ClInclude Include="GlobalVariable.h" />
+    <ClInclude Include="GraphEditCtrl.h" />
+    <ClInclude Include="GraphViewCtrl.h" />
+    <ClInclude Include="i3EditCtrl.h" />
+    <ClInclude Include="i3EffectEditor.h" />
+    <ClInclude Include="i3EffectEditorDlg.h" />
+    <ClInclude Include="i3EffectProject.h" />
+    <ClInclude Include="i3PropertySheetCtrl.h" />
+    <ClInclude Include="OptionInfo.h" />
+    <ClInclude Include="ParticleSpecColor.h" />
+    <ClInclude Include="ParticleSpecEmitter.h" />
+    <ClInclude Include="ParticleSpecObject.h" />
+    <ClInclude Include="ParticleSpecParticle.h" />
+    <ClInclude Include="ParticleSpecPosition.h" />
+    <ClInclude Include="ParticleSpecRotate.h" />
+    <ClInclude Include="ParticleSpecScale.h" />
+    <ClInclude Include="PlayControlDlg.h" />
+    <ClInclude Include="PropertyKeyframe.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SelectBoneDialog.h" />
+    <ClInclude Include="SpaceConvertConfirmDialog.h" />
+    <ClInclude Include="SpecTextureSequence.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="TimeTrackCtrl.h" />
+    <ClInclude Include="TimeTrackSpec.h" />
+    <ClInclude Include="Util.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\i3EffectEditor.ico" />
+    <Image Include="res\i3_FX.ico" />
+    <Image Include="res\ico00001.ico" />
+    <Image Include="res\ico00002.ico" />
+    <Image Include="res\ico00003.ico" />
+    <Image Include="res\icon1.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3EffectEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\i3EffectEditor.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3EffectEditor.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3EffectEditor.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

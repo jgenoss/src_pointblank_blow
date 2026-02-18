@@ -1,0 +1,22 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3EffectEditor", "i3EffectEditor.vcproj", "{306110D9-BE8A-4790-8D2C-84B46C4421F9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Debug|Win32.ActiveCfg = Debug|Win32
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Debug|Win32.Build.0 = Debug|Win32
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Distribute|Win32.Build.0 = Distribute|Win32
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Release|Win32.ActiveCfg = Distribute|Win32
+		{306110D9-BE8A-4790-8D2C-84B46C4421F9}.Release|Win32.Build.0 = Distribute|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

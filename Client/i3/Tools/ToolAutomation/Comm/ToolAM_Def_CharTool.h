@@ -1,0 +1,63 @@
+
+#ifndef _TOOLAM_DEF_CHARTOOL_H_
+#define _TOOLAM_DEF_CHARTOOL_H_
+
+#define TOOAM_DEF_CMDSTR(x) if(cmd == ##x##) { return #x##;}
+
+namespace ToolAM
+{
+	namespace CharTool
+	{
+		const static char* QNAME = "i3ChrTool";
+
+		enum ECMD
+		{
+			ECMD_CHARTOOL_MF_I3CHR_NEW,
+			ECMD_CHARTOOL_MF_I3CHR_ADDLOD_WITH_HERO,
+			ECMD_CHARTOOL_MF_I3CHR_EXPORT_HERO_MASK,
+			ECMD_CHARTOOL_MF_I3CHR_EXPORT_CHARA,
+			ECMD_CHARTOOL_MF_I3CHR_DELETE_AIDRIVERCPP,
+
+			ECMD_CHARTOOL_MF_I3CHR_SAVE,
+			ECMD_CHARTOOL_MF_I3CHR_CLOSE,
+
+			ECMD_CHARTOOL_MF_I3CHR_EXPORT,
+
+			ECMD_CHARTOOL_MF_EXPORT,
+
+			ECMD_CHARTOOL_MAX
+		};
+
+		static const char* ConvertCmdStr(DWORD cmd)
+		{
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_NEW)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_ADDLOD_WITH_HERO)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_EXPORT_HERO_MASK)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_EXPORT_CHARA)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_DELETE_AIDRIVERCPP)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_SAVE)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_CLOSE)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_I3CHR_EXPORT)
+			TOOAM_DEF_CMDSTR(ECMD_CHARTOOL_MF_EXPORT)
+
+			return "Unknown";
+		}
+
+		const static INT32 MASK_NUM_LODFILENAME_PATTERN = 2;
+		const static char* MaskLODFileNamePattern[MASK_NUM_LODFILENAME_PATTERN] = 
+		{
+			"Defense_Mask_%h_%m_LOD%n.i3s",
+			"%m_%h_LOD%n.i3s",
+			//"%h_%m_LOD%n.i3s"
+		};
+
+		std::string EvaluateLODFileName(const char* evalStr, const char* heroName, 
+			const char* maskName, INT32 lodIndex);
+
+	} // end of namespace CharTool
+
+} // end of namespace ToolAM
+
+
+#endif
+

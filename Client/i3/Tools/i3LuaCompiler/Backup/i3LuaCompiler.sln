@@ -1,0 +1,23 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3LuaCompiler", "i3LuaCompiler.vcproj", "{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Debug|Win32.ActiveCfg = Debug|Win32
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Debug|Win32.Build.0 = Debug|Win32
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Distribute|Win32.Build.0 = Distribute|Win32
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Release|Win32.ActiveCfg = Debug|Win32
+		{3C5A27AE-0DE4-4B26-A8B0-16B35E67CC04}.Release|Win32.Build.0 = Debug|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,674 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{dfabd6fa-fbd9-4b92-8b37-6d360756e4c4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{490da0f1-7d5f-4400-9986-e9cf4772d451}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Common\Resource Files\Control">
+      <UniqueIdentifier>{fdc1c2ca-936c-4fb2-82c4-b596e89efe09}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{b9acaf9e-a1e6-4e4c-94f5-626a3dd65fbd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{98d388b9-318e-4bcb-a9ad-c4b88ed52861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialogs">
+      <UniqueIdentifier>{8ba70c3b-e59c-4528-b440-5a37f04e7c71}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Template">
+      <UniqueIdentifier>{bfb8f9a5-5577-47d4-a571-5e7593b01d4f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{5d40be3d-b7f9-4fb9-981a-363e24bde58f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UndoSystem2">
+      <UniqueIdentifier>{1d4a7504-7c05-4691-80f2-5d7a64a59d96}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GlobalVariables.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEFramework.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEMeta.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIMergedTexture.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="UIProject.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="GameStringTable.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEditor.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEditorDoc.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEditorView.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIEditorView_Template.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageChecker.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Home.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Project.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Template.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIGlobalRes.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="UIToolFileMgr.cpp">
+      <Filter>Common\Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CEdit_Output.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneBase.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneOutput.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneProperties.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneScreen.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneScriptList.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneTemplate.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneTemplateExplorer.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneTimeLine.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel\UIPaneWorkSpace.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKDlg_SelectVirtualTexture.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrlPoint.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrlRect.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripObjHandler.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="UIShapeGripManager.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="UIUVSelectorDlg.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_SelectTexture.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_SelTemplateType.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_SplitValue.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_SubsetSpec.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgProgress.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="DragDropOptionDlg.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="LeftAlignValueDlg.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectModuleDlg.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="SelectSceneDlg.cpp">
+      <Filter>Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDK_DrawBoard.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIShapeListCtrl.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\TemplateTree.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="UIEShapePropertyDlg.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="UIShapeListCtrl.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="UITemplate_Editor.cpp">
+      <Filter>Template</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Find.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_GoToLine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_InsertEventHandler.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWatcher.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWatcher2.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptManager.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptPane.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="ScriptWnd.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoInfo.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoInfoCreate.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoInfoDelete.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoInfoEdit.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoInfoTransform.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+    <ClCompile Include="UndoSystem2\UIUndoSystem.cpp">
+      <Filter>UndoSystem2</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GlobalVariables.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEFramework.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEMeta.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="UIMergedTexture.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="UIProject.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="GameStringTable.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="UIGlobalRes.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="CEdit_Output.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneBase.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="UIPaneDefines.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneOutput.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneProperties.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneScreen.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneScriptList.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneTemplate.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneTemplateExplorer.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneTimeLine.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel\UIPaneWorkSpace.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="i3TDKDlg_SelectVirtualTexture.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrlPoint.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrlRect.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripObjHandler.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="UIShapeGripManager.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="UIUVSelectorDlg.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_SelectTexture.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_SelTemplateType.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_SplitValue.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_SubsetSpec.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgProgress.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="DragDropOptionDlg.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="LeftAlignValueDlg.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectModuleDlg.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="SelectSceneDlg.h">
+      <Filter>Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="i3TDK_DrawBoard.h">
+      <Filter>Template</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\TemplateTree.h">
+      <Filter>Template</Filter>
+    </ClInclude>
+    <ClInclude Include="UIEShapePropertyDlg.h">
+      <Filter>Template</Filter>
+    </ClInclude>
+    <ClInclude Include="UIShapeListCtrl.h">
+      <Filter>Template</Filter>
+    </ClInclude>
+    <ClInclude Include="UITemplate_Editor.h">
+      <Filter>Template</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Find.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_GoToLine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_InsertEventHandler.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWatcher.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWatcher2.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptDefines.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptManager.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptPane.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="ScriptWnd.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoSystem2\UIUndoInfo.h">
+      <Filter>UndoSystem2</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoSystem2\UIUndoInfoCreate.h">
+      <Filter>UndoSystem2</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoSystem2\UIUndoInfoDelete.h">
+      <Filter>UndoSystem2</Filter>
+    </ClInclude>
+    <ClInclude Include="UndoSystem2\UIUndoSystem.h">
+      <Filter>UndoSystem2</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEditor.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEditorDoc.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEditorView.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIEditorView_Template.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageChecker.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="UIToolFileMgr.h">
+      <Filter>Common\Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrow.cur">
+      <Filter>Common\Resource Files</Filter>
+    </None>
+    <None Include="res\i3UIEditor.rc2">
+      <Filter>Common\Resource Files</Filter>
+    </None>
+    <None Include="i3UIEditor.reg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap3.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\bmp00001.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\buttons.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\filelarge.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\filesmall.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3UIEditor.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3UIEditorDoc.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\ico00001.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon1.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\icon1.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\icon_pro.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\main.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\progress_image.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\Progress_Image_Sel.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\progress_split.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\progress_split_sel.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Res_TemplateExplorer.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\screenlarge.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\screensmall.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_Icon.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_IconBig.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_ToolBar.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\toolbar1.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\ToolbarLarge.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\ToolbarSmall.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UIHide.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UILock.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UInlock.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UIScreen.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UIScreen_Sel.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\UIShow.ico">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\writelarge.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\writesmall.bmp">
+      <Filter>Common\Resource Files</Filter>
+    </Image>
+    <Image Include="res\Controls\Button.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Button_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Check.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Check_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Combo.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Combo_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Edit.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Edit_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\framewnd.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\framewnd_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\GroupCtrl.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\GroupCtrl_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\HScrollbar.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\HScrollbar_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\ListBox.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\ListBox_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Progress.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Progress_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Radio.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Radio_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\SImage.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\SImage_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Slider.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Slider_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Spin.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\Spin_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\SText.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\SText_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\TabCtrl.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\TabCtrl_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\TreeCtrl.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\TreeCtrl_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\UIFilter.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\UIFilter_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\VScrollbar.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+    <Image Include="res\Controls\VScrollbar_Sel.ico">
+      <Filter>Common\Resource Files\Control</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3UIEditor.rc">
+      <Filter>Common\Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="i3UIShapeListCtrl.h">
+      <Filter>Template</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UndoSystem2\UIUndoInfoEdit.h">
+      <Filter>UndoSystem2</Filter>
+    </CustomBuild>
+    <CustomBuild Include="UndoSystem2\UIUndoInfoTransform.h">
+      <Filter>UndoSystem2</Filter>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

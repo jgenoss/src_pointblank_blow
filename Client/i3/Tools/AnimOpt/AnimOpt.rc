@@ -1,0 +1,135 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ANIMPAKVIEW DIALOGEX 0, 0, 953, 394
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "i3AnimPack Viewer & Analyze"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,896,373,50,14
+    CONTROL         "",IDC_APV_LV_FILELIST_LEFT,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,38,675,217
+    CTEXT           "Drop Files!",IDC_APV_ST_FILEDROPTARGET,7,7,675,24,SS_SUNKEN
+    LTEXT           "Working Directory",IDC_STATIC,7,259,69,13,SS_SUNKEN
+    EDITTEXT        IDC_APV_EB_WORKDIR,79,259,502,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Analyze!",IDC_APV_BT_EXEC_ANALYZE,585,259,97,14
+    LISTBOX         IDC_APV_LB_ANALYZE,7,280,939,89,LBS_OWNERDRAWFIXED | LBS_HASSTRINGS | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "View Filter",IDC_STATIC,687,35,252,211
+    PUSHBUTTON      "Filter",IDC_APV_VF_BT_FILTER,695,227,115,14
+    PUSHBUTTON      "UnFilter",IDC_APV_VF_BT_CLEAR,820,226,115,14
+    CONTROL         "Bad state i3AnimPack (empty, corrupt)",IDC_APV_VF_CK_BADSTATE_ANIMPACK,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,696,50,219,10
+    CONTROL         "i3Animation Path",IDC_APV_VF_CK_I3ANIPATH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,696,66,127,10
+    CONTROL         "2nd",IDC_APV_VF_CK_2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,114,27,10
+    CONTROL         "1st",IDC_APV_VF_CK_1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,97,27,10
+    LTEXT           "ex) CHARA/SWAT_MALE/1PV/WeaponName/*.I3A",IDC_STATIC,709,184,170,11,SS_SUNKEN
+    EDITTEXT        IDC_APV_VF_EB_1,740,97,144,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_APV_VF_EB_2,740,113,144,12,ES_AUTOHSCROLL
+    CONTROL         "3rd",IDC_APV_VF_CK_3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,131,27,10
+    EDITTEXT        IDC_APV_VF_EB_3,740,129,144,12,ES_AUTOHSCROLL
+    CONTROL         "4th",IDC_APV_VF_CK_4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,148,27,10
+    EDITTEXT        IDC_APV_VF_EB_4,740,146,144,12,ES_AUTOHSCROLL
+    CONTROL         "5th",IDC_APV_VF_CK_5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,165,27,10
+    EDITTEXT        IDC_APV_VF_EB_5,740,163,144,12,ES_AUTOHSCROLL
+    CONTROL         "0",IDC_APV_VF_CK_0,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,707,81,27,10
+    EDITTEXT        IDC_APV_VF_EB_0,740,80,144,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_0,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,82,14,10
+    LTEXT           " ExactlyMatch",IDC_STATIC,859,63,49,11,SS_SUNKEN
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_1,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,98,14,10
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,114,14,10
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,131,14,10
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_4,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,147,14,10
+    CONTROL         "",IDC_APV_VF_CK_EXACTMATCH_5,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,893,164,14,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ANIMPAKVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 946
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 387
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_APKVIEW_STATUS      BITMAP                  "bitmap1.bmp"
+#endif    // 한국어 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

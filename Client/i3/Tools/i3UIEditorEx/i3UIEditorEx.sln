@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3UIEditorEx", "i3UIEditor.vcxproj", "{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Debug|Win32.ActiveCfg = Debug|Win32
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Debug|Win32.Build.0 = Debug|Win32
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Distribute|Win32.Build.0 = Distribute|Win32
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Release|Win32.ActiveCfg = Distribute|Win32
+		{C48B6042-D5D7-4D22-B7B1-12C0ECCD25D1}.Release|Win32.Build.0 = Distribute|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

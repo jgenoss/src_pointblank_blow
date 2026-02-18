@@ -1,0 +1,60 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="comm">
+      <UniqueIdentifier>{f42879f5-4d60-4bd2-ba4c-e7a897afb001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="comm\ctl">
+      <UniqueIdentifier>{bd1fc9e4-6671-4ef8-88c3-bb77b698376e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{215b01a0-94a4-47e0-a5e8-4a792e8cb278}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\ctl">
+      <UniqueIdentifier>{3dca0767-b69c-4bff-bee7-2f2814aae5ed}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Comm\ToolAM.h">
+      <Filter>comm</Filter>
+    </ClInclude>
+    <ClInclude Include="Comm\ToolAM_Def.h">
+      <Filter>comm</Filter>
+    </ClInclude>
+    <ClInclude Include="Comm\ToolAM_Def_CharTool.h">
+      <Filter>comm</Filter>
+    </ClInclude>
+    <ClInclude Include="Comm\ToolAM_Util.h">
+      <Filter>comm</Filter>
+    </ClInclude>
+    <ClInclude Include="Comm\ctl\MCtlFileDropTarget.h">
+      <Filter>comm\ctl</Filter>
+    </ClInclude>
+    <ClInclude Include="ToolAMPCH.h">
+      <Filter>src</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ToolAM.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolAM_Def.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolAM_Def_CharTool.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolAM_Util.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolAMPCH.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="MCtlFileDropTarget.cpp">
+      <Filter>src\ctl</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

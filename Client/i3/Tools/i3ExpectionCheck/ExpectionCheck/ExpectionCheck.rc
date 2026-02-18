@@ -1,0 +1,258 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\ExpectionCheck.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\ExpectionCheck.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "ExpectionCheck 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "ExpectionCheck Version 1.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2007",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_EXPECTIONCHECK_DIALOG DIALOGEX 0, 0, 375, 362
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_VISIBLE | 
+    WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_APPWINDOW
+CAPTION "ExpectionCheck"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "종료",IDOK,209,339,58,16
+    EDITTEXT        IDC_E_MAPFILE,31,7,304,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_E_ADDRESS,39,46,94,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "찾기",IDC_B_MAPOPEN,343,7,25,12
+    PUSHBUTTON      "호출스택",IDC_B_CALLCATCH,135,46,31,12
+    LTEXT           "맵파일",IDC_STATIC,7,7,22,8
+    LTEXT           "주소값",IDC_STATIC,14,46,22,8
+    GROUPBOX        "입력",IDC_STATIC,7,22,162,41
+    LISTBOX         IDC_L_CALLSTACK,15,249,346,78,LBS_HASSTRINGS | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "스택 지우기",IDC_B_CLEAN,99,339,58,16
+    EDITTEXT        IDC_E_CODE,39,34,94,12,ES_AUTOHSCROLL
+    LTEXT           "코드",IDC_STATIC,14,34,15,8
+    PUSHBUTTON      "코드",IDC_B_CODE,135,34,31,12
+    EDITTEXT        IDC_E_CODERESULT,193,193,167,43,ES_MULTILINE | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_INPUT,177,31,162,29,ES_MULTILINE | ES_AUTOHSCROLL | 
+                    WS_VSCROLL
+    PUSHBUTTON      "입력",IDC_B_INFO,341,30,24,28
+    LTEXT           "O/S",IDC_STATIC,233,80,17,10
+    LTEXT           "CPU",IDC_STATIC,15,80,15,10
+    LTEXT           "GPU",IDC_STATIC,15,97,16,10
+    LTEXT           "Memory",IDC_STATIC,193,97,34,10
+    LTEXT           "Multimedia",IDC_STATIC,15,162,34,10
+    LTEXT           "DirectX",IDC_STATIC,193,162,34,10
+    LTEXT           "System Process",IDC_STATIC,14,180,56,10
+    LTEXT           "Error Code",IDC_STATIC,193,180,34,10
+    LTEXT           "Call Stack",IDC_STATIC,15,239,34,10
+    LISTBOX         IDC_L_PROCESS,15,193,174,43,LBS_HASSTRINGS | 
+                    LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_E_OS,250,80,109,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_E_CPU,34,80,189,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_E_GPU_CARD,50,105,132,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_MULTMEDIA,59,161,124,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_GPU_PROV,50,141,132,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_DIRECTX,218,161,141,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_GPU_DATE,50,117,132,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_GPU_VER,50,129,132,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_E_MEM_TOTALPHYS,294,105,65,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    LTEXT           "Card",IDC_STATIC,22,107,26,8
+    LTEXT           "Date",IDC_STATIC,22,118,26,8
+    LTEXT           "Version",IDC_STATIC,22,130,26,8
+    LTEXT           "Provider",IDC_STATIC,22,142,26,8
+    EDITTEXT        IDC_E_MEM_AVAILPHYS,294,117,65,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_MEM_TOTALVIR,294,129,65,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    EDITTEXT        IDC_E_MEM_AVAILVIR,294,141,65,12,ES_AUTOHSCROLL | 
+                    ES_READONLY
+    LTEXT           "메인 메모리 총크기",IDC_STATIC,204,107,87,8
+    LTEXT           "메인메모리가용사이즈",IDC_STATIC,204,118,87,8
+    LTEXT           "가상 메모리 총 사이즈",IDC_STATIC,204,130,87,8
+    LTEXT           "가용 가상 메모리 총 사이즈",IDC_STATIC,204,142,87,8
+    GROUPBOX        "입력",IDC_STATIC,173,22,195,41
+    GROUPBOX        "출력",IDC_STATIC,7,69,361,267
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "TODO: <회사 이름>"
+            VALUE "FileDescription", "TODO: <파일 설명>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "ExpectionCheck.exe"
+            VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
+            VALUE "OriginalFilename", "ExpectionCheck.exe"
+            VALUE "ProductName", "TODO: <제품 이름>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "변환", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_EXPECTIONCHECK_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 368
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 355
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDS_ABOUTBOX            "ExpectionCheck 정보(&A)..."
+END
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\ExpectionCheck.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

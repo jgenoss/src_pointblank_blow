@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\dlgBatchRenAttrOpti">
+      <UniqueIdentifier>{6f863ac0-459e-4f0d-b188-dd37461fe56a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Axis">
+      <UniqueIdentifier>{574825f4-a371-4771-b1f1-7b57d29ae1a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlgBlendOptionApply">
+      <UniqueIdentifier>{c8c915de-aceb-4dcd-b6d5-1072235c2287}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\dlgColorOptionApply">
+      <UniqueIdentifier>{0f08debe-3f2a-4d46-81db-dc9c6f9fea51}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{6c801d72-2830-4f9c-8ab8-cafba349fd6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GlobalVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2Doc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2Framework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2View.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Ribbon_Home.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraphTreeCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="dlgBatchRenAttrOpti.cpp">
+      <Filter>Source Files\dlgBatchRenAttrOpti</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2Axis.cpp">
+      <Filter>Source Files\Axis</Filter>
+    </ClCompile>
+    <ClCompile Include="i3Viewer2LightAxis.cpp">
+      <Filter>Source Files\Axis</Filter>
+    </ClCompile>
+    <ClCompile Include="dlgBlendOptionApply.cpp">
+      <Filter>Source Files\dlgBlendOptionApply</Filter>
+    </ClCompile>
+    <ClCompile Include="dlgColorOptionApply.cpp">
+      <Filter>Source Files\dlgColorOptionApply</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_SceneGraph.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Spec.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="GlobalVar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2Doc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2Framework.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2View.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraphTreeCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgBatchRenAttrOpti.h">
+      <Filter>Source Files\dlgBatchRenAttrOpti</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2Axis.h">
+      <Filter>Source Files\Axis</Filter>
+    </ClInclude>
+    <ClInclude Include="i3Viewer2LightAxis.h">
+      <Filter>Source Files\Axis</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgBlendOptionApply.h">
+      <Filter>Source Files\dlgBlendOptionApply</Filter>
+    </ClInclude>
+    <ClInclude Include="dlgColorOptionApply.h">
+      <Filter>Source Files\dlgColorOptionApply</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_SceneGraph.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Spec.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\buttons.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\class_view.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\class_view_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\classview.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\classview_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\explorer.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\explorer_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\file_view.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\file_view_hc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\fileview.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\fileview_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3Viewer2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3Viewer2Doc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icons_24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icons_32.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\main.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\menuimages.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\menuimages_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sort.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\sort_hc.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3Viewer2.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\i3Viewer2.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="i3Viewer2.reg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

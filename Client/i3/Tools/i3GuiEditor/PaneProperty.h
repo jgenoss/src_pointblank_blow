@@ -1,0 +1,35 @@
+#pragma once
+
+#include "PropCommon.h"
+
+// PaneUVEdit dialog
+class CPaneProperty : public i3TDKDialogBase
+{
+	DECLARE_DYNAMIC(CPaneProperty)
+
+public:
+	CPaneProperty(CWnd* pParent = NULL);   // standard constructor
+	virtual ~CPaneProperty();
+
+public:
+// Dialog Data
+	enum { IDD = IDD_PANE_PROPERTY };
+
+	i3TDKWndFoldCtrl	m_WndFoldCtrl;
+
+	CPropCommon			m_PropCommon;
+	void				_SetInfo(i3GuiObjBase * pObj);
+protected:
+	virtual void DoDataExchange(CDataExchange* pDX) override;    // DDX/DDV support
+
+	DECLARE_MESSAGE_MAP()
+public:
+	virtual BOOL OnInitDialog() override;
+
+protected:
+	void	OnUpdate( I3_TDK_UPDATE_INFO * pInfo );
+	virtual LRESULT WindowProc(UINT message, WPARAM wParam, LPARAM lParam) override;
+public:
+	afx_msg void OnLButtonDown(UINT nFlags, CPoint point);
+	afx_msg void OnSize(UINT nType, int cx, int cy);
+};

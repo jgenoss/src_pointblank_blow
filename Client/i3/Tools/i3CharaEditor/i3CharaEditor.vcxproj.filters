@@ -1,0 +1,338 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\ToolAutomation">
+      <UniqueIdentifier>{0983d3f1-d0c2-4020-89e2-4ecef5d54f12}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ToolAutomation\Mask">
+      <UniqueIdentifier>{24bcf609-bd48-4d70-a02c-336ab96a53d8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\ToolAutomation\AIState">
+      <UniqueIdentifier>{f30c3e80-a236-430c-a846-206b6095050d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{724f552e-b1b0-4e9d-9d71-57da66ba4c7b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Spec">
+      <UniqueIdentifier>{e87e5f1d-b9b8-4631-8284-3faa2de40cc7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GIC">
+      <UniqueIdentifier>{779c6c74-87c2-4279-9dad-e8e9436667c8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{2f26f8b8-f922-4846-909c-52c78ebbf879}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Chara.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CharaAnim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Merge_1PV_3PV.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Replace.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgAddAIStateToChilds.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgAiAni.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgDumpAnim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgExport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgOption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgRefResCpy.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgRenameFolder.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgSelectSound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3CharaEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3CharaEditorFramework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LOD.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\DlgNogadaMask.cpp">
+      <Filter>Source Files\ToolAutomation\Mask</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\AIStateEditor_Ctl.cpp">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\AIStateEditor_Def.cpp">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\CtlLVI3AMapper.cpp">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\DlgNogadaAIState.cpp">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClCompile>
+    <ClCompile Include="Automate\ToolAM_I3CharaEditor.cpp">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelAIGraph.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelLog.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelLuaEditor.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelRender.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelResource.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelSceneGraph.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelSpec.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelTimeTrack.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecAI.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecAIState.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecAnim.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecChara.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecLOD.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="SpecSoundNode.cpp">
+      <Filter>Spec</Filter>
+    </ClCompile>
+    <ClCompile Include="AIGraphView.cpp">
+      <Filter>GIC</Filter>
+    </ClCompile>
+    <ClCompile Include="GICDiagramAI.cpp">
+      <Filter>GIC</Filter>
+    </ClCompile>
+    <ClCompile Include="GICShapeAI.cpp">
+      <Filter>GIC</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeSeqCtrl.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AI.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Chara.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Merge_1PV_3PV.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Replace.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgAddAIStateToChilds.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgAiAni.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgDumpAnim.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgExport.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgOption.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgRefResCpy.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgRenameFolder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgSelectSound.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3CharaEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3CharaEditorFramework.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LOD.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Automate\DlgNogadaMask.h">
+      <Filter>Source Files\ToolAutomation\Mask</Filter>
+    </ClInclude>
+    <ClInclude Include="Automate\AIStateEditor_Ctl.h">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClInclude>
+    <ClInclude Include="Automate\AIStateEditor_Def.h">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClInclude>
+    <ClInclude Include="Automate\CtlLVI3AMapper.h">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClInclude>
+    <ClInclude Include="Automate\DlgNogadaAIState.h">
+      <Filter>Source Files\ToolAutomation\AIState</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelAIGraph.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelLog.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelLuaEditor.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelRender.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelResource.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelSceneGraph.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelSpec.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelTimeTrack.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecAI.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecAIState.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecAnim.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecChara.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecLOD.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="SpecSoundNode.h">
+      <Filter>Spec</Filter>
+    </ClInclude>
+    <ClInclude Include="AIGraphView.h">
+      <Filter>GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="GICDiagramAI.h">
+      <Filter>GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="GICShapeAI.h">
+      <Filter>GIC</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeSeqCtrl.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\aistate_edit_stateImg.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3Character.ICO">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3CharaEditor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00001.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00002.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3CharaEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\i3CharaEditor.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3CharaEditor.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

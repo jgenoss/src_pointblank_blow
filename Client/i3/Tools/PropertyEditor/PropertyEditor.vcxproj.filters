@@ -1,0 +1,197 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Dialog">
+      <UniqueIdentifier>{e417e275-5adf-4e44-bac7-9e1fc5cfb06d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SubList">
+      <UniqueIdentifier>{536bf476-8604-4f37-957e-290c07ba238e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Impl">
+      <UniqueIdentifier>{4a86c017-d518-49be-8d15-180fe918c359}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Impl\i3TDKRegistryCtrl">
+      <UniqueIdentifier>{30bfef55-09fa-4ef1-9986-98a21a48d519}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SearchToolBar">
+      <UniqueIdentifier>{5acdff85-23fd-4e45-859e-cf34f7f84efa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="GlobalVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropEditorProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyEditor.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyEditorDoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyEditorView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AckDialog.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="CodePageSelectDlg.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionDialog.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="WeaponContextDialog.cpp">
+      <Filter>Source Files\Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="ListSubComboBox.cpp">
+      <Filter>Source Files\SubList</Filter>
+    </ClCompile>
+    <ClCompile Include="ListSubCtrl.cpp">
+      <Filter>Source Files\SubList</Filter>
+    </ClCompile>
+    <ClCompile Include="ListSubDialog.cpp">
+      <Filter>Source Files\SubList</Filter>
+    </ClCompile>
+    <ClCompile Include="ListSubEdit.cpp">
+      <Filter>Source Files\SubList</Filter>
+    </ClCompile>
+    <ClCompile Include="i3RegistrySet_Impl.cpp">
+      <Filter>Source Files\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKImageViewCtrl_Impl.cpp">
+      <Filter>Source Files\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKListCtrl_Impl.cpp">
+      <Filter>Source Files\Impl</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKRegistryCtrl_Impl.cpp">
+      <Filter>Source Files\Impl\i3TDKRegistryCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKRegistryCtrl_Impl_Command.cpp">
+      <Filter>Source Files\Impl\i3TDKRegistryCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="i3TDKRegistryCtrl_Impl_ItemWeapon.cpp">
+      <Filter>Source Files\Impl\i3TDKRegistryCtrl</Filter>
+    </ClCompile>
+    <ClCompile Include="CSearchToolBar.cpp">
+      <Filter>Source Files\SearchToolBar</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropEditorProfile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyEditor.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyEditorDoc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyEditorView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AckDialog.h">
+      <Filter>Source Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="CodePageSelectDlg.h">
+      <Filter>Source Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDialog.h">
+      <Filter>Source Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="WeaponContextDialog.h">
+      <Filter>Source Files\Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="i3RegistrySet_Impl.h">
+      <Filter>Source Files\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="i3TDKImageViewCtrl_Impl.h">
+      <Filter>Source Files\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="i3TDKListCtrl_Impl.h">
+      <Filter>Source Files\Impl</Filter>
+    </ClInclude>
+    <ClInclude Include="CSearchToolBar_I.h">
+      <Filter>Source Files\SearchToolBar</Filter>
+    </ClInclude>
+    <ClInclude Include="CSearchToolBar.h">
+      <Filter>Source Files\SearchToolBar</Filter>
+    </ClInclude>
+    <ClInclude Include="ListSubComboBox.h">
+      <Filter>Source Files\SubList</Filter>
+    </ClInclude>
+    <ClInclude Include="ListSubCtrl.h">
+      <Filter>Source Files\SubList</Filter>
+    </ClInclude>
+    <ClInclude Include="ListSubDialog.h">
+      <Filter>Source Files\SubList</Filter>
+    </ClInclude>
+    <ClInclude Include="ListSubEdit.h">
+      <Filter>Source Files\SubList</Filter>
+    </ClInclude>
+    <ClInclude Include="i3TDKRegistryCtrl_Impl.h">
+      <Filter>Source Files\Impl\i3TDKRegistryCtrl</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bmp00001.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\PropertyEditor.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\PropertyEditorDoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\toolbar1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="PropertyEditor.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\PropertyEditor.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

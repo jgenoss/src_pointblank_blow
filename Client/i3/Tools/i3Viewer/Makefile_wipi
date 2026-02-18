@@ -1,0 +1,103 @@
+I3_ROOT		=	$(I3_WIPI_ROOT)
+GCCROOT		=	$(ARM_GCCROOT)
+BINDIR		=	$(GCCROOT)/bin
+STDINC		=	$(GCCROOT)/arm-elf/include
+STDLIB		=	$(GCCROOT)/arm-elf/lib
+#GCCLIB_INC	=	$(GCCLIB_ROOT)/include
+#GCCLIB_LIB	=	$(GCCLIB_ROOT)/lib
+TC_ROOT		=	$(I3_WIPI_SKT)
+TC_INC		=	$(TC_ROOT)/include/API
+TC_LIB		=	$(TC_ROOT)/Lib
+I3LIBDIR	=	$(I3_ROOT)/lib/WIPI_FXD/Debug
+I3_INC	=	$(I3_ROOT)/include/i3Base
+
+#
+# Linker로 arm-elf-ld를 사용해서는 안된다.
+# C++ 언어를 제대로 사용하기 위해서는 반드시 arm-elf-g++로
+# Linker를 Invoke 시켜야 한다.
+#
+CC			=	$(BINDIR)/arm-elf-gcc
+CXX			=	$(BINDIR)/arm-elf-g++
+LD			=	$(BINDIR)/arm-elf-g++
+MAKE		=	make
+
+TARGET_NAME	= i3Viewer
+
+#
+# WIPI 환경 하에서 올바르게 Binary Make가 되기 위해서
+# 반드시 필요한 WIPIStubGcc.o를 자동으로 Link시키는
+# Link Script 파일.
+#
+LINKSCRIPT	=WIPIGcc.ld
+
+DEFS		=	-DI3_WIPI -DI3_WIPI_GIGA -DI3_COMPILER_GCC -DI3_DEBUG -DI3_NO_STATIC_CLASSMETA -DI3_FIXED_POINT
+INCS		=	-I$(STDINC) -I$(TC_INC) -I$(I3_ROOT)/include -I$(I3_INC)
+LIBFLAG		=	-L$(TC_LIB) -L$(I3LIBDIR)
+
+#
+# C++용 Compile Option
+#
+USER_CFLAGS =	-mhard-float -mapcs-frame -fshort-enums -mthumb -mthumb-interwork
+USER_CFLAGS +=	-fno-rtti -Wabi -nodefaultlibs -nostartfiles -fno-enforce-eh-specs
+
+#
+# Linker용 Options
+USER_LFLAGS =	-Wl,-x,-X,-Map=$(TARGET_NAME).map,'-T$(LINKSCRIPT)',--no-gc-sections,-EL,--verbose
+USER_LFLAGS +=	-Wl,-warn-common,-nostartfiles,-nodefaultlibs,-nostdlib,-nostdinc++,'-o$(TARGET)'
+
+I3_LIBS		=	$(I3LIBDIR)/libi3Base.a \
+				$(I3LIBDIR)/libi3Math.a \
+				$(I3LIBDIR)/libi3Gfx.a \
+				$(I3LIBDIR)/libi3Input.a \
+				$(I3LIBDIR)/libi3Scene.a \
+				$(I3LIBDIR)/libi3Framework.a
+
+TARGET		= $(TARGET_NAME).elf
+OBJS		= wipimain.o
+
+CFLAGS		= -O2 -Wall $(DEFS) $(INCS) $(USER_CFLAGS)
+
+# 아래의 -r Option을 포함하지 않는 것으로 반드시 unresolved external symbol check를
+# 해야한다.
+#
+#LFLAGS		= -O2 $(LIBFLAG) $(USER_LFLAGS) -Ii3Math -li3Base -lgcc -lc -lm
+
+LFLAGS		= -O2 $(LIBFLAG) $(USER_LFLAGS) $(I3_LIBS) -li3Base -li3Math -li3Scene -li3Math -li3Base -li3Gfx -li3Scene -li3Input -lgcc -lc -lm
+	
+# vpath %.cpp		.
+			
+			
+.PHONY: all clean
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	$(LD) -o $@ $(OBJS) $(LFLAGS)
+	$(LD) -o $@ $(OBJS) $(LFLAGS) -r
+
+#crt0.o: $(TC_LIB)/crt0.c
+#	$(CC) $(CFLAGS) -c -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+.cpp.o:
+	$(CXX) $(CFLAGS) -c -o $@ $<
+
+#clean:
+#	@-rm -f $(TARGET) *.o *~ *.bak
+
+clean:
+	rm -f *.o *.d *~ *.bak *.elf *.map
+	
+rebuild :
+	make -f Makefile_wipi clean
+	make -f Makefile_wipi
+
+#
+%.o : %.cpp %.c
+
+DEPENDENCY_FILES:= $(wildcard *.d)
+ifneq ($(strip $(DEPENDENCY_FILES)),)
+include $(DEPENDENCY_FILES)
+endif

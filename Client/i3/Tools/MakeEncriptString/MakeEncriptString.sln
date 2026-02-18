@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeEncriptString", "MakeEncriptString\MakeEncriptString.vcproj", "{EB8E1C70-6BB3-4EFF-A7BA-DD4FF4CB7AD7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {A02BA972-0F07-4556-80A0-AC1B50166434}
+		SccProjectUniqueName1 = MakeEncriptString\\MakeEncriptString.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection1 = MakeEncriptString\\
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{EB8E1C70-6BB3-4EFF-A7BA-DD4FF4CB7AD7}.Debug.ActiveCfg = Debug|Win32
+		{EB8E1C70-6BB3-4EFF-A7BA-DD4FF4CB7AD7}.Debug.Build.0 = Debug|Win32
+		{EB8E1C70-6BB3-4EFF-A7BA-DD4FF4CB7AD7}.Release.ActiveCfg = Release|Win32
+		{EB8E1C70-6BB3-4EFF-A7BA-DD4FF4CB7AD7}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

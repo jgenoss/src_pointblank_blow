@@ -1,0 +1,395 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="UV">
+      <UniqueIdentifier>{d73c65d4-13ab-417b-8dbc-768d7191c7bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{4bdb38bd-5e5c-4013-8ac5-51d20d74db9f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UV\Pane">
+      <UniqueIdentifier>{3da20ad3-2b1e-4dd6-872d-0326f6bd584c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UV\Dlg">
+      <UniqueIdentifier>{7df33990-e4bd-4fdd-af37-8e8dabe4d2bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UV\Wnd">
+      <UniqueIdentifier>{0ce5a59b-c6d4-4894-b851-c21986f47d0c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Control\UIGlobalRes.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrlPoint.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripCtrlRect.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIGripObjHandler.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="Control\UIShapeGripManager.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageListCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="PropertyPane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="PieceListPane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageListPane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeLinePane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="PaneBase.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationViewPane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationListPane.h">
+      <Filter>UV\Pane</Filter>
+    </ClInclude>
+    <ClInclude Include="ADDAnimationDlg.h">
+      <Filter>UV\Dlg</Filter>
+    </ClInclude>
+    <ClInclude Include="TextureViewer.h">
+      <Filter>UV\Wnd</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalInstance.h">
+      <Filter>UV</Filter>
+    </ClInclude>
+    <ClInclude Include="TimeLineCtrl.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIAnimation.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIAnimationDoc.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="i3UIAnimationView.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="i3UIAnimation.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIAnimationDoc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="i3UIAnimationView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGlobalRes.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrlPoint.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripCtrlRect.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIGripObjHandler.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="Control\UIShapeGripManager.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageListCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="PropertyPane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="PieceListPane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageListPane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeLinePane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="PaneBase.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationViewPane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="AnimationListPane.cpp">
+      <Filter>UV\Pane</Filter>
+    </ClCompile>
+    <ClCompile Include="ADDAnimationDlg.cpp">
+      <Filter>UV\Dlg</Filter>
+    </ClCompile>
+    <ClCompile Include="TextureViewer.cpp">
+      <Filter>UV\Wnd</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalInstance.cpp">
+      <Filter>UV</Filter>
+    </ClCompile>
+    <ClCompile Include="TimeLineCtrl.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3UIAnimation.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\i3UIAnimation.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\i3UIAnimationDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\i3UIAnimation.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\icons_32.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\icons_24.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\sort_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\menuimages_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\main.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\filesmall.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\filelarge.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\fileview_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\fileview.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\explorer_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\classview_hc.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\classview.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\buttons.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_ToolBar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_Icon.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\TemplateExplorer_IconBig.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\VScrollbar_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\VScrollbar.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UInlock.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIShow.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIScreen_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIScreen.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UILock.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIHide.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIFilter_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\UIFilter.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\TreeCtrl_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\TreeCtrl.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\TabCtrl_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\TabCtrl.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\controls\icon1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\SText_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\SText.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\SImage_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\SImage.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Spin_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Spin.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Slider_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Slider.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Radio_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Radio.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\controls\progress_split_sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\controls\progress_split.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Progress_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\controls\Progress_Image_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\controls\Progress_Image.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Progress.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\ListBox_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\ListBox.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\HScrollbar_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\HScrollbar.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\GroupCtrl_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\GroupCtrl.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\framewnd_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\framewnd.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Edit_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Edit.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Combo_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Combo.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Check_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Check.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Button_Sel.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Controls\Button.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

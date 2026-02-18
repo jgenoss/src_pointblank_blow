@@ -1,0 +1,578 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Panel">
+      <UniqueIdentifier>{d3baf5ab-0dbc-49fe-a90c-0ac93619ee18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{42c9291d-111d-431d-b8b9-7c2e919c3a4b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Dialog">
+      <UniqueIdentifier>{f4429832-4753-4273-99ee-f44e224968ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Prop">
+      <UniqueIdentifier>{2507c75b-ae83-4e5f-9cbb-e5f16415ee93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NavMesh">
+      <UniqueIdentifier>{b219e9ac-3ee1-482f-a6f5-e4b0d0982771}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="NavMesh\Panel">
+      <UniqueIdentifier>{c6e72759-1c32-407a-b70a-157e68557fa0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DB">
+      <UniqueIdentifier>{9fbb6ce5-7457-4040-bdec-bbab91032c08}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DlgNavmeshGenerator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgRename.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ExportThread.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3LevelDesign.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3LevelDesignDoc.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3LevelDesignView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LevelDesignProfile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Ribbon_Home.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ModalObjectType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PathExporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldExporter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelProperty.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelPropertyCommon.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelPropertySpecific.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelResource.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelTransform.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="CTimeEventCtrl.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="ModifiedListCtrl.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="ResTreeCtrl.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="ColorDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_Debug_Sg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Dlg_LoadError.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgActionSelect.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgActionSetWorldSection.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgElementList.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgEnterEventName.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgExport.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgLayer.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgMapSectorEdit.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgReplaceRes.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgSelectSg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgSetMapSectorIndex.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgTextureSelect.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgWorldSectionEdit.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgWorldSectionInput.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionDlg.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_CameraObj.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_Common.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_Object.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_PathLink.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_PathPoint.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_Prim_Respawn.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_Primitive.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_World.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvRes_Animation.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvRes_Character.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvRes_SceneGraph.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvRes_Sound.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvRes_Texture.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="PropLight.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="PropWorld.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelNavMesh.cpp">
+      <Filter>NavMesh\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelNavMeshCommon.cpp">
+      <Filter>NavMesh\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelNavMeshEdit.cpp">
+      <Filter>NavMesh\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelNavMeshGenerator.cpp">
+      <Filter>NavMesh\Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="PanelHitMap.cpp">
+      <Filter>Panel</Filter>
+    </ClCompile>
+    <ClCompile Include="Prop_LvElm_HitMap.cpp">
+      <Filter>Prop</Filter>
+    </ClCompile>
+    <ClCompile Include="HitMapTimeSeqCtrl.cpp">
+      <Filter>Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\Ado.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DB\MapPlayInfo.cpp">
+      <Filter>DB</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgHitMapTimeSet.cpp">
+      <Filter>Dialog</Filter>
+    </ClCompile>
+    <ClCompile Include="HitMapManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ExportThread.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVariable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3LevelDesign.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3LevelDesignDoc.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3LevelDesignView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="LevelDesignProfile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ModalObjectType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PathExporter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldExporter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelProperty.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelPropertyCommon.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelPropertySpecific.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelResource.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelTransform.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="CTimeEventCtrl.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ModifiedListCtrl.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ResTreeCtrl.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="ColorDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_Debug_Sg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Dlg_LoadError.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgActionSelect.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgActionSetWorldSection.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgElementList.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgEnterEventName.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgExport.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgLayer.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgMapSectorEdit.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgNavmeshGenerator.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgRename.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgReplaceRes.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgSelectSg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgSetMapSectorIndex.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgTextureSelect.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgWorldSectionEdit.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgWorldSectionInput.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionDlg.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Shell.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_CameraObj.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_Common.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_Object.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_PathLink.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_PathPoint.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_Prim_Respawn.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_Primitive.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_World.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvRes_Animation.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvRes_Character.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvRes_SceneGraph.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvRes_Sound.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvRes_Texture.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="PropLight.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="PropWorld.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelNavMesh.h">
+      <Filter>NavMesh\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelNavMeshCommon.h">
+      <Filter>NavMesh\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelNavMeshEdit.h">
+      <Filter>NavMesh\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelNavMeshGenerator.h">
+      <Filter>NavMesh\Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="PanelHitMap.h">
+      <Filter>Panel</Filter>
+    </ClInclude>
+    <ClInclude Include="Prop_LvElm_HitMap.h">
+      <Filter>Prop</Filter>
+    </ClInclude>
+    <ClInclude Include="HitMapTimeSeqCtrl.h">
+      <Filter>Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\Ado.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\MapPlayInfo.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DB\MapPlayInfoDef.h">
+      <Filter>DB</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgHitMapTimeSet.h">
+      <Filter>Dialog</Filter>
+    </ClInclude>
+    <ClInclude Include="HitMapManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="resource.hm">
+      <Filter>Source Files</Filter>
+    </None>
+    <None Include="arrowcop.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cur00001.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cur00002.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cur00003.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cur00004.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cursor1.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\cursor2.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\i3LevelDesign.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="nodrop.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\bitmap2.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\buttons.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\i3LevelDesign.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00001.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00002.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00003.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00004.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00005.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00006.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00007.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00008.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00009.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico00010.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\ico_chk_.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon2.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon3.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon4.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icon5.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Icons_16.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Icons_32.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\lockX.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\select_t.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Sphere.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3LevelDesign.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3LevelDesign.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

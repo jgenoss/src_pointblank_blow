@@ -1,0 +1,21 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3ClothSim", "i3ClothSim\i3ClothSim.vcproj", "{03BDC10F-7462-48CB-A9FC-4ABC3CF6E71A}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{03BDC10F-7462-48CB-A9FC-4ABC3CF6E71A}.Debug.ActiveCfg = Debug|Win32
+		{03BDC10F-7462-48CB-A9FC-4ABC3CF6E71A}.Debug.Build.0 = Debug|Win32
+		{03BDC10F-7462-48CB-A9FC-4ABC3CF6E71A}.Release.ActiveCfg = Release|Win32
+		{03BDC10F-7462-48CB-A9FC-4ABC3CF6E71A}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="소스 파일\Helper">
+      <UniqueIdentifier>{a1d0840b-be8f-4fde-a1e2-c7194f98e161}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Helper\Utils">
+      <UniqueIdentifier>{0e179d12-0afc-4125-a2e9-2397ce34b243}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Third Party">
+      <UniqueIdentifier>{4b3e65e1-c9f9-436e-90e2-e8fc50a4a7ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="소스 파일\Helper\Profiler">
+      <UniqueIdentifier>{edc64136-158c-4351-b1ca-572c5bd3a90c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="dllmain.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="i3iThumbnailProvider.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ClaassFactory.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Reg.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtil.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtil32Bits.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtilDXT.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtil16Bits.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtil24Bits.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Profiler.cpp">
+      <Filter>소스 파일\Helper\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>소스 파일\Helper\Profiler</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtilDDS.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="ImageUtilCalc.cpp">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i3iThumbnailProvider.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Reg.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="ClassFactory.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="i3ImageDefine.h">
+      <Filter>소스 파일\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="TypeDefine.h">
+      <Filter>소스 파일\Helper</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtil.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtil32Bits.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtilDXT.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtil16bits.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtil24Bits.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Profiler.h">
+      <Filter>소스 파일\Helper\Profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="Timer.h">
+      <Filter>소스 파일\Helper\Profiler</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtilDDS.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="ImageUtilCalc.h">
+      <Filter>소스 파일\Helper\Utils</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="GlobalExportFunction.def">
+      <Filter>소스 파일</Filter>
+    </None>
+  </ItemGroup>
+</Project>

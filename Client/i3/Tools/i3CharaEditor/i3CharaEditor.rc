@@ -1,0 +1,874 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어 resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3CharaEditor.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "새 캐릭터(&N)",                   ID_FILE_NEW
+        MENUITEM "열기(&O)",                      ID_FILE_OPEN
+        MENUITEM "저장하기(&S)",                    ID_FILE_SAVE
+        MENUITEM "새 이름으로...(&A)",               ID_FILE_SAVEAS
+        MENUITEM SEPARATOR
+        MENUITEM "Export I3CHR",                ID_FILE_EXPORTI3CHR
+        MENUITEM "Build Animation Pack File...", ID_BUILD_ANIMPACK
+        MENUITEM SEPARATOR
+        MENUITEM "끝내기(&X)",                     ID_APP_EXIT
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소\tCtrl+Z(&U)",           ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기\tCtrl+X(&T)",            ID_EDIT_CUT
+        MENUITEM "복사\tCtrl+C(&C)",              ID_EDIT_COPY
+        MENUITEM "붙여넣기\tCtrl+V(&P)",            ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Autoset Collidees",           ID_AUTOSET_COLLIDEE
+    END
+    POPUP "보기(&V)"
+    BEGIN
+        MENUITEM "상태 표시줄(&S)",                  ID_VIEW_STATUS_BAR
+        MENUITEM SEPARATOR
+        MENUITEM "Line Render Mode",            ID_VIEW_LINERENDER
+    END
+    POPUP "도구(&T)"
+    BEGIN
+        MENUITEM SEPARATOR
+        MENUITEM "설정(&O)",                      ID_TOOL_OPTION
+        MENUITEM SEPARATOR
+        MENUITEM "Check Bones",                 ID_TOOLS_CHECKBONES
+        MENUITEM "Dump AI",                     ID_TOOL_DUMP_AI
+        MENUITEM "Convert to animation templates", ID_CONVERT_ANIM_TEMPLATE
+        MENUITEM "Merge 1PV + 3PV",             ID_MERGE_1PV_3PV
+        MENUITEM SEPARATOR
+        MENUITEM "Copy Referenced File To (...)", ID_COPY_REF_FILE
+        MENUITEM SEPARATOR
+        POPUP "노가다도우미"
+        BEGIN
+            MENUITEM "마스크",                         ID_POPUPMENUITEM_NOGADA_MASK
+            MENUITEM "AIState",                     ID_POPUPMENUITEM_NOGADA_AISTATE
+            MENUITEM "ANI & AI",                    ID_32817
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Output List for Shared Animation", ID_TOOL_OUTPUT_SHAREDANIM
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "i3CharaEditor 정보(&A)...",     ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_RSC MENU 
+BEGIN
+    POPUP "RSC_POPUP"
+    BEGIN
+        MENUITEM "&Delete",                     ID_RSC_DELETE
+        MENUITEM SEPARATOR
+    END
+END
+
+IDR_POPUP_AIDRAG MENU 
+BEGIN
+    POPUP "AI_DRAG"
+    BEGIN
+        MENUITEM "Move...",                     ID_AI_MOVE
+        MENUITEM "Create Clone...",             ID_AI_CREATECLONE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "i3CharaEditor 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3CharaEditor Version 1.0",IDC_STATIC,40,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2006",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_PANEL_RESOURCE DIALOGEX 0, 0, 158, 210
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_RSC_TREE,"SysTreeView32",TVS_HASBUTTONS | TVS_HASLINES | TVS_LINESATROOT | TVS_EDITLABELS | WS_TABSTOP,15,18,73,89,WS_EX_STATICEDGE
+END
+
+IDD_PANEL_SCENEGRAPH DIALOGEX 0, 0, 149, 196
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANEL_AI_GRAPH DIALOGEX 0, 0, 283, 169
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    PUSHBUTTON      "",IDC_BTN_SELMODE,3,19,19,16,BS_ICON | WS_GROUP
+    PUSHBUTTON      "",IDC_BTN_CREATEAI,3,38,19,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_CREATENEXT,3,55,19,16,BS_ICON
+    EDITTEXT        IDC_ED_NAME,3,3,51,13,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    COMBOBOX        IDC_CB_AISTATE,57,3,72,349,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Save",IDC_BTN_SAVE,131,3,31,14
+    PUSHBUTTON      "Check...",IDC_BTN_CHECK_TEMPLATE,228,3,33,14
+    PUSHBUTTON      "Adjust",IDC_BTN_ADJUST,196,3,32,14
+    PUSHBUTTON      "Replace",IDC_BTN_REPLACE,163,3,32,14
+END
+
+IDD_PANEL_SPEC DIALOGEX 0, 0, 186, 96
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANEL_TIMETRACK DIALOGEX 0, 0, 161, 123
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANEL_LUA DIALOGEX 0, 0, 169, 111
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Lua Editor",IDC_STATIC,43,42,33,8
+END
+
+IDD_PANEL_LOG DIALOGEX 0, 0, 265, 81
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANEL_RENDER DIALOGEX 0, 0, 186, 96
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_DLG_OPTION DIALOGEX 0, 0, 311, 131
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,258,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,258,24,50,14
+    LTEXT           "Working Folder",IDC_STATIC,3,3,49,8
+    EDITTEXT        IDC_EDIT1,3,15,212,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "…",IDC_BTN_WORKPATH,217,15,12,11
+    LTEXT           "Template Character Names",IDC_STATIC,3,34,88,8
+    EDITTEXT        IDC_ED_CHARAS,3,46,212,76,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
+END
+
+IDD_SPEC_AI DIALOGEX 0, 0, 218, 81
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Name",IDC_STATIC,19,4,19,8
+    EDITTEXT        IDC_ED_NAME,45,3,90,12,ES_AUTOHSCROLL
+    CONTROL         "Enabled",IDC_CHK_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,19,41,10
+    COMBOBOX        IDC_CB_INITSTATE,45,34,92,360,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Initial State",IDC_STATIC,3,36,38,8
+    LTEXT           "Driver Meta",IDC_STATIC,3,52,38,8
+    EDITTEXT        IDC_ED_DRIVERMETA,45,50,92,12,ES_AUTOHSCROLL
+END
+
+IDD_SPEC_AISTATE DIALOGEX 0, 0, 219, 412
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_CLIPSIBLINGS | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    EDITTEXT        IDC_ED_NAME,43,3,98,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_CB_ANIM,3,67,212,157,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_ED_ID,44,145,56,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_RUN_SCRIPT,99,233,79,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_FINISH_SCRIPT,99,247,79,12,ES_AUTOHSCROLL
+    CONTROL         "Animation의 종료와 함께 종료",IDC_CHK_TERM_WITHANIM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,169,117,10
+    CONTROL         "시간제",IDC_CHK_TERM_TIME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,45,180,40,10
+    EDITTEXT        IDC_ED_TIMELENGTH,80,191,40,12,ES_AUTOHSCROLL
+    COMBOBOX        IDC_CB_NEXTSTATE,44,211,137,313,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Name",IDC_STATIC,3,3,19,8
+    LTEXT           "Animation",IDC_STATIC,3,21,32,8
+    LTEXT           "ID",IDC_STATIC,3,127,8,8
+    LTEXT           "Time limit",IDC_STATIC,46,193,30,8
+    LTEXT           "sec.",IDC_STATIC,124,193,14,8
+    LTEXT           "Run function",IDC_STATIC,47,235,42,8
+    LTEXT           "Finish function",IDC_STATIC,47,249,47,8
+    LTEXT           "Next State",IDC_STATIC,3,209,21,16
+    LTEXT           "Time",IDC_STATIC,72,112,16,8
+    EDITTEXT        IDC_ED_BLEND,92,110,40,12,ES_AUTOHSCROLL
+    LTEXT           "sec.",IDC_STATIC,136,112,14,8
+    LTEXT           "Type",IDC_STATIC,70,127,17,8
+    COMBOBOX        IDC_CB_BLENDTYPE,92,125,93,137,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Loop",IDC_CHK_ANIM_LOOP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,165,110,31,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,19,212,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,47,102,168,1
+    LTEXT           "Blend",IDC_STATIC,42,104,18,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,141,208,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,160,212,1
+    LTEXT           "Conditions",IDC_STATIC,3,163,34,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,207,208,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,229,212,1
+    LTEXT           "Scripts",IDC_STATIC,3,232,22,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,263,212,1
+    LTEXT           "Source",IDC_STATIC,3,266,23,8
+    CONTROL         "",IDC_ED_SRCTEXT,"RichEdit20A",ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,48,266,167,60,WS_EX_STATICEDGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,331,208,1
+    LTEXT           "Comment",IDC_STATIC,3,334,31,8
+    CONTROL         "",IDC_ED_COMMENTTEXT,"RichEdit20A",ES_MULTILINE | ES_AUTOVSCROLL | ES_AUTOHSCROLL | ES_WANTRETURN | WS_VSCROLL | WS_HSCROLL | WS_TABSTOP,48,338,167,55,WS_EX_STATICEDGE
+    LTEXT           "Filter",IDC_STATIC,43,30,17,8
+    COMBOBOX        IDC_CB_FILTER,67,27,148,185,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    CONTROL         "Display path of animation",IDC_CHK_VIEWPATH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,3,55,97,10
+    CONTROL         "Only Name",IDC_CHK_ONLYNAME,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,68,41,51,10
+    EDITTEXT        IDC_ED_ANIMNAME,46,84,169,12,ES_AUTOHSCROLL
+END
+
+IDD_DLG_SELECTSOUND DIALOGEX 0, 0, 295, 154
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CLIPCHILDREN | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Sound"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,242,3,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,242,24,50,14
+    CONTROL         "",IDC_SOUND_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,3,235,148,WS_EX_STATICEDGE
+END
+
+IDD_SPEC_LOD DIALOGEX 0, 0, 184, 90
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Scene Graph",IDC_STATIC,4,5,42,8
+    COMBOBOX        IDC_CB_SG,52,3,108,384,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "# Triangles",IDC_STATIC,9,20,37,8
+    EDITTEXT        IDC_ED_TRICOUNT,52,19,40,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_BONECOUNT,52,34,40,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "# Bones",IDC_STATIC,18,35,28,8
+    CONTROL         "Disable shadow casting",IDC_CHK_CAST_SHADOW,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,51,50,90,10
+END
+
+IDD_SPEC_CHARA DIALOGEX 0, 0, 151, 75
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Name",IDC_STATIC,3,3,19,8
+    GROUPBOX        "Level of Detail",IDC_STATIC,37,21,76,41
+    LTEXT           "Slope",IDC_STATIC,45,33,18,8
+    LTEXT           "Const",IDC_STATIC,44,48,20,8
+    EDITTEXT        IDC_ED_SLOPE,67,31,40,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_CONST,67,46,40,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_NAME,36,3,92,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+END
+
+IDD_SPEC_ANIM DIALOGEX 0, 0, 235, 150
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "# of tracks",IDC_STATIC,3,4,36,8
+    EDITTEXT        IDC_ED_TRACKCOUNT,44,3,40,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Duration",IDC_STATIC,99,4,28,8
+    EDITTEXT        IDC_ED_DURATION,131,3,29,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "",IDC_TRACKLIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,19,169,92,WS_EX_STATICEDGE
+    LTEXT           "sec.",IDC_STATIC,165,4,14,8
+END
+
+IDD_DLG_EXPORT DIALOGEX 0, 0, 275, 203
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Export..."
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,219,4,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,219,25,50,14
+    CONTROL         "Export Merged I3S file",IDC_CHK_I3S,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,3,87,10
+    CONTROL         "Export I3CHR file",IDC_CHK_I3CHR,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,33,71,10
+    CONTROL         "Generate C Source for AI...",IDC_CHK_GENC,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,151,163,10
+    CONTROL         "Rotate Axis to 3DSMAX",IDC_CHK_ROTATEAXIS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,44,117,10
+    CONTROL         "Mipmap Generation",IDC_CHK_OPTIMIZE_GENMIPMAP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,87,77,10
+    CONTROL         "Convert to DXT Texture",IDC_CHK_OPTIMIZE_DXT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,98,93,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,82,190,1
+    CONTROL         "Alpha enable",IDC_CHK_OPTIMIZE_DXT_ALPHA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,116,100,57,10
+    CONTROL         "Extern Texture",IDC_CHK_EXTERN_I3I,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,111,93,8
+    CONTROL         "Optimize Animation",IDC_CHK_OPTIMIZE_ANIM,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,11,129,88,12
+    CONTROL         "Build AnimPack",IDC_CHK_GEN_ANIMPACK,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,116,127,77,15
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,124,189,1
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,145,189,1
+    LTEXT           "I3S File",IDC_STATIC,28,16,24,8
+    EDITTEXT        IDC_ED_I3SNAME,56,15,121,12,ES_AUTOHSCROLL
+    LTEXT           "-> 캐릭터파츠 익스포트시 체크",IDC_STATIC,27,57,159,8
+    LTEXT           "-> 무기등 어태치등은 체크해제",IDC_STATIC,27,69,159,8
+    LTEXT           "->체크안하면 애니메이션 정렬안되서 문제발생 ",IDC_STATIC,26,166,178,8
+    CONTROL         "Remove Same Image File",IDC_CHECK_REMOVE_SAMEIMAGE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,115,33,101,10
+END
+
+IDD_SPEC_SOUNDNODE DIALOGEX 0, 0, 201, 163
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    CONTROL         "Loop",IDC_CHK_LOOP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,58,28,31,10
+    LTEXT           "Count",IDC_STATIC,108,28,20,8
+    EDITTEXT        IDC_ED_LOOPCOUNT,133,28,35,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "Listener Sound",IDC_CHK_POSITIONAL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,58,43,63,10
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,102,195,1
+    LTEXT           "Default Volume",IDC_STATIC,3,114,49,8
+    LTEXT           "Priority",IDC_STATIC,27,135,24,8
+    EDITTEXT        IDC_ED_PRIORITY,55,133,47,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "",IDC_SLIDER_VOL,"msctls_trackbar32",TBS_AUTOTICKS | WS_TABSTOP,55,112,115,18,WS_EX_STATICEDGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,3,23,195,1
+    EDITTEXT        IDC_EDIT_SOUNDNODE_NAME,3,3,195,14,ES_AUTOHSCROLL
+    CONTROL         "Mute At MaxDistance",IDC_CHK_MUTEATMAX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,58,58,85,10
+    CONTROL         "Stop OnReset",IDC_CHK_STOP_ON_RESET,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,124,43,67,10
+    EDITTEXT        IDC_ED_MINDIST,132,86,40,12,ES_AUTOHSCROLL
+    LTEXT           "Min Dist.",IDC_STATIC,98,88,28,8
+    EDITTEXT        IDC_ED_MAXDIST,132,70,40,12,ES_AUTOHSCROLL
+    LTEXT           "Max Dist.",IDC_STATIC,98,72,31,8
+END
+
+IDD_DLG_RENAMEFOLDER DIALOGEX 0, 0, 267, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,201,54,50,14
+    EDITTEXT        IDC_EDIT_FOLDER_FILTER,58,12,146,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_FOLDER_RENAME,58,33,146,14,ES_AUTOHSCROLL
+    LTEXT           "FindName",IDC_STATIC,15,15,32,8
+    LTEXT           "ChangeName",IDC_STATIC,13,35,44,8
+END
+
+IDD_DLG_ADDAISTATE_CHILDS DIALOGEX 0, 0, 379, 119
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Add AIState to childs"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,322,98,50,14
+    EDITTEXT        IDC_ED_ADDCHILDS_NAME,82,7,104,14,ES_AUTOHSCROLL
+    LTEXT           "AIState Name",IDC_STATIC,11,10,46,8
+    LTEXT           "Animation BlendTime",IDC_STATIC,10,45,66,8
+    EDITTEXT        IDC_ED_ADDCHILDS_BLENDTIME,82,41,103,14,ES_AUTOHSCROLL
+    LTEXT           "Common Animation",IDC_STATIC,10,27,62,8
+    COMBOBOX        IDC_COMBO_ADDCHILDS_ANIMNAME,81,25,105,30,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Animation Filter",IDC_STATIC,201,27,50,8
+    EDITTEXT        IDC_EDIT_ADDCHILDS_FILTER,257,24,106,14,ES_AUTOHSCROLL
+    CONTROL         "Loop",IDC_CHK_ADDCHILDS_LOOP,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,201,44,31,10
+    GROUPBOX        "Add Position",IDC_GROUP_ADDCHILDS_POSITION,10,59,232,29
+    CONTROL         "Auto",IDC_RADIO_ADDCHILDS_POS_AUTO,"Button",BS_AUTORADIOBUTTON | WS_GROUP,22,72,31,10
+    CONTROL         "Bottom of Last Node",IDC_RADIO_ADDCHILDS_POS_BOTTOM,
+                    "Button",BS_AUTORADIOBUTTON,66,72,83,10
+    CONTROL         "Right of Last Node",IDC_RADIO_ADDCHILDS_POS_RIGHT,
+                    "Button",BS_AUTORADIOBUTTON,156,72,75,10
+    CONTROL         "Use Own Path.",IDC_CHK_USE_OWN_PATH,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,94,64,10
+    EDITTEXT        IDC_ED_ADDCHILD_ROOTNODE,79,92,110,14,ES_AUTOHSCROLL | WS_DISABLED
+END
+
+IDD_MERGE_1PV_3PV DIALOGEX 0, 0, 316, 183
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_ACCEPTFILES
+CAPTION "Merge 1PV + 3PV"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,205,162,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,259,162,50,14
+    LTEXT           "1PV AI와 3PV AI 파일을 Drop해 주셈",IDC_STATIC,19,44,123,8
+END
+
+IDD_DLG_REPLACE DIALOGEX 0, 0, 186, 58
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Replace"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,78,40,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,132,40,50,14
+    LTEXT           "Source String",IDC_STATIC,11,4,44,8
+    LTEXT           "Target String",IDC_STATIC,12,19,43,8
+    EDITTEXT        IDC_ED_SRC,59,3,123,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_DEST,59,18,123,12,ES_AUTOHSCROLL
+END
+
+IDD_DLG_REFRESCPY DIALOGEX 0, 0, 716, 175
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "Copy Referenced Resource"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,659,154,50,14
+    EDITTEXT        IDC_REFRESCPY_EB_WORKDIR,62,10,624,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_REFRESCPY_EB_FILE,62,25,624,14,ES_AUTOHSCROLL
+    LTEXT           "WorkDir",IDC_STATIC,9,11,36,9
+    LTEXT           "File",IDC_STATIC,10,26,38,9
+    LTEXT           "CopyTo",IDC_STATIC,7,56,39,9
+    EDITTEXT        IDC_REFRESCPY_EB_COPYTO,62,54,624,14,ES_AUTOHSCROLL
+    LISTBOX         IDC_IDC_REFRESCPY_LB_COPYLOG,7,78,702,71,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Copy",IDC_REFRESCPY_BT_COPY,333,154,50,14
+END
+
+IDD_NOGADA_MASK DIALOGEX 0, 0, 889, 413
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE WS_EX_ACCEPTFILES
+CAPTION "노가다도우미-마스크"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,399,391,50,14
+    PUSHBUTTON      "마스크 Go!",IDC_AUTOMAT_MASK_BT_GO,15,250,276,18
+    LISTBOX         IDC_AUTOMAT_LB_LOG,7,282,800,106,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Hero type to operate",IDC_STATIC,713,7,165,182
+    CONTROL         "AcidPol",IDC_AUTOMAT_OPERHERO_ACIDPOL,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,24,45,10
+    CONTROL         "Bella",IDC_AUTOMAT_OPERHERO_BELLA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,37,45,10
+    CONTROL         "Chou",IDC_AUTOMAT_OPERHERO_CHOU,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,51,45,10
+    CONTROL         "D-Fox",IDC_AUTOMAT_OPERHERO_DFOX,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,65,45,10
+    CONTROL         "Hide",IDC_AUTOMAT_OPERHERO_HIDE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,80,45,10
+    CONTROL         "KeenEyes",IDC_AUTOMAT_OPERHERO_KEENEYES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,93,45,10
+    CONTROL         "Leopard",IDC_AUTOMAT_OPERHERO_LEOPARD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,107,45,10
+    CONTROL         "RedBulls",IDC_AUTOMAT_OPERHERO_REDBULLS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,121,45,10
+    CONTROL         "Tarantula",IDC_AUTOMAT_OPERHERO_TARANTULA,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,136,45,10
+    CONTROL         "ViperRed",IDC_AUTOMAT_OPERHERO_VIPERRED,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,723,149,45,10
+    PUSHBUTTON      "All",IDC_AUTOMAT_OPERHERO_CHECK_ALL,723,167,20,13
+    PUSHBUTTON      "Uncheck All",IDC_AUTOMAT_OPERHERO_UNCHECKALL,747,167,44,13
+    GROUPBOX        "Equip/Mask/",IDC_STATIC,7,53,297,223
+    LTEXT           "Working Directory",IDC_STATIC,7,13,73,14,SS_SUNKEN
+    EDITTEXT        IDC_AUTOMAT_EB_WORKDIR,84,13,614,14,ES_AUTOHSCROLL
+    LTEXT           "ex) c:\\trunk\\media",IDC_STATIC,84,29,103,11,SS_SUNKEN
+    LISTBOX         IDC_AUTOMAT_MASK_LB_PATH,15,130,207,96,LBS_SORT | LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "Del",IDC_AUTOMAT_MASK_BT_DEL,16,227,28,14
+    LTEXT           " Drop! \nMask Directory",IDC_AUTOMAT_MASK_ST_DROPMASKDIR,224,129,69,97,SS_CENTERIMAGE | SS_SUNKEN | NOT WS_VISIBLE
+    PUSHBUTTON      "Reset",IDC_AUTOMAT_MASK_BT_RESET,45,227,28,14
+    PUSHBUTTON      "Save",IDC_AUTOMAT_BT_SAVELOG,757,391,50,14
+    LTEXT           "LOD FileName Pattern",IDC_STATIC,16,68,82,8
+    EDITTEXT        IDC_AUTOMAT_MASK_EB_LODFILENAMEPAT,14,82,231,14,ES_AUTOHSCROLL
+    LTEXT           "%h = HeroName(AcidPol, Bella .. )",IDC_STATIC,14,98,121,8
+    LTEXT           "%m = maskName",IDC_STATIC,135,98,66,8
+    PUSHBUTTON      "evaluate",IDC_AUTOMAT_MASK_BT_LODFILENAME_EVAL,14,110,36,14
+    LTEXT           "",IDC_AUTOMAT_MASK_ST_LODFILENAME_EVAL,51,110,240,14,SS_SUNKEN
+    PUSHBUTTON      "<<패턴목록",IDC_AUTOMAT_MASK_BT_LODFILENAME_PRESET,248,82,46,14
+    LTEXT           "%n = lod index",IDC_STATIC,197,99,58,8
+    LTEXT           "Resource/*_LOD0~2.i3s",IDC_STATIC,162,69,82,10
+    LTEXT           "(SWAT_Male)",IDC_STATIC,763,24,46,8
+    LTEXT           "(SWAT_FeMale)",IDC_STATIC,771,94,58,8
+    LTEXT           "(REBEL_Female)",IDC_STATIC,768,137,58,8
+    LTEXT           "(REBEL_Female(ViperRed))",IDC_STATIC,768,149,92,8
+    LTEXT           "(REBEL_Male)",IDC_STATIC,767,122,58,8
+END
+
+IDD_DLG_DUMP_ANIMATIONLIST DIALOGEX 0, 0, 316, 54
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dump Animation List"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,205,33,50,14
+    PUSHBUTTON      "취소",IDCANCEL,259,33,50,14
+    EDITTEXT        IDC_EDIT_DUMP_ANIM_PATH,35,14,238,12,ES_AUTOHSCROLL
+    LTEXT           "Path",IDC_STATIC,10,16,16,8
+    PUSHBUTTON      "...",IDC_BUTTON1,281,13,20,14
+END
+
+IDD_NOGADA_AISTATE DIALOGEX 0, 0, 821, 445
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+CAPTION "AIState Editor"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,764,424,50,14
+    LTEXT           "",IDC_AIED_ST_AREA_AISTATE,7,127,807,268,SS_SUNKEN | NOT WS_VISIBLE
+    LTEXT           "Upper Weapon Name",IDC_STATIC,7,79,80,12,SS_SUNKEN
+    LTEXT           "ActionName",IDC_STATIC,13,113,59,8
+    LTEXT           "DriverMeta",IDC_STATIC,106,114,51,8
+    LTEXT           "AIState Name",IDC_STATIC,191,113,51,8
+    LTEXT           "i3a Name",IDC_STATIC,276,114,51,8
+    LTEXT           "Chara",IDC_STATIC,361,113,51,8
+    LTEXT           "HeroName",IDC_STATIC,446,113,51,8
+    LTEXT           "1pv/3pv",IDC_STATIC,531,113,44,8
+    LTEXT           "Weapon_i3A",IDC_STATIC,609,113,75,8
+    LTEXT           "i3a Name",IDC_STATIC,718,115,69,8
+    COMBOBOX        IDC_AIED_CB_UPPER_WEAPON_CLASS,91,79,143,322,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_AIED_EB_FIND_UPPER_WEAPON_NAME,289,7,164,14,ES_AUTOHSCROLL
+    PUSHBUTTON      "Find",IDC_AIED_BT_FIND_UPPER_WEAPON_BY_NAME,262,7,22,14
+    PUSHBUTTON      "Query",IDC_AIED_BT_QUERY_UPPER_WEAPON,7,94,446,14
+    LTEXT           "WeaponClasss",IDC_STATIC,93,67,54,8
+    LTEXT           "WeapnName",IDC_STATIC,249,66,54,8
+    COMBOBOX        IDC_AIED_CB_UPPER_WEAPON_NAME,249,77,143,330,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    PUSHBUTTON      "ReScan",IDC_AIED_BT_RESCAN_WEAPON_CLASSANDNAME,397,76,54,14
+END
+
+IDD_ANIPACKFILE_PROGRESS DIALOGEX 0, 0, 404, 89
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "I3AnimationPack Progress"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Cancel",IDCANCEL,178,71,50,14
+    CONTROL         "",IDC_I3ANIPAKPG_PB_PHASE,"msctls_progress32",WS_BORDER,55,8,291,9
+    LTEXT           "Phase",IDC_STATIC,8,7,41,8
+    LTEXT           "...",IDC_I3ANIPAKPG_ST_PHASE_DESC,59,19,288,11
+    LTEXT           "Static",IDC_I3ANIPAKPG_ST_PHASE_REMAIN,354,7,41,8
+    CONTROL         "",IDC_I3ANIPAKPG_PB_TASK,"msctls_progress32",WS_BORDER,55,37,291,9
+    LTEXT           "...",IDC_I3ANIPAKPG_ST_TASK_DESC,58,50,291,9
+    LTEXT           "Task",IDC_STATIC,8,37,41,8
+    LTEXT           "Static",IDC_I3ANIPAKPG_ST_TASK_REMAIN,354,37,41,8
+END
+
+IDD_DLG_AIANI DIALOGEX 0, 0, 718, 455
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "노가다제거 - PB 1.0, 1.1 용  AI / ANI 머지 및 에러탐지기"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_ED_PATH_1,16,41,128,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "AutoRepier",IDOK4,81,251,61,14
+    EDITTEXT        IDC_ED_PATH_2,15,231,128,12,ES_AUTOHSCROLL
+    DEFPUSHBUTTON   "Insert",IDOK,16,60,61,14
+    DEFPUSHBUTTON   "ErrorCheck",IDOK5,14,251,61,14
+    CONTROL         "",IDC_EXCEPT_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,14,81,128,145,WS_EX_STATICEDGE
+    LTEXT           "Error Check",IDC_STATIC,61,18,59,11
+    DEFPUSHBUTTON   "Delete",IDOK6,81,60,61,14
+    LTEXT           "AI / ANI Merge",IDC_STATIC,258,17,59,11
+    EDITTEXT        IDC_ED_PATH_3,179,74,409,12,ES_AUTOHSCROLL
+    CONTROL         "Male",IDC_CHK_ENABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,178,62,31,10
+    CONTROL         "Female",IDC_CHK_ENABLE2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,209,62,39,10
+    CONTROL         "UI Idle Custom",IDC_CHK_ENABLE3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,248,62,63,10
+    PUSHBUTTON      "...",IDC_BUTTON1,691,42,20,14
+    EDITTEXT        IDC_ED_PATH_4,178,41,506,12,ES_AUTOHSCROLL | WS_DISABLED
+    CONTROL         "",IDC_EXCEPT_LIST2,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,176,106,535,120,WS_EX_STATICEDGE
+    COMBOBOX        IDC_AI_LIST,311,230,334,202,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "Merge",IDOK7,650,229,61,14
+    DEFPUSHBUTTON   "Merge+Chr",IDOK8,245,251,70,14,NOT WS_VISIBLE
+    DEFPUSHBUTTON   "Insert",IDOK9,591,73,50,13
+    DEFPUSHBUTTON   "Delete",IDOK10,657,62,54,42
+    DEFPUSHBUTTON   "Auto Check+Repier",IDOK11,176,251,68,14
+    PUSHBUTTON      "Insert From Preset - (SWAT_MALE 은 Preset 항목에서 빠짐)",IDC_AIANI_BT_INS_FROM_PRESET,179,88,462,13
+    GROUPBOX        "",IDC_STATIC,175,57,474,47
+    LISTBOX         IDC_AIANI_LB_LOGMSG,7,271,704,167,LBS_NOINTEGRALHEIGHT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Select SWAT_MALE AI to merge into",IDC_STATIC,179,232,123,8
+END
+
+IDD_DLG_AIANI_V1_PRESET DIALOGEX 0, 0, 662, 359
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_RTLREADING | WS_EX_LEFTSCROLLBAR
+CAPTION "V1.0 캐릭터 머징프리셋"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "확인",IDOK,550,338,50,14,0,WS_EX_RTLREADING
+    PUSHBUTTON      "취소",IDCANCEL,605,338,50,14,0,WS_EX_RTLREADING
+    CONTROL         "",IDC_AIANI_V1P_LB_PRESET,"SysListView32",LVS_REPORT | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,7,71,648,261
+    COMBOBOX        IDC_AIANI_V1P_CB_PRESET,371,13,117,66,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "1. 반드시 SWAT_MALE 이나 SWAT_FEMAL.i3CharaEditor를 열어놓은상태에서 왼쪽 콤보박스에서 선택",IDC_STATIC,7,14,363,15
+    PUSHBUTTON      "Set",IDC_AIANI_V1P_BT_SET,7,28,38,14
+    PUSHBUTTON      "UnSet",IDC_AIANI_V1P_BT_UNSET,47,28,38,14
+    LTEXT           "2. 머징할 캐릭터 이름을 선택후 Set/UnSet버튼으로 체크 (Merge 컬럼확인)",IDC_STATIC,90,32,263,12
+    LTEXT           "Static",IDC_AIANI_V1P_ST_WORKPATH,7,50,387,14,SS_SUNKEN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "TODO: <회사 이름>"
+            VALUE "FileDescription", "TODO: <파일 설명>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3CharaEditor.exe"
+            VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
+            VALUE "OriginalFilename", "i3CharaEditor.exe"
+            VALUE "ProductName", "TODO: <제품 이름>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "변환", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_DLG_EXPORT, DIALOG
+    BEGIN
+        RIGHTMARGIN, 269
+        BOTTOMMARGIN, 196
+    END
+
+    IDD_NOGADA_MASK, DIALOG
+    BEGIN
+        RIGHTMARGIN, 878
+    END
+
+    IDD_ANIPACKFILE_PROGRESS, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 380
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 82
+    END
+
+    IDD_DLG_AIANI, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 711
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 448
+    END
+
+    IDD_DLG_AIANI_V1_PRESET, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 655
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 352
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3Character.ICO"
+IDI_SELMODE             ICON                    "res\\icon1.ico"
+IDI_CREATEAI            ICON                    "res\\ico00001.ico"
+IDI_CREATENEXT          ICON                    "res\\ico00002.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_SPEC_AISTATE DLGINIT
+BEGIN
+    IDC_CB_BLENDTYPE, 0x403, 22, 0
+0x6c42, 0x6e65, 0x6964, 0x676e, 0x7720, 0x7469, 0x2068, 0x6c70, 0x7961, 
+0x6e69, 0x0067, 
+    IDC_CB_BLENDTYPE, 0x403, 23, 0
+0x6c42, 0x6e65, 0x6964, 0x676e, 0x7720, 0x7469, 0x2068, 0x7473, 0x706f, 
+0x6970, 0x676e, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_AISTATE_STATEIMG    BITMAP                  "res\\aistate_edit_stateImg.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDP_OLE_INIT_FAILED     "OLE를 초기화할 수 없습니다. OLE 라이브러리 버전이 올바른지 확인하십시오."
+    IDP_SOCKETS_INIT_FAILED "Windows 소켓을 초기화하지 못했습니다."
+END
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "i3CharaEditor"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "i3CharaEditor"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호, 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모든 것을 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_STATUS_BAR      "상태 표시줄을 표시하거나 숨깁니다.\n상태 표시줄 설정/해제"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록 활성화"
+END
+
+#endif    // 한국어 resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3CharaEditor.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

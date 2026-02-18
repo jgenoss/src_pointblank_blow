@@ -1,0 +1,1135 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3UIEditor.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3UIEditor.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_MAINFRAME           BITMAP                  "res\\Toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_MAINFRAME TOOLBAR  16, 15
+BEGIN
+    BUTTON      ID_EDIT_CUT
+    BUTTON      ID_EDIT_COPY
+    BUTTON      ID_EDIT_PASTE
+    SEPARATOR
+    BUTTON      ID_APP_ABOUT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "새 프로젝트 만들기",          ID_FILE_NEW
+        MENUITEM "프로젝트 불러오기",           ID_FILE_LOAD_PROJECT
+        MENUITEM "프로젝트 저장하기",           ID_FILE_SAVE_PROJECT
+        MENUITEM SEPARATOR
+        MENUITEM "Template List Export",        ID_FILE_TEMPLATE_EXPORT
+        MENUITEM "Template List Import",        ID_FILE_TEMPLATE_IMPORT
+        MENUITEM SEPARATOR
+        MENUITEM SEPARATOR
+        MENUITEM "끝내기(&X)",                  ID_APP_EXIT
+        MENUITEM "Export to File",              ID_EXPORT_FILE
+        MENUITEM SEPARATOR
+        MENUITEM "작업 해상도 변경",            ID_CHANGE_RESOLUTION
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소\tCtrl+Z(&U)",       ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기\tCtrl+X(&T)",        ID_EDIT_CUT
+        MENUITEM "복사\tCtrl+C(&C)",            ID_EDIT_COPY
+        MENUITEM "붙여넣기\tCtrl+V(&P)",        ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "Erase Shape (Empty for Offset)", 
+                                                ID_ERASESHAPE_EMPTY_FOROFFSET
+
+    END
+    POPUP "보기(&V)"
+    BEGIN
+        MENUITEM "도구 모음(&T)",               ID_VIEW_TOOLBAR
+        MENUITEM "상태 표시줄(&S)",             ID_VIEW_STATUS_BAR
+        POPUP "Load BackGround"
+        BEGIN
+            MENUITEM "as World",                    ID_LOADBG_AS_WORLD
+            MENUITEM "as Sky",                      ID_LOADBG_AS_SKY
+        END
+        MENUITEM "Working Folder",              ID_MENU_SETWORKINGFOLDER
+        POPUP "라인색 선택"
+        BEGIN
+            MENUITEM "흰색선",                      ID_MENU_SETLINECOLOR_WHITE
+
+            MENUITEM "검정선",                      ID_MENU_SETLINECOLOR_BLACK
+
+        END
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "i3UIEditor 정보(&A)...",      ID_APP_ABOUT
+    END
+END
+
+IDR_POPUP_GUI MENU 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "&Expand...",                  ID_POPUP_EXPAND
+        MENUITEM "&Collapse Tree",              ID_POPUP_COLLAPSE
+        MENUITEM "&Show",                       ID_POPUP_SHOW
+        MENUITEM "&Find..",                     ID_POPUP_FIND
+        MENUITEM SEPARATOR
+        MENUITEM "Export Node",                 ID__EXPORTNODE
+        MENUITEM "Import Node",                 ID__IMPORTNODE
+        MENUITEM SEPARATOR
+        MENUITEM "Add Control...",              ID_POPUP_INSERT_INSERTCONTROL
+
+        POPUP "Set"
+        BEGIN
+            MENUITEM "Template",                    ID_POPUP_SETTEMPLATE
+        END
+        POPUP "Select"
+        BEGIN
+            MENUITEM "Select All",                  ID_POPUP_SELECT_SELECTALL
+
+            MENUITEM "UnSelect All",                ID_POPUP_SELECT_UNSELECTALL
+
+            MENUITEM "Select All Descendants",      ID_POPUP_SELECT_SELECTALLDESCENDANTS
+
+            MENUITEM "UnSelect All Descendants",    ID_POPUP_SELECT_UNSELECTALLDESCENDANTS
+
+            MENUITEM "Reverse selection",           ID_POPUP_SELECT_REVERSESELECTION
+
+        END
+        MENUITEM "Delete",                      ID_POPUP_DELETE
+        MENUITEM "SetCurrentRoot",              ID__SETCURRENTROOT
+        MENUITEM SEPARATOR
+        MENUITEM "Check Mnemonics",             ID_CHECK_MNEMONICS
+    END
+END
+
+IDR_POPUP_RES MENU 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "New Template",                ID_ADD_NEWTEMPLATE
+        POPUP "Open"
+        BEGIN
+            MENUITEM "Template",                    ID_IMPORT_TEMPLATE
+            MENUITEM SEPARATOR
+            MENUITEM "Texture",                     ID_IMPORT_TEXTURE
+            MENUITEM "Animation",                   ID_IMPORT_ANIMATION
+            MENUITEM "SceneGraph",                  ID_IMPORT_SCENEGRAPH
+        END
+        MENUITEM "Delete",                      ID_DELETE_RES
+        POPUP "FixedCountShapeType"
+        BEGIN
+            MENUITEM "Set FixedCount",              ID_SET_FIXEDCOUNTSHAPETYPE
+
+            MENUITEM "Unset FixedCount",            ID_UNSET_FIXEDCOUNTSHAPETYPE
+
+        END
+    END
+END
+
+IDR_POPUP_CTRLSHAPE MENU 
+BEGIN
+    POPUP ""
+    BEGIN
+        MENUITEM "SetTexture",                  ID_CTRLSHAPE_SETTEXTURE
+        MENUITEM "Copy UV to Selected Shapes",  ID_COPY_UV_TOALLOTHERS
+        MENUITEM "Copy Size to Selected Shapes", ID_COPY_SIZE_TOOTHERS
+        MENUITEM SEPARATOR
+        MENUITEM "Add Shape",                   ID_SHAPE_ADD
+        MENUITEM "Delete Shape",                ID_SHAPE_DELETE
+        MENUITEM SEPARATOR
+        MENUITEM "Adjust Size by UV",           ID_ADJUST_SIZEBY_UV
+        POPUP "Align"
+        BEGIN
+            MENUITEM "Align Left",                  ID_ALIGN_LEFT
+            MENUITEM "Align Top",                   ID_ALIGN_TOP
+            MENUITEM "Align Right",                 ID_ALIGN_RIGHT
+            MENUITEM "Align Bottom",                ID_ALIGN_BOTTOM
+            MENUITEM "Align Center X",              ID_ALIGN_CENTER_X
+            MENUITEM "Align Center Y",              ID_ALIGN_CENTER_Y
+            MENUITEM "Align LeftTop",               ID_ALIGN_LEFTTOP
+            MENUITEM "Align RightBottom",           ID_ALIGN_RIGHTBOTTOM
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Select All",                  ID_CTRLSHAPE_SELECTALL
+        POPUP "컨트롤 넓게 펴기"
+        BEGIN
+            MENUITEM "모두 늘어 놓기",              ID_SPREADSHAPES_DEFAULT
+            MENUITEM "선택 Shape기준으로 모두 늘어놓기", ID_SPREADSHAPES_ALL
+            MENUITEM "선택 Shape기준으로 선택된것만 늘어놓기", 
+                                                    ID_SPREADSHAPES_SELECTED
+            MENUITEM "모두 늘어놓기( 값)",          ID_SPREADSHAPES_DEFAULT_BYVALUE
+
+            MENUITEM "선택 Shape기준으로 모두 늘어놓기( 값)", 
+                                                    ID_SPREADSHAPES_ALL_BYVALUE
+
+            MENUITEM "선택 Shape기준으로 선택된것만 늘어놓기( 값)", 
+                                                    ID_SPREADSHAPES_SELECTED_BYVALUE
+
+        END
+    END
+END
+
+IDR_POPUP_ACTION MENU 
+BEGIN
+    POPUP "Action "
+    BEGIN
+        POPUP "&Add Action"
+        BEGIN
+            MENUITEM "&Move   To",                  ID_ACTION_ADDMOVE
+            MENUITEM "&Rotate  To",                 ID_ACTION_ADDROTATE
+            MENUITEM "&Scale   To",                 ID_ACTION_ADDSCALE
+            MENUITEM "&Play    Sound",              ID_ACTION_ADDSOUND
+        END
+        MENUITEM "&Remove Action",              ID_POPUP_REMOVEACTION
+        MENUITEM SEPARATOR
+        MENUITEM "&Edit Action",                ID_POPUP_EDITACTION
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "i3UIEditor 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3UIEditor Version 1.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2005",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,178,7,50,16,WS_GROUP
+END
+
+IDD_PANE_PREVIEW DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN
+FONT 8, "Tahoma", 400, 1, 0x0
+BEGIN
+    CONTROL         "",IDC_PREVIEW_PLACEHOLDER,"Static",SS_BLACKRECT | 
+                    SS_NOTIFY,2,2,15,13
+END
+
+IDD_PANE_TREEVIEW DIALOGEX 0, 0, 192, 131
+STYLE DS_SETFONT | DS_SETFOREGROUND | DS_3DLOOK | WS_CHILD | WS_VISIBLE | 
+    WS_CLIPCHILDREN
+EXSTYLE WS_EX_TRANSPARENT
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANE_UVEDIT DIALOGEX 0, 0, 190, 142
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANE_LAYOUT DIALOGEX 0, 0, 279, 146
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANE_PROPERTY DIALOGEX 0, 0, 186, 94
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | 
+    WS_THICKFRAME
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANE_CONTROLSHAPE DIALOGEX 0, 0, 203, 122
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_PANE_EVENTNACTION DIALOGEX 0, 0, 258, 198
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | 
+    WS_BORDER
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_LIST_ENA_STATE,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
+                    WS_TABSTOP,0,0,122,197
+    CONTROL         "",IDC_LIST_ENA_ACTION,"SysListView32",LVS_REPORT | 
+                    LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_TABSTOP,122,0,135,
+                    197
+END
+
+IDD_PANE_TEXTURELIST DIALOGEX 0, 0, 275, 154
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    CONTROL         "",IDC_RESLIST_TEXTURE,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_EDITLABELS | 
+                    LVS_ALIGNLEFT | WS_TABSTOP,6,7,102,81
+    CONTROL         "",IDC_RESLIST_TEMPLATE,"SysListView32",LVS_REPORT | 
+                    LVS_SHOWSELALWAYS | LVS_EDITLABELS | LVS_ALIGNLEFT | 
+                    WS_TABSTOP,166,7,102,81
+END
+
+IDD_PANE_GUITREEVIEW DIALOGEX 0, 0, 192, 131
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN
+EXSTYLE WS_EX_TRANSPARENT
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+END
+
+IDD_SELECT_CONTROL DIALOGEX 0, 0, 219, 43
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Select Control"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,165,4,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,165,24,50,14
+    COMBOBOX        IDC_COMBO_SELECT_CONTROL,25,4,99,169,CBS_DROPDOWNLIST | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Type",IDC_STATIC,4,4,17,8
+END
+
+IDD_TEMPLATE_ADD DIALOGEX 0, 0, 265, 90
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,208,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,208,24,50,14
+    EDITTEXT        IDC_EDIT1,50,7,152,20,ES_AUTOHSCROLL
+END
+
+IDD_PROPERTY_COMMON DIALOGEX 0, 0, 163, 90
+STYLE DS_SETFONT | DS_3DLOOK | WS_CHILD | WS_SYSMENU
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    LTEXT           "Pos_X",IDC_STATIC,14,7,22,8
+    LTEXT           "Pos_Y",IDC_STATIC,49,7,22,8
+    LTEXT           "Width",IDC_STATIC,85,7,22,8
+    LTEXT           "Height",IDC_STATIC,121,7,22,8
+    EDITTEXT        IDC_PROP_COMMON_POSX,10,18,32,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_PROP_COMMON_POSY,45,18,32,12,ES_RIGHT | 
+                    ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_PROP_COMMON_WIDTH,83,18,32,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_PROP_COMMON_HEIGHT,120,18,32,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,7,34,149,3
+    LTEXT           "Name:",IDC_STATIC,13,49,22,8
+    EDITTEXT        IDC_PROP_COMMON_NAME,35,48,110,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER,WS_EX_STATICEDGE
+END
+
+IDD_SELECT_TEXTURE DIALOGEX 0, 0, 426, 235
+STYLE DS_SETFONT | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Select Texture"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "선 택",IDOK,18,218,50,14
+    PUSHBUTTON      "취 소",IDCANCEL,75,217,50,14
+    CONTROL         "",IDC_LIST_SELTEX,"SysListView32",LVS_REPORT | 
+                    LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | 
+                    WS_BORDER | WS_TABSTOP,0,0,145,214,WS_EX_ACCEPTFILES
+END
+
+IDD_SELECT_TEMPLATE DIALOGEX 0, 0, 428, 236
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | 
+    WS_THICKFRAME
+CAPTION "Select Template"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "선 택",IDOK,2,216,69,19
+    PUSHBUTTON      "취 소",IDCANCEL,74,216,66,19
+    CONTROL         "",IDC_LIST_SELTEMPLATE,"SysListView32",LVS_REPORT | 
+                    LVS_ALIGNLEFT | WS_BORDER | WS_TABSTOP,0,0,142,215
+END
+
+IDD_EDITACTION_MOVE DIALOGEX 0, 0, 196, 107
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit ( Move To ) Action"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,33,86,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,103,86,50,14
+    COMBOBOX        IDC_CB_MOVE_SELFACTOR,92,7,97,70,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Factor Type",IDC_STATIC,12,9,73,8
+    EDITTEXT        IDC_ED_MOVE_DURATION,91,26,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    EDITTEXT        IDC_ED_MOVE_TARGETPOSX,91,44,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    EDITTEXT        IDC_ED_MOVE_TARGETPOSY,91,62,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    LTEXT           "Action Duration",IDC_STATIC,12,28,73,8
+    LTEXT           "Target Position X",IDC_STATIC,12,47,73,8
+    LTEXT           "Target Position Y",IDC_STATIC,12,64,73,8
+END
+
+IDD_EDITACTION_SCALE DIALOGEX 0, 0, 196, 124
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit ( Scale To) Action"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,31,103,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,102,103,50,14
+    COMBOBOX        IDC_CB_SCALE_SELFACTOR,92,7,97,70,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Factor Type",IDC_STATIC,12,9,73,8
+    EDITTEXT        IDC_ED_SCALE_DURATION,92,24,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    EDITTEXT        IDC_ED_SCALE_X,92,41,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    EDITTEXT        IDC_ED_SCALE_Y,92,58,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    LTEXT           "Action Duration",IDC_STATIC,12,26,73,8
+    LTEXT           "Scale Length X",IDC_STATIC,12,45,73,8
+    LTEXT           "Scale Length Y",IDC_STATIC,12,62,73,8
+    CONTROL         "Loop Scale Action",IDC_CHECK_LOOPSCALE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,13,80,109,11
+END
+
+IDD_EDITACTION_ROTATE DIALOGEX 0, 0, 192, 102
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,7,81,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,74,81,50,14
+    COMBOBOX        IDC_CB_ROTATE_SELFACTOR,88,7,97,70,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Factor Type",IDC_STATIC,8,9,73,8
+    EDITTEXT        IDC_ED_ROTATE_DURATION,88,38,96,13,ES_AUTOHSCROLL | 
+                    ES_WANTRETURN
+    LTEXT           "Action Duration",IDC_STATIC,8,40,73,8
+    CONTROL         "Loop Rotate Action",IDC_CHECK_LOOPROTATE,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,38,59,109,11
+    COMBOBOX        IDC_CB_ROTATE_SELSPINDIR,87,22,97,70,CBS_DROPDOWN | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Spin Direction",IDC_STATIC,7,25,73,8
+END
+
+IDD_EDITACTION_SOUND DIALOGEX 0, 0, 242, 121
+STYLE DS_SETFONT | DS_MODALFRAME | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Edit ( Play Sound) Action"
+FONT 8, "Tahoma", 400, 0, 0x0
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,100,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,182,100,50,14
+    PUSHBUTTON      "...",IDC_ED_SOUND_FILESELECT,215,7,17,13
+    EDITTEXT        IDC_EDITACTION_SOUND_SELFILE,50,7,163,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDITACTION_SOUNDVOLUME,50,64,66,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDITACTION_SOUNDSTARTTIME,50,85,66,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDITACTION_LOOPCOUNT,153,63,78,14,ES_AUTOHSCROLL
+    CONTROL         "Loop Play",IDC_CKB_LOOPPLAY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,131,24,51,15,WS_EX_RTLREADING
+    LTEXT           "Sound File",IDC_STATIC,8,9,35,9
+    LTEXT           "Def Volume",IDC_STATIC,7,65,39,9
+    LTEXT           "Start Time",IDC_STATIC,8,85,35,9
+    LTEXT           "Loop Count",IDC_STATIC,153,50,37,9
+    COMBOBOX        IDC_CB_SOUNDTYPE,50,24,66,42,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "Sound Type",IDC_STATIC,7,26,39,9
+    COMBOBOX        IDC_CB_3DMODE,50,44,66,42,CBS_DROPDOWN | WS_VSCROLL | 
+                    WS_TABSTOP
+    LTEXT           "3D Mode",IDC_STATIC,7,47,39,9
+END
+
+IDD_DIALOG1 DIALOGEX 0, 0, 167, 91
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "펴기 값 설정"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,23,70,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,100,70,50,14
+    EDITTEXT        IDC_EDIT_SPREAD_COLCOUNT,80,7,79,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_SPREAD_WIDTH,79,23,80,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_EDIT_SPREAD_HEIGHT,78,40,82,14,ES_AUTOHSCROLL
+    LTEXT           "Column Count",IDC_STATIC,7,7,68,14
+    LTEXT           "Seperate Width",IDC_STATIC,7,25,66,14
+    LTEXT           "Seperate Height",IDC_STATIC,7,44,61,14
+END
+
+IDD_DIALOG_GETSTRING DIALOGEX 0, 0, 193, 62
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "찾을 이름 입력"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,136,24,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,136,41,50,14
+    EDITTEXT        IDC_EDIT_NODENAME,7,7,179,15,ES_AUTOHSCROLL
+    CONTROL         "정확히 같은이름만 찾기",IDC_CHECK_SEARCH_EXACTLYSAME,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,26,124,11
+END
+
+IDD_PROPERTY_TEXT DIALOGEX 0, 0, 199, 164
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN
+EXSTYLE WS_EX_TOOLWINDOW
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    EDITTEXT        IDC_FONT_TYPE,49,26,58,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_FONT_MAXSIZE,49,45,58,14,ES_AUTOHSCROLL
+    EDITTEXT        IDC_FONT_DEFAULTSTRING,49,8,139,14,ES_AUTOHSCROLL
+    LTEXT           "글 꼴",IDC_STATIC,16,28,22,10
+    LTEXT           "크기",IDC_STATIC,128,28,17,10
+    LTEXT           "기본 값",IDC_STATIC,12,10,31,9
+    COMBOBOX        IDC_FONT_SIZE,151,26,40,49,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "최대길이",IDC_STATIC,12,47,34,10
+    CONTROL         "입력 허용",IDC_FONT_ALLOWINPUT,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,89,54,13
+    LTEXT           "그림자 해상도",IDC_STATIC,97,124,51,9
+    COMBOBOX        IDC_FONT_SHADOWQUALITY,153,121,39,49,CBS_DROPDOWN | 
+                    CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "굵기",IDC_STATIC,128,45,18,10
+    COMBOBOX        IDC_FONT_WEIGHT,151,43,40,49,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    CONTROL         "그림자",IDC_FONT_SHADOWENABLE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,124,44,13
+    CONTROL         "멀티 라인",IDC_FONT_MULTILINE,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,10,107,62,13
+    PUSHBUTTON      "글자 색",IDC_FONT_COLOR,148,137,43,19
+    LTEXT           "좌우정렬",IDC_STATIC,90,91,33,8
+    COMBOBOX        IDC_FONT_ALIGNX,132,88,59,49,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "상하정렬",IDC_STATIC,91,106,32,9
+    COMBOBOX        IDC_FONT_ALIGNY,132,103,59,49,CBS_DROPDOWN | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    EDITTEXT        IDC_FONT_SPACE,49,65,58,14,ES_AUTOHSCROLL
+    LTEXT           "글자간격",IDC_STATIC,12,67,34,10
+    EDITTEXT        IDC_FONT_OFFSET_X,61,140,31,14,ES_AUTOHSCROLL
+    LTEXT           "기본 위치",IDC_STATIC,13,143,39,10
+    EDITTEXT        IDC_FONT_OFFSETY,99,140,32,14,ES_AUTOHSCROLL
+END
+
+IDD_SELECT_RESOLUTION DIALOGEX 0, 0, 155, 71
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "해상도 설정"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,18,50,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,83,50,50,14
+    EDITTEXT        IDC_RESOLUTION_WIDTH,60,7,84,13,ES_AUTOHSCROLL
+    EDITTEXT        IDC_RESOLUTION_HEIGHT,60,25,85,13,ES_AUTOHSCROLL
+    LTEXT           "WIDTH",IDC_STATIC,11,8,40,8
+    LTEXT           "HEIGHT",IDC_STATIC,11,25,30,8
+END
+
+IDD_PANE_SPEC DIALOGEX 0, 0, 186, 94
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_SPEC_EDITBOX DIALOGEX 0, 0, 216, 167
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Text",IDC_STATIC,4,4,16,8
+    EDITTEXT        IDC_ED_TXT,21,15,187,12,ES_AUTOHSCROLL | NOT WS_BORDER,
+                    WS_EX_STATICEDGE
+    LTEXT           "Font",IDC_STATIC,4,53,16,8
+    EDITTEXT        IDC_ED_FONTINFO,21,62,166,12,ES_AUTOHSCROLL | 
+                    ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    PUSHBUTTON      "...",IDC_BTN_FONT,188,62,21,12
+    CONTROL         "Password",IDC_CHK_PASSWORD,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,22,120,47,10
+    CONTROL         "Read Only",IDC_CHK_READONLY,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,22,90,49,10
+    LTEXT           "Max. Text Length",IDC_ST_MAXTEXT,92,90,58,8
+    EDITTEXT        IDC_ED_MAXTEXT,153,88,29,12,ES_AUTOHSCROLL
+    CONTROL         "Shadow",IDC_CHK_SHADOW,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,22,105,41,10
+    LTEXT           "Quality",IDC_ST_SHADOWQUALITY,92,105,24,8
+    COMBOBOX        IDC_CB_SHADOWQUALITY,118,103,65,78,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Style",IDC_STATIC,4,80,17,8
+    LTEXT           "Color",IDC_STATIC,22,31,18,8
+    CONTROL         "",IDC_ST_COLORPH,"Static",SS_BLACKFRAME,43,30,20,20
+    CONTROL         "Auto Word-Wrap",IDC_CHK_AUTOWRAP,"Button",
+                    BS_AUTOCHECKBOX | WS_TABSTOP,22,135,71,10
+    CONTROL         "No Border",IDC_CHK_NOBORDER,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,22,149,48,10
+END
+
+IDD_SPEC_BUTTON DIALOGEX 0, 0, 189, 121
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPSIBLINGS | 
+    WS_CLIPCHILDREN | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Caption",IDC_STATIC,13,6,26,8
+    EDITTEXT        IDC_ED_CAPTION,43,4,114,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER,WS_EX_STATICEDGE
+    CONTROL         "Caption Shadow",IDC_CHK_SHADOW,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,44,38,68,10
+    COMBOBOX        IDC_CB_SHADOWQUALITY,113,36,56,80,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Font",IDC_STATIC,21,22,16,8
+    EDITTEXT        IDC_ED_FONT,43,20,114,12,ES_AUTOHSCROLL | ES_READONLY | 
+                    NOT WS_BORDER,WS_EX_STATICEDGE
+    PUSHBUTTON      "...",IDC_BTN_FONT,159,20,14,12
+    LTEXT           "Color",IDC_STATIC,21,55,18,8
+    CONTROL         "",IDC_ST_COLORPH,"Static",SS_BLACKFRAME,43,55,20,20
+    LTEXT           "Align",IDC_STATIC,22,81,16,8
+    COMBOBOX        IDC_CB_HORZALIGN,43,79,62,73,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+    COMBOBOX        IDC_CB_VERTALIGN,108,79,62,73,CBS_DROPDOWNLIST | 
+                    WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_DLG_SELECT_ADDCONTROL DIALOGEX 0, 0, 351, 156
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Add Control..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,297,4,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,297,24,50,14
+    LTEXT           "Type",IDC_STATIC,3,6,17,8
+    COMBOBOX        IDC_CB_TYPE,23,4,88,108,CBS_DROPDOWNLIST | CBS_SORT | 
+                    WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Template",IDC_STATIC,3,22,30,8
+    CONTROL         "",IDC_TREE_TEMPLATE,"SysTreeView32",TVS_HASBUTTONS | 
+                    TVS_HASLINES | TVS_SHOWSELALWAYS | TVS_NOSCROLL | 
+                    WS_TABSTOP | 0x800,3,33,129,119,WS_EX_STATICEDGE
+    LTEXT           "Candidates",IDC_STATIC,139,23,37,8
+    CONTROL         "",IDC_LIST_CANDIDATES,"SysListView32",LVS_REPORT | 
+                    LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_TABSTOP,139,33,
+                    150,119,WS_EX_STATICEDGE
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "TODO: <회사 이름>"
+            VALUE "FileDescription", "TODO: <파일 설명>"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3UIEditor.exe"
+            VALUE "LegalCopyright", "TODO: (c) <회사 이름>.  All rights reserved."
+            VALUE "OriginalFilename", "i3UIEditor.exe"
+            VALUE "ProductName", "TODO: <제품 이름>"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "변환", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 228
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 48
+    END
+
+    IDD_PANE_PREVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 182
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_PANE_TREEVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 189
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 128
+    END
+
+    IDD_PANE_UVEDIT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 183
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 135
+    END
+
+    IDD_PANE_LAYOUT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 272
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 139
+    END
+
+    IDD_PANE_PROPERTY, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_PANE_CONTROLSHAPE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 196
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 115
+    END
+
+    IDD_PANE_EVENTNACTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 251
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 191
+    END
+
+    IDD_PANE_TEXTURELIST, DIALOG
+    BEGIN
+        LEFTMARGIN, 6
+        RIGHTMARGIN, 268
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 147
+    END
+
+    IDD_PANE_GUITREEVIEW, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 189
+        TOPMARGIN, 2
+        BOTTOMMARGIN, 128
+    END
+
+    IDD_SELECT_CONTROL, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 215
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 39
+    END
+
+    IDD_TEMPLATE_ADD, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 258
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 83
+    END
+
+    IDD_PROPERTY_COMMON, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 156
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 84
+    END
+
+    IDD_EDITACTION_MOVE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 189
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 100
+    END
+
+    IDD_EDITACTION_SCALE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 189
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 117
+    END
+
+    IDD_EDITACTION_ROTATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 185
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 95
+    END
+
+    IDD_EDITACTION_SOUND, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 232
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 114
+    END
+
+    IDD_DIALOG1, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 160
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 84
+    END
+
+    IDD_DIALOG_GETSTRING, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 186
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 55
+    END
+
+    IDD_PROPERTY_TEXT, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 192
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 157
+    END
+
+    IDD_SELECT_RESOLUTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 148
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 64
+    END
+
+    IDD_PANE_SPEC, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_SPEC_EDITBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 212
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 163
+    END
+
+    IDD_SPEC_BUTTON, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 185
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 117
+    END
+
+    IDD_DLG_SELECT_ADDCONTROL, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 347
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 152
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_DRAG                CURSOR                  "res\\cursor1.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog Info
+//
+
+IDD_SPEC_EDITBOX DLGINIT
+BEGIN
+    IDC_CB_SHADOWQUALITY, 0x403, 4, 0
+0x6f4c, 0x0077, 
+    IDC_CB_SHADOWQUALITY, 0x403, 7, 0
+0x6f4e, 0x6d72, 0x6c61, "\000" 
+    IDC_CB_SHADOWQUALITY, 0x403, 5, 0
+0x6948, 0x6867, "\000" 
+    0
+END
+
+IDD_SPEC_BUTTON DLGINIT
+BEGIN
+    IDC_CB_SHADOWQUALITY, 0x403, 4, 0
+0x6f4c, 0x0077, 
+    IDC_CB_SHADOWQUALITY, 0x403, 7, 0
+0x6f4e, 0x6d72, 0x6c61, "\000" 
+    IDC_CB_SHADOWQUALITY, 0x403, 5, 0
+0x6948, 0x6867, "\000" 
+    IDC_CB_HORZALIGN, 0x403, 5, 0
+0x654c, 0x7466, "\000" 
+    IDC_CB_HORZALIGN, 0x403, 7, 0
+0x6543, 0x746e, 0x7265, "\000" 
+    IDC_CB_HORZALIGN, 0x403, 6, 0
+0x6952, 0x6867, 0x0074, 
+    IDC_CB_VERTALIGN, 0x403, 4, 0
+0x6f54, 0x0070, 
+    IDC_CB_VERTALIGN, 0x403, 7, 0
+0x694d, 0x6464, 0x656c, "\000" 
+    IDC_CB_VERTALIGN, 0x403, 7, 0
+0x6f42, 0x7474, 0x6d6f, "\000" 
+    0
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "i3UIEditor"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "i3UIEditor"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호, 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모든 것을 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_VIEW_TOOLBAR         "도구 모음을 표시하거나 숨깁니다.\n도구 모음 설정/해제"
+    ID_VIEW_STATUS_BAR      "상태 표시줄을 표시하거나 숨깁니다.\n상태 표시줄 설정/해제"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록 활성화"
+END
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_NODROP              CURSOR                  "nodrop.cur"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3UIEditor.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

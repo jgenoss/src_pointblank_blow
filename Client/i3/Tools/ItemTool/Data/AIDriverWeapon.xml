@@ -1,0 +1,800 @@
+<?xml version="1.0" encoding="euc-kr" standalone="yes" ?>	
+<AIDriver>	
+  <AxeDefault>
+    <Table>
+      <AIPROC name="AttackA_Left" />
+      <AIPROC name="AttackA_Right" />
+      <AIPROC name="AttackB_Left" />
+      <AIPROC name="AttackB_Right" />
+      <AIPROC name="Change1PV" />
+      <AIPROC name="Change3PV" />
+      <AIPROC name="Change_Left" />
+      <AIPROC name="Change_Right" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="SecondaryFire" />
+      <AIPROC name="UI_RebelFemale2" />
+      <AIPROC name="UI_RebelFemale" />
+      <AIPROC name="UI_RebelFemale_Left" />
+      <AIPROC name="UI_RebelFemale_Right" />
+      <AIPROC name="UI_RebelMale2" />
+      <AIPROC name="UI_RebelMale" />
+      <AIPROC name="UI_RebelMale_Left" />
+      <AIPROC name="UI_RebelMale_Right" />
+    </Table>
+	  <Weapon name = "BallisticKnife " />
+	  <Weapon name = "MiniAxe " />
+  </AxeDefault>	
+  <Bow>
+    <Table>
+      <AIPROC name="AttackReady1PV" />
+      <AIPROC name="AttackReady3PV" />
+      <AIPROC name="Change" />
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire1PV" />
+      <AIPROC name="Fire3PV" />
+      <AIPROC name="GrenadeAttackReady1PV" />
+      <AIPROC name="GrenadeAttackReady3PV" />
+      <AIPROC name="Idle" />
+      <AIPROC name="SecondaryFire" />
+      <AIPROC name="UI_Rebel_Bella_A" />
+      <AIPROC name="UI_Rebel_Bella_B" />
+      <AIPROC name="UI_Rebel_D_Fox_A" />
+      <AIPROC name="UI_Rebel_D_Fox_B" />
+      <AIPROC name="UI_Rebel_Female_A" />
+      <AIPROC name="UI_Rebel_Female_B" />
+      <AIPROC name="UI_Rebel_Male_A" />
+      <AIPROC name="UI_Rebel_Male_B" />
+      <AIPROC name="UI_Rebel_ViperRed_A" />
+      <AIPROC name="UI_Rebel_ViperRed_B" />
+      <AIPROC name="UI_SWAT_Chou_A" />
+      <AIPROC name="UI_SWAT_Chou_B" />
+      <AIPROC name="UI_SWAT_Female_A" />
+      <AIPROC name="UI_SWAT_Female_B" />
+      <AIPROC name="UI_SWAT_Hide_A" />
+      <AIPROC name="UI_SWAT_Hide_B" />
+      <AIPROC name="UI_SWAT_Leopard_A" />
+      <AIPROC name="UI_SWAT_Leopard_B" />
+      <AIPROC name="UI_SWAT_Male_A" />
+      <AIPROC name="UI_SWAT_Male_B" />
+    </Table>
+	  <Weapon name = "Compound_Bow_Blue " />
+  </Bow>	
+  <DualGunDefault>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="LoadMagDualGun" />
+    </Table>
+	  <Weapon name = "Colt45 " />
+	  <Weapon name = "IMI_Uzi_9mm " />
+  </DualGunDefault>	
+  <GrenadeDefault>
+    <Table>
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+    </Table>
+    <Weapon name = "GrenadeShell " />
+    <Weapon name = "PoisonGrenade " />
+    <Weapon name = "RPG7Shell " />
+    <Weapon name = "ChocolateGrenade " />
+    <Weapon name = "K-400 " />
+    <Weapon name = "Chocolate_Kit " />
+    <Weapon name = "FlashBang " />
+    <Weapon name = "FlashBang_Plus " />
+    <Weapon name = "Halloween_Medical_Kit " />
+    <Weapon name = "Medical_Kit " />
+    <Weapon name = "SmokeGrenade " />
+    <Weapon name = "Smoke_Plus " />
+    <Weapon name = "SmokeGrenade_WP " />
+    <Weapon name = "WP_Smoke_Plus " />
+  </GrenadeDefault>	
+  <Gun_13PV>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag3PV" />
+        <AIPROC name="LoadMagMaster1PV" />
+        <AIPROC name="LoadMagMaster3PV" />
+      </Table>
+      <Weapon name = "AUG-A3 " />
+      <Weapon name = "AUG_A3_Blue " />
+      <Weapon name = "AUG_A3_ESports " />
+      <Weapon name = "AUG-A3_Gold " />
+      <Weapon name = "FAMAS_G2 " />
+      <Weapon name = "FAMAS_G2_Commando " />
+      <Weapon name = "Famas_G2_Commando_ESports " />
+      <Weapon name = "Famas_G2_Commando_Gold " />
+      <Weapon name = "FAMAS_G2_Scope " />
+      <Weapon name = "ColtPython " />
+      <Weapon name = "ColtPython_Gold " />
+      <Weapon name = "ColtPython " />
+      <Weapon name = "RPG7 " />
+  </Gun_13PV>	
+  <Gun_13PV_2>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadBullet1PV" />
+        <AIPROC name="LoadBullet3PV" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag3PV" />
+      </Table>
+      <Weapon name = "Taurus_454SS_2M " />
+	    <Weapon name = "Taurus_454SS_5M " />
+	    <Weapon name = "Taurus_454SS_8M " />
+	    <Weapon name = "Taurus_454SS_Scope " />
+  </Gun_13PV_2>	
+  <Gun_13PV_DualGun>
+      <Table>
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag1PV_DualGun_Left" />
+        <AIPROC name="LoadMag1PV_DualGun_Right" />
+        <AIPROC name="LoadMag3PV" />
+        <AIPROC name="LoadMag3PV_DualGun_Left" />
+        <AIPROC name="LoadMag3PV_DualGun_Right" />
+      </Table>
+      <Weapon name = "DesertEagle_Gold " />
+	    <Weapon name = "DesertEagle_Ref " />
+  </Gun_13PV_DualGun>	
+  <Gun_13PV_DualGun_Ext>
+      <Table>
+        <AIPROC name="Change1PV_DualGun_Left" />
+        <AIPROC name="Change1PV_DualGun_Right" />
+        <AIPROC name="Change3PV_DualGun_Left" />
+        <AIPROC name="Change3PV_DualGun_Right" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Fire_Ext" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV_DualGun_Left" />
+        <AIPROC name="LoadMag1PV_DualGun_Right" />
+        <AIPROC name="LoadMag3PV_DualGun_Left" />
+        <AIPROC name="LoadMag3PV_DualGun_Right" />
+      </Table>
+      <Weapon name = "HK45_Dual " />
+  </Gun_13PV_DualGun_Ext>	
+  <Gun_13PV_DualUzi>
+      <Table>
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="FireBurst" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV_DualGun_Left" />
+        <AIPROC name="LoadMag3PV_DualGun_Left" />
+        <AIPROC name="LoadMag1PV_DualGun_Right" />
+        <AIPROC name="LoadMag3PV_DualGun_Right" />
+      </Table>
+      <Weapon name = "Uzi " />
+	    <Weapon name = "Uzi_Micro " />
+	    <Weapon name = "Uzi_Micro_SL " />
+	    <Weapon name = "Uzi_Mini_Gold " />
+	    <Weapon name = "Uzi_Mini " />
+  </Gun_13PV_DualUzi>	
+  <Gun_13PV_FoldedGun>
+      <Table>
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Fire_Folded" />
+        <AIPROC name="Idle" />
+        <AIPROC name="Idle_Folded" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag1PV_Folded" />
+        <AIPROC name="LoadMag3PV" />
+        <AIPROC name="LoadMag3PV_Folded" />
+      </Table>
+      <Weapon name = "KrissSuperV " />
+	    <Weapon name = "KrissSuperV_Batik " />
+	    <Weapon name = "KrissSuperV_Black " />
+	    <Weapon name = "KrissSuperV_ESports " />
+	    <Weapon name = "KrissSuperV_G " />
+	    <Weapon name = "Kriss_Vector_SV " />
+	    <Weapon name = "Kriss_Vector_SDP " />
+	    <Weapon name = "KrissSuperV_ESports " />
+  </Gun_13PV_FoldedGun>	
+  <Gun_13PV_GrenadeLauncher>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="FireShell" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PVFemale" />
+        <AIPROC name="LoadMag1PVMale" />
+        <AIPROC name="LoadMag3PVFemale" />
+        <AIPROC name="LoadMag3PVMale" />
+        <AIPROC name="LoadMagMaster1PV" />
+        <AIPROC name="LoadMagMaster3PV" />
+        <AIPROC name="LoadShell_1PV" />
+        <AIPROC name="LoadShell_3PV" />
+        <AIPROC name="RemoveShell_1PV" />
+        <AIPROC name="RemoveShell_3PV" />
+      </Table>
+      <Weapon name = "GrenadeLauncher_AK47 " />
+	    <Weapon name = "GrenadeLauncher_AK47_RED " />
+	    <Weapon name = "FAMAS_G2_M203 " />
+	    <Weapon name = "M4-SR16-FC " />
+	    <Weapon name = "M4-SR16-LV3 " />
+  </Gun_13PV_GrenadeLauncher>	
+  <Gun_13PV_KnifeGun>
+      <Table>
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionActivate3PV" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="ExtensionDeactivate3PV" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Fire_Ext" />
+        <AIPROC name="Idle" />
+        <AIPROC name="Idle_Ext" />
+        <AIPROC name="LoadMag1PV_Ext_Female" />
+        <AIPROC name="LoadMag1PV_Ext_Male" />
+        <AIPROC name="LoadMag1PVFemale" />
+        <AIPROC name="LoadMag1PVMale" />
+        <AIPROC name="LoadMag3PV_Ext_Female" />
+        <AIPROC name="LoadMag3PV_Ext_Male" />
+        <AIPROC name="LoadMag3PVFemale" />
+        <AIPROC name="LoadMag3PVMale" />
+        <AIPROC name="LoadMagMaster1PV" />
+        <AIPROC name="LoadMagMaster1PV_Ext" />
+        <AIPROC name="LoadMagMaster3PV" />
+        <AIPROC name="LoadMagMaster3PV_Ext" />
+        <AIPROC name="SecondaryFire" />
+      </Table>
+      <Weapon name = "Vz52 " />
+  </Gun_13PV_KnifeGun>	
+  <Gun_13PV_old>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag3PV" />
+      </Table>
+      <Weapon name = "AUG-A3_Black " />
+  </Gun_13PV_old>	
+  <Gun_13PV_ShotGunLauncher>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire1PV" />
+        <AIPROC name="Fire3PV" />
+        <AIPROC name="FireShell1PV" />
+        <AIPROC name="FireShell3PV" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PVFemale" />
+        <AIPROC name="LoadMag1PVMale" />
+        <AIPROC name="LoadMag3PVFemale" />
+        <AIPROC name="LoadMag3PVMale" />
+        <AIPROC name="LoadMagMaster1PV" />
+        <AIPROC name="LoadMagMaster3PV" />
+        <AIPROC name="LoadShell1PV" />
+        <AIPROC name="LoadShell3PV" />
+      </Table>
+      <Weapon name = "M4-CQBR-LV3 " />
+  </Gun_13PV_ShotGunLauncher>	
+  <Gun_13PV_WithUI>
+      <Table>
+        <AIPROC name="Change1PV" />
+        <AIPROC name="Change3PV" />
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadMag1PV" />
+        <AIPROC name="LoadMag3PV" />
+        <AIPROC name="UI_IdleA_REBEL_Female" />
+        <AIPROC name="UI_IdleA_REBEL_Male" />
+        <AIPROC name="UI_IdleA_SWAT_Female" />
+        <AIPROC name="UI_IdleA_SWAT_Male" />
+        <AIPROC name="UI_IdleB_REBEL_Female" />
+        <AIPROC name="UI_IdleB_REBEL_Male" />
+        <AIPROC name="UI_IdleB_SWAT_Female" />
+        <AIPROC name="UI_IdleB_SWAT_Male" />
+      </Table>
+      <Weapon name = "Glock18 " />
+  </Gun_13PV_WithUI>	
+  <GunDefault>
+      <Table>
+        <AIPROC name="ExtensionActivate" />
+        <AIPROC name="ExtensionDeactivate" />
+        <AIPROC name="Fire" />
+        <AIPROC name="Idle" />
+        <AIPROC name="LoadBullet" />
+        <AIPROC name="LoadMag" />
+      </Table>
+      <Weapon name = "F2000 " />
+	    <Weapon name = "F2000_SL " />
+	    <Weapon name = "C4 " />
+	    <Weapon name = "C4_ShuttleX " />
+	    <Weapon name = "P99 " />
+	    <Weapon name = "P99_Silver " />
+	    <Weapon name = "DesertEagle " />
+	    <Weapon name = "P99 " />
+	    <Weapon name = "MP7_Camo " />
+	    <Weapon name = "MP7_Non_Ex " />
+	    <Weapon name = "MP7_SE2 " />
+	    <Weapon name = "MP7_SL " />
+	    <Weapon name = "P90MC " />
+	    <Weapon name = "P90MC_Camo " />
+	    <Weapon name = "P90_Ext " />
+	    <Weapon name = "Spectre_Non_Ex " />
+	    <Weapon name = "Spectre_SE " />
+	    <Weapon name = "Spectre_Silver " />
+	    <Weapon name = "Spectre_White " />
+	    <Weapon name = "Spectre_SE " />
+	    <Weapon name = "HK-PSG1 " />
+	    <Weapon name = "HK-PSG1_Gold " />
+	    <Weapon name = "HK-PSG1_S " />
+	    <Weapon name = "HK-PSG1_Silver " />
+	    <Weapon name = "C5 " />
+  </GunDefault>	
+  <GunDualMagazine>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Fire_Right" />
+      <AIPROC name="Idle" />
+      <AIPROC name="Idle_Right" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadBullet_Right" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="LoadMag_Right" />
+      <AIPROC name="LoadMag_RightAll" />
+      <AIPROC name="LoadMag_RightAllMaster1PV" />
+      <AIPROC name="LoadMag_RightAllMaster3PV" />
+      <AIPROC name="LoadMag_RightShift" />
+      <AIPROC name="LoadMagB" />
+      <AIPROC name="LoadMagMaster1PV" />
+      <AIPROC name="LoadMagMaster3PV" />
+    </Table>
+
+    <Weapon name = "UMP45_black " />
+	    <Weapon name = "UMP45_DualMag " />
+	    <Weapon name = "UMP45_SL " />
+  </GunDualMagazine>	
+  <GunDualMagazine_Type>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Fire_Right" />
+      <AIPROC name="Idle" />
+      <AIPROC name="Idle_Right" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadBullet_Right" />
+      <AIPROC name="LoadMag1PVFemale" />
+      <AIPROC name="LoadMag1PVMale" />
+      <AIPROC name="LoadMag3PVFemale" />
+      <AIPROC name="LoadMag3PVMale" />
+      <AIPROC name="LoadMag_Right" />
+      <AIPROC name="LoadMag_RightAll_1PV_FEMALE" />
+      <AIPROC name="LoadMag_RightAll_1PV_MALE" />
+      <AIPROC name="LoadMag_RightAll_3PV_FEMALE" />
+      <AIPROC name="LoadMag_RightAll_3PV_MALE" />
+      <AIPROC name="LoadMag_RightAllMaster1PV" />
+      <AIPROC name="LoadMag_RightAllMaster3PV" />
+      <AIPROC name="LoadMag_RightShift" />
+      <AIPROC name="LoadMagB" />
+      <AIPROC name="LoadMagMaster1PV" />
+      <AIPROC name="LoadMagMaster3PV" />
+    </Table>
+
+    <Weapon name = "AK-47_DualMag " />
+	    <Weapon name = "AK-47_Gold " />
+	    <Weapon name = "AK-47_Silver " />
+	    <Weapon name = "AK-47_SOPMOD " />
+	    <Weapon name = "AK-47_SOPMOD_KingCobra " />
+  </GunDualMagazine_Type>	
+  <GunExtension>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire_Ext" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="Idle_Ext" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadBullet_Ext" />
+      <AIPROC name="LoadMag_Ext" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="LoadMagDualGun" />
+    </Table>
+    <Weapon name = "MK23 " />
+	    <Weapon name = "MK23_SILVER " />
+	    <Weapon name = "MP5K_Serif " />
+	    <Weapon name = "MP5K_Silver " />
+	    <Weapon name = "MP5K_White " />
+  </GunExtension>	
+  <GunGrenadeLauncher>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="FireShell" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag1PVFemale" />
+      <AIPROC name="LoadMag1PVMale" />
+      <AIPROC name="LoadMag3PVFemale" />
+      <AIPROC name="LoadMag3PVMale" />
+      <AIPROC name="LoadMagMaster1PV" />
+      <AIPROC name="LoadMagMaster3PV" />
+      <AIPROC name="LoadShell" />
+      <AIPROC name="RemoveShell" />
+    </Table>
+
+    <Weapon name = "K201 " />
+  </GunGrenadeLauncher>	
+  <GunMachineGun>
+    <Table>
+      <AIPROC name="Change" />
+      <AIPROC name="Damage" />
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Fire1" />
+      <AIPROC name="Fire2" />
+      <AIPROC name="Fire3" />
+      <AIPROC name="Fire4" />
+      <AIPROC name="Idle" />
+      <AIPROC name="JumpEnd" />
+      <AIPROC name="LoadBullet1PVFemale" />
+      <AIPROC name="LoadBullet1PVMale" />
+      <AIPROC name="LoadBullet3PVFemale" />
+      <AIPROC name="LoadBullet3PVMale" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="Move" />
+    </Table>
+
+    <Weapon name = "MK46_Silver " />
+	    <Weapon name = "RPD " />
+  </GunMachineGun>	
+  <GunSniper_DualMagazine>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet1PVFemale" />
+      <AIPROC name="LoadBullet1PVMale" />
+      <AIPROC name="LoadBullet3PVFemale" />
+      <AIPROC name="LoadBullet3PVMale" />
+      <AIPROC name="LoadMag1PV" />
+      <AIPROC name="LoadMag1PVSwapShell" />
+      <AIPROC name="LoadMag3PV" />
+      <AIPROC name="LoadMag3PVSwapShell" />
+      <AIPROC name="LoadMagB" />
+    </Table>
+
+    <Weapon name = "DSR_1 " />
+  </GunSniper_DualMagazine>	
+  <GunSniper_LoadBullet_Type>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="FireBullet1PVFemale" />
+      <AIPROC name="FireBullet1PVMale" />
+      <AIPROC name="FireBullet3PVFemale" />
+      <AIPROC name="FireBullet3PVMale" />
+      <AIPROC name="FireBulletMaster1PVFemale" />
+      <AIPROC name="FireBulletMaster1PVMale" />
+      <AIPROC name="FireBulletMaster3PVFemale" />
+      <AIPROC name="FireBulletMaster3PVMale" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet1PVFemale" />
+      <AIPROC name="LoadBullet1PVMale" />
+      <AIPROC name="LoadBullet3PVFemale" />
+      <AIPROC name="LoadBullet3PVMale" />
+      <AIPROC name="LoadBulletMaster1PVFemale" />
+      <AIPROC name="LoadBulletMaster1PVMale" />
+      <AIPROC name="LoadBulletMaster3PVFemale" />
+      <AIPROC name="LoadBulletMaster3PVMale" />
+      <AIPROC name="LoadMag1PVFemale" />
+      <AIPROC name="LoadMag1PVMale" />
+      <AIPROC name="LoadMag3PVFemale" />
+      <AIPROC name="LoadMag3PVMale" />
+      <AIPROC name="LoadMagMaster1PVFemale" />
+      <AIPROC name="LoadMagMaster1PVMale" />
+      <AIPROC name="LoadMagMaster3PVFemale" />
+      <AIPROC name="LoadMagMaster3PVMale" />
+      <AIPROC name="LoadMagReady1PVFemale" />
+      <AIPROC name="LoadMagReady1PVMale" />
+      <AIPROC name="LoadMagReady3PVFemale" />
+      <AIPROC name="LoadMagReady3PVMale" />
+      <AIPROC name="LoadMagReadyMaster1PVFemale" />
+      <AIPROC name="LoadMagReadyMaster1PVMale" />
+      <AIPROC name="LoadMagReadyMaster3PVFemale" />
+      <AIPROC name="LoadMagReadyMaster3PVMale" />
+      <AIPROC name="LoadMagB" />
+    </Table>
+
+    <Weapon name = "M70 " />
+  </GunSniper_LoadBullet_Type>	
+  <GunSniper_Type>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet1PVFemale" />
+      <AIPROC name="LoadBullet1PVMale" />
+      <AIPROC name="LoadBullet3PVFemale" />
+      <AIPROC name="LoadBullet3PVMale" />
+      <AIPROC name="LoadMag1PVFemale" />
+      <AIPROC name="LoadMag1PVMale" />
+      <AIPROC name="LoadMag3PVFemale" />
+      <AIPROC name="LoadMag3PVMale" />
+      <AIPROC name="LoadMagB" />
+    </Table>
+
+    <Weapon name = "Barrett_M82A1 " />
+	    <Weapon name = "Cheytac " />
+	    <Weapon name = "L115A1 " />
+	    <Weapon name = "L115A1_Black " />
+	    <Weapon name = "L115A1_ESports " />
+	    <Weapon name = "L115A1_G " />
+	    <Weapon name = "L115A1_SE " />
+	    <Weapon name = "RangeMaster338 " />
+	    <Weapon name = "RangeMaster762 " />
+	    <Weapon name = "RangeMaster762Stby " />
+	    <Weapon name = "SSG69_Camo " />
+	    <Weapon name = "SSG69 " />
+	    <Weapon name = "SSG69_Silver " />
+	    <Weapon name = "SVD-Dragunov " />
+	    <Weapon name = "SVD-Dragunov_SE " />
+	    <Weapon name = "SVD-Dragunov_KingCobra_Gold " />
+	    <Weapon name = "SVD-Dragunov_KingCobra_Silver " />
+	    <Weapon name = "SVD-Dragunov_SE " />
+	    <Weapon name = "SVD-Dragunov_Silver " />
+	    <Weapon name = "SVU " />
+	    <Weapon name = "VSK94 " />
+  </GunSniper_Type>	
+  <Knife_13PV>
+    <Table>
+      <AIPROC name="AttackA_Left" />
+      <AIPROC name="AttackA_Right" />
+      <AIPROC name="AttackB_Left" />
+      <AIPROC name="AttackB_Right" />
+      <AIPROC name="Change1PV" />
+      <AIPROC name="Change3PV" />
+      <AIPROC name="Change_Left" />
+      <AIPROC name="Change_Right" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle1PV" />
+      <AIPROC name="Idle3PV" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="SecondaryFire" />
+      <AIPROC name="UI_Rebel_Common" />
+      <AIPROC name="UI_Swat_Common" />
+    </Table>
+
+    <Weapon name = "GH5007 " />
+  </Knife_13PV>	
+  <KnifeDefault>
+    <Table>
+      <AIPROC name="AttackA_Left" />
+      <AIPROC name="AttackA_Right" />
+      <AIPROC name="AttackB_Left" />
+      <AIPROC name="AttackB_Right" />
+      <AIPROC name="Change_Left" />
+      <AIPROC name="Change_Right" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="SecondaryFire" />
+      <AIPROC name="UI_Rebel_Common" />
+      <AIPROC name="UI_RebelFemale_Left" />
+      <AIPROC name="UI_RebelFemale_Left2" />
+      <AIPROC name="UI_RebelFemale_Right2" />
+      <AIPROC name="UI_RebelFemale_Right" />
+      <AIPROC name="UI_RebelMale_Left2" />
+      <AIPROC name="UI_RebelMale_Left" />
+      <AIPROC name="UI_RebelMale_Right2" />
+      <AIPROC name="UI_RebelMale_Right" />
+      <AIPROC name="UI_Swat_Common" />
+    </Table>
+
+    <Weapon name = "M-7 " />
+	    <Weapon name = "BoneKnife " />
+	    <Weapon name = "M-9 " />
+	    <Weapon name = "BoneKnife " />
+	    <Weapon name = "CandyCane " />
+	    <Weapon name = "FangBlade " />
+	    <Weapon name = "Hak " />
+	    <Weapon name = "Keris " />
+	    <Weapon name = "Keris_SE " />
+	    <Weapon name = "Kukrii " />
+	    <Weapon name = "M-7_Gold " />
+	    <Weapon name = "M-9 " />
+	    <Weapon name = "Spetnatz_Field_Shovel " />
+  </KnifeDefault>	
+  <KnuckleDefault>
+    <Table>
+      <AIPROC name="AttackA_Female_Left" />
+      <AIPROC name="AttackA_Female_Right" />
+      <AIPROC name="AttackA_Male_Left" />
+      <AIPROC name="AttackA_Male_Right" />
+      <AIPROC name="AttackB_Female_Left" />
+      <AIPROC name="AttackB_Female_Right" />
+      <AIPROC name="AttackB_Male_Left" />
+      <AIPROC name="AttackB_Male_Right" />
+      <AIPROC name="Change_Female_Right" />
+      <AIPROC name="Change_Female_Left" />
+      <AIPROC name="Change_Male_Left" />
+      <AIPROC name="Change_Male_Right" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle_Female_Left" />
+      <AIPROC name="Idle_Female_Right" />
+      <AIPROC name="Idle_Male_Left" />
+      <AIPROC name="Idle_Male_Right" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="SecondaryFire" />
+    </Table>
+
+    <Weapon name = "BarefistKnuckle " />
+	    <Weapon name = "BlackKnuckle " />
+	    <Weapon name = "PumpkinKnuckle " />
+	    <Weapon name = "SilverKnuckle " />
+	    <Weapon name = "SpikedKnuckle " />
+  </KnuckleDefault>	
+  <MasterGun>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag" />
+      <AIPROC name="LoadMagMaster1PV" />
+      <AIPROC name="LoadMagMaster3PV" />
+    </Table>
+
+    <Weapon name = "G36C " />
+	    <Weapon name = "G36C_Non_Ex " />
+	    <Weapon name = "G36C_Silver " />
+	    <Weapon name = "Jackhammer " />
+	    <Weapon name = "SPAS15 " />
+	    <Weapon name = "SPAS15_MSC " />
+	    <Weapon name = "SPAS15_Silver " />
+  </MasterGun>	
+  <MasterGun_Type>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadMag1PVFemale" />
+      <AIPROC name="LoadMag1PVMale" />
+      <AIPROC name="LoadMag3PVFemale" />
+      <AIPROC name="LoadMag3PVMale" />
+      <AIPROC name="LoadMagMaster1PV" />
+      <AIPROC name="LoadMagMaster3PV" />
+    </Table>
+
+    <Weapon name = "AK-47_Non_Ext " />
+	    <Weapon name = "K-2 " />
+	    <Weapon name = "M4-SR16-LV1 " />
+	    <Weapon name = "M4-SR16-LV2 " />
+	    <Weapon name = "M4A1_Gold " />
+	    <Weapon name = "M4A1_SE " />
+	    <Weapon name = "M4A1_Scope2 " />
+	    <Weapon name = "M4A1_Silver " />
+	    <Weapon name = "M4A1_White " />
+	    <Weapon name = "M4_Non_Ext " />
+	    <Weapon name = "SG550_SE " />
+	    <Weapon name = "SG550_DotSight " />
+	    <Weapon name = "SG550_MB " />
+	    <Weapon name = "SG550_Silver " />
+	    <Weapon name = "SG550_White " />
+	    <Weapon name = "L86_LSW " />
+	    <Weapon name = "HK69 " />
+	    <Weapon name = "M79 " />
+	    <Weapon name = "AKS74U " />
+	    <Weapon name = "K-1_SE " />
+	    <Weapon name = "K-1 " />
+	    <Weapon name = "M4-CQBR-LV1 " />
+	    <Weapon name = "M4-CQBR-LV2 " />
+	    <Weapon name = "M4-SPR-LV1 " />
+	    <Weapon name = "M4-SPR-LV2 " />
+	    <Weapon name = "M4-SPR-LV3 " />
+  </MasterGun_Type>	
+  <ShotGun_13PV>
+    <Table>
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet1PV" />
+      <AIPROC name="LoadBullet3PV" />
+      <AIPROC name="LoadMag1PV" />
+      <AIPROC name="LoadMag3PV" />
+    </Table>
+
+    <Weapon name = "Kel_Tec_KSG_15 " />
+  </ShotGun_13PV>	
+  <ShotGun3>
+    <Table>
+      <AIPROC name="Change_1PV" />
+      <AIPROC name="Change_3PV" />
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Fire_Sec_1PV" />
+      <AIPROC name="Fire_Sec_3PV" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadBullet_1PV" />
+      <AIPROC name="LoadBullet_3PV" />
+      <AIPROC name="LoadMag_1PV" />
+      <AIPROC name="LoadMag_3PV" />
+      <AIPROC name="LoadMag_Ready_1PV" />
+      <AIPROC name="LoadMag_Ready_3PV" />
+      <AIPROC name="UI_Rebel_D_Fox" />
+      <AIPROC name="UI_Rebel_Female" />
+      <AIPROC name="UI_Rebel_Male" />
+      <AIPROC name="UI_Rebel_ViperRed" />
+      <AIPROC name="UI_SWAT_Female" />
+      <AIPROC name="UI_SWAT_Hide" />
+      <AIPROC name="UI_SWAT_Leopard" />
+      <AIPROC name="UI_SWAT_Male" />
+    </Table>
+
+    <Weapon name = "M1887 " />
+	    <Weapon name = "M1887_SE " />
+	    <Weapon name = "M1887_SL " />
+  </ShotGun3>	
+  <ShotGunDefault>
+    <Table>
+      <AIPROC name="ExtensionActivate" />
+      <AIPROC name="ExtensionDeactivate" />
+      <AIPROC name="Fire" />
+      <AIPROC name="Idle" />
+      <AIPROC name="LoadB_Master1PV" />
+      <AIPROC name="LoadB_Master3PV" />
+      <AIPROC name="LoadBullet" />
+      <AIPROC name="LoadC_Master1PV" />
+      <AIPROC name="LoadC_Master3PV" />
+      <AIPROC name="LoadD_Master1PV" />
+      <AIPROC name="LoadD_Master3PV" />
+      <AIPROC name="LoadMag" />
+    </Table>
+
+    <Weapon name = "870MCS " />
+	    <Weapon name = "870MCS_SL" />
+  </ShotGunDefault>	
+</AIDriver>	

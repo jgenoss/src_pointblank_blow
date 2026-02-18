@@ -1,0 +1,1323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug_MAX2010|Win32">
+      <Configuration>Debug_MAX2010</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_MAX2011|Win32">
+      <Configuration>Debug_MAX2011</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug_Max2013|Win32">
+      <Configuration>Debug_Max2013</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute_MAX2010|Win32">
+      <Configuration>Distribute_MAX2010</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute_MAX2011|Win32">
+      <Configuration>Distribute_MAX2011</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute_Max2013|Win32">
+      <Configuration>Distribute_Max2013</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{0028E532-A9E0-4EE5-9805-5389D5061F7D}</ProjectGuid>
+    <RootNamespace>i3Export2</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v90</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v90</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v90</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\_Common\Max2013SDK\MAX_2013_SDK.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common\Max2013SDK\MAX_2013_SDK.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\_Common\Max2011SDK\MAX_2011_SDK.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\_Common\Max2011SDK\MAX_2011_SDK.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\_Common\Max2010SDK\MAX_2010_SDK.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\_Common\Max2010SDK\MAX_2010_SDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'">
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2010</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2010</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'">
+    <OutDir>C:\Program Files (x86)\Autodesk\3ds Max 2011\plugins\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2011</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);..\..\DirectX9\Include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2011</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2013</TargetName>
+    <IncludePath>$(VC_IncludePath);$(WindowsSdk_71A_IncludePath);..\..\DirectX9\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <TargetExt>.gup</TargetExt>
+    <TargetName>$(ProjectName)_MAX2013</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;I3G_DX;_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3OptDx.lib;comctl32.lib;i3TDK.lib;i3BaseDx.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACUIAccess>false</UACUIAccess>
+      <IgnoreSpecificDefaultLibraries>libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+copy "$(TargetPath)" "C:\Program Files (x86)\Autodesk\3ds Max 2010\plugins"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;I3G_DX;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3OptDx.lib;comctl32.lib;i3Tdk.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACUIAccess>true</UACUIAccess>
+      <IgnoreSpecificDefaultLibraries>libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>comctl32.lib;i3OptDx.lib;i3TDK.lib;i3BaseDx.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACUIAccess>false</UACUIAccess>
+      <IgnoreSpecificDefaultLibraries>libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;I3G_DX;_BIND_TO_CURRENT_VCLIBS_VERSION=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3OptDx.lib;comctl32.lib;i3Tdk.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <IgnoreSpecificDefaultLibraries>libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;_AFXEXT;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3OptDx.lib;comctl32.lib;i3TDK.lib;i3BaseDx.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACUIAccess>false</UACUIAccess>
+      <IgnoreSpecificDefaultLibraries>libcmtd;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+copy "$(TargetPath)" "C:\Program Files (x86)\Autodesk\3ds Max 2010\plugins"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>./;./OptiExpPlug;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;I3EXPORT2_EXPORTS;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;I3G_DX;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <ShowIncludes>false</ShowIncludes>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3OptDx.lib;comctl32.lib;i3Tdk.lib;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACUIAccess>true</UACUIAccess>
+      <IgnoreSpecificDefaultLibraries>libcmt;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile>.\i3Export2.def</ModuleDefinitionFile>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>$(OutDir)i3Export2.pdb</ProgramDatabaseFile>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <ImportLibrary>$(OutDir)$(TargetName).lib</ImportLibrary>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AboutDlg.cpp" />
+    <ClCompile Include="AdjustAllMaterialDialog.cpp" />
+    <ClCompile Include="DlgConvertTGA.cpp" />
+    <ClCompile Include="DlgProperty.cpp" />
+    <ClCompile Include="DxRenderContext.cpp" />
+    <ClCompile Include="FalloffMtl.cpp" />
+    <ClCompile Include="HelpDialog.cpp" />
+    <ClCompile Include="i3EXPClassDesc.cpp" />
+    <ClCompile Include="i3EXPFrameMsgHandler.cpp" />
+    <ClCompile Include="i3EXPLogDialog.cpp" />
+    <ClCompile Include="i3Export.cpp" />
+    <ClCompile Include="i3Export2.cpp" />
+    <ClCompile Include="i3ExportCamera.cpp" />
+    <ClCompile Include="i3ExportGeometry.cpp" />
+    <ClCompile Include="i3ExportLight.cpp" />
+    <ClCompile Include="i3ExportMaterial.cpp" />
+    <ClCompile Include="i3ExportPhysique.cpp" />
+    <ClCompile Include="i3ExportPhysix.cpp" />
+    <ClCompile Include="i3ExportProcess.cpp" />
+    <ClCompile Include="i3ExportSkeleton.cpp" />
+    <ClCompile Include="i3ExportSkin.cpp" />
+    <ClCompile Include="i3ExportTexture.cpp" />
+    <ClCompile Include="i3ExportTracer.cpp" />
+    <ClCompile Include="i3ExportTransform.cpp" />
+    <ClCompile Include="i3EXPPosData.cpp" />
+    <ClCompile Include="i3ExpProcessInfo.cpp" />
+    <ClCompile Include="i3ExpTriObject.cpp" />
+    <ClCompile Include="i3Image.cpp" />
+    <ClCompile Include="i3ImageClassDesc.cpp" />
+    <ClCompile Include="i3TDKAgent.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'">
+      </PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="i3TDKFolderSelectDialog.cpp" />
+    <ClCompile Include="MeshInfo.cpp" />
+    <ClCompile Include="MultiExportDialog.cpp" />
+    <ClCompile Include="OptiExpPlugService.cpp" />
+    <ClCompile Include="OptiExpPlug\i3OptiExpPlug.cpp" />
+    <ClCompile Include="OptiExpPlug\OptiExpDlg.cpp" />
+    <ClCompile Include="OptiExpPlug\OptiExpPlugHandlerImpl.cpp" />
+    <ClCompile Include="OptiExpPlug\OptiExpSettings.cpp" />
+    <ClCompile Include="OptiExpPlug\OptiExpSetupOperDlg.cpp" />
+    <ClCompile Include="OptiExpPlug\OptiExpTask.cpp" />
+    <ClCompile Include="OptionDialog.cpp" />
+    <ClCompile Include="PickTarget.cpp" />
+    <ClCompile Include="SelectBoneDialog.cpp" />
+    <ClCompile Include="SgBuilder.cpp" />
+    <ClCompile Include="SgBuilder_Camera.cpp" />
+    <ClCompile Include="SgBuilder_Light.cpp" />
+    <ClCompile Include="SgBuilder_Material.cpp" />
+    <ClCompile Include="SgBuilder_Mesh.cpp" />
+    <ClCompile Include="SgBuilder_Physique.cpp" />
+    <ClCompile Include="SgBuilder_Physix.cpp" />
+    <ClCompile Include="SgBuilder_Skin.cpp" />
+    <ClCompile Include="SgBuilder_Util.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2010|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_MAX2011|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug_Max2013|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2010|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_MAX2011|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute_Max2013|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="Util.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\_Common\Max2011SDK\include\3dsmaxport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\acolor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\actiontable.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\actiontableTypedefs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\alerts.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimAppData.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\Animatable.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimatableFlags.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimatableInterfaceIDs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimEnum.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimProperty.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimPropertyID.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AnimPropertyList.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\animtbl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AppDataChunk.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\appio.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\arcdlg.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\assert1.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetEnumCallback.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\AssetId.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\assetmanagementExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\AssetType.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\AssetUser.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\IAssetAccessor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\AssetManagement\iassetmanager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ATS\IATSCustomDeps.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ATS\IATSMax.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ATS\IATSNotifications.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ATS\IATSProvider.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ATS\IATSProviderExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\autoptr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\baseinterface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\bezfont.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\bitarray.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\bitmap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\BMMExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\bmmlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\box2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\box3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\buildnumber.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\buildver.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\BuildWarnings.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\captypes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\channels.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\chkmtlapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\client.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\cmdmode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\color.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\containers\Array.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\containers\Array.imp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\containers\Array.inline.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\contextids.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\control.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\coreexp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CoreExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CoreFunctions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\csapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\AnimationWBImp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\bhvr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Biped10Api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Biped11Api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Biped12Api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Biped8Api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Biped9Api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\BipedApi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\BIPEXP.H" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\delegexp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\IMixer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\IMixer8.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\IMoFlow.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\KeyTrack.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\OurExp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Phyexp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\CS\Tracks.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\custattrib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\custcont.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\dbgprint.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\DebuggingTools.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\decomp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\DefaultActions.H" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\dllutilities.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\dpoint3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\dummy.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\dynamic.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\EditParamFlags.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\EditSoftSelectionMode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\euler.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\evrouter.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\evuser.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\excllist.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\expmtlControl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\export.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\expr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\exprlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\FileEnumConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\filters.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\fltapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\FLTExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\fltlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\frontend.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gamma.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gbuf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gencam.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\genhier.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\genlight.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\genshape.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\geom.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GeomExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\geomlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GeoTableItem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GetCOREInterface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GetResourceString.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gfloat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gfx.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gfxlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gizmo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gizmoimp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gport2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GraphicsConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GraphicsTypes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GraphicsViewportColorConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\GraphicsWindow.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gup.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gupapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\guplib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\gutil.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\helpsys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\hitdata.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\hold.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\hotcheck.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\hsv.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\HWIndex.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\HWMesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\HWVertex.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IActionItemOverrideManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iADTCategory.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iADTObjMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iADTStyle.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iassembly.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iassemblymgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IBatchRenderManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IBlobMesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iBlockMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iBlockRef.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ibrowser.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IBrushPresets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icollision.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IColorCorrectionMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icolorman.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icommandpanel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ICompositeShader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IContainerManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IContainerObject.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ICoordSys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icurvctl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ICustAttribCollapseManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icustattribcontainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\icustrendpresets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\id3d9graphicswindow.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\id3dgraphicswindow.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idatachannel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IDaylightControlledLightSystem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IDaylightSystem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IDialogMonitor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idraganddrop.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IDX10HardwareRenderer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idx8pixelshader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idx8vertexshader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idx9pixelshader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\idx9vertexshader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IDxMaterial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iEditNormals.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iemissioncolor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iepoly.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iEPolyMod.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ifacedatamgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IFileResolutionManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ifnpub.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IFrameTagManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IConversionManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGame.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameControl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameError.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameFX.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameMaterial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameModifier.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameObject.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameProperty.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameRenderedSurface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameStd.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IGameType.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGame\IXrefManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGeometryChecker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IGlobalDXDisplayManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\igrip.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iguest.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ihardwarematerial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ihardwaremesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ihardwaremnmesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ihardwarerenderer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ihardwareshader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IHeightManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iiksys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iimageviewer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IIndirectRefMaker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IIndirectRefTargContainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iInstanceMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ikctrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ikhierarchy.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iksolver.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ilag.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ilayer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILayerControl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ilayermanager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILayerProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILightingUnits.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILimitCtrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILinkTMCtrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILoadSaveAnimation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILockedContainerUpdate.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ILockedTracks.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iLuminaire.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imacroscript.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imaterial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IMaterialBrowserEntryInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IMaterialViewportShading.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imblur.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imenuman.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imenus.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IMetaData.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iMorphByBone.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\impapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\impexp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\impexpintf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imszip.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imtl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IMtlBrowserFilter.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\imtledit.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IMtlRender_Compatibility.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INamedSelectionSetManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\inode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeBakeProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeDisplayProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeExposure.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeGIProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeLayerProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeMentalRayProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeMonitor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeShadingProperties.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeTab.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeTransformModes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeTransformMonitor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\INodeValidity.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\interactiverender.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\interpik.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\interval.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ioapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IPainterInterface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamb.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamb2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamb2Typedefs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamm.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamm2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iparamwire.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IParticleObjectExt.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IPathConfigMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ipipelineclient.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ipoint2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ipoint3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ipointcache.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IProjectionMod.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IProjectionRenderHandler.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IProjection_WorkingModelInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRadiosityPreferences.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\irefhierarchy.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRefTargContainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRefTargMonitor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRefTargMonitorClass.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iRenderPresets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\irollupsettings.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRTShaderNode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IRTShaderParameterBinding.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISceneEventManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISceneStateManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IShadeContextExtension8.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISimpleFaceDataChannel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISimpleFaceDataManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iskin.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iskincodes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iSkinPose.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISkinWrapMesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ISkinWrapPatch.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ispringctrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\istddualvs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\istdplug.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ITabDialog.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iTargetedIO.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iTrackSet.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\itreevw.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\iunwrap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IUtilityPanel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IViewportButton.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IViewportManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IViewportShadingMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\IWorkingPivot.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\keyreduc.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\LightTypeEnums.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\linklist.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\linshape.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\lockid.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\log.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\lslights.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\macrorec.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ManagedServices\StringConverter.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\manipulator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\marketDefaults.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\matrix2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\matrix3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\max.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxcom.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MaxHeap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxheapdirect.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxicon.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MaxMixer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_archive.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_file.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_job.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_manager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_platform.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxnet_types.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\compiler\codetree.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\compiler\parser.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\compiler\thunks.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\editor\MXS_Editor_Interface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\editor\scripteditor.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\3dmath.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\arrays.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\collection.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\colors.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\functions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\hashtable.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\mxstime.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\name.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\numbers.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\pipe.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\streams.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\strings.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\foundation\structs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\collectable.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\exceptions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\interupts.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\MaxscriptTypedefs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\MAXScript_TLS.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\kernel\value.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\define_abstract_functions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\define_external_functions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\define_implementations.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\define_instantiation_functions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\generic_class.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\local_abstract_generic_functions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\local_class.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\local_class_instantiations.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\local_external_declarations.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\local_implementations.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\macros\value_locals.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxscript.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\bitmaps.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\maxclasses.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\meshselection.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\mxskeys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\mxsmaterial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\mxsnurbs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\mxsNurbsSelection.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\mxsobjects.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\objectsets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\pathname.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\scriptcontroller.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\maxwrapper\selectionsets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\mxsplugin\mxsCustomAttributes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\mxsplugin\mxsPlugin.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\arrays.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\atmospherics.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\bigmatrix.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\biped.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\bitmaps.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\box.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\cameratracker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\color.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\controller.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\corenames.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\create.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\generics.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\kernel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\math.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\mathgeneric.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\matrix.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\max_commands.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\mousetool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\node.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\notekey.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\nurbs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\physiqueblend.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\physiquemod.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\physiquevertex.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\primitives.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\progn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\quat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\shadows.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\streams.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\strings.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\textures.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\thread_locals.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\time.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\timefunctions.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\transform.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\vector.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\protocols\xrefs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\ScripterExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\UI\rollouts.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\UI\uiextend.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\IMXSDebugger.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\listener.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\mousetool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\mxsMaxFileVersion.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\mxsZipPackage.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\OLE.CExcepInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\OLE.classids.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\OLE.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\sceneio.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscript\util\visualmaxscript.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\3dmath.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\arraypro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\arrays.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\atmspro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\bipedpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\biprops.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\bitmapro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\bitmaps.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\bmatpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\boxpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\classids.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\codetree.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\colctble.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\collect.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\colorpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\colorval.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\corename.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\creatpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\ctbmapro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\ctrlrpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\defabsfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\defextfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\defimpfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\definsfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\deprecated\defabs21.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\deprecated\wirectrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\evalprms.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\evalpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\excepinf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\excepts.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\funcs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\hashtab.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\IMXSDebugger.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\ivisualms.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\kernlpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\lclabsfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\lclclass.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\lclextfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\lclimpfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\lclinsfn.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\listener.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mathpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\matpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxclses.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxkeys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxmats.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxnurbs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\maxscrpt.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\max_cmds.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\meshsub.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mousetool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mscustattrib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\msplugin.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mstime.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mszippackage.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\mxsctrlr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\MXS_Editor_Interface.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\name.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\namedset.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\nodepro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\notespro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\numbers.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\nurbspro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\nurbssub.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\objpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\objsets.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\ole_auto.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\parser.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\pathname.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\phyblpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\phymcpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\phyrgpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\pipe.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\prims.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\quatpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\rollouts.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\sceneio.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\scripted.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\scrpctrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\shdtppro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\streampr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\streams.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\strings.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\strngpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\structs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\texmapro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\thrdlcls.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\thunks.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\timepro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\time_fns.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\toolpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\uiextend.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\value.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\vectpro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxscrpt\xrefspro.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxtess.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxtypes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\maxversion.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mcapdev.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrAdvancedTranslation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrLightTranslation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrMaterialCustAttrib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrPhysicalSkyEnvironmentMap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrPhysicalSkyLight.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrPhysicalSunLight.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrPreferences.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrShader.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrShaderClassDesc.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrShaderTranslation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrSkyPortalLight.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\imrTranslation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\mentalrayInMax.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\shared_src\mrShaderButtonHandler.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mentalray\shared_src\mrShaderFilter.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\meshacc.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\meshadj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\meshdelta.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\meshdlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MeshFaceFlagConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\meshlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MeshNormalSpec.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\midiman.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mnbigmat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MNChamferData10.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mncommon.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mnmath.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mnmesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MNNormalSpec.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\modstack.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mouseman.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mouseproc.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\mtl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\MtlBaseList.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\NameEnumCallback.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\namesel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\nametab.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\naturalLight.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\ClientInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\ConfigurationBlock.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\JobFrames.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\JobServer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\ManagerInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\MaxNet.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\MaxNetExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\NetworkStatus.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\ServerInfo.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\ServerList.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\Statistics.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\network\Util.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\nodedisp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\Noncopyable.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\notetrck.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\notify.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\nsclip.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\object.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\objectClassId.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ObjectWrapper.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\objmode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\omanapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\osnap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\osnapapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\osnaphit.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\osnapmk.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\palutil.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParamDimension.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\paramtype.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\partclib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\particle.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\CreatedChannelLinker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IChannelContainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IMXSParticleContainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannel.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelAcceleration.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelAmount.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelAngAxis.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelBirthTime.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelBool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelDeathTime.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelEventStart.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelExt.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelFloat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelID.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelINode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelInt.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelLifespan.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMaterialIndex.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMatrix3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMeshMap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMXSFloat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMXSInteger.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMXSMatrix.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelMXSVector.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelNew.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelOrientation.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelPoint3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelPosition.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelPTV.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelQuat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannels.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelScale.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelSelection.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelShape.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelShapeTexture.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelSpeed.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelSpin.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelTabTVFace.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelTabUVVert.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelTime.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelTrueFalseIterator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleChannelVoid.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleContainer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IParticleGroup.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFAction.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFActionList.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFActionListPool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFActionListSet.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFActionState.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFArrow.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFIntegrator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFOperator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFRender.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFSystem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFSystemPool.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFTest.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPFViewport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPViewItem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPViewItemCreator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\IPViewManager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\OneClickCreateCallBack.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\ParticleChannelMask.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFActionStateDesc.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFClassIDs.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFExport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFMessages.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFSimpleAction.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFSimpleActionState.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFSimpleOperator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PFSimpleTest.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\PreciseTimeValue.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ParticleFlow\RandObjLinker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\patch.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\patchcap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\patchlib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\patchobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\PatchTypeConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\Path.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\PB2Export.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\pbbitmap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\PerformanceTools.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\pixelbuf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\plugapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\plugin.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\pod.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\point2.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\point3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\point4.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\polyobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\polyshp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\printmanager.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ProductDefaults.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ProductFileSupport.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ProductSDKVer.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\props.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ptrvec.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\quat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\radiosity.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\radiosityMesh.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\randgenerator.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\random.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\RealWorldMapUtils.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\ref.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\referencemgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\render.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\renderelements.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\RendType.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\RollupConstants.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\rtclick.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\RTMax.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\samplers.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\sbmtlapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\sceneapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\scenetraversal.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\SchematicViewProperty.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\setkeymode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\sfx.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shadbuf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shaders.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shadgen.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shape.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shphier.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\shpsels.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\simpmod.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\simpobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\simpshp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\simpspl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\SingleWeakRefMaker.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\snap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\soundobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\spacearraycallback.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\spline3d.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\splshape.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\springsys.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\sse.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\stack.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\stack3.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\stdmat.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\strbasic.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\strclass.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\Strip.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\SubObjAxisCallback.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\surf_api.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\svcore.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\SysNodeContext.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\systemutilities.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\tab.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TabTypes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\tcbgraph.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\templt.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\tessint.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\texutil.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TimeMap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\toneop.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\toolmap.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TrackClipObject.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TrackFlags.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TrackHitRecord.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\TrackScreenUtils.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\trig.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\triobj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\tvnode.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\tvutil.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\units.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\utilapi.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\utilexp.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\utilintf.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\utillib.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\UVWMapper.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\UVWMapTypes.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\VariableGuard.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\vedge.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\viewfile.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\WindowsDefines.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\WindowsMessageFilter.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\winutil.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\wrangler.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XMLAnimTreeEntry.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefAtmos.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefCtrl.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefItem.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefMaterial.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefObj.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefObjMgr.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXRefObjMgr8.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXRefObjRecord.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\XRef\iXrefProxy.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\xtcobject.h" />
+    <ClInclude Include="..\_Common\Max2011SDK\include\zlibdll.h" />
+    <ClInclude Include="AboutDlg.h" />
+    <ClInclude Include="AdjustAllMaterialDialog.h" />
+    <ClInclude Include="DlgConvertTGA.h" />
+    <ClInclude Include="DlgProperty.h" />
+    <ClInclude Include="FalloffMtl.h" />
+    <ClInclude Include="HelpDialog.h" />
+    <ClInclude Include="i3EXPBitmapStorage.h" />
+    <ClInclude Include="i3EXPClassDesc.h" />
+    <ClInclude Include="i3EXPFrameMsgHandler.h" />
+    <ClInclude Include="i3EXPLogDialog.h" />
+    <ClInclude Include="i3Export.h" />
+    <ClInclude Include="i3ExportTracer.h" />
+    <ClInclude Include="i3Export_Define.h" />
+    <ClInclude Include="i3EXPPosData.h" />
+    <ClInclude Include="i3ExpProcessInfo.h" />
+    <ClInclude Include="i3EXPTriObject.h" />
+    <ClInclude Include="i3Image.h" />
+    <ClInclude Include="i3ImageClassDesc.h" />
+    <ClInclude Include="i3TDKAgent.h" />
+    <ClInclude Include="i3TDKFolderSelectDialog.h" />
+    <ClInclude Include="MeshInfo.h" />
+    <ClInclude Include="MultiExportDialog.h" />
+    <ClInclude Include="OptiExpPlugService.h" />
+    <ClInclude Include="OptiExpPlug\i3OptiExpPlug.h" />
+    <ClInclude Include="OptiExpPlug\IOptiExpSettings.h" />
+    <ClInclude Include="OptiExpPlug\OptiExpDlg.h" />
+    <ClInclude Include="OptiExpPlug\OptiExpPlugHandlerImpl.h" />
+    <ClInclude Include="OptiExpPlug\OptiExpSettings.h" />
+    <ClInclude Include="OptiExpPlug\OptiExpSetupOperDlg.h" />
+    <ClInclude Include="OptiExpPlug\OptiExpTask.h" />
+    <ClInclude Include="OptiExpPlug\OptiExp_Alli3OptSceneOptimizers.h" />
+    <ClInclude Include="OptionDialog.h" />
+    <ClInclude Include="OptionInfo.h" />
+    <ClInclude Include="PickTarget.h" />
+    <ClInclude Include="resource.h" />
+    <ClInclude Include="SgBuilder.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Util.h" />
+    <ClInclude Include="\.DxRenderContext.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="i3Export2.def" />
+    <None Include="i3Export2.rc2" />
+    <None Include="resource.hm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3Export2.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="i3Icon16.bmp" />
+    <Image Include="i3Icon16.ico" />
+    <Image Include="i3Icon32.bmp" />
+    <Image Include="i3Icon48.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="i3Export2.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

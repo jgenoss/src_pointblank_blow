@@ -1,0 +1,6 @@
+LIBRARY	"i3ImageShellExtension"
+EXPORTS
+    DllGetClassObject   PRIVATE
+    DllCanUnloadNow     PRIVATE
+    DllRegisterServer   PRIVATE
+    DllUnregisterServer PRIVATE

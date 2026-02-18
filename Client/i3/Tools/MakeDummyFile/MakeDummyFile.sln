@@ -1,0 +1,31 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "MakeDummyFile", "MakeDummyFile\MakeDummyFile.vcproj", "{588E2E5C-9A64-4C75-82E1-F7ABFA89A3CD}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 2
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {0292C9BF-1F73-428B-A678-0C2B91FAF643}
+		SccProjectUniqueName1 = MakeDummyFile\\MakeDummyFile.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection1 = MakeDummyFile\\
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{588E2E5C-9A64-4C75-82E1-F7ABFA89A3CD}.Debug.ActiveCfg = Debug|Win32
+		{588E2E5C-9A64-4C75-82E1-F7ABFA89A3CD}.Debug.Build.0 = Debug|Win32
+		{588E2E5C-9A64-4C75-82E1-F7ABFA89A3CD}.Release.ActiveCfg = Release|Win32
+		{588E2E5C-9A64-4C75-82E1-F7ABFA89A3CD}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

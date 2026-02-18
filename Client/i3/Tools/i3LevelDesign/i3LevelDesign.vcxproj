@@ -1,0 +1,327 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{ACC2E7D9-DEEE-4DF6-83F4-6D18F2F672CD}</ProjectGuid>
+    <RootNamespace>i3LevelDesign</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3TDK_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC71.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\DirectX9\DX9_ForTools.props" />
+    <Import Project="..\..\i3TDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <IncludePath>$(IncludePath);..\..\DirectX9\Include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.\NavMesh;.\NavMesh\Recast;..\..\..\..\Common\CommonSource\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <BasicRuntimeChecks>Default</BasicRuntimeChecks>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>mfc140d.lib;PhysXLoader.2.8.1.lib;nxuStream2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>$(ProjectDir)\i3Level\Debug;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>.\NavMesh;.\NavMesh\Recast;..\..\..\..\Common\CommonSource\Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+    <Link>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.cpp" />
+    <ClCompile Include="ColorDlg.cpp" />
+    <ClCompile Include="CTimeEventCtrl.cpp" />
+    <ClCompile Include="DB\Ado.cpp" />
+    <ClCompile Include="DB\MapPlayInfo.cpp" />
+    <ClCompile Include="DlgActionSelect.cpp" />
+    <ClCompile Include="DlgActionSetWorldSection.cpp" />
+    <ClCompile Include="DlgElementList.cpp" />
+    <ClCompile Include="DlgEnterEventName.cpp" />
+    <ClCompile Include="DlgExport.cpp" />
+    <ClCompile Include="DlgLayer.cpp" />
+    <ClCompile Include="DlgMapSectorEdit.cpp" />
+    <ClCompile Include="DlgNavmeshGenerator.cpp" />
+    <ClCompile Include="DlgRename.cpp" />
+    <ClCompile Include="DlgReplaceRes.cpp" />
+    <ClCompile Include="DlgSelectSg.cpp" />
+    <ClCompile Include="DlgSetMapSectorIndex.cpp" />
+    <ClCompile Include="DlgTextureSelect.cpp" />
+    <ClCompile Include="DlgWorldSectionEdit.cpp" />
+    <ClCompile Include="DlgWorldSectionInput.cpp" />
+    <ClCompile Include="Dlg_Debug_Sg.cpp" />
+    <ClCompile Include="Dlg_LoadError.cpp" />
+    <ClCompile Include="ExportThread.cpp" />
+    <ClCompile Include="GlobalVariable.cpp" />
+    <ClCompile Include="DlgHitMapTimeSet.cpp" />
+    <ClCompile Include="HitMapManager.cpp" />
+    <ClCompile Include="HitMapTimeSeqCtrl.cpp" />
+    <ClCompile Include="i3LevelDesign.cpp" />
+    <ClCompile Include="i3LevelDesignDoc.cpp" />
+    <ClCompile Include="i3LevelDesignView.cpp" />
+    <ClCompile Include="LevelDesignProfile.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MainFrm_Ribbon_Home.cpp" />
+    <ClCompile Include="ModalObjectType.cpp" />
+    <ClCompile Include="ModifiedListCtrl.cpp" />
+    <ClCompile Include="OptionDlg.cpp" />
+    <ClCompile Include="PanelHitMap.cpp" />
+    <ClCompile Include="PanelNavMesh.cpp" />
+    <ClCompile Include="PanelNavMeshCommon.cpp" />
+    <ClCompile Include="PanelNavMeshEdit.cpp" />
+    <ClCompile Include="PanelNavMeshGenerator.cpp" />
+    <ClCompile Include="PanelProperty.cpp" />
+    <ClCompile Include="PanelPropertyCommon.cpp" />
+    <ClCompile Include="PanelPropertySpecific.cpp" />
+    <ClCompile Include="PanelResource.cpp" />
+    <ClCompile Include="PanelTransform.cpp" />
+    <ClCompile Include="PathExporter.cpp" />
+    <ClCompile Include="PropLight.cpp" />
+    <ClCompile Include="PropWorld.cpp" />
+    <ClCompile Include="Prop_LvElm_HitMap.cpp" />
+    <ClCompile Include="Prop_LvElm_CameraObj.cpp" />
+    <ClCompile Include="Prop_LvElm_Common.cpp" />
+    <ClCompile Include="Prop_LvElm_Object.cpp" />
+    <ClCompile Include="Prop_LvElm_PathLink.cpp" />
+    <ClCompile Include="Prop_LvElm_PathPoint.cpp" />
+    <ClCompile Include="Prop_LvElm_Primitive.cpp" />
+    <ClCompile Include="Prop_LvElm_Prim_Respawn.cpp" />
+    <ClCompile Include="Prop_LvElm_World.cpp" />
+    <ClCompile Include="Prop_LvRes_Animation.cpp" />
+    <ClCompile Include="Prop_LvRes_Character.cpp" />
+    <ClCompile Include="Prop_LvRes_SceneGraph.cpp" />
+    <ClCompile Include="Prop_LvRes_Sound.cpp" />
+    <ClCompile Include="Prop_LvRes_Texture.cpp" />
+    <ClCompile Include="ResTreeCtrl.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <ClCompile Include="WorldExporter.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Item.h" />
+    <ClInclude Include="..\..\..\..\Common\CommonSource\Common\CommonDef_Stage.h" />
+    <ClInclude Include="ColorDlg.h" />
+    <ClInclude Include="CTimeEventCtrl.h" />
+    <ClInclude Include="DB\Ado.h" />
+    <ClInclude Include="DB\MapPlayInfo.h" />
+    <ClInclude Include="DB\MapPlayInfoDef.h" />
+    <ClInclude Include="DlgActionSelect.h" />
+    <ClInclude Include="DlgActionSetWorldSection.h" />
+    <ClInclude Include="DlgElementList.h" />
+    <ClInclude Include="DlgEnterEventName.h" />
+    <ClInclude Include="DlgExport.h" />
+    <ClInclude Include="DlgLayer.h" />
+    <ClInclude Include="DlgMapSectorEdit.h" />
+    <ClInclude Include="DlgNavmeshGenerator.h" />
+    <ClInclude Include="DlgRename.h" />
+    <ClInclude Include="DlgReplaceRes.h" />
+    <ClInclude Include="DlgSelectSg.h" />
+    <ClInclude Include="DlgSetMapSectorIndex.h" />
+    <ClInclude Include="DlgTextureSelect.h" />
+    <ClInclude Include="DlgWorldSectionEdit.h" />
+    <ClInclude Include="DlgWorldSectionInput.h" />
+    <ClInclude Include="Dlg_Debug_Sg.h" />
+    <ClInclude Include="Dlg_LoadError.h" />
+    <ClInclude Include="ExportThread.h" />
+    <ClInclude Include="GlobalVariable.h" />
+    <ClInclude Include="DlgHitMapTimeSet.h" />
+    <ClInclude Include="HitMapManager.h" />
+    <ClInclude Include="HitMapTimeSeqCtrl.h" />
+    <ClInclude Include="i3LevelDesign.h" />
+    <ClInclude Include="i3LevelDesignDoc.h" />
+    <ClInclude Include="i3LevelDesignView.h" />
+    <ClInclude Include="LevelDesignProfile.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="ModalObjectType.h" />
+    <ClInclude Include="ModifiedListCtrl.h" />
+    <ClInclude Include="OptionDlg.h" />
+    <ClInclude Include="PanelHitMap.h" />
+    <ClInclude Include="PanelNavMesh.h" />
+    <ClInclude Include="PanelNavMeshCommon.h" />
+    <ClInclude Include="PanelNavMeshEdit.h" />
+    <ClInclude Include="PanelNavMeshGenerator.h" />
+    <ClInclude Include="PanelProperty.h" />
+    <ClInclude Include="PanelPropertyCommon.h" />
+    <ClInclude Include="PanelPropertySpecific.h" />
+    <ClInclude Include="PanelResource.h" />
+    <ClInclude Include="PanelTransform.h" />
+    <ClInclude Include="PathExporter.h" />
+    <ClInclude Include="PropLight.h" />
+    <ClInclude Include="PropWorld.h" />
+    <ClInclude Include="Prop_LvElm_HitMap.h" />
+    <ClInclude Include="Prop_LvElm_CameraObj.h" />
+    <ClInclude Include="Prop_LvElm_Common.h" />
+    <ClInclude Include="Prop_LvElm_Object.h" />
+    <ClInclude Include="Prop_LvElm_PathLink.h" />
+    <ClInclude Include="Prop_LvElm_PathPoint.h" />
+    <ClInclude Include="Prop_LvElm_Primitive.h" />
+    <ClInclude Include="Prop_LvElm_Prim_Respawn.h" />
+    <ClInclude Include="Prop_LvElm_World.h" />
+    <ClInclude Include="Prop_LvRes_Animation.h" />
+    <ClInclude Include="Prop_LvRes_Character.h" />
+    <ClInclude Include="Prop_LvRes_SceneGraph.h" />
+    <ClInclude Include="Prop_LvRes_Sound.h" />
+    <ClInclude Include="Prop_LvRes_Texture.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="ResTreeCtrl.h" />
+    <ClInclude Include="Shell.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="WorldExporter.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrowcop.cur" />
+    <None Include="nodrop.cur" />
+    <None Include="resource.hm" />
+    <None Include="res\cur00001.cur" />
+    <None Include="res\cur00002.cur" />
+    <None Include="res\cur00003.cur" />
+    <None Include="res\cur00004.cur" />
+    <None Include="res\cursor1.cur" />
+    <None Include="res\cursor2.cur" />
+    <None Include="res\i3LevelDesign.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\buttons.bmp" />
+    <Image Include="res\filelarge.bmp" />
+    <Image Include="res\filesmall.bmp" />
+    <Image Include="res\i3LevelDesign.ico" />
+    <Image Include="res\ico00001.ico" />
+    <Image Include="res\ico00002.ico" />
+    <Image Include="res\ico00003.ico" />
+    <Image Include="res\ico00004.ico" />
+    <Image Include="res\ico00005.ico" />
+    <Image Include="res\ico00006.ico" />
+    <Image Include="res\ico00007.ico" />
+    <Image Include="res\ico00008.ico" />
+    <Image Include="res\ico00009.ico" />
+    <Image Include="res\ico00010.ico" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\icon2.ico" />
+    <Image Include="res\icon3.ico" />
+    <Image Include="res\icon4.ico" />
+    <Image Include="res\icon5.ico" />
+    <Image Include="res\Icons_16.bmp" />
+    <Image Include="res\Icons_32.bmp" />
+    <Image Include="res\ico_chk_.ico" />
+    <Image Include="res\lockX.ico" />
+    <Image Include="res\select_t.bmp" />
+    <Image Include="res\Sphere.ico" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\writelarge.bmp" />
+    <Image Include="res\writesmall.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3LevelDesign.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3LevelDesign.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3LevelDesign.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

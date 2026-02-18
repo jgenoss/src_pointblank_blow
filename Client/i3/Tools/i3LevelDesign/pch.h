@@ -1,0 +1,90 @@
+// stdafx.h : 잘 변경되지 않고 자주 사용하는
+// 표준 시스템 포함 파일 및 프로젝트 관련 포함 파일이 
+// 들어 있는 포함 파일입니다.
+
+#pragma once
+
+#ifndef _SECURE_ATL
+#define _SECURE_ATL 1
+#endif
+
+
+#ifndef VC_EXTRALEAN
+#define VC_EXTRALEAN		// Windows 헤더에서 거의 사용되지 않는 내용을 제외시킵니다.
+#endif
+
+// 아래 지정된 플랫폼보다 우선하는 플랫폼을 대상으로 하는 경우 다음 정의를 수정하십시오.
+// 다른 플랫폼에 사용되는 해당 값의 최신 정보는 MSDN을 참조하십시오.
+#ifndef WINVER				// Windows 95 및 Windows NT 4 이후 버전에서만 기능을 사용할 수 있습니다.
+#define WINVER 0x0600		// Windows 98과 Windows 2000 이후 버전에 맞도록 적합한 값으로 변경해 주십시오.
+#endif
+
+#ifndef _WIN32_WINNT		// Windows NT 4 이후 버전에서만 기능을 사용할 수 있습니다.
+#define _WIN32_WINNT 0x0600		// Windows 98과 Windows 2000 이후 버전에 맞도록 적합한 값으로 변경해 주십시오.
+#endif						
+
+#ifndef _WIN32_WINDOWS		// Windows 98 이후 버전에서만 기능을 사용할 수 있습니다.
+#define _WIN32_WINDOWS 0x0410 // Windows Me 이후 버전에 맞도록 적합한 값으로 변경해 주십시오.
+#endif
+
+#ifndef _WIN32_IE			// IE 4.0 이후 버전에서만 기능을 사용할 수 있습니다.
+#define _WIN32_IE 0x0700	// IE 5.0 이후 버전에 맞도록 적합한 값으로 변경해 주십시오.
+#endif
+
+
+#define _ATL_CSTRING_EXPLICIT_CONSTRUCTORS	// 일부 CString 생성자는 명시적으로 선언됩니다.
+
+// MFC의 공통 부분과 무시 가능한 경고 메시지에 대한 숨기기를 해제합니다.
+#define _AFX_ALL_WARNINGS
+
+#include <afxwin.h>         // MFC 핵심 및 표준 구성 요소
+#include <afxext.h>         // MFC 익스텐션
+#include <afxdisp.h>        // MFC 자동화 클래스
+
+#include <afxdtctl.h>		// Internet Explorer 4 공용 컨트롤에 대한 MFC 지원
+#ifndef _AFX_NO_AFXCMN_SUPPORT
+#include <afxcmn.h>			// Windows 공용 컨트롤에 대한 MFC 지원
+#endif // _AFX_NO_AFXCMN_SUPPORT
+
+#include <afxcontrolbars.h>     // MFC support for ribbons and control bars
+
+#include <afxsock.h>		// MFC 소켓 익스텐션
+
+////////////////////////////////////////////////////
+// Client 의 Common 을 사용하기 위해 선언 합니다.
+typedef		UINT32		T_ItemID;		// 아이템 ID
+typedef		UINT32		T_ItemArg;		// 아이템 Arg
+typedef		INT32		T_ItemDBIdx;	// 인벤토리 Item Idx
+
+#define NET_NICK_NAME_SIZE			33				// 한글/영문 16자 (note. 다른 언어일 경우 16자 아닐 수 있음.)
+// Client 의 Common 을 사용하기 위해 선언 합니다.
+////////////////////////////////////////////////////
+
+#include "i3Base.h"
+#include "i3Math.h"
+#include "i3Input.h"
+#include "i3Gfx.h"
+#include "i3Scene.h"
+#include "i3SceneUtil.h"
+#include "i3Framework.h"
+#include "i3TDK.h"
+#include "CommonDef_Stage.h"
+#include "../../Library/include/ErrorCode.h"
+#include "../CommonDef.h"
+#include "CommonDef_Item.h"
+#include "i3Level/i3Level.h"
+#include <afxdhtml.h>
+
+#define		RESDB_FILENAME			"RES.i3RESDB"
+
+#if defined _M_IX86
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='x86' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_IA64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='ia64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#elif defined _M_X64
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='amd64' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#else
+#pragma comment(linker,"/manifestdependency:\"type='win32' name='Microsoft.Windows.Common-Controls' version='6.0.0.0' processorArchitecture='*' publicKeyToken='6595b64144ccf1df' language='*'\"")
+#endif
+
+

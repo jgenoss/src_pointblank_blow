@@ -1,0 +1,236 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9B9BB7E2-9FDF-456B-9B18-6500F3A1A9AC}</ProjectGuid>
+    <RootNamespace>i3GuiEditor</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\DirectX9\DX9.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3TDK_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\DirectX9\DX9.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\i3TDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;I3_COMPILER_VC;I3_DEBUG;I3_WINDOWS;I3_DLL;I3G_DX;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level4</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3FrameworkDx.lib;i3SoundDx.lib;i3TDK.lib;i3GuiDx.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command />
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300
+ %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;I3_COMPILER_VC;I3_DEBUG;I3_WINDOWS;I3_DLL;I3G_DX;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <StructMemberAlignment>16Bytes</StructMemberAlignment>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3FrameworkDx.lib;i3SoundDx.lib;i3TDK.lib;i3GuiDx.lib;zlib.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention />
+      <TargetMachine>MachineX86</TargetMachine>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+    <PostBuildEvent>
+      <Command>del /F "../..\bin\$(TargetFileName)"
+copy "$(TargetPath)" "../..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="nodrop.cur" />
+    <None Include="res\cursor1.cur" />
+    <None Include="res\i3GuiEditor.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\i3GuiEditor.ico" />
+    <Image Include="res\Toolbar.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3GuiEditor.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="EditDlgAction_MoveTo.cpp" />
+    <ClCompile Include="EditDlgAction_PlaySound.cpp" />
+    <ClCompile Include="EditDlgAction_RotateTo.cpp" />
+    <ClCompile Include="EditDlgAction_ScaleTo.cpp" />
+    <ClCompile Include="GetStringDlg.cpp" />
+    <ClCompile Include="GlobalVariable.cpp" />
+    <ClCompile Include="GuiEditorProfile.cpp" />
+    <ClCompile Include="GuiToolProject.cpp" />
+    <ClCompile Include="GuiTreeCtrl.cpp" />
+    <ClCompile Include="i3GuiEditor.cpp" />
+    <ClCompile Include="i3GuiEditorDef.cpp" />
+    <ClCompile Include="i3GuiEditorFramework.cpp" />
+    <ClCompile Include="i3GuiToolResManager.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="PaneControlShape.cpp" />
+    <ClCompile Include="PaneEventnAction.cpp" />
+    <ClCompile Include="PaneGuiTreeView.cpp" />
+    <ClCompile Include="PaneLayOut.cpp" />
+    <ClCompile Include="PanePreviewer.cpp" />
+    <ClCompile Include="PaneProperty.cpp" />
+    <ClCompile Include="PaneResList.cpp" />
+    <ClCompile Include="PaneTreeView.cpp" />
+    <ClCompile Include="PaneUVEdit.cpp" />
+    <ClCompile Include="PropCommon.cpp" />
+    <ClCompile Include="SelectTemplateDialog.cpp" />
+    <ClCompile Include="SelectTextureDialog.cpp" />
+    <ClCompile Include="SingleSelectControlTypeDialog.cpp" />
+    <ClCompile Include="SpreadPropertyDlg.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="UVEditCtrl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="EditDlgAction_MoveTo.h" />
+    <ClInclude Include="EditDlgAction_PlaySound.h" />
+    <ClInclude Include="EditDlgAction_RotateTo.h" />
+    <ClInclude Include="EditDlgAction_ScaleTo.h" />
+    <ClInclude Include="GetStringDlg.h" />
+    <ClInclude Include="GlobalVariable.h" />
+    <ClInclude Include="GuiEditorProfile.h" />
+    <ClInclude Include="GuiToolProject.h" />
+    <ClInclude Include="GuiTreeCtrl.h" />
+    <ClInclude Include="i3GuiEditor.h" />
+    <ClInclude Include="i3GuiEditorDef.h" />
+    <ClInclude Include="i3GuiEditorFramework.h" />
+    <ClInclude Include="i3GuiToolResManager.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="PaneControlShape.h" />
+    <ClInclude Include="PaneEventnAction.h" />
+    <ClInclude Include="PaneGuiTreeView.h" />
+    <ClInclude Include="PaneLayOut.h" />
+    <ClInclude Include="PanePreviewer.h" />
+    <ClInclude Include="PaneProperty.h" />
+    <ClInclude Include="PaneResList.h" />
+    <ClInclude Include="PaneTreeView.h" />
+    <ClInclude Include="PaneUVEdit.h" />
+    <ClInclude Include="PropCommon.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SelectTemplateDialog.h" />
+    <ClInclude Include="SelectTextureDialog.h" />
+    <ClInclude Include="SingleSelectControlTypeDialog.h" />
+    <ClInclude Include="SpreadPropertyDlg.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="UVEditCtrl.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="res\i3GuiEditor.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\Project\i3Engine.natvis" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3GuiEditor.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

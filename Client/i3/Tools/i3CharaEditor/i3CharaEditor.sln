@@ -1,0 +1,33 @@
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3CharaEditor", "i3CharaEditor.vcproj", "{A3924753-4549-423A-812B-FB8B1581B050}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17} = {4ED271B0-8C15-4816-809E-3A9FB53CAE17}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ToolAM", "..\ToolAutomation\ToolAM.vcproj", "{4ED271B0-8C15-4816-809E-3A9FB53CAE17}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{A3924753-4549-423A-812B-FB8B1581B050}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A3924753-4549-423A-812B-FB8B1581B050}.Debug|Win32.Build.0 = Debug|Win32
+		{A3924753-4549-423A-812B-FB8B1581B050}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{A3924753-4549-423A-812B-FB8B1581B050}.Distribute|Win32.Build.0 = Distribute|Win32
+		{A3924753-4549-423A-812B-FB8B1581B050}.Release|Win32.ActiveCfg = Distribute|Win32
+		{A3924753-4549-423A-812B-FB8B1581B050}.Release|Win32.Build.0 = Distribute|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Debug|Win32.Build.0 = Debug|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Distribute|Win32.Build.0 = Distribute|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Release|Win32.ActiveCfg = Distribute|Win32
+		{4ED271B0-8C15-4816-809E-3A9FB53CAE17}.Release|Win32.Build.0 = Distribute|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

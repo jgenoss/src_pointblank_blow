@@ -1,0 +1,211 @@
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:53:43 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+\i3\src\i3Base\i3Stream.cpp(1010) : [int __thiscall i3FileStream::Open(const char *,int,unsigned int)]  : Failed to CreateFile( "config/Template.i3Game" ). err code = 3
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:53:43 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+\i3\src\i3Base\i3Stream.cpp(1010) : [int __thiscall i3FileStream::Open(const char *,int,unsigned int)]  : Failed to CreateFile( "config/Template.i3Game" ). err code = 3
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:58:11 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+d:\i3\tools\template_stage\gameinterface.cpp(89) : [class i3Framework *__thiscall GameInterface::CreateFramework(class i3Viewer *)]  : Asserted : g_pFramework->IsExactTypeOf( CFramework::GetClassMeta())
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:58:11 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+d:\i3\tools\template_stage\gameinterface.cpp(89) : [class i3Framework *__thiscall GameInterface::CreateFramework(class i3Viewer *)]  : Asserted : g_pFramework->IsExactTypeOf( CFramework::GetClassMeta())
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:58:11 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+d:\i3\tools\template_stage\gameinterface.cpp(89) : [class i3Framework *__thiscall GameInterface::CreateFramework(class i3Viewer *)]  : Asserted : g_pFramework->IsExactTypeOf( CFramework::GetClassMeta())
+d:\i3\tools\template_stage\gameinterface.cpp(28) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 14:58:11 )
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+d:\i3\tools\template_stage\gameinterface.cpp(89) : [class i3Framework *__thiscall GameInterface::CreateFramework(class i3Viewer *)]  : Asserted : g_pFramework->IsExactTypeOf( CFramework::GetClassMeta())
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 18:32:15 )
+d:\i3\tools\template_stage\gameinterface.cpp(31) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+d:\i3\tools\template_stage\gameinterface.cpp(94) : [class i3Framework *__thiscall GameInterface::CreateFramework(class i3Viewer *)]  : Asserted : g_pFramework->IsExactTypeOf( CFramework::GetClassMeta())
+d:\i3\tools\template_stage\gameinterface.cpp(29) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 18:33:04 )
+d:\i3\tools\template_stage\gameinterface.cpp(31) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+\i3\src\i3Framework\i3Framework.cpp(610) : [void __thiscall i3Framework::OnUpdate(float)]  : 꾵 Stage Class를 생성할 수가 없다. RegisterMeta를 해야한다.
+
+d:\i3\tools\template_stage\gameinterface.cpp(30) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+d:\i3\tools\template_stage\gameinterface.cpp(31) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : Start Log( Mar 31 2009, 18:36:32 )
+d:\i3\tools\template_stage\gameinterface.cpp(32) : [void __thiscall GameInterface::OnRegisterMeta(void)]  : =============================================
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1146) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1148) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::_InvalidateGfxResource() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1177) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1224) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1225) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Type: D3DDEVTYPE_HAL
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1226) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Create Device Behavior: D3DCREATE_HARDWARE_VERTEXPROCESSING
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1247) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : i3RenderContext::CreateDevice() Leave
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1278) : [bool __thiscall i3RenderContext::_CreateDevice(void)]  : >>>>>Current GPU Name: NVIDIA GeForce GTX 280 
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1449) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Enter
+
+\i3\src\i3Gfx\i3RenderContextDX.cpp(1488) : [int __thiscall i3RenderContext::ResetDevice(void)]  : i3RenderContext::ResetDevice() Leave
+
+\i3\src\i3Framework\i3Framework.cpp(665) : [void __thiscall i3Framework::OnUpdate(float)]  : i3Framework::OnUpdate() - STATE_LOAD_END Enter
+
+\i3\src\i3Framework\i3Framework.cpp(690) : [void __thiscall i3Framework::OnUpdate(float)]  : i3Framework::OnUpdate() - STATE_LOAD_END Leave
+

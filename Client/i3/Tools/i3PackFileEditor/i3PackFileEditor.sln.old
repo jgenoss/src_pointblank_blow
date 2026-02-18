@@ -1,0 +1,43 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3PackFileEditor", "i3PackFileEditor\i3PackFileEditor.vcproj", "{4DC4F3A1-2315-4A55-BA20-C95CF89AB6A7}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "PackFileLib", "PackFileLib\PackFileLib.vcproj", "{15D017E0-973D-4BAA-9A9E-E166182FD464}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 3
+		SccLocalPath0 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {F134D066-20ED-4B69-9293-321DB3F9B4EA}
+		SccProjectUniqueName1 = i3PackFileEditor\\i3PackFileEditor.vcproj
+		SccLocalPath1 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection1 = i3PackFileEditor\\
+		SccProjectUniqueName2 = PackFileLib\\PackFileLib.vcproj
+		SccLocalPath2 = .
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection2 = PackFileLib\\
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{4DC4F3A1-2315-4A55-BA20-C95CF89AB6A7}.Debug.ActiveCfg = Debug|Win32
+		{4DC4F3A1-2315-4A55-BA20-C95CF89AB6A7}.Debug.Build.0 = Debug|Win32
+		{4DC4F3A1-2315-4A55-BA20-C95CF89AB6A7}.Release.ActiveCfg = Release|Win32
+		{4DC4F3A1-2315-4A55-BA20-C95CF89AB6A7}.Release.Build.0 = Release|Win32
+		{15D017E0-973D-4BAA-9A9E-E166182FD464}.Debug.ActiveCfg = Debug|Win32
+		{15D017E0-973D-4BAA-9A9E-E166182FD464}.Debug.Build.0 = Debug|Win32
+		{15D017E0-973D-4BAA-9A9E-E166182FD464}.Release.ActiveCfg = Release|Win32
+		{15D017E0-973D-4BAA-9A9E-E166182FD464}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

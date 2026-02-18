@@ -1,0 +1,47 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Viewer", "i3Viewer.vcproj", "{12322648-6398-4BAA-93B0-2DE847DFFFBC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 1
+		SccProjectUniqueName0 = i3Viewer.vcproj
+		SccProjectName0 = \u0022$/I3/Tools/i3Viewer\u0022,\u0020UWUAAAAA
+		SccLocalPath0 = .
+		SccProvider0 = MSSCCI:Microsoft\u0020Visual\u0020SourceSafe
+		CanCheckoutShared = true
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug Win32 = Debug Win32
+		Debug Xbox = Debug Xbox
+		PSP Debug Win32 = PSP Debug Win32
+		PSP Debug Xbox = PSP Debug Xbox
+		Release Win32 = Release Win32
+		Release Xbox = Release Xbox
+		Software Debug Win32 = Software Debug Win32
+		Software Debug Xbox = Software Debug Xbox
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Debug Win32.ActiveCfg = Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Debug Win32.Build.0 = Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Debug Xbox.ActiveCfg = Debug|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Debug Xbox.Build.0 = Debug|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.PSP Debug Win32.ActiveCfg = PSP Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.PSP Debug Win32.Build.0 = PSP Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.PSP Debug Xbox.ActiveCfg = PSP Debug|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.PSP Debug Xbox.Build.0 = PSP Debug|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Release Win32.ActiveCfg = Release|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Release Win32.Build.0 = Release|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Release Xbox.ActiveCfg = Release|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Release Xbox.Build.0 = Release|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Software Debug Win32.ActiveCfg = Software Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Software Debug Win32.Build.0 = Software Debug|Win32
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Software Debug Xbox.ActiveCfg = Software Debug|Xbox
+		{12322648-6398-4BAA-93B0-2DE847DFFFBC}.Software Debug Xbox.Build.0 = Software Debug|Xbox
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

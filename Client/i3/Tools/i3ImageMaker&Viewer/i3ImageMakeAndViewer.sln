@@ -1,0 +1,20 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3ImageMakeAndViewer", "i3ImageMakeAndViewer.vcproj", "{FCA283E0-C06E-46C9-AF7C-CF818CDC4B6F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{FCA283E0-C06E-46C9-AF7C-CF818CDC4B6F}.Debug|Win32.ActiveCfg = Debug|Win32
+		{FCA283E0-C06E-46C9-AF7C-CF818CDC4B6F}.Debug|Win32.Build.0 = Debug|Win32
+		{FCA283E0-C06E-46C9-AF7C-CF818CDC4B6F}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{FCA283E0-C06E-46C9-AF7C-CF818CDC4B6F}.Distribute|Win32.Build.0 = Distribute|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

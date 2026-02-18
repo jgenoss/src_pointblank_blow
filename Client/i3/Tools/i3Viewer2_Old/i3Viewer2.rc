@@ -1,0 +1,461 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3Viewer2.rc2""  // Microsoft Visual C++에서 편집되지 않은 리소스\r\n"
+    "#include ""afxres.rc""         // 표준 구성 요소\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDR_MAINFRAME           ICON                    "res\\i3Viewer2.ico"
+IDI_MODE_COLL           ICON                    "res\\Icon_Collision.ICO"
+IDI_GRID                ICON                    "res\\Icon_Grid.ICO"
+IDI_MODE_NORMAL         ICON                    "res\\Icon_Normal.ICO"
+IDI_MODE_MESH           ICON                    "res\\Icon_Seperate.ICO"
+IDI_SHADOW              ICON                    "res\\Icon_Shadow.ICO"
+IDI_MODE_WIRE           ICON                    "res\\Icon_Wireframe.ICO"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAINFRAME MENU 
+BEGIN
+    POPUP "파일(&F)"
+    BEGIN
+        MENUITEM "&Open",                       ID_FILE_OPEN
+        MENUITEM "&Save",                       ID_FILE_SAVE
+        MENUITEM "Save &As...",                 ID_FILE_SAVEAS
+        MENUITEM SEPARATOR
+        POPUP "Recently Used Files..."
+        BEGIN
+            MENUITEM "File0",                       ID_FILE_MRU0
+            MENUITEM "File1",                       ID_FILE_MRU1
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "끝내기(&X)",                  ID_APP_EXIT
+    END
+    POPUP "편집(&E)"
+    BEGIN
+        MENUITEM "실행 취소\tCtrl+Z(&U)",       ID_EDIT_UNDO
+        MENUITEM SEPARATOR
+        MENUITEM "잘라내기\tCtrl+X(&T)",        ID_EDIT_CUT
+        MENUITEM "복사\tCtrl+C(&C)",            ID_EDIT_COPY
+        MENUITEM "붙여넣기\tCtrl+V(&P)",        ID_EDIT_PASTE
+        MENUITEM SEPARATOR
+        MENUITEM "&Geometry Tool",              ID_EDIT_GEOMETRYTOOL
+        MENUITEM "&Texture Tool",               ID_EDIT_TEXTOOL
+        MENUITEM "ViewMapScale",                ID_VIEWMAPSCALE
+    END
+    POPUP "도구(&T)"
+    BEGIN
+        POPUP "Record Camera Positions..."
+        BEGIN
+            MENUITEM "Camera &1\t\t\tCtrl+Alt+1",   ID_SETCAMERAPOSITIONS_CAMERA1
+
+            MENUITEM "Camera &2\t\t\tCtrl+Alt+2",   ID_SETCAMERAPOSITIONS_CAMERA2
+
+            MENUITEM "Camera &3\t\t\tCtrl+Alt+3",   ID_SETCAMERAPOSITIONS_CAMERA3
+
+            MENUITEM "Camera &4\t\t\tCtrl+Alt+4",   ID_SETCAMERAPOSITIONS_CAMERA4
+
+        END
+        POPUP "Set Camera Positions..."
+        BEGIN
+            MENUITEM "Camera 1\t\t\tCtrl+1",        ID_CAMPOS1
+            MENUITEM "Camera 2\t\t\tCtrl+2",        ID_CAMPOS2
+            MENUITEM "Camera 3\t\t\tCtrl+3",        ID_CAMPOS3
+            MENUITEM "Camera 4\t\t\tCtrl+4",        ID_CAMPOS4
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "&Project Configuration...",   ID_TOOL_PROJECT_CONFIG
+        MENUITEM "&Options",                    ID_TOOL_OPTIONS
+    END
+    POPUP "도움말(&H)"
+    BEGIN
+        MENUITEM "i3Viewer2 정보(&A)...",       ID_APP_ABOUT
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_MAINFRAME ACCELERATORS 
+BEGIN
+    "1",            ID_CAMPOS1,             VIRTKEY, CONTROL, NOINVERT
+    "2",            ID_CAMPOS2,             VIRTKEY, CONTROL, NOINVERT
+    "3",            ID_CAMPOS3,             VIRTKEY, CONTROL, NOINVERT
+    "C",            ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_COPY,           VIRTKEY, CONTROL, NOINVERT
+    VK_DELETE,      ID_EDIT_CUT,            VIRTKEY, SHIFT, NOINVERT
+    "X",            ID_EDIT_CUT,            VIRTKEY, CONTROL, NOINVERT
+    "V",            ID_EDIT_PASTE,          VIRTKEY, CONTROL, NOINVERT
+    VK_INSERT,      ID_EDIT_PASTE,          VIRTKEY, SHIFT, NOINVERT
+    VK_BACK,        ID_EDIT_UNDO,           VIRTKEY, ALT, NOINVERT
+    "Z",            ID_EDIT_UNDO,           VIRTKEY, CONTROL, NOINVERT
+    VK_F6,          ID_NEXT_PANE,           VIRTKEY, NOINVERT
+    VK_F6,          ID_PREV_PANE,           VIRTKEY, SHIFT, NOINVERT
+    "1",            ID_SETCAMERAPOSITIONS_CAMERA1, VIRTKEY, CONTROL, ALT, 
+                                                    NOINVERT
+    "2",            ID_SETCAMERAPOSITIONS_CAMERA2, VIRTKEY, CONTROL, ALT, 
+                                                    NOINVERT
+    "3",            ID_SETCAMERAPOSITIONS_CAMERA3, VIRTKEY, CONTROL, ALT, 
+                                                    NOINVERT
+    "4",            ID_SETCAMERAPOSITIONS_CAMERA4, VIRTKEY, CONTROL, ALT, 
+                                                    NOINVERT
+    "4",            ID_CAMPOS4,             VIRTKEY, CONTROL, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOGEX 0, 0, 235, 55
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | 
+    WS_SYSMENU
+CAPTION "i3Viewer2 정보"
+FONT 9, "MS Shell Dlg", 0, 0, 0x1
+BEGIN
+    ICON            IDR_MAINFRAME,IDC_STATIC,11,17,20,20
+    LTEXT           "i3Viewer2 Version 1.0",IDC_STATIC,40,10,119,8,
+                    SS_NOPREFIX
+    LTEXT           "Copyright (C) 2009",IDC_STATIC,40,25,119,8
+    DEFPUSHBUTTON   "확인",IDOK,182,3,50,16,WS_GROUP
+END
+
+IDD_PANEL_TOOLBAR DIALOGEX 0, 0, 455, 22
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+EXSTYLE WS_EX_CONTEXTHELP
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "",IDC_BTN_NORMALVIEW,3,3,17,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_MESHVIEW,22,3,17,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_SHADOWENABLE,118,3,17,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_GRID,138,3,17,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_COLLVIEW,40,3,17,16,BS_ICON
+    PUSHBUTTON      "",IDC_BTN_WIREVIEW,58,3,17,16,BS_ICON
+    CONTROL         "",IDC_SLIDER_TIMESCALE,"msctls_trackbar32",
+                    TBS_AUTOTICKS | TBS_BOTH | TBS_TOOLTIPS | WS_TABSTOP,201,
+                    3,82,15,WS_EX_STATICEDGE
+    LTEXT           "Time scale",IDC_STATIC,167,7,34,8
+    PUSHBUTTON      "Dynamic",IDC_BTN_DYNAMIC,292,3,38,16
+    PUSHBUTTON      "Kinematic",IDC_BTN_KINEMATIC,331,3,38,16
+    PUSHBUTTON      "OnlySel",IDC_BTN_VIEWONLYSEL,76,3,17,16,BS_ICON
+END
+
+IDD_PANEL_SG DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPCHILDREN | 
+    WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_PANEL_VIEWER DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_CHILD | WS_CLIPCHILDREN | 
+    WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_PANEL_SPEC DIALOGEX 0, 0, 186, 95
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_CHILD | WS_SYSMENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+IDD_DLG_OPTION DIALOGEX 0, 0, 258, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | 
+    WS_CAPTION | WS_SYSMENU
+CAPTION "Options"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,203,4,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,203,24,50,14
+    LTEXT           "Ambient Color",IDC_STATIC,16,6,46,8
+    CONTROL         "",IDC_ST_ACOLOR_PH,"Static",SS_BLACKFRAME,65,4,74,13
+    LTEXT           "Background Color",IDC_STATIC,5,23,57,8
+    CONTROL         "",IDC_ST_BCOLOR_PH,"Static",SS_BLACKFRAME,65,21,74,13
+    LTEXT           "Resolution",IDC_STATIC,65,52,34,8
+    EDITTEXT        IDC_ED_SHADOWSIZE,103,50,40,12,ES_AUTOHSCROLL | NOT 
+                    WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Shadow",IDC_STATIC,36,40,26,8
+    LTEXT           "Light",IDC_STATIC,46,68,16,8
+    LTEXT           "Diffuse",IDC_STATIC,76,80,24,8
+    CONTROL         "",IDC_ST_LIT_DCOLORPH,"Static",SS_BLACKFRAME,104,78,74,
+                    13
+    CONTROL         "",IDC_ST_LIT_SCOLORPH,"Static",SS_BLACKFRAME,104,94,74,
+                    13
+    LTEXT           "Specular",IDC_STATIC,72,96,28,8
+    CONTROL         "Glow Effect",IDC_CHK_GLOW,"Button",BS_AUTOCHECKBOX | 
+                    WS_TABSTOP,66,112,53,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "Zepetto Inc."
+            VALUE "FileDescription", "i3Engine Scene-Graph"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3Viewer2.exe"
+            VALUE "LegalCopyright", "(c) Zepetto Inc.  All rights reserved."
+            VALUE "OriginalFilename", "i3Viewer2.exe"
+            VALUE "ProductName", "i3Engine Scene-Graph Viewer"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_ABOUTBOX, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 232
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 52
+    END
+
+    IDD_PANEL_TOOLBAR, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 452
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 19
+    END
+
+    IDD_PANEL_SG, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 183
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_PANEL_VIEWER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 179
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 88
+    END
+
+    IDD_PANEL_SPEC, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 183
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 92
+    END
+
+    IDD_DLG_OPTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 253
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 130
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE 
+BEGIN
+    IDR_MAINFRAME           "i3Viewer2"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_APP_TITLE       "i3Viewer2"
+    AFX_IDS_IDLEMESSAGE     "준비"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_INDICATOR_EXT        "EXT"
+    ID_INDICATOR_CAPS       "CAP"
+    ID_INDICATOR_NUM        "NUM"
+    ID_INDICATOR_SCRL       "SCRL"
+    ID_INDICATOR_OVR        "OVR"
+    ID_INDICATOR_REC        "REC"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_APP_ABOUT            "프로그램 정보, 버전 번호, 저작권을 표시합니다.\n정보"
+    ID_APP_EXIT             "문서를 저장할지를 묻고 응용 프로그램을 끝냅니다.\n끝내기"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_NEXT_PANE            "다음 창으로 전환합니다.\n다음 창"
+    ID_PREV_PANE            "이전 창으로 전환합니다.\n이전 창"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_WINDOW_SPLIT         "활성 창을 여러 개의 창으로 분할합니다.\n분할"
+END
+
+STRINGTABLE 
+BEGIN
+    ID_EDIT_CLEAR           "선택 영역을 지웁니다.\n지우기"
+    ID_EDIT_CLEAR_ALL       "모든 것을 지웁니다.\n모두 지우기"
+    ID_EDIT_COPY            "선택 영역을 복사하여 클립보드에 넣습니다.\n복사"
+    ID_EDIT_CUT             "선택 영역을 잘라내어 클립보드에 넣습니다.\n잘라내기"
+    ID_EDIT_FIND            "지정한 텍스트를 찾습니다.\n찾기"
+    ID_EDIT_PASTE           "클립보드 내용을 삽입합니다.\n붙여넣기"
+    ID_EDIT_REPEAT          "마지막 작업을 반복합니다.\n반복"
+    ID_EDIT_REPLACE         "특정 텍스트를 다른 텍스트로 바꿉니다.\n바꾸기"
+    ID_EDIT_SELECT_ALL      "전체 문서를 선택합니다.\n모두 선택"
+    ID_EDIT_UNDO            "마지막 작업 실행을 취소합니다.\n실행 취소"
+    ID_EDIT_REDO            "이전에 실행 취소된 작업을 다시 실행합니다.\n다시 실행"
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCSIZE          "창 크기를 변경합니다."
+    AFX_IDS_SCMOVE          "창 위치를 변경합니다."
+    AFX_IDS_SCMINIMIZE      "창을 아이콘으로 축소합니다."
+    AFX_IDS_SCMAXIMIZE      "창을 전체 화면 크기로 확대합니다."
+    AFX_IDS_SCNEXTWINDOW    "다음 문서 창으로 전환합니다."
+    AFX_IDS_SCPREVWINDOW    "이전 문서 창으로 전환합니다."
+    AFX_IDS_SCCLOSE         "문서를 저장할 것인지 확인하고 활성 창을 닫습니다."
+END
+
+STRINGTABLE 
+BEGIN
+    AFX_IDS_SCRESTORE       "창을 보통 크기로 복원합니다."
+    AFX_IDS_SCTASKLIST      "작업 목록 활성화"
+END
+
+STRINGTABLE 
+BEGIN
+    IDC_BTN_NORMALVIEW      "일반 보기"
+    IDC_BTN_MESHVIEW        "Mesh 단위별 보기"
+    IDC_BTN_COLLVIEW        "Collision Mesh에 보기"
+END
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3Viewer2.rc2"  // Microsoft Visual C++에서 편집되지 않은 리소스
+#include "afxres.rc"         // 표준 구성 요소
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

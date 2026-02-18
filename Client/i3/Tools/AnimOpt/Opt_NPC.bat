@@ -1,0 +1,2 @@
+AnimOpt Chara\NPC_Kel_Mahum_Archer
+AnimOpt Chara\NPC_Ketra_Orc_Archer
