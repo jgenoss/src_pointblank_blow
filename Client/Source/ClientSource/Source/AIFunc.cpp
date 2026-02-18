@@ -1,0 +1,16 @@
+#include "pch.h"
+#include "AIFunc.h"
+#include "TempConfig.h"
+#include "Weapon/WeaponItemID.h"
+
+//EXPORT_AVALIABLE_CODE_VALUE
+UINT32	GetAIWeapon_Melee(INT32 DifficultyLevel) 
+{
+	switch (g_pTempConfig->m_Weapon[DifficultyLevel])
+	{
+	case 1:		return MAKE_ITEM_FLAG(	ITEM_EVENT_TYPE_NONE, ITEM_TYPE_MELEE,	WEAPON_CLASS_KNIFE, WEAPON::getItemIndex(WEAPON::KNIFE_M7));
+	case 2:		return MAKE_ITEM_FLAG(	ITEM_EVENT_TYPE_NONE, ITEM_TYPE_MELEE,	WEAPON_CLASS_KNIFE, WEAPON::getItemIndex(WEAPON::KNIFE_M7_GOLD));
+	case 3:		return MAKE_ITEM_FLAG(	ITEM_EVENT_TYPE_NONE, ITEM_TYPE_MELEE,	WEAPON_CLASS_KNIFE, WEAPON::getItemIndex(WEAPON::MINIAXE));
+	}
+	return MAKE_ITEM_FLAG(	ITEM_EVENT_TYPE_NONE, ITEM_TYPE_MELEE,		WEAPON_CLASS_KNIFE, WEAPON::getItemIndex(WEAPON::KNIFE_KUKRII));
+}

@@ -1,0 +1,17 @@
+//////////////////////////////////////////////////////////////////////////
+// 			Battle Carnival 코드 규칙			//
+// 작성자 : 정순구							//
+// 작성일 : 2006. 11. 14						//
+//////////////////////////////////////////////////////////////////////////
+
+. class function name
+- inline함수 : 소문자name()
+- protected함수 : _Name()
+- public함수 : Name()
+
+. GameChara class function name
+- 네트워크 코드 포함 : NET_name()				-> 담당 : 정순구
+- 캐릭터 스테이트 및 애니메이션 설정 함수: ACTION_name()  	-> 담당 : 백성민
+
+. I3TRACE를 I3NOTICE로 교체
+. I3ASSERT보다는 I3FATAL로 교체

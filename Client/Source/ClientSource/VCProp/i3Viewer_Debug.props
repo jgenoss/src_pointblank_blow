@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <TargetName>PointBlank</TargetName>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <PreprocessorDefinitions>_DEBUG;I3_DEBUG;BUILD_RELEASE_QA_VERSION;_AFXDLL;DUMP_FULLMEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <Optimization>Disabled</Optimization>
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\SDK\CaseRunModule\lib;..\..\..\i3\lib\DirectX\DebugDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>CaseRunModule_DEBUG.lib;mfc140d.lib;d3d9.lib;d3dx9.lib;i3BaseDx.lib;zlib.lib;i3MathDx.lib;i3GfxDx.lib;lua.lib;i3GuiDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3SoundDx.lib;i3FrameworkDx.lib;i3InputDx.lib;i3NetworkDx.lib;i3OptDx.lib;fmodex_vc.lib;Iphlpapi.lib;winmm.lib;dinput8.lib;dxerr.lib;strmiids.lib;dsound.lib;ws2_32.lib;IMM32.LIB;$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <PreBuildEvent>
+      <Command>copy "$(SolutionDir)Debug PB\*.lib" $(TargetDir)
+copy "$(SolutionDir)Debug PB\*.dll" $(TargetDir)</Command>
+    </PreBuildEvent>
+    <PreLinkEvent />
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

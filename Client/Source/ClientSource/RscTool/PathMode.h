@@ -1,0 +1,9 @@
+#pragma once
+
+enum PathMode
+{
+	PATHMODE_MEDIA,
+	PATHMODE_QA,
+	PATHMODE_LIVE,
+	NUM_PATHMODE,
+};

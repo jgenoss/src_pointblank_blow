@@ -1,0 +1,29 @@
+<HTML>
+	<HEAD>
+		<TITLE></TITLE>
+		<META NAME="GENERATOR" Content="Microsoft Visual Studio .NET 7.1">
+	</HEAD>
+	<BODY>
+		<P><FONT face="굴림" size="4">&nbsp; * UDP 예외 처리</FONT></P>
+		<P><FONT face="굴림">&nbsp;예시 
+				)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CN 
+				&lt;----X---- CS</FONT><FONT face="굴림">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				CN이 못 받는 경우</FONT></P>
+		<P><FONT face="굴림">&nbsp;1.&nbsp;MS는 CS와 연결상태 확인. 연결이 끊긴 경우 CS의 상태 점검을 시작한다. ( 프로토콜 필요)</FONT></P>
+		<P><FONT face="굴림">&nbsp;&nbsp;&nbsp;&nbsp; TCP 및 UDP&nbsp;확인 필요</FONT></P>
+		<P><FONT face="굴림">&nbsp;2. 1번의 연결은 되어 있으나 해당 CN이 CS와 접속이 안되는 경우</FONT></P>
+		<P><FONT face="굴림">&nbsp;&nbsp;&nbsp;&nbsp;- MS에게 접속불가를 알려준다.</FONT></P>
+		<P><FONT face="굴림">&nbsp;&nbsp;&nbsp; - 접속불가 수가 과반수 이하인경우&nbsp;접속불가 CN의 접속을 끊어준다.</FONT></P>
+		<P><FONT face="굴림">&nbsp;&nbsp;&nbsp; - 모두 접속불가인경우는 강제로 CS를 끊어주고 새로운 CS를 설정해준다.</FONT></P>
+		<P><FONT face="굴림">&nbsp;3. 1번의 연결이 안되면 CS의 Session 종료 및 새로운 CS를 설정한다.</FONT></P>
+		<P><FONT face="굴림"></FONT>&nbsp;</P>
+		<P><FONT face="굴림">&nbsp;예시 
+				)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CN 
+				----X----&gt;CS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+				CS가 CN으로부터 못 받는경우</FONT></P>
+		<P><FONT face="굴림">&nbsp;1. CN에 대한 접속여부를 MS에게 알려준다.</FONT></P>
+		<P><FONT face="굴림">&nbsp;2. MS는 해당 CN에 대해 상태 점검.</FONT></P>
+		<P><FONT face="굴림">&nbsp;3. 연결이 되어 있다면 CN에게 접속불가를 통보</FONT></P>
+		<P><FONT face="굴림">&nbsp;4. 연결이 안되면 Session 종료</FONT></P>
+	</BODY>
+</HTML>

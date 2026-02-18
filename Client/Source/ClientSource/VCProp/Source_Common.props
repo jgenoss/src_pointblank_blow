@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <TargetName>$(Configuration)</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../../i3/include;../../../i3/i3TDK;../../../i3/PhysX/common/include;../../../i3/PhysX/SDKs/Physics/include;../../../i3/PhysX/SDKs/PhysXLoader/include;../../../i3/PhysX\SDKs/Foundation/include;../../../i3/PhysX/SDKs/Framework/include;../../../i3/PhysX/SDKs/Cooking/include;../../../i3/PhysX/SDKs/NxCharacter/include;../../../i3/FMOD/fmoddesignerapi/api/inc;../../../i3/FMOD/api/inc;../../../i3/PhysX/Tools/NxuStream2;$(ProjectDir);$(ProjectDir)/BugTrap;$(SolutionDir)/EditGameDlg;$(SolutionDir)/FileSyncBase;$(SolutionDir)/FileList;$(SolutionDir)/Source/Weapon;$(SolutionDir)/Source/Weapon/WeaponInfo;../../Avatar;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DLL;BUG_TRAP;USE_LOCALE_UI;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalOptions>-Zm360 %(AdditionalOptions)</AdditionalOptions>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

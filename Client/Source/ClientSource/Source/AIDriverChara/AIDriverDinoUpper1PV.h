@@ -1,0 +1,24 @@
+#if !defined( __DinoUpper1PV_AIDRIVER_H)
+#define __DinoUpper1PV_AIDRIVER_H
+
+#include "i3Framework.h"
+
+#define AI_DINOUPPER1PV_ATTACK1_A	0x00000000
+#define AI_DINOUPPER1PV_ATTACK1_B	0x00000001
+#define AI_DINOUPPER1PV_ATTACK2	0x00000002
+#define AI_DINOUPPER1PV_ATTACKIDLE	0x00000003
+#define AI_DINOUPPER1PV_DAMAGEATTACKIDLE	0x00000004
+#define AI_DINOUPPER1PV_JUMPEND	0x00000005
+#define AI_DINOUPPER1PV_JUMPSTART	0x00000006
+#define AI_DINOUPPER1PV_MOVEATTACKIDLE	0x00000007
+
+class AIDriverDinoUpper1PV : public i3AIDriver
+{
+	I3_CLASS_DEFINE( AIDriverDinoUpper1PV);
+protected:
+public:
+	AIDriverDinoUpper1PV(void);
+	virtual ~AIDriverDinoUpper1PV(void);
+};
+
+#endif

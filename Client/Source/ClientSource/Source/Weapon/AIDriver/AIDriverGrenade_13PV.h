@@ -1,0 +1,24 @@
+#if !defined( __Grenade_13PV_AIDRIVER_H)
+#define __Grenade_13PV_AIDRIVER_H
+
+#include "i3Framework.h"
+
+#define AI_GRENADE_13PV_ATTACKREADY1PV	0x00000000
+#define AI_GRENADE_13PV_ATTACKREADY3PV	0x00000001
+#define AI_GRENADE_13PV_CHANGE1PV	0x00000002
+#define AI_GRENADE_13PV_CHANGE3PV	0x00000003
+#define AI_GRENADE_13PV_FIRE1PV	0x00000004
+#define AI_GRENADE_13PV_FIRE3PV	0x00000005
+#define AI_GRENADE_13PV_IDLE1PV	0x00000006
+#define AI_GRENADE_13PV_IDLE3PV	0x00000007
+
+class AIDriverGrenade_13PV : public i3AIDriver
+{
+	I3_CLASS_DEFINE( AIDriverGrenade_13PV, i3AIDriver);
+protected:
+public:
+	AIDriverGrenade_13PV(void);
+	virtual ~AIDriverGrenade_13PV(void);
+};
+
+#endif

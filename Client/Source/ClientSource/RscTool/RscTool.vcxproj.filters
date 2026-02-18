@@ -1,0 +1,651 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="MFC Packscript Tab">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="CustomMFC">
+      <UniqueIdentifier>{f17138bd-afac-4982-b7da-594966248a4a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Data Packscript">
+      <UniqueIdentifier>{639342ce-b348-4608-b092-70e05240f035}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MFC Main">
+      <UniqueIdentifier>{c7e46e7e-70d5-498f-b170-b0d121c8a633}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MFC Item Tab">
+      <UniqueIdentifier>{430d9a74-13e1-49ec-be81-176e5f8beab9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data Item">
+      <UniqueIdentifier>{f005baa7-1741-4a66-80c8-7f21d83cdac4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3RscGenSrc">
+      <UniqueIdentifier>{fe3b537e-7f6d-4d11-ad06-af4ebe2c5222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Util">
+      <UniqueIdentifier>{8a87dea5-a06e-4cea-ab00-914974364e54}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Pef Diff">
+      <UniqueIdentifier>{2215f342-5a4a-4815-9c9e-f2690d902912}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Locale String Diff">
+      <UniqueIdentifier>{287c79bf-a648-42af-99f7-b33d4176d2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="MFC FileCheck Tab">
+      <UniqueIdentifier>{ae9717bc-29d8-42b9-bed1-7c4b0f6cf928}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Data FileCheck">
+      <UniqueIdentifier>{cd8fcbe0-00c4-4917-a783-efa15a4810b9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ExceptionDlg.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecutePackFrameWnd.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="LocaleStringDiffView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="LocaleStringFrameWnd.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackDiffView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackQueue.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptFileExplorerListView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptFileExplorerTreeView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptFileFrameWnd.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptFileTaskPane.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptForceCopyToQAPane.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptLeftView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptRealFileListPane.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptRightView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PathDlg.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PathView.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PefDiffFrameWnd.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PefTxtDiffDlg.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PreprocessItemDlg.cpp">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCButton.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCDialog.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCFolderDialog.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCListCtrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCListCtrl_Custom.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCPaneSplitter.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCTabViewCtrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCThread.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCTreeCtrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCVSListBox.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3MFCWorkAround.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3shelllistctrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3shellmanager.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="i3shelltreectrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="IconInfo.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="pidl_util.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="ShellChangeWatcher.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="TextProgressCtrl.cpp">
+      <Filter>CustomMFC</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadPackScriptTree.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="PackPath.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptContents.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptMgr.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="PackScriptTree.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="PathMgr.cpp">
+      <Filter>Data Packscript</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="PreprocessMessageCallbackDerived.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RscTool.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RscToolDoc.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="RscToolView.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="View1.cpp">
+      <Filter>MFC Main</Filter>
+    </ClCompile>
+    <ClCompile Include="Category1stView.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="Category2ndView.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDetailFrame.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemDetailView.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemListView.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemView.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="PefItemPackScriptPane.cpp">
+      <Filter>MFC Item Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="AssocFile.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="i3RscPartialFile.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemData_Derived.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemIDMgr.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemInfo.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemInfo_Derived.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="ItemInfoMgr.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="LoadRSCFile.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="RSCFileMgr.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SubItemInfo.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="SubItemInfo_Derived.cpp">
+      <Filter>Data Item</Filter>
+    </ClCompile>
+    <ClCompile Include="i3RSCGenSrc\RSCGenDefine.cpp">
+      <Filter>i3RscGenSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="i3RSCGenSrc\RSCNode.cpp">
+      <Filter>i3RscGenSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="i3RSCGenSrc\RSGFile.cpp">
+      <Filter>i3RscGenSrc</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecuteSVN.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="ExecuteTSVN.cpp">
+      <Filter>Util</Filter>
+    </ClCompile>
+    <ClCompile Include="FindPefDiff.cpp">
+      <Filter>Pef Diff</Filter>
+    </ClCompile>
+    <ClCompile Include="LocaleStringDiff.cpp">
+      <Filter>Locale String Diff</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_MD5FrameWnd.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_MD5ModifiedView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_MD5Thread.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_NoFileView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_OnlyFilesView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_ProgressBarView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_ProgressMD5View.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_PSListView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_PSTreeView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_ResultView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_RSCListView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheckView.cpp">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClCompile>
+    <ClCompile Include="FileCheck_PackScriptMgr.cpp">
+      <Filter>Data FileCheck</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="ExceptionDlg.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecutePackFrameWnd.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="LocaleStringDiffView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="LocaleStringFrameWnd.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackDiffView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackQueue.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptFileExplorerListView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptFileExplorerTreeView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptFileFrameWnd.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptFileTaskPane.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptForceCopyToQAPane.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptLeftView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptRealFileListPane.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptRightView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PathDlg.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PathView.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PefDiffFrameWnd.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PefTxtDiffDlg.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PefTxtDiffInputInfo.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessItemDlg.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>MFC Packscript Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCButton.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCDialog.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCFolderDialog.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCListCtrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCListCtrl_Custom.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCPaneSplitter.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCTabViewCtrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCThread.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCTreeCtrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCVSListBox.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3MFCWorkAround.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3shelllistctrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3shellmanager.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="i3shelltreectrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="IconInfo.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="pidl_util.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="ShellChangeWatcher.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="TextProgressCtrl.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="WndProcThunk.h">
+      <Filter>CustomMFC</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadPackScriptTree.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackMode.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackPath.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptContents.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptFileMapElement.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptMgr.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PackScriptTree.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMgr.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PathMode.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessMessageCallback.h">
+      <Filter>Data Packscript</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="PreprocessMessageCallbackDerived.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="RscTool.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="RscToolDoc.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="RscToolView.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="View1.h">
+      <Filter>MFC Main</Filter>
+    </ClInclude>
+    <ClInclude Include="Category1stView.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="Category2ndView.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDetailFrame.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemDetailView.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemListView.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemView.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="PefItemPackScriptPane.h">
+      <Filter>MFC Item Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="AssocFile.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="eItemInfo.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="i3RscPartialFile.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemData.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemData_Derived.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemIDMgr.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemInfo.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemInfo_Derived.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="ItemInfoMgr.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="LoadRSCFile.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="RSCFileMgr.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SubItemInfo.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="SubItemInfo_Derived.h">
+      <Filter>Data Item</Filter>
+    </ClInclude>
+    <ClInclude Include="i3RSCGenSrc\RSCGenDefine.h">
+      <Filter>i3RscGenSrc</Filter>
+    </ClInclude>
+    <ClInclude Include="i3RSCGenSrc\RSCNode.h">
+      <Filter>i3RscGenSrc</Filter>
+    </ClInclude>
+    <ClInclude Include="i3RSCGenSrc\RSGFile.h">
+      <Filter>i3RscGenSrc</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteSVN.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="ExecuteTSVN.h">
+      <Filter>Util</Filter>
+    </ClInclude>
+    <ClInclude Include="FindPefDiff.h">
+      <Filter>Pef Diff</Filter>
+    </ClInclude>
+    <ClInclude Include="LocaleStringDiff.h">
+      <Filter>Locale String Diff</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_MD5FrameWnd.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_MD5ModifiedView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_MD5Thread.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_NoFileView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_OnlyFilesView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_ProgressBarView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_ProgressMD5View.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_PSListView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_PSTreeView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_ResultView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_RSCListView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheckView.h">
+      <Filter>MFC FileCheck Tab</Filter>
+    </ClInclude>
+    <ClInclude Include="DiffResult_PackScriptResult.h">
+      <Filter>Data FileCheck</Filter>
+    </ClInclude>
+    <ClInclude Include="FileCheck_PackScriptMgr.h">
+      <Filter>Data FileCheck</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\RscTool.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\RscToolDoc.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="UserImages.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RscTool.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\RscTool.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

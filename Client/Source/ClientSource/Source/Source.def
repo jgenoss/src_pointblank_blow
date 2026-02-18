@@ -1,0 +1,3 @@
+EXPORTS
+	i3CreateGameInterface
+	i3Geti3EngineVersion

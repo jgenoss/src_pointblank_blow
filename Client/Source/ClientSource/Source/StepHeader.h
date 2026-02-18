@@ -1,0 +1,6 @@
+#include "StepInventory.h"
+#include "StepShop.h"
+#include "StepClanMember.h"
+#include "StepClanNonMember.h"
+#include "StepProfile.h"
+#include "StepClanBattleLobby.h"

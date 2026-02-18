@@ -1,0 +1,12 @@
+#pragma once
+
+enum eItemInfo
+{
+	ITEMINFO_WEAPON,
+	ITEMINFO_EQUIPMENT,
+	ITEMINFO_CHARACTER,
+	ITEMINFO_WORLD,	
+
+	NUM_ITEMINFO,
+};
+

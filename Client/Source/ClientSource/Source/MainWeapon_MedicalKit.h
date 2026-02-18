@@ -1,0 +1,53 @@
+#pragma once
+
+
+#include "MainWeapon_Grenade.h"
+
+// 일단 급한대로 원래와 비슷하게 수류탄을 상속한다..
+
+// 나중에, 쓰로잉쪽으로 루틴을 좀더 옮기고, 수류탄대신 쓰로잉을 상속받게 조정해야한다.
+
+class MainWeapon_MedicalKit : public MainWeapon_Grenade
+{
+public:
+	MainWeapon_MedicalKit(WeaponBase* p); 
+	virtual void	OnInitVariable() override;
+	virtual void	OnCreate(bool bCreateInWeapon) override;
+	virtual void	Reset() override;
+
+
+	virtual void	CheckWorldCollision(REAL32 rDeltaSeconds) override;
+
+	virtual bool	isPlayRadioSound(void) override { return false; }
+	virtual bool	isUseTraceEffect(void) override { return false; }
+
+	virtual VEC3D * GetThrowInfo_Normal(void) override { return &m_vAttachNormal; }
+
+protected:
+	virtual void	_PlayBoundSound(I3_TERRAIN_TYPE nTerrainType = (I3_TERRAIN_TYPE)0) override;
+
+protected:
+	virtual void	UpdateFlying( REAL32 rDeltaSeconds, REAL32 rExplosionRange) override;
+	virtual void	UpdateNetworkData(REAL32 rDeltatime) override;
+
+protected:
+	virtual void	OnUpdate_Grenade(REAL32 rDeltaSeconds) override;
+
+	void			_TakeObject( I3_PHYSIX_HIT_RESULT * pResult );
+	void			_TakeObject( i3Object * pObject);
+	virtual void	Explosion( void ) override;
+
+	bool RecoveryHP (CGameCharaBase * pChara);
+
+protected:
+	VEC3D			m_vAttachNormal;		// 벽에 붙는 노멀
+
+	MATRIX			m_AttachLocalMatrix;
+	REAL32			m_rRotateY;
+	REAL32			m_rThrowLen;			// 거리에 따른 벽에 붙는 기능 제어
+	REAL32			m_rElapsedPickTime;		// 아이템 투척 후 획득 가능 딜레이
+
+	bool			m_bFirstBound;
+	bool			m_bCalcEllipsedTime;
+};
+

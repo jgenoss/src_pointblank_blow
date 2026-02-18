@@ -1,0 +1,97 @@
+#include "pch.h"
+#include "CommonDef_MultiSlot.h"
+
+void COMMON_PARTS_INFO::Reset( void)
+{
+	i3mem::FillZero( m_Info, sizeof(ITEM_INFO) * CHAR_EQUIPMENT_COMMON_COUNT );
+
+	m_Info[CHAR_EQUIPMENT_COMMON_DINO].m_TItemID		= DEFAULT_DINO;
+}
+
+void CHARA_PARTS_INFO::Reset( void)
+{
+	i3mem::FillZero( m_Info, sizeof(ITEM_INFO) * CHAR_EQUIPMENT_PARTS_COUNT );
+
+	m_Info[CHAR_EQUIPMENT_PARTS_HEAD].m_TItemID		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_HEADGEAR);
+	m_Info[CHAR_EQUIPMENT_PARTS_FACE].m_TItemID		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_FACEGEAR);
+	m_Info[CHAR_EQUIPMENT_PARTS_UPPER].m_TItemID	= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_UPPER);;
+	m_Info[CHAR_EQUIPMENT_PARTS_LOWER].m_TItemID	= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_LOWER);
+	m_Info[CHAR_EQUIPMENT_PARTS_GLOVE].m_TItemID	= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_GLOVE);
+	m_Info[CHAR_EQUIPMENT_PARTS_BELT].m_TItemID		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_BELT);
+	m_Info[CHAR_EQUIPMENT_PARTS_HOLSTER].m_TItemID	= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_HOLSTER);
+	m_Info[CHAR_EQUIPMENT_PARTS_SKIN].m_TItemID		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_SKIN);
+}
+
+T_ItemID CHARA_PARTS_INFO::GetPartsItemID(CHAR_EQUIPMENT_PARTS eParts) const
+{
+	I3ASSERT_RETURN( eParts >= 0 && eParts < CHAR_EQUIPMENT_PARTS_COUNT, 0);
+
+	if( m_Info[ eParts ].m_TItemID > DEFAULT_PARTS_ITEM_ID_MIN && m_Info[ CHAR_EQUIPMENT_PARTS_CHARA ].m_TItemID > 0 )
+	{
+		const CCharaInfo * pCharaDBInfo = g_pCharaInfoDataBase->GetCharaDBInfo( m_Info[ CHAR_EQUIPMENT_PARTS_CHARA ].m_TItemID);
+		if( pCharaDBInfo != nullptr)
+			return pCharaDBInfo->GetPartsItemID(EQUIP::CommonParts2eParts(eParts) );
+	}
+
+	return m_Info[eParts].m_TItemID;
+}
+
+void CHARA_PARTS_INFO::SetItemID(T_ItemID itemID)
+{
+	INT32 i32ItemType = GET_ITEM_TYPE( itemID);
+
+	switch( i32ItemType )
+	{
+	case ITEM_TYPE_BERET :	
+		{
+			if( g_pEnvSet->IsV2Version() )
+				SetPartsItemID( CHAR_EQUIPMENT_PARTS_HEAD, itemID);	
+			else
+				SetPartsItemID( CHAR_EQUIPMENT_PARTS_BERET, itemID);				
+		}
+		break;
+	case ITEM_TYPE_DINO : 
+		{
+			SetPartsItemID( CHAR_EQUIPMENT_PARTS_CHARA, itemID);	
+		}
+		break;
+	default :	
+		{
+			if( i32ItemType < ITEM_TYPE_CHARA || i32ItemType > ITEM_TYPE_SKIN) 
+			{
+				I3PRINTLOG(I3LOG_FATAL,  "SetItemID invalid type!!! %d", GET_ITEM_TYPE( itemID));	
+				return;
+			}
+			SetPartsItemID( CHAR_EQUIPMENT_PARTS( i32ItemType - ITEM_TYPE_CHARA ), itemID);	
+		}
+		break;
+	}
+}
+
+void CHARA_PARTS_INFO_OTHER::Reset( T_ItemID ui32ItemID)
+{
+	i3mem::FillZero( m_Info, sizeof(T_ItemID) * CHAR_EQUIPMENT_PARTS_COUNT );
+
+	m_Info[CHAR_EQUIPMENT_PARTS_HEAD]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_HEADGEAR);
+	m_Info[CHAR_EQUIPMENT_PARTS_FACE]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_FACEGEAR);
+	m_Info[CHAR_EQUIPMENT_PARTS_UPPER]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_UPPER);;
+	m_Info[CHAR_EQUIPMENT_PARTS_LOWER]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_LOWER);
+	m_Info[CHAR_EQUIPMENT_PARTS_GLOVE]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_GLOVE);
+	m_Info[CHAR_EQUIPMENT_PARTS_BELT]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_BELT);
+	m_Info[CHAR_EQUIPMENT_PARTS_HOLSTER]	= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_HOLSTER);
+	m_Info[CHAR_EQUIPMENT_PARTS_SKIN]		= (T_ItemID)MAKE_DEFAULT_PARTS_ITEMID(ITEM_TYPE_SKIN);
+}
+
+T_ItemID CHARA_PARTS_INFO_OTHER::GetPartsItemID(CHAR_EQUIPMENT_PARTS eParts) const
+{
+	I3ASSERT( eParts < CHAR_EQUIPMENT_PARTS_COUNT);
+
+	if( m_Info[ eParts ] > DEFAULT_PARTS_ITEM_ID_MIN && m_Info[ CHAR_EQUIPMENT_PARTS_CHARA ] > 0 )
+	{
+		const CCharaInfo * pCharaDBInfo = g_pCharaInfoDataBase->GetCharaDBInfo( m_Info[ CHAR_EQUIPMENT_PARTS_CHARA ] );
+		if( pCharaDBInfo != nullptr)
+			return pCharaDBInfo->GetPartsItemID(EQUIP::CommonParts2eParts(eParts) );
+	}
+
+	return m_Info[ eParts ];
+}

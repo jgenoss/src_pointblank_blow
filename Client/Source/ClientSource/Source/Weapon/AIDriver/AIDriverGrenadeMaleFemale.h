@@ -1,0 +1,24 @@
+#if !defined( __GrenadeMaleFemale_AIDRIVER_H)
+#define __GrenadeMaleFemale_AIDRIVER_H
+
+#include "i3Framework.h"
+
+#define AI_GRENADEMALEFEMALE_FIRE_FEMALE	0x00000000
+#define AI_GRENADEMALEFEMALE_FIRE_MALE	0x00000001
+#define AI_GRENADEMALEFEMALE_IDLE_FEMALE	0x00000002
+#define AI_GRENADEMALEFEMALE_IDLE_MALE	0x00000003
+#define AI_GRENADEMALEFEMALE_LOADBULLET_FEMALE	0x00000004
+#define AI_GRENADEMALEFEMALE_LOADBULLET_MALE	0x00000005
+#define AI_GRENADEMALEFEMALE_LOADMAG_FEMALE	0x00000006
+#define AI_GRENADEMALEFEMALE_LOADMAG_MALE	0x00000007
+
+class AIDriverGrenadeMaleFemale : public i3AIDriver
+{
+	I3_CLASS_DEFINE( AIDriverGrenadeMaleFemale, i3AIDriver);
+protected:
+public:
+	AIDriverGrenadeMaleFemale(void);
+	virtual ~AIDriverGrenadeMaleFemale(void);
+};
+
+#endif

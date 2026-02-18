@@ -1,0 +1,128 @@
+#if !defined( __GAME_CHARA_ACTION_CONTROL_DEF_H__ )
+#define __GAME_CHARA_ACTION_CONTROL_DEF_H__
+
+#include "GameCharaDef.h"
+#include "GameCharaEquipDef.h"
+
+enum ACTION_COMMAND
+{
+	ACTION_CMD_RESET = 1,
+	// Body
+	ACTION_CMD_CROUCH,
+	ACTION_CMD_STAND,
+	ACTION_CMD_BODYTOGGLE,
+
+	// Body2
+	ACTION_CMD_ZOOM,
+	ACTION_CMD_ZOOMCANCLE,
+
+	// all
+	ACTION_CMD_RUN_BOTH,
+	ACTION_CMD_WALK_BOTH,
+	ACTION_CMD_STEADY_BOTH,
+	ACTION_CMD_JUMP_START,
+	ACTION_CMD_DEATH,
+	ACTION_CMD_PROFILE_IDLE_A,
+	ACTION_CMD_PROFILE_IDLE_B,
+	ACTION_CMD_IDLE1,
+	ACTION_CMD_IDLE2,
+
+	ACTION_CMD_PROFILE_CEREMONY,
+
+	// lower
+	ACTION_CMD_RUNLOWER,
+	ACTION_CMD_WALKLOWER,
+	ACTION_CMD_STEADYLOWER,
+	ACTION_CMD_JUMPLOWER_FINISH,
+	ACTION_CMD_RETURNLOWER,
+
+	// upper	
+	ACTION_CMD_RUNUPPER,
+	ACTION_CMD_STEADYUPPER,
+	ACTION_CMD_JUMPUPPER_FINISH,
+	ACTION_CMD_ATTACK,
+	ACTION_CMD_SECATTACK,
+	ACTION_CMD_ATTACKREADY,
+	ACTION_CMD_LOADMAG,
+	ACTION_CMD_B_LOADMAG,
+	ACTION_CMD_LOADMAG_DUAL,
+	ACTION_CMD_LOADBULLET,
+	ACTION_CMD_REMOVESHELL,
+	ACTION_CMD_DISCHARGEBULLET,
+	ACTION_CMD_SWAPWEAPON,
+	ACTION_CMD_EXTACTIVATE,
+	ACTION_CMD_EXTDEACTIVATE,
+	ACTION_CMD_DAMAGE,
+	ACTION_CMD_FALL_DAMAGE,
+	ACTION_CMD_RETURNUPPER,			// 
+	ACTION_CMD_LOADMAG_MASTER,
+	ACTION_CMD_LOADMAG_READY,
+
+	// KERWORD : WEAPON_DUAL
+	ACTION_CMD_RETURNUPPER_DUAL_LEFT,
+	ACTION_CMD_RUNUPPER_DUAL_LEFT,
+
+	ACTION_CMD_RETURNUPPER_DUAL_RIGHT,
+	ACTION_CMD_RUNUPPER_DUAL_RIGHT,
+};
+
+struct ActionParameter
+{
+	INT32				_idx;
+	BOOL				_bool;
+	
+	CHARA_HIT_PART		_part;
+	CHARA_DEATH_TYPE	_deathType;
+	WEAPON::FIRE_ORDER	_fireOrder;
+
+	i3Node *			_node;
+	i3GameNode *		_gameNode;
+	WeaponBase *		_weapon;
+	CHARA_DAMAGEINFO *	_damageInfo;
+	INT32				_WeaponSlot;
+
+	VEC3D				_dir;
+	VEC3D				_pos;
+
+	ActionParameter() : _idx(-1), _bool(FALSE), _part(CHARA_HIT_UNKNOWN), 
+		_deathType(CHARA_DEATH_UN), _fireOrder(WEAPON::PRIMARY_FIRE),
+		_node(NULL), _gameNode(NULL), _weapon(NULL), _damageInfo(NULL), _WeaponSlot(0)							
+	{
+		i3Vector::Zero(&_dir);
+		i3Vector::Zero(&_pos);
+	}
+
+	void Clear(void)
+	{
+		_idx = -1;
+		_bool = FALSE;
+
+		_part = CHARA_HIT_UNKNOWN;
+		_deathType = CHARA_DEATH_UN;
+		_fireOrder = WEAPON::PRIMARY_FIRE;
+
+		_node = NULL;
+		_gameNode = NULL;
+		_weapon = NULL;
+		_damageInfo = NULL;
+		_WeaponSlot = 0;
+
+		i3Vector::Zero(&_dir);
+		i3Vector::Zero(&_pos);
+	}
+
+	void	SetDeathParam( INT32 killerIdx, CHARA_DEATH_TYPE deathType, VEC3D * pDir)
+	{
+		_idx		= killerIdx;
+		_deathType	= deathType;
+		i3Vector::Copy( &_dir, pDir);
+	}
+
+	void	SetDamageParam( CHARA_HIT_PART part, VEC3D * pDir)
+	{
+		_part	= part;
+		i3Vector::Copy( &_dir, pDir);
+	}
+};
+
+#endif // __GAME_CHARA_ACTION_CONTROL_DEF_H__

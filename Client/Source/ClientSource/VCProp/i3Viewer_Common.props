@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Label="PropertySheets" />
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup />
+  <ItemDefinitionGroup>
+    <ClCompile>
+      <AdditionalIncludeDirectories>../../../i3/include;../../../i3/include/i3Base;../../../i3/i3TDK;../../../i3/PhysX/SDKs/Physics/include;../../../i3/PhysX/SDKs/PhysXLoader/include;../../../i3/PhysX/SDKs/Foundation/include;../../../i3/PhysX/SDKs/Framework/include;../../../i3/PhysX/SDKs/Cooking/include;../../../i3/PhysX/SDKs/NxCharacter/include;../../../i3/FMOD/fmoddesignerapi/api\inc;../../../i3/FMOD/api/inc;../../../i3/PhysX/Tools/NxuStream2;../Source;../Source/Weapon;../Source/Weapon/WeaponInfo;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;I3_WINDOWS;I3G_DX;I3_COMPILER_VC;I3_DLL;BUG_TRAP;__UNICODE_STRING__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(OutDir);..\..\..\i3\FMOD\api\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>FileSyncBase.lib;FileList.lib;$(Configuration).lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>$(OutDir)i3Viewer.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>$(TargetDir)/i3Viewer.MAP</MapFileName>
+      <MapExports>true</MapExports>
+      <SubSystem>Windows</SubSystem>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+      <LargeAddressAware>true</LargeAddressAware>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup />
+</Project>

@@ -1,0 +1,409 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CA7C892B-FCD6-4C87-BD16-795AAB272E8B}</ProjectGuid>
+    <RootNamespace>RscTool</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath);../../../i3/DirectX9/Include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath);../../../i3/DirectX9/Include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath);../../../i3/DirectX9/Include;</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>../../../i3/include;../../../i3/PhysX/SDKs/Physics/include;../../../i3/PhysX/SDKs/Foundation/include;../../../i3/PhysX/SDKs/PhysXLoader/include;../../../i3/PhysX/SDKs/NxCharacter/include;../../../i3/FMOD/api/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;_AFXDLL;_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>mfc140ud.lib;i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;Crypto.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../i3/lib/DirectX/DebugDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>../../../i3/include;../../../i3/PhysX/SDKs/Physics/include;../../../i3/PhysX/SDKs/Foundation/include;../../../i3/PhysX/SDKs/PhysXLoader/include;../../../i3/PhysX/SDKs/NxCharacter/include;../../../i3/FMOD/api/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DLL;_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;Crypto.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../i3/lib/DirectX/ReleaseDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>../../../i3/include;../../../i3/PhysX/SDKs/Physics/include;../../../i3/PhysX/SDKs/Foundation/include;../../../i3/PhysX/SDKs/PhysXLoader/include;../../../i3/PhysX/SDKs/NxCharacter/include;../../../i3/FMOD/api/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DLL;I3_DEBUG;_SILENCE_STDEXT_HASH_DEPRECATION_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;Crypto.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../i3/lib/DirectX/DistributeDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "..\..\..\i3\bin\$(TargetFileName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="AssocFile.cpp" />
+    <ClCompile Include="Category1stView.cpp" />
+    <ClCompile Include="Category2ndView.cpp" />
+    <ClCompile Include="ExceptionDlg.cpp" />
+    <ClCompile Include="ExecutePackFrameWnd.cpp" />
+    <ClCompile Include="ExecuteSVN.cpp" />
+    <ClCompile Include="ExecuteTSVN.cpp" />
+    <ClCompile Include="FileCheckView.cpp" />
+    <ClCompile Include="FileCheck_MD5FrameWnd.cpp" />
+    <ClCompile Include="FileCheck_MD5ModifiedView.cpp" />
+    <ClCompile Include="FileCheck_MD5Thread.cpp" />
+    <ClCompile Include="FileCheck_NoFileView.cpp" />
+    <ClCompile Include="FileCheck_OnlyFilesView.cpp" />
+    <ClCompile Include="FileCheck_PackScriptMgr.cpp" />
+    <ClCompile Include="FileCheck_ProgressBarView.cpp" />
+    <ClCompile Include="FileCheck_ProgressMD5View.cpp" />
+    <ClCompile Include="FileCheck_PSListView.cpp" />
+    <ClCompile Include="FileCheck_PSTreeView.cpp" />
+    <ClCompile Include="FileCheck_ResultView.cpp" />
+    <ClCompile Include="FileCheck_RSCListView.cpp" />
+    <ClCompile Include="FindPefDiff.cpp" />
+    <ClCompile Include="i3MFCButton.cpp" />
+    <ClCompile Include="i3MFCDialog.cpp" />
+    <ClCompile Include="i3MFCFolderDialog.cpp" />
+    <ClCompile Include="i3MFCListCtrl.cpp" />
+    <ClCompile Include="i3MFCListCtrl_Custom.cpp" />
+    <ClCompile Include="i3MFCPaneSplitter.cpp" />
+    <ClCompile Include="i3MFCTabViewCtrl.cpp" />
+    <ClCompile Include="i3MFCThread.cpp" />
+    <ClCompile Include="i3MFCTreeCtrl.cpp" />
+    <ClCompile Include="i3MFCVSListBox.cpp" />
+    <ClCompile Include="i3MFCWorkAround.cpp" />
+    <ClCompile Include="i3RSCGenSrc\RSCGenDefine.cpp" />
+    <ClCompile Include="i3RSCGenSrc\RSCNode.cpp" />
+    <ClCompile Include="i3RSCGenSrc\RSGFile.cpp" />
+    <ClCompile Include="i3RscPartialFile.cpp" />
+    <ClCompile Include="i3shelllistctrl.cpp" />
+    <ClCompile Include="i3shellmanager.cpp" />
+    <ClCompile Include="i3shelltreectrl.cpp" />
+    <ClCompile Include="IconInfo.cpp" />
+    <ClCompile Include="ItemData.cpp" />
+    <ClCompile Include="ItemData_Derived.cpp" />
+    <ClCompile Include="ItemDetailFrame.cpp" />
+    <ClCompile Include="ItemDetailView.cpp" />
+    <ClCompile Include="ItemIDMgr.cpp" />
+    <ClCompile Include="ItemInfo.cpp" />
+    <ClCompile Include="ItemInfoMgr.cpp" />
+    <ClCompile Include="ItemInfo_Derived.cpp" />
+    <ClCompile Include="ItemListView.cpp" />
+    <ClCompile Include="ItemView.cpp" />
+    <ClCompile Include="LoadPackScriptTree.cpp" />
+    <ClCompile Include="LoadRSCFile.cpp" />
+    <ClCompile Include="LocaleStringDiff.cpp" />
+    <ClCompile Include="LocaleStringDiffView.cpp" />
+    <ClCompile Include="LocaleStringFrameWnd.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="PackDiffView.cpp" />
+    <ClCompile Include="PackPath.cpp" />
+    <ClCompile Include="PackQueue.cpp" />
+    <ClCompile Include="PackScriptContents.cpp" />
+    <ClCompile Include="PackScriptFileExplorerListView.cpp" />
+    <ClCompile Include="PackScriptFileExplorerTreeView.cpp" />
+    <ClCompile Include="PackScriptFileFrameWnd.cpp" />
+    <ClCompile Include="PackScriptFileTaskPane.cpp" />
+    <ClCompile Include="PackScriptForceCopyToQAPane.cpp" />
+    <ClCompile Include="PackScriptLeftView.cpp" />
+    <ClCompile Include="PackScriptMgr.cpp" />
+    <ClCompile Include="PackScriptRealFileListPane.cpp" />
+    <ClCompile Include="PackScriptRightView.cpp" />
+    <ClCompile Include="PackScriptTree.cpp" />
+    <ClCompile Include="PackScriptView.cpp" />
+    <ClCompile Include="PathDlg.cpp" />
+    <ClCompile Include="PathMgr.cpp" />
+    <ClCompile Include="PathView.cpp" />
+    <ClCompile Include="PefDiffFrameWnd.cpp" />
+    <ClCompile Include="PefItemPackScriptPane.cpp" />
+    <ClCompile Include="PefTxtDiffDlg.cpp" />
+    <ClCompile Include="pidl_util.cpp" />
+    <ClCompile Include="PreprocessItemDlg.cpp" />
+    <ClCompile Include="PreprocessMessageCallbackDerived.cpp" />
+    <ClCompile Include="RSCFileMgr.cpp" />
+    <ClCompile Include="RscTool.cpp" />
+    <ClCompile Include="RscToolDoc.cpp" />
+    <ClCompile Include="RscToolView.cpp" />
+    <ClCompile Include="ShellChangeWatcher.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SubItemInfo.cpp" />
+    <ClCompile Include="SubItemInfo_Derived.cpp" />
+    <ClCompile Include="TextProgressCtrl.cpp" />
+    <ClCompile Include="View1.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AssocFile.h" />
+    <ClInclude Include="Category1stView.h" />
+    <ClInclude Include="Category2ndView.h" />
+    <ClInclude Include="DiffResult_PackScriptResult.h" />
+    <ClInclude Include="eItemInfo.h" />
+    <ClInclude Include="ExceptionDlg.h" />
+    <ClInclude Include="ExecutePackFrameWnd.h" />
+    <ClInclude Include="ExecuteSVN.h" />
+    <ClInclude Include="ExecuteTSVN.h" />
+    <ClInclude Include="FileCheckView.h" />
+    <ClInclude Include="FileCheck_MD5FrameWnd.h" />
+    <ClInclude Include="FileCheck_MD5ModifiedView.h" />
+    <ClInclude Include="FileCheck_MD5Thread.h" />
+    <ClInclude Include="FileCheck_NoFileView.h" />
+    <ClInclude Include="FileCheck_OnlyFilesView.h" />
+    <ClInclude Include="FileCheck_PackScriptMgr.h" />
+    <ClInclude Include="FileCheck_ProgressBarView.h" />
+    <ClInclude Include="FileCheck_ProgressMD5View.h" />
+    <ClInclude Include="FileCheck_PSListView.h" />
+    <ClInclude Include="FileCheck_PSTreeView.h" />
+    <ClInclude Include="FileCheck_ResultView.h" />
+    <ClInclude Include="FileCheck_RSCListView.h" />
+    <ClInclude Include="FindPefDiff.h" />
+    <ClInclude Include="i3MFCButton.h" />
+    <ClInclude Include="i3MFCDialog.h" />
+    <ClInclude Include="i3MFCFolderDialog.h" />
+    <ClInclude Include="i3MFCListCtrl.h" />
+    <ClInclude Include="i3MFCListCtrl_Custom.h" />
+    <ClInclude Include="i3MFCPaneSplitter.h" />
+    <ClInclude Include="i3MFCTabViewCtrl.h" />
+    <ClInclude Include="i3MFCThread.h" />
+    <ClInclude Include="i3MFCTreeCtrl.h" />
+    <ClInclude Include="i3MFCVSListBox.h" />
+    <ClInclude Include="i3MFCWorkAround.h" />
+    <ClInclude Include="i3RSCGenSrc\RSCGenDefine.h" />
+    <ClInclude Include="i3RSCGenSrc\RSCNode.h" />
+    <ClInclude Include="i3RSCGenSrc\RSGFile.h" />
+    <ClInclude Include="i3RscPartialFile.h" />
+    <ClInclude Include="i3shelllistctrl.h" />
+    <ClInclude Include="i3shellmanager.h" />
+    <ClInclude Include="i3shelltreectrl.h" />
+    <ClInclude Include="IconInfo.h" />
+    <ClInclude Include="ItemData.h" />
+    <ClInclude Include="ItemData_Derived.h" />
+    <ClInclude Include="ItemDetailFrame.h" />
+    <ClInclude Include="ItemDetailView.h" />
+    <ClInclude Include="ItemIDMgr.h" />
+    <ClInclude Include="ItemInfo.h" />
+    <ClInclude Include="ItemInfoMgr.h" />
+    <ClInclude Include="ItemInfo_Derived.h" />
+    <ClInclude Include="ItemListView.h" />
+    <ClInclude Include="ItemView.h" />
+    <ClInclude Include="LoadPackScriptTree.h" />
+    <ClInclude Include="LoadRSCFile.h" />
+    <ClInclude Include="LocaleStringDiff.h" />
+    <ClInclude Include="LocaleStringDiffView.h" />
+    <ClInclude Include="LocaleStringFrameWnd.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="PackDiffView.h" />
+    <ClInclude Include="PackMode.h" />
+    <ClInclude Include="PackPath.h" />
+    <ClInclude Include="PackQueue.h" />
+    <ClInclude Include="PackScriptContents.h" />
+    <ClInclude Include="PackScriptFileExplorerListView.h" />
+    <ClInclude Include="PackScriptFileExplorerTreeView.h" />
+    <ClInclude Include="PackScriptFileFrameWnd.h" />
+    <ClInclude Include="PackScriptFileMapElement.h" />
+    <ClInclude Include="PackScriptFileTaskPane.h" />
+    <ClInclude Include="PackScriptForceCopyToQAPane.h" />
+    <ClInclude Include="PackScriptLeftView.h" />
+    <ClInclude Include="PackScriptMgr.h" />
+    <ClInclude Include="PackScriptRealFileListPane.h" />
+    <ClInclude Include="PackScriptRightView.h" />
+    <ClInclude Include="PackScriptTree.h" />
+    <ClInclude Include="PackScriptView.h" />
+    <ClInclude Include="PathDlg.h" />
+    <ClInclude Include="PathMgr.h" />
+    <ClInclude Include="PathMode.h" />
+    <ClInclude Include="PathView.h" />
+    <ClInclude Include="PefDiffFrameWnd.h" />
+    <ClInclude Include="PefItemPackScriptPane.h" />
+    <ClInclude Include="PefTxtDiffDlg.h" />
+    <ClInclude Include="PefTxtDiffInputInfo.h" />
+    <ClInclude Include="pidl_util.h" />
+    <ClInclude Include="PreprocessItemDlg.h" />
+    <ClInclude Include="PreprocessMessageCallback.h" />
+    <ClInclude Include="PreprocessMessageCallbackDerived.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="RSCFileMgr.h" />
+    <ClInclude Include="RscTool.h" />
+    <ClInclude Include="RscToolDoc.h" />
+    <ClInclude Include="RscToolView.h" />
+    <ClInclude Include="ShellChangeWatcher.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="SubItemInfo.h" />
+    <ClInclude Include="SubItemInfo_Derived.h" />
+    <ClInclude Include="targetver.h" />
+    <ClInclude Include="TextProgressCtrl.h" />
+    <ClInclude Include="View1.h" />
+    <ClInclude Include="WndProcThunk.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\RscTool.ico" />
+    <Image Include="res\RscToolDoc.ico" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\Toolbar256.bmp" />
+    <Image Include="UserImages.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="RscTool.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
+    <None Include="res\RscTool.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="RscTool.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

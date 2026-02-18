@@ -1,0 +1,61 @@
+﻿#ifndef __ARTPERROR_H__
+#define __ARTPERROR_H__
+
+// It's ok
+#define ARTPRET_OK							0
+
+// About Packet
+#define ARTPRET_PKT_NODATA					-1		// packet struct has no data.
+#define ARTPRET_INVALID_PACKET				-2		// invalid(unexpected) packet
+#define ARTPRET_INVALID_SESSIONKEY			-3		// can not disassembly sessionkey
+
+#define ARTPRET_SKT_CONNFAIL				-100
+#define ARTPRET_SKT_SENDFAIL				-101
+#define ARTPRET_SKT_RECVFAIL				-102
+#define ARTPRET_SKT_NODATATOSEND			-103
+#define ARTPRET_SKT_UNKNOWN					-199
+
+inline bool isSocketError( int errCode_ )
+{
+	return (errCode_ <= ARTPRET_SKT_CONNFAIL && errCode_ >= ARTPRET_SKT_UNKNOWN);
+}
+
+/*
+* not used
+*/
+#define ARTPRET_NOCALLBACK					-50
+#define ARTPRET_BUFFEROVERFLOW				-51
+
+#define ARTPRET_GAME_STARTINGFAIL			-200
+#define ARTPERT_GAME_INVALIDMAINWND			-201
+#define ARTPRET_GAME_CREATEPROCESSFAILED	-202
+#define ARTPRET_GAME_NOGAMEPROCESSFOUND		-203
+#define ARTPRET_GAME_NOGAMEWNDFOUND			-204
+#define ARTPRET_GAME_NOTENOUGHTPARAMETER	-205
+#define ARTPRET_GAME_NOTNETCAFEUSER			-206
+
+// DB ERROR
+#define ARTPRET_DB_ERROR					-300
+#define ARTPRET_DB_QUERYFAIL				-301
+#define ARTPRET_DB_FULL						-302
+
+// V3.0 -- from 2010.4.20
+#define ARTPRET_V3_IPCHECK_OK					0
+#define ARTPRET_V3_IPCHECK_IP_OK				1
+#define ARTPRET_V3_IPCHECK_IPBOUND_OK			2
+#define ARTPRET_V3_IPCHECK_UNKNOWNIP			-20001
+#define ARTPRET_V3_IPCHECK_NOTALLOWEDCOUNTRY	-20002
+
+// 함수 내부에서 에러 났을 경우 에러의 값
+// (ARTPRET_FNERR-1)..(ARTPRET_FNERR-2).. 와 같은 형식으로 사용
+#define ARTPRET_FNERR_WRONGPARAM			-1004
+#define ARTPRET_FNERR						-1005
+#define ARTPRET_FNERR_LAUNCH2_AUTH   		-1006
+#define ARTPRET_FNERR_LAUNCH2_SESSKEY		-1007
+
+#define ARTPRET_FNERR_BEFOREAUTHFUNC_FAIL	-2000
+
+// HIS 
+#define ARTPRET_HIS_ERROR_NOTMOVEDUSER		-10001
+
+#endif // __ARTPERROR_H__
