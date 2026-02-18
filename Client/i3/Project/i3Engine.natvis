@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<AutoVisualizer xmlns="http://schemas.microsoft.com/vstudio/debugger/natvis/2010">
+  <Type Name="i3::vector&lt;*&gt;">
+    <AlternativeType Name="i3::unordered_vector&lt;*&gt;" />
+    <AlternativeType Name="i3::svector&lt;*&gt;" />
+    <DisplayString>{{ size = { m_last - m_first } }}</DisplayString>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_last - m_first</Item>
+      <Item Name="[capacity]" ExcludeView="simple" Optional="true">m_end - m_first</Item>
+      <ArrayItems>
+        <Size>m_last - m_first</Size>
+        <ValuePointer>m_first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::vector_map&lt;*&gt;">
+    <AlternativeType Name="i3::vector_multimap&lt;*&gt;" />
+    <AlternativeType Name="i3::vector_set&lt;*&gt;"></AlternativeType>
+    <AlternativeType Name="i3::vector_multiset&lt;*&gt;" />
+    <DisplayString>{{ size = { m_vector.m_last - m_vector.m_first } }}</DisplayString>
+    <Expand>
+      <Item Name="[capacity]" ExcludeView="simple">m_vector.m_end - m_vector.m_first</Item>
+      <ArrayItems>
+        <Size>m_vector.m_last - m_vector.m_first</Size>
+        <ValuePointer>m_vector.m_first</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::basic_string&lt;char,*&gt;">
+    <AlternativeType Name="i3::stack_basic_string&lt;*,char,*&gt;" />
+    <DisplayString>{ m_ptr,na }</DisplayString>
+    <StringView>m_ptr,na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_size</Item>
+      <Item Name="[capacity]" ExcludeView="simple">m_reserve</Item>
+      <Item Name="[static array size]" ExcludeView="simple" Optional="true">(size_t)this-&gt;BUF_SIZE</Item>
+      <Synthetic Name="[alloc status]" Optional="true" ExcludeView="simple">
+        <DisplayString Condition="m_sso != m_ptr">using dynamic allocator</DisplayString>
+        <DisplayString Condition="m_sso == m_ptr">using static array</DisplayString>
+      </Synthetic>
+      <ArrayItems>
+        <Size>m_size</Size>
+        <ValuePointer>m_ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::basic_string&lt;wchar_t,*&gt;">
+    <AlternativeType Name="i3::basic_string&lt;unsigned short,*&gt;" />
+    <AlternativeType Name="i3::stack_basic_string&lt;*,wchar_t,*&gt;"></AlternativeType>
+    <AlternativeType Name="i3::stack_basic_string&lt;*,unsigned short,*&gt;" />
+    <DisplayString>{ m_ptr,su }</DisplayString>
+    <StringView>m_ptr,su</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_size</Item>
+      <Item Name="[capacity]" ExcludeView="simple">m_reserve</Item>
+      <Item Name="[static array size]" ExcludeView="simple" Optional="true">(size_t)this-&gt;BUF_SIZE</Item>
+      <Synthetic Name="[alloc status]" Optional="true" ExcludeView="simple">
+        <DisplayString Condition="m_sso != m_ptr">using dynamic allocator</DisplayString>
+        <DisplayString Condition="m_sso == m_ptr">using static array</DisplayString>
+      </Synthetic>
+      <ArrayItems>
+        <Size>m_size</Size>
+        <ValuePointer>m_ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::rc_basic_string&lt;char,*&gt;">
+    <DisplayString>{ m_storage-&gt;ptr,na }</DisplayString>
+    <StringView>m_storage-&gt;ptr,na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_storage-&gt;size</Item>
+      <Item Name="[reference count]" ExcludeView="simple">m_storage-&gt;refcount.i &amp; m_storage-&gt;REF_MASK</Item>
+      <Synthetic Name="[is fixed storage]" ExcludeView="simple">
+        <DisplayString Condition="( m_storage-&gt;refcount.i &amp; m_storage-&gt;FIXED_MASK ) != 0">true</DisplayString>
+        <DisplayString Condition="( m_storage-&gt;refcount.i &amp; m_storage-&gt;FIXED_MASK ) == 0">false</DisplayString>
+      </Synthetic>
+      <ArrayItems>
+        <Size>m_storage-&gt;size</Size>
+        <ValuePointer>m_storage-&gt;ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::rc_basic_string&lt;wchar_t,*&gt;">
+    <AlternativeType Name="i3::rc_basic_string&lt;unsigned short,*&gt;" />
+    <DisplayString>{ m_storage-&gt;ptr,su }</DisplayString>
+    <StringView>m_storage-&gt;ptr,su</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_storage-&gt;size</Item>
+      <Item Name="[reference count]" ExcludeView="simple">m_storage-&gt;refcount.i &amp; m_storage-&gt;REF_MASK</Item>
+      <Synthetic Name="[is fixed storage]" ExcludeView="simple">
+        <DisplayString Condition="( m_storage-&gt;refcount.i &amp; m_storage-&gt;FIXED_MASK ) != 0">true</DisplayString>
+        <DisplayString Condition="( m_storage-&gt;refcount.i &amp; m_storage-&gt;FIXED_MASK ) == 0">false</DisplayString>
+      </Synthetic>
+      <ArrayItems>
+        <Size>m_storage-&gt;size</Size>
+        <ValuePointer>m_storage-&gt;ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::fixed_basic_string&lt;char,*&gt;">
+    <DisplayString>{ m_dyn_string.m_storage-&gt;ptr,na }</DisplayString>
+    <StringView>m_dyn_string.m_storage-&gt;ptr,na</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_dyn_string.m_storage-&gt;size</Item>
+      <Item Name="[reference count]" ExcludeView="simple">m_dyn_string.m_storage-&gt;refcount.i &amp; m_dyn_string.m_storage-&gt;REF_MASK</Item>
+      <ArrayItems>
+        <Size>m_dyn_string.m_storage-&gt;size</Size>
+        <ValuePointer>m_dyn_string.m_storage-&gt;ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::fixed_basic_string&lt;wchar_t,*&gt;">
+    <AlternativeType Name="i3::fixed_basic_string&lt;unsigned short,*&gt;" />
+    <DisplayString>{ m_dyn_string.m_storage-&gt;ptr,su }</DisplayString>
+    <StringView>m_dyn_string.m_storage-&gt;ptr,su</StringView>
+    <Expand>
+      <Item Name="[size]" ExcludeView="simple">m_dyn_string.m_storage-&gt;size</Item>
+      <Item Name="[reference count]" ExcludeView="simple">m_dyn_string.m_storage-&gt;refcount.i &amp; m_dyn_string.m_storage-&gt;REF_MASK</Item>
+      <ArrayItems>
+        <Size>m_dyn_string.m_storage-&gt;size</Size>
+        <ValuePointer>m_dyn_string.m_storage-&gt;ptr</ValuePointer>
+      </ArrayItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::scoped_ptr&lt;*&gt;">
+    <AlternativeType Name="i3::pscoped_ptr&lt;*&gt;" />
+    <AlternativeType Name="i3::intrusive_ptr&lt;*&gt;" />
+    <DisplayString Condition="m_p == 0">empty</DisplayString>
+    <DisplayString Condition="m_p != 0">{*(($T1*)m_p)}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]" Condition="m_p != 0">m_p</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::null_object_intrusive_ptr&lt;*&gt;">
+    <DisplayString Condition="m_p == i3::null_ref_ptr&lt;$T1&gt;::ms_pnull_obj">empty</DisplayString>
+    <DisplayString Condition="m_p != i3::null_ref_ptr&lt;$T1&gt;::ms_pnull_obj">{*(($T1*)m_p)}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]" Condition="m_p != i3::null_ref_ptr&lt;$T1&gt;::ms_pnull_obj">($T1*)m_p</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::map&lt;*&gt;">
+    <AlternativeType Name="i3::multi_map&lt;*&gt;" />
+    <AlternativeType Name="i3::set&lt;*&gt;" />
+    <AlternativeType Name="i3::multi_set&lt;*&gt;" />
+    <DisplayString>{{ size={m_comp_and_size.m_second} }}</DisplayString>
+    <Expand>
+      <TreeItems>
+        <Size>m_comp_and_size.m_second</Size>
+        <HeadPointer>m_alloc_and_head.m_second-&gt;parent</HeadPointer>
+        <LeftPointer>left</LeftPointer>
+        <RightPointer>right</RightPointer>
+        <ValueNode Condition="is_nil == 0">val</ValueNode>
+      </TreeItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::rbtree_value&lt;*&gt;::iterator">
+    <AlternativeType Name="i3::rbtree_value&lt;*&gt;::const_iterator" />
+    <DisplayString Condition="m_node-&gt;is_nil == 0">{m_node-&gt;val}</DisplayString>
+    <DisplayString Condition="m_node-&gt;is_nil != 0">end</DisplayString>
+    <Expand>
+      <Item Name="[ptr]" Condition="m_node-&gt;is_nil == 0">&amp;m_node-&gt;val</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::list&lt;*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <Size>m_size</Size>
+        <HeadPointer>m_alloc_and_head.m_second-&gt;pNext</HeadPointer>
+        <NextPointer>pNext</NextPointer>
+        <ValueNode>Val</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::list&lt;*&gt;::iterator">
+    <AlternativeType Name="i3::list&lt;*&gt;::const_iterator" />
+    <DisplayString>{ptr-&gt;Val}</DisplayString>
+    <Expand>
+      <Item Name="[ptr]">&amp;ptr-&gt;Val</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::deque&lt;*&gt;">
+    <DisplayString>{{ size={m_size} }}</DisplayString>
+    <Expand>
+      <IndexListItems>
+        <Size>m_size</Size>
+        <ValueNode>m_map_alloc_and_map.m_second[(($i + m_offset) / deque_size) % m_map_size][($i + m_offset) % deque_size]</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::deque&lt;*&gt;::iterator">
+    <AlternativeType Name="i3::deque&lt;*&gt;::const_iterator" />
+    <DisplayString Condition="m_offset &lt; m_deque-&gt;m_offset + m_deque-&gt;m_size">{m_deque-&gt;m_map_alloc_and_map.m_second[( m_offset / m_deque-&gt;deque_size) % m_deque-&gt;m_map_size][m_offset % m_deque-&gt;deque_size]}</DisplayString>
+    <DisplayString Condition="m_offset &gt;= m_deque-&gt;m_offset + m_deque-&gt;m_size">end</DisplayString>
+    <Expand>
+      <Item Condition="m_offset &lt; m_deque-&gt;m_offset + m_deque-&gt;m_size" Name="[index]">m_offset - m_deque-&gt;m_offset</Item>
+      <Item Condition="m_offset &lt; m_deque-&gt;m_offset + m_deque-&gt;m_size" Name="[ptr]">&amp;m_deque-&gt;m_map_alloc_and_map.m_second[(m_offset / m_deque-&gt;deque_size) % m_deque-&gt;m_map_size][m_offset % m_deque-&gt;deque_size]</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::unordered_map&lt;*&gt;">
+    <AlternativeType Name="i3::unordered_multimap&lt;*&gt;" />
+    <AlternativeType Name="i3::unordered_set&lt;*&gt;" />
+    <AlternativeType Name="i3::unordered_multiset&lt;*&gt;" />
+    <DisplayString>{{ size={m_equal_function_and_num_size.m_second} bucket_size={m_hash_function_and_num_bucket.m_second} }}</DisplayString>
+    <Expand>
+      <Item Name="[bucket_size]" IncludeView="detailed">m_hash_function_and_num_bucket.m_second</Item>
+      <Item Name="[load_factor]" IncludeView="detailed">((float)m_equal_function_and_num_size.m_second) / ((float)m_hash_function_and_num_bucket.m_second)</Item>
+      <Item Name="[max_load_factor]" IncludeView="detailed">m_max_load_factor</Item>
+      <IndexListItems>
+        <Size>m_hash_function_and_num_bucket.m_second</Size>
+        <ValueNode Condition="m_node_alloc_and_buckets.m_second[$i].pHead != 0">*m_node_alloc_and_buckets.m_second[$i].pHead</ValueNode>
+        <ValueNode Condition="m_node_alloc_and_buckets.m_second[$i].pHead == 0">nullptr</ValueNode>
+      </IndexListItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::HashTableNode_Unique&lt;*&gt;::Node">
+    <AlternativeType Name="i3::HashTableNode_Multi&lt;*&gt;::Node" />
+    <DisplayString>{{ head={myValue} }}</DisplayString>
+    <Expand>
+      <LinkedListItems>
+        <HeadPointer>this</HeadPointer>
+        <NextPointer>pNext</NextPointer>
+        <ValueNode>myValue</ValueNode>
+      </LinkedListItems>
+    </Expand>
+  </Type>
+  <Type Name="i3::HashTableValue&lt;*&gt;::iterator">
+    <AlternativeType Name="i3::HashTableValue&lt;*&gt;::const_iterator" />
+    <DisplayString Condition="pNode != 0">{pNode-&gt;myValue}</DisplayString>
+    <DisplayString Condition="pNode == 0">invalid</DisplayString>
+    <Expand>
+      <Item Condition="pNode != 0" Name="[ptr]">&amp;pNode-&gt;myValue</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::shared_ptr&lt;*&gt;">
+    <DisplayString Condition="px == 0">empty</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 1) &amp;&amp; (pn.pi-&gt;m_weak_count == 1)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 1)   &amp;&amp; (pn.pi-&gt;m_weak_count == 2)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong ref, {pn.pi-&gt;m_weak_count - 1} weak ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 1)   &amp;&amp; (pn.pi-&gt;m_weak_count &gt; 2)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong ref, {pn.pi-&gt;m_weak_count - 1} weak refs]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 1) &amp;&amp; (pn.pi-&gt;m_weak_count == 1)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong refs]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 1) &amp;&amp; (pn.pi-&gt;m_weak_count == 2)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong refs, {pn.pi-&gt;m_weak_count - 1} weak ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 1) &amp;&amp; (pn.pi-&gt;m_weak_count &gt; 2)">shared_ptr {*px} [{pn.pi-&gt;m_use_count} strong refs, {pn.pi-&gt;m_weak_count - 1} weak refs]</DisplayString>
+    <Expand>
+      <Item Condition="px != 0" Name="[ptr]">px</Item>
+    </Expand>
+  </Type>
+  <Type Name="i3::weak_ptr&lt;*&gt;">
+    <DisplayString Condition="px == 0">empty</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 0)   &amp;&amp; (pn.pi-&gt;m_weak_count == 1)">expired [{pn.pi-&gt;m_weak_count} weak ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 0)   &amp;&amp; (pn.pi-&gt;m_weak_count &gt; 1)">expired [{pn.pi-&gt;m_weak_count} weak refs]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 1)   &amp;&amp; (pn.pi-&gt;m_weak_count == 2)">weak_ptr {*px} [{pn.pi-&gt;m_use_count} strong ref, {pn.pi-&gt;m_weak_count - 1} weak ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count == 1)   &amp;&amp; (pn.pi-&gt;m_weak_count &gt; 2)">weak_ptr {*px} [{pn.pi-&gt;m_use_count} strong ref, {pn.pi-&gt;m_weak_count - 1} weak refs]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 1) &amp;&amp; (pn.pi-&gt;m_weak_count == 2)">weak_ptr {*px} [{pn.pi-&gt;m_use_count} strong refs, {pn.pi-&gt;m_weak_count - 1} weak ref]</DisplayString>
+    <DisplayString Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 1) &amp;&amp; (pn.pi-&gt;m_weak_count &gt; 2)">weak_ptr {*px} [{pn.pi-&gt;m_use_count} strong refs, {pn.pi-&gt;m_weak_count - 1} weak refs]</DisplayString>
+    <Expand>
+      <Item Condition="(px != 0) &amp;&amp; (pn.pi-&gt;m_use_count &gt; 0)" Name="[ptr]">px</Item>
+    </Expand>
+  </Type>
+</AutoVisualizer>

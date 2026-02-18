@@ -1,0 +1,636 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}</ProjectGuid>
+    <RootNamespace>i3SceneDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+-Zm200
+ %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SCENE_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3SceneDef.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4714;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;i3SoundDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../PhysX/bin/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+      <SubSystem>Windows</SubSystem>
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SCENE_BUILD;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3SceneDef.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4714;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;i3SoundDx.lib;d3d9.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../PhysX/bin/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Scene;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SCENE_BUILD;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3SceneDef.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4714;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;i3SoundDx.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../PhysX/bin/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Scene.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AbstractBoolAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AllAttrs.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AllNodes.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AlphaFuncAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AlphaTestEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AmbientAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AnimationContext.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrID.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrSet.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrStack.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrStackManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Billboard.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BillBoardAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BinaryPartitionNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BlendEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BlendModeAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Body.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Bone.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BoneMatrixListAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BoneRef.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BSPDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3BSPNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Camera.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ClearRenderTargetAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ClippingEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Collidee.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeCapsule.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeCylinder.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeGroup.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeLine.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeSphere.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Collider.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ColliderSet.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollisionContext.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollisionSolver.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ColorAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3CommonNodeProcs.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Decal.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3DecalDef.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3DecalManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3EmissiveMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3EmissiveMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FaceCullModeAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogColorAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogDensityAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogModeAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogNearFarAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Font.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3FresnelAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3MipmapBiasAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectOffsetAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinMeshAABBProcessor.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Geometry.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryAttr2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryResolver.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometrySubsetAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3GPUCommandListAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3IME.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LayerRootNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightingEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightSet.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightSpacePerspectiveShadowMap.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LOD.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3MaterialAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3MeshParticle.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ModelViewMatrixAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Navigation.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMeshNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMeshPathFinder.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint2PathFinder.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathFinder.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathNode2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointSlerp.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Node.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NodeSelector.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcclusionQuery.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcclusionQueryAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcTreeNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Particle.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleGroup.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleGroupForTriangles.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleRender.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleRenderNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixContext.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixController.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJoint.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJointInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJointInfoD6.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixMemManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixMemoryPool.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixShapeSet.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3PointSpriteAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectiveShadowShader.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectiveTextureShader.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectMatrixAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Quad.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3QuadAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegArray.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegCOLOR.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegData.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegINT32.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegINT32Ex.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Registry.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegistryDef.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegistrySet.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegKey.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegKeyEx.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegMATRIX.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegREAL32.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegString.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC2D.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC3D.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC4D.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderAttrListAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderModeAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderTargetAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SATGenerator.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneDebug.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneDef.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneFile.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphContext.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphInfoResManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOQueue.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOThread.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneObject.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneTracer.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SGTexChangeManager.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadeModeAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShaderAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadowMap.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadowMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Shape.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShapeSetContainer.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Skeleton.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Skin.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinBuilder.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinGeometryAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinOptimize.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SoundNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SoundObject.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite2D.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite2DAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpriteAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilFuncAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilOperationAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilTestEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttrDX.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttrDX2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextCommonDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNodeDX.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNodeDX2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureBindAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordOffsetAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordScaleAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordSourceAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureFilterAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureFunctionAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureMatrixAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureWrapAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeSequence.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeSequenceInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeStamp.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Transform.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3Transform2.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TransformBillboard.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3TransformRef.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3UserAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3UserNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ViewMatrixAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ViewportAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3VSM_BlurFilter.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayColorAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayNode.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayScene.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZBiasAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZFuncAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZTestEnableAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZWriteEnableAttr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AbstractBoolAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AlphaFuncAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AlphaTestEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AmbientAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AnimationContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrStack.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrStackManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Billboard.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BillBoardAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BinaryPartitionNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BlendEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BlendModeAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Body.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Bone.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BoneMatrixListAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BoneRef.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3BSPNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Camera.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ClearRenderTargetAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ClippingEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Collidee.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeCapsule.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeCylinder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeGroup.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeLine.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeSphere.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Collider.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ColliderSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollisionContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollisionSolver.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ColorAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3CommonNodeProcs.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Decal.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3DecalManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3EmissiveMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3EmissiveMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FaceCullModeAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogColorAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogDensityAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogModeAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogNearFarAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Font.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3FresnelAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3MipmapBiasAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectOffsetAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinGeometryAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Geometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryAttr2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryResolver.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometrySubsetAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3GPUCommandListAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3IME.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LayerRootNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightingEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSpacePerspectiveShadowMap.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSpacePerspectiveShadowMap2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LOD.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3MaterialAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3MeshParticle.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ModelViewMatrixAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Navigation.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMeshNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMeshPathFinder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint2PathFinder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathFinder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathNode2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointSlerp.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Node.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NodeMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NodeSelector.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcclusionQuery.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcclusionQueryAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcTreeNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Particle.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleGroup.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleGroupForTriangles.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleRender.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleRenderNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixController.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixDefine.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJoint.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJointInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJointInfoD6.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixMemManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixMemoryPool.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixShapeSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3PointSpriteAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectiveShadowShader.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectiveTextureShader.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectMatrixAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Quad.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3QuadAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegArray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegCOLOR.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegData.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegINT32.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegINT32Ex.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Registry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegistrySet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegKey.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegMATRIX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegREAL32.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegString.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC2D.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC3D.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC4D.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderAttrListAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderModeAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderTargetAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SATGenerator.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneDebug.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneDef.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphInfoResManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOQueue.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOThread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneObject.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneTracer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SGTexChangeManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadeModeAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShaderAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadowMap.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadowMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Shape.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShapeSetContainer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Skeleton.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Skin.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinBuilder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinMeshAABBProcessorSrc.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinOptimize.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SoundNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SoundObject.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite2D.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite2DAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpriteAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilFuncAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilOperationAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilTestEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttrDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttrDX2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNodeDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNodeDX2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureBindAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordOffsetAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordScaleAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordSourceAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureFilterAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureFunctionAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureMatrixAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureWrapAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeSequence.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeSequenceInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeStamp.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Transform.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3Transform2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TransformBillboard.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3TransformRef.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3UserAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3UserNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ViewMatrixAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ViewportAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3VSM_BlurFilter.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayColorAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayScene.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZBiasAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZFuncAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZTestEnableAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZWriteEnableAttr.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Shader\i3SAT_HalfTone.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3SAT_Sum.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3ShadowMapCaster.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3ShadowMapDebug.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3VSM_BlurFilter.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3InputDx\i3InputDx.vcxproj">
+      <Project>{bca7065a-c03b-47d3-b8f1-0be632128989}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3SoundDx\i3SoundDx.vcxproj">
+      <Project>{d1103304-125d-4264-a228-9d26239aec9d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\NxuStream2\NxuStream2.vcxproj">
+      <Project>{9303fd7e-d682-493a-a631-9a625e4b4fea}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

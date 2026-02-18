@@ -1,0 +1,199 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Base">
+      <UniqueIdentifier>{5173a9c5-b034-4aa4-99cf-2e5d0e8bbe0f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control">
+      <UniqueIdentifier>{b7817f92-017d-449d-9564-8c07abb71817}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Control_Base">
+      <UniqueIdentifier>{5387ab1f-6208-4ae0-8a59-460f776b10ab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Window">
+      <UniqueIdentifier>{2ab504d5-9d2b-48a5-939e-acb865c238e0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{191ff54a-6275-472e-8211-21d6e1ba6abe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Defines">
+      <UniqueIdentifier>{7df361c7-08aa-4067-a2ac-8c0ef567b21c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GuiComponent">
+      <UniqueIdentifier>{47034617-5aff-4620-b13d-c317b0d319b6}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiBase.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiMeta.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPCH.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiRoot.cpp">
+      <Filter>Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3Gui3DView.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiButton.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiCheckBox.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiEditBox.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiList.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiMovie.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPopupList.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPopupListWithScroll.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiProgressBar.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiRadioButton.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiSlider.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiStatic.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiTextBox.cpp">
+      <Filter>Control</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiControl.cpp">
+      <Filter>Control_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiControlTemplate.cpp">
+      <Filter>Control_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiObjBase.cpp">
+      <Filter>Control_Base</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiWindow.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiWindowTemplate.cpp">
+      <Filter>Window</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiResource.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDefines.cpp">
+      <Filter>Defines</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiComponentBase.cpp">
+      <Filter>GuiComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDragDropManager.cpp">
+      <Filter>GuiComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDragSource.cpp">
+      <Filter>GuiComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDropTarget.cpp">
+      <Filter>GuiComponent</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiBase.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiMeta.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPCH.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiRoot.h">
+      <Filter>Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3Gui3DView.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiButton.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiCheckBox.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiEditBox.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiList.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiMovie.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPopupList.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPopupListWithScroll.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiProgressBar.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiRadioButton.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiSlider.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiStatic.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiTextBox.h">
+      <Filter>Control</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiControl.h">
+      <Filter>Control_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiControlTemplate.h">
+      <Filter>Control_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiObjBase.h">
+      <Filter>Control_Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiWindow.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiWindowTemplate.h">
+      <Filter>Window</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiResource.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDefines.h">
+      <Filter>Defines</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiComponentBase.h">
+      <Filter>GuiComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDragDropManager.h">
+      <Filter>GuiComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDragSource.h">
+      <Filter>GuiComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDropTarget.h">
+      <Filter>GuiComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gui.h" />
+  </ItemGroup>
+</Project>

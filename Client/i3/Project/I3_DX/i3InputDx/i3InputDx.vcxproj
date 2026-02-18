@@ -1,0 +1,195 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{BCA7065A-C03B-47D3-B8F1-0BE632128989}</ProjectGuid>
+    <RootNamespace>i3InputDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP -Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\../include/i3Input;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;I3_INPUT_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3InputType.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;dinput8.lib;strmiids.lib;IMM32.LIB;Version.lib;extra_text.obj;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\../include/i3Input;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;I3_INPUT_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3InputType.h</PrecompiledHeaderFile>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;dinput8.lib;strmiids.lib;IMM32.LIB;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24  -Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\../include/i3Input;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;I3_INPUT_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3InputType.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;dinput8.lib;strmiids.lib;dxguid.lib;IMM32.LIB;Version.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Input\dxerr.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">NotUsing</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">NotUsing</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Input\i3InputController.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputControllerDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputDevice.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputDeviceManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputDeviceManagerDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputGlobalVariable.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputIME.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputIMEContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputKeyboard.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputKeyboardDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputMethodContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputMouse.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputMouseDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Input\i3InputType.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Input.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputController.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputDevice.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputDeviceManager.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputGlobalVariable.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputIME.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputIMEContext.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputKeyboard.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputMethodContext.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputMouse.h" />
+    <ClInclude Include="..\..\..\include\i3Input\i3InputType.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

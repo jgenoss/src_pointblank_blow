@@ -1,0 +1,105 @@
+BINDIR			=	$(GCCROOT)/bin
+STDINC			=	$(GCCROOT)/psp/include
+STDLIB			=	$(GCCROOT)/psp/lib
+GCCLIB_ROOT		=	$(GCCROOT)/lib/gcc-lib/psp/3.3.3+allegrex-2.2.2-psp-1.7.1
+GCCLIB_INC		=	$(GCCLIB_ROOT)/include
+GCCLIB_LIB		=	$(GCCLIB_ROOT)
+TC_ROOT			=	$(PSPSDK)
+TC_INC			=	$(TC_ROOT)/devkit/include
+TC_LIB			=	$(TC_ROOT)/devkit/lib
+I3BASE_INC		=	$(I3_PSP_ROOT)/include/i3Base
+I3BASE_SRC		=	${I3_PSP_ROOT}/src/i3Base
+I3FRAMEWORK_INC	=	$(I3_PSP_ROOT)/include/i3Framework
+I3FRAMEWORK_SRC	=	${I3_PSP_ROOT}/src/i3Framework
+I3GUI_INC		=	$(I3_PSP_ROOT)/include/i3Gui
+I3GUI_SRC		=	$(I3_PSP_ROOT)/src/i3Gui
+I3MATH_INC		=	$(I3_PSP_ROOT)/include/i3Math
+I3MATH_SRC		=	$(I3_PSP_ROOT)/src/i3Math
+I3INPUT_INC		=	$(I3_PSP_ROOT)/include/i3Input
+I3INPUT_SRC		=	$(I3_PSP_ROOT)/src/i3Input
+I3GFX_INC		=	$(I3_PSP_ROOT)/include/i3Gfx
+I3GFX_SRC		=	$(I3_PSP_ROOT)/src/i3Gfx
+I3SCENE_INC		=	$(I3_PSP_ROOT)/include/i3Scene
+I3SCENE_SRC		=	$(I3_PSP_ROOT)/src/i3Scene
+I3SCENEUTIL_INC	=	$(I3_PSP_ROOT)/include/i3SceneUtil
+I3SCENEUTIL_SRC	=	$(I3_PSP_ROOT)/src/i3SceneUtil
+I3SOUND_INC		=	$(I3_PSP_ROOT)/include/i3Sound
+I3SOUND_SRC		=	$(I3_PSP_ROOT)/src/i3Sound
+I3NETWORK_INC	=	$(I3_PSP_ROOT)/include/i3Network
+I3NETWORK_SRC	=	$(I3_PSP_ROOT)/src/i3Network
+I3ZLIB_INC		=	$(I3_PSP_ROOT)/include/zlib
+I3ZLIB_SRC		=	$(I3_PSP_ROOT)/src/zlib
+	
+ifndef OUTDIR
+#OUTDIR		=	$(I3_PSP_ROOT)/lib/PSP/Debug
+OUTDIR		=	$(I3_PSP_ROOT)/lib/PSP/Release
+endif
+
+ifdef USE_GCC2VC
+CC			=	gcc2vc psp-gcc
+CXX			=	gcc2vc psp-g++
+else
+CC			=	$(GCCROOT)/bin/psp-gcc
+CXX			=	$(GCCROOT)/bin/psp-g++
+endif
+
+AS          =	$(GCCROOT)/bin/psp-gcc
+AR			=	$(GCCROOT)/bin/psp-ar
+RANLIB		=	$(GCCROOT)/bin/psp-ranlib
+MAKE		=	make
+
+ASFLAGS     = -c -xassembler-with-cpp
+
+ifndef DEFS
+DEFS		=	-DI3_PSP -DI3_COMPILER_GCC -DI3G_PSP
+endif
+
+ifndef CFLAG_BUILD
+#CFLAG_BUILD	= -O4 -DI3_DEBUG -fno-rtti
+CFLAG_BUILD	= -O4 -fno-rtti
+endif
+
+ifndef CFLAG_USER
+CFLAG_USER	= 
+endif
+
+# -Winline -Wall	: inline function이 올바르게 사용되고 있는지를 확인하는 gcc Option
+# -save-temps		: Compile 중의 임시 파일들을 지우지 않는 Option.
+CFLAGS		= -g $(CFLAG_BUILD) $(CFLAG_USER) -Wall $(DEFS) $(INCS)
+
+.s.o:
+	$(AS) $(ASFLAGS) -o $@ $<
+
+.c.o:
+	$(CC) $(CFLAGS) -c $<
+	
+.cpp.o:
+	$(CXX) $(CFLAGS) -c $<
+	
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	$(AR) crv $@ $(OBJS)
+	$(RANLIB) $@
+
+clean:
+	rm -f *.o *.d *~ *.bak
+	
+rebuild :
+	make clean
+	make
+
+master :
+	CFLAG_BUILD="-O4 -fno-rtti" OUTDIR="$(I3_PSP_ROOT)/lib/PSP/Release" $(MAKE)
+	
+rebuild-master :
+	make clean
+	make master
+
+depend:
+	makedepend -- $(CFLAGS) -- *.c *.cpp
+	
+DEPENDENCY_FILES:= $(wildcard *.d)
+ifneq ($(strip $(DEPENDENCY_FILES)),)
+include $(DEPENDENCY_FILES)
+endif

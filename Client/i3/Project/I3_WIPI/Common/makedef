@@ -1,0 +1,55 @@
+MAKEBASE_DIR	= $(I3_WIPI_ROOT)/Project/I3_WIPI/Common/Makebase
+
+ifneq "$(findstring Debug,$(INTDIR))" ""
+DEBUG		= TRUE
+else
+	ifneq "$(findstring Master,$(INTDIR))" ""
+	MASTER		= TRUE
+	else
+	RELEASE		= TRUE
+	endif
+endif
+
+ifneq "$(findstring KTF_G1000,$(INTDIR))" ""
+PLATFORM_HOLDER		= KTF
+PRODUCT_ID			= KTF_G1000
+endif
+
+ifneq "$(findstring KTF_KV3600,$(INTDIR))" ""
+PLATFORM_HOLDER		= KTF
+PRODUCT_ID			= KTF_KV3600
+endif
+
+ifneq "$(findstring SKT_G100,$(INTDIR))" ""
+PLATFORM_HOLDER		= SKT
+PRODUCT_ID			= SKT_G100
+endif
+
+ifneq "$(findstring SKT_IM8300,$(INTDIR))" ""
+PLATFORM_HOLDER		= SKT
+PRODUCT_ID			= SKT_IM8300
+endif
+
+ifneq "$(findstring SKT_SV360,$(INTDIR))" ""
+PLATFORM_HOLDER		= SKT
+PRODUCT_ID			= SKT_SV360
+endif
+
+ifneq "$(findstring SKT_MS550,$(INTDIR))" ""
+PLATFORM_HOLDER		= SKT
+PRODUCT_ID			= SKT_MS550
+endif
+
+
+MAKE_ARG			= INTDIR=$(INTDIR) -f ../Makefile
+PRE_CMD				= mkdir -p $(INTDIR); cd $(INTDIR)
+
+default:
+	$(PRE_CMD); make all $(MAKE_ARG)
+
+rebuild: clean
+	$(PRE_CMD); make all $(MAKE_ARG)
+	
+clean:
+	$(PRE_CMD); rm -f *.o *.d *~ *.bak
+

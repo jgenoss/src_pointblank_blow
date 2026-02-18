@@ -1,0 +1,205 @@
+#
+# 환견변수 설정 예
+# ARM_GCCROOT		= c:\GNUARM
+# I3_WIPI_SDK_KTF	= c:\KTF\WIPI1231SDK
+# I3_WIPI_SDK_SKT	= c:\WIPI
+# I3_WIPI_ROOT		= /cygdrive/d/PRJ_I3
+#
+
+###############################################################################
+# Directories
+###############################################################################
+BINDIR		=	$(ARM_GCCROOT)/bin
+STDINC		=	$(ARM_GCCROOT)/arm-elf/include
+STDLIB		=	$(ARM_GCCROOT)/arm-elf/lib
+
+ifeq ($(PLATFORM_HOLDER),KTF)
+
+## KTF 네트워크
+GCSNETWORK_INC	=	$(GCS_ROOT)/include
+
+ifeq ($(PRODUCT_ID),KTF_G1000)
+TC_ROOT		=	$(I3_WIPI_SDK_KTF_G1000)
+GCSNETWORK_LIB	=	$(GCS_ROOT)/lib_G1000/GCSAPI.o
+else
+TC_ROOT		=	$(I3_WIPI_SDK_KTF)
+GCSNETWORK_LIB	=	$(GCS_ROOT)/lib_Standard/GCSAPI.o
+endif
+
+TC_INC		=	$(TC_ROOT)/include_arm
+TC_WIPIINC	=	$(TC_ROOT)/include_WIPIC
+
+endif
+
+ifeq ($(PLATFORM_HOLDER),SKT)
+TC_ROOT		=	$(I3_WIPI_SDK_SKT)
+TC_INC		=	$(TC_ROOT)/include/API
+endif
+
+TC_LIB		=	$(TC_ROOT)/lib
+GCCLIB_INC	=	$(TC_LIB)
+I3BASE_INC	=	$(I3_WIPI_ROOT)/include/i3Base
+I3BASE_SRC	=	${I3_WIPI_ROOT}/src/i3Base
+I3MATH_INC	=	$(I3_WIPI_ROOT)/include/i3Math
+I3MATH_SRC	=	$(I3_WIPI_ROOT)/src/i3Math
+I3INPUT_INC	=	$(I3_WIPI_ROOT)/include/i3Input
+I3INPUT_SRC	=	$(I3_WIPI_ROOT)/src/i3Input
+I3GFX_INC	=	$(I3_WIPI_ROOT)/include/i3Gfx
+I3GFX_SRC	=	$(I3_WIPI_ROOT)/src/i3Gfx
+I3NETWORK_INC	=	$(I3_WIPI_ROOT)/include/i3network
+I3NETWORK_SRC	=	$(I3_WIPI_ROOT)/src/i3network
+I3SCENE_INC	=	$(I3_WIPI_ROOT)/include/i3Scene
+I3SCENE_SRC	=	$(I3_WIPI_ROOT)/src/i3Scene
+I3SCENEUTIL_INC	=	$(I3_WIPI_ROOT)/include/i3SceneUtil
+I3SCENEUTIL_SRC	=	$(I3_WIPI_ROOT)/src/i3SceneUtil
+I3SOUND_INC	=		$(I3_WIPI_ROOT)/include/i3Sound
+I3SOUND_SRC	=		$(I3_WIPI_ROOT)/src/i3Sound
+I3GUI_INC	=		$(I3_WIPI_ROOT)/include/i3Gui
+I3GUI_SRC	=		$(I3_WIPI_ROOT)/src/i3Gui
+I3FRAMEWORK_INC	=	$(I3_WIPI_ROOT)/include/i3Framework
+I3FRAMEWORK_SRC	=	$(I3_WIPI_ROOT)/src/i3Framework
+I3ZLIB_INC	=		$(I3_WIPI_ROOT)/include/zlib
+I3ZLIB_SRC	=		$(I3_WIPI_ROOT)/src/zlib
+
+###############################################################################
+# C Flags
+###############################################################################
+
+CFLAG_BUILD		=	-O2
+
+ifdef DEBUG
+	CFLAG_BUILD		+=	-DI3_DEBUG
+else
+	ifdef MASTER
+		# Master
+		CFLAG_BUILD		+=	-DI3_NO_PROFILE
+	else
+		# Release
+		#
+	endif
+endif
+
+#PLATFORM		=	WIPI
+PLATFORM		=	WIPI_FXD
+
+ifeq ($(PLATFORM),WIPI_FXD)
+CFLAG_BUILD		+=	-DI3_FIXED_POINT
+endif
+
+OUTDIR		=	$(I3_WIPI_ROOT)/lib/$(PLATFORM)/$(INTDIR)
+
+###############################################################################
+# Compiler & Linker
+###############################################################################
+ifdef USE_GCC2VC
+AS          =	$(I3_WIPI_ROOT)/bin/gcc2vc $(ARM_GCCROOT)/bin/arm-elf-gcc
+CC			=	$(I3_WIPI_ROOT)/bin/gcc2vc $(ARM_GCCROOT)/bin/arm-elf-gcc
+CXX			=	$(I3_WIPI_ROOT)/bin/gcc2vc $(ARM_GCCROOT)/bin/arm-elf-g++
+#AS         =	gcc2vc $(ARM_GCCROOT)/bin/arm-elf-gcc
+#CC			=	gcc2vc $(ARM_GCCROOT)/bin/arm-elf-gcc
+#CXX		=	gcc2vc $(ARM_GCCROOT)/bin/arm-elf-g++
+else
+AS          =	$(ARM_GCCROOT)/bin/arm-elf-gcc
+CC			=	$(ARM_GCCROOT)/bin/arm-elf-gcc
+CXX			=	$(ARM_GCCROOT)/bin/arm-elf-g++
+endif
+
+AR			=	$(ARM_GCCROOT)/bin/arm-elf-ar
+RANLIB		=	$(ARM_GCCROOT)/bin/arm-elf-ranlib
+MAKE		=	make
+
+ASFLAGS     = -c -xassembler-with-cpp -EL
+
+ifeq ($(PLATFORM_HOLDER),KTF)
+CFLAG_WIPI	= -mhard-float -mapcs-frame -fshort-enums -fno-common -mthumb
+endif
+
+ifeq ($(PLATFORM_HOLDER),SKT)
+CFLAG_WIPI	= -mhard-float -mapcs-frame -fshort-enums -fno-common -mthumb -mthumb-interwork
+endif
+
+CFLAG_WIPI += -fno-rtti -nostdinc++ -Wabi -nodefaultlibs -nostartfiles -fno-enforce-eh-specs
+
+###############################################################################
+# Definitions
+###############################################################################
+DEFS		=	-DI3_WIPI -DI3_COMPILER_GCC -DI3G_OGLES -DI3_NO_STATIC_CLASSMETA
+
+ifeq ($(PLATFORM_HOLDER),KTF)
+DEFS		+=	-DI3_WIPI_KTF 
+endif
+ifeq ($(PLATFORM_HOLDER),SKT)
+DEFS		+=	-DI3_WIPI_SKT
+endif
+
+# KTF
+ifeq ($(PRODUCT_ID),KTF_G1000)
+DEFS		+=	-DI3_WIPI_GP -DI3_WIPI_KTF_G1000
+endif
+ifeq ($(PRODUCT_ID),KTF_KV3600)
+DEFS		+=	-DI3_WIPI_KTF_KV3600 -DKTF1231
+endif
+
+# SKT
+ifeq ($(PRODUCT_ID),SKT_G100)
+DEFS		+=	-DI3_WIPI_GIGA -DI3_WIPI_SKT_G100
+endif
+ifeq ($(PRODUCT_ID),SKT_IM8300)
+DEFS		+=	-DI3_WIPI_GIGA -DI3_WIPI_SKT_IM8300
+endif
+ifeq ($(PRODUCT_ID),SKT_SV360)
+DEFS		+=	-DI3_WIPI_GIGA -DI3_WIPI_SKT_SV360
+endif
+ifeq ($(PRODUCT_ID),SKT_MS550)
+DEFS		+=	-DI3_WIPI_GIGA -DI3_WIPI_SKT_MS550
+endif
+				
+
+###############################################################################
+# Includes
+###############################################################################
+ifeq ($(PLATFORM_HOLDER),KTF)
+COMMON_INC	= -I$(STDINC) -I$(GCCLIB_INC) -I$(TC_INC) -I$(TC_WIPIINC) -I$(I3_WIPI_ROOT)/include
+endif
+
+ifeq ($(PLATFORM_HOLDER),SKT)
+COMMON_INC	= -I$(STDINC) -I$(GCCLIB_INC) -I$(TC_INC) -I$(I3_WIPI_ROOT)/include $(INCS)
+endif
+
+ifdef INCS
+ALL_INCS	= $(COMMON_INC) $(INCS)
+else
+ALL_INCS	= $(COMMON_INC)
+endif
+
+###############################################################################
+# -Winline -Wall	: inline function이 올바르게 사용되고 있는지를 확인하는 gcc Option
+# -save-temps		: Compile 중의 임시 파일들을 지우지 않는 Option.
+CFLAGS		= $(CFLAG_USER) $(DEFS) $(ALL_INCS) $(CFLAG_BUILD) $(CFLAG_WIPI) -Wall -MD 
+
+.s.o:
+	$(AS) $(ASFLAGS) -o $@ $<
+
+.c.o: $<.d
+	$(CC) $(CFLAGS) -c -o $@ $<
+	
+.cpp.o:
+	$(CXX) $(CFLAGS) -c -o $@ $<
+	
+%.d:
+	$(CXX) $(CFLAGS) -E -MD -c -o $@
+
+all:	$(TARGET)
+
+$(TARGET): $(OBJS)
+	@rm -f $@
+	$(AR) crv $@ $(OBJS)
+	$(RANLIB) $@
+
+depend:
+	makedepend -- $(CFLAGS) -- *.c *.cpp
+	
+DEPENDENCY_FILES:= $(wildcard *.d)
+ifneq ($(strip $(DEPENDENCY_FILES)),)
+include $(DEPENDENCY_FILES)
+endif

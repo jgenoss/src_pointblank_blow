@@ -1,0 +1,1347 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Node">
+      <UniqueIdentifier>{040ecc06-03a3-4b13-9fd5-a076bdfecde8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Attribute">
+      <UniqueIdentifier>{14dd89ea-49ab-43df-824b-99997e928100}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{aa6f4459-8ce1-4e6b-a7cb-699062ad6374}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Precompiled Header">
+      <UniqueIdentifier>{dfee6bcc-0263-4979-872e-a21a501359bb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Collision">
+      <UniqueIdentifier>{5a924fc0-2472-4572-bffe-6d76402a6333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Navigation">
+      <UniqueIdentifier>{e486a2bc-963a-4690-adbc-9df514477f1d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Skin">
+      <UniqueIdentifier>{70e05582-4c37-4966-a1de-9979b3aa97dd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shadow">
+      <UniqueIdentifier>{cf8d0363-9516-41e7-83c9-6cb04024e7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shadow\Shader">
+      <UniqueIdentifier>{9ca5d217-6455-47b7-a88f-fcd4633196ac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Internal">
+      <UniqueIdentifier>{d71a54bb-6b3e-4dc1-824d-7897936126a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3Registry">
+      <UniqueIdentifier>{da2f67e4-51da-4765-a0e2-8c6368ab5a5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physix">
+      <UniqueIdentifier>{2ec170af-81b2-4b64-aadf-927bdf12975f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Particle">
+      <UniqueIdentifier>{a8bc2d01-5c16-417c-83f4-30001019cd48}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BSP">
+      <UniqueIdentifier>{017b18be-548e-4682-bea8-674f1fa75114}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Octree">
+      <UniqueIdentifier>{302485cf-1590-4ade-8dd4-a923c6516947}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Background Loading">
+      <UniqueIdentifier>{4ad1dc41-fe15-4dfd-abd0-778cd5f92620}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IK">
+      <UniqueIdentifier>{768f509e-d8b0-4b57-919c-2865eec3daa4}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AllNodes.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrSet.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Billboard.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BoneRef.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BSPNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Camera.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CommonNodeProcs.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Geometry.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LayerRootNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightSet.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Node.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NodeSelector.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcclusionQuery.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleRenderNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectiveShadowShader.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectiveTextureShader.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Quad.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneObject.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SoundNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SoundObject.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite2D.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNodeDX.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextNodeDX2.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeSequence.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeSequenceInfo.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TimeStamp.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Transform.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TransformBillboard.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TransformRef.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3UserNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AbstractBoolAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AllAttrs.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AlphaFuncAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AlphaTestEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AmbientAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrID.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BillBoardAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BlendEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BlendModeAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ClearRenderTargetAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ClippingEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ColorAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3EmissiveMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3EmissiveMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FaceCullModeAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogColorAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogDensityAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogModeAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FogNearFarAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3FresnelAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryAttr2.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometrySubsetAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3GPUCommandListAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightingEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LuxMapWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3MaterialAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ModelViewMatrixAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NormalMapWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcclusionQueryAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PointSpriteAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectMatrixAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3QuadAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMapWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ReflectMaskMapWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderAttrListAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderModeAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RenderTargetAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadeModeAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShaderAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadowMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinGeometryAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpecularMapWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Sprite2DAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SpriteAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilFuncAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilOperationAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3StencilTestEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttrDX.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextAttrDX2.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextCommonDefine.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureBindAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordOffsetAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordScaleAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureCoordSourceAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureFilterAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureFunctionAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureMatrixAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3TextureWrapAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3UserAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ViewMatrixAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ViewportAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayColorAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZBiasAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZFuncAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZTestEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ZWriteEnableAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AnimationContext.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrStack.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3AttrStackManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Font.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3GeometryResolver.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3IME.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneDebug.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneFile.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphContext.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphInfo.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneMeta.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneTracer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneUtil.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SGTexChangeManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneDef.h">
+      <Filter>Precompiled Header</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Collidee.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeCapsule.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeCylinder.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeGroup.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeLine.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeMesh.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollideeSphere.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Collider.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ColliderSet.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollisionContext.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3CollisionSolver.h">
+      <Filter>Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Navigation.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMesh.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMeshNode.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationMeshPathFinder.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint2.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPoint2PathFinder.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathFinder.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathNode.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointPathNode2.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3NavigationPointSlerp.h">
+      <Filter>Navigation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Body.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Bone.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BoneMatrixListAttr.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LOD.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Shape.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Skeleton.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Skin.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinBuilder.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinOptimize.h">
+      <Filter>Skin</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3LightSpacePerspectiveShadowMap.h">
+      <Filter>Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SATGenerator.h">
+      <Filter>Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShadowMap.h">
+      <Filter>Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3VSM_BlurFilter.h">
+      <Filter>Shadow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneGraphInfoResManager.h">
+      <Filter>Internal</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegArray.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegCOLOR.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegData.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegINT32.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegINT32Ex.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Registry.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegistryDef.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegistrySet.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegKey.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegKeyEx.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegMATRIX.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegREAL32.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegString.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC2D.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC3D.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3RegVEC4D.h">
+      <Filter>i3Registry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixContext.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixController.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixDefine.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJoint.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJointInfo.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixJointInfoD6.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixMemManager.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixMemoryPool.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixShapeSet.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3PhysixUtil.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ShapeSetContainer.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Transform2.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Decal.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3DecalDef.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3DecalManager.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3MeshParticle.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3Particle.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleGroup.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleGroupForTriangles.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleInfo.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ParticleRender.h">
+      <Filter>Particle</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BinaryPartitionNode.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3BSPDefine.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3OcTreeNode.h">
+      <Filter>Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOManager.h">
+      <Filter>Background Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOQueue.h">
+      <Filter>Background Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3SceneIOThread.h">
+      <Filter>Background Loading</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene.h" />
+    <ClInclude Include="..\..\..\include\i3Scene\i3SkinMeshAABBProcessor.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3ProjectOffsetAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3MipmapBiasAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3MipmapBiasAttr.h">
+      <Filter>Attribute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayScene.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Scene\i3XrayNode.h">
+      <Filter>Node</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrSet.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Billboard.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BoneRef.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BSPNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Camera.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CommonNodeProcs.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Geometry.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LayerRootNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSet.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Node.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NodeMeta.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NodeSelector.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcclusionQuery.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleRenderNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectiveShadowShader.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectiveTextureShader.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Quad.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneObject.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SoundNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SoundObject.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite2D.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNodeDX.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextNodeDX2.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeSequence.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeSequenceInfo.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TimeStamp.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Transform.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TransformBillboard.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TransformRef.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3UserNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AbstractBoolAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AlphaFuncAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AlphaTestEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AmbientAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrMeta.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BillBoardAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BlendEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BlendModeAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ClearRenderTargetAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ClippingEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ColorAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3EmissiveMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3EmissiveMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FaceCullModeAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogColorAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogDensityAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogModeAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FogNearFarAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3FresnelAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryAttr2.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometrySubsetAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3GPUCommandListAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightingEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LuxMapWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3MaterialAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ModelViewMatrixAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NormalMapWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcclusionQueryAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PointSpriteAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectMatrixAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3QuadAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMapWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ReflectMaskMapWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderAttrListAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderModeAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RenderTargetAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadeModeAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShaderAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadowMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpecularMapWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Sprite2DAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SpriteAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilFuncAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilOperationAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3StencilTestEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttrDX.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextAttrDX2.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureBindAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordOffsetAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordScaleAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureCoordSourceAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureFilterAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureFunctionAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureMatrixAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3TextureWrapAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3UserAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ViewMatrixAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ViewportAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayColorAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZBiasAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZFuncAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZTestEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ZWriteEnableAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AnimationContext.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrStack.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3AttrStackManager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Font.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3GeometryResolver.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3IME.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneDebug.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneFile.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphContext.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphInfo.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneMeta.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneTracer.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneUtil.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SGTexChangeManager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneDef.cpp">
+      <Filter>Precompiled Header</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Collidee.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeCapsule.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeCylinder.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeGroup.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeLine.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeMesh.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollideeSphere.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Collider.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ColliderSet.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollisionContext.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3CollisionSolver.cpp">
+      <Filter>Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Navigation.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMesh.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMeshNode.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationMeshPathFinder.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint2.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPoint2PathFinder.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathFinder.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathNode.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointPathNode2.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3NavigationPointSlerp.cpp">
+      <Filter>Navigation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Body.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Bone.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BoneMatrixListAttr.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LOD.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Shape.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Skeleton.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Skin.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinBuilder.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinOptimize.cpp">
+      <Filter>Skin</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSpacePerspectiveShadowMap.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3LightSpacePerspectiveShadowMap2.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SATGenerator.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShadowMap.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3VSM_BlurFilter.cpp">
+      <Filter>Shadow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneGraphInfoResManager.cpp">
+      <Filter>Internal</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegArray.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegCOLOR.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegData.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegINT32.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegINT32Ex.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Registry.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegistrySet.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegKey.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegMATRIX.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegREAL32.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegString.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC2D.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC3D.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3RegVEC4D.cpp">
+      <Filter>i3Registry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixContext.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixController.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixDefine.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJoint.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJointInfo.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixJointInfoD6.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixMemManager.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixMemoryPool.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixShapeSet.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3PhysixUtil.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ShapeSetContainer.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Transform2.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Decal.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3DecalManager.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3MeshParticle.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3Particle.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleGroup.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleGroupForTriangles.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleInfo.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ParticleRender.cpp">
+      <Filter>Particle</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3BinaryPartitionNode.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3OcTreeNode.cpp">
+      <Filter>Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOManager.cpp">
+      <Filter>Background Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOQueue.cpp">
+      <Filter>Background Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SceneIOThread.cpp">
+      <Filter>Background Loading</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinGeometryAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3SkinMeshAABBProcessorSrc.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3ProjectOffsetAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3MipmapBiasAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3MipmapBiasAttr.cpp">
+      <Filter>Attribute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayScene.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Scene\i3XrayNode.cpp">
+      <Filter>Node</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Shader\i3SAT_HalfTone.hlsl">
+      <Filter>Shadow\Shader</Filter>
+    </None>
+    <None Include="..\..\..\Shader\i3SAT_Sum.hlsl">
+      <Filter>Shadow\Shader</Filter>
+    </None>
+    <None Include="..\..\..\Shader\i3ShadowMapCaster.hlsl">
+      <Filter>Shadow\Shader</Filter>
+    </None>
+    <None Include="..\..\..\Shader\i3ShadowMapDebug.hlsl">
+      <Filter>Shadow\Shader</Filter>
+    </None>
+    <None Include="..\..\..\Shader\i3VSM_BlurFilter.hlsl">
+      <Filter>Shadow\Shader</Filter>
+    </None>
+  </ItemGroup>
+</Project>

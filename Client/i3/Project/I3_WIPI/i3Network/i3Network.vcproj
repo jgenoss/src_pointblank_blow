@@ -1,0 +1,302 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="i3Network"
+	ProjectGUID="{A4CE7DB6-75C8-4A8C-826A-5CF7FA44865C}"
+	SccProjectName=""
+	SccAuxPath=""
+	SccLocalPath=""
+	SccProvider=""
+	Keyword="MakeFileProj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="Debug|Win32"
+			OutputDirectory="Debug"
+			IntermediateDirectory="Debug"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild  INTDIR=$(IntDir)"
+				CleanCommandLine="make clean  INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="Release|Win32"
+			OutputDirectory="Release"
+			IntermediateDirectory="Release"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="i3Network.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_G1000_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_G1000_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_IM8300_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_G100_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_G100_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_IM8300_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_SV360_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_SV360_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_G1000_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_G100_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make  INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_IM8300_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_SV360_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Source Files"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			<File
+				RelativePath="..\..\..\src\i3network\i3NetworkContextWIPI.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Network\i3NetworkDef.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3network\i3NetworkMeta.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3network\i3NetworkPCH.cpp">
+			</File>
+		</Filter>
+		<Filter
+			Name="Header Files"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="..\..\..\include\i3Network\i3NetworkContext.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Network\i3NetworkDef.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkDef_GCS.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkDef_KTF.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkDef_NHN.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkMeta.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkPCH.h">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3network\i3NetworkWIPI.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Resource Files"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+		</Filter>
+		<File
+			RelativePath=".\Makefile">
+		</File>
+		<File
+			RelativePath=".\readme.txt">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

@@ -1,0 +1,205 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{9303FD7E-D682-493A-A631-9A625E4B4FEA}</ProjectGuid>
+    <RootNamespace>NxuStream2</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\../PhysX/common/include;..\..\../PhysX/SDKs/Physics/include;..\..\../PhysX/SDKs/PhysXLoader/include;..\..\../PhysX\SDKs/Foundation/include;..\..\../PhysX/SDKs/Framework/include;..\..\../PhysX/SDKs/Cooking/include;..\..\../PhysX/SDKs/NxCharacter/include;..\..\../FMOD/fmoddesignerapi/api\inc;..\..\../FMOD/api/inc;..\..\../PhysX/Tools/NxuStream2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader />
+      <ProgramDataBaseFileName>$(IntDir)NxuStream2.pdb</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <DisableSpecificWarnings>4996;4819;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)NxuStream2.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\../PhysX/common/include;..\..\../PhysX/SDKs/Physics/include;..\..\../PhysX/SDKs/PhysXLoader/include;..\..\../PhysX\SDKs/Foundation/include;..\..\../PhysX/SDKs/Framework/include;..\..\../PhysX/SDKs/Cooking/include;..\..\../PhysX/SDKs/NxCharacter/include;..\..\../FMOD/fmoddesignerapi/api\inc;..\..\../FMOD/api/inc;..\..\../PhysX/Tools/NxuStream2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebug</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader />
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)NxuStream2.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\../PhysX/common/include;..\..\../PhysX/SDKs/Physics/include;..\..\../PhysX/SDKs/PhysXLoader/include;..\..\../PhysX\SDKs/Foundation/include;..\..\../PhysX/SDKs/Framework/include;..\..\../PhysX/SDKs/Cooking/include;..\..\../PhysX/SDKs/NxCharacter/include;..\..\../FMOD/fmoddesignerapi/api\inc;..\..\../FMOD/api/inc;..\..\../PhysX/Tools/NxuStream2;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <SmallerTypeCheck>true</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <BufferSecurityCheck>true</BufferSecurityCheck>
+      <EnableEnhancedInstructionSet>StreamingSIMDExtensions</EnableEnhancedInstructionSet>
+      <PrecompiledHeader />
+      <ProgramDataBaseFileName>$(IntDir)$(ProjectName).pdb</ProgramDataBaseFileName>
+      <WarningLevel>TurnOffAllWarnings</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <Lib>
+      <OutputFile>$(OutDir)NxuStream2.lib</OutputFile>
+    </Lib>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_Asc2Bin.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_ColladaExport.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_ColladaImport.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_cooking.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_customcopy.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_File.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_Geometry.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_GraphicsMesh.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_helper.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_hull.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_PhysicsExport.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_PhysicsInstantiator.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_schema.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_SchemaStream.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_Streaming.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_string.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinystr.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinyxml.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinyxmlerror.cpp" />
+    <ClCompile Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinyxmlparser.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_Asc2Bin.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_ColladaExport.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_ColladaImport.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_cooking.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_customcopy.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_File.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_Geometry.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_GraphicsMesh.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_helper.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_hull.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_PhysicsExport.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_PhysicsInstantiator.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\nxu_schema.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_SchemaStream.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_SchemaTypes.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_Streaming.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_string.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinystr.h" />
+    <ClInclude Include="..\..\..\PhysX\tools\NxuStream2\NXU_tinyxml.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\PhysX\tools\NxuStream2\The NxuStream FAQ.htm">
+      <DeploymentContent>true</DeploymentContent>
+    </None>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

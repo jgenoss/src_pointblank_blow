@@ -1,0 +1,317 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{659D237A-B554-49B3-A4C9-86C309EAC60E}</ProjectGuid>
+    <RootNamespace>i3MathDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP -Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_MATH_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3MathType.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4091</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_MATH_BUILD;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3MathType.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4091;</DisableSpecificWarnings>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;d3d9.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 -Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_MATH_BUILD;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3MathType.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Math\i3Animation.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Animation2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3AnimationPackFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3AnimationResManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3BoundBox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Color.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Frustum.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Key.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3KeyframeTable.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Math.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MathGlobalVariable.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MathMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MathPropertyGridDefines.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MathType.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Matrix.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixArray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixN.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixObject.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixObjectList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixStackDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3PolygonArray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3PolygonList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Quat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Rect.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3RectCoordSource.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformModifier.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSequence.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSource.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSourceBind.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSourceCombiner.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector2Array.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3Array.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3List.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3List16Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4Array.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4List.cpp">
+      <Optimization Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Disabled</Optimization>
+      <InlineFunctionExpansion Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Default</InlineFunctionExpansion>
+      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Neither</FavorSizeOrSpeed>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4List16Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3VectorN.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\i3Volume.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_adjacency.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_convert_quad.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_delete_t_junction.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_weld.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\quad_adj_collection.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_culler.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_item.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_plane.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_quad_set.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_item.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_lv_info.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_node.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\octree\word_aabb.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\aabb.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\box_plane_np_lookup.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\frustum_intersection.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\frustum_plane.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\mat4.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\mat4_function.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\matrix_multiply.cpp" />
+    <ClCompile Include="..\..\..\src\i3Math\structure\plane_intersection.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Math.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Animation.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Animation2.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationPackFile.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationResManager.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3BoundBox.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Color.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Frustum.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Key.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3KeyframeTable.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathGlobalVariable.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathPropertyGridDefines.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathType.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MathUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Matrix.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixArray.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixN.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixObject.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixObjectList.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixStack.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Plane.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3PolygonArray.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3PolygonList.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Quat.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Rect.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3RectCoordSource.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformModifier.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSequence.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSource.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSourceBind.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSourceCombiner.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector2Array.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3Array.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3List.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3List16Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4Array.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4List.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4List16Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3VectorN.h" />
+    <ClInclude Include="..\..\..\include\i3Math\i3Volume.h" />
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_adjacency.h" />
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_convert_quad.h" />
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_delete_t_junction.h" />
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_weld.h" />
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\quad_adj_collection.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_culler.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_item.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_plane.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_quad_set.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_callback.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_constant.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_item.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_lv_info.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_node.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_test_option.h" />
+    <ClInclude Include="..\..\..\include\i3Math\octree\word_aabb.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\aabb.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\box_plane_np_lookup.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\frustum_intersection.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\frustum_plane.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\intersect_side.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\int_structure.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\mat4.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\mat4_function.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\matrix_multiply.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane_function.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane_intersection.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\vec3.h" />
+    <ClInclude Include="..\..\..\include\i3Math\structure\vec3_function.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\i3Math\structure\aabb.inl" />
+    <None Include="..\..\..\include\i3math\structure\frustum_intersection.inl" />
+    <None Include="..\..\..\include\i3Math\structure\frustum_plane.inl" />
+    <None Include="..\..\..\include\i3Math\structure\mat4.inl" />
+    <None Include="..\..\..\include\i3Math\structure\plane.inl" />
+    <None Include="..\..\..\include\i3Math\structure\plane_function.inl" />
+    <None Include="..\..\..\include\i3Math\structure\plane_intersection.inl" />
+    <None Include="..\..\..\include\i3Math\structure\vec3.inl" />
+    <None Include="..\..\..\include\i3Math\structure\vec3_function.inl" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

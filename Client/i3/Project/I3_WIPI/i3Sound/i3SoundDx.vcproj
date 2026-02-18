@@ -1,0 +1,330 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioProject
+	ProjectType="Visual C++"
+	Version="7.10"
+	Name="i3Sound"
+	ProjectGUID="{D1103304-125D-4264-A228-9D26239AEC9D}"
+	SccProjectName=""
+	SccAuxPath=""
+	SccLocalPath=""
+	SccProvider=""
+	Keyword="Win32Proj">
+	<Platforms>
+		<Platform
+			Name="Win32"/>
+	</Platforms>
+	<Configurations>
+		<Configuration
+			Name="KTF_G1000_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_G1000_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Debug|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Release|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_KV3600_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="KTF_G1000_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_G100_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_IM8300_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_MS550_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+		<Configuration
+			Name="SKT_SV360_Master|Win32"
+			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			IntermediateDirectory="$(ConfigurationName)"
+			ConfigurationType="0">
+			<Tool
+				Name="VCNMakeTool"
+				BuildCommandLine="make INTDIR=$(IntDir)"
+				ReBuildCommandLine="make rebuild INTDIR=$(IntDir)"
+				CleanCommandLine="make clean INTDIR=$(IntDir)"
+				Output="libi3Sound.a"/>
+		</Configuration>
+	</Configurations>
+	<References>
+	</References>
+	<Files>
+		<Filter
+			Name="Context"
+			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx"
+			UniqueIdentifier="{4FC737F1-C7A5-4376-A066-2A32D752A2FF}">
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundContext.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundContext.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="Sound"
+			Filter="h;hpp;hxx;hm;inl;inc;xsd"
+			UniqueIdentifier="{93995380-89BD-4b04-88EB-625FBE52EBFB}">
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3Sound.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3Sound.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundAt3Plus.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundAt3Plus.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundI3s.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundI3s.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundMidi.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundMidi.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundMmf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundMmf.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundMp3.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundMp3.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundSpf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundSpf.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundVag.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundVag.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundVagThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundVagThread.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundWav.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundWav.h">
+			</File>
+		</Filter>
+		<Filter
+			Name="SoundPlay"
+			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx"
+			UniqueIdentifier="{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}">
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlay.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlay.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayAt3Plus.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayAt3Plus.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayI3s.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayI3s.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayMidi.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayMidi.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayMmf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayMmf.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayMp3.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayMp3.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlaySpf.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlaySpf.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayVag.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayVag.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundPlayWav.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundPlayWav.h">
+			</File>
+			<File
+				RelativePath="..\..\..\src\i3Sound\i3SoundStreamThread.cpp">
+			</File>
+			<File
+				RelativePath="..\..\..\include\i3Sound\i3SoundStreamThread.h">
+			</File>
+		</Filter>
+		<File
+			RelativePath="..\..\..\include\i3Sound\i3SoundDef.h">
+		</File>
+		<File
+			RelativePath="..\..\..\include\i3SoundH.h">
+		</File>
+		<File
+			RelativePath="..\..\..\src\i3Sound\i3SoundMeta.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\include\i3Sound\i3SoundMeta.h">
+		</File>
+		<File
+			RelativePath=".\Makefile">
+		</File>
+		<File
+			RelativePath="..\..\..\src\i3Sound\stdafx.cpp">
+		</File>
+		<File
+			RelativePath="..\..\..\src\i3Sound\stdafx.h">
+		</File>
+	</Files>
+	<Globals>
+	</Globals>
+</VisualStudioProject>

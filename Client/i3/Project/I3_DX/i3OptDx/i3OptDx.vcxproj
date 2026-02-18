@@ -1,0 +1,355 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{C1F91507-C648-40AC-88CA-A6D1DF5B9030}</ProjectGuid>
+    <RootNamespace>i3OptDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Opt;..\..\../src/i3Opt/nvDXTLib/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_OPT_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3OptPCH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3InputDx.lib;i3GfxDx.lib;i3MathDx.lib;i3SceneDx.lib;nvDXTlibMT.vc7.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../PhysX/bin/Win32/Release;..\..\../src/i3Opt/nvDXTLib/lib/release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libc.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <DelayLoadDLLs />
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Opt;..\..\../src/i3Opt/nvDXTLib/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_OPT_BUILD;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3OptPCH.h</PrecompiledHeaderFile>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3GfxDx.lib;i3MathDx.lib;i3SceneDx.lib;i3InputDx.lib;nvDXTlibMT.vc7.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../src/i3Opt/nvDXTLib/lib/release;..\..\../PhysX/bin/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Opt;..\..\../src/i3Opt/nvDXTLib/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_OPT_BUILD;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3OptPCH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3GfxDx.lib;i3MathDx.lib;i3SceneDx.lib;i3InputDx.lib;nvDXTlibMT.vc7.lib;NxCharacter.2.8.1.lib;NxCooking.2.8.1.lib;PhysXLoader.2.8.1.lib;NxuStream2.lib;user32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../src/i3Opt/nvDXTLib/lib/release;..\..\../PhysX/bin/Win32/Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;libcd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Opt.h" />
+    <ClInclude Include="..\..\..\include\i3OptRemoveDuplicatedVA.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3AllOpts.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3GeometrySplitter.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3NvTriStrip.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3NvTriStripObjects.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptAnimation.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPBuilder.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPGeometry.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPNode.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildBoundSphere.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildBSP.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildCollisionMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildCommonSg.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildError.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildHull.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildIndexedGeometry.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildLODBoneMap.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildNavigationMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildOcTree.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildProgressiveMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildPSPCommandList.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTangentBasis.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTerrainMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTriStrip.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangeCollisionGroup.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangePhysXFormat.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangeShapeSetValue.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCollapseNode.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCollapseTransform.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptColliderStyleNoneStatic.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCompactMesh.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCompressImage.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertDXTTexture.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertImgTo4BitGray.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertShapeSetContainer.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertTextureFormat.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertVertexFormat.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCreateBoundBox.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptDetermineSharability.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptExternRef.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGatherUpAttribute.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGatherUpAttrSet.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGeometryBase.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGeo_NonIndexed_to_Indexed.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGetAllVertices.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptI3Image.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMacroTexture.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMacroTexture2.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMeshInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMipmapGen.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptNodeFlag.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptOctreeNode.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptParticleBound.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptPCH.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptPSPSwizzledImage.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptQuadric.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptQVector5.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveAnim.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveAttribute.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveNodeName.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveRedundantAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveShapeSet.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveVertexComponent.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttrMerger.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttr_Private.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptResizeTexture.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSaveToFile.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptScene2Body.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSetupCenterMass.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptShareTexture.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSkinGeometry.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSortNodeByAttr.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSoundConv.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSpatialPartition.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSplitGeometry.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptTriSplitNode.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptUniqueNodeName.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptValidateGeometryBound.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptVertexFormat.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptVertexTree.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\I3OPT_BSP_CONTEXT.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3SceneOptimizer.h" />
+    <ClInclude Include="..\..\..\include\i3Opt\i3VertexCache.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Opt\i3GeometrySplitter.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3NvTriStrip.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3NvTriStripObjects.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptAnimation.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPBuilder.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPGeometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildBoundSphere.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildBSP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildCollisionMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildCommonSg.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildHull.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildIndexedGeometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildLODBoneMap.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildNavigationMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildOcTree.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildProgressiveMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildPSPCommandList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTangentBasis.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTerrainMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTriStrip.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangeCollisionGroup.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangePhysXFormat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangeShapeSetValue.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCollapseNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCollapseTransform.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptColliderStyleNoneStatic.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCompactMesh.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCompressImage.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertDXTTexture.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertImgTo4BitGray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertShapeSetContainer.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertTextureFormat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertVertexFormat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCreateBoundBox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptDetermineSharability.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptExternRef.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGatherUpAttribute.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGatherUpAttrSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGeometryBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGeo_NonIndexed_to_Indexed.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGetAllVertices.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptI3Image.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMacroTexture.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMacroTexture2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMeshInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMipmapGen.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptNodeFlag.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptOctreeNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptParticleBound.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptPCH.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptPSPSwizzledImage.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptQuadric.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptQVector5.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveAnim.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveAttribute.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveDuplicatedVA.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveNodeName.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveRedundantAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveShapeSet.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveVertexComponent.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRenAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRenAttrMerger.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptResizeTexture.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSaveToFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptScene2Body.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSetupCenterMass.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptShareTexture.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSkinGeometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSortNodeByAttr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSoundConv.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSpatialPartition.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSplitGeometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptTriSplitNode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptUniqueNodeName.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptValidateGeometryBound.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptVertexFormat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptVertexTree.cpp" />
+    <ClCompile Include="..\..\..\src\i3Opt\i3SceneOptimizer.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3SceneDx\i3SceneDx.vcxproj">
+      <Project>{1b5ae97b-959f-40c8-9e78-f7b7280dbc71}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\NxuStream2\NxuStream2.vcxproj">
+      <Project>{9303fd7e-d682-493a-a631-9a625e4b4fea}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

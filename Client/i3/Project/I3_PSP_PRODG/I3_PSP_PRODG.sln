@@ -1,0 +1,97 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Base", "i3Base\i3Base.vcproj", "{EA152112-999A-4CB0-B026-8BC793573FEE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Gfx", "i3Gfx\i3Gfx.vcproj", "{D4271C3E-9210-40BE-A109-C8709E1A66E8}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Input", "i3Input\i3Input.vcproj", "{9B21829C-AE29-40F7-A855-81012B96C586}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Math", "i3Math\i3Math.vcproj", "{0AD04696-8B1B-477B-A613-8D34D6BCCC84}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Scene", "i3Scene\i3Scene.vcproj", "{6E096A14-ADE3-4A32-96B4-62036ADBF680}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3Sound", "i3Sound\i3Sound.vcproj", "{512FADD5-DDE1-4DE8-8A08-496E38373934}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SourceCodeControl) = preSolution
+		SccNumberOfProjects = 7
+		SccProjectUniqueName0 = i3Base\\i3Base.vcproj
+		SccProjectName0 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath0 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection0 = Project\\I3_PSP_PRODG\\i3Base\\
+		SccProjectUniqueName1 = i3Gfx\\i3Gfx.vcproj
+		SccProjectName1 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath1 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection1 = Project\\I3_PSP_PRODG\\i3Gfx\\
+		SccProjectUniqueName2 = i3Input\\i3Input.vcproj
+		SccProjectName2 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath2 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection2 = Project\\I3_PSP_PRODG\\i3Input\\
+		SccProjectUniqueName3 = i3Math\\i3Math.vcproj
+		SccProjectName3 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath3 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection3 = Project\\I3_PSP_PRODG\\i3Math\\
+		SccProjectUniqueName4 = i3Scene\\i3Scene.vcproj
+		SccProjectName4 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath4 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection4 = Project\\I3_PSP_PRODG\\i3Scene\\
+		SccProjectUniqueName5 = i3Sound\\i3Sound.vcproj
+		SccProjectName5 = \u0022$/i3\u0022,\u0020BAAAAAAA
+		SccLocalPath5 = ..\\..
+		CanCheckoutShared = true
+		SccProjectFilePathRelativizedFromConnection5 = Project\\I3_PSP_PRODG\\i3Sound\\
+		SccLocalPath6 = .
+		CanCheckoutShared = true
+		SolutionUniqueID = {B39F2B98-B722-4CDB-B95C-A6932989DEAA}
+	EndGlobalSection
+	GlobalSection(SolutionConfiguration) = preSolution
+		PSP HW Debug = PSP HW Debug
+		PSP HW Release = PSP HW Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{EA152112-999A-4CB0-B026-8BC793573FEE}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{EA152112-999A-4CB0-B026-8BC793573FEE}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{EA152112-999A-4CB0-B026-8BC793573FEE}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{EA152112-999A-4CB0-B026-8BC793573FEE}.PSP HW Release.Build.0 = PSP HW Release|Win32
+		{D4271C3E-9210-40BE-A109-C8709E1A66E8}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{D4271C3E-9210-40BE-A109-C8709E1A66E8}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{D4271C3E-9210-40BE-A109-C8709E1A66E8}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{D4271C3E-9210-40BE-A109-C8709E1A66E8}.PSP HW Release.Build.0 = PSP HW Release|Win32
+		{9B21829C-AE29-40F7-A855-81012B96C586}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{9B21829C-AE29-40F7-A855-81012B96C586}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{9B21829C-AE29-40F7-A855-81012B96C586}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{9B21829C-AE29-40F7-A855-81012B96C586}.PSP HW Release.Build.0 = PSP HW Release|Win32
+		{0AD04696-8B1B-477B-A613-8D34D6BCCC84}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{0AD04696-8B1B-477B-A613-8D34D6BCCC84}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{0AD04696-8B1B-477B-A613-8D34D6BCCC84}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{0AD04696-8B1B-477B-A613-8D34D6BCCC84}.PSP HW Release.Build.0 = PSP HW Release|Win32
+		{6E096A14-ADE3-4A32-96B4-62036ADBF680}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{6E096A14-ADE3-4A32-96B4-62036ADBF680}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{6E096A14-ADE3-4A32-96B4-62036ADBF680}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{6E096A14-ADE3-4A32-96B4-62036ADBF680}.PSP HW Release.Build.0 = PSP HW Release|Win32
+		{512FADD5-DDE1-4DE8-8A08-496E38373934}.PSP HW Debug.ActiveCfg = PSP HW Debug|Win32
+		{512FADD5-DDE1-4DE8-8A08-496E38373934}.PSP HW Debug.Build.0 = PSP HW Debug|Win32
+		{512FADD5-DDE1-4DE8-8A08-496E38373934}.PSP HW Release.ActiveCfg = PSP HW Release|Win32
+		{512FADD5-DDE1-4DE8-8A08-496E38373934}.PSP HW Release.Build.0 = PSP HW Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

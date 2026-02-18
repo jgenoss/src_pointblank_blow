@@ -1,0 +1,476 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Animation">
+      <UniqueIdentifier>{00053770-e928-445f-81de-52fd50e633d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="octree">
+      <UniqueIdentifier>{550cfa7a-3eaa-4f26-bb95-94593b2d3a21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="structure">
+      <UniqueIdentifier>{025684fa-3a07-4187-aec0-296c9791b586}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="mesh_function">
+      <UniqueIdentifier>{60ee10d3-5062-45c2-ad85-7cf2f3104414}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Math\i3BoundBox.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Color.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Frustum.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Key.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3KeyframeTable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Math.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathGlobalVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathMeta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathPropertyGridDefines.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MathUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Matrix.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixObjectList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3MatrixStackDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3PolygonArray.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3PolygonList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Quat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Rect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3RectCoordSource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector2Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector3List16Bits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4Array.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4List.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Vector4List16Bits.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3VectorN.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Volume.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Animation.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3Animation2.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3AnimationPackFile.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3AnimationResManager.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformModifier.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSequence.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSource.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSourceBind.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\i3TransformSourceCombiner.cpp">
+      <Filter>Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_item.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_lv_info.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\octree_node.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\word_aabb.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\aabb.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\mat4.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\matrix_multiply.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\frustum_plane.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\box_plane_np_lookup.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\mat4_function.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\plane_intersection.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\structure\frustum_intersection.cpp">
+      <Filter>structure</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_adjacency.cpp">
+      <Filter>mesh_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_convert_quad.cpp">
+      <Filter>mesh_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_weld.cpp">
+      <Filter>mesh_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_item.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_plane.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_quad_set.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\octree\occ_culler.cpp">
+      <Filter>octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\mesh_delete_t_junction.cpp">
+      <Filter>mesh_function</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Math\mesh function\quad_adj_collection.cpp">
+      <Filter>mesh_function</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Math\i3BoundBox.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Color.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Frustum.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Key.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3KeyframeTable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathDefine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathGlobalVariable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathMeta.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathPropertyGridDefines.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MathUtil.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Matrix.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixArray.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixN.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixObjectList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3MatrixStack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Plane.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3PolygonArray.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3PolygonList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Quat.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Rect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3RectCoordSource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector2Array.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3Array.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3List.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector3List16Bits.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4Array.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4List.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Vector4List16Bits.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3VectorN.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Volume.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Animation.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3Animation2.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationPackFile.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationResManager.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3AnimationUtil.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformModifier.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSequence.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSource.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSourceBind.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\i3TransformSourceCombiner.h">
+      <Filter>Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_item.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_lv_info.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_node.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\word_aabb.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\aabb.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\mat4.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\matrix_multiply.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\vec3.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\frustum_plane.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\int_structure.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\box_plane_np_lookup.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane_function.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\vec3_function.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\mat4_function.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\plane_intersection.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\intersect_side.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\structure\frustum_intersection.h">
+      <Filter>structure</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_constant.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_item.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_plane.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_quad_set.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_callback.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\octree_test_option.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\octree\occ_culler.h">
+      <Filter>octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_convert_quad.h">
+      <Filter>mesh_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_weld.h">
+      <Filter>mesh_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_adjacency.h">
+      <Filter>mesh_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\mesh_delete_t_junction.h">
+      <Filter>mesh_function</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Math\mesh_function\quad_adj_collection.h">
+      <Filter>mesh_function</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\include\i3Math\structure\aabb.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\mat4.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\vec3.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\plane.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\frustum_plane.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\plane_function.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\vec3_function.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3Math\structure\plane_intersection.inl">
+      <Filter>structure</Filter>
+    </None>
+    <None Include="..\..\..\include\i3math\structure\frustum_intersection.inl">
+      <Filter>structure</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,245 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectName>i3GuiDx</ProjectName>
+    <ProjectGuid>{A82909B4-6D9C-4058-81D1-D6535234876F}</ProjectGuid>
+    <RootNamespace>i3GuiDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Static</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+-Zm400 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Gui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GUI_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GuiPCH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;i3SceneDx.lib;i3FrameworkDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <DelayLoadDLLs />
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>../../../include/i3Gui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GUI_BUILD;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GuiPCH.h</PrecompiledHeaderFile>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;i3SceneDx.lib;i3FrameworkDx.lib;i3SoundDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"
+
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 
+-Zm400 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Gui;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GUI_BUILD;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GuiPCH.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3InputDx.lib;i3SceneDx.lib;i3FrameworkDx.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Gui\i3Gui3DView.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiButton.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiCheckBox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiComponentBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiControl.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiControlTemplate.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDefines.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDragDropManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDragSource.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiDropTarget.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiEditBox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiMovie.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiObjBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPCH.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPopupList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiPopupListWithScroll.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiProgressBar.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiRadioButton.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiResource.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiRoot.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiSlider.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiStatic.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiTextBox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiWindow.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gui\i3GuiWindowTemplate.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Gui.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3Gui3DView.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiBase.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiButton.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiCheckBox.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiComponentBase.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiControl.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiControlTemplate.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDefines.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDragDropManager.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDragSource.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiDropTarget.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiEditBox.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiList.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiMovie.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiObjBase.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPCH.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPopupList.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiPopupListWithScroll.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiProgressBar.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiRadioButton.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiResource.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiRoot.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiSlider.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiStatic.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiTextBox.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiWindow.h" />
+    <ClInclude Include="..\..\..\include\i3Gui\i3GuiWindowTemplate.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3FrameworkDx\i3FrameworkDx.vcxproj">
+      <Project>{4ba9def3-aeb3-4a36-9731-fd79b98c3823}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3InputDx\i3InputDx.vcxproj">
+      <Project>{bca7065a-c03b-47d3-b8f1-0be632128989}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3SceneDx\i3SceneDx.vcxproj">
+      <Project>{1b5ae97b-959f-40c8-9e78-f7b7280dbc71}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

@@ -1,0 +1,224 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Context">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Sound">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="PlayState">
+      <UniqueIdentifier>{bb0e758a-c649-4d17-80f5-07004013a163}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define">
+      <UniqueIdentifier>{7df46bd9-a492-4aef-b5d8-7183f7ee67d3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Define\FileManage">
+      <UniqueIdentifier>{9d042b63-bdb2-414d-9dfc-02e40eab8569}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="FMOD">
+      <UniqueIdentifier>{020bebd1-66e5-4c4d-85a7-d97e17c116f2}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContext.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContextDx.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContextFMOD.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayThread.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundUpdateThread.cpp">
+      <Filter>Context</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3Sound.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundDx.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFMOD.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayArgument.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundProperty.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStream.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamDx.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamFMOD.cpp">
+      <Filter>Sound</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayInfo.cpp">
+      <Filter>PlayState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayState.cpp">
+      <Filter>PlayState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayStateDx.cpp">
+      <Filter>PlayState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayStateFMOD.cpp">
+      <Filter>PlayState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamThread.cpp">
+      <Filter>PlayState</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundGlobal.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundMeta.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundResManager.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\stdafx.cpp">
+      <Filter>Define</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3FMODGeometry.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFile.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileI3Snd.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileVag.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileWav.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundUtil.cpp">
+      <Filter>Define\FileManage</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContext.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContextDX.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContextFMOD.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayThread.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundUpdateThread.h">
+      <Filter>Context</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3Sound.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundDx.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFMOD.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayArgument.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundProperty.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStream.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamDx.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamFMOD.h">
+      <Filter>Sound</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayInfo.h">
+      <Filter>PlayState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayState.h">
+      <Filter>PlayState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayStateDx.h">
+      <Filter>PlayState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayStateFMOD.h">
+      <Filter>PlayState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamThread.h">
+      <Filter>PlayState</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundConfig.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundDef.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundGlobal.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3SoundH.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundMeta.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundResManager.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\i3Sound\stdafx.h">
+      <Filter>Define</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3FMODGeometry.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFile.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileI3Snd.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileVag.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileWav.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundUtil.h">
+      <Filter>Define\FileManage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod.h">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod.hpp">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_codec.h">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_dsp.h">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_errors.h">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_output.h">
+      <Filter>FMOD</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

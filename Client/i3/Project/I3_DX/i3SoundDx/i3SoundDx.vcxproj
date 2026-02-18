@@ -1,0 +1,250 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{D1103304-125D-4264-A228-9D26239AEC9D}</ProjectGuid>
+    <RootNamespace>i3SoundDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <CharacterSet>MultiByte</CharacterSet>
+    <PlatformToolset>v140_xp</PlatformToolset>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Sound;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SOUND_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;winmm.lib;libogg.lib;libvorbis.lib;libvorbisfile.lib;dsound.lib;fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../FMOD/api/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Sound;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SOUND_BUILD;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <ProjectReference>
+      <LinkLibraryDependencies>false</LinkLibraryDependencies>
+    </ProjectReference>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;winmm.lib;libogg.lib;libvorbisfile.lib;libvorbis.lib;dsound.lib;dxguid.lib;fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../FMOD/api/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Sound;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_SOUND_BUILD;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>stdafx.h</PrecompiledHeaderFile>
+      <DisableSpecificWarnings>4201;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;winmm.lib;libogg.lib;libvorbisfile.lib;libvorbis.lib;dsound.lib;fmodex_vc.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../FMOD/api/lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Sound\i3FMODGeometry.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3Sound.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContextDx.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundContextFMOD.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundDx.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileI3Snd.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileVag.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFileWav.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundFMOD.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundGlobal.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayArgument.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayState.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayStateDx.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayStateFMOD.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundPlayThread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundProperty.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundResManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStream.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamDx.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamFMOD.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundStreamThread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundUpdateThread.cpp" />
+    <ClCompile Include="..\..\..\src\i3Sound\i3SoundUtil.cpp">
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(IntDir)</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">$(IntDir)%(Filename)1.obj</ObjectFileName>
+      <ObjectFileName Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(IntDir)</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Sound\stdafx.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">stdafx.h</PrecompiledHeaderFile>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">stdafx.h</PrecompiledHeaderFile>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod.h" />
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod.hpp" />
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_codec.h" />
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_dsp.h" />
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_errors.h" />
+    <ClInclude Include="..\..\..\FMOD\api\inc\fmod_output.h" />
+    <ClInclude Include="..\..\..\include\i3SoundH.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3FMODGeometry.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3Sound.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundConfig.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContext.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContextDX.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundContextFMOD.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundDef.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundDx.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFile.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileI3Snd.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileVag.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFileWav.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundFMOD.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundGlobal.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayArgument.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayState.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayStateDx.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayStateFMOD.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundPlayThread.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundProperty.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundResManager.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStream.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamDx.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamFMOD.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundStreamThread.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundUpdateThread.h" />
+    <ClInclude Include="..\..\..\include\i3Sound\i3SoundUtil.h" />
+    <ClInclude Include="..\..\..\src\i3Sound\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

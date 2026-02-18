@@ -1,0 +1,542 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="NvTriStrip">
+      <UniqueIdentifier>{3ae0121e-5d32-45b5-b993-359db658f669}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="BSP">
+      <UniqueIdentifier>{aa664855-eef6-4525-b838-ef9b1f7229bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{587709ec-4feb-4e7b-92ca-03f943baf971}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry">
+      <UniqueIdentifier>{a33b3cea-e212-412c-9219-ec4e393914f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Geometry\ProgressiveMesh">
+      <UniqueIdentifier>{a0124501-f1d6-45e3-b882-3522c2f5ccc9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{6994412d-b24d-46e7-9005-56fc0dbd4f73}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\Octree">
+      <UniqueIdentifier>{936c8f64-ab82-48c3-9e65-844a557a6893}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\OptRenAttr">
+      <UniqueIdentifier>{19780e48-8464-4448-9fdb-21ebc62f38be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Physix">
+      <UniqueIdentifier>{19d5e156-c09c-46f2-a7a9-ca1586ea9461}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Opt\i3AllOpts.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptAnimation.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildBSP.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildCollisionMesh.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildError.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildHull.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildPSPCommandList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptColliderStyleNoneStatic.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptDetermineSharability.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMeta.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptParticleBound.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptPCH.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveAnim.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSaveToFile.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSoundConv.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptUtil.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3SceneOptimizer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3NvTriStrip.h">
+      <Filter>NvTriStrip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3NvTriStripObjects.h">
+      <Filter>NvTriStrip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3VertexCache.h">
+      <Filter>NvTriStrip</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\I3OPT_BSP_CONTEXT.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPBuilder.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPGeometry.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBSPNode.h">
+      <Filter>BSP</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCompressImage.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertDXTTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertImgTo4BitGray.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertTextureFormat.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptI3Image.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMacroTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMacroTexture2.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMipmapGen.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptPSPSwizzledImage.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptResizeTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptShareTexture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildBoundSphere.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildIndexedGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildProgressiveMesh.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTangentBasis.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTriStrip.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCompactMesh.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertVertexFormat.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGeo_NonIndexed_to_Indexed.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGeometryBase.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGetAllVertices.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3OptRemoveDuplicatedVA.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveVertexComponent.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSkinGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSplitGeometry.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptTriSplitNode.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptValidateGeometryBound.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptVertexFormat.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptVertexTree.h">
+      <Filter>Geometry</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptQuadric.h">
+      <Filter>Geometry\ProgressiveMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptQVector5.h">
+      <Filter>Geometry\ProgressiveMesh</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildCommonSg.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildLODBoneMap.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildNavigationMesh.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCollapseNode.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCollapseTransform.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptCreateBoundBox.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptExternRef.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGatherUpAttribute.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptGatherUpAttrSet.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptNodeFlag.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveAttribute.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveNodeName.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveRedundantAttr.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptScene2Body.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSortNodeByAttr.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSpatialPartition.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptUniqueNodeName.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3GeometrySplitter.h">
+      <Filter>Scene\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildOcTree.h">
+      <Filter>Scene\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptMeshInfo.h">
+      <Filter>Scene\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptOctreeNode.h">
+      <Filter>Scene\Octree</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttr.h">
+      <Filter>Scene\OptRenAttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttr_Private.h">
+      <Filter>Scene\OptRenAttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRenAttrMerger.h">
+      <Filter>Scene\OptRenAttr</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptBuildTerrainMesh.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangeCollisionGroup.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangePhysXFormat.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptChangeShapeSetValue.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptConvertShapeSetContainer.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptRemoveShapeSet.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt\i3OptSetupCenterMass.h">
+      <Filter>Physix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Opt.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptAnimation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildBSP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildCollisionMesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildHull.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildPSPCommandList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptColliderStyleNoneStatic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptDetermineSharability.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMeta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptParticleBound.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptPCH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveAnim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSaveToFile.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSoundConv.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3SceneOptimizer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3NvTriStrip.cpp">
+      <Filter>NvTriStrip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3NvTriStripObjects.cpp">
+      <Filter>NvTriStrip</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPBuilder.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPGeometry.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBSPNode.cpp">
+      <Filter>BSP</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCompressImage.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertDXTTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertImgTo4BitGray.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertTextureFormat.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptI3Image.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMacroTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMacroTexture2.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMipmapGen.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptPSPSwizzledImage.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptResizeTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptShareTexture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildBoundSphere.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildIndexedGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildProgressiveMesh.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTangentBasis.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTriStrip.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCompactMesh.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertVertexFormat.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGeo_NonIndexed_to_Indexed.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGeometryBase.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGetAllVertices.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveDuplicatedVA.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveVertexComponent.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSkinGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSplitGeometry.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptTriSplitNode.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptValidateGeometryBound.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptVertexFormat.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptVertexTree.cpp">
+      <Filter>Geometry</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptQuadric.cpp">
+      <Filter>Geometry\ProgressiveMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptQVector5.cpp">
+      <Filter>Geometry\ProgressiveMesh</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildCommonSg.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildLODBoneMap.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildNavigationMesh.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCollapseNode.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCollapseTransform.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptCreateBoundBox.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptExternRef.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGatherUpAttribute.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptGatherUpAttrSet.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptNodeFlag.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveAttribute.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveNodeName.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveRedundantAttr.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptScene2Body.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSortNodeByAttr.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSpatialPartition.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptUniqueNodeName.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3GeometrySplitter.cpp">
+      <Filter>Scene\Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildOcTree.cpp">
+      <Filter>Scene\Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptMeshInfo.cpp">
+      <Filter>Scene\Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptOctreeNode.cpp">
+      <Filter>Scene\Octree</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRenAttr.cpp">
+      <Filter>Scene\OptRenAttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRenAttrMerger.cpp">
+      <Filter>Scene\OptRenAttr</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptBuildTerrainMesh.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangeCollisionGroup.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangePhysXFormat.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptChangeShapeSetValue.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptConvertShapeSetContainer.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptRemoveShapeSet.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Opt\i3OptSetupCenterMass.cpp">
+      <Filter>Physix</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

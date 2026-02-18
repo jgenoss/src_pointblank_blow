@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3Engine2_Distribute_ForExternProj"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		PreprocessorDefinitions="I3_DEBUG"
+		StringPooling="true"
+		BasicRuntimeChecks="3"
+		RuntimeLibrary="2"
+		WarningLevel="4"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		OutputFile="$(OutDir)\$(ProjectName)_DISTRIBUTE.dll"
+		AdditionalLibraryDirectories="&quot;../lib\DirectX\DistributeDLL&quot;"
+		GenerateDebugInformation="true"
+		GenerateMapFile="true"
+	/>
+</VisualStudioPropertySheet>

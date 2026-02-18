@@ -1,0 +1,701 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{36ea79a4-3595-4396-9144-9535e9934bf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader\Params">
+      <UniqueIdentifier>{c223414c-e3be-4d34-ada8-5887943ffb3c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL">
+      <UniqueIdentifier>{e9b3ac65-1492-4142-9906-9898c1fefb23}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HLSL\CPP">
+      <UniqueIdentifier>{1a010db2-b477-4291-a87a-f12b1b81a1a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RasterizeChain">
+      <UniqueIdentifier>{d69348b1-2e1d-4e79-b159-409c0828feff}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ImageFile">
+      <UniqueIdentifier>{5ee116f5-1cb9-4f70-a70d-1a3910f89b30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{5a89a570-0ccf-418f-b5df-077eb013c574}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Texture">
+      <UniqueIdentifier>{5a083bac-a20e-410e-b21c-f13cf2d3d870}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="VertexArray">
+      <UniqueIdentifier>{f4da9d49-ef74-40c3-accd-8112f500f59e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="IndexArray">
+      <UniqueIdentifier>{ddce366f-d8df-4f9b-8a5f-1252cd7a80b8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SH">
+      <UniqueIdentifier>{a58998b5-bfcb-4885-82fa-d4c0b7a26c30}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="PostProcess">
+      <UniqueIdentifier>{6e71994d-dcd0-46a1-8e30-1b9158f715b1}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Clut.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ClutDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3DisplayList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxCaps.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxCapsGPU.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxFontDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxFontDX2.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGeometryUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGlobalVariable.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGlobalVariableDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxMeta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxMovie.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOcclusionTest.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOption.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxResource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GFXType.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxUtil.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxUtilDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxVertexBank.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GPUCommandList.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GPUCommandParserPSP.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PerformanceReport.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderContextDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderTarget.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderTargetDX.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Surface.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3SurfaceMem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3SystemFont.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VideoInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Shader.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderCache.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderCode.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderContext.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderContextDX.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderGen.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderUtil.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParam.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamMatrix.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamMatrixObject.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamSampler.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamSamplerStates.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamVector4.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamVector4Ref.cpp">
+      <Filter>Shader\Params</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_BloomCombine.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_BrightPathExtract.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_DownScale.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_GaussianBlur.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_NightVision.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_Sample.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_SimpleMotionBlur.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_ToneMapping.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainBase.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainContext.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainManager.cpp">
+      <Filter>RasterizeChain</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFile.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileBGLoader.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileBMP.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileDDS.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileI3I.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFilePNG.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileTGA.cpp">
+      <Filter>ImageFile</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil16Bits.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil24Bits.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil32Bits.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil4Bits.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil8Bits.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtilDXT.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtilHDR.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3UVPositioner.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Texture.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCube.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCubeDX.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCubeMem.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureDX.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureMem.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureResManager.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureSequence.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureXbox.cpp">
+      <Filter>Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArray.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayDX.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayMem.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayPSP.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexBlending.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexFormat.cpp">
+      <Filter>VertexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArray.cpp">
+      <Filter>IndexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayDX.cpp">
+      <Filter>IndexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayMem.cpp">
+      <Filter>IndexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayXbox.cpp">
+      <Filter>IndexArray</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcess.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessBloom.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessCelShading.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessManager.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessMotionBlur.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessNightVision.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOccCuller.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessHaze.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderMemoryCode.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderSourceCodeMgr.cpp">
+      <Filter>Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Wmi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessGamma.cpp">
+      <Filter>PostProcess</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3FullScreenWindowModeHelper.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Clut.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3DisplayList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxCaps.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxDefine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxDefineDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxFontDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxFontDX2.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGeometryUtil.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGlobalVariable.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGlobalVariableDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxMeta.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxMovie.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOcclusionTest.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOption.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxPSPCommandBuilder.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxResource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxUtil.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxUtilDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxVertexBank.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GPUCommandList.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GPUCommandParserPSP.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Light.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PerformanceReport.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderContext.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderState.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderStateDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderTarget.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderTargetDX.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Surface.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3SurfaceMem.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3SystemFont.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VideoInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VLog.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VLogDefine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\i3Gfx\smartptr.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Shader.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderCache.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderCode.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderContext.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderDefine.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderGen.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderUtil.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParam.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamMatrix.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamMatrixObject.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamSampler.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamSamplerStates.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamVector4.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamVector4Ref.h">
+      <Filter>Shader\Params</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_BloomCombine.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_BrightPathExtract.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_DownScale.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_GaussianBlur.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_NightVision.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_Sample.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_SimpleMotionBlur.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_ToneMapping.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainBase.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainContext.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainManager.h">
+      <Filter>RasterizeChain</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFile.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileBGLoader.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileBMP.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileDDS.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileI3I.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\i3Gfx\i3ImageFilePNG.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileTGA.h">
+      <Filter>ImageFile</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil16Bits.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil24Bits.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil32Bits.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil4Bits.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil8Bits.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtilDXT.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtilHDR.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3UVPositioner.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Texture.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCube.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCubeDX.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCubeMem.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureDX.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureMem.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureResManager.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureSequence.h">
+      <Filter>Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArray.h">
+      <Filter>VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArrayDX.h">
+      <Filter>VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArrayMem.h">
+      <Filter>VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexBlending.h">
+      <Filter>VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexFormat.h">
+      <Filter>VertexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3IndexArray.h">
+      <Filter>IndexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3IndexArrayMem.h">
+      <Filter>IndexArray</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcess.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessBloom.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessCelShading.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessManager.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessMotionBlur.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessNightVision.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOccCuller.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessHaze.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderMemoryCode.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderSourceCodeMgr.h">
+      <Filter>Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Wmi.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessGamma.h">
+      <Filter>PostProcess</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Gfx\i3FullScreenWindowModeHelper.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Shader\i3Common.hlsl" />
+    <None Include="..\..\..\Shader\i3Custom_LightModel.hlsl" />
+    <None Include="..\..\..\Shader\i3Decl.hlsl" />
+    <None Include="..\..\..\Shader\i3Definition.hlsl" />
+    <None Include="..\..\..\Shader\i3DirectionalLight.hlsl" />
+    <None Include="..\..\..\Shader\i3GI1_LightModel.hlsl" />
+    <None Include="..\..\..\Shader\i3Glow.hlsl" />
+    <None Include="..\..\..\Shader\i3HSL_LightModel.hlsl" />
+    <None Include="..\..\..\Shader\i3LuxMap.hlsl" />
+    <None Include="..\..\..\Shader\i3Phong_LightModel.hlsl" />
+    <None Include="..\..\..\Shader\i3PixelShader_PPL.hlsl" />
+    <None Include="..\..\..\Shader\i3PixelShader_PVL.hlsl" />
+    <None Include="..\..\..\Shader\i3PointLight.hlsl" />
+    <None Include="..\..\..\Shader\i3Reflection.hlsl" />
+    <None Include="..\..\..\Shader\i3ShadowMap.hlsl" />
+    <None Include="..\..\..\Shader\i3SpotLight.hlsl" />
+    <None Include="..\..\..\Shader\i3SuperShader.hlsl" />
+    <None Include="..\..\..\Shader\i3VertexShader_PPL.hlsl" />
+    <None Include="..\..\..\Shader\i3VertexShader_PVL.hlsl" />
+  </ItemGroup>
+</Project>

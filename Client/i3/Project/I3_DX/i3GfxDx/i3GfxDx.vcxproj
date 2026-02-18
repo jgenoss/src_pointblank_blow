@@ -1,0 +1,460 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{A16536C6-3DFB-4EB1-83F4-66B72923A29A}</ProjectGuid>
+    <RootNamespace>i3GfxDx</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Distribute.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Debug.props" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\..\DirectX9\DX9_i3.props" />
+    <Import Project="..\..\i3Engine2_Common.props" />
+    <Import Project="..\..\i3Engine2_Release.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Gfx;..\..\..\MovieBase;..\..\..\include\i3Input;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GFX_BUILD;WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GfxType.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;zlib.lib;libpng.lib;nvDXTlibMT.lib;strmbase.lib;Winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../src/i3Gfx/DXTLib/lib/release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>false</EnableCOMDATFolding>
+      <FixedBaseAddress>false</FixedBaseAddress>
+    </Link>
+    <PostBuildEvent>
+      <Command>attrib -r "..\..\..\lib\DirectX\ReleaseDLL\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\ReleaseDLL\"
+copy "$(OutDir)$(TargetName).lib" "..\..\..\lib\DirectX\ReleaseDLL\"
+
+attrib -r "..\..\..\bin\$(TargetName).*"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\GPK;..\..\..\include\i3Gfx;..\..\..\include\i3Input;..\..\..\MovieBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GFX_BUILD;D3D_DEBUG_INFO;WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GfxType.h</PrecompiledHeaderFile>
+      <MinimalRebuild>true</MinimalRebuild>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;zlib.lib;libpng.lib;d3d9.lib;nvDXTlibMT.lib;strmbasd.lib;Winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../src/i3Gfx/DXTLib/lib/release;..\..\../lib/GPK;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DebugDLL\"
+
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>/MP
+24
+-Zm200 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>..\..\..\include\i3Gfx;..\..\..\include\i3Input;..\..\..\MovieBase;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GFX_BUILD;D3D_DEBUG_INFO;WIN32;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>i3GfxType.h</PrecompiledHeaderFile>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3InputDx.lib;zlib.lib;libpng.lib;nvDXTlibMT.lib;strmbase.lib;Winmm.lib;ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>..\..\../src/i3Gfx/DXTLib/lib/release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\..\..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\..\..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\..\..\lib\DirectX\DistributeDLL\"
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Clut.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ClutDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3DisplayList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3FullScreenWindowModeHelper.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxCaps.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxCapsGPU.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxFontDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxFontDX2.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGeometryUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGlobalVariable.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxGlobalVariableDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxMeta.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxMovie.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOccCuller.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOcclusionTest.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxOption.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxResource.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GFXType.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxUtilDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GfxVertexBank.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GPUCommandList.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3GPUCommandParserPSP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFile.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileBGLoader.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileBMP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileDDS.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileI3I.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFilePNG.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageFileTGA.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil16Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil24Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil32Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil4Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtil8Bits.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtilDXT.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ImageUtilHDR.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3IndexArrayXbox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Light.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PerformanceReport.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcess.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessBloom.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessCelShading.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessHaze.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessGamma.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessMotionBlur.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3PostProcessNightVision.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainBase.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChainManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_BloomCombine.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_BrightPathExtract.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_DownScale.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_GaussianBlur.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_NightVision.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_Sample.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_SimpleMotionBlur.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RasterizeChain_ToneMapping.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderContextDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderTarget.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3RenderTargetDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Shader.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderCache.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderCode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderContext.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderContextDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderGen.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderMemoryCode.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParam.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamMatrix.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamMatrixObject.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamSampler.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamSamplerStates.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamVector4.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderParamVector4Ref.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderSourceCodeMgr.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3ShaderUtil.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Surface.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3SurfaceMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3SystemFont.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Texture.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCube.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCubeDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureCubeMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureResManager.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureSequence.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3TextureXbox.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3UVPositioner.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArray.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayDX.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayMem.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexArrayPSP.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexBlending.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VertexFormat.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VideoInfo.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3VLog.cpp" />
+    <ClCompile Include="..\..\..\src\i3Gfx\i3Wmi.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Gfx.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Clut.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3DisplayList.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3FullScreenWindowModeHelper.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxCaps.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxDefineDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxFontDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxFontDX2.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGeometryUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGlobalVariable.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxGlobalVariableDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxMeta.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxMovie.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOccCuller.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOcclusionTest.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxOption.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxPSPCommandBuilder.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxResource.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxType.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxUtilDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GfxVertexBank.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GPUCommandList.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3GPUCommandParserPSP.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFile.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileBGLoader.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileBMP.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileDDS.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileI3I.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageFileTGA.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil16Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil24Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil32Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil4Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtil8Bits.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtilDXT.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ImageUtilHDR.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3IndexArray.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3IndexArrayMem.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Light.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PerformanceReport.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcess.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessBloom.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessCelShading.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessHaze.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessGamma.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessManager.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessMotionBlur.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3PostProcessNightVision.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainBase.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainContext.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChainManager.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_BloomCombine.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_BrightPathExtract.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_DownScale.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_GaussianBlur.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_NightVision.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_Sample.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_SimpleMotionBlur.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RasterizeChain_ToneMapping.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderContext.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderState.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderStateDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderTarget.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3RenderTargetDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Shader.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderCache.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderCode.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderContext.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderGen.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderMemoryCode.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParam.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamMatrix.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamMatrixObject.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamSampler.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamSamplerStates.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamVector4.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderParamVector4Ref.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderSourceCodeMgr.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3ShaderUtil.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Surface.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3SurfaceMem.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3SystemFont.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Texture.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCube.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCubeDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureCubeMem.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureMem.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureResManager.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3TextureSequence.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3UVPositioner.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArray.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArrayDX.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexArrayMem.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexBlending.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VertexFormat.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VideoInfo.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VLog.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3VLogDefine.h" />
+    <ClInclude Include="..\..\..\include\i3Gfx\i3Wmi.h" />
+    <ClInclude Include="..\..\..\src\i3Gfx\i3ImageFilePNG.h" />
+    <ClInclude Include="..\..\..\src\i3Gfx\smartptr.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\Shader\i3Common.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Custom_LightModel.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Decl.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Definition.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3DirectionalLight.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3GI1_LightModel.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Glow.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3HSL_LightModel.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3LuxMap.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Phong_LightModel.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3PixelShader_PPL.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3PixelShader_PVL.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3PointLight.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3Reflection.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3ShadowMap.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3SpotLight.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3SuperShader.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3VertexShader_PPL.hlsl">
+      <FileType>Document</FileType>
+    </None>
+    <None Include="..\..\..\Shader\i3VertexShader_PVL.hlsl">
+      <FileType>Document</FileType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\MovieBase\MovieBase.vcxproj">
+      <Project>{c14d9535-35e5-4b7f-8614-b772a214eb0b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\libpng\libpng.vcxproj">
+      <Project>{1320ebd6-c29b-4a9e-96ac-7dd2ed7b523c}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\zlib\zlib.vcxproj">
+      <Project>{b190c055-5689-4de2-8748-8387640464e0}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

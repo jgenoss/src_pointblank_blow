@@ -1,0 +1,1331 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Documents">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+    <Filter Include="Action">
+      <UniqueIdentifier>{041833df-b2a2-40c3-a465-adb12d6652be}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Effect">
+      <UniqueIdentifier>{5ba5edc2-98e2-4bb6-a2d2-b956eb35a1c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="AI">
+      <UniqueIdentifier>{2b02e687-94a5-4171-b510-246144ffa637}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Framework">
+      <UniqueIdentifier>{a8fd3b00-69a7-46ca-9fd0-7a8e42bf90f8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{fcd1e8e3-010b-4b74-9126-9b2885b56196}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="GameObj">
+      <UniqueIdentifier>{8e867c02-17b8-42dd-8f18-3d281dc8db2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Stage">
+      <UniqueIdentifier>{d41486d1-5441-4ccd-b50e-29d8855ce83c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI">
+      <UniqueIdentifier>{49e56ddf-dfe2-42e2-9481-2b1ea379bca7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Controls">
+      <UniqueIdentifier>{7f189477-df40-4f37-990e-3e7394e121f7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Templates">
+      <UniqueIdentifier>{589f308f-1033-4ee0-8708-4467088cb9ca}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Templates\Library">
+      <UniqueIdentifier>{fd8b85f4-73ff-4609-8dfe-e58ac5ee29b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Font">
+      <UniqueIdentifier>{fbcb04af-d6f5-4b62-abe9-2e07647a255d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Font\Uniscribe">
+      <UniqueIdentifier>{5bd77a4e-ea69-4500-a4a1-56ab61cec397}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Framework">
+      <UniqueIdentifier>{0951f837-4866-46e2-a15d-17b066942a6c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Framework\i3UIConsole">
+      <UniqueIdentifier>{95a54a25-2c62-4f1b-a32f-1a604683a5b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Virtual Texture">
+      <UniqueIdentifier>{6ec33460-5a5b-4265-b4e1-f35e166bff05}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Shader">
+      <UniqueIdentifier>{a9eef9cf-c5a9-4640-ad9e-79aeb722ca99}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\ListView New">
+      <UniqueIdentifier>{0739d35e-6ed2-4757-89eb-94b003d47572}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="i3UI\Virtual Texture\VTFileFormat">
+      <UniqueIdentifier>{93ec6b85-6758-4203-8b91-3cea80f9a241}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\..\src\i3Framework\i3DebugFont.inc">
+      <Filter>Source Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\..\src\i3Framework\i3FadeEffect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3FontManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3FrameworkMeta.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3FrameworkPCH.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameNodeTraversal.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameObjRef.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameSceneInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameSceneInfo_OldVersion.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Viewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionBreakObject.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionCollision.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionDisable.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionDynamicState.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionEmitEffect.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionExplosion.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionMeta.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionPath.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionPlayAnim.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionPlaySound.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionSetWorldSection.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionUserEvent.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ActionVisible.cpp">
+      <Filter>Action</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3EffectManager.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3EffectTypeInfo.cpp">
+      <Filter>Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3AI.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3AIContext.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3AIDriver.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3AIResManager.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3AIState.cpp">
+      <Filter>AI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3CharaSGChangeManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Framework.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Framework_Glue.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Framework_UI.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameInterface.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameObjPropertyDialog.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3InputDispatchManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3InstanceManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ResourceFile_i3Chara.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ResourceManager.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3SgLayer.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3ViewerFramework.cpp">
+      <Filter>Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameRes.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResAnimation.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResBinary.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResCamera.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResChara.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResEvent.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResLight.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResObject.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResPath.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResRespawn.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResSceneGraph.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResSound.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResTexture.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameResWorld.cpp">
+      <Filter>Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3CameraObject.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Chara.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameNode.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameObj.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GameObjBase.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3GamePath.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3LightObject.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Object.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3PathLine.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3PathPoint.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3RespawnObj.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3StaticObject.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Trigger.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3World.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3WorldSectionTable.cpp">
+      <Filter>GameObj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3Stage.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3StageInfo.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3StageStack.cpp">
+      <Filter>Stage</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3Ime.cpp">
+      <Filter>i3UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI.cpp">
+      <Filter>i3UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIRenderer.cpp">
+      <Filter>i3UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIRenderer_Legacy.cpp">
+      <Filter>i3UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UISystem.cpp">
+      <Filter>i3UI</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UI3DViewBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIButton.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIButtonComboBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIButtonComposed3.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIButtonImageSet.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UICaptionControl.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UICaptionControl_Glue.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UICaptionControl_Wrapper.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UICheckBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIComboBase.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIComboBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIComboBox_NoEditBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl_Child.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\include\i3Framework\i3UI\i3UIControl_Dummy.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl_Input.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl_LuaGlue.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl_Place.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIControl_User.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIDoubleText.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIDummyAttrSet.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIEditBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFrameWnd.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIHBar.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIImageBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIImageBoxEx.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIMessageBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIProgressBar.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIProgressBarImage.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIProgressBarSplit.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIRadio.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIScrollBar.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UISocketBox.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UISpin.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIStaticText.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITab.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIToolTip.cpp">
+      <Filter>i3UI\Controls</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_3DView.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_Button.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ButtonComboBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ButtonComposed3.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ButtonImageSet.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_CheckBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_CheckButton.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ComboBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ComboBox_NoEditBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_DoubleText.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_EditBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_FrameWnd.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_HBar.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_HScrollBar.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ImageBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ImageBoxEx.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ListBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_MessageBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ProgressBar.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ProgressBarImage.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ProgressBarSplit.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_Radio.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ScrollBar.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_SocketBox.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_Spin.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_StaticText.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_Tab.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_ToolTip.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_User.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_VScrollBar.cpp">
+      <Filter>i3UI\Templates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILibrary.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILTreeElement.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILTreeFilter.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILTreeNode_Filter.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILTreeNode_Template.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFont.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFontCache.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFontCache2.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFontManager.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIText.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITextManager.cpp">
+      <Filter>i3UI\Font</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\Uniscribe\i3UIText2.cpp">
+      <Filter>i3UI\Font\Uniscribe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\Uniscribe\i3UIText2_Edit.cpp">
+      <Filter>i3UI\Font\Uniscribe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\Uniscribe\i3UIUniscribe.cpp">
+      <Filter>i3UI\Font\Uniscribe</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIDefines.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIManager.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIManager_Dispatch.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIManager_Library.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIManager_LuaGlue.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIManager_VirtualTexture.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIModalDriver.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIRoot.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIScene.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\I3UIConsoleCmd.cpp">
+      <Filter>i3UI\Framework\i3UIConsole</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIConsoleContext.cpp">
+      <Filter>i3UI\Framework\i3UIConsole</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTexture.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTexture_Legacy.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTexture_Subset.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureCache.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureCache_Allocator.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureCache_RAM.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureCache_VRAM.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureIO.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureIO_Thread.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VirtualTextureSystem.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Box.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Cell.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Data.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Header.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Item.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_LuaGlue.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIListView_Sep.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_LVBox.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_LVCell.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_LVHeader.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_LVItem.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UITemplate_LVSep.cpp">
+      <Filter>i3UI\ListView New</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\OccDebugInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormatController.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormatController_Legacy.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormatController_New.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormatController_New_Tool.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTSubsetController.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormatUtil.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3VTFileFormat.cpp">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIFilePathMgr.cpp">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIAnimationMgr.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UILibHdr.cpp">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\..\src\i3Framework\i3UI\i3UIAnimation2DSprite.cpp">
+      <Filter>i3UI\Framework</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\..\include\i3Framework\i3FadeEffect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3FadeEffectType.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3FontManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3FrameworkMeta.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3FrameworkPCH.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Game.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameNodeTraversal.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameObjRef.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameSceneInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Viewer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\i3Framework\res\resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionBreakObject.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionCollision.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionDisable.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionDynamicState.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionEmitEffect.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionExplosion.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionMeta.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionPath.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionPlayAnim.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionPlaySound.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionSetWorldSection.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionUserEvent.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ActionVisible.h">
+      <Filter>Action</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3EffectManager.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3EffectTypeInfo.h">
+      <Filter>Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3AI.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3AIContext.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3AIDriver.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3AIResManager.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3AIState.h">
+      <Filter>AI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3CharaSGChangeManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Framework.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameInterface.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameObjPropertyDialog.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3InputDispatchManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3InstanceManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ResourceFile_i3Chara.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ResourceManager.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3SgLayer.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3ViewerFramework.h">
+      <Filter>Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameRes.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResAnimation.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResBinary.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResCamera.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResChara.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResDefine.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResEvent.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResLight.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResObject.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResPath.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResRespawn.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResSceneGraph.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResSound.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResTexture.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameResWorld.h">
+      <Filter>Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3CameraObject.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Chara.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameNode.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameObj.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GameObjBase.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3GamePath.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3LightObject.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Object.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3PathLine.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3PathPoint.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3RespawnObj.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3StaticObject.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Trigger.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3World.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3WorldSectionTable.h">
+      <Filter>GameObj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3Stage.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3StageInfo.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3StageStack.h">
+      <Filter>Stage</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3Ime.h">
+      <Filter>i3UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI.h">
+      <Filter>i3UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIRenderer.h">
+      <Filter>i3UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UISprite.h">
+      <Filter>i3UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UISystem.h">
+      <Filter>i3UI</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UI3DViewBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIButton.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIButtonComboBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIButtonComposed3.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIButtonImageSet.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UICaptionControl.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UICheckBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIComboBase.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIComboBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIComboBox_NoEditBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIControl.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIControl_Dummy.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIControl_User.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIDoubleText.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIDummyAttrSet.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIEditBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFrameWnd.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIHBar.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIImageBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIImageBoxEx.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIMessageBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIProgressBar.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIProgressBarImage.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIProgressBarSplit.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIRadio.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIScrollBar.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UISocketBox.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UISpin.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIStaticText.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITab.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIToolTip.h">
+      <Filter>i3UI\Controls</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_3DView.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_Button.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ButtonComboBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ButtonComposed3.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ButtonImageSet.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_CheckBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_CheckButton.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ComboBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ComboBox_NoEditBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_DoubleText.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_EditBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_FrameWnd.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_HBar.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_HScrollBar.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ImageBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ImageBoxEx.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ListBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_MessageBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ProgressBar.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ProgressBarImage.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ProgressBarSplit.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_Radio.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ScrollBar.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_SocketBox.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_Spin.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_StaticText.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_Tab.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_ToolTip.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_User.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_VScrollBar.h">
+      <Filter>i3UI\Templates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILibrary.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILTreeElement.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILTreeFilter.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILTreeNode_Filter.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILTreeNode_Template.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFont.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFontCache.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFontCache2.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFontManager.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIGlyph.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILetter.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITextManager.h">
+      <Filter>i3UI\Font</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\Uniscribe\i3UIText2.h">
+      <Filter>i3UI\Font\Uniscribe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\Uniscribe\i3UIUniscribe.h">
+      <Filter>i3UI\Font\Uniscribe</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIDefines.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIManager.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIModalDriver.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIRoot.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIScene.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIConsoleCmd.h">
+      <Filter>i3UI\Framework\i3UIConsole</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIConsoleCommon.h">
+      <Filter>i3UI\Framework\i3UIConsole</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIConsoleContext.h">
+      <Filter>i3UI\Framework\i3UIConsole</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTexture.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureCache.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureCache_Allocator.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureCache_RAM.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureCache_VRAM.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureDefine.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureIO.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureIO_Thread.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureQuadTree.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VirtualTextureSystem.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Data.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Defines.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Header.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Item.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Sep.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_LVHeader.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_LVItem.h">
+      <Filter>i3UI\ListView New</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework.h">
+      <Filter>Documents</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\OccDebugInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormatController.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormatController_Legacy.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormatController_New.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormatController_New_Tool.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTSubsetController.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormatUtil.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3VTFileFormat.h">
+      <Filter>i3UI\Virtual Texture\VTFileFormat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIFilePathMgr.h">
+      <Filter>i3UI\Virtual Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIAnimationMgr.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UILibHdr.h">
+      <Filter>i3UI\Templates\Library</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\include\i3Framework\i3UI\i3UIAnimation2DSprite.h">
+      <Filter>i3UI\Framework</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\..\..\src\i3Framework\res\i3FrameworkDx.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\..\..\src\i3Framework\res\ico00001.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\src\i3Framework\res\ico00002.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\src\i3Framework\res\ico00003.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\src\i3Framework\res\ico00004.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\src\i3Framework\res\ico00005.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\..\..\src\i3Framework\res\icon1.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UIText.h">
+      <Filter>i3UI\Font</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Box.h">
+      <Filter>i3UI\ListView New</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UIListView_Cell.h">
+      <Filter>i3UI\ListView New</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_LVBox.h">
+      <Filter>i3UI\ListView New</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_LVCell.h">
+      <Filter>i3UI\ListView New</Filter>
+    </CustomBuild>
+    <CustomBuild Include="..\..\..\include\i3Framework\i3UI\i3UITemplate_LVSep.h">
+      <Filter>i3UI\ListView New</Filter>
+    </CustomBuild>
+  </ItemGroup>
+</Project>
