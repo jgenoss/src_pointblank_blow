@@ -1,0 +1,64 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Engine", "Engine", "{4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AvatarViewer", "AvatarViewer.vcxproj", "{686B2166-1118-4A46-95D5-4DD2813D1537}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3BaseDx", "..\..\i3\Project\I3_DX\i3BaseDx\i3BaseDx.vcxproj", "{9351551B-71B9-4000-AC64-F55678384ABF}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3FrameworkDx", "..\..\i3\Project\I3_DX\i3FrameworkDx\i3FrameworkDx.vcxproj", "{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3SceneDx", "..\..\i3\Project\I3_DX\i3SceneDx\i3SceneDx.vcxproj", "{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3GfxDx", "..\..\i3\Project\I3_DX\i3GfxDx\i3GfxDx.vcxproj", "{A16536C6-3DFB-4EB1-83F4-66B72923A29A}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "i3SceneUtilDx", "..\..\i3\Project\I3_DX\i3SceneUtil\i3SceneUtil.vcxproj", "{ECE6CA1F-B83B-40C5-873F-B46C89D29487}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Win32 = Debug|Win32
+		Distribute|Win32 = Distribute|Win32
+		Release|Win32 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Debug|Win32.ActiveCfg = Debug|Win32
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Debug|Win32.Build.0 = Debug|Win32
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Distribute|Win32.ActiveCfg = Release|Win32
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Distribute|Win32.Build.0 = Release|Win32
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Release|Win32.ActiveCfg = Release|Win32
+		{686B2166-1118-4A46-95D5-4DD2813D1537}.Release|Win32.Build.0 = Release|Win32
+		{9351551B-71B9-4000-AC64-F55678384ABF}.Debug|Win32.ActiveCfg = Debug|Win32
+		{9351551B-71B9-4000-AC64-F55678384ABF}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{9351551B-71B9-4000-AC64-F55678384ABF}.Release|Win32.ActiveCfg = Release|Win32
+		{9351551B-71B9-4000-AC64-F55678384ABF}.Release|Win32.Build.0 = Release|Win32
+		{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823}.Debug|Win32.ActiveCfg = Debug|Win32
+		{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823}.Release|Win32.ActiveCfg = Release|Win32
+		{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823}.Release|Win32.Build.0 = Release|Win32
+		{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}.Debug|Win32.ActiveCfg = Debug|Win32
+		{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}.Release|Win32.ActiveCfg = Release|Win32
+		{1B5AE97B-959F-40C8-9E78-F7B7280DBC71}.Release|Win32.Build.0 = Release|Win32
+		{A16536C6-3DFB-4EB1-83F4-66B72923A29A}.Debug|Win32.ActiveCfg = Debug|Win32
+		{A16536C6-3DFB-4EB1-83F4-66B72923A29A}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{A16536C6-3DFB-4EB1-83F4-66B72923A29A}.Release|Win32.ActiveCfg = Release|Win32
+		{A16536C6-3DFB-4EB1-83F4-66B72923A29A}.Release|Win32.Build.0 = Release|Win32
+		{ECE6CA1F-B83B-40C5-873F-B46C89D29487}.Debug|Win32.ActiveCfg = Debug|Win32
+		{ECE6CA1F-B83B-40C5-873F-B46C89D29487}.Distribute|Win32.ActiveCfg = Distribute|Win32
+		{ECE6CA1F-B83B-40C5-873F-B46C89D29487}.Release|Win32.ActiveCfg = Release|Win32
+		{ECE6CA1F-B83B-40C5-873F-B46C89D29487}.Release|Win32.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{9351551B-71B9-4000-AC64-F55678384ABF} = {4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}
+		{4BA9DEF3-AEB3-4A36-9731-FD79B98C3823} = {4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}
+		{1B5AE97B-959F-40C8-9E78-F7B7280DBC71} = {4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}
+		{A16536C6-3DFB-4EB1-83F4-66B72923A29A} = {4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}
+		{ECE6CA1F-B83B-40C5-873F-B46C89D29487} = {4412F8AF-6B41-44C1-AF96-0C1F9D9CE020}
+	EndGlobalSection
+EndGlobal

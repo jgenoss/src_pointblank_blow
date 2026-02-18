@@ -1,0 +1,239 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="Controls">
+      <UniqueIdentifier>{5d420063-38a1-4482-9e87-92ff4d72fc2b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common Source">
+      <UniqueIdentifier>{fdf506b4-e23b-48ec-9aea-30207107b2f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="S2MO">
+      <UniqueIdentifier>{10e36c41-db1e-4ff8-922c-4ad85d8d4ed5}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="AvatarManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AvatarViewer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AvatarViewerFramework.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChildView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ConvertBlendIndex.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgSelectBody.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="EquipData.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm_Ribbon_Home.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OptionInfo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Anim.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Avatar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_CamSet.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Dlg_Avatar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_Part.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Panel_SceneGraph.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="pch.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SceneGraphTreeCtrl.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Avatar.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Avatar\AvatarDefine.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Avatar\AvatarGen.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Avatar\AvatarGen_Geo.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Avatar\AvatarGen_Tex.cpp">
+      <Filter>Common Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="AvatarManager.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AvatarViewer.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AvatarViewerFramework.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ChildView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ConvertBlendIndex.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgSelectBody.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="EquipData.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OptionInfo.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Anim.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Avatar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_CamSet.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Dlg_Avatar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_Part.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Panel_SceneGraph.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="pch.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneGraphTreeCtrl.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Avatar.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Avatar\AvatarDefine.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Avatar\AvatarGen.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Avatar\AvatarID.h">
+      <Filter>Common Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\ErrorCode.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\ProtocolDef.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\S2MO.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\S2MODataType.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\S2MOPackable.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\S2MORSA.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Library\include\S2MOStruct.h">
+      <Filter>S2MO</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\AvatarViewer.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\buttons.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\filesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icons_24.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\icons_32.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\main.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writelarge.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\writesmall.bmp">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AvatarViewer.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\AvatarViewer.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

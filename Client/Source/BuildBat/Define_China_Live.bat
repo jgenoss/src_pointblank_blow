@@ -1,0 +1,17 @@
+@echo off
+
+
+set LOCALE=China
+set EXE_NAME=PointBlank
+set EXEC_NAME=PointBlank
+set LOG_PATH=.
+set EXE_ROOT=%CLIENT_EXES%\ChinaLive\Distribute
+set EXE_LIVE_FILE_DIR=%EXE_ROOT%
+set BUILD_NAME=%LOCALE%_Live
+set DIST_TYPE=NC_Distribute
+set SECURITY_TYPE=Themida
+set BUILD_CONFIG_QA=%CONFIG_QA%_China
+set BUILD_CONFIG_LIVE=%CONFIG_Live%_China
+set BUILD_RESULT_QA=%PB_SRC_ROOT%\ClientSource\%BUILD_CONFIG_QA%
+set BUILD_RESULT_LIVE=%PB_SRC_ROOT%\ClientSource\%BUILD_CONFIG_LIVE%
+

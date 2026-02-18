@@ -1,0 +1,17 @@
+@echo off
+
+
+set LOCALE=Korea
+set EXE_NAME=PointBlank
+set EXEC_NAME=PointBlank
+set LOG_PATH=.
+set EXE_ROOT=%CLIENT_EXES%\PointBlank_Sample
+set EXE_LIVE_FILE_DIR=%EXE_ROOT%
+set BUILD_NAME=Development_Live
+set DIST_TYPE=Default
+set SECURITY_TYPE=Null
+set BUILD_CONFIG_QA=%CONFIG_QA%_%LOCALE%_Dev
+set BUILD_CONFIG_LIVE=%CONFIG_QA%_%LOCALE%_Dev
+set BUILD_RESULT_QA=%PB_SRC_ROOT%\ClientSource\%BUILD_CONFIG_QA%
+set BUILD_RESULT_LIVE=%PB_SRC_ROOT%\ClientSource\%BUILD_CONFIG_LIVE%
+

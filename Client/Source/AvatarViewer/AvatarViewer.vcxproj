@@ -1,0 +1,231 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{686B2166-1118-4A46-95D5-4DD2813D1537}</ProjectGuid>
+    <RootNamespace>AvatarViewer</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3\i3Engine2_Common.props" />
+    <Import Project="..\..\i3\i3Engine2_Distribute.props" />
+    <Import Project="..\..\i3\i3TDK_Distribute.props" />
+    <Import Project="DX9.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\..\i3\i3Engine2_Common.props" />
+    <Import Project="..\..\i3\i3Engine2_Debug.props" />
+    <Import Project="..\..\i3\i3TDK.props" />
+    <Import Project="DX9.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <IncludePath>$(IncludePath);..\..\i3\DirectX9\Include;</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(IncludePath);..\..\i3\DirectX9\Include;</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\Avatar;..\..\i3\include;..\..\i3\include\lua;..\..\i3\include/i3Framework;..\..\i3\include/i3Framework/i3UI;..\..\i3\PhysX/common/include;..\..\i3\PhysX/SDKs/Physics/include;..\..\i3\PhysX/SDKs/PhysXLoader/include;..\..\i3\PhysX\SDKs/Foundation/include;..\..\i3\PhysX/SDKs/Framework/include;..\..\i3\PhysX/SDKs/Cooking/include;..\..\i3\PhysX/SDKs/NxCharacter/include;..\..\i3\FMOD/fmoddesignerapi/api\inc;..\..\i3\FMOD/api/inc;..\..\i3\PhysX/Tools/NxuStream2;..\..\i3\i3TDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;AVATAR_TOOL;I3_DEBUG;_AFXDLL;BUILD_RELEASE_QA_VERSION;LOCALE_KOREA;DEV_BUILD;ENABLE_UI2;__VER_1_5__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\i3\lib\DirectX\DebugDLL;..\..\i3\PhysX\Bin\win32\Release;..\..\i3\DirectX9\Lib\X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm250 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>..\Avatar;..\..\i3\include;..\..\i3\include\lua;..\..\i3\include/i3Framework;..\..\i3\include/i3Framework/i3UI;..\..\i3\PhysX/common/include;..\..\i3\PhysX/SDKs/Physics/include;..\..\i3\PhysX/SDKs/PhysXLoader/include;..\..\i3\PhysX\SDKs/Foundation/include;..\..\i3\PhysX/SDKs/Framework/include;..\..\i3\PhysX/SDKs/Cooking/include;..\..\i3\PhysX/SDKs/NxCharacter/include;..\..\i3\FMOD/fmoddesignerapi/api\inc;..\..\i3\FMOD/api/inc;..\..\i3\PhysX/Tools/NxuStream2;..\..\i3\i3TDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;AVATAR_TOOL;_BIND_TO_CURRENT_VCLIBS_VERSION=1;_BIND_TO_CURRENT_CRT_VERSION=1;_BIND_TO_CURRENT_ATL_VERSION=1;_BIND_TO_CURRENT_MFC_VERSION=1;_BIND_TO_CURRENT_OPENMP_VERSION=1;_CRT_NON_CONFORMING_SWPRINTFS;__VER_1_5__;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalLibraryDirectories>..\..\i3\lib\DirectX\DistributeDLL;..\..\i3\PhysX\Bin\win32\Release;..\..\i3\DirectX9\Lib\X86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+      <AdditionalDependencies>dxerr.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <UACExecutionLevel>RequireAdministrator</UACExecutionLevel>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(TargetPath)" "..\..\i3\bin\$(TargetFileName)"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\Avatar\AvatarDefine.cpp" />
+    <ClCompile Include="..\Avatar\AvatarGen.cpp" />
+    <ClCompile Include="..\Avatar\AvatarGen_Geo.cpp" />
+    <ClCompile Include="..\Avatar\AvatarGen_Tex.cpp" />
+    <ClCompile Include="Avatar.cpp" />
+    <ClCompile Include="AvatarManager.cpp" />
+    <ClCompile Include="AvatarViewer.cpp" />
+    <ClCompile Include="AvatarViewerFramework.cpp" />
+    <ClCompile Include="ChildView.cpp" />
+    <ClCompile Include="ConvertBlendIndex.cpp" />
+    <ClCompile Include="DlgSelectBody.cpp" />
+    <ClCompile Include="EquipData.cpp" />
+    <ClCompile Include="GlobalVar.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="MainFrm_Ribbon_Home.cpp" />
+    <ClCompile Include="OptionInfo.cpp" />
+    <ClCompile Include="Panel_Anim.cpp" />
+    <ClCompile Include="Panel_Avatar.cpp" />
+    <ClCompile Include="Panel_CamSet.cpp" />
+    <ClCompile Include="Panel_Dlg_Avatar.cpp" />
+    <ClCompile Include="Panel_Part.cpp" />
+    <ClCompile Include="Panel_SceneGraph.cpp" />
+    <ClCompile Include="pch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pch.h</PrecompiledHeaderFile>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+    <ClCompile Include="SceneGraphTreeCtrl.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Avatar\AvatarDefine.h" />
+    <ClInclude Include="..\Avatar\AvatarGen.h" />
+    <ClInclude Include="..\Avatar\AvatarID.h" />
+    <ClInclude Include="..\Library\include\ErrorCode.h" />
+    <ClInclude Include="..\Library\include\ProtocolDef.h" />
+    <ClInclude Include="..\Library\include\S2MO.h" />
+    <ClInclude Include="..\Library\include\S2MODataType.h" />
+    <ClInclude Include="..\Library\include\S2MOPackable.h" />
+    <ClInclude Include="..\Library\include\S2MORSA.h" />
+    <ClInclude Include="..\Library\include\S2MOStruct.h" />
+    <ClInclude Include="Avatar.h" />
+    <ClInclude Include="AvatarManager.h" />
+    <ClInclude Include="AvatarViewer.h" />
+    <ClInclude Include="AvatarViewerFramework.h" />
+    <ClInclude Include="ChildView.h" />
+    <ClInclude Include="ConvertBlendIndex.h" />
+    <ClInclude Include="DlgSelectBody.h" />
+    <ClInclude Include="EquipData.h" />
+    <ClInclude Include="GlobalVar.h" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="OptionInfo.h" />
+    <ClInclude Include="Panel_Anim.h" />
+    <ClInclude Include="Panel_Avatar.h" />
+    <ClInclude Include="Panel_CamSet.h" />
+    <ClInclude Include="Panel_Dlg_Avatar.h" />
+    <ClInclude Include="Panel_Part.h" />
+    <ClInclude Include="Panel_SceneGraph.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="SceneGraphTreeCtrl.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\AvatarViewer.ico" />
+    <Image Include="res\buttons.bmp" />
+    <Image Include="res\filelarge.bmp" />
+    <Image Include="res\filesmall.bmp" />
+    <Image Include="res\icons_24.bmp" />
+    <Image Include="res\icons_32.bmp" />
+    <Image Include="res\main.bmp" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\Toolbar256.bmp" />
+    <Image Include="res\writelarge.bmp" />
+    <Image Include="res\writesmall.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="AvatarViewer.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\AvatarViewer.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="AvatarViewer.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

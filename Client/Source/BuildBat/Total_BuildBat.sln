@@ -1,0 +1,118 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.23107.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{E632D267-C853-46EB-B9FE-BFD133EE4271}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Build", "Build", "{BE52636A-276C-497B-9BE6-008D8DB41565}"
+	ProjectSection(SolutionItems) = preProject
+		Build_All.bat = Build_All.bat
+		Build_All_Brazil.bat = Build_All_Brazil.bat
+		Build_All_Indonesia.bat = Build_All_Indonesia.bat
+		Build_All_Japan.bat = Build_All_Japan.bat
+		Build_All_Korea.bat = Build_All_Korea.bat
+		Build_All_Latin.bat = Build_All_Latin.bat
+		Build_All_NorthAmerica.bat = Build_All_NorthAmerica.bat
+		Build_All_Philippines.bat = Build_All_Philippines.bat
+		Build_All_Russia.bat = Build_All_Russia.bat
+		Build_All_Thai.bat = Build_All_Thai.bat
+		Build_All_Turkey.bat = Build_All_Turkey.bat
+		Build_Backup.bat = Build_Backup.bat
+		Build_Client.bat = Build_Client.bat
+		Build_Count_Version.bat = Build_Count_Version.bat
+		Build_LevelTooli3Exec.bat = Build_LevelTooli3Exec.bat
+		Build_Live.bat = Build_Live.bat
+		Build_Main.bat = Build_Main.bat
+		Build_QA.bat = Build_QA.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Define", "Define", "{80B376AC-3052-41D9-8564-4856251F5CEF}"
+	ProjectSection(SolutionItems) = preProject
+		Define.bat = Define.bat
+		Define_Brazil_Live.bat = Define_Brazil_Live.bat
+		Define_Brazil_QA.bat = Define_Brazil_QA.bat
+		Define_China_Live.bat = Define_China_Live.bat
+		Define_China_QA.bat = Define_China_QA.bat
+		Define_Development_Live.bat = Define_Development_Live.bat
+		Define_Development_QA.bat = Define_Development_QA.bat
+		Define_English_Live.bat = Define_English_Live.bat
+		Define_English_QA.bat = Define_English_QA.bat
+		Define_Indonesia_Live.bat = Define_Indonesia_Live.bat
+		Define_Indonesia_QA.bat = Define_Indonesia_QA.bat
+		Define_Italy_Live.bat = Define_Italy_Live.bat
+		Define_Italy_QA.bat = Define_Italy_QA.bat
+		Define_Japan_Live.bat = Define_Japan_Live.bat
+		Define_Japan_QA.bat = Define_Japan_QA.bat
+		Define_Korea_Live.bat = Define_Korea_Live.bat
+		Define_Korea_QA.bat = Define_Korea_QA.bat
+		Define_Latin_America_Live.bat = Define_Latin_America_Live.bat
+		Define_Latin_America_QA.bat = Define_Latin_America_QA.bat
+		Define_MiddleEast_Live.bat = Define_MiddleEast_Live.bat
+		Define_MiddleEast_QA.bat = Define_MiddleEast_QA.bat
+		Define_ModeScript_QA.bat = Define_ModeScript_QA.bat
+		Define_NorthAmerica_Live.bat = Define_NorthAmerica_Live.bat
+		Define_NorthAmerica_QA.bat = Define_NorthAmerica_QA.bat
+		Define_Philippines_Live.bat = Define_Philippines_Live.bat
+		Define_Philippines_QA.bat = Define_Philippines_QA.bat
+		Define_Russia_Live.bat = Define_Russia_Live.bat
+		Define_Russia_QA.bat = Define_Russia_QA.bat
+		Define_Singmal_Live.bat = Define_Singmal_Live.bat
+		Define_Singmal_QA.bat = Define_Singmal_QA.bat
+		Define_Thailand_Live.bat = Define_Thailand_Live.bat
+		Define_Thailand_QA.bat = Define_Thailand_QA.bat
+		Define_Turkey_Live.bat = Define_Turkey_Live.bat
+		Define_Turkey_QA.bat = Define_Turkey_QA.bat
+		Define_UI2_Korea_QA.bat = Define_UI2_Korea_QA.bat
+		Define_UI2_Korea_Uni_QA.bat = Define_UI2_Korea_Uni_QA.bat
+		Define_Vietnam_Live.bat = Define_Vietnam_Live.bat
+		Define_Vietnam_QA.bat = Define_Vietnam_QA.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Encrypt", "Encrypt", "{AD58A0A5-1C0D-4522-9D8E-9C390A417A2E}"
+	ProjectSection(SolutionItems) = preProject
+		PB_Encription_HackShield.bat = PB_Encription_HackShield.bat
+		PB_Encription_NProtect.bat = PB_Encription_NProtect.bat
+		PB_Encription_Null.bat = PB_Encription_Null.bat
+		PB_Encription_Regen_LMP.bat = PB_Encription_Regen_LMP.bat
+		PB_Encription_Themida.bat = PB_Encription_Themida.bat
+		PB_Encription_XTrap.bat = PB_Encription_XTrap.bat
+		PB_UlSanGuard.bat = PB_UlSanGuard.bat
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Etc", "Etc", "{A73D8A6C-D7BF-40E4-999D-937507CB172D}"
+	ProjectSection(SolutionItems) = preProject
+		_buildIB.bat = _buildIB.bat
+		_buildIBLive.bat = _buildIBLive.bat
+		Backup_Build_Files.bat = Backup_Build_Files.bat
+		Backup_Indonesia.bat = Backup_Indonesia.bat
+		Backup_Korea.bat = Backup_Korea.bat
+		Backup_PBSource.bat = Backup_PBSource.bat
+		Backup_Russia.bat = Backup_Russia.bat
+		Backup_Thai.bat = Backup_Thai.bat
+		BuildCounter.bat = BuildCounter.bat
+		CodeSign.bat = CodeSign.bat
+		Command_Auto.bat = Command_Auto.bat
+		Command_Page.bat = Command_Page.bat
+		Copy_BIN.bat = Copy_BIN.bat
+		Copy_BIN_DBG.bat = Copy_BIN_DBG.bat
+		Copy_BIN_Qa.bat = Copy_BIN_Qa.bat
+		Copy_DBG.bat = Copy_DBG.bat
+		Copy_S2MO_dll.bat = Copy_S2MO_dll.bat
+		Execute_ClientSource.bat = Execute_ClientSource.bat
+		SVN_Commit.bat = SVN_Commit.bat
+		SVN_Update.bat = SVN_Update.bat
+		TimeStamp.bat = TimeStamp.bat
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{BE52636A-276C-497B-9BE6-008D8DB41565} = {E632D267-C853-46EB-B9FE-BFD133EE4271}
+		{80B376AC-3052-41D9-8564-4856251F5CEF} = {E632D267-C853-46EB-B9FE-BFD133EE4271}
+		{AD58A0A5-1C0D-4522-9D8E-9C390A417A2E} = {E632D267-C853-46EB-B9FE-BFD133EE4271}
+		{A73D8A6C-D7BF-40E4-999D-937507CB172D} = {E632D267-C853-46EB-B9FE-BFD133EE4271}
+	EndGlobalSection
+EndGlobal
