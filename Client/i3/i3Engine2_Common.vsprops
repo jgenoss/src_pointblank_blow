@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3Engine2_Common"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="../../include;../../include/lua;../../include/i3Framework;../../include/i3Framework/i3UI;../../PhysX/common/include;../../PhysX/SDKs/Physics/include;../../PhysX/SDKs/PhysXLoader/include;../../PhysX\SDKs/Foundation/include;../../PhysX/SDKs/Framework/include;../../PhysX/SDKs/Cooking/include;../../PhysX/SDKs/NxCharacter/include;../../FMOD/fmoddesignerapi/api\inc;../../FMOD/api/inc;../../PhysX/Tools/NxuStream2"
+		PreprocessorDefinitions="I3_WINDOWS;I3_COMPILER_VC;I3_DEBUG;I3G_DX;I3_DLL"
+		StructMemberAlignment="5"
+		EnableEnhancedInstructionSet="1"
+		TreatWChar_tAsBuiltInType="true"
+		ForceConformanceInForLoopScope="false"
+		RuntimeTypeInfo="true"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="NxCharacter.2.8.1.lib NxCooking.2.8.1.lib PhysXCore.2.8.1.lib PhysXLoader.2.8.1.lib"
+		AdditionalLibraryDirectories="../../PhysX/Bin/win32/Release"
+		TargetMachine="1"
+	/>
+</VisualStudioPropertySheet>

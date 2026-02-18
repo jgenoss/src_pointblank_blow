@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3Engine2_Distribute"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		InlineFunctionExpansion="2"
+		EnableIntrinsicFunctions="true"
+		FavorSizeOrSpeed="1"
+		RuntimeLibrary="2"
+		BrowseInformation="1"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="i3BaseDx.lib i3MathDx.lib i3GfxDx.lib i3InputDx.lib i3SceneDx.lib i3SoundDx.lib i3SceneUtilDx.lib i3FrameworkDx.lib i3OptDx.lib d3dx9.lib winmm.lib lua.lib NxuStream2.lib"
+		AdditionalLibraryDirectories="../../lib/DirectX/DistributeDLL; ../../../lib/DirectX/DistributeDLL"
+		GenerateDebugInformation="true"
+		SubSystem="2"
+		TargetMachine="1"
+	/>
+</VisualStudioPropertySheet>

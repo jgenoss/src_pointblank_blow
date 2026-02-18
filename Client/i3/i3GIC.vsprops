@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3GIC"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="../../i3GIC"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="i3GIC.lib"
+	/>
+</VisualStudioPropertySheet>

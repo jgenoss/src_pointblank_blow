@@ -1,0 +1,5 @@
+#include "i3MathType.h"
+#include "i3MathUtil.h"
+#include "i3Base.h"
+#include "i3Vector.h"
+#include "i3PolygonArray.h"

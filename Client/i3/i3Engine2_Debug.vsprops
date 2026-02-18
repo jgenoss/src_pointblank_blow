@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="i3Engine2_Debug"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		Optimization="0"
+		InlineFunctionExpansion="0"
+		PreprocessorDefinitions="I3_DEBUG"
+		MinimalRebuild="true"
+		BasicRuntimeChecks="3"
+		SmallerTypeCheck="true"
+		RuntimeLibrary="3"
+		BrowseInformation="1"
+		WarningLevel="4"
+		DebugInformationFormat="3"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		LinkLibraryDependencies="false"
+		AdditionalDependencies="i3BaseDx.lib i3MathDx.lib i3GfxDx.lib i3InputDx.lib i3SceneDx.lib i3SoundDx.lib i3SceneUtilDx.lib i3FrameworkDx.lib i3OptDx.lib d3dx9.lib winmm.lib lua.lib NxuStream2.lib"
+		AdditionalLibraryDirectories="../../lib/DirectX/DebugDLL"
+		GenerateDebugInformation="true"
+		SubSystem="2"
+	/>
+</VisualStudioPropertySheet>
