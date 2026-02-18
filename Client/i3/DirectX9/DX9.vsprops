@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="ks_c_5601-1987"?>
+<VisualStudioPropertySheet
+	ProjectType="Visual C++"
+	Version="8.00"
+	Name="DX9"
+	>
+	<Tool
+		Name="VCCLCompilerTool"
+		AdditionalIncludeDirectories="&quot;..\DirectX9\Include&quot;"
+		TreatWChar_tAsBuiltInType="true"
+	/>
+	<Tool
+		Name="VCLinkerTool"
+		AdditionalDependencies="d3d9.lib dxguid.lib d3dx9.lib dxerr.lib"
+		AdditionalLibraryDirectories="&quot;..\DirectX9\Lib\X86&quot;"
+	/>
+</VisualStudioPropertySheet>

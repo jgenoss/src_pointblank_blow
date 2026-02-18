@@ -1,0 +1,9 @@
+VS 2008 비주얼라이저 스크립트 파일입니다.
+
+C:\Program Files (x86)\Microsoft Visual Studio 9.0\Common7\Packages\Debugger
+
+안에 autoexp.dat파일이 있습니다. 기존 파일은 이름을 바꾸어 백업용도로 보관하시고
+
+i3엔진/Documents에 있는 autoexp.dat를 덮어 씌우면 됩니다.
+
+i3엔진전용 STL 디버깅 정보가 표준 STL처럼 출력 됩니다.
