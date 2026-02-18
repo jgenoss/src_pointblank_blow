@@ -1,0 +1,28 @@
+aion_qa  	3.4.0.1
+aion_pts  	3.4.0.8
+aion_live 	3.4.0.8
+
+aceonline_qa 	N/A
+aceonline_pts	3.4.0.1
+aceonline_live 	3.4.0.4
+
+pb_qa 		4.4.0.5
+pb_pts		4.4.0.5
+pb_live 	4.4.0.5
+
+rfonline_qa 	4.4.0.5
+rfonline_pts 	4.4.0.5
+rfonline_live 	4.4.0.5
+
+l2_qa 		3.4.0.5_L2
+l2_pts 		4.4.0.5_L2
+l2_live 	3.4.0.5_L2
+
+atlantica_qa    3.4.0.1
+atlantica_pts   3.4.0.1
+atlantica_live	1.2.2.6
+
+r2online_qa     3.4.0.1
+r2online_pts    4.4.0.5
+r2online_live   3.4.0.4
+

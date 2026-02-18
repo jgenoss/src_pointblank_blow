@@ -1,0 +1,6 @@
+EXPORTS
+	InstallKeyhook
+	UninstallKeyhook
+	ResetWatchKey
+	KeyHookProc
+	SetViewerKeyhook

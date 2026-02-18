@@ -1,0 +1,787 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{FFE53A91-00B3-4005-B4A6-EEE5BFE763A0}</ProjectGuid>
+    <RootNamespace>BuildTool</RootNamespace>
+    <Keyword>MFCProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v140</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>12.0.21005.1</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2008%29\Include</IncludePath>
+    <ExcludePath>$(ExcludePath)</ExcludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(WindowsSDK_IncludePath);$(VC_IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2008%29\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);C:\Program Files %28x86%29\Microsoft DirectX SDK %28June 2008%29\Include;$(IncludePath)</IncludePath>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>Disabled</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>d:\boost_1_59_0;../../../../i3/PhysX/SDKs/Physics/include;../../../../i3/PhysX/SDKs/Foundation/include;../../../../i3/PhysX/SDKs/PhysXLoader/include;../../../../i3/PhysX/SDKs/NxCharacter/include;../../../../i3/FMOD/api/inc;../../../../i3/include;./implements;./externals;./</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DEBUG;I3_DLL;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <StringPooling>false</StringPooling>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <RuntimeTypeInfo>true</RuntimeTypeInfo>
+      <OpenMPSupport>false</OpenMPSupport>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;i3FrameworkDx.lib;Crypto.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../../../../i3/lib/DirectX/DebugDLL/;d:\boost_1_59_0\stage\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <TargetMachine>MachineX86</TargetMachine>
+      <LinkTimeCodeGeneration>Default</LinkTimeCodeGeneration>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+      <ValidateAllParameters>true</ValidateAllParameters>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>C:\boost_1_59_0;../../../../i3/PhysX/SDKs/Physics/include;../../../../i3/PhysX/SDKs/Foundation/include;../../../../i3/PhysX/SDKs/PhysXLoader/include;../../../../i3/PhysX/SDKs/NxCharacter/include;../../../../i3/FMOD/api/inc;../../../../i3/include;./implements;./externals;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>false</MinimalRebuild>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;Crypto.lib;i3FrameworkDx.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\boost_1_59_0\stage\lib;../../../../i3/lib/DirectX/ReleaseDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <ClCompile>
+      <AdditionalOptions>-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <WholeProgramOptimization>false</WholeProgramOptimization>
+      <AdditionalIncludeDirectories>d:\boost_1_59_0;../../../../i3/PhysX/SDKs/Physics/include;../../../../i3/PhysX/SDKs/Foundation/include;../../../../i3/PhysX/SDKs/PhysXLoader/include;../../../../i3/PhysX/SDKs/NxCharacter/include;../../../../i3/FMOD/api/inc;../../../../i3/include;./implements;./externals;./;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;NDEBUG;I3G_DX;I3_COMPILER_VC;I3_WINDOWS;I3_DLL;I3_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>Create</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3SceneDx.lib;i3MathDx.lib;i3FrameworkDx.lib;Crypto.lib;winmm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>d:\boost_1_59_0\stage\lib;../../../../i3/lib/DirectX/DistributeDLL;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <SubSystem>Windows</SubSystem>
+      <OptimizeReferences>true</OptimizeReferences>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <LinkTimeCodeGeneration>UseLinkTimeCodeGeneration</LinkTimeCodeGeneration>
+      <EntryPointSymbol>wWinMainCRTStartup</EntryPointSymbol>
+      <TargetMachine>MachineX86</TargetMachine>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="BuildTool.cpp" />
+    <ClCompile Include="BuildToolDoc.cpp" />
+    <ClCompile Include="BuildToolView.cpp" />
+    <ClCompile Include="externals\i3RSCGen\i3RSCGen.cpp" />
+    <ClCompile Include="externals\i3RSCGen\RSCGenDefine.cpp" />
+    <ClCompile Include="externals\i3RSCGen\RSCNode.cpp" />
+    <ClCompile Include="externals\jsoncpp\json_reader.cpp" />
+    <ClCompile Include="externals\jsoncpp\json_value.cpp" />
+    <ClCompile Include="externals\jsoncpp\json_writer.cpp" />
+    <ClCompile Include="externals\RscTool\ExecuteSVN.cpp" />
+    <ClCompile Include="externals\RscTool\ExecuteTSVN.cpp" />
+    <ClCompile Include="externals\RscTool\FindPefDiff.cpp" />
+    <ClCompile Include="externals\RscTool\i3MFCListCtrl.cpp" />
+    <ClCompile Include="externals\RscTool\i3MFCListCtrl_Custom.cpp" />
+    <ClCompile Include="externals\RscTool\i3MFCTabViewCtrl.cpp" />
+    <ClCompile Include="externals\RscTool\i3MFCTreeCtrl.cpp" />
+    <ClCompile Include="externals\RscTool\i3MFCWorkAround.cpp" />
+    <ClCompile Include="externals\RscTool\i3RscPartialFile.cpp" />
+    <ClCompile Include="externals\RscTool\i3shelllistctrl.cpp" />
+    <ClCompile Include="externals\RscTool\i3shellmanager.cpp" />
+    <ClCompile Include="externals\RscTool\i3shelltreectrl.cpp" />
+    <ClCompile Include="externals\RscTool\IconInfo.cpp" />
+    <ClCompile Include="externals\RscTool\LoadRSCFile.cpp" />
+    <ClCompile Include="externals\RscTool\md5.cpp" />
+    <ClCompile Include="externals\RscTool\PackScriptContents.cpp" />
+    <ClCompile Include="externals\RscTool\pidl_util.cpp" />
+    <ClCompile Include="externals\RscTool\RSCFileMgr.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCBType.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCell.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCelTyp.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCnrBtn.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTafnt.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTarrw.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTAutoSize.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTbutn.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTDropGrid.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTdtp.cpp" />
+    <ClCompile Include="externals\ugctrl\ugctelps.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTExpand.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTLabeled.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTMail.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTMailSort.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTMarquee.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTmfnt.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTNote.cpp" />
+    <ClCompile Include="externals\ugctrl\ugctnotewnd.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTOutlookHeader.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTpie.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTpro1.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTprog.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTRado.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCtrl.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTsarw.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTsldr.cpp" />
+    <ClCompile Include="externals\ugctrl\UGCTSpin.cpp" />
+    <ClCompile Include="externals\ugctrl\UGDLType.cpp" />
+    <ClCompile Include="externals\ugctrl\UGDrgDrp.cpp" />
+    <ClCompile Include="externals\ugctrl\UGDrwHnt.cpp" />
+    <ClCompile Include="externals\ugctrl\UGDtaSrc.cpp" />
+    <ClCompile Include="externals\ugctrl\UGEdit.cpp" />
+    <ClCompile Include="externals\ugctrl\UGEditBase.cpp" />
+    <ClCompile Include="externals\ugctrl\ugformat.cpp" />
+    <ClCompile Include="externals\ugctrl\uggdinfo.cpp" />
+    <ClCompile Include="externals\ugctrl\UGGrid.cpp" />
+    <ClCompile Include="externals\ugctrl\UGHint.cpp" />
+    <ClCompile Include="externals\ugctrl\ughscrol.cpp" />
+    <ClCompile Include="externals\ugctrl\ugLstBox.cpp" />
+    <ClCompile Include="externals\ugctrl\UGMEdit.cpp" />
+    <ClCompile Include="externals\ugctrl\UGMemMan.cpp" />
+    <ClCompile Include="externals\ugctrl\UGMultiS.cpp" />
+    <ClCompile Include="externals\ugctrl\ugprint.cpp" />
+    <ClCompile Include="externals\ugctrl\ugptrlst.cpp" />
+    <ClCompile Include="externals\ugctrl\ugsidehd.cpp" />
+    <ClCompile Include="externals\ugctrl\UGStrOp.cpp" />
+    <ClCompile Include="externals\ugctrl\ugtab.cpp" />
+    <ClCompile Include="externals\ugctrl\UGTopHdg.cpp" />
+    <ClCompile Include="externals\ugctrl\ugvscrol.cpp" />
+    <ClCompile Include="externals\ugctrl\UGXPThemes.cpp" />
+    <ClCompile Include="implements\resource\CharacterContentsCrawler_V1.cpp" />
+    <ClCompile Include="implements\resource\CharacterContentsCrawler_V2.cpp" />
+    <ClCompile Include="implements\resource\CharacterFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V1.cpp" />
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V2.cpp" />
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\resource\CompatiblePackScriptsCrawler.cpp" />
+    <ClCompile Include="implements\resource\ContentsCrawlerFactory.cpp" />
+    <ClCompile Include="implements\resource\ContentsStateChecker.cpp" />
+    <ClCompile Include="implements\resource\ContentsStateCallback.cpp" />
+    <ClCompile Include="implements\resource\ContentsCrawlerCallback.cpp" />
+    <ClCompile Include="implements\resource\ContentsDB.cpp" />
+    <ClCompile Include="implements\resource\ContentsDefines.cpp" />
+    <ClCompile Include="implements\resource\ContentsSynchronizer.cpp" />
+    <ClCompile Include="implements\resource\ContentsSynchronizerFactory.cpp" />
+    <ClCompile Include="implements\resource\ContentsTableCallback.cpp" />
+    <ClCompile Include="implements\resource\ContentsTable_json.cpp" />
+    <ClCompile Include="implements\resource\ContentsTable_Map.cpp" />
+    <ClCompile Include="implements\resource\ContentsTable_Null.cpp" />
+    <ClCompile Include="implements\resource\ContentsTable_Vector.cpp" />
+    <ClCompile Include="implements\resource\CountrySettings.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3_V1Info.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3_V2Info.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Copy_i3Pack.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Null.cpp" />
+    <ClCompile Include="implements\resource\GoodsContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\GoodsFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V1.cpp" />
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V2.cpp" />
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\resource\i3PackInnerFileCompare.cpp" />
+    <ClCompile Include="implements\resource\i3UIeCrawler.cpp" />
+    <ClCompile Include="implements\resource\PackRule_EquipMask.cpp" />
+    <ClCompile Include="implements\resource\PackRule_GuiItem.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Object.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_Col.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_Col_Hero.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_ImagesNoText.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_Scene.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_SubData.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_TabMinimap.cpp" />
+    <ClCompile Include="implements\resource\PackRule_World_Textures.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Character.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Equipment.cpp" />
+    <ClCompile Include="implements\resource\PackSync_ShopGoods.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Object.cpp" />
+    <ClCompile Include="implements\resource\PackSync_World.cpp" />
+    <ClCompile Include="implements\resource\Settings.cpp" />
+    <ClCompile Include="implements\resource\FileCrawlerFactory.cpp" />
+    <ClCompile Include="implements\resource\DragdropDataContext.cpp" />
+    <ClCompile Include="implements\resource\EquipmentContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V1.cpp" />
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V2_Avatar.cpp" />
+    <ClCompile Include="implements\resource\FileCompareFactory.cpp" />
+    <ClCompile Include="implements\resource\FileSync_SVNCheckConflict.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Copy(Deprecated).cpp" />
+    <ClCompile Include="implements\resource\FileSync_Copy_FailIfExists.cpp" />
+    <ClCompile Include="implements\resource\FileSync_RegisterSoundInRSG.cpp" />
+    <ClCompile Include="implements\resource\FolderFilesCrawler.cpp" />
+    <ClCompile Include="implements\resource\i3pack.cpp" />
+    <ClCompile Include="implements\resource\IPackRule.cpp" />
+    <ClCompile Include="implements\resource\IPackSync.cpp" />
+    <ClCompile Include="implements\resource\PackCommandFactory.cpp" />
+    <ClCompile Include="implements\resource\PackCommands.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Avatar.cpp" />
+    <ClCompile Include="implements\resource\PackRule_AvatarCommon.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Chara.cpp" />
+    <ClCompile Include="implements\resource\PackRule_CharaRSC.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Script.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Sound.cpp" />
+    <ClCompile Include="implements\resource\PackRule_SoundRSC.cpp" />
+    <ClCompile Include="implements\resource\PackRule_String.cpp" />
+    <ClCompile Include="implements\resource\PackRule_UIReScene.cpp" />
+    <ClCompile Include="implements\resource\PackRule_UIReScript.cpp" />
+    <ClCompile Include="implements\resource\PackRule_UIWeapon.cpp" />
+    <ClCompile Include="implements\resource\PackRule_Weapon.cpp" />
+    <ClCompile Include="implements\resource\PackRule_WeaponAnimPack.cpp" />
+    <ClCompile Include="implements\resource\PackRule_WeaponRSC.cpp" />
+    <ClCompile Include="implements\resource\PackScriptParser.cpp" />
+    <ClCompile Include="implements\resource\PackScriptMappedTable.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Factory.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Null.cpp" />
+    <ClCompile Include="implements\resource\PackSync_Weapon.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Factory.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Copy.cpp" />
+    <ClCompile Include="implements\resource\FileSync_RegisterInRSG.cpp" />
+    <ClCompile Include="implements\resource\i3aCrawler.cpp" />
+    <ClCompile Include="implements\resource\i3chrCrawler.cpp" />
+    <ClCompile Include="implements\resource\i3PackMappedFileTable.cpp" />
+    <ClCompile Include="implements\resource\i3PackMappedFileTableFactory.cpp" />
+    <ClCompile Include="implements\resource\i3sCrawler.cpp" />
+    <ClCompile Include="implements\resource\IContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\IContentsTable.cpp" />
+    <ClCompile Include="implements\resource\IFileComparator.cpp" />
+    <ClCompile Include="implements\resource\IFileCompare.cpp" />
+    <ClCompile Include="implements\resource\IFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\IFilePathable.cpp" />
+    <ClCompile Include="implements\resource\FileSync_Wrapper.cpp" />
+    <ClCompile Include="implements\resource\IPefable.cpp" />
+    <ClCompile Include="implements\resource\IFileSync.cpp" />
+    <ClCompile Include="implements\resource\LiveFileClassifier.cpp" />
+    <ClCompile Include="implements\resource\LiveFileComparator.cpp" />
+    <ClCompile Include="implements\resource\MediaFileComparator.cpp" />
+    <ClCompile Include="implements\resource\NativeFileCompare.cpp" />
+    <ClCompile Include="implements\resource\NullCompare.cpp" />
+    <ClCompile Include="implements\resource\PathHelper.cpp" />
+    <ClCompile Include="implements\resource\ResourceController.cpp" />
+    <ClCompile Include="implements\resource\ShaderContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\ShellChangeWatcher.cpp" />
+    <ClCompile Include="implements\resource\SyncLogger.cpp" />
+    <ClCompile Include="implements\resource\SyncProgressCallback.cpp" />
+    <ClCompile Include="implements\resource\SyncShaders.cpp" />
+    <ClCompile Include="implements\resource\UIContentsCrawler_V1_Gui.cpp" />
+    <ClCompile Include="implements\resource\UIContentsCrawler_V2_UIRe.cpp" />
+    <ClCompile Include="implements\resource\UIContentsCrawler_V3.cpp" />
+    <ClCompile Include="implements\resource\UIFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V1_Gui.cpp" />
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V2_UIRe.cpp" />
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\resource\VersionSettings.cpp" />
+    <ClCompile Include="implements\resource\WeaponContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\WeaponFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V1.cpp" />
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V2.cpp" />
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\resource\WorldContentsCrawler.cpp" />
+    <ClCompile Include="implements\resource\WorldFileCrawler.cpp" />
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl.cpp" />
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V1.cpp" />
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V2.cpp" />
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V3.cpp" />
+    <ClCompile Include="implements\ui\ContentsDescriptionList.cpp" />
+    <ClCompile Include="implements\ui\ContentsDescriptionBar.cpp" />
+    <ClCompile Include="implements\ui\ContentsViewToolbar.cpp" />
+    <ClCompile Include="implements\ui\CountrySettingList.cpp" />
+    <ClCompile Include="implements\ui\CustomButton.cpp" />
+    <ClCompile Include="implements\ui\CustomEditBox.cpp" />
+    <ClCompile Include="implements\ui\CustomProgressCtrl.cpp" />
+    <ClCompile Include="implements\ui\CustomStatic.cpp" />
+    <ClCompile Include="implements\ui\CustomUGEditBox.cpp" />
+    <ClCompile Include="implements\ui\CustomUGEditBrowse.cpp" />
+    <ClCompile Include="implements\ui\CustomUGCtrl.cpp" />
+    <ClCompile Include="implements\ui\DuplicatedPackFileDataMgr.cpp" />
+    <ClCompile Include="implements\ui\DuplicatedPackFilesDlg.cpp" />
+    <ClCompile Include="implements\ui\FileView.cpp" />
+    <ClCompile Include="implements\ui\i3PackNameSettingDlg.cpp" />
+    <ClCompile Include="implements\ui\i3PackToolBar.cpp" />
+    <ClCompile Include="implements\ui\i3PackToolDlg.cpp" />
+    <ClCompile Include="implements\ui\i3PackToolTree.cpp" />
+    <ClCompile Include="implements\ui\LiveCountryList.cpp" />
+    <ClCompile Include="implements\ui\LoadingProgressMsgBox.cpp" />
+    <ClCompile Include="implements\ui\LoadingProgressMsgCallback.cpp" />
+    <ClCompile Include="implements\ui\CountrySettingDlg.cpp" />
+    <ClCompile Include="implements\ui\MemoryShaderCodeEditBox.cpp" />
+    <ClCompile Include="implements\ui\MQContentsStatusBar.cpp" />
+    <ClCompile Include="implements\ui\MQContentsStatusTree.cpp" />
+    <ClCompile Include="implements\ui\PackedFileSearchBar.cpp" />
+    <ClCompile Include="implements\ui\PackedFileSearchDlg.cpp" />
+    <ClCompile Include="implements\ui\PackInnerFileDataMgr.cpp" />
+    <ClCompile Include="implements\ui\QLContentsStatusBar.cpp" />
+    <ClCompile Include="implements\ui\QLContentsStatusTree.cpp" />
+    <ClCompile Include="implements\ui\SearchedPackFiles.cpp" />
+    <ClCompile Include="implements\ui\SettingsList.cpp" />
+    <ClCompile Include="implements\ui\FileShaderCodeEditBox.cpp" />
+    <ClCompile Include="implements\ui\ShaderList.cpp" />
+    <ClCompile Include="implements\ui\ShaderSyncDlg.cpp" />
+    <ClCompile Include="implements\ui\SplashScreenEx.cpp" />
+    <ClCompile Include="implements\ui\SyncExportPefRscButton.cpp" />
+    <ClCompile Include="implements\ui\SyncForceCopyModeButton.cpp" />
+    <ClCompile Include="implements\ui\SyncPlayAllModeButton.cpp" />
+    <ClCompile Include="implements\ui\SyncContentsList.cpp" />
+    <ClCompile Include="implements\ui\SyncPlayButton.cpp" />
+    <ClCompile Include="implements\ui\SyncPlayerDlg.cpp" />
+    <ClCompile Include="implements\ui\SyncProgressBar.cpp" />
+    <ClCompile Include="implements\ui\ToolFactory.cpp" />
+    <ClCompile Include="implements\ui\ToolList.cpp" />
+    <ClCompile Include="implements\ui\UIDefines.cpp" />
+    <ClCompile Include="implements\ui\SyncPlayerBar.cpp" />
+    <ClCompile Include="implements\ui\ContentsViewList.cpp" />
+    <ClCompile Include="implements\ui\ContentsView.cpp" />
+    <ClCompile Include="implements\ui\OutputBar.cpp" />
+    <ClCompile Include="implements\ui\TasksBar.cpp" />
+    <ClCompile Include="implements\ui\VersionSettingDlg.cpp" />
+    <ClCompile Include="implements\ui\VersionSettingList.cpp" />
+    <ClCompile Include="implements\util\CustomUtil.cpp" />
+    <ClCompile Include="implements\util\FSM.cpp" />
+    <ClCompile Include="implements\util\GITCommand.cpp" />
+    <ClCompile Include="implements\util\IProcessCommand.cpp" />
+    <ClCompile Include="implements\util\PathTokenizer.cpp" />
+    <ClCompile Include="implements\util\TGITCommand.cpp" />
+    <ClCompile Include="MainFrm.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BuildTool.h" />
+    <ClInclude Include="BuildToolDoc.h" />
+    <ClInclude Include="BuildToolView.h" />
+    <ClInclude Include="externals\i3RSCGen\i3RSCGen.h" />
+    <ClInclude Include="externals\i3RSCGen\RSCGenDefine.h" />
+    <ClInclude Include="externals\i3RSCGen\RSCNode.h" />
+    <ClInclude Include="externals\jsoncpp\assertions.h" />
+    <ClInclude Include="externals\jsoncpp\autolink.h" />
+    <ClInclude Include="externals\jsoncpp\config.h" />
+    <ClInclude Include="externals\jsoncpp\features.h" />
+    <ClInclude Include="externals\jsoncpp\forwards.h" />
+    <ClInclude Include="externals\jsoncpp\json.h" />
+    <ClInclude Include="externals\jsoncpp\json_tool.h" />
+    <ClInclude Include="externals\jsoncpp\reader.h" />
+    <ClInclude Include="externals\jsoncpp\value.h" />
+    <ClInclude Include="externals\jsoncpp\version.h" />
+    <ClInclude Include="externals\jsoncpp\writer.h" />
+    <ClInclude Include="externals\RscTool\ExecuteSVN.h" />
+    <ClInclude Include="externals\RscTool\ExecuteTSVN.h" />
+    <ClInclude Include="externals\RscTool\FindPefDiff.h" />
+    <ClInclude Include="externals\RscTool\i3MFCListCtrl.h" />
+    <ClInclude Include="externals\RscTool\i3MFCListCtrl_Custom.h" />
+    <ClInclude Include="externals\RscTool\i3MFCTabViewCtrl.h" />
+    <ClInclude Include="externals\RscTool\i3MFCTreeCtrl.h" />
+    <ClInclude Include="externals\RscTool\i3MFCWorkAround.h" />
+    <ClInclude Include="externals\RscTool\i3RscPartialFile.h" />
+    <ClInclude Include="externals\RscTool\i3shelllistctrl.h" />
+    <ClInclude Include="externals\RscTool\i3shellmanager.h" />
+    <ClInclude Include="externals\RscTool\i3shelltreectrl.h" />
+    <ClInclude Include="externals\RscTool\IconInfo.h" />
+    <ClInclude Include="externals\RscTool\LoadRSCFile.h" />
+    <ClInclude Include="externals\RscTool\md5.h" />
+    <ClInclude Include="externals\RscTool\PackScriptContents.h" />
+    <ClInclude Include="externals\RscTool\pidl_util.h" />
+    <ClInclude Include="externals\RscTool\PreprocessMessageCallback.h" />
+    <ClInclude Include="externals\RscTool\RSCFileMgr.h" />
+    <ClInclude Include="externals\ugctrl\UG64Bit.h" />
+    <ClInclude Include="externals\ugctrl\UGCBType.h" />
+    <ClInclude Include="externals\ugctrl\UGCell.h" />
+    <ClInclude Include="externals\ugctrl\ugceltyp.h" />
+    <ClInclude Include="externals\ugctrl\UGCnrBtn.h" />
+    <ClInclude Include="externals\ugctrl\UGCTafnt.h" />
+    <ClInclude Include="externals\ugctrl\UGCTarrw.h" />
+    <ClInclude Include="externals\ugctrl\UGCTAutoSize.h" />
+    <ClInclude Include="externals\ugctrl\UGCTbutn.h" />
+    <ClInclude Include="externals\ugctrl\UGCTDropGrid.h" />
+    <ClInclude Include="externals\ugctrl\UGCTdtp.h" />
+    <ClInclude Include="externals\ugctrl\ugctelps.h" />
+    <ClInclude Include="externals\ugctrl\UGCTExpand.h" />
+    <ClInclude Include="externals\ugctrl\UGCTLabeled.h" />
+    <ClInclude Include="externals\ugctrl\UGCTMail.h" />
+    <ClInclude Include="externals\ugctrl\UGCTMailSort.h" />
+    <ClInclude Include="externals\ugctrl\UGCTMarquee.h" />
+    <ClInclude Include="externals\ugctrl\UGCTmfnt.h" />
+    <ClInclude Include="externals\ugctrl\UGCTNote.h" />
+    <ClInclude Include="externals\ugctrl\ugctnotewnd.h" />
+    <ClInclude Include="externals\ugctrl\UGCTOutlookHeader.h" />
+    <ClInclude Include="externals\ugctrl\UGCTpie.h" />
+    <ClInclude Include="externals\ugctrl\UGCTpro1.h" />
+    <ClInclude Include="externals\ugctrl\UGCTprog.h" />
+    <ClInclude Include="externals\ugctrl\UGCTRado.h" />
+    <ClInclude Include="externals\ugctrl\UGCtrl.h" />
+    <ClInclude Include="externals\ugctrl\UGCTsarw.h" />
+    <ClInclude Include="externals\ugctrl\UGCTsldr.h" />
+    <ClInclude Include="externals\ugctrl\UGCTSpin.h" />
+    <ClInclude Include="externals\ugctrl\ugdefine.h" />
+    <ClInclude Include="externals\ugctrl\UGDLType.h" />
+    <ClInclude Include="externals\ugctrl\UGDrgDrp.h" />
+    <ClInclude Include="externals\ugctrl\UGDrwHnt.h" />
+    <ClInclude Include="externals\ugctrl\UGDtaSrc.h" />
+    <ClInclude Include="externals\ugctrl\UGEdit.h" />
+    <ClInclude Include="externals\ugctrl\UGEditBase.h" />
+    <ClInclude Include="externals\ugctrl\ugformat.h" />
+    <ClInclude Include="externals\ugctrl\uggdinfo.h" />
+    <ClInclude Include="externals\ugctrl\UGGrid.h" />
+    <ClInclude Include="externals\ugctrl\UGHint.h" />
+    <ClInclude Include="externals\ugctrl\ughscrol.h" />
+    <ClInclude Include="externals\ugctrl\uglstbox.h" />
+    <ClInclude Include="externals\ugctrl\UGMEdit.h" />
+    <ClInclude Include="externals\ugctrl\UGMemMan.h" />
+    <ClInclude Include="externals\ugctrl\UGMultiS.h" />
+    <ClInclude Include="externals\ugctrl\ugprint.h" />
+    <ClInclude Include="externals\ugctrl\ugptrlst.h" />
+    <ClInclude Include="externals\ugctrl\ugsidehd.h" />
+    <ClInclude Include="externals\ugctrl\UGStrOp.h" />
+    <ClInclude Include="externals\ugctrl\ugstruct.h" />
+    <ClInclude Include="externals\ugctrl\ugtab.h" />
+    <ClInclude Include="externals\ugctrl\UGTopHdg.h" />
+    <ClInclude Include="externals\ugctrl\ugvscrol.h" />
+    <ClInclude Include="externals\ugctrl\ugxpthemes.h" />
+    <ClInclude Include="implements\resource\CharacterContentsCrawler_V1.h" />
+    <ClInclude Include="implements\resource\CharacterContentsCrawler_V2.h" />
+    <ClInclude Include="implements\resource\CharacterFileCrawler.h" />
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V1.h" />
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V2.h" />
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\resource\CompatiblePackScriptsCrawler.h" />
+    <ClInclude Include="implements\resource\ContentsCrawlerFactory.h" />
+    <ClInclude Include="implements\resource\ContentsStateChecker.h" />
+    <ClInclude Include="implements\resource\ContentsStateCallback.h" />
+    <ClInclude Include="implements\resource\ContentsCrawlerCallback.h" />
+    <ClInclude Include="implements\resource\ContentsDB.h" />
+    <ClInclude Include="implements\resource\ContentsDefines.h" />
+    <ClInclude Include="implements\resource\ContentsSynchronizer.h" />
+    <ClInclude Include="implements\resource\ContentsSynchronizerFactory.h" />
+    <ClInclude Include="implements\resource\ContentsTableCallback.h" />
+    <ClInclude Include="implements\resource\ContentsTable_json.h" />
+    <ClInclude Include="implements\resource\ContentsTable_Map.h" />
+    <ClInclude Include="implements\resource\ContentsTable_Null.h" />
+    <ClInclude Include="implements\resource\ContentsTable_Vector.h" />
+    <ClInclude Include="implements\resource\CountrySettings.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3_V1Info.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3_V2Info.h" />
+    <ClInclude Include="implements\resource\FileSync_Copy_i3Pack.h" />
+    <ClInclude Include="implements\resource\FileSync_Null.h" />
+    <ClInclude Include="implements\resource\GoodsContentsCrawler.h" />
+    <ClInclude Include="implements\resource\GoodsFileCrawler.h" />
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V1.h" />
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V2.h" />
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\resource\i3PackInnerFileCompare.h" />
+    <ClInclude Include="implements\resource\i3UIeCrawler.h" />
+    <ClInclude Include="implements\resource\PackRule_EquipMask.h" />
+    <ClInclude Include="implements\resource\PackRule_GuiItem.h" />
+    <ClInclude Include="implements\resource\PackRule_Object.h" />
+    <ClInclude Include="implements\resource\PackRule_World.h" />
+    <ClInclude Include="implements\resource\PackRule_World_Col.h" />
+    <ClInclude Include="implements\resource\PackRule_World_Col_Hero.h" />
+    <ClInclude Include="implements\resource\PackRule_World_ImagesNoText.h" />
+    <ClInclude Include="implements\resource\PackRule_World_Scene.h" />
+    <ClInclude Include="implements\resource\PackRule_World_SubData.h" />
+    <ClInclude Include="implements\resource\PackRule_World_TabMinimap.h" />
+    <ClInclude Include="implements\resource\PackRule_World_Textures.h" />
+    <ClInclude Include="implements\resource\PackSync_Character.h" />
+    <ClInclude Include="implements\resource\PackSync_Equipment.h" />
+    <ClInclude Include="implements\resource\PackSync_ShopGoods.h" />
+    <ClInclude Include="implements\resource\PackSync_Object.h" />
+    <ClInclude Include="implements\resource\PackSync_World.h" />
+    <ClInclude Include="implements\resource\Settings.h" />
+    <ClInclude Include="implements\resource\FileCrawlerFactory.h" />
+    <ClInclude Include="implements\resource\DragdropDataContext.h" />
+    <ClInclude Include="implements\resource\EquipmentContentsCrawler.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawler.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V1.h" />
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V2_Avatar.h" />
+    <ClInclude Include="implements\resource\FileCompareFactory.h" />
+    <ClInclude Include="implements\resource\FileCrawlerNull.h" />
+    <ClInclude Include="implements\resource\FileSync_SVNCheckConflict.h" />
+    <ClInclude Include="implements\resource\FileSync_Copy(Deprecated).h" />
+    <ClInclude Include="implements\resource\FileSync_Copy_FailIfExists.h" />
+    <ClInclude Include="implements\resource\FileSync_RegisterSoundInRSG.h" />
+    <ClInclude Include="implements\resource\FolderFilesCrawler.h" />
+    <ClInclude Include="implements\resource\i3pack.h" />
+    <ClInclude Include="implements\resource\IPackRule.h" />
+    <ClInclude Include="implements\resource\IPackSync.h" />
+    <ClInclude Include="implements\resource\PackCommandFactory.h" />
+    <ClInclude Include="implements\resource\PackCommands.h" />
+    <ClInclude Include="implements\resource\PackRule_Avatar.h" />
+    <ClInclude Include="implements\resource\PackRule_AvatarCommon.h" />
+    <ClInclude Include="implements\resource\PackRule_Chara.h" />
+    <ClInclude Include="implements\resource\PackRule_CharaRSC.h" />
+    <ClInclude Include="implements\resource\PackRule_Script.h" />
+    <ClInclude Include="implements\resource\PackRule_Sound.h" />
+    <ClInclude Include="implements\resource\PackRule_SoundRSC.h" />
+    <ClInclude Include="implements\resource\PackRule_String.h" />
+    <ClInclude Include="implements\resource\PackRule_UIReScene.h" />
+    <ClInclude Include="implements\resource\PackRule_UIReScript.h" />
+    <ClInclude Include="implements\resource\PackRule_UIWeapon.h" />
+    <ClInclude Include="implements\resource\PackRule_Weapon.h" />
+    <ClInclude Include="implements\resource\PackRule_WeaponAnimPack.h" />
+    <ClInclude Include="implements\resource\PackRule_WeaponRSC.h" />
+    <ClInclude Include="implements\resource\PackScriptParser.h" />
+    <ClInclude Include="implements\resource\PackScriptMappedTable.h" />
+    <ClInclude Include="implements\resource\PackSync_Factory.h" />
+    <ClInclude Include="implements\resource\PackSync_Null.h" />
+    <ClInclude Include="implements\resource\PackSync_Weapon.h" />
+    <ClInclude Include="implements\resource\FileSync_Factory.h" />
+    <ClInclude Include="implements\resource\FileSync_Copy.h" />
+    <ClInclude Include="implements\resource\FileSync_RegisterInRSG.h" />
+    <ClInclude Include="implements\resource\i3aCrawler.h" />
+    <ClInclude Include="implements\resource\i3chrCrawler.h" />
+    <ClInclude Include="implements\resource\i3PackMappedFileTable.h" />
+    <ClInclude Include="implements\resource\i3PackMappedFileTableFactory.h" />
+    <ClInclude Include="implements\resource\i3sCrawler.h" />
+    <ClInclude Include="implements\resource\IContentsCrawler.h" />
+    <ClInclude Include="implements\resource\IContentsTable.h" />
+    <ClInclude Include="implements\resource\IFileComparator.h" />
+    <ClInclude Include="implements\resource\IFileCompare.h" />
+    <ClInclude Include="implements\resource\IFileCrawler.h" />
+    <ClInclude Include="implements\resource\IFilePathable.h" />
+    <ClInclude Include="implements\resource\FileSync_Wrapper.h" />
+    <ClInclude Include="implements\resource\IPefable.h" />
+    <ClInclude Include="implements\resource\IFileSync.h" />
+    <ClInclude Include="implements\resource\LiveFileClassifier.h" />
+    <ClInclude Include="implements\resource\LiveFileComparator.h" />
+    <ClInclude Include="implements\resource\MediaFileComparator.h" />
+    <ClInclude Include="implements\resource\NativeFileCompare.h" />
+    <ClInclude Include="implements\resource\NullCompare.h" />
+    <ClInclude Include="implements\resource\PathHelper.h" />
+    <ClInclude Include="implements\resource\ResourceController.h" />
+    <ClInclude Include="implements\resource\ShaderContentsCrawler.h" />
+    <ClInclude Include="implements\resource\ShellChangeWatcher.h" />
+    <ClInclude Include="implements\resource\SyncLogger.h" />
+    <ClInclude Include="implements\resource\SyncProgressCallback.h" />
+    <ClInclude Include="implements\resource\SyncShaders.h" />
+    <ClInclude Include="implements\resource\UIContentsCrawler_V1_Gui.h" />
+    <ClInclude Include="implements\resource\UIContentsCrawler_V2_UIRe.h" />
+    <ClInclude Include="implements\resource\UIContentsCrawler_V3.h" />
+    <ClInclude Include="implements\resource\UIFileCrawler.h" />
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V1_Gui.h" />
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V2_UIRe.h" />
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\resource\VersionSettings.h" />
+    <ClInclude Include="implements\resource\WeaponContentsCrawler.h" />
+    <ClInclude Include="implements\resource\WeaponFileCrawler.h" />
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V1.h" />
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V2.h" />
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\resource\WndProcThunk.h" />
+    <ClInclude Include="implements\resource\WorldContentsCrawler.h" />
+    <ClInclude Include="implements\resource\WorldFileCrawler.h" />
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl.h" />
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V1.h" />
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V2.h" />
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V3.h" />
+    <ClInclude Include="implements\ui\ContentsDescriptionList.h" />
+    <ClInclude Include="implements\ui\ContentsDescriptionBar.h" />
+    <ClInclude Include="implements\ui\ContentsViewToolbar.h" />
+    <ClInclude Include="implements\ui\CountrySettingList.h" />
+    <ClInclude Include="implements\ui\CustomButton.h" />
+    <ClInclude Include="implements\ui\CustomEditBox.h" />
+    <ClInclude Include="implements\ui\CustomProgressCtrl.h" />
+    <ClInclude Include="implements\ui\CustomStatic.h" />
+    <ClInclude Include="implements\ui\CustomUGEditBox.h" />
+    <ClInclude Include="implements\ui\CustomUGEditBrowse.h" />
+    <ClInclude Include="implements\ui\CustomUGCtrl.h" />
+    <ClInclude Include="implements\ui\DuplicatedPackFileDataMgr.h" />
+    <ClInclude Include="implements\ui\DuplicatedPackFilesDlg.h" />
+    <ClInclude Include="implements\ui\FileView.h" />
+    <ClInclude Include="implements\ui\i3PackNameSettingDlg.h" />
+    <ClInclude Include="implements\ui\i3PackToolBar.h" />
+    <ClInclude Include="implements\ui\i3PackToolDlg.h" />
+    <ClInclude Include="implements\ui\i3PackToolTree.h" />
+    <ClInclude Include="implements\ui\LiveCountryList.h" />
+    <ClInclude Include="implements\ui\LoadingProgressMsgBox.h" />
+    <ClInclude Include="implements\ui\LoadingProgressMsgCallback.h" />
+    <ClInclude Include="implements\ui\CountrySettingDlg.h" />
+    <ClInclude Include="implements\ui\MemoryShaderCodeEditBox.h" />
+    <ClInclude Include="implements\ui\MQContentsStatusBar.h" />
+    <ClInclude Include="implements\ui\MQContentsStatusTree.h" />
+    <ClInclude Include="implements\ui\PackedFileSearchBar.h" />
+    <ClInclude Include="implements\ui\PackedFileSearchDlg.h" />
+    <ClInclude Include="implements\ui\PackInnerFileDataMgr.h" />
+    <ClInclude Include="implements\ui\QLContentsStatusBar.h" />
+    <ClInclude Include="implements\ui\QLContentsStatusTree.h" />
+    <ClInclude Include="implements\ui\SearchedPackFiles.h" />
+    <ClInclude Include="implements\ui\SettingsList.h" />
+    <ClInclude Include="implements\ui\FileShaderCodeEditBox.h" />
+    <ClInclude Include="implements\ui\ShaderList.h" />
+    <ClInclude Include="implements\ui\ShaderSyncDlg.h" />
+    <ClInclude Include="implements\ui\SplashScreenEx.h" />
+    <ClInclude Include="implements\ui\SyncExportPefRscButton.h" />
+    <ClInclude Include="implements\ui\SyncForceCopyModeButton.h" />
+    <ClInclude Include="implements\ui\SyncPlayAllModeButton.h" />
+    <ClInclude Include="implements\ui\SyncContentsList.h" />
+    <ClInclude Include="implements\ui\SyncPlayButton.h" />
+    <ClInclude Include="implements\ui\SyncPlayerDlg.h" />
+    <ClInclude Include="implements\ui\SyncProgressBar.h" />
+    <ClInclude Include="implements\ui\ToolFactory.h" />
+    <ClInclude Include="implements\ui\ToolList.h" />
+    <ClInclude Include="implements\ui\UIDefines.h" />
+    <ClInclude Include="implements\ui\SyncPlayerBar.h" />
+    <ClInclude Include="implements\ui\ContentsViewList.h" />
+    <ClInclude Include="implements\ui\ContentsView.h" />
+    <ClInclude Include="implements\ui\OutputBar.h" />
+    <ClInclude Include="implements\ui\TasksBar.h" />
+    <ClInclude Include="implements\ui\VersionSettingDlg.h" />
+    <ClInclude Include="implements\ui\VersionSettingList.h" />
+    <ClInclude Include="implements\util\Creator.h" />
+    <ClInclude Include="implements\util\CustomUtil.h" />
+    <ClInclude Include="implements\util\FSM.h" />
+    <ClInclude Include="implements\util\GITCommand.h" />
+    <ClInclude Include="implements\util\IProcessCommand.h" />
+    <ClInclude Include="implements\util\ObjectFactory.h" />
+    <ClInclude Include="implements\util\PathTokenizer.h" />
+    <ClInclude Include="implements\util\sigslot.h" />
+    <ClInclude Include="implements\util\TGITCommand.h" />
+    <ClInclude Include="implements\util\ThreadPolicy.h" />
+    <ClInclude Include="implements\util\ThreadPool.hpp" />
+    <ClInclude Include="MainFrm.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BuildTool.ico" />
+    <Image Include="res\BuildToolDoc.ico" />
+    <Image Include="res\pb_logo.ico" />
+    <Image Include="res\sync.ico" />
+    <Image Include="res\Toolbar.bmp" />
+    <Image Include="res\Toolbar256.bmp" />
+    <Image Include="UserImages.bmp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BuildTool.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+    <None Include="res\BuildTool.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="BuildTool.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

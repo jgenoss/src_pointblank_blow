@@ -1,0 +1,1934 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="externals">
+      <UniqueIdentifier>{b8eb4e54-df8a-4ba2-9619-47d3ed3659cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\jsoncpp">
+      <UniqueIdentifier>{cb8c76e2-0b63-4061-85ec-6431ee08f6f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\ugctrl">
+      <UniqueIdentifier>{adcaa640-a66b-46a0-a4ea-1ae4e904e0cf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\RscTool">
+      <UniqueIdentifier>{373c4b0c-8dcb-4930-b20a-c97d78d1b6df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="externals\i3RSCGen">
+      <UniqueIdentifier>{9eded59a-b2dd-4d4d-bc56-369c33835eeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements">
+      <UniqueIdentifier>{264e4890-324b-4fc8-aeb5-772f64dac4ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource">
+      <UniqueIdentifier>{2c3b00a5-a9bf-4f53-9b59-3968263c91c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui">
+      <UniqueIdentifier>{32048426-3d7c-4fdb-9c10-f1791471f918}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\util">
+      <UniqueIdentifier>{6dbbd405-ce5c-44db-b2a3-d7ae34911831}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\comparator">
+      <UniqueIdentifier>{318fd9ca-80a3-444f-82f0-f6b29eb8d05d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\comparator\file compare">
+      <UniqueIdentifier>{2d0af0b0-a736-4590-9385-57cbf24ecb22}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\controller">
+      <UniqueIdentifier>{7bef5795-fce6-41e6-9797-345f1ce01110}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler">
+      <UniqueIdentifier>{6f441f2c-e326-46a4-aa54-3a933eae16ec}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\watcher">
+      <UniqueIdentifier>{871d219c-5a20-49d4-a34d-3c66c1075031}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization">
+      <UniqueIdentifier>{6008ab1f-ec63-4460-9076-d6214d0a94c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\pack">
+      <UniqueIdentifier>{7c1dd318-d30e-4662-8e15-175489feea31}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\sync qa -&gt; live">
+      <UniqueIdentifier>{ae50edbf-941f-4870-b5e6-551bdf06fee3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\sync media -&gt; qa">
+      <UniqueIdentifier>{3c8144a0-146a-443b-b36d-b1b670489e78}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\context">
+      <UniqueIdentifier>{3827d35c-7662-4811-b182-e38c0e767403}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\data">
+      <UniqueIdentifier>{f9a34805-1441-4002-ad88-ba692fa317f3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\pack\commands">
+      <UniqueIdentifier>{72db7300-ff09-4f17-a3d9-cd8ca21fe39e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents">
+      <UniqueIdentifier>{f00b5f39-6f1e-40a3-8562-06bf6c4549df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\equipment">
+      <UniqueIdentifier>{1c491187-3cc4-43bd-872e-ad7d78689d8a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\weapon">
+      <UniqueIdentifier>{6922f6cd-ab1f-4deb-abb2-d7ab8befd2bf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\ui">
+      <UniqueIdentifier>{eedbf7ed-b807-47b9-a6c5-3e53f770e02b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\world">
+      <UniqueIdentifier>{ad0ee3b5-20a5-4bac-b592-f759014488e2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\basic file">
+      <UniqueIdentifier>{cd966783-e3e2-47b7-a5f3-171af311cae2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\character">
+      <UniqueIdentifier>{3c8eb52e-5ba5-41c0-9f46-cb2e3fecf23c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\goods">
+      <UniqueIdentifier>{dd57c656-f9d1-417a-af45-6c53c7107273}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\sync player">
+      <UniqueIdentifier>{6453c69f-712b-461c-8a05-c4daf015d7da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\contents view">
+      <UniqueIdentifier>{09bf833b-2418-496a-9a9d-b139e7ea139a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\settings">
+      <UniqueIdentifier>{f6ddc100-da91-40a4-9515-6d6066c93a25}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\loading">
+      <UniqueIdentifier>{b477a029-80b5-4cd6-aa67-8abc596ed0c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\tasks">
+      <UniqueIdentifier>{7c6735be-4734-473f-8d18-0aa99d046d38}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\custom controls">
+      <UniqueIdentifier>{2e558f26-ecb8-4656-b862-17808b5a75d2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\util\process commands">
+      <UniqueIdentifier>{6970e43e-c9a9-4ce7-a734-ba7c9e88cc36}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\pack\rules">
+      <UniqueIdentifier>{5f919cd4-85a4-48c5-83c7-2b6708a22675}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\pack\rules\deprecated">
+      <UniqueIdentifier>{1fde7df1-8a96-4c74-88cd-a60ba4acf1fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\synchronization\sync shaders">
+      <UniqueIdentifier>{da24560f-3abe-43c2-8453-96d3ab78392b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\crawler\contents\shaders">
+      <UniqueIdentifier>{71a1c0e5-b52d-499c-8b05-d419d6cc6c21}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\resource\data\settings">
+      <UniqueIdentifier>{c6f3b8b2-a738-4791-8d0b-0f59a5562b83}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\Tools">
+      <UniqueIdentifier>{cbc53ec4-dfb2-49bf-bd27-9c15b5d23cac}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\file view">
+      <UniqueIdentifier>{db368d04-467e-4e00-80f6-c774533913af}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\contents descriptions">
+      <UniqueIdentifier>{f0570f12-e579-45bf-b0db-176ac865b81d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\Tools\pack tool">
+      <UniqueIdentifier>{f3a843a4-e9bd-49e1-ad60-1c58691a80d9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\Tools\shader sync tool">
+      <UniqueIdentifier>{adc95fb4-58e0-4d6e-8353-766aa219df32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\Tools\packed file search">
+      <UniqueIdentifier>{decc9e31-fdc4-47a5-8b5f-57709f3d3222}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="implements\ui\Tools\duplicated file show">
+      <UniqueIdentifier>{58e9be4a-6f2b-4f2c-add8-2e785a7483b3}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\BuildTool.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\BuildToolDoc.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\Toolbar256.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="UserImages.bmp">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\pb_logo.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+    <Image Include="res\sync.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="res\BuildTool.rc2">
+      <Filter>리소스 파일</Filter>
+    </None>
+    <None Include="ClassDiagram.cd" />
+    <None Include="ClassDiagram1.cd" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="BuildTool.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BuildTool.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildToolDoc.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="BuildToolView.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="MainFrm.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCBType.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCell.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCelTyp.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCnrBtn.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTafnt.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTarrw.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTAutoSize.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTbutn.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTDropGrid.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTdtp.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugctelps.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTExpand.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTLabeled.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTMail.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTMailSort.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTMarquee.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTmfnt.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTNote.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugctnotewnd.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTOutlookHeader.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTpie.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTpro1.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTprog.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTRado.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCtrl.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTsarw.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTsldr.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGCTSpin.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGDLType.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGDrgDrp.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGDrwHnt.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGDtaSrc.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGEdit.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGEditBase.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugformat.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\uggdinfo.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGGrid.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGHint.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ughscrol.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugLstBox.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGMEdit.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGMemMan.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGMultiS.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugprint.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugptrlst.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugsidehd.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGStrOp.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugtab.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGTopHdg.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\ugvscrol.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\ugctrl\UGXPThemes.cpp">
+      <Filter>externals\ugctrl</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\jsoncpp\json_reader.cpp">
+      <Filter>externals\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\jsoncpp\json_value.cpp">
+      <Filter>externals\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\jsoncpp\json_writer.cpp">
+      <Filter>externals\jsoncpp</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PathHelper.cpp">
+      <Filter>implements\resource\crawler</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsDB.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsDefines.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsTable_json.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsTable_Map.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsTable_Vector.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IContentsTable.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ResourceController.cpp">
+      <Filter>implements\resource\controller</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileCompareFactory.cpp">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IFileCompare.cpp">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\NativeFileCompare.cpp">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\NullCompare.cpp">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IFileComparator.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\LiveFileClassifier.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\LiveFileComparator.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\MediaFileComparator.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsSynchronizer.cpp">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\SyncProgressCallback.cpp">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsStateChecker.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsStateCallback.cpp">
+      <Filter>implements\resource\comparator</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\ExecuteSVN.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\ExecuteTSVN.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\FindPefDiff.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3MFCListCtrl.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3MFCListCtrl_Custom.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3MFCTabViewCtrl.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3MFCTreeCtrl.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3MFCWorkAround.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3RscPartialFile.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3shelllistctrl.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3shellmanager.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\i3shelltreectrl.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\IconInfo.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\LoadRSCFile.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\md5.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\pidl_util.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\RSCFileMgr.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\RscTool\PackScriptContents.cpp">
+      <Filter>externals\RscTool</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\i3RSCGen\RSCNode.cpp">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\i3RSCGen\i3RSCGen.cpp">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClCompile>
+    <ClCompile Include="externals\i3RSCGen\RSCGenDefine.cpp">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IFileSync.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Factory.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Copy.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_RegisterInRSG.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Wrapper.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IPackSync.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Factory.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\DragdropDataContext.cpp">
+      <Filter>implements\resource\context</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\SyncLogger.cpp">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\PathTokenizer.cpp">
+      <Filter>implements\util</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_RegisterSoundInRSG.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V1.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V2.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V2_Avatar.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V1.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Avatar.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Sound.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Weapon.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IPackRule.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Chara.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_AvatarCommon.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_CharaRSC.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Script.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_SoundRSC.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_String.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_UIReScene.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_UIReScript.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_WeaponAnimPack.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_WeaponRSC.cpp">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Copy_FailIfExists.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_UIWeapon.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Copy(Deprecated).cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_SVNCheckConflict.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V1.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V2.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsTableCallback.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsTable_Null.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_EquipMask.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Equipment.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3PackMappedFileTable.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3PackMappedFileTableFactory.cpp">
+      <Filter>implements\resource\data</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3pack.cpp">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackCommandFactory.cpp">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackCommands.cpp">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackScriptMappedTable.cpp">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackScriptParser.cpp">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_Col.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_Col_Hero.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_Scene.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_SubData.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_TabMinimap.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_Textures.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V1_Gui.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V2_UIRe.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IPefable.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IFilePathable.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IFileCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3sCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3chrCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3aCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FolderFilesCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsCrawlerCallback.cpp">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\IContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsCrawlerFactory.cpp">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIContentsCrawler_V2_UIRe.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIContentsCrawler_V1_Gui.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CompatiblePackScriptsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileCrawlerFactory.cpp">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3UIeCrawler.cpp">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_Object.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Object.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V1.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V2.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterContentsCrawler_V2.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterContentsCrawler_V1.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Character.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Weapon.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_World.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_Null.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\CustomUtil.cpp">
+      <Filter>implements\util</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\UIDefines.cpp">
+      <Filter>implements\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsFileCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V1.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V2.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ContentsView.cpp">
+      <Filter>implements\ui\contents view</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ContentsViewToolbar.cpp">
+      <Filter>implements\ui\contents view</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\TasksBar.cpp">
+      <Filter>implements\ui\tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\OutputBar.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncPlayerBar.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\FSM.cpp">
+      <Filter>implements\util</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CountrySettingDlg.cpp">
+      <Filter>implements\ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncPlayerDlg.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\LoadingProgressMsgBox.cpp">
+      <Filter>implements\ui\loading</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\LoadingProgressMsgCallback.cpp">
+      <Filter>implements\ui\loading</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ContentsDescriptionBar.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomButton.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncPlayButton.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncPlayAllModeButton.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncForceCopyModeButton.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomUGCtrl.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncContentsList.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ContentsViewList.cpp">
+      <Filter>implements\ui\contents view</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ContentsDescriptionList.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\LiveCountryList.cpp">
+      <Filter>implements\ui\tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SettingsList.cpp">
+      <Filter>implements\ui\tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CountrySettingList.cpp">
+      <Filter>implements\ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\GITCommand.cpp">
+      <Filter>implements\util\process commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\IProcessCommand.cpp">
+      <Filter>implements\util\process commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\util\TGITCommand.cpp">
+      <Filter>implements\util\process commands</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\MQContentsStatusTree.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\MQContentsStatusBar.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\QLContentsStatusBar.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\QLContentsStatusTree.cpp">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Copy_i3Pack.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WeaponFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CharacterFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\GoodsFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\i3PackInnerFileCompare.cpp">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3_V1Info.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\EquipmentFileCrawlerImpl_V3_V2Info.cpp">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\UIContentsCrawler_V3.cpp">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_GuiItem.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackSync_ShopGoods.cpp">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\FileSync_Null.cpp">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SplashScreenEx.cpp">
+      <Filter>implements\ui\loading</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\SyncShaders.cpp">
+      <Filter>implements\resource\synchronization\sync shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\WorldFileCrawlerImpl_V3.cpp">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\PackRule_World_ImagesNoText.cpp">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ShaderContentsCrawler.cpp">
+      <Filter>implements\resource\crawler\contents\shaders</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ContentsSynchronizerFactory.cpp">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\VersionSettings.cpp">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\Settings.cpp">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\CountrySettings.cpp">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\VersionSettingDlg.cpp">
+      <Filter>implements\ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\VersionSettingList.cpp">
+      <Filter>implements\ui\settings</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ShaderSyncDlg.cpp">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ToolList.cpp">
+      <Filter>implements\ui\tasks</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ToolFactory.cpp">
+      <Filter>implements\ui\Tools</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\ShaderList.cpp">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomUGEditBrowse.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomUGEditBox.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomEditBox.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\FileShaderCodeEditBox.cpp">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\MemoryShaderCodeEditBox.cpp">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncExportPefRscButton.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SyncProgressBar.cpp">
+      <Filter>implements\ui\sync player</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\FileView.cpp">
+      <Filter>implements\ui\file view</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomProgressCtrl.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\CustomStatic.cpp">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\i3PackToolBar.cpp">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\i3PackToolTree.cpp">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\i3PackToolDlg.cpp">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\i3PackNameSettingDlg.cpp">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\resource\ShellChangeWatcher.cpp">
+      <Filter>implements\resource\watcher</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\PackedFileSearchBar.cpp">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\PackedFileSearchDlg.cpp">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\SearchedPackFiles.cpp">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\PackInnerFileDataMgr.cpp">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\DuplicatedPackFilesDlg.cpp">
+      <Filter>implements\ui\Tools\duplicated file show</Filter>
+    </ClCompile>
+    <ClCompile Include="implements\ui\DuplicatedPackFileDataMgr.cpp">
+      <Filter>implements\ui\Tools\duplicated file show</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BuildTool.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildToolDoc.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="BuildToolView.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="MainFrm.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>소스 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UG64Bit.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCBType.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCell.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugceltyp.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCnrBtn.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTafnt.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTarrw.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTAutoSize.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTbutn.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTDropGrid.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTdtp.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugctelps.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTExpand.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTLabeled.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTMail.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTMailSort.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTMarquee.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTmfnt.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTNote.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugctnotewnd.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTOutlookHeader.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTpie.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTpro1.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTprog.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTRado.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCtrl.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTsarw.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTsldr.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGCTSpin.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugdefine.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGDLType.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGDrgDrp.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGDrwHnt.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGDtaSrc.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGEdit.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGEditBase.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugformat.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\uggdinfo.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGGrid.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGHint.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ughscrol.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\uglstbox.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGMEdit.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGMemMan.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGMultiS.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugprint.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugptrlst.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugsidehd.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGStrOp.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugstruct.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugtab.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\UGTopHdg.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugvscrol.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\ugctrl\ugxpthemes.h">
+      <Filter>externals\ugctrl</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\assertions.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\autolink.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\config.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\features.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\forwards.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\json.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\json_tool.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\reader.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\value.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\version.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\jsoncpp\writer.h">
+      <Filter>externals\jsoncpp</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PathHelper.h">
+      <Filter>implements\resource\crawler</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsDB.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsDefines.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsTable_json.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsTable_Map.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsTable_Vector.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IContentsTable.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ResourceController.h">
+      <Filter>implements\resource\controller</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileCompareFactory.h">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IFileCompare.h">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\NativeFileCompare.h">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\NullCompare.h">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IFileComparator.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\LiveFileClassifier.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\LiveFileComparator.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\MediaFileComparator.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\Creator.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\ObjectFactory.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\sigslot.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\ThreadPolicy.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\ThreadPool.hpp">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsSynchronizer.h">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\SyncProgressCallback.h">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsStateChecker.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsStateCallback.h">
+      <Filter>implements\resource\comparator</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\ExecuteSVN.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\ExecuteTSVN.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\FindPefDiff.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3MFCListCtrl.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3MFCListCtrl_Custom.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3MFCTabViewCtrl.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3MFCTreeCtrl.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3MFCWorkAround.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3RscPartialFile.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3shelllistctrl.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3shellmanager.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\i3shelltreectrl.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\IconInfo.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\LoadRSCFile.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\md5.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\pidl_util.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\PreprocessMessageCallback.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\RSCFileMgr.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\RscTool\PackScriptContents.h">
+      <Filter>externals\RscTool</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\i3RSCGen\RSCNode.h">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\i3RSCGen\i3RSCGen.h">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClInclude>
+    <ClInclude Include="externals\i3RSCGen\RSCGenDefine.h">
+      <Filter>externals\i3RSCGen</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IFileSync.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Factory.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Copy.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_RegisterInRSG.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Wrapper.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IPackSync.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Factory.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\DragdropDataContext.h">
+      <Filter>implements\resource\context</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\SyncLogger.h">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\PathTokenizer.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_RegisterSoundInRSG.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V1.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V2.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V2_Avatar.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V1.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Avatar.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Sound.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Weapon.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IPackRule.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Chara.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_AvatarCommon.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_CharaRSC.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Script.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_SoundRSC.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_String.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_UIReScene.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_UIReScript.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_WeaponAnimPack.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_WeaponRSC.h">
+      <Filter>implements\resource\synchronization\pack\rules\deprecated</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Copy_FailIfExists.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_UIWeapon.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Copy(Deprecated).h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_SVNCheckConflict.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V1.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V2.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsTableCallback.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsTable_Null.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_EquipMask.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Equipment.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3PackMappedFileTable.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3PackMappedFileTableFactory.h">
+      <Filter>implements\resource\data</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3pack.h">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackCommandFactory.h">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackCommands.h">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackScriptMappedTable.h">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackScriptParser.h">
+      <Filter>implements\resource\synchronization\pack\commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_Col.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_Col_Hero.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_Scene.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_SubData.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_TabMinimap.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_Textures.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V1_Gui.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V2_UIRe.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IPefable.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IFilePathable.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IFileCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3sCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3chrCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3aCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FolderFilesCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileCrawlerNull.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsCrawlerCallback.h">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\IContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsCrawlerFactory.h">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIContentsCrawler_V2_UIRe.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIContentsCrawler_V1_Gui.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CompatiblePackScriptsCrawler.h">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileCrawlerFactory.h">
+      <Filter>implements\resource\crawler\contents</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3UIeCrawler.h">
+      <Filter>implements\resource\crawler\basic file</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_Object.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Object.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V1.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V2.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterContentsCrawler_V2.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterContentsCrawler_V1.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Character.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Weapon.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_World.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_Null.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\CustomUtil.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\UIDefines.h">
+      <Filter>implements\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsFileCrawler.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V1.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V2.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ContentsView.h">
+      <Filter>implements\ui\contents view</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ContentsViewToolbar.h">
+      <Filter>implements\ui\contents view</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\TasksBar.h">
+      <Filter>implements\ui\tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\OutputBar.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncPlayerBar.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\FSM.h">
+      <Filter>implements\util</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CountrySettingDlg.h">
+      <Filter>implements\ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncPlayerDlg.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\LoadingProgressMsgBox.h">
+      <Filter>implements\ui\loading</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\LoadingProgressMsgCallback.h">
+      <Filter>implements\ui\loading</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ContentsDescriptionBar.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomButton.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncPlayButton.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncPlayAllModeButton.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncForceCopyModeButton.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomUGCtrl.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncContentsList.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ContentsViewList.h">
+      <Filter>implements\ui\contents view</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ContentsDescriptionList.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\LiveCountryList.h">
+      <Filter>implements\ui\tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SettingsList.h">
+      <Filter>implements\ui\tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CountrySettingList.h">
+      <Filter>implements\ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\GITCommand.h">
+      <Filter>implements\util\process commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\IProcessCommand.h">
+      <Filter>implements\util\process commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\util\TGITCommand.h">
+      <Filter>implements\util\process commands</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\MQContentsStatusTree.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\MQContentsStatusBar.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\QLContentsStatusBar.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\QLContentsStatusTree.h">
+      <Filter>implements\ui\contents descriptions</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Copy_i3Pack.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WeaponFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\weapon</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CharacterFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\character</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\GoodsFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\goods</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\i3PackInnerFileCompare.h">
+      <Filter>implements\resource\comparator\file compare</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3_V1Info.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\EquipmentFileCrawlerImpl_V3_V2Info.h">
+      <Filter>implements\resource\crawler\contents\equipment</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\UIContentsCrawler_V3.h">
+      <Filter>implements\resource\crawler\contents\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_GuiItem.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackSync_ShopGoods.h">
+      <Filter>implements\resource\synchronization\sync qa -&gt; live</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\FileSync_Null.h">
+      <Filter>implements\resource\synchronization\sync media -&gt; qa</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SplashScreenEx.h">
+      <Filter>implements\ui\loading</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\SyncShaders.h">
+      <Filter>implements\resource\synchronization\sync shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WorldFileCrawlerImpl_V3.h">
+      <Filter>implements\resource\crawler\contents\world</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\PackRule_World_ImagesNoText.h">
+      <Filter>implements\resource\synchronization\pack\rules</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ShaderContentsCrawler.h">
+      <Filter>implements\resource\crawler\contents\shaders</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ContentsSynchronizerFactory.h">
+      <Filter>implements\resource\synchronization</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\VersionSettings.h">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\Settings.h">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\CountrySettings.h">
+      <Filter>implements\resource\data\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\VersionSettingDlg.h">
+      <Filter>implements\ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\VersionSettingList.h">
+      <Filter>implements\ui\settings</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ShaderSyncDlg.h">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ToolList.h">
+      <Filter>implements\ui\tasks</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ToolFactory.h">
+      <Filter>implements\ui\Tools</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\ShaderList.h">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomUGEditBrowse.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomUGEditBox.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomEditBox.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\FileShaderCodeEditBox.h">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\MemoryShaderCodeEditBox.h">
+      <Filter>implements\ui\Tools\shader sync tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncExportPefRscButton.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SyncProgressBar.h">
+      <Filter>implements\ui\sync player</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\FileView.h">
+      <Filter>implements\ui\file view</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomProgressCtrl.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\CustomStatic.h">
+      <Filter>implements\ui\custom controls</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\i3PackToolBar.h">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\i3PackToolTree.h">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\i3PackToolDlg.h">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\i3PackNameSettingDlg.h">
+      <Filter>implements\ui\Tools\pack tool</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\ShellChangeWatcher.h">
+      <Filter>implements\resource\watcher</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\resource\WndProcThunk.h">
+      <Filter>implements\resource\watcher</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\PackedFileSearchBar.h">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\PackedFileSearchDlg.h">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\SearchedPackFiles.h">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\PackInnerFileDataMgr.h">
+      <Filter>implements\ui\Tools\packed file search</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\DuplicatedPackFilesDlg.h">
+      <Filter>implements\ui\Tools\duplicated file show</Filter>
+    </ClInclude>
+    <ClInclude Include="implements\ui\DuplicatedPackFileDataMgr.h">
+      <Filter>implements\ui\Tools\duplicated file show</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

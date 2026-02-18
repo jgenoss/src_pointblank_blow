@@ -1,0 +1,6 @@
+frostUpdate .\frost\
+rootURL = http://frostsecurity.net:80/
+check connection ...
+utility::connection_exists = ok
+get_frost_version_map from http://frostsecurity.net:80//frost/version/version.txt
+failed to get local version from register

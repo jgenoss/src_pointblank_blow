@@ -1,0 +1,148 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{21021e74-6c15-4a20-ae07-96b7ef3ce286}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{a7b07214-48b3-460a-9069-69a01057b9c6}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{c3d906af-da3a-4667-8b65-46cc9840523c}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\DebugPannel">
+      <UniqueIdentifier>{84ca2484-325c-49fb-b044-432958a15a05}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="DllGuard.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Winmain.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DebugPanel.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgClassInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgGameGraph.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgHeapInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgIBInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgMemoryPoolInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgPoolSpec.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgRAMState.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgTexInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgVBInspector.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="DlgVRAMState.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="GlobalVar.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+    <ClCompile Include="MFCApp.cpp">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="DllGuard.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DebugPanel.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgClassInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgGameGraph.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgHeapInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgIBInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgMemoryPoolInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgPoolSpec.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgRAMState.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgTexInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgVBInspector.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="DlgVRAMState.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="GlobalVar.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+    <ClInclude Include="MFCApp.h">
+      <Filter>Resource Files\DebugPannel</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="i3Viewer.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+    <Manifest Include="PointBlank.exe.manifest">
+      <Filter>Resource Files</Filter>
+    </Manifest>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3Viewer.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="..\Resource\PointBlank_xp.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="..\Resource\ProjectBlackout.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+    <None Include="Makefile_wipi" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="..\..\..\i3\Project\i3Engine.natvis" />
+  </ItemGroup>
+</Project>

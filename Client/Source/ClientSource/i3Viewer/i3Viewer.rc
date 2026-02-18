@@ -1,0 +1,548 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#define APSTUDIO_HIDDEN_SYMBOLS
+#include "windows.h"
+#undef APSTUDIO_HIDDEN_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// 한국어(대한민국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_I3VIEWER            ICON                    "..\\Resource\\PointBlank_xp.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_REPORT DIALOGEX 0, 0, 134, 158
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Performance Report"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "FPS :",IDC_STATIC,58,4,18,8
+    LTEXT           "Pre-Trace elapsed :",IDC_STATIC,11,37,64,8
+    LTEXT           "Collision elapsed :",IDC_STATIC,17,67,58,8
+    LTEXT           "Reset elapsed :",IDC_STATIC,24,23,51,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,2,18,129,1
+    LTEXT           "Triangles :",IDC_STATIC,40,131,34,8
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,2,125,129,1
+    LTEXT           "Draw call :",IDC_STATIC,41,145,34,8
+    EDITTEXT        IDC_ED_FPS,80,3,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_PRETRACE,80,35,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_COLLISION,80,65,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_RESET,80,21,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_TRIANGLES,80,129,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_DRAWCALL,80,144,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_FLIP,80,110,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Flip elapsed :",IDC_STATIC,32,112,43,8
+    LTEXT           "Post-Trace elapsed :",IDC_STATIC,8,52,67,8
+    EDITTEXT        IDC_ED_POSTTRACE,80,50,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Draw elapsed :",IDC_STATIC,26,97,49,8
+    EDITTEXT        IDC_ED_DRAW2,80,95,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Update elapsed :",IDC_STATIC,19,82,56,8
+    EDITTEXT        IDC_ED_UPDATE,80,80,44,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+END
+
+IDD_DEBUG_PANEL DIALOGEX 0, 0, 586, 22
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Debug Panel"
+MENU IDR_DEBUG_MENU
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "VRAM",IDC_BTN_VRAM,57,4,50,14
+    PUSHBUTTON      "RAM",IDC_BTN_RAM,4,4,50,14
+    PUSHBUTTON      "GameGraph",IDC_BTN_GAMEGRAPH,111,4,50,14
+END
+
+IDD_VRAM_STATUS DIALOGEX 0, 0, 309, 173
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "VRAM Status"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,255,155,50,14
+    LTEXT           "Total VRAM",IDC_STATIC,112,112,38,8
+    LTEXT           "Texture Count",IDC_STATIC,34,32,48,8
+    LTEXT           "Vertex Buffer Count",IDC_STATIC,16,46,66,8
+    LTEXT           "Index Buffer Count",IDC_STATIC,19,62,63,8
+    LTEXT           "Shader Count",IDC_STATIC,37,77,45,8
+    EDITTEXT        IDC_ED_TOTALVRAM,154,110,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_RT_MEM,153,15,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_TEX_COUNT,86,30,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_TEX_MEM,153,30,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_VB_COUNT,86,45,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_VB_MEM,153,45,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_IB_COUNT,86,60,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_IB_MEM,153,60,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_SHADER_COUNT,86,75,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_EST_TOTAL,154,95,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_EST_OVER,154,130,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    LTEXT           "Estimated Usage",IDC_STATIC,95,97,54,8
+    PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,255,4,50,14
+    LTEXT           "Render Target",IDC_STATIC,34,18,48,8
+    EDITTEXT        IDC_ED_RT_COUNT,86,15,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    EDITTEXT        IDC_ED_SHADER_SIZE,153,75,59,12,ES_AUTOHSCROLL | ES_READONLY,WS_EX_RIGHT
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,4,90,213,1
+    LTEXT           "Count",IDC_STATIC,101,4,20,8
+    LTEXT           "Size",IDC_STATIC,173,4,14,8
+    CONTROL         "",IDC_STATIC,"Static",SS_BLACKFRAME | SS_SUNKEN,4,126,216,1
+    LTEXT           "Excess",IDC_STATIC,126,132,23,8
+    PUSHBUTTON      "...",IDC_BTN_RT,215,14,17,13
+    PUSHBUTTON      "...",IDC_BTN_TEX,215,30,17,13
+    PUSHBUTTON      "...",IDC_BTN_VB,215,45,17,13
+    PUSHBUTTON      "...",IDC_BTN_IB,215,59,17,13
+END
+
+IDD_TEX_INSPECTOR DIALOGEX 0, 0, 563, 327
+STYLE DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Textures"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Search",IDC_STATIC,4,4,23,8
+    EDITTEXT        IDC_ED_SEARCH,35,4,165,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_LIST_TEX,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,4,20,256,157,WS_EX_STATICEDGE
+    PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,425,4,47,12
+    LTEXT           "Count",IDC_STATIC,221,6,20,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,246,4,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Size",IDC_STATIC,304,6,14,8
+    EDITTEXT        IDC_ED_TOTALSIZE,323,4,60,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_VB_INSPECTOR DIALOGEX 0, 0, 623, 327
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Vertex Arrays"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Search",IDC_STATIC,4,4,23,8
+    EDITTEXT        IDC_ED_SEARCH,35,4,165,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_LIST_VB,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,4,20,256,157,WS_EX_STATICEDGE
+    PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,425,4,47,12
+    LTEXT           "Count",IDC_STATIC,221,6,20,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,246,4,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Size",IDC_STATIC,304,6,14,8
+    EDITTEXT        IDC_ED_TOTALSIZE,323,4,60,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_IB_INSPECTOR DIALOGEX 0, 0, 609, 334
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Index Arrays"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Search",IDC_STATIC,4,4,23,8
+    EDITTEXT        IDC_ED_SEARCH,35,4,165,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_LIST_IB,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,4,20,256,157,WS_EX_STATICEDGE
+    PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,425,4,47,12
+    LTEXT           "Count",IDC_STATIC,221,6,20,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,246,4,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Size",IDC_STATIC,304,6,14,8
+    EDITTEXT        IDC_ED_TOTALSIZE,323,4,60,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_RT_INSPECTOR DIALOGEX 0, 0, 585, 335
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Render Targets"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Search",IDC_STATIC,4,4,23,8
+    EDITTEXT        IDC_ED_SEARCH,35,4,165,12,ES_AUTOHSCROLL
+    CONTROL         "",IDC_LIST_RT,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,4,20,256,157,WS_EX_STATICEDGE
+    PUSHBUTTON      "Refresh",IDC_BTN_REFRESH,425,4,47,12
+    LTEXT           "Count",IDC_STATIC,221,6,20,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,246,4,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Size",IDC_STATIC,304,6,14,8
+    EDITTEXT        IDC_ED_TOTALSIZE,323,4,60,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_RAM_STATUS DIALOGEX 0, 0, 244, 134
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Memory Status"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,136,116,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,190,116,50,14
+    LTEXT           "Physical Memory",IDC_STATIC,7,6,54,8
+    EDITTEXT        IDC_ED_PHYSICAL_MEM,63,4,42,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Used",IDC_STATIC,42,54,17,8
+    EDITTEXT        IDC_ED_USED_COUNT,64,52,42,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Classes",IDC_STATIC,35,70,25,8
+    EDITTEXT        IDC_ED_CLASS_COUNT,64,68,42,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Memory Pool",IDC_STATIC,18,86,42,8
+    EDITTEXT        IDC_ED_POOL_COUNT,64,84,42,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Details...",IDC_BTN_CLASS,153,67,54,14
+    PUSHBUTTON      "Details...",IDC_BTN_POOL,153,83,54,14
+    CONTROL         "",IDC_STATIC,"Static",SS_ETCHEDHORZ,4,36,236,1
+    EDITTEXT        IDC_ED_USED_SIZE,109,52,42,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_CLASS_SIZE,109,68,42,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_POOL_SIZE,109,84,42,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Count",IDC_STATIC,76,41,20,8
+    LTEXT           "Size (MB)",IDC_STATIC,115,41,30,8
+    LTEXT           "Process Memory",IDC_STATIC,6,22,53,8
+    EDITTEXT        IDC_ED_PROCESS_MEM,63,20,42,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Details...",IDC_BTN_USED,153,51,54,14
+END
+
+IDD_HEAP_INSPECTOR DIALOGEX 0, 0, 601, 334
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Used Heap Inspector"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,19,301,154,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_SEARCH,38,3,100,12,ES_AUTOHSCROLL
+    LTEXT           "Total Size",IDC_STATIC,271,5,32,8
+    LTEXT           "Total Count",IDC_STATIC,161,5,38,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,203,3,47,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_TOTALSIZE,306,3,63,12,ES_AUTOHSCROLL
+    LTEXT           "Search",IDC_STATIC,11,4,23,8
+    PUSHBUTTON      "Save report",IDC_BTN_SAVE,388,3,50,12
+END
+
+IDD_CLASS_INSPECTOR DIALOGEX 0, 0, 577, 338
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Class Inspector"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,19,301,154,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_SEARCH,38,3,100,12,ES_AUTOHSCROLL
+    LTEXT           "Total Size",IDC_STATIC,271,5,32,8
+    LTEXT           "Total Count",IDC_STATIC,161,5,38,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,203,3,47,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_TOTALSIZE,306,3,63,12,ES_AUTOHSCROLL
+    LTEXT           "Search",IDC_STATIC,11,4,23,8
+    PUSHBUTTON      "Save report",IDC_BTN_SAVE,388,3,50,12
+END
+
+IDD_POOL_INSPECTOR DIALOGEX 0, 0, 591, 351
+STYLE DS_SETFONT | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Memory Pool Inspector"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CONTROL         "",IDC_LIST,"SysListView32",LVS_REPORT | LVS_ALIGNLEFT | WS_TABSTOP,3,19,301,154,WS_EX_STATICEDGE
+    EDITTEXT        IDC_ED_SEARCH,38,3,100,12,ES_AUTOHSCROLL
+    LTEXT           "Total Size",IDC_STATIC,271,5,32,8
+    LTEXT           "Total Count",IDC_STATIC,161,5,38,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,203,3,47,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_ED_TOTALSIZE,306,3,63,12,ES_AUTOHSCROLL
+    LTEXT           "Search",IDC_STATIC,11,4,23,8
+    PUSHBUTTON      "Save report",IDC_BTN_SAVE,390,4,50,12
+END
+
+IDD_POOL_SPEC DIALOGEX 0, 0, 182, 119
+STYLE DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Memory Pool details..."
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,129,101,50,14
+    LTEXT           "Total Pages",IDC_STATIC,6,6,38,8
+    EDITTEXT        IDC_ED_TOTALCOUNT,48,4,40,12,ES_AUTOHSCROLL | ES_READONLY
+    LTEXT           "Page Size",IDC_STATIC,12,36,32,8
+    LTEXT           "Unit Size",IDC_STATIC,16,51,28,8
+    LTEXT           "Allocated",IDC_STATIC,14,66,30,8
+    LTEXT           "Freed",IDC_STATIC,24,80,20,8
+    LTEXT           "Total Size",IDC_STATIC,12,21,32,8
+    EDITTEXT        IDC_ED_TOTALSIZE,48,19,60,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_PAGESIZE,48,34,40,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_UNITSIZE,48,49,40,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_ALLOCCOUNT,48,64,40,12,ES_AUTOHSCROLL | ES_READONLY
+    EDITTEXT        IDC_ED_FREECOUNT,48,78,40,12,ES_AUTOHSCROLL | ES_READONLY
+END
+
+IDD_GAMEGRAPH DIALOGEX 0, 0, 515, 343
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU | WS_THICKFRAME
+CAPTION "Game Graph"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_REPORT, DIALOG
+    BEGIN
+        LEFTMARGIN, 2
+        RIGHTMARGIN, 131
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 156
+    END
+
+    IDD_DEBUG_PANEL, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 582
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 18
+    END
+
+    IDD_VRAM_STATUS, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 305
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 169
+    END
+
+    IDD_TEX_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 559
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 323
+    END
+
+    IDD_VB_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 619
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 323
+    END
+
+    IDD_IB_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 605
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 330
+    END
+
+    IDD_RT_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 581
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 331
+    END
+
+    IDD_RAM_STATUS, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 240
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 130
+    END
+
+    IDD_HEAP_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 598
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 331
+    END
+
+    IDD_CLASS_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 573
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 334
+    END
+
+    IDD_POOL_INSPECTOR, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 587
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 347
+    END
+
+    IDD_POOL_SPEC, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 179
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 115
+    END
+
+    IDD_GAMEGRAPH, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 511
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 339
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 3,3,1602,53
+ PRODUCTVERSION 3,1,1502,1
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041204b0"
+        BEGIN
+            VALUE "CompanyName", "Zepetto Co."
+            VALUE "FileDescription", "master <2016-02-15 13-09-32.1>"
+            VALUE "FileVersion", 3, 3, 1602, 53
+            VALUE "InternalName", "i3Viewer"
+            VALUE "LegalCopyright", "Zepetto Co.  All rights reserved."
+#if !defined( LOCALE_NORTHAMERICA)
+            VALUE "OriginalFilename", "PointBlank.exe"
+            VALUE "ProductName", "Point Blank"
+#else
+			VALUE "OriginalFilename", "PiercingBlow.exe"
+			VALUE "ProductName", "Piercing Blow"
+#endif
+            VALUE "ProductVersion", "3.1.1502.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 1200
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_DEBUG_MENU MENU
+BEGIN
+    MENUITEM "Debug",                       0
+END
+
+#endif    // 한국어(대한민국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// 영어(미국) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ABOUTBOX DIALOG 22, 17, 230, 75
+STYLE DS_SETFONT | DS_MODALFRAME | WS_CAPTION | WS_SYSMENU
+CAPTION "About"
+FONT 9, "System"
+BEGIN
+    ICON            107,IDC_MYICON,14,9,16,16
+    LTEXT           "i3Viewer Version 1.0",IDC_STATIC,49,10,119,8,SS_NOPREFIX
+    LTEXT           "Copyright (C) 2003",IDC_STATIC,49,20,119,8
+    DEFPUSHBUTTON   "OK",IDOK,195,6,30,11,WS_GROUP
+END
+
+IDD_LOADING_DLG DIALOGEX 0, 0, 189, 13
+STYLE DS_SYSMODAL | DS_SETFONT | DS_FIXEDSYS | DS_CENTER | WS_POPUP
+EXSTYLE WS_EX_TOPMOST
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    CTEXT           "",IDC_LOADING_FILES_NAME,0,2,189,11,SS_ENDELLIPSIS
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDC_I3VIEWER ACCELERATORS
+BEGIN
+    "?",            IDM_ABOUT,              ASCII,  ALT
+    "/",            IDM_ABOUT,              ASCII,  ALT
+END
+
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#define APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "#include ""windows.h""\r\n"
+    "#undef APSTUDIO_HIDDEN_SYMBOLS\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// String Table
+//
+
+STRINGTABLE
+BEGIN
+    IDS_APP_TITLE           "i3Viewer version 1.0"
+    IDP_OLE_INIT_FAILED     "OLE initialization failed.  Make sure that the OLE libraries are the correct version."
+    IDC_I3VIEWER            "I3VIEWER"
+END
+
+#endif    // 영어(미국) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

@@ -1,0 +1,30 @@
+Microsoft Visual Studio Solution File, Format Version 8.00
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameShieldLib", "gameShieldLib\gameShieldLib.vcproj", "{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "gameTest", "gameTest\gameTest.vcproj", "{D55E7804-65B7-4B4D-8201-A9EFD4FF5796}"
+	ProjectSection(ProjectDependencies) = postProject
+		{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05} = {27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfiguration) = preSolution
+		Debug = Debug
+		Release = Release
+	EndGlobalSection
+	GlobalSection(ProjectConfiguration) = postSolution
+		{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}.Debug.ActiveCfg = Debug|Win32
+		{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}.Debug.Build.0 = Debug|Win32
+		{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}.Release.ActiveCfg = Release|Win32
+		{27B9E001-BAB1-4DFC-86E1-F4A72CAB0A05}.Release.Build.0 = Release|Win32
+		{D55E7804-65B7-4B4D-8201-A9EFD4FF5796}.Debug.ActiveCfg = Debug|Win32
+		{D55E7804-65B7-4B4D-8201-A9EFD4FF5796}.Debug.Build.0 = Debug|Win32
+		{D55E7804-65B7-4B4D-8201-A9EFD4FF5796}.Release.ActiveCfg = Release|Win32
+		{D55E7804-65B7-4B4D-8201-A9EFD4FF5796}.Release.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

@@ -1,0 +1,5 @@
+id : Point
+pw : Blank!@#
+
+id : PointBlankTR
+pw :  @)!)vhdlsxmqmffodzm
