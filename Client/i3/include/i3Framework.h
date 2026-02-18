@@ -1,0 +1,76 @@
+#ifndef __I3_FRAMEWORK_INCLUDE__
+#define __I3_FRAMEWORK_INCLUDE__
+
+#include "i3Framework/i3GameNode.h"
+#include "i3Framework/i3GameRes.h"
+#include "i3Framework/i3GameResSceneGraph.h"
+#include "i3Framework/i3GameResChara.h"
+#include "i3Framework/i3GameResCamera.h"
+#include "i3Framework/i3GameResAnimation.h"
+#include "i3Framework/i3GameResTexture.h"
+#include "i3Framework/i3GameResWorld.h"
+#include "i3Framework/i3GameResSound.h"
+
+#include "i3Framework/i3GameResLight.h"
+#include "i3Framework/i3GameResPath.h"
+#include "i3Framework/i3GameResObject.h"
+#include "i3Framework/i3GameResRespawn.h"
+#include "i3Framework/i3GameResEvent.h"
+#include "i3Framework/i3GameSceneInfo.h"
+#include "i3Framework/i3GameObjBase.h"
+#include "i3Framework/i3GameObj.h"
+#include "i3Framework/i3InputDispatchManager.h"
+#include "i3Framework/i3ResourceManager.h"
+#include "i3Framework/i3Stage.h"
+#include "i3Framework/i3Framework.h"
+#include "i3Framework/i3Viewer.h"
+#include "i3Framework/i3AI.h"
+#include "i3Framework/i3AIState.h"
+#include "i3Framework/i3AIContext.h"
+#include "i3Framework/i3FontManager.h"
+#include "i3Framework/i3ViewerFramework.h"
+#include "i3Framework/i3Chara.h"
+#include "i3Framework/i3Trigger.h"
+#include "i3Framework/i3StageInfo.h"
+#include "i3Framework/i3StageStack.h"
+#include "i3Framework/i3InstanceManager.h"
+#include "i3Framework/i3GameNodeTraversal.h"
+#include "i3Framework/i3World.h"
+#include "i3Framework/i3AIDriver.h"
+#include "i3Framework/i3Object.h"
+#include "i3Framework/i3StaticObject.h"
+#include "i3Framework/i3EffectManager.h"
+#include "i3Framework/i3LightObject.h"
+#include "i3Framework/i3Game.h"
+#include "i3Framework/i3GamePath.h"
+#include "i3Framework/i3RespawnObj.h"
+#include "i3Framework/i3WorldSectionTable.h"
+#include "i3Framework/i3GameObjRef.h"
+#include "i3Framework/i3CameraObject.h"
+#include "i3Framework/i3GameInterface.h"
+
+#include "i3Framework/i3ActionBreakObject.h"
+#include "i3Framework/i3ActionCollision.h"
+#include "i3Framework/i3ActionPlaySound.h"
+#include "i3Framework/i3ActionEmitEffect.h"
+#include "i3Framework/i3ActionVisible.h"
+#include "i3Framework/i3ActionDisable.h"
+#include "i3Framework/i3ActionDynamicState.h"
+#include "i3Framework/i3ActionPath.h"
+#include "i3Framework/i3ActionPlayAnim.h"
+#include "i3Framework/i3ActionExplosion.h"
+#include "i3Framework/i3ActionSetWorldSection.h"
+
+#include "i3Framework/i3Trigger.h"
+
+#include "i3Framework/i3UI.h"
+
+#if defined( I3_WINDOWS)
+	//#include "i3Framework/i3IMEHandler.h"
+	#include "i3Framework/i3GameObjPropertyDialog.h"
+#endif
+
+#include "i3Framework/i3CharaSGChangeManager.h"
+
+
+#endif //__I3_FRAMEWORK_INCLUDE__

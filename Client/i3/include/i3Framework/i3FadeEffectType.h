@@ -1,0 +1,8 @@
+#pragma once
+
+enum i3FadeEffectType
+{
+	I3_FADE_EFFECT_FADE_IN,
+	I3_FADE_EFFECT_FADE_OUT,
+	I3_FADE_EFFECT_FADE_OUT_IN,
+};

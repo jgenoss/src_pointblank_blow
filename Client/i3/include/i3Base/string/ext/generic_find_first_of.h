@@ -1,0 +1,38 @@
+#pragma once
+
+//
+// 
+#include "../../itl/range/iterator.h"
+#include "../../itl/range/value_type.h"
+#include "../../itl/range/as_literal.h"
+#include "../../itl/range/algorithm/find_first_of.h"
+#include "../../itl/range/algorithm/find.h"
+
+
+namespace i3
+{
+	template<class Range, class DelimitRange> inline
+	typename i3::range_iterator<const Range>::type generic_find_first_of(const Range& input, const DelimitRange& delimit)
+	{
+		return range::find_first_of(i3::as_literal(input), i3::as_literal(delimit));	
+	}
+
+	template<class Range> inline
+	typename i3::range_iterator<const Range>::type generic_find_first_of(const Range& input, typename i3::range_value<Range>::type delimit_c)
+	{
+		return range::find(i3::as_literal(input), delimit_c);
+	}
+
+	template<class InIt, class DelimitRange> inline
+	typename InIt generic_find_first_of( InIt beg, InIt end, const DelimitRange& delimit)
+	{
+		return range::find_first_of(i3::iterator_range<InIt>(beg, end), i3::as_literal(delimit));
+	}
+
+	template<class InIt> inline
+	typename InIt generic_find_first_of( InIt beg, InIt end, typename i3::iterator_value<InIt>::type delimit_c)
+	{
+		return i3::find(beg, end, delimit_c);
+	}
+
+}

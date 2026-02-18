@@ -1,0 +1,881 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1B480929-0475-4916-A7EF-BA0FE510C49B}</ProjectGuid>
+    <RootNamespace>i3TDK</RootNamespace>
+    <Keyword>MFCDLLProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\DirectX9\DX9_i3TDK.props" />
+    <Import Project="..\Project\i3Engine2_Common_ForExternProj.props" />
+    <Import Project="..\Project\i3Engine2_Distribute_ForExternProj.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Project\i3Engine2_Common_ForExternProj.props" />
+    <Import Project="..\Project\i3Engine2_Debug_ForExternProj.props" />
+    <Import Project="..\DirectX9\DX9_i3TDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+-Zm300 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_DEBUG;_AFXEXT;I3_TDK_BUILD;_AFXDLL;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <MinimalRebuild>true</MinimalRebuild>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>MFC140d.lib;i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3OptDx.lib;i3FrameworkDx.lib;i3SoundDx.lib;PhysXLoader.2.8.1.lib;nxuStream2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../PhysX\bin\win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile />
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\lib\DirectX\DebugDLL\"</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>/MP
+24 
+/D "_BIND_TO_CURRENT_MFC_VERSION=1"
+/D "_BIND_TO_CURRENT_CRT_VERSION=1"
+/Zm400 %(AdditionalOptions)</AdditionalOptions>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;_USRDLL;I3_TDK_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3SceneUtilDx.lib;i3OptDx.lib;i3FrameworkDx.lib;i3SoundDx.lib;PhysXLoader.2.8.1.lib;nxuStream2.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>../PhysX\bin\win32\Release;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <IgnoreSpecificDefaultLibraries>libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <ModuleDefinitionFile />
+      <MapFileName>
+      </MapFileName>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\lib\DirectX\DistributeDLL\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="i3TDK.rc2" />
+    <None Include="res\cur00001.cur" />
+    <None Include="res\cur00002.cur" />
+    <None Include="res\cur00003.cur" />
+    <None Include="res\cur00004.cur" />
+    <None Include="res\cur00005.cur" />
+    <None Include="res\cur00006.cur" />
+    <None Include="res\cur00007.cur" />
+    <None Include="res\cur00008.cur" />
+    <None Include="res\cur00009.cur" />
+    <None Include="res\cursor1.cur" />
+    <None Include="res\Element Brush.cur" />
+    <None Include="res\Element Rotation.cur" />
+    <None Include="res\Element Scale.cur" />
+    <None Include="res\Element Selection.cur" />
+    <None Include="res\Element Transition.cur" />
+    <None Include="res\nodrop.cur" />
+    <None Include="res\Path Edit.cur" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="i3Level\AIMesh.cpp" />
+    <ClCompile Include="i3Level\AIPathData.cpp" />
+    <ClCompile Include="i3Level\AIPathFinder.cpp" />
+    <ClCompile Include="i3Level\AIStage.cpp" />
+    <ClCompile Include="i3Level\Common.cpp" />
+    <ClCompile Include="i3Level\Cube.cpp" />
+    <ClCompile Include="i3Level\i3LevelAction.cpp" />
+    <ClCompile Include="i3Level\i3LevelAxis.cpp" />
+    <ClCompile Include="i3Level\i3LevelAxisMove.cpp" />
+    <ClCompile Include="i3Level\i3LevelAxisRotate.cpp" />
+    <ClCompile Include="i3Level\i3LevelAxisScale.cpp" />
+    <ClCompile Include="i3Level\i3LevelCamera.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraFree.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraFront.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraObject.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraScene.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraTop.cpp" />
+    <ClCompile Include="i3Level\i3LevelCameraWalk.cpp" />
+    <ClCompile Include="i3Level\i3LevelChara.cpp" />
+    <ClCompile Include="i3Level\i3LevelControl.cpp" />
+    <ClCompile Include="i3Level\i3LevelDefine.cpp" />
+    <ClCompile Include="i3Level\i3LevelElement.cpp" />
+    <ClCompile Include="i3Level\i3LevelElement3D.cpp" />
+    <ClCompile Include="i3Level\i3LevelElementList.cpp" />
+    <ClCompile Include="i3Level\i3LevelFramework.cpp" />
+    <ClCompile Include="i3Level\i3LevelGlobalRes.cpp" />
+    <ClCompile Include="i3Level\i3LevelGlobalVariable.cpp" />
+    <ClCompile Include="i3Level\i3LevelGroup.cpp" />
+    <ClCompile Include="i3Level\i3LevelHitMap.cpp" />
+    <ClCompile Include="i3Level\i3LevelHitPathLink.cpp" />
+    <ClCompile Include="i3Level\i3LevelHitPoint.cpp" />
+    <ClCompile Include="i3Level\i3LevelIcon.cpp" />
+    <ClCompile Include="i3Level\i3LevelLayer.cpp" />
+    <ClCompile Include="i3Level\i3LevelLight.cpp" />
+    <ClCompile Include="i3Level\i3LevelLink.cpp" />
+    <ClCompile Include="i3Level\i3LevelObject.cpp" />
+    <ClCompile Include="i3Level\i3LevelParserHelper.cpp" />
+    <ClCompile Include="i3Level\i3LevelPath.cpp" />
+    <ClCompile Include="i3Level\i3LevelPathLink.cpp" />
+    <ClCompile Include="i3Level\i3LevelPathPoint.cpp" />
+    <ClCompile Include="i3Level\i3LevelPrimitive.cpp" />
+    <ClCompile Include="i3Level\i3LevelPrimitive_Box.cpp" />
+    <ClCompile Include="i3Level\i3LevelPrimitive_Capsule.cpp" />
+    <ClCompile Include="i3Level\i3LevelPrimitive_Sphere.cpp" />
+    <ClCompile Include="i3Level\i3LevelPrim_Respawn.cpp" />
+    <ClCompile Include="i3Level\i3LevelProperty.cpp" />
+    <ClCompile Include="i3Level\i3LevelPropertyContainer.cpp" />
+    <ClCompile Include="i3Level\i3LevelRes.cpp" />
+    <ClCompile Include="i3Level\i3LevelResAnimation.cpp" />
+    <ClCompile Include="i3Level\i3LevelResCamera.cpp" />
+    <ClCompile Include="i3Level\i3LevelResChara.cpp" />
+    <ClCompile Include="i3Level\i3LevelResDatabase.cpp" />
+    <ClCompile Include="i3Level\i3LevelResEvent.cpp" />
+    <ClCompile Include="i3Level\i3LevelResLight.cpp" />
+    <ClCompile Include="i3Level\i3LevelResObject.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPath.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPrim.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPrimitive_Box.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPrimitive_Capsule.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPrimitive_Respawn.cpp" />
+    <ClCompile Include="i3Level\i3LevelResPrimitive_Sphere.cpp" />
+    <ClCompile Include="i3Level\i3LevelResRef.cpp" />
+    <ClCompile Include="i3Level\i3LevelResScanThread.cpp" />
+    <ClCompile Include="i3Level\i3LevelResSceneGraph.cpp" />
+    <ClCompile Include="i3Level\i3LevelResSceneGraphClone.cpp" />
+    <ClCompile Include="i3Level\i3LevelResSound.cpp" />
+    <ClCompile Include="i3Level\i3LevelResTexture.cpp" />
+    <ClCompile Include="i3Level\i3LevelResWorld.cpp" />
+    <ClCompile Include="i3Level\i3LevelScene.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneAction.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneElement.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneGroup.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneLayer.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneResource.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneString.cpp" />
+    <ClCompile Include="i3Level\i3LevelSceneTrigger.cpp" />
+    <ClCompile Include="i3Level\i3LevelStaticObject.cpp" />
+    <ClCompile Include="i3Level\i3LevelTrigger.cpp" />
+    <ClCompile Include="i3Level\i3LevelType.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoInfo.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoInfoCreate.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoInfoDelete.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoInfoEdit.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoInfoTransform.cpp" />
+    <ClCompile Include="i3Level\i3LevelUndoSystem.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewport.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControl.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlObjectBrush.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlObjectMove.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlObjectRotate.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlObjectScale.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlObjectSelect.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlPathCreate.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlRespawnCreate.cpp" />
+    <ClCompile Include="i3Level\i3LevelViewportControlSelectTarget.cpp" />
+    <ClCompile Include="i3Level\i3LevelWorld.cpp" />
+    <ClCompile Include="i3Level\i3NavMesh.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshDataMgr.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshFile.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshGenerator.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitive.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitivePolyCut.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitivePolygon.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitivePolyNormal.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitiveSelBox.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshPrimitiveVertex.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoAddVertex.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoCreatePoly.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoGenerateMesh.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoInvertPolyNormal.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoMoveVertex.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoPolyCut.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoRemovePoly.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUndoInfoRemoveVertex.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshUtil.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_PolyCut.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_PolyMove.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_PolySelect.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_VertexAdd.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_VertexMove.cpp" />
+    <ClCompile Include="i3Level\i3NavMeshViewportControl_VertexSelect.cpp" />
+    <ClCompile Include="i3Level\Polygon.cpp" />
+    <ClCompile Include="i3Level\Recast\Recast.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastAlloc.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastArea.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastContour.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastFilter.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastLayers.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastMesh.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastMeshDetail.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastRasterization.cpp" />
+    <ClCompile Include="i3Level\Recast\RecastRegion.cpp" />
+    <ClCompile Include="i3TDKActionSoundCtrl.cpp" />
+    <ClCompile Include="i3TDKAlphaPickCtrl.cpp" />
+    <ClCompile Include="i3TDKApp.cpp" />
+    <ClCompile Include="i3TDKClipboard.cpp" />
+    <ClCompile Include="i3TDKColorCtrl.cpp" />
+    <ClCompile Include="i3TDKColorPicker.cpp" />
+    <ClCompile Include="i3TDKColorPreviewCtrl.cpp" />
+    <ClCompile Include="i3TDKDialogBase.cpp" />
+    <ClCompile Include="i3TDKDialogContainer.cpp" />
+    <ClCompile Include="i3TDKDlgBuildShape.cpp" />
+    <ClCompile Include="i3TDKDlgChangeTex.cpp" />
+    <ClCompile Include="i3TDKDlgEnvSet.cpp" />
+    <ClCompile Include="i3TDKDlgGeometryTool.cpp" />
+    <ClCompile Include="i3TDKDlgOptProgress.cpp" />
+    <ClCompile Include="i3TDKDlgPhysixSetting.cpp" />
+    <ClCompile Include="i3TDKDlgRename.cpp" />
+    <ClCompile Include="i3TDKDlgSelectAction.cpp" />
+    <ClCompile Include="i3TDKDlgTextureTool.cpp" />
+    <ClCompile Include="i3TDKDlgTimeEventSetting.cpp" />
+    <ClCompile Include="i3TDKDlg_NodeBound.cpp" />
+    <ClCompile Include="i3TDKDlg_NodeFlag.cpp" />
+    <ClCompile Include="i3TDKDlg_Physix_Tool.cpp" />
+    <ClCompile Include="i3TDKDlg_Skeleton.cpp" />
+    <ClCompile Include="i3TDKDock.cpp" />
+    <ClCompile Include="i3TDKDockFrameWnd.cpp" />
+    <ClCompile Include="i3TDKDockSplitWnd.cpp" />
+    <ClCompile Include="i3TDKDockWnd.cpp" />
+    <ClCompile Include="i3TDKEditCtrl.cpp" />
+    <ClCompile Include="i3TDKEnvSet.cpp" />
+    <ClCompile Include="i3TDKFloatingEditCtrl.cpp" />
+    <ClCompile Include="i3TDKFolderSelectDialog.cpp" />
+    <ClCompile Include="i3TDKGameGraphTreeCtrl.cpp" />
+    <ClCompile Include="i3TDKGameRegistry.cpp" />
+    <ClCompile Include="i3TDKGlobalRes.cpp" />
+    <ClCompile Include="i3TDKGlobalVariable.cpp" />
+    <ClCompile Include="i3TDKImageBtnCtrl.cpp" />
+    <ClCompile Include="i3TDKImageViewCtrl.cpp" />
+    <ClCompile Include="i3TDKListCtrl.cpp" />
+    <ClCompile Include="i3TDKListCtrlComboBox.cpp" />
+    <ClCompile Include="i3TDKListCtrlEdit.cpp" />
+    <ClCompile Include="i3TDKLogCtrl.cpp" />
+    <ClCompile Include="i3TDKMeta.cpp" />
+    <ClCompile Include="i3TDKObjectBase.cpp" />
+    <ClCompile Include="i3TDKOptSpecBase.cpp" />
+    <ClCompile Include="i3TDKOptSpecBSPBuilder.cpp" />
+    <ClCompile Include="i3TDKOptSpecChangeCollisionGroup.cpp" />
+    <ClCompile Include="i3TDKOptSpecConvertDXTTexture.cpp" />
+    <ClCompile Include="i3TDKOptSpecGatherUpAttribute.cpp" />
+    <ClCompile Include="i3TDKOptSpecMacroTexture.cpp" />
+    <ClCompile Include="i3TDKOptSpecMipmapGen.cpp" />
+    <ClCompile Include="i3TDKOptSpecNodeFlag.cpp" />
+    <ClCompile Include="i3TDKOptSpecOctreeBuilder.cpp" />
+    <ClCompile Include="i3TDKOptSpecRenAttr.cpp" />
+    <ClCompile Include="i3TDKOptSpecResizeImage.cpp" />
+    <ClCompile Include="i3TDKOptSpecs.cpp" />
+    <ClCompile Include="i3TDKOptSpecSpatialPartition.cpp" />
+    <ClCompile Include="i3TDKOptSpec_RemoveVertexComponent.cpp" />
+    <ClCompile Include="i3TDKPopupListBoxCtrl.cpp" />
+    <ClCompile Include="i3TDKPrimaryColorPickCtrl.cpp" />
+    <ClCompile Include="i3TDKProfilingViewerCtrl.cpp" />
+    <ClCompile Include="i3TDKProfilingViewerDialog.cpp" />
+    <ClCompile Include="i3TDKProperty.cpp" />
+    <ClCompile Include="i3TDKPropertyBool.cpp" />
+    <ClCompile Include="i3TDKPropertyContainer.cpp" />
+    <ClCompile Include="i3TDKPropertyEditBoxCtrl.cpp" />
+    <ClCompile Include="i3TDKPropertyInt.cpp" />
+    <ClCompile Include="i3TDKPropertyReal.cpp" />
+    <ClCompile Include="i3TDKPropertyString.cpp" />
+    <ClCompile Include="i3TDKPropertySubItem.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemColor.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemComboBox.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemEdit.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemFilePath.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemStatic.cpp" />
+    <ClCompile Include="i3TDKPropertySubItemUserCtrl.cpp" />
+    <ClCompile Include="i3TDKPropertyToolTipCtrl.cpp" />
+    <ClCompile Include="i3TDKPropertyUint.cpp" />
+    <ClCompile Include="i3TDKRegDataCtrl.cpp" />
+    <ClCompile Include="i3TDKRegistryCtrl.cpp" />
+    <ClCompile Include="i3TDKRegKeyCtrl.cpp" />
+    <ClCompile Include="i3TDKRGBPickCtrl.cpp" />
+    <ClCompile Include="i3TDKRibbonColor.cpp" />
+    <ClCompile Include="i3TDKRibbonDockBase.cpp" />
+    <ClCompile Include="i3TDKSceneGraphTreeCtrl.cpp" />
+    <ClCompile Include="i3TDKSceneGraphTreeCtrlNode.cpp" />
+    <ClCompile Include="i3TDKSelectAttrTypeDialog.cpp" />
+    <ClCompile Include="i3TDKSelectNodeTypeDialog.cpp" />
+    <ClCompile Include="i3TDKSingleSelectAttrTypeDialog.cpp" />
+    <ClCompile Include="i3TDKSingleSelectNodeTypeDialog.cpp" />
+    <ClCompile Include="i3TDKSpecDialogContainer.cpp" />
+    <ClCompile Include="i3TDKSpec_AttrSet.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_AlphaFunc.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_BlendMode.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Bool.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Color.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_FaceCull.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_FogColor.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_FogDensity.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_FogMode.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_FogNearFar.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Fresnel.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Geometry.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Material.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_RenderMode.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_ShadeMode.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_Shader.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_TexBind.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_TexMat.cpp" />
+    <ClCompile Include="i3TDKSpec_Attr_TexWrap.cpp" />
+    <ClCompile Include="i3TDKSpec_Body.cpp" />
+    <ClCompile Include="i3TDKSpec_BoneRef.cpp" />
+    <ClCompile Include="i3TDKSpec_Joint.cpp" />
+    <ClCompile Include="i3TDKSpec_Node.cpp" />
+    <ClCompile Include="i3TDKSpec_ShapeSet.cpp" />
+    <ClCompile Include="i3TDKSpec_ShapeSet_GlobalPos.cpp" />
+    <ClCompile Include="i3TDKSpec_ShapeSet_LocalPos.cpp" />
+    <ClCompile Include="i3TDKSpec_Transform.cpp" />
+    <ClCompile Include="i3TDKSpec_Transform2.cpp" />
+    <ClCompile Include="i3TDKSplitterWnd.cpp" />
+    <ClCompile Include="i3TDKTabCtrl.cpp" />
+    <ClCompile Include="i3TDKTimeEventCtrl.cpp" />
+    <ClCompile Include="i3TDKTimeLineCtrl.cpp" />
+    <ClCompile Include="i3TDKTimeSeqCtrl.cpp" />
+    <ClCompile Include="i3TDKType.cpp" />
+    <ClCompile Include="i3TDKUpdateSystem.cpp" />
+    <ClCompile Include="i3TDKUtilCommon.cpp" />
+    <ClCompile Include="i3TDKUtilCtrl.cpp" />
+    <ClCompile Include="i3TDKUtilFile.cpp" />
+    <ClCompile Include="i3TDKUtilGDI.cpp" />
+    <ClCompile Include="i3TDKUtilShell.cpp" />
+    <ClCompile Include="i3TDKViewerCtrl.cpp" />
+    <ClCompile Include="i3TDKWindowInfo.cpp" />
+    <ClCompile Include="i3TDKWndFoldCtrl.cpp" />
+    <ClCompile Include="i3TDK_Dlg_SelectImageExt.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridCtrl.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridImageViewer.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Bool.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Button.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Color.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_ColorPicker.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Combo.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Empty.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_File.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Font.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Group.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Image.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_ImageGroup.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Int32.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Matrix.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Real32.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_String.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_StringW.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_UINT32_BitFlag.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Vec3D.cpp" />
+    <ClCompile Include="PropertyGrid\i3TDKPropertyGridProperty_Vec4D.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <AdditionalOptions Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">/MP1 %(AdditionalOptions)</AdditionalOptions>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i3Level\AIMesh.h" />
+    <ClInclude Include="i3Level\AIPathData.h" />
+    <ClInclude Include="i3Level\AIPathFinder.h" />
+    <ClInclude Include="i3Level\AIStage.h" />
+    <ClInclude Include="i3Level\Common.h" />
+    <ClInclude Include="i3Level\Cube.h" />
+    <ClInclude Include="i3Level\i3Level.h" />
+    <ClInclude Include="i3Level\i3LevelAction.h" />
+    <ClInclude Include="i3Level\i3LevelAxis.h" />
+    <ClInclude Include="i3Level\i3LevelAxisMove.h" />
+    <ClInclude Include="i3Level\i3LevelAxisRotate.h" />
+    <ClInclude Include="i3Level\i3LevelAxisScale.h" />
+    <ClInclude Include="i3Level\i3LevelCamera.h" />
+    <ClInclude Include="i3Level\i3LevelCameraFree.h" />
+    <ClInclude Include="i3Level\i3LevelCameraFront.h" />
+    <ClInclude Include="i3Level\i3LevelCameraObject.h" />
+    <ClInclude Include="i3Level\i3LevelCameraScene.h" />
+    <ClInclude Include="i3Level\i3LevelCameraTop.h" />
+    <ClInclude Include="i3Level\i3LevelCameraWalk.h" />
+    <ClInclude Include="i3Level\i3LevelChara.h" />
+    <ClInclude Include="i3Level\i3LevelControl.h" />
+    <ClInclude Include="i3Level\i3LevelDefine.h" />
+    <ClInclude Include="i3Level\i3LevelElement.h" />
+    <ClInclude Include="i3Level\i3LevelElement3D.h" />
+    <ClInclude Include="i3Level\i3LevelElementList.h" />
+    <ClInclude Include="i3Level\i3LevelFramework.h" />
+    <ClInclude Include="i3Level\i3LevelGlobalRes.h" />
+    <ClInclude Include="i3Level\i3LevelGlobalVariable.h" />
+    <ClInclude Include="i3Level\i3LevelGroup.h" />
+    <ClInclude Include="i3Level\i3LevelHitMap.h" />
+    <ClInclude Include="i3Level\i3LevelHitPathLink.h" />
+    <ClInclude Include="i3Level\i3LevelHitPoint.h" />
+    <ClInclude Include="i3Level\i3LevelIcon.h" />
+    <ClInclude Include="i3Level\i3LevelLayer.h" />
+    <ClInclude Include="i3Level\i3LevelLight.h" />
+    <ClInclude Include="i3Level\i3LevelLink.h" />
+    <ClInclude Include="i3Level\i3LevelObject.h" />
+    <ClInclude Include="i3Level\i3LevelParserHelper.h" />
+    <ClInclude Include="i3Level\i3LevelPath.h" />
+    <ClInclude Include="i3Level\i3LevelPathLink.h" />
+    <ClInclude Include="i3Level\i3LevelPathPoint.h" />
+    <ClInclude Include="i3Level\i3LevelPrimitive.h" />
+    <ClInclude Include="i3Level\i3LevelPrimitive_Box.h" />
+    <ClInclude Include="i3Level\i3LevelPrimitive_Capsule.h" />
+    <ClInclude Include="i3Level\i3LevelPrimitive_Sphere.h" />
+    <ClInclude Include="i3Level\i3LevelPrim_Respawn.h" />
+    <ClInclude Include="i3Level\i3LevelProperty.h" />
+    <ClInclude Include="i3Level\i3LevelPropertyContainer.h" />
+    <ClInclude Include="i3Level\i3LevelRes.h" />
+    <ClInclude Include="i3Level\i3LevelResAnimation.h" />
+    <ClInclude Include="i3Level\i3LevelResCamera.h" />
+    <ClInclude Include="i3Level\i3LevelResChara.h" />
+    <ClInclude Include="i3Level\i3LevelResDatabase.h" />
+    <ClInclude Include="i3Level\i3LevelResEvent.h" />
+    <ClInclude Include="i3Level\i3LevelResLight.h" />
+    <ClInclude Include="i3Level\i3LevelResObject.h" />
+    <ClInclude Include="i3Level\i3LevelResPath.h" />
+    <ClInclude Include="i3Level\i3LevelResPrim.h" />
+    <ClInclude Include="i3Level\i3LevelResPrimitive_Box.h" />
+    <ClInclude Include="i3Level\i3LevelResPrimitive_Capsule.h" />
+    <ClInclude Include="i3Level\i3LevelResPrimitive_Respawn.h" />
+    <ClInclude Include="i3Level\i3LevelResPrimitive_Sphere.h" />
+    <ClInclude Include="i3Level\i3LevelResRef.h" />
+    <ClInclude Include="i3Level\i3LevelResScanThread.h" />
+    <ClInclude Include="i3Level\i3LevelResSceneGraph.h" />
+    <ClInclude Include="i3Level\i3LevelResSceneGraphClone.h" />
+    <ClInclude Include="i3Level\i3LevelResSound.h" />
+    <ClInclude Include="i3Level\i3LevelResTexture.h" />
+    <ClInclude Include="i3Level\i3LevelResWorld.h" />
+    <ClInclude Include="i3Level\i3LevelScene.h" />
+    <ClInclude Include="i3Level\i3LevelStaticObject.h" />
+    <ClInclude Include="i3Level\i3LevelTrigger.h" />
+    <ClInclude Include="i3Level\i3LevelType.h" />
+    <ClInclude Include="i3Level\i3LevelUndoInfo.h" />
+    <ClInclude Include="i3Level\i3LevelUndoInfoCreate.h" />
+    <ClInclude Include="i3Level\i3LevelUndoInfoDelete.h" />
+    <ClInclude Include="i3Level\i3LevelUndoInfoEdit.h" />
+    <ClInclude Include="i3Level\i3LevelUndoInfoTransform.h" />
+    <ClInclude Include="i3Level\i3LevelUndoSystem.h" />
+    <ClInclude Include="i3Level\i3LevelViewport.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControl.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlObjectBrush.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlObjectMove.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlObjectRotate.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlObjectScale.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlObjectSelect.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlPathCreate.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlRespawnCreate.h" />
+    <ClInclude Include="i3Level\i3LevelViewportControlSelectTarget.h" />
+    <ClInclude Include="i3Level\i3LevelWorld.h" />
+    <ClInclude Include="i3Level\i3NavMesh.h" />
+    <ClInclude Include="i3Level\i3NavMeshDataMgr.h" />
+    <ClInclude Include="i3Level\i3NavMeshFile.h" />
+    <ClInclude Include="i3Level\i3NavMeshGenerator.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitive.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitivePolyCut.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitivePolygon.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitivePolyNormal.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitiveSelBox.h" />
+    <ClInclude Include="i3Level\i3NavMeshPrimitiveVertex.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoAddVertex.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoCreatePoly.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoGenerateMesh.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoInvertPolyNormal.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoMoveVertex.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoPolyCut.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoRemovePoly.h" />
+    <ClInclude Include="i3Level\i3NavMeshUndoInfoRemoveVertex.h" />
+    <ClInclude Include="i3Level\i3NavMeshUtil.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_PolyCut.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_PolyMove.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_PolySelect.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_VertexAdd.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_VertexMove.h" />
+    <ClInclude Include="i3Level\i3NavMeshViewportControl_VertexSelect.h" />
+    <ClInclude Include="i3Level\Polygon.h" />
+    <ClInclude Include="i3Level\Recast\Recast.h" />
+    <ClInclude Include="i3Level\Recast\RecastAlloc.h" />
+    <ClInclude Include="i3Level\Recast\RecastAssert.h" />
+    <ClInclude Include="i3TDK.h" />
+    <ClInclude Include="i3TDKActionSoundCtrl.h" />
+    <ClInclude Include="i3TDKAlphaPickCtrl.h" />
+    <ClInclude Include="i3TDKApp.h" />
+    <ClInclude Include="i3TDKClipboard.h" />
+    <ClInclude Include="i3TDKColorCtrl.h" />
+    <ClInclude Include="i3TDKColorPicker.h" />
+    <ClInclude Include="i3TDKColorPreviewCtrl.h" />
+    <ClInclude Include="i3TDKDialogBase.h" />
+    <ClInclude Include="i3TDKDialogContainer.h" />
+    <ClInclude Include="i3TDKDlgBuildShape.h" />
+    <ClInclude Include="i3TDKDlgChangeTex.h" />
+    <ClInclude Include="i3TDKDlgEnvSet.h" />
+    <ClInclude Include="i3TDKDlgGeometryTool.h" />
+    <ClInclude Include="i3TDKDlgOptProgress.h" />
+    <ClInclude Include="i3TDKDlgPhysixSetting.h" />
+    <ClInclude Include="i3TDKDlgRename.h" />
+    <ClInclude Include="i3TDKDlgSelectAction.h" />
+    <ClInclude Include="i3TDKDlgTextureTool.h" />
+    <ClInclude Include="i3TDKDlgTimeEventSetting.h" />
+    <ClInclude Include="i3TDKDlg_NodeBound.h" />
+    <ClInclude Include="i3TDKDlg_NodeFlag.h" />
+    <ClInclude Include="i3TDKDlg_Physix_Tool.h" />
+    <ClInclude Include="i3TDKDlg_Skeleton.h" />
+    <ClInclude Include="i3TDKDock.h" />
+    <ClInclude Include="i3TDKDockFrameWnd.h" />
+    <ClInclude Include="i3TDKDockSplitWnd.h" />
+    <ClInclude Include="i3TDKDockWnd.h" />
+    <ClInclude Include="i3TDKEditCtrl.h" />
+    <ClInclude Include="i3TDKEnvSet.h" />
+    <ClInclude Include="i3TDKFloatingEditCtrl.h" />
+    <ClInclude Include="i3TDKFolderSelectDialog.h" />
+    <ClInclude Include="i3TDKGameGraphTreeCtrl.h" />
+    <ClInclude Include="i3TDKGameRegistry.h" />
+    <ClInclude Include="i3TDKGlobalRes.h" />
+    <ClInclude Include="i3TDKGlobalVariable.h" />
+    <ClInclude Include="i3TDKImageBtnCtrl.h" />
+    <ClInclude Include="i3TDKImageViewCtrl.h" />
+    <ClInclude Include="i3TDKListCtrl.h" />
+    <ClInclude Include="i3TDKListCtrlComboBox.h" />
+    <ClInclude Include="i3TDKListCtrlEdit.h" />
+    <ClInclude Include="i3TDKLogCtrl.h" />
+    <ClInclude Include="i3TDKMeta.h" />
+    <ClInclude Include="i3TDKObjectBase.h" />
+    <ClInclude Include="i3TDKOptSpecBase.h" />
+    <ClInclude Include="i3TDKOptSpecBSPBuilder.h" />
+    <ClInclude Include="i3TDKOptSpecChangeCollisionGroup.h" />
+    <ClInclude Include="i3TDKOptSpecConvertDXTTexture.h" />
+    <ClInclude Include="i3TDKOptSpecGatherUpAttribute.h" />
+    <ClInclude Include="i3TDKOptSpecMacroTexture.h" />
+    <ClInclude Include="i3TDKOptSpecMipmapGen.h" />
+    <ClInclude Include="i3TDKOptSpecNodeFlag.h" />
+    <ClInclude Include="i3TDKOptSpecOctreeBuilder.h" />
+    <ClInclude Include="i3TDKOptSpecRenAttr.h" />
+    <ClInclude Include="i3TDKOptSpecResizeImage.h" />
+    <ClInclude Include="i3TDKOptSpecs.h" />
+    <ClInclude Include="i3TDKOptSpecSpatialPartition.h" />
+    <ClInclude Include="i3TDKOptSpec_RemoveVertexComponent.h" />
+    <ClInclude Include="i3TDKPopupListBoxCtrl.h" />
+    <ClInclude Include="i3TDKPrimaryColorPickCtrl.h" />
+    <ClInclude Include="i3TDKProfilingViewerCtrl.h" />
+    <ClInclude Include="i3TDKProfilingViewerDialog.h" />
+    <ClInclude Include="i3TDKProperty.h" />
+    <ClInclude Include="i3TDKPropertyBool.h" />
+    <ClInclude Include="i3TDKPropertyContainer.h" />
+    <ClInclude Include="i3TDKPropertyEditBoxCtrl.h" />
+    <ClInclude Include="i3TDKPropertyInt.h" />
+    <ClInclude Include="i3TDKPropertyReal.h" />
+    <ClInclude Include="i3TDKPropertyString.h" />
+    <ClInclude Include="i3TDKPropertySubItem.h" />
+    <ClInclude Include="i3TDKPropertySubItemColor.h" />
+    <ClInclude Include="i3TDKPropertySubItemComboBox.h" />
+    <ClInclude Include="i3TDKPropertySubItemEdit.h" />
+    <ClInclude Include="i3TDKPropertySubItemFilePath.h" />
+    <ClInclude Include="i3TDKPropertySubItemStatic.h" />
+    <ClInclude Include="i3TDKPropertySubItemUserCtrl.h" />
+    <ClInclude Include="i3TDKPropertyToolTipCtrl.h" />
+    <ClInclude Include="i3TDKPropertyUint.h" />
+    <ClInclude Include="i3TDKRegDataCtrl.h" />
+    <ClInclude Include="i3TDKRegistryCtrl.h" />
+    <ClInclude Include="i3TDKRegKeyCtrl.h" />
+    <ClInclude Include="i3TDKRGBPickCtrl.h" />
+    <ClInclude Include="i3TDKRibbonColor.h" />
+    <ClInclude Include="i3TDKRibbonDockBase.h" />
+    <ClInclude Include="i3TDKSceneGraphTreeCtrl.h" />
+    <ClInclude Include="i3TDKSelectAttrTypeDialog.h" />
+    <ClInclude Include="i3TDKSelectNodeTypeDialog.h" />
+    <ClInclude Include="i3TDKSingleSelectAttrTypeDialog.h" />
+    <ClInclude Include="i3TDKSingleSelectNodeTypeDialog.h" />
+    <ClInclude Include="i3TDKSpecDialogContainer.h" />
+    <ClInclude Include="i3TDKSpec_AttrSet.h" />
+    <ClInclude Include="i3TDKSpec_Attr_AlphaFunc.h" />
+    <ClInclude Include="i3TDKSpec_Attr_BlendMode.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Bool.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Color.h" />
+    <ClInclude Include="i3TDKSpec_Attr_FaceCull.h" />
+    <ClInclude Include="i3TDKSpec_Attr_FogColor.h" />
+    <ClInclude Include="i3TDKSpec_Attr_FogDensity.h" />
+    <ClInclude Include="i3TDKSpec_Attr_FogMode.h" />
+    <ClInclude Include="i3TDKSpec_Attr_FogNearFar.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Fresnel.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Geometry.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Material.h" />
+    <ClInclude Include="i3TDKSpec_Attr_RenderMode.h" />
+    <ClInclude Include="i3TDKSpec_Attr_ShadeMode.h" />
+    <ClInclude Include="i3TDKSpec_Attr_Shader.h" />
+    <ClInclude Include="i3TDKSpec_Attr_TexBind.h" />
+    <ClInclude Include="i3TDKSpec_Attr_TexMat.h" />
+    <ClInclude Include="i3TDKSpec_Attr_TexWrap.h" />
+    <ClInclude Include="i3TDKSpec_Body.h" />
+    <ClInclude Include="i3TDKSpec_BoneRef.h" />
+    <ClInclude Include="i3TDKSpec_Joint.h" />
+    <ClInclude Include="i3TDKSpec_Node.h" />
+    <ClInclude Include="i3TDKSpec_ShapeSet.h" />
+    <ClInclude Include="i3TDKSpec_ShapeSet_GlobalPos.h" />
+    <ClInclude Include="i3TDKSpec_ShapeSet_LocalPos.h" />
+    <ClInclude Include="i3TDKSpec_Transform.h" />
+    <ClInclude Include="i3TDKSpec_Transform2.h" />
+    <ClInclude Include="i3TDKSplitterWnd.h" />
+    <ClInclude Include="i3TDKTabCtrl.h" />
+    <ClInclude Include="i3TDKTimeEventCtrl.h" />
+    <ClInclude Include="i3TDKTimeLineCtrl.h" />
+    <ClInclude Include="i3TDKTimeSeqCtrl.h" />
+    <ClInclude Include="i3TDKType.h" />
+    <ClInclude Include="i3TDKUpdateSystem.h" />
+    <ClInclude Include="i3TDKUtilCommon.h" />
+    <ClInclude Include="i3TDKUtilCtrl.h" />
+    <ClInclude Include="i3TDKUtilFile.h" />
+    <ClInclude Include="i3TDKUtilGDI.h" />
+    <ClInclude Include="i3TDKUtilShell.h" />
+    <ClInclude Include="i3TDKViewerCtrl.h" />
+    <ClInclude Include="i3TDKWindowInfo.h" />
+    <ClInclude Include="i3TDKWndFoldCtrl.h" />
+    <ClInclude Include="i3TDK_Dlg_SelectImageExt.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridCtrl.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridImageViewer.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Bool.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Button.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Color.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_ColorPicker.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Combo.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Empty.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_File.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Font.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Group.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Image.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_ImageGroup.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Int32.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Matrix.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Real32.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_String.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_StringW.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_UINT32_BitFlag.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Vec3D.h" />
+    <ClInclude Include="PropertyGrid\i3TDKPropertyGridProperty_Vec4D.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="res\anim1.ico" />
+    <Image Include="res\Animation_Selected.ICO" />
+    <Image Include="res\Animation_Unselected.ICO" />
+    <Image Include="res\bitmap1.bmp" />
+    <Image Include="res\bitmap2.bmp" />
+    <Image Include="res\bmp00001.bmp" />
+    <Image Include="res\bmp00002.bmp" />
+    <Image Include="res\bmp00003.bmp" />
+    <Image Include="res\Born_Selected.ICO" />
+    <Image Include="res\Born_Unselected.ICO" />
+    <Image Include="res\Box.ICO" />
+    <Image Include="res\Camera Group.ICO" />
+    <Image Include="res\Camera_Selected.ICO" />
+    <Image Include="res\Camera_Unselected.ICO" />
+    <Image Include="res\Character Group.ICO" />
+    <Image Include="res\Character.ICO" />
+    <Image Include="res\Cylinder.ICO" />
+    <Image Include="res\Directional Light.ICO" />
+    <Image Include="res\edit_back.bmp" />
+    <Image Include="res\Effect.ICO" />
+    <Image Include="res\Effect_Group.ICO" />
+    <Image Include="res\Element Brush.ICO" />
+    <Image Include="res\Element Rotation.ICO" />
+    <Image Include="res\Element Scale.ICO" />
+    <Image Include="res\Element Selection.ICO" />
+    <Image Include="res\Element Transition.ICO" />
+    <Image Include="res\ElementList.ico" />
+    <Image Include="res\Export.ICO" />
+    <Image Include="res\float_grip.BMP" />
+    <Image Include="res\folder_caption_back.bmp" />
+    <Image Include="res\folder_caption_back_left.bmp" />
+    <Image Include="res\folder_caption_back_right.bmp" />
+    <Image Include="res\folder_caption_close.bmp" />
+    <Image Include="res\folder_caption_collapse.bmp" />
+    <Image Include="res\folder_caption_expand.bmp" />
+    <Image Include="res\folder_caption_grip.bmp" />
+    <Image Include="res\folder_selected_caption_back.bmp" />
+    <Image Include="res\folder_selected_caption_back_left.bmp" />
+    <Image Include="res\folder_selected_caption_back_right.bmp" />
+    <Image Include="res\folder_selected_caption_close.bmp" />
+    <Image Include="res\folder_selected_caption_collapse.BMP" />
+    <Image Include="res\folder_selected_caption_expand.BMP" />
+    <Image Include="res\folder_selected_caption_grip.bmp" />
+    <Image Include="res\Geometry_Selected.ICO" />
+    <Image Include="res\Geometry_Unselected.ICO" />
+    <Image Include="res\ico00001.ico" />
+    <Image Include="res\ico00002.ico" />
+    <Image Include="res\ico00003.ico" />
+    <Image Include="res\ico00004.ico" />
+    <Image Include="res\icon1.ico" />
+    <Image Include="res\icon2.ico" />
+    <Image Include="res\Layer.ICO" />
+    <Image Include="res\Level.ICO" />
+    <Image Include="res\Light_Group.ICO" />
+    <Image Include="res\NodeNormal_Selected.ICO" />
+    <Image Include="res\NodeNormal_Unselected.ICO" />
+    <Image Include="res\Object.ICO" />
+    <Image Include="res\Object_Group.ICO" />
+    <Image Include="res\Option.ICO" />
+    <Image Include="res\Path Edit.ICO" />
+    <Image Include="res\Point Light.ICO" />
+    <Image Include="res\Render_Selected.ICO" />
+    <Image Include="res\Render_Unselected.ICO" />
+    <Image Include="res\Resource_Selected.ICO" />
+    <Image Include="res\Resource_Unselected.ICO" />
+    <Image Include="res\Respawn.ICO" />
+    <Image Include="res\Sound_Selected.ICO" />
+    <Image Include="res\Sound_Unselected.ICO" />
+    <Image Include="res\Sphere.ICO" />
+    <Image Include="res\Spot Light.ICO" />
+    <Image Include="res\tab_back_left.BMP" />
+    <Image Include="res\tab_back_mid.BMP" />
+    <Image Include="res\tab_back_right.BMP" />
+    <Image Include="res\tab_selected_left.BMP" />
+    <Image Include="res\tab_selected_mid.bmp" />
+    <Image Include="res\tab_selected_right.bmp" />
+    <Image Include="res\Texture_Selected.ICO" />
+    <Image Include="res\Texture_Unselected.ICO" />
+    <Image Include="res\timeseq_guage.bmp" />
+    <Image Include="res\timeseq_ruler_back.bmp" />
+    <Image Include="res\timeseq_slide_back.bmp" />
+    <Image Include="res\timeseq_slide_disable_body.bmp" />
+    <Image Include="res\timeseq_slide_disable_left.bmp" />
+    <Image Include="res\timeseq_slide_disable_right.bmp" />
+    <Image Include="res\timeseq_slide_normal_body.bmp" />
+    <Image Include="res\timeseq_slide_normal_left.bmp" />
+    <Image Include="res\timeseq_slide_normal_right.bmp" />
+    <Image Include="res\timeseq_slide_select_body.bmp" />
+    <Image Include="res\timeseq_slide_select_left.bmp" />
+    <Image Include="res\timeseq_slide_select_right.bmp" />
+    <Image Include="res\timeseq_track_body.bmp" />
+    <Image Include="res\timeseq_track_disable_body.bmp" />
+    <Image Include="res\timeseq_track_disable_left.bmp" />
+    <Image Include="res\timeseq_track_disable_right.bmp" />
+    <Image Include="res\timeseq_track_left.bmp" />
+    <Image Include="res\timeseq_track_right.bmp" />
+    <Image Include="res\timeseq_track_select_body.bmp" />
+    <Image Include="res\timeseq_track_select_left.bmp" />
+    <Image Include="res\timeseq_track_select_right.bmp" />
+    <Image Include="res\World Partition.ICO" />
+    <Image Include="res\World.ICO" />
+  </ItemGroup>
+  <ItemGroup>
+    <Manifest Include="i3TDK.manifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3TDK.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Project\I3_DX\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3FrameworkDx\i3FrameworkDx.vcxproj">
+      <Project>{4ba9def3-aeb3-4a36-9731-fd79b98c3823}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3OptDx\i3OptDx.vcxproj">
+      <Project>{c1f91507-c648-40ac-88ca-a6d1df5b9030}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3SceneDx\i3SceneDx.vcxproj">
+      <Project>{1b5ae97b-959f-40c8-9e78-f7b7280dbc71}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3SceneUtil\i3SceneUtil.vcxproj">
+      <Project>{ece6ca1f-b83b-40c5-873f-b46c89d29487}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3SoundDx\i3SoundDx.vcxproj">
+      <Project>{d1103304-125d-4264-a228-9d26239aec9d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\NxuStream2\NxuStream2.vcxproj">
+      <Project>{9303fd7e-d682-493a-a631-9a625e4b4fea}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties RESOURCE_FILE="i3TDK.rc" />
+    </VisualStudio>
+  </ProjectExtensions>
+</Project>

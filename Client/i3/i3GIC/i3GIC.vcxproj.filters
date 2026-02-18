@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="i3GIC.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICColorProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICControlPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICDeviceContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICDiagram.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICDiagramContext.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICDiagramView.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICDlg_CharaState.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICFileProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICGlobalVariables.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICLinkPoint.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICObject.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICOffsetStack.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICProperty.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShape.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeBezierLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeCircle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeCircleBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeFigure.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeLine.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeRectBar.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeRenderTexture.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeTemplate.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeTextRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="i3GICShapeTriangle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrow.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="arrowcop.cur">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="res\i3GIC.rc2">
+      <Filter>Resource Files</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i3GICColorProperty.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICControlPoint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDefine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDeviceContext.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDiagram.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDiagramContext.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDiagramView.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICDlg_CharaState.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICFileProperty.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICGlobalVariables.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICLinkPoint.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICObject.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICOffsetStack.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICProperty.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShape.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeBezierLine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeCircle.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeCircleBar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeFigure.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeLine.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeRect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeRectBar.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeRenderTexture.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeTemplate.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeTextRect.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICShapeTriangle.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GIC.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICAll.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="i3GICApp.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3GIC.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+</Project>

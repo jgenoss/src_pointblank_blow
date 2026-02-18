@@ -1,0 +1,33 @@
+#pragma once
+
+//
+//  주소연산자(&)와 기본역할은 같지만, 클래스객체가 & operator를 재정의한 경우 해당동작 대신 실제 주소를 얻는 기능이 덧붙은 유틸 함수.
+//  (참고 : boost::address_of)
+
+namespace i3
+{
+	namespace detail
+	{
+		template<class T> struct addr_impl_ref
+		{
+			T & v_;
+			__forceinline addr_impl_ref( T & v ): v_( v ) {}
+			__forceinline operator T& () const { return v_; }
+		private:
+			addr_impl_ref & operator=(const addr_impl_ref &);
+		};
+
+		template<class T> struct addressof_impl
+		{
+			static __forceinline T * f( T & v, long ) { return reinterpret_cast<T*>(&const_cast<char&>(reinterpret_cast<const volatile char &>(v))); }
+			static __forceinline T * f( T * v, int ) {  return v;  }
+		};
+	}
+
+	template<class T> __forceinline 
+	T * addressof( T & v )
+	{
+		return detail::addressof_impl<T>::f( detail::addr_impl_ref<T>( v ), 0 );
+	}
+
+}

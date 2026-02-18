@@ -1,0 +1,6 @@
+#if !defined ( __I3_PHYSICS_GLOBALVARIABLE_H )
+#define __I3_PHYSICS_GLOBALVARIABLE_H
+
+I3_EXTERN_PHYSICS i3PhysicsWind * g_pi3PhysicsWind;
+
+#endif	// __I3_PHYSICS_GLOBALVARIABLE_H

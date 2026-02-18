@@ -1,0 +1,18 @@
+#pragma once
+
+#include "repetition/pp_deduce_r.h"
+#include "repetition/pp_deduce_z.h"
+#include "repetition/pp_enum.h"
+#include "repetition/pp_enum_binary_params.h"
+#include "repetition/pp_enum_params.h"
+#include "repetition/pp_enum_params_with_a_default.h"
+#include "repetition/pp_enum_params_with_defaults.h"
+#include "repetition/pp_enum_shifted.h"
+#include "repetition/pp_enum_shifted_binary_params.h"
+#include "repetition/pp_enum_shifted_params.h"
+#include "repetition/pp_enum_trailing.h"
+#include "repetition/pp_enum_trailing_binary_params.h"
+#include "repetition/pp_enum_trailing_params.h"
+#include "repetition/pp_for.h"
+#include "repetition/pp_repeat.h"
+#include "repetition/pp_repeat_from_to.h"

@@ -1,0 +1,237 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Distribute|Win32">
+      <Configuration>Distribute</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CAB30014-7166-4311-9C5B-C6FDDDB2A61C}</ProjectGuid>
+    <RootNamespace>i3GIC</RootNamespace>
+    <Keyword>MFCDLLProj</Keyword>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>DynamicLibrary</ConfigurationType>
+    <PlatformToolset>v140_xp</PlatformToolset>
+    <UseOfMfc>Dynamic</UseOfMfc>
+    <CharacterSet>MultiByte</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\DirectX9\DX9_i3TDK.props" />
+    <Import Project="..\Project\i3Engine2_Common_ForExternProj.props" />
+    <Import Project="..\Project\i3Engine2_Distribute_ForExternProj.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\Project\i3Engine2_Common_ForExternProj.props" />
+    <Import Project="..\Project\i3Engine2_Debug_ForExternProj.props" />
+    <Import Project="..\DirectX9\DX9_i3TDK.props" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>14.0.23107.0</_ProjectFileVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <OutDir>$(Configuration)\</OutDir>
+    <IntDir>$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm400 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>../i3TDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>I3_GIC_BUILD;_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StringPooling>false</StringPooling>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <MinimalRebuild>true</MinimalRebuild>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3FrameworkDx.lib;i3InputDx.lib;i3SoundDx.lib;i3TDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile />
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\bin\"
+copy "$(OutDir)$(ProjectName).lib" "..\lib\DirectX\DebugDLL\"
+copy "$(OutDir)$(TargetName).dll" "..\lib\DirectX\DebugDLL\"
+
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>false</MkTypLibCompatible>
+    </Midl>
+    <ClCompile>
+      <AdditionalOptions>-Zm300 /MP
+24 %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalIncludeDirectories>../i3TDK;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_WINDOWS;I3_GIC_BUILD;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <StructMemberAlignment>Default</StructMemberAlignment>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0412</Culture>
+      <AdditionalIncludeDirectories>$(IntDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>i3BaseDx.lib;i3MathDx.lib;i3GfxDx.lib;i3SceneDx.lib;i3FrameworkDx.lib;i3InputDx.lib;i3SoundDx.lib;i3TDK.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile />
+      <MapFileName>
+      </MapFileName>
+    </Link>
+    <PostBuildEvent>
+      <Command>copy "$(OutDir)$(TargetName).dll" "..\bin\"
+copy "$(OutDir)$(TargetName).dll" "..\lib\DirectX\DistributeDLL\"
+copy "$(OutDir)$(ProjectName).lib" "..\lib\DirectX\DistributeDLL\"
+
+</Command>
+    </PostBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="i3GIC.cpp" />
+    <ClCompile Include="i3GICColorProperty.cpp" />
+    <ClCompile Include="i3GICControlPoint.cpp" />
+    <ClCompile Include="i3GICDeviceContext.cpp" />
+    <ClCompile Include="i3GICDiagram.cpp" />
+    <ClCompile Include="i3GICDiagramContext.cpp" />
+    <ClCompile Include="i3GICDiagramView.cpp" />
+    <ClCompile Include="i3GICDlg_CharaState.cpp" />
+    <ClCompile Include="i3GICFileProperty.cpp" />
+    <ClCompile Include="i3GICGlobalVariables.cpp" />
+    <ClCompile Include="i3GICLinkPoint.cpp" />
+    <ClCompile Include="i3GICObject.cpp" />
+    <ClCompile Include="i3GICOffsetStack.cpp" />
+    <ClCompile Include="i3GICProperty.cpp" />
+    <ClCompile Include="i3GICShape.cpp" />
+    <ClCompile Include="i3GICShapeBezierLine.cpp" />
+    <ClCompile Include="i3GICShapeCircle.cpp" />
+    <ClCompile Include="i3GICShapeCircleBar.cpp" />
+    <ClCompile Include="i3GICShapeFigure.cpp" />
+    <ClCompile Include="i3GICShapeLine.cpp" />
+    <ClCompile Include="i3GICShapeRect.cpp" />
+    <ClCompile Include="i3GICShapeRectBar.cpp" />
+    <ClCompile Include="i3GICShapeRenderTexture.cpp" />
+    <ClCompile Include="i3GICShapeTemplate.cpp" />
+    <ClCompile Include="i3GICShapeTextRect.cpp" />
+    <ClCompile Include="i3GICShapeTriangle.cpp" />
+    <ClCompile Include="stdafx.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Distribute|Win32'">Create</PrecompiledHeader>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="arrow.cur" />
+    <None Include="arrowcop.cur" />
+    <None Include="res\i3GIC.rc2" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="i3GIC.h" />
+    <ClInclude Include="i3GICAll.h" />
+    <ClInclude Include="i3GICApp.h" />
+    <ClInclude Include="i3GICColorProperty.h" />
+    <ClInclude Include="i3GICControlPoint.h" />
+    <ClInclude Include="i3GICDefine.h" />
+    <ClInclude Include="i3GICDeviceContext.h" />
+    <ClInclude Include="i3GICDiagram.h" />
+    <ClInclude Include="i3GICDiagramContext.h" />
+    <ClInclude Include="i3GICDiagramView.h" />
+    <ClInclude Include="i3GICDlg_CharaState.h" />
+    <ClInclude Include="i3GICFileProperty.h" />
+    <ClInclude Include="i3GICGlobalVariables.h" />
+    <ClInclude Include="i3GICLinkPoint.h" />
+    <ClInclude Include="i3GICObject.h" />
+    <ClInclude Include="i3GICOffsetStack.h" />
+    <ClInclude Include="i3GICProperty.h" />
+    <ClInclude Include="i3GICShape.h" />
+    <ClInclude Include="i3GICShapeBezierLine.h" />
+    <ClInclude Include="i3GICShapeCircle.h" />
+    <ClInclude Include="i3GICShapeCircleBar.h" />
+    <ClInclude Include="i3GICShapeFigure.h" />
+    <ClInclude Include="i3GICShapeLine.h" />
+    <ClInclude Include="i3GICShapeRect.h" />
+    <ClInclude Include="i3GICShapeRectBar.h" />
+    <ClInclude Include="i3GICShapeRenderTexture.h" />
+    <ClInclude Include="i3GICShapeTemplate.h" />
+    <ClInclude Include="i3GICShapeTextRect.h" />
+    <ClInclude Include="i3GICShapeTriangle.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="i3GIC.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\i3TDK\i3TDK.vcxproj">
+      <Project>{1b480929-0475-4916-a7ef-ba0fe510c49b}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3BaseDx\i3BaseDx.vcxproj">
+      <Project>{9351551b-71b9-4000-ac64-f55678384abf}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3FrameworkDx\i3FrameworkDx.vcxproj">
+      <Project>{4ba9def3-aeb3-4a36-9731-fd79b98c3823}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3GfxDx\i3GfxDx.vcxproj">
+      <Project>{a16536c6-3dfb-4eb1-83f4-66b72923a29a}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3InputDx\i3InputDx.vcxproj">
+      <Project>{bca7065a-c03b-47d3-b8f1-0be632128989}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3MathDx\i3MathDx.vcxproj">
+      <Project>{659d237a-b554-49b3-a4c9-86c309eac60e}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3SceneDx\i3SceneDx.vcxproj">
+      <Project>{1b5ae97b-959f-40c8-9e78-f7b7280dbc71}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\Project\I3_DX\i3SoundDx\i3SoundDx.vcxproj">
+      <Project>{d1103304-125d-4264-a228-9d26239aec9d}</Project>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

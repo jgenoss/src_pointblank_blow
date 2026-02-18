@@ -1,0 +1,257 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "#define _AFX_NO_SPLITTER_RESOURCES\r\n"
+    "#define _AFX_NO_OLE_RESOURCES\r\n"
+    "#define _AFX_NO_TRACKER_RESOURCES\r\n"
+    "#define _AFX_NO_PROPERTY_RESOURCES\r\n"
+    "\r\n"
+    "#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)\r\n"
+    "LANGUAGE 18, 1\r\n"
+    "#pragma code_page(949)\r\n"
+    "#include ""res\\i3GIC.rc2""  // non-Microsoft Visual C++ edited resources\r\n"
+    "#include ""afxres.rc""     // Standard components\r\n"
+    "#endif\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 1,0,0,1
+ PRODUCTVERSION 1,0,0,1
+ FILEFLAGSMASK 0x3fL
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x2L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041203b5"
+        BEGIN
+            VALUE "CompanyName", "Zepetto Co. Ltd."
+            VALUE "FileDescription", "i3GIC Library"
+            VALUE "FileVersion", "1.0.0.1"
+            VALUE "InternalName", "i3GIC.dll"
+            VALUE "LegalCopyright", "(c) Zepetto Co. Ltd.  All rights reserved."
+            VALUE "OriginalFilename", "i3GIC.dll"
+            VALUE "ProductName", "i3Engine"
+            VALUE "ProductVersion", "1.0.0.1"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x412, 949
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_POPUP_SHAPE_DIAGRAM MENU 
+BEGIN
+    POPUP "Diagram"
+    BEGIN
+        MENUITEM "Return to Behavior Diagram",  ID_DIAGRAM_RETURN_BEHAVIOR
+        MENUITEM SEPARATOR
+        MENUITEM "&Select All...",              ID_DIAGRAM_SELECTALL
+        MENUITEM "&Unselect all...",            ID_DIAGRAM_UNSELECTALL
+        MENUITEM SEPARATOR
+        MENUITEM "&Copy",                       ID_DIAGRAM_COPY
+        MENUITEM "&Paste",                      ID_DIAGRAM_PASTE
+        MENUITEM "&Delete",                     ID_DIAGRAM_DELETE
+        MENUITEM SEPARATOR
+        POPUP "Align"
+        BEGIN
+            MENUITEM "Left",                        ID_ALIGN_TOLEFT
+            MENUITEM "Center",                      ID_ALIGN_TOCENTER
+            MENUITEM "Right",                       ID_ALIGN_TORIGHT
+            MENUITEM "Top",                         ID_ALIGN_TOP
+            MENUITEM "Middle",                      ID_ALIGN_MIDDLE
+            MENUITEM "Bottom",                      ID_ALIGN_BOTTOM
+        END
+        POPUP "Depth Position"
+        BEGIN
+            MENUITEM "To Back",                     ID_DEPTHPOSITION_TOBACK
+            MENUITEM "To The Tail",                 ID_DEPTHPOSITION_TOTHETAIL
+            MENUITEM "To Front",                    ID_DEPTHPOSITION_TOFRONT
+            MENUITEM "To The Foremost",             ID_DEPTHPOSITION_TOTHEFOREMOST
+        END
+        MENUITEM SEPARATOR
+        MENUITEM "Add Trigger",                 ID_DIAGRAM_ADDTRIGGER
+        MENUITEM "Delete Trigger",              ID_DIAGRAM_DELETETRIGGER
+        MENUITEM "Insert Behavior",             ID_DIAGRAM_INSERTBEHAVIOR
+        MENUITEM "Break Link",                  ID_DIAGRAM_BREAKLINK
+    END
+    POPUP "Trigger"
+    BEGIN
+        MENUITEM "Input",                       ID_TRIGGER_INPUT
+        MENUITEM "MotionEnd",                   ID_TRIGGER_MOTIONEND
+        MENUITEM "Timer",                       ID_TRIGGER_TIMER
+        MENUITEM "UserDefine",                  ID_TRIGGER_USERDEFINE
+        MENUITEM "Character State",             ID_TRIGGER_CHARASTATE
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_CURSOR_LINK         CURSOR                  "cursor1.cur"
+IDC_CURSOR_SCROLL       CURSOR                  "cursor2.cur"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_GIC_DLG_BEHAVIOR_TRIGGER DIALOGEX 0, 0, 238, 48
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,179,7,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,179,25,50,14
+    COMBOBOX        IDC_GIC_CMB_BEHAVIOR_TRIGGER_TYPE,67,9,94,30,CBS_DROPDOWN | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Trigger Type",IDC_STATIC,7,7,42,8
+END
+
+IDD_GIC_DLG_CHARA_STATE DIALOGEX 0, 0, 178, 61
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Character State"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,71,43,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,124,43,50,14
+    CONTROL         "Flying",IDC_CHECK_FLYING,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,4,4,35,10
+    CONTROL         "Falling",IDC_CHECK2,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,59,4,36,10
+    CONTROL         "Touch wall",IDC_CHECK3,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,113,4,49,10
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_GIC_DLG_BEHAVIOR_TRIGGER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 231
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 41
+    END
+
+    IDD_GIC_DLG_CHARA_STATE, DIALOG
+    BEGIN
+        LEFTMARGIN, 4
+        RIGHTMARGIN, 174
+        TOPMARGIN, 4
+        BOTTOMMARGIN, 57
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_POINTER             CURSOR                  "arrow.cur"
+IDC_POINTER_COPY        CURSOR                  "arrowcop.cur"
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+#define _AFX_NO_SPLITTER_RESOURCES
+#define _AFX_NO_OLE_RESOURCES
+#define _AFX_NO_TRACKER_RESOURCES
+#define _AFX_NO_PROPERTY_RESOURCES
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+LANGUAGE 18, 1
+#pragma code_page(949)
+#include "res\i3GIC.rc2"  // non-Microsoft Visual C++ edited resources
+#include "afxres.rc"     // Standard components
+#endif
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

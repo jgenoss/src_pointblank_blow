@@ -1,0 +1,26 @@
+#ifndef __PARSER_HELPER_H__
+#define __PARSER_HELPER_H__
+
+
+#define IF_STR(_STR_)									if(stricmp(szBuf,_STR_)==0)
+
+
+#define GET_VALUE(_LABEL_,_DEFAULT_,_VAR_)				_GET_VALUE(_LABEL_,_DEFAULT_,_VAR_,FALSE)
+#define GET_IMPORTANT_VALUE(_LABEL_,_DEFAULT_,_VAR_)	_GET_VALUE(_LABEL_,_DEFAULT_,_VAR_,TRUE)
+
+#define GET_STRING(_LABEL_,_DEFAULT_,_VAR_,_BUFSZ_)				_GET_STRING(_LABEL_,_DEFAULT_,_VAR_,_BUFSZ_,FALSE)
+#define GET_IMPORTANT_STRING(_LABEL_,_DEFAULT_,_VAR_,_BUFSZ_)	_GET_STRING(_LABEL_,_DEFAULT_,_VAR_,_BUFSZ_,TRUE)
+
+#define GET_VEC3D(_LABEL_,_VAR_)						_GET_VEC3D(_LABEL_,_VAR_,FALSE)	
+#define GET_IMPORTANT_VEC3D(_LABEL_,_VAR_)				_GET_VEC3D(_LABEL_,_VAR_,TRUE)	
+
+#define GET_MAX_VEC3D(_LABEL_,_VAR_)						_GET_MAX_VEC3D(_LABEL_,_VAR_,FALSE)	
+#define GET_IMPORTANT_MAX_VEC3D(_LABEL_,_VAR_)				_GET_MAX_VEC3D(_LABEL_,_VAR_,TRUE)	
+
+BOOL GetBOOL( const char * pszStr);
+char * BOOL2Str( BOOL bValue);
+
+I3G_FOG_MODE GetFogMode( const char * pszStr);
+char * FogMode2Str( I3G_FOG_MODE mode);
+
+#endif //__PARSER_HELPER_H__

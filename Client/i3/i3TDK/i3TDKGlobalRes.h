@@ -1,0 +1,163 @@
+#if !defined( __I3_TDK_GLOBAL_RES_H)
+#define __I3_TDK_GLOBAL_RES_H
+
+#define		FOLDER_CAPTION_GRIP_CX		12
+#define		FOLDER_CAPTION_GRIP_CY		15
+
+#define		FOLDER_CAPTION_IND_CX		11
+#define		FOLDER_CAPTION_IND_CY		11
+
+#define		FOLDER_CAPTION_BACK_CX		32
+#define		FOLDER_CAPTION_BACK_CY		19
+
+#define		FOLDER_CAPTION_CLOSE_CX		13
+#define		FOLDER_CAPTION_CLOSE_CY		13
+
+#define		FOLDER_CAPTION_BACK_LEFT_CX		8
+#define		FOLDER_CAPTION_BACK_RIGHT_CX	8
+
+#define		FLOAT_GRIP_CX					5
+#define		FLOAT_GRIP_CY					5
+
+#define		I3TDK_EDIT_BACK_CX				12
+#define		I3TDK_EDIT_BACK_CY				12
+
+enum I3TDK_SYS_COLOR
+{
+	I3TDK_COLOR_BACK_APP_BKGND = 0,
+	I3TDK_COLOR_FORE_APP_BKGND,
+
+	I3TDK_COLOR_BACK_BORDER,
+	I3TDK_COLOR_FORE_BORDER,
+
+	I3TDK_COLOR_BACK_CAPTION_TEXT,
+	I3TDK_COLOR_FORE_CAPTION_TEXT,
+
+	I3TDK_COLOR_TEXT_NORMAL,
+	I3TDK_COLOR_TEXT_HILIGHT,
+	I3TDK_COLOR_TEXT_DISABLE,
+	
+	I3TDK_COLOR_BACK_3D_LIT,
+	I3TDK_COLOR_BACK_3D_LIT_DARK,
+	I3TDK_COLOR_BACK_3D_FACE,
+	I3TDK_COLOR_BACK_3D_SHADOW,
+	I3TDK_COLOR_BACK_3D_SHADOW_DARK,
+
+	I3TDK_COLOR_FORE_3D_LIT,
+	I3TDK_COLOR_FORE_3D_LIT_DARK,
+	I3TDK_COLOR_FORE_3D_FACE,
+	I3TDK_COLOR_FORE_3D_SHADOW,
+	I3TDK_COLOR_FORE_3D_SHADOW_DARK,
+
+	I3TDK_COLOR_FLOAT_BORDER,
+	I3TDK_COLOR_FLOAT_BORDER_FACE,
+
+	I3TDK_COLOR_BACK_WHITE,
+	I3TDK_COLOR_TEXT_BLACK,
+
+	I3TDK_COLOR_MAX
+};
+
+enum I3TDK_IMAGELIST
+{
+	I3TDK_IMAGELIST_ANIM,
+	I3TDK_IMAGELIST_ANIM_UNSEL,
+	I3TDK_IMAGELIST_ATTR,
+	I3TDK_IMAGELIST_ATTR_UNSEL,
+	I3TDK_IMAGELIST_BONE,
+	I3TDK_IMAGELIST_BONE_UNSEL,
+	I3TDK_IMAGELIST_CAMERA,
+	I3TDK_IMAGELIST_CAMERA_UNSEL,
+	I3TDK_IMAGELIST_GEOMETRY,
+	I3TDK_IMAGELIST_GEOMETRY_UNSEL,
+	I3TDK_IMAGELIST_NODE,
+	I3TDK_IMAGELIST_NODE_UNSEL,
+	I3TDK_IMAGELIST_RESOURCE,
+	I3TDK_IMAGELIST_RESOURCE_UNSEL,
+	I3TDK_IMAGELIST_SOUND,
+	I3TDK_IMAGELIST_SOUND_UNSEL,
+	I3TDK_IMAGELIST_TEXTURE,
+	I3TDK_IMAGELIST_TEXTURE_UNSEL,
+
+	I3TDK_IMAGELIST_BLANK,
+
+	I3TDK_IMAGELIST_MAX
+};
+
+struct I3TDK_COLORSET
+{
+	COLORREF		m_Color = 0;
+	HPEN			m_hPen = nullptr;
+	HBRUSH			m_hBrush = nullptr;
+} ;
+
+class I3_EXPORT_TDK i3TDKGlobalRes : public i3ElementBase
+{
+	I3_EXPORT_CLASS_DEFINE( i3TDKGlobalRes, i3ElementBase);
+
+protected:
+	void		_initColor( I3TDK_SYS_COLOR index, COLORREF color);
+
+	void		InitSysColors(void);
+
+public:
+	i3TDKGlobalRes(void);
+	virtual ~i3TDKGlobalRes(void);
+
+	// Folder Window Control
+	HBITMAP		m_hbmpCaptionBack;
+	HBITMAP		m_hbmpCaptionBackLeft;
+	HBITMAP		m_hbmpCaptionBackRight;
+	HBITMAP		m_hbmpCaptionGrip;
+	HBITMAP		m_hbmpCaptionClose;
+	HBITMAP		m_hbmpCaptionCollapse;
+	HBITMAP		m_hbmpCaptionExpand;
+
+	HBITMAP		m_hbmpSelCaptionBack;
+	HBITMAP		m_hbmpSelCaptionBackLeft;
+	HBITMAP		m_hbmpSelCaptionBackRight;
+	HBITMAP		m_hbmpSelCaptionGrip;
+	HBITMAP		m_hbmpSelCaptionClose;
+	HBITMAP		m_hbmpSelCaptionCollapse;
+	HBITMAP		m_hbmpSelCaptionExpand;
+
+	HBITMAP		m_hbmpFloatGrip;
+
+	HBITMAP		m_hbmpTabBackLeft;
+	HBITMAP		m_hbmpTabBackMid;
+	HBITMAP		m_hbmpTabBackRight;
+
+	HBITMAP		m_hbmpTabForeLeft;
+	HBITMAP		m_hbmpTabForeMid;
+	HBITMAP		m_hbmpTabForeRight;
+
+	// Edit Box Control
+	HBITMAP		m_hbmpEditBack;
+
+	HCURSOR		m_hCursorArrow;
+	HCURSOR		m_hCursorHand;
+	HCURSOR		m_hCursorNoDrop;
+	HCURSOR		m_hCursorSizeNS;
+	HCURSOR		m_hCursorSizeWE;
+
+	CImageList *		m_pTDKImageList;
+
+	I3TDK_COLORSET		m_SysColor[ I3TDK_COLOR_MAX];
+
+	static	BOOL Init(void);
+	static BOOL	Close(void);
+
+	COLORREF		getColor( I3TDK_SYS_COLOR idx)		{ return m_SysColor[idx].m_Color;	}
+	HPEN			getPen( I3TDK_SYS_COLOR idx)		{ return m_SysColor[idx].m_hPen; }
+	HBRUSH			getBrush( I3TDK_SYS_COLOR idx)		{ return m_SysColor[idx].m_hBrush; }
+
+};
+
+namespace i3TDK
+{
+	I3_EXPORT_TDK	void	SetResInstance(void);
+	I3_EXPORT_TDK	void	RestoreResInstance(void);
+	I3_EXPORT_TDK	HICON	LoadIcon( UINT id);
+};
+
+#endif

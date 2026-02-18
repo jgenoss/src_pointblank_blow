@@ -1,0 +1,38 @@
+#pragma once
+
+// i3::contain_string/ContainNew/ContainW의 일반화...  Contain과 ContainNew의 차이점은 없어보인다..
+#include "../algorithm/find.h"
+#include "../../itl/range/literal_begin.h"
+
+namespace i3
+{
+	template<class Range1, class Range2> inline
+	int contain_string(const Range1& str_src, const Range2& str_find)
+	{
+		typedef typename i3::get_iterator_range_type<const Range1>::type iterator_range_type1;
+		typedef typename i3::get_iterator_range_type<const Range2>::type iterator_range_type2;
+		typedef typename iterator_range_type1::value_type					Ch1;
+		typedef typename iterator_range_type2::value_type					Ch2;
+		compile_assert_pred(( is_same<Ch1, Ch2> ));
+
+		typename i3::get_iterator_range_type<const Range1>::type it_rng = i3::find_first(str_src, str_find);
+		if (it_rng.empty()) return -1;
+		return int(i3::distance(literal_begin(str_src), it_rng.begin()));
+	}
+	
+	template<class Range1, class Range2> inline
+	int icontain_string(const Range1& str_src, const Range2& str_find)
+	{
+		typedef typename i3::get_iterator_range_type<const Range1>::type iterator_range_type1;
+		typedef typename i3::get_iterator_range_type<const Range2>::type iterator_range_type2;
+		typedef typename iterator_range_type1::value_type					Ch1;
+		typedef typename iterator_range_type2::value_type					Ch2;
+		compile_assert_pred(( is_same<Ch1, Ch2> ));
+
+		typename i3::get_iterator_range_type<const Range1>::type it_rng = i3::ifind_first(str_src, str_find);
+		if (it_rng.empty()) return -1;
+		return int(i3::distance(literal_begin(str_src), it_rng.begin()));
+	}
+
+}
+
