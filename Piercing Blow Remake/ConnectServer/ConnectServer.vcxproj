@@ -59,15 +59,19 @@
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ServerCommon\ServerCommon.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ServerCommon\ServerCommon.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ServerCommon\ServerCommon.props" />
   </ImportGroup>
   <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="..\ServerCommon\ServerCommon.props" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -128,6 +132,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="ConnectServer.cpp" />
+    <ClCompile Include="ConnectServerContext.cpp" />
+    <ClCompile Include="ConnectSession.cpp" />
+    <ClCompile Include="ConnectSessionManager.cpp" />
+    <ClCompile Include="GameServerRegistry.cpp" />
+    <ClCompile Include="..\ServerCommon\BaseServer.cpp" />
+    <ClCompile Include="..\ServerCommon\ServerList.cpp" />
+    <ClCompile Include="..\ServerCommon\ModuleBase.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ConnectServerContext.h" />
+    <ClInclude Include="ConnectSession.h" />
+    <ClInclude Include="ConnectSessionManager.h" />
+    <ClInclude Include="GameServerRegistry.h" />
+    <ClInclude Include="..\ServerCommon\IServer.h" />
+    <ClInclude Include="..\ServerCommon\BaseServer.h" />
+    <ClInclude Include="..\ServerCommon\ServerInfo.h" />
+    <ClInclude Include="..\ServerCommon\ServerList.h" />
+    <ClInclude Include="..\ServerCommon\InterServerProtocol.h" />
+    <ClInclude Include="..\ServerCommon\ModuleBase.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
