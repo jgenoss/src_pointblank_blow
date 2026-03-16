@@ -1,6 +1,6 @@
 # Plan de Implementación - Piercing Blow Server Remake
 
-> **Última actualización**: 2026-03-16 (post Batch 20)
+> **Última actualización**: 2026-03-16 (post Batch 20 + análisis completo original vs remake)
 
 ---
 
@@ -9,253 +9,367 @@
 | Servidor | Archivos | Líneas | Estado |
 |----------|----------|--------|--------|
 | **GameServer** | 56 | 31,686 | Activo - 443 dispatch cases |
-| **DataServer** | 22 | 3,372 | Completo - PostgreSQL |
-| **BattleServer** | 17 | 1,846 | Completo - UDP relay |
-| **ConnectServer** | 10 | 1,068 | Completo - Auth + registry |
+| **DataServer** | 22 | 3,372 | Funcional - PostgreSQL sync |
+| **BattleServer** | 17 | 1,846 | Funcional - UDP relay simple |
+| **ConnectServer** | 10 | 1,068 | Funcional - Auth + registry |
 | **ServerCommon** | 12 | 2,054 | Completo - InterServerProtocol |
 | **S2MO** | - | - | Completo - RSA/AES/XOR |
 | **i3Server** | - | - | Completo - IOCP framework |
 | **TOTAL** | **117+** | **~40,026** | |
 
-### Cobertura de Protocolos
+---
 
-**443 dispatch cases implementados de ~529 relevantes (~84%)**
+## Análisis: Original vs Remake
 
-(605 totales en ProtocolDef.h - ~76 deprecated/server-only = ~529 relevantes)
+### Escala de Código
 
-| Categoría | Rango | En ProtocolDef | Implementados | % |
-|-----------|-------|----------------|---------------|---|
-| Login | 0x0100 | 1 | 1 | 100% |
-| Base (info/channel/quest/medal/map/title/attendance) | 0x0200 | 86 | 91* | ~100% |
-| Auth (social/friends/whisper/block) | 0x0300 | 78 | 53 | 68% |
-| Shop (buy/gift/capsule/repair) | 0x0400 | 5+24** | 29 | 100% |
-| Clan CS_* (create/join/member/mark) | 0x0700 | 87*** | 57 | 66% |
-| Clan Match CS_MATCH_* | 0x0800 | 31 | 24 | 77% |
-| Community | 0x0B00 | 2 | 1 | 50% |
-| Lobby | 0x0C00 | 21 | 20 | 95% |
-| Inventory | 0x0D00 | 3 | 3 | 100% |
-| RS/IGS/FieldShop | 0x0E00 | 13 | 13 | 100% |
-| Room | 0x0F00 | 46 | 42 | 91% |
-| Battle | 0x1000 | 97 | 52 | 54% |
-| Cheat | 0x1300 | 12 | 12 | 100% |
-| Gacha | 0x1400 | 6 | 6 | 100% |
-| QuickJoin | 0x1500 | 2 | 2 | 100% |
-| Skill | 0x1700 | 3 | 3 | 100% |
-| Char/New | 0x1800 | 14 | 6 | 43% |
-| MyInfo | 0x1900 | 2 | 2 | 100% |
-| GMChat | 0x1A00 | 5 | 4 | 80% |
-| Clan War | 0x1B00 | 25 | 22 | 88% |
-| Messenger | N/A | 38 | 24 | 63% |
+| Componente | Original | Remake | % Cubierto |
+|------------|----------|--------|------------|
+| GameServer (UserSession + Room + Context + Modules) | ~30,000 líneas | 31,686 líneas | ~105%* |
+| BattleServer (DediServer) | ~40,139 líneas, 82 archivos | 1,846 líneas, 17 archivos | **4.6%** |
+| DataServer (TransServer) | ~29,931 líneas, 90+ archivos | 3,372 líneas, 22 archivos | **11.3%** |
+| **Total servidor** | **~100,070 líneas** | **~36,904 líneas** | **~37%** |
 
-\* Base tiene más dispatch cases que REQs porque incluye SET_*/GET_*/INIT_*/DELETE_*/PERIOD_* protocolos
-\** Auth shop protocols están divididos entre PROTOCOL_AUTH_SHOP_* y PROTOCOL_SHOP_*
-\*** CS_ total (118) menos CS_MATCH_ (31) = 87 clan-only
+\* El GameServer del remake tiene más líneas que el original porque incluye lógica que en el original se distribuía entre Auth/Clan/Messenger servers.
 
-### Archivos GameServer más grandes
+### Cobertura de Protocolos (Precisa)
 
-| Archivo | Líneas | Contenido |
-|---------|--------|-----------|
-| GameSession.cpp | 3,773 | Switch dispatch (443 cases) + base/login handlers |
-| Room.cpp | 2,748 | Room logic, game modes, state machine |
-| GameSessionClan.cpp | 2,117 | 40+ clan handlers (CS_* protocols) |
-| GameSessionShop.cpp | 1,967 | Shop/buy/gift/roulette handlers |
-| GameSessionBattle.cpp | 1,885 | Battle flow, death, respawn, mission |
-| GameSessionClanWar.cpp | 1,640 | Clan war + 16 clan match handlers |
-| GameSessionRoom.cpp | 1,592 | Room operations, kick vote, observer |
-| GameSessionSocial.cpp | 1,582 | Friends, whisper, notes, messenger |
-| GameSessionChannel.cpp | 1,313 | Channel/lobby, quickjoin, map data |
-| GameSessionGM.cpp | 1,244 | GM commands, admin tools |
-| GameSession.h | 932 | Session class declaration |
+**578 REQ protocols definidos → 443 implementados → 135 faltantes**
+
+De los 135 faltantes:
+- 20 son deprecated (사용안함) → ignorar
+- **115 son server-to-server internos** (no llegan del cliente)
+- **~10 son client-facing verdaderos** que faltan
+
+| Categoría Faltante | Count | Tipo | Prioridad |
+|---------------------|-------|------|-----------|
+| ASC_ADMIN (0x0500) | 25 | Control Server → GameServer | Baja (admin tool) |
+| GC_INTERNAL | 22 | GameServer → ClanServer | N/A (interno) |
+| BATTLE_SERVER (0x0900) | 17 | GameServer ↔ BattleServer | Media (inter-server) |
+| CS_USER_* | 15 | GameServer → ClanServer state | N/A (interno) |
+| AUTH_INTERNAL | 14 | GameServer → AuthServer | N/A (interno) |
+| MESSENGER_INTERNAL | 12 | GameServer → MessengerServer | N/A (interno) |
+| SS_GACHA | 5 | Server-to-Server gacha | N/A (interno) |
+| SKILL duplicates | 5 | Alias de handlers existentes | Baja |
+| CLAN_WAR client | 3 | Client-facing | Media |
+| AUTH_CLIENT | 3 | Client-facing | Media |
+| ROOM | 2 | Client-facing | Media |
+| CS_MATCH | 1 | Client-facing | Baja |
+| Otros (BASE, LOGIN, etc.) | 6 | Mixto | Baja |
+
+**Conclusión de protocolos: La cobertura CLIENT-FACING es ~98%. Los faltantes son mayormente inter-server.**
 
 ---
 
-## Fases Completadas
+## Gaps Críticos por Servidor
 
-### FASE 0: Infraestructura de Build [COMPLETADA]
-- ServerCommon.props compartido para los 4 servidores
-- Los 4 vcxproj linkan contra i3Server.dll y S2MO.dll
-- Win32 + x64 configurations
+### GameServer - Gaps vs Original
 
-### FASE 1: Battle Flow [COMPLETADA]
-- Room state machine completa (COUNTDOWN_R → LOADING → RENDEZVOUS → PRE_BATTLE → COUNTDOWN_B → BATTLE → BATTLE_RESULT)
-- Death/kill con multi-kill tracking, headshots, assists
-- Respawn system con timers configurables
-- Battle result screen con stats y recompensas
-- BattleServer integration (IS_BATTLE_CREATE, UDP IP/port relay)
+#### Lo que TIENE el remake (y el original):
+- [x] Session state machine (GAME_TASK: CONNECT→LOGIN→INFO→CHANNEL→LOBBY→ROOM→BATTLE)
+- [x] Channel system con tipos (Normal, Beginner, Clan, Expert)
+- [x] Room system con 17 game modes
+- [x] Room state machine (WAITING→COUNTDOWN→LOADING→BATTLE→RESULT)
+- [x] Battle flow completo (ready, loading, start, death, respawn, end)
+- [x] Shop con compra/regalo/reparación/gacha
+- [x] Clan system (crear, miembros, rangos, mark, chat)
+- [x] Clan match + clan war
+- [x] Friends/whisper/block/notes
+- [x] Medal/quest/skill/title systems
+- [x] Equipment/inventory/character management
+- [x] GM commands (kick, ban, pause, announce)
+- [x] Anti-cheat stubs (GameGuard, cheat detection)
+- [x] EXP/GP calculation con boost events
+- [x] Attendance/daily gifts
+- [x] Double-buffered room/lobby lists
+- [x] Per-channel mutexes
 
-### FASE 2: Game Modes [COMPLETADA]
-- Deathmatch, Bomb (install/defuse), Annihilation, Destroy, Defence
-- Escape (VIP), CrossCount, Convoy, Challenge/AI
-- Round-based logic con ATK/DEF swap
+#### Lo que FALTA en el GameServer remake:
 
-### FASE 3: Room Protocols [COMPLETADA]
-- Room invite, observer, kick vote, ping
-- Double-buffered room info, FillRoomInfoBasic completo
+**1. Callbacks Asíncronos del Original (*_A methods)**
+En el original, CUserSession tiene ~30 callback methods (`*_A` suffix) que se llaman cuando respuestas llegan de AuthServer/TransServer/ClanServer:
+```
+LogIn_MAU(), GetMyInfo_A(), ServerEnter_A(), ServerLeave_A()
+CreateNickName_A(), CreateChar_A(), DeleteChar_A(), ChangeStateChar_A()
+SetClan_C(), SetBirthDay_A(), SendAttendanceItemResult()
+OnGoodsBuy_A(), OnGiftAuth_A(), OnInsertItem_A(), OnDeleteItem_A()
+OnItemAuth_A(), OnMedalReward_A(), SetRankUp()
+```
+**En el remake**: Estos callbacks se manejan directamente en ModuleDataServer response handlers. La mayoría están como TODOs (Fase 8.2 del plan maestro).
 
-### FASE 4: Protocolos Base [COMPLETADA]
-- Login flow, system info, options save/load
-- Map/stage data (version, list, rules, matching)
-- User info (record, basic, all, detail)
-- Title system (equip/release/change)
+**2. Equipment Validation Completa**
+El original tiene ~17 métodos de validación de equipamiento:
+```
+_CheckWeaponEquip(), _SetWeaponEquip(), _CheckCharEquip(), _SetCharEquip()
+_CheckItemAuth(), _CheckItemPositionCommon(), _SyncEquipIdx()
+_CheckEquipment(), _CheckCharEquipment(), _CheckCommonEquipment()
+_ExceptionChara(), _ExceptionSpecial(), _ExceptionEquip()
+```
+**En el remake**: Equipamiento básico funciona pero sin validación profunda de restricciones por tipo/clase/nivel.
 
-### FASE 5: Shop System [COMPLETADA]
-- Shop catalog, purchase, gift, capsule/gacha
-- Roulette shop con weighted tiers
-- Field shop, repair, durability
+**3. Item System Completo**
+```
+_BuyGoods() (con multi-basket), _CheckBuyRestriction(), _CheckBuyGoods()
+_ExtendItem(), _RepairItem(), _SetUsedItem()
+_SetItemAbilityAuth(), _SetItemAbilityChange()
+_LastQuestItem(), _DeleteQuestCardSet(), _SetQuestEvent()
+```
+**En el remake**: Compra básica funciona. Faltan: extend items, item ability auth/change, quest item rewards completos.
 
-### FASE 6: Clan System [COMPLETADA]
-- Clan create/dissolve, member management, mark/notice/intro
-- Clan match: team create/join/fight request/accept/chat
-- Clan war 1.5: seasons, scoring, mercenary stubs
+**4. Abuse/Hack Detection Avanzada**
+```
+_CheckUlsanGuard() - USG anti-cheat integration
+CheckRespawnHacking() - Respawn speed validation
+m_ui8AbusingLevel, m_ui32AbusingPopupTime - Abuse tracking
+m_bHSCheck, m_bHackKill - Hack detection flags
+```
+**En el remake**: Stubs básicos. Sin integración real de anti-cheat.
 
-### FASE 7: Social & Community [COMPLETADA]
-- Friends (add/delete/accept/info), whisper, block
-- Note system (send/receive/delete)
-- Messenger protocol aliases
-- GM chat + admin commands
+**5. ContextMain Data Loading**
+El original CContextMain (462 líneas) carga masivamente:
+```
+Map/Stage data: m_aStageData[STAGE_TOTAL_MAX], m_aStageMatching[], m_aRuleData[]
+Quest data: m_pQuest[QUEST_CARDSET_TYPE_COUNT][], m_pQuest_ItemInfo[]
+Medal data: m_MedalSystemInfo, m_MQFMedal[], m_MQFAllDailyMedalSet
+Shop: CShop*, FieldShopInfo
+Clan: CLAN_CONTEXT[], CLAN_LIST_BASIC_INFO*
+Events: m_stBoostEvent[], m_DailyGift, m_stTSEvent[]
+GameGuard: HMODULE, hack check functions
+Default items: m_TBasicWeapon[][], m_TBasicEquip[]
+```
+**En el remake**: GameContextMain tiene lo básico (session count, channels, server ID). Muchos datos se manejan inline o con stubs.
 
-### FASE 8: QuickJoin [COMPLETADA]
-- Search compatible rooms, random selection
-
-### FASE 9: Anti-Cheat & Security [COMPLETADA]
-- Packet validation, replay detection, rate limiting
-- State validation, timeouts por estado
-- GameGuard stub, cheat detection handlers
-
-### FASE 10: EXP/Point/Rank [COMPLETADA]
-- Battle rewards (EXP/GP calculation, boost events)
-- Rank-up system con items reward
-
-### FASE 11: Admin/GM Tools [COMPLETADA]
-- Kick, exit, block, destroy room, pause/resume
-- Server announce, shutdown, config reload
-
-### FASE 12: Performance [COMPLETADA]
-- Per-channel mutexes, ring buffers, pre-allocated pools
-- Battle logging, ZLog, performance metrics
-
-### FASE 13: ConnectServer [COMPLETADA]
-- Auth tokens, server list, load balancing, heartbeat
-
-### FASE 14: Miscellaneous [COMPLETADA]
-- Attendance/daily gift, boost events
-- Item durability, random map rotation
-
----
-
-## Trabajo Actual: Cobertura de Protocolos
-
-### Historial de Batches (protocol handler coverage)
-
-| Batch | Commit | Handlers | Lines | Total Cases | Cobertura |
-|-------|--------|----------|-------|-------------|-----------|
-| 15 | ec3a3f76 | +34 | +1,092 | ~310 | ~52% |
-| 16 | 56ede0ab | +34 | +1,476 | ~344 | ~58% |
-| 17 | 3b3082e8 | +35 | +1,255 | ~348 | ~59% |
-| 18 | 5e18339c | +36 | +1,143 | ~385 | ~64% |
-| 19 | 03164304 | +37 | +1,539 | 385 | ~65% |
-| 20 | 7d187083 | +56 | +1,594 | 441→443 | ~84% |
-
-### Protocolos Pendientes (~86 restantes)
-
-#### Alta Prioridad - Battle (0x1000) ~45 pendientes
-El gap más grande. Muchos son protocolos de sub-sistemas de batalla:
-- `PROTOCOL_BATTLE_MISSION_*` (bomb, object, NPC sub-protocols)
-- `PROTOCOL_BATTLE_WEAPON_*` (pickup, change, special)
-- `PROTOCOL_BATTLE_ITEM_*` (use item in battle)
-- `PROTOCOL_BATTLE_VEHICLE_*` (vehicle mount/dismount)
-- `PROTOCOL_BATTLE_SYNC_*` (position sync, state sync)
-- `PROTOCOL_BATTLE_SPECIAL_*` (special kills, streaks)
-
-#### Media Prioridad - Auth (0x0300) ~25 pendientes
-- `PROTOCOL_AUTH_COUPON_*` (coupon redemption)
-- `PROTOCOL_AUTH_EVENT_*` (event participation)
-- `PROTOCOL_AUTH_PCR_*` (PC room features)
-- Algunos `PROTOCOL_AUTH_SHOP_*` variantes menores
-
-#### Media Prioridad - Clan CS_* (0x0700) ~30 pendientes
-- `PROTOCOL_CS_USER_*` (muchos son server-to-server internos)
-- `PROTOCOL_CS_RECORD_*` (clan records, server-only)
-- `PROTOCOL_CS_MEMBER_INFO_*` (server-only)
-- Algunos client-facing restantes
-
-#### Baja Prioridad - Messenger ~14 pendientes
-- `PROTOCOL_MESSENGER_LOGIN/LOGOUT` (internal)
-- `PROTOCOL_MESSENGER_ENTER_USER/LEAVE_USER` (internal)
-- Algunos protocolos de estado y notificación
-
-#### Baja Prioridad - Char/New (0x1800) ~8 pendientes
-- `PROTOCOL_NEW_*` protocolos misceláneos
-- `PROTOCOL_CHAR_*` character management adicional
-
-#### Baja Prioridad - Room (0x0F00) ~4 pendientes
-- `PROTOCOL_ROOM_GM_*` variantes adicionales
-
-#### Baja Prioridad - CS_MATCH (0x0800) ~7 pendientes
-- `PROTOCOL_CS_MATCH_TEAM_*` (context/all team variants)
-- `PROTOCOL_CS_MATCH_FIGHT_ACCECT_*` (accept variants)
-- `PROTOCOL_CS_MATCH_CHATING_*` (chat)
+**6. Error Message System**
+```
+_SendErrorMessage() (2 overloads) - Unified error reporting
+DisconnectUserDelay() (2 overloads) - Delayed disconnect with reason
+EVENT_ERROR enum - Structured error codes
+```
+**En el remake**: Errores se manejan con SendSimpleAck(proto, errorCode). No hay sistema unificado de error messages.
 
 ---
 
-## Fase 8 del Plan Maestro (GameServer ↔ DataServer Sync)
+### BattleServer - Gaps vs Original DediServer (MÁS GRANDE)
 
-> Del plan maestro `zazzy-mixing-creek.md` - pendientes de implementación
+El original DediServer es **22x más grande** que el remake. Es el gap más significativo.
 
-### 8.1 - Shop DB Table [PENDIENTE]
-- Tabla `pb_shop_items` en DataServer
-- Protocolo `IS_SHOP_LIST_REQ/ACK` inter-servidor
-- `ModuleDBGameData::LoadShopItems()`
+#### Sistemas COMPLETAMENTE AUSENTES del BattleServer remake:
 
-### 8.2 - ModuleDataServer Sync [PENDIENTE - CRÍTICO]
-- 15 nuevos métodos Request en ModuleDataServer (equipment, medal, attendance, skill, quest, clan, friends, block, shop)
-- 16 response handlers correspondientes
-- Actualmente muchos subsistemas operan in-memory sin persistencia a DB
+| Sistema | Original | Remake | Líneas Faltantes |
+|---------|----------|--------|-------------------|
+| **HMSParser (Anti-Cheat)** | 1,612 líneas, 20+ hack types, state rollback | NINGUNO | ~1,600 |
+| **PhysX Engine** | NxGlobal, NxScene, NxActor, NxShape, raycasts | NINGUNO | ~600 |
+| **Game Objects** | DSObject, DSObjectManager, COctreeNode | NINGUNO | ~560 |
+| **Weapon System** | CWeapon, WeaponSlot, MultiWeaponSlot, bullet tracking | NINGUNO | ~1,300 |
+| **Character System** | CCharacter (HP, position, speed validation) | BattleMember (UID+IP only) | ~520 |
+| **Grenade/Throwables** | ThrowWeaponMgr, GrenadeState tracking | NINGUNO | ~330 |
+| **Respawn Manager** | RespawnMgr, RespawnState queue | NINGUNO | ~270 |
+| **Dropped Weapons** | DroppedWeaponMgr (pickup mechanics) | NINGUNO | ~240 |
+| **Speed Validation** | SpeedState (anti-speed-hack) | NINGUNO | ~185 |
+| **TaskProcessor Room** | 2,800 líneas de game logic por room | NINGUNO | ~2,800 |
+| **TaskProcessor Relay** | P2P relay con validación | Relay sin validación | ~140 |
+| **Map System** | MapManager, MapData (stage geometry) | NINGUNO | ~650 |
+| **IOCP Workers** | iocpServer, iocpWorker (multi-thread) | Single-thread | ~800 |
+| **Module Systems** | Cast, Physics, PhysicsReceiver, Log | NINGUNO | ~1,000 |
+| **Packet Validation** | DediUdpChecker, DediRoom_UDPCheck | NINGUNO | ~490 |
+| **Statistics** | ServerStatistics profiling | NINGUNO | ~185 |
+| **Thread-safe containers** | InterlockedList, PacketLocker, UdpBufferPool | NINGUNO | ~650 |
+| **NxuLib (PhysX support)** | 60+ archivos | NINGUNO | ~3,000 |
 
-### 8.3 - Fix Nick Callbacks [PENDIENTE]
-- `OnCreateNickAck()` / `OnCheckNickAck()` - callback a session con resultado
-- Métodos `OnNickCreated()`, `SendCreateNickAck()`, `SendCheckNickAck()` en GameSession
+**Impacto**: El BattleServer remake es un "UDP relay tonto" - reenvía paquetes sin validar nada. El original es un servidor autoritativo con física, detección de hacks, y tracking completo de estado de juego.
 
-### 8.4 - Battle End → Save Stats [PENDIENTE - CRÍTICO]
-- `OnBattleEndNotify()` debe guardar stats via DataServer
-- `RequestStatsSave()`, `RequestPlayerSave()` post-batalla
-
-### 8.5 - BattleServer UDP Integration Fix [PENDIENTE]
-- Room debe almacenar BattleServer UDP IP/port (`m_szBattleUdpIP`, `m_ui16BattleUdpPort`)
-- `OnBattleCreateAck()` → `Room::SetBattleInfo()`
-- `OnBattlePreStartBattleReq()` → usar datos de Room en vez de hardcoded
-
-### 8.6 - Room Timer System [PENDIENTE]
-- `Room::UpdateBattleTimer()` - check time limit expiry
-- Auto-end battle cuando tiempo expira
-- Integrar en `RoomManager::OnUpdate()`
-
-### 8.7 - Shop Catalog Dynamic Loading [PENDIENTE]
-- `ShopManager::LoadFromDataServer()` reemplaza static `s_ShopCatalog[]`
-- `OnShopListReceived()` callback
-
-### 8.8 - Config-Driven Settings [PENDIENTE]
-- `config.ini` secciones [Economy], [Battle], [Channels]
-- `GameContextMain` carga valores desde INI
-- Reemplazar hardcoded values (GP costs, level requirements, time limits)
+**¿Se necesita todo esto?** No necesariamente:
+- **PhysX/NxuLib**: Solo si quieres server-side hit detection (anti-cheat serio)
+- **HMSParser**: Solo si quieres detección de hacks (recomendado para producción)
+- **Weapon/Character/Object systems**: Solo si el server valida daño/posición
+- **Para un server de pruebas/desarrollo**: El relay actual es suficiente
 
 ---
 
-## Próximos Pasos Recomendados
+### DataServer - Gaps vs Original TransServer
 
-### Opción A: Continuar cobertura de protocolos (Batch 21+)
-- Foco en **Battle (0x1000)** - el gap más grande (~45 pendientes)
-- Luego **Auth (0x0300)** y **Clan CS_* (0x0700)**
-- Meta: llegar a 95%+ cobertura
+El original TransServer es **9x más grande** que el remake.
 
-### Opción B: Implementar Fase 8 (DataServer sync)
-- Hacer que los datos realmente persistan en PostgreSQL
-- Crítico para producción pero no para testing del cliente
+#### Sistemas FALTANTES del DataServer remake:
 
-### Opción C: Refinamiento de sistemas existentes
-- Battle modes: agregar variantes faltantes (vehicle, special weapons)
-- Clan match: completar mercenary invite/accept flow
-- Shop: migrar de catálogo hardcoded a DB
+| Sistema | Original | Remake | Impacto |
+|---------|----------|--------|---------|
+| **TaskProcessor completo** | 13 sub-processors, 10,000+ líneas | 1 processor sync, ~200 líneas | Alto |
+| **ModuleDBShop_SP** | 4,154 líneas (compras, cupones, promos) | Tabla básica pb_shop_items | Alto |
+| **Async Ring Buffers** | LocalRingBuffer para DB non-blocking | Sync directo (bloquea) | Medio |
+| **User Management** | UserManager, UserFinder, UserEvent | Sin tracking de sesiones | Medio |
+| **GeoIP/IPChecker** | Geolocalización, filtrado IP | NINGUNO | Bajo |
+| **Payment (SIA)** | ModuleSIA (pagos reales) | NINGUNO | Bajo* |
+| **Ranking System** | GeneralRankup (leaderboards) | NINGUNO | Medio |
+| **Capsule/Gacha DB** | CapsuleItem, CapsuleRand | NINGUNO (se hace en GameServer) | Bajo |
+| **Design System** | DesignV1, DesignV2 (progression curves) | NINGUNO | Bajo |
+| **Kick List** | ModuleDBKickList (ban persistence) | NINGUNO | Medio |
+| **ModuleDBNick** | 387 líneas (validación, historial) | Básico (check+create) | Bajo |
+| **ModuleDBStats** | 234 líneas (stats detallados) | Básico | Bajo |
+
+\* Payment no aplica para server privado
+
+---
+
+## Protocolos Client-Facing Verdaderamente Faltantes (~10)
+
+Estos son los únicos REQ que un cliente podría enviar y NO tienen handler:
+
+| Protocolo | Categoría | Impacto |
+|-----------|-----------|---------|
+| `PROTOCOL_AUTH_SHOP_SEND_GIFT_REQ` | Shop gift variante | Bajo (ya hay GOODS_GIFT) |
+| `PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_REQ` | Item auth data | Bajo |
+| `PROTOCOL_AUTH_RS_JACKPOT_USER_NICK_INSERT_REQ` | Roulette jackpot nick | Bajo |
+| `PROTOCOL_CLAN_WAR_MERCENARY_PENALTY_SAVE_REQ` | Save merc penalty | Bajo |
+| `PROTOCOL_CLAN_WAR_RELEASE_INVITE_TEAM_REQ` | Release team invite | Bajo |
+| `PROTOCOL_CLAN_WAR_START_GAME_SERVER_REQ` | Start clan war game | Medio |
+| `PROTOCOL_ROOM_FRIEND_INVITE_LOBBY_USER_REQ` | Invite friend to room | Bajo (ya hay INVITE) |
+| `PROTOCOL_ROOM_UNREADY_4VS4_REQ` | Unready 4v4 | Bajo |
+| `PROTOCOL_CS_MATCH_ALL_TEAM_CONTEXT_REQ` | All team context | Bajo |
+| `PROTOCOL_BASE_FIND_UID_GET_USER_DETAIL_INFO_REQ` | Find by UID detail | Bajo |
+
+---
+
+## Protocolos Inter-Server Faltantes (115) - Diseño del Remake
+
+En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan, Game↔Messenger, Game↔BattleServer). En el remake distribuido, se manejan diferente:
+
+| Comunicación Original | Solución en Remake |
+|-----------------------|-------------------|
+| GameServer → AuthServer (14 protos) | Via ModuleDataServer (InterServerProtocol.h) |
+| GameServer → ClanServer (15 CS_USER_* + 22 GC_*) | In-memory GameClanManager (no server separado) |
+| GameServer → MessengerServer (12 protos) | In-memory via GameSessionManager |
+| GameServer ↔ BattleServer (17 protos) | Via ModuleBattleServer (InterServerProtocol.h) |
+| ControlServer → GameServer (25 ASC_* protos) | GM commands via chat + futuro admin panel |
+| GameServer → GachaServer (5 SS_GACHA_*) | In-memory en GameServer |
+
+**Estos 115 protocolos NO necesitan dispatch en GameSession.cpp** porque no vienen del cliente. Se manejan en los módulos inter-servidor o in-memory.
+
+---
+
+## Prioridades de Desarrollo Pendiente
+
+### P0 - Crítico para Funcionamiento (Fase 8 del plan maestro)
+
+| Task | Descripción | Estado |
+|------|-------------|--------|
+| **8.2 ModuleDataServer Sync** | 15 Request + 16 Response handlers para persistir datos | PENDIENTE |
+| **8.4 Battle End → Save Stats** | Guardar stats post-batalla via DataServer | PENDIENTE |
+| **8.3 Fix Nick Callbacks** | Callbacks de CreateNick/CheckNick a session | PENDIENTE |
+| **8.5 BattleServer UDP Fix** | Room almacena IP/port del BattleServer | PENDIENTE |
+
+### P1 - Importante para Experiencia
+
+| Task | Descripción | Estado |
+|------|-------------|--------|
+| **8.1 Shop DB Table** | `pb_shop_items` + IS protocols + DataServer handler | PENDIENTE |
+| **8.6 Room Timer System** | Auto-end batalla cuando tiempo expira | PENDIENTE |
+| **8.7 Shop Dynamic Loading** | Catálogo desde DataServer en vez de hardcoded | PENDIENTE |
+| **8.8 Config-Driven Settings** | Valores de config.ini en vez de hardcoded | PENDIENTE |
+| **10 client-facing protos** | Los ~10 protocolos client-facing faltantes | PENDIENTE |
+
+### P2 - Mejoras de Calidad
+
+| Task | Descripción | Estado |
+|------|-------------|--------|
+| Equipment validation | _CheckWeaponEquip, _CheckCharEquip completos | PENDIENTE |
+| Item abilities | _SetItemAbilityAuth/Change | PENDIENTE |
+| Error message system | _SendErrorMessage unificado | PENDIENTE |
+| Ranking/Leaderboard | GeneralRankup en DataServer | PENDIENTE |
+| Ban persistence | ModuleDBKickList en DataServer | PENDIENTE |
+
+### P3 - Producción (si se va a hacer público)
+
+| Task | Descripción | Estado |
+|------|-------------|--------|
+| BattleServer anti-cheat | HMSParser básico (speed, damage, position) | PENDIENTE |
+| BattleServer character state | CCharacter con HP y position tracking | PENDIENTE |
+| Async DB operations | Ring buffers para DataServer non-blocking | PENDIENTE |
+| Admin panel | ASC_* protocol handlers (o web panel) | PENDIENTE |
+| IP filtering | IPChecker, GeoIP | PENDIENTE |
+
+### P4 - Nice-to-have
+
+| Task | Descripción | Estado |
+|------|-------------|--------|
+| PhysX integration | Server-side hit detection | PENDIENTE |
+| Weapon/bullet tracking | WeaponSlot, bullet state en BattleServer | PENDIENTE |
+| Game objects | DSObject, DSObjectManager en BattleServer | PENDIENTE |
+| Payment system | SIA module (solo para producción comercial) | N/A |
+| PC Cafe features | PCCafeInfo, Thai PC module | N/A |
+
+---
+
+## Archivos del Original - Referencia Completa
+
+### GameServer Original (`Server/Source/Game/Game/`)
+
+| Archivo | Líneas | Clase Principal | Portado a Remake? |
+|---------|--------|-----------------|-------------------|
+| ServerDef.h | 706 | Enums, macros, constantes | Parcial (RoomDef.h, BattleDef.h) |
+| ServerContext.h/cpp | ~200 | CServerContext | ✅ GameServerContext |
+| UserSession.h | 1,200 | CUserSession | ✅ GameSession.h (932 líneas) |
+| UserSession*.cpp | 17,542 | Handlers | ✅ GameSession*.cpp (31,686 líneas) |
+| UserManager.h/cpp | ~500 | CUserSessionManager | ✅ GameSessionManager |
+| Room.h/cpp | ~3,000 | CRoom (12 mode pointers) | ✅ Room.h/cpp (2,748 líneas) |
+| RoomManager.h/cpp | ~400 | CRoomManager | ✅ RoomManager |
+| ContextMain.h/cpp | ~1,500 | CContextMain | Parcial (GameContextMain) |
+| RoomInDeathmatch.h | 35 | CRoomInDeathmatch | ✅ Inline en Room.cpp |
+| RoomInBomb.h | 57 | CRoomInBomb | ✅ Inline en Room.cpp |
+| RoomInAnnihilation.h | 46 | CRoomInAnnihilation | ✅ Inline en Room.cpp |
+| RoomInDestroy.h | 59 | CRoomInDestroy | ✅ Inline en Room.cpp |
+| RoomInDefence.h | 73 | CRoomInDefence | ✅ Inline en Room.cpp |
+| RoomInEscape.h | 129 | CRoomInEscape | ✅ Inline en Room.cpp |
+| RoomInCrossCount.h | 71 | CRoomInCrossCount | ✅ Inline en Room.cpp |
+| RoomInConvoy.h | 55 | CRoomInConvoy | ✅ Inline en Room.cpp |
+| RoomInChallenge.h | 36 | CRoomInChallenge | ✅ Inline en Room.cpp |
+| RoomInTutorial.h | 50 | CRoomInTutorial | ✅ Inline en Room.cpp |
+| RoomInRunAway.h | 56 | CRoomInRunAway | ✅ Inline en Room.cpp |
+| RoomInSpace.h | 13 | CRoomInSpace | ✅ Inline en Room.cpp |
+| ModuleAuth.h | ~300 | CModuleAuth | ⚠️ Parcial (ModuleDataServer) |
+| ModuleTrans.h | ~200 | CModuleTrans | ⚠️ Parcial (ModuleDataServer) |
+| ModuleClan.h | ~200 | CModuleClan | ✅ In-memory (GameClanManager) |
+| ModuleMessenger.h | ~200 | CModuleMessenger | ✅ In-memory (GameSessionManager) |
+| ModuleControl.h | ~200 | CModuleControl | ❌ No (GM commands via chat) |
+| ModuleGIP.h | ~200 | CModuleGIP | ⚠️ Parcial (ModuleBattleServer) |
+| ModuleLog.h | ~200 | CModuleLog | ✅ ServerLog inline |
+| ModuleZLog.h | ~200 | CModuleZLog | ✅ ServerLog inline |
+
+### DediServer Original (`Server/Source/Dedication/Dedi/`) - 82 archivos, 40,139 líneas
+
+| Área | Archivos | Líneas | Portado? |
+|------|----------|--------|----------|
+| Core (DediRoom, DediMember) | 4 | 7,075 | ⚠️ Simplificado (BattleRoom/Member) |
+| Anti-Cheat (HMSParser) | 3 | 2,652 | ❌ |
+| Physics (NxGlobal, NxShape) | 5 | 1,024 | ❌ |
+| Game Objects (DSObject) | 4 | 1,218 | ❌ |
+| Characters (Character, Skill) | 6 | 1,390 | ❌ |
+| Weapons (Weapon, WeaponSlot) | 7 | 1,573 | ❌ |
+| Grenades/Thrown | 2 | 329 | ❌ |
+| Respawn | 2 | 269 | ❌ |
+| Speed State | 1 | 185 | ❌ |
+| TaskProcessor | 3 | 6,840 | ❌ (relay simple) |
+| UDP Parser/Builder | 4 | 1,347 | ⚠️ UdpRelay simple |
+| Networking (Modules) | 11 | 2,846 | ⚠️ Básico |
+| IOCP Framework | 4 | 800 | ❌ (usa i3Server) |
+| Maps/Config | 5 | 1,325 | ❌ |
+| Utilities | 8 | 1,510 | ❌ |
+| NxuLib (PhysX) | 60+ | 3,000+ | ❌ |
+
+### TransServer Original (`Server/Source/Trans/Trans/`) - 90+ archivos, 29,931 líneas
+
+| Área | Archivos | Líneas | Portado? |
+|------|----------|--------|----------|
+| TaskProcessor (13 sub-procs) | 13 | 10,903 | ⚠️ Simplificado (1 proc sync) |
+| DB Modules (13 modules) | 26 | 7,195 | ⚠️ 6 módulos básicos |
+| ModuleDBShop_SP | 1 | 4,154 | ❌ |
+| User Management | 4 | 879 | ❌ |
+| Networking | 8 | 2,063 | ⚠️ Básico |
+| Data Structures | 5 | 925 | ❌ |
+| Specialized (GeoIP, Ranking) | 6 | 1,900 | ❌ |
+| Capsule/Gacha | 2 | 383 | ❌ |
+| Design System | 3 | 500 | ❌ |
+| Utilities | 8 | 1,029 | ⚠️ Parcial |
 
 ---
 
@@ -276,24 +390,55 @@ El gap más grande. Muchos son protocolos de sub-sistemas de batalla:
      ┌────────▼────────┐    │     ┌────────▼────────┐
      │  GameServer #1  │    │     │  GameServer #N  │
      │  :40000 (TCP)   │    │     │  :400XX (TCP)   │
+     │  443 dispatch   │    │     │                 │
+     │  56 archivos    │    │     │                 │
      └────────┬────────┘    │     └────────┬────────┘
               │             │              │
               │    ┌────────▼────────┐     │
               │    │  DataServer     │     │
               ├────►  :40100 (TCP)   ◄─────┤
-              │    │  (PostgreSQL)   │     │
+              │    │  PostgreSQL     │     │
+              │    │  22 archivos    │     │
               │    └─────────────────┘     │
               │                            │
      ┌────────▼────────┐         ┌────────▼────────┐
      │ BattleServer #1 │         │ BattleServer #N │
      │ :40200 (TCP)    │         │ :402XX (TCP)    │
      │ :41000+ (UDP)   │         │ :410XX+ (UDP)   │
+     │ Relay simple    │         │                 │
      └─────────────────┘         └─────────────────┘
 ```
 
-### Flujo de Conexión
-1. Cliente → ConnectServer: RSA handshake + login
-2. ConnectServer → Cliente: Server list + auth token
-3. Cliente → GameServer: Validate token → enter channel → lobby → room
-4. GameServer → BattleServer: Create battle room → UDP relay
-5. GameServer → DataServer: Load/save player data
+### Diferencia Arquitectural vs Original
+
+```
+ORIGINAL (Monolítico):
+  GameServer ←→ AuthServer ←→ TransServer (DB)
+      ↕              ↕
+  ClanServer    MessengerServer
+      ↕              ↕
+  ControlServer  CastServer
+      ↕
+  DediServer (BattleServer con PhysX)
+
+REMAKE (Distribuido simplificado):
+  ConnectServer → GameServer → DataServer (PostgreSQL)
+                      ↕
+                  BattleServer (UDP relay)
+
+  Clan/Messenger/Control → In-memory en GameServer
+  Auth → Manejado por ConnectServer + DataServer
+```
+
+---
+
+## Historial de Batches
+
+| Batch | Commit | Handlers | Lines | Total Cases |
+|-------|--------|----------|-------|-------------|
+| 15 | ec3a3f76 | +34 | +1,092 | ~310 |
+| 16 | 56ede0ab | +34 | +1,476 | ~344 |
+| 17 | 3b3082e8 | +35 | +1,255 | ~348 |
+| 18 | 5e18339c | +36 | +1,143 | ~385 |
+| 19 | 03164304 | +37 | +1,539 | 385 |
+| 20 | 7d187083 | +56 | +1,594 | 443 |
