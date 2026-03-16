@@ -283,10 +283,18 @@ public:
 	void		AdvanceMapRotation();
 	bool		IsMapRotationEnabled() const { return m_bMapRotationEnabled; }
 
+	// Battle log
+	uint64_t	GetBattleUniqueNumber() const { return m_ui64BattleUniqueNum; }
+	void		LogBattleResult();
+
 private:
 	// Slots
 	GameSlotInfo		m_Slots[SLOT_MAX_COUNT];
 	GameSession*		m_pSlotSession[SLOT_MAX_COUNT];
+
+	// Battle unique number for logging
+	uint64_t			m_ui64BattleUniqueNum;
+	static volatile long s_BattleCounter;		// Global counter for unique IDs
 };
 
 #endif // __ROOM_H__

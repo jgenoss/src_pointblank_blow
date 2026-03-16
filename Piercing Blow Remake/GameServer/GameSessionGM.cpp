@@ -631,10 +631,77 @@ bool GameSession::ProcessAdminCommand(const char* pszMessage, int i32MsgLen)
 		return true;
 	}
 
+	// /reload - Hot reload economy/battle config
+	if (_stricmp(cmd, "reload") == 0 && m_ui8AuthLevel >= 2)
+	{
+		extern GameServer* g_pGameServer;
+		if (g_pGameServer && g_pGameServer->ReloadEconomyConfig())
+		{
+			const char* msg = "[GM] Config reloaded successfully.";
+			SendServerAnnounce(msg, (uint16_t)strlen(msg));
+		}
+		else
+		{
+			const char* msg = "[GM] Config reload failed.";
+			SendServerAnnounce(msg, (uint16_t)strlen(msg));
+		}
+		printf("[AdminCmd] RELOAD by GM %s\n", m_szNickname);
+		return true;
+	}
+
+	// /rooms [channel] - List rooms in channel
+	if (_stricmp(cmd, "rooms") == 0)
+	{
+		int channel = (arg1Len > 0) ? atoi(arg1) : m_i32ChannelNum;
+		if (channel < 0) channel = 0;
+
+		char roomMsg[300];
+		int totalRooms = g_pRoomManager ? g_pRoomManager->GetChannelUseRoomCount(channel) : 0;
+		snprintf(roomMsg, sizeof(roomMsg), "[ROOMS] Channel %d: %d active rooms", channel, totalRooms);
+		SendServerAnnounce(roomMsg, (uint16_t)strlen(roomMsg));
+
+		// List first 5 rooms
+		if (g_pRoomManager && totalRooms > 0)
+		{
+			int shown = 0;
+			for (int i = 0; i < 200 && shown < 5; i++)
+			{
+				Room* pRoom = g_pRoomManager->GetRoom(channel, i);
+				if (pRoom && pRoom->IsCreated())
+				{
+					snprintf(roomMsg, sizeof(roomMsg), "  [%d] \"%s\" Mode=%d Map=%d Players=%d/%d State=%d",
+						i, pRoom->GetTitle(), pRoom->GetGameMode(), pRoom->GetMapIndex(),
+						pRoom->GetPlayerCount(), pRoom->GetMaxPlayers(), pRoom->GetRoomState());
+					SendServerAnnounce(roomMsg, (uint16_t)strlen(roomMsg));
+					shown++;
+				}
+			}
+			if (totalRooms > 5)
+			{
+				snprintf(roomMsg, sizeof(roomMsg), "  ... and %d more rooms", totalRooms - 5);
+				SendServerAnnounce(roomMsg, (uint16_t)strlen(roomMsg));
+			}
+		}
+		return true;
+	}
+
+	// /users [channel] - List online users in channel
+	if (_stricmp(cmd, "users") == 0)
+	{
+		int channel = (arg1Len > 0) ? atoi(arg1) : m_i32ChannelNum;
+		if (channel < 0) channel = 0;
+
+		int userCount = g_pGameSessionManager ? g_pGameSessionManager->GetChannelUserCount(channel) : 0;
+		char userMsg[300];
+		snprintf(userMsg, sizeof(userMsg), "[USERS] Channel %d: %d users online", channel, userCount);
+		SendServerAnnounce(userMsg, (uint16_t)strlen(userMsg));
+		return true;
+	}
+
 	// /help - Show available commands
 	if (_stricmp(cmd, "help") == 0)
 	{
-		const char* helpMsg = "[GM] Commands: /announce /kick /ban /info /ccu /help";
+		const char* helpMsg = "[GM] Commands: /announce /kick /ban /info /ccu /rooms /users /reload /help";
 		SendServerAnnounce(helpMsg, (uint16_t)strlen(helpMsg));
 		return true;
 	}

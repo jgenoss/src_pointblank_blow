@@ -58,6 +58,7 @@ int main(int argc, char* argv[])
 
 	// Crear e inicializar el servidor
 	GameServer server;
+	g_pGameServer = &server;
 
 	if (!server.Initialize(pszConfigPath))
 	{

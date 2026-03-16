@@ -5,6 +5,8 @@
 #include "Room.h"
 #include "RoomManager.h"
 #include "ClanDef.h"
+#include "GameServerContext.h"
+#include "ModuleConnectServer.h"
 
 I3_CLASS_INSTANCE(GameSession);
 
@@ -530,12 +532,34 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 	memcpy(m_szUsername, pData + sizeof(uint32_t), 64);
 	m_szUsername[63] = '\0';
 
-	// TODO: Validate auth token via ModuleConnectServer
+	// Validate auth token via ModuleConnectServer
 	m_ui32AuthToken = authToken;
+	int64_t validatedUID = 0;
+	char validatedUsername[64] = {};
+
+	ModuleConnectServer* pModCS = g_pGameServer ? g_pGameServer->GetModuleConnectServer() : nullptr;
+	if (pModCS && pModCS->IsConnected())
+	{
+		if (!pModCS->ValidateToken(authToken, &validatedUID, validatedUsername))
+		{
+			printf("[GameSession] Auth token validation failed - Index=%d, Token=%u\n",
+				GetIndex(), authToken);
+			SendLoginAck(3);	// 3 = invalid token
+			m_eMainTask = GAME_TASK_CONNECT;
+			return;
+		}
+		m_i64UID = validatedUID;
+		strncpy_s(m_szUsername, validatedUsername, _TRUNCATE);
+	}
+	else
+	{
+		// No ConnectServer connection - development mode, accept all
+		m_i64UID = (int64_t)(GetIndex() + 1);
+	}
+
 	m_eMainTask = GAME_TASK_LOGIN;
 
-	// TODO: Request player data from DataServer
-	m_i64UID = (int64_t)(GetIndex() + 1);
+	// TODO: Request player data from DataServer (for now use defaults)
 	strncpy_s(m_szNickname, m_szUsername, _TRUNCATE);
 	m_i32Level = 1;
 	m_i64Exp = 0;

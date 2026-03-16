@@ -315,9 +315,9 @@
 ### 11B. Control Server Integration
 - [x] Server announce (BroadcastToAll, BroadcastAnnounce in GameSessionManager)
 - [ ] Server start/stop commands
-- [ ] Config reload
-- [ ] User kick via admin tool
-- [ ] Room list/user list queries
+- [x] Config reload (hot reload economy/battle via /reload GM command)
+- [x] User kick via admin tool (/kick, /ban GM commands)
+- [x] Room list/user list queries (/rooms, /users GM commands)
 
 ---
 
@@ -334,7 +334,7 @@
 - [ ] Object pooling para packets
 
 ### 12C. Logging
-- [ ] Battle log con unique number tracking
+- [x] Battle log con unique number tracking (BattleID=ServerID+Timestamp+Counter)
 - [ ] ZLog integration para persistent logging
 - [x] Performance metrics: packet count, average CCU, room count, peak tracking, periodic logging
 
@@ -342,7 +342,7 @@
 
 ## FASE 13: ConnectServer Completo
 
-- [ ] Auth token generation y validación
+- [x] Auth token generation y validación (ModuleConnectServer validates, fallback dev mode)
 - [ ] Server list transmission al cliente
 - [ ] Load balancing: redirect clientes al server con menos carga
 - [ ] Server heartbeat monitoring

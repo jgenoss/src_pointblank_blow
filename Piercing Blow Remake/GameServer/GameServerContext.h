@@ -83,6 +83,7 @@ private:
 };
 
 extern GameServerContext* g_pGameServerContext;
+extern GameServer* g_pGameServer;
 
 // Wrapper de servidor que integra BaseServer con GameServerContext
 class GameServer : public BaseServer
@@ -103,6 +104,9 @@ public:
 	ModuleConnectServer*	GetModuleConnectServer()		{ return m_pModuleConnect; }
 	ModuleDataServer*		GetModuleDataServer()			{ return m_pModuleData; }
 	ModuleBattleServer*		GetModuleBattleServer()			{ return m_pModuleBattle; }
+
+	// Hot reload economy/battle config without restart
+	bool					ReloadEconomyConfig();
 
 	// Initialize inter-server modules (called after Start)
 	bool					InitializeModules();

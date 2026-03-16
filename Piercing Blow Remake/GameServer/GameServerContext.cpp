@@ -18,6 +18,7 @@
 I3_CLASS_INSTANCE(GameServerContext);
 
 GameServerContext* g_pGameServerContext = nullptr;
+GameServer* g_pGameServer = nullptr;
 GameSessionManager* g_pGameSessionManager = nullptr;
 GameClanManager* g_pClanManager = nullptr;
 GameRouletteData* g_pRouletteData = nullptr;
@@ -349,6 +350,42 @@ bool GameServer::InitializeModules()
 			m_GameConfig.i32MaxSessions);
 	}
 	g_pModuleBattleServer = m_pModuleBattle;
+
+	return true;
+}
+
+bool GameServer::ReloadEconomyConfig()
+{
+	if (!g_pContextMain)
+		return false;
+
+	i3IniParser ini;
+	if (!ini.Load("config.ini"))
+	{
+		printf("[GameServer] ReloadConfig: Cannot load config.ini\n");
+		return false;
+	}
+
+	// Reload economy
+	g_pContextMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
+	g_pContextMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
+	g_pContextMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
+	g_pContextMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
+	g_pContextMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
+	g_pContextMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
+	g_pContextMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
+	g_pContextMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+
+	// Reload battle config
+	g_pContextMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
+	g_pContextMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
+	g_pContextMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
+	g_pContextMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+
+	printf("[GameServer] Config reloaded: KillGP=%d WinGP=%d LoseGP=%d TimeLimit=%d MaxRound=%d\n",
+		g_pContextMain->m_i32KillGPReward, g_pContextMain->m_i32WinGPReward,
+		g_pContextMain->m_i32LoseGPReward, g_pContextMain->m_i32DefaultTimeLimit,
+		g_pContextMain->m_i32DefaultMaxRound);
 
 	return true;
 }

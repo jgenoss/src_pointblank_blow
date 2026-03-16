@@ -6,6 +6,8 @@
 
 I3_CLASS_INSTANCE(Room);
 
+volatile long Room::s_BattleCounter = 0;
+
 Room::Room()
 	: m_bIsCreate(false)
 	, m_i32ChannelNum(-1)
@@ -48,6 +50,7 @@ Room::Room()
 	, m_i32MapRotationCount(0)
 	, m_i32MapRotationIdx(0)
 	, m_bMapRotationEnabled(false)
+	, m_ui64BattleUniqueNum(0)
 {
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
@@ -325,8 +328,16 @@ bool Room::OnStartBattle()
 	if (m_ui8GameMode == STAGE_MODE_ESCAPE)
 		SelectVIP();
 
-	printf("[Room] Battle started - Ch=%d, Room=%d, Mode=%d, Players=%d\n",
-		m_i32ChannelNum, m_i32RoomIdx, m_ui8GameMode, m_i32PlayerCount);
+	// Generate unique battle number: ServerID(16) + Timestamp(32) + Counter(16)
+	long counter = InterlockedIncrement(&s_BattleCounter);
+	int serverId = g_pContextMain ? g_pContextMain->m_i32ServerId : 1;
+	DWORD timestamp = (DWORD)time(nullptr);
+	m_ui64BattleUniqueNum = ((uint64_t)(serverId & 0xFFFF) << 48)
+						  | ((uint64_t)timestamp << 16)
+						  | ((uint64_t)(counter & 0xFFFF));
+
+	printf("[Room] Battle started - Ch=%d, Room=%d, Mode=%d, Players=%d, BattleID=%016llX\n",
+		m_i32ChannelNum, m_i32RoomIdx, m_ui8GameMode, m_i32PlayerCount, m_ui64BattleUniqueNum);
 	return true;
 }
 
@@ -346,6 +357,9 @@ void Room::OnEndBattle()
 	// Track total battles completed
 	if (g_pContextMain)
 		g_pContextMain->IncrementBattles();
+
+	// Log detailed battle result
+	LogBattleResult();
 
 	printf("[Room] Battle ended - Ch=%d, Room=%d, Score R%d-B%d\n",
 		m_i32ChannelNum, m_i32RoomIdx, m_Score.i32RedScore, m_Score.i32BlueScore);
@@ -2173,4 +2187,45 @@ void Room::AdvanceMapRotation()
 	printf("[Room] Map rotated - Ch=%d Idx=%d, NewMap=%d (rotation %d/%d)\n",
 		m_i32ChannelNum, m_i32RoomIdx, m_ui8MapIndex,
 		m_i32MapRotationIdx + 1, m_i32MapRotationCount);
+}
+
+// ============================================================================
+// Battle Log (Phase 12C)
+// ============================================================================
+
+void Room::LogBattleResult()
+{
+	DWORD dwDuration = 0;
+	if (m_dwBattleStartTime > 0)
+		dwDuration = (GetTickCount() - m_dwBattleStartTime) / 1000;
+
+	int winner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? 0 :
+				 (m_Score.i32BlueScore > m_Score.i32RedScore) ? 1 : -1;
+
+	printf("[BattleLog] ====== BATTLE RESULT ======\n");
+	printf("[BattleLog] BattleID=%016llX Ch=%d Room=%d Mode=%d Map=%d\n",
+		m_ui64BattleUniqueNum, m_i32ChannelNum, m_i32RoomIdx,
+		m_ui8GameMode, m_ui8MapIndex);
+	printf("[BattleLog] Duration=%lus Score: RED=%d BLUE=%d Winner=%s\n",
+		dwDuration, m_Score.i32RedScore, m_Score.i32BlueScore,
+		winner == 0 ? "RED" : winner == 1 ? "BLUE" : "DRAW");
+	printf("[BattleLog] Round=%d/%d\n", m_Score.i32CurrentRound, m_Score.i32MaxRound);
+
+	// Per-player stats
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (!m_pSlotSession[i])
+			continue;
+
+		const SlotBattleStats& stats = m_SlotStats[i];
+		const GameSlotInfo& slot = m_Slots[i];
+
+		printf("[BattleLog]   Slot%02d [%s] UID=%lld K=%d D=%d HS=%d Assists=%d Streak=%d\n",
+			i, slot.ui8Team == 0 ? "RED" : "BLU",
+			m_pSlotSession[i]->GetUID(),
+			stats.i32Kills, stats.i32Deaths, stats.i32Headshots,
+			stats.i32Assists, stats.i32MaxConsecutiveKills);
+	}
+
+	printf("[BattleLog] ============================\n");
 }
