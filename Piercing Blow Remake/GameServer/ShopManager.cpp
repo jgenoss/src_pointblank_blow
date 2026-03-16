@@ -6,6 +6,7 @@ ShopManager* g_pShopManager = nullptr;
 ShopManager::ShopManager()
 	: m_i32ItemCount(0)
 	, m_bLoaded(false)
+	, m_ui32Version(1)
 {
 	for (int i = 0; i < MAX_SHOP_ITEMS; i++)
 		m_Items[i].Reset();
@@ -37,8 +38,9 @@ void ShopManager::LoadFromDataServer(IS_SHOP_ITEM_ENTRY* pEntries, int i32Count)
 	}
 
 	m_bLoaded = true;
+	m_ui32Version++;
 
-	printf("[ShopManager] Loaded %d items from DataServer\n", m_i32ItemCount);
+	printf("[ShopManager] Loaded %d items from DataServer (v%u)\n", m_i32ItemCount, m_ui32Version);
 }
 
 const ShopItem* ShopManager::GetItem(int i32Index) const

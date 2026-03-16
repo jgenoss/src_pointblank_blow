@@ -19,6 +19,24 @@ class Room;
 #define MAX_FRIEND_COUNT	50
 #define MAX_BLOCK_COUNT		50
 
+// Title system (Phase 4D)
+#define MAX_TITLE_COUNT		44
+#define MAX_EQUIPPED_TITLES	3
+
+struct GameTitleData
+{
+	uint8_t		ui8OwnedTitles[MAX_TITLE_COUNT];	// 0=not owned, 1=owned
+	uint8_t		ui8EquippedSlots[MAX_EQUIPPED_TITLES];	// Title ID per slot (0=empty)
+	int			i32OwnedCount;
+
+	void Reset()
+	{
+		memset(ui8OwnedTitles, 0, sizeof(ui8OwnedTitles));
+		memset(ui8EquippedSlots, 0, sizeof(ui8EquippedSlots));
+		i32OwnedCount = 0;
+	}
+};
+
 // Friend info stored per session
 struct GameFriendInfo
 {
@@ -180,6 +198,18 @@ private:
 	void			OnCheckNickNameReq(char* pData, INT32 i32Size);
 	void			OnCreateNickReq(char* pData, INT32 i32Size);
 	void			OnRankUpReq(char* pData, INT32 i32Size);
+	void			OnGameGuardReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - User Info (Phase 4C - GameSession.cpp)
+	void			OnGetMyInfoRecordReq(char* pData, INT32 i32Size);
+	void			OnGetMyInfoBasicReq(char* pData, INT32 i32Size);
+	void			OnGetMyInfoAllReq(char* pData, INT32 i32Size);
+	void			OnGetRecordInfoDBReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Title (Phase 4D - GameSession.cpp)
+	void			OnTitleEquipReq(char* pData, INT32 i32Size);
+	void			OnTitleReleaseReq(char* pData, INT32 i32Size);
+	void			OnTitleChangeReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Map/Stage data (Phase 4B - GameSessionChannel.cpp)
 	void			OnMapVersionReq(char* pData, INT32 i32Size);
@@ -250,6 +280,11 @@ private:
 	void			OnShopBuyReq(char* pData, INT32 i32Size);
 	void			OnShopRepairReq(char* pData, INT32 i32Size);
 	void			OnGetPointCashReq(char* pData, INT32 i32Size);
+	void			OnShopVersionReq(char* pData, INT32 i32Size);
+	void			OnShopListReq(char* pData, INT32 i32Size);
+	void			OnShopGoodsListReq(char* pData, INT32 i32Size);
+	void			OnShopItemListReq(char* pData, INT32 i32Size);
+	void			OnShopMatchingListReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Social (GameSessionSocial.cpp)
 	void			OnFriendInfoReq(char* pData, INT32 i32Size);
@@ -388,6 +423,9 @@ private:
 
 	// Skill (7O) - Character class skills
 	GameSkillData	m_SkillData;
+
+	// Title (4D) - Titles/Designations
+	GameTitleData	m_TitleData;
 
 	// Timing
 	DWORD			m_dwConnectTime;

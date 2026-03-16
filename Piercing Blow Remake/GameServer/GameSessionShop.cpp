@@ -260,6 +260,180 @@ void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 	SendSimpleAck(PROTOCOL_SHOP_REPAIR_ACK, 0);
 }
 
+void GameSession::OnShopVersionReq(char* pData, INT32 i32Size)
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_VERSION_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Shop version (incremented when catalog changes)
+	uint32_t shopVersion = 1;
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+		shopVersion = g_pShopManager->GetVersion();
+	memcpy(buffer + offset, &shopVersion, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopListReq(char* pData, INT32 i32Size)
+{
+	// Shop categories list
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Categories: Primary, Secondary, Melee, Grenade, Character, Parts
+	uint8_t categoryCount = 6;
+	memcpy(buffer + offset, &categoryCount, 1);			offset += 1;
+
+	const char* categories[] = { "Primary", "Secondary", "Melee", "Grenade", "Character", "Parts" };
+	for (int i = 0; i < categoryCount; i++)
+	{
+		uint8_t catId = (uint8_t)i;
+		memcpy(buffer + offset, &catId, 1);					offset += 1;
+		char catName[32] = {0};
+		strncpy_s(catName, categories[i], _TRUNCATE);
+		memcpy(buffer + offset, catName, 32);				offset += 32;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopGoodsListReq(char* pData, INT32 i32Size)
+{
+	// Goods list for a specific category
+	uint8_t categoryId = 0;
+	if (i32Size >= 1)
+		categoryId = *(uint8_t*)pData;
+
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODSLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &categoryId, 1);				offset += 1;
+
+	// Count items matching category
+	int countPos = offset;
+	uint16_t itemCount = 0;
+	offset += sizeof(uint16_t);
+
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItems = g_pShopManager->GetItems();
+		int totalItems = g_pShopManager->GetItemCount();
+		for (int i = 0; i < totalItems && offset < 3900; i++)
+		{
+			if (pItems[i].ui8Category == categoryId)
+			{
+				memcpy(buffer + offset, &pItems[i].ui32GoodsId, 4);		offset += 4;
+				memcpy(buffer + offset, &pItems[i].ui32ItemId, 4);		offset += 4;
+				memcpy(buffer + offset, &pItems[i].i32PriceGP, 4);		offset += 4;
+				memcpy(buffer + offset, &pItems[i].i32PriceCash, 4);	offset += 4;
+				memcpy(buffer + offset, &pItems[i].ui32Duration, 4);	offset += 4;
+				itemCount++;
+			}
+		}
+	}
+	else
+	{
+		// Fallback: filter hardcoded catalog by category
+		for (int i = 0; i < SHOP_CATALOG_SIZE && offset < 3900; i++)
+		{
+			// Map item type to category: primary=0, secondary=1, melee=2, chara=4
+			uint8_t itemCat = 0;
+			uint32_t itemId = s_ShopCatalog[i].ui32ItemId;
+			uint8_t itemType = (itemId >> 20) & 0x7;	// Extract item type from MAKE_ITEM_ID
+			if (itemType == ITEM_TYPE_PRIMARY) itemCat = 0;
+			else if (itemType == ITEM_TYPE_SECONDARY) itemCat = 1;
+			else if (itemType == ITEM_TYPE_MELEE) itemCat = 2;
+			else if (itemType == ITEM_TYPE_CHARA) itemCat = 4;
+			else itemCat = 5;
+
+			if (itemCat == categoryId)
+			{
+				memcpy(buffer + offset, &s_ShopCatalog[i].ui32GoodsId, 4);	offset += 4;
+				memcpy(buffer + offset, &s_ShopCatalog[i].ui32ItemId, 4);	offset += 4;
+				memcpy(buffer + offset, &s_ShopCatalog[i].i32PriceGP, 4);	offset += 4;
+				memcpy(buffer + offset, &s_ShopCatalog[i].i32PriceCash, 4);	offset += 4;
+				memcpy(buffer + offset, &s_ShopCatalog[i].ui32Duration, 4);	offset += 4;
+				itemCount++;
+			}
+		}
+	}
+
+	memcpy(buffer + countPos, &itemCount, sizeof(uint16_t));
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopItemListReq(char* pData, INT32 i32Size)
+{
+	// Item details - same format as goods list but for specific items
+	// Client sends list of item IDs it wants details for
+	OnShopGoodsListReq(pData, i32Size);	// Reuse goods list logic
+}
+
+void GameSession::OnShopMatchingListReq(char* pData, INT32 i32Size)
+{
+	// Shop matching list - maps goods to categories
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_MATCHINGLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Empty matching list (client uses default)
+	uint16_t matchCount = 0;
+	memcpy(buffer + offset, &matchCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 {
 	if (m_eMainTask < GAME_TASK_INFO)

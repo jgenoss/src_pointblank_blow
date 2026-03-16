@@ -49,6 +49,7 @@ GameSession::GameSession()
 	m_AttendanceData.Reset();
 	m_DailyRecord.Reset();
 	m_SkillData.Reset();
+	m_TitleData.Reset();
 }
 
 GameSession::~GameSession()
@@ -136,6 +137,18 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_CHECK_NICK_NAME_REQ:	OnCheckNickNameReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_CREATE_NICK_REQ:		OnCreateNickReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_RANK_UP_REQ:			OnRankUpReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_GAMEGUARD_REQ:		OnGameGuardReq(pData, dataSize);		break;
+
+	// ---- User Info (Phase 4C) ----
+	case PROTOCOL_BASE_GET_MYINFO_RECORD_REQ:	OnGetMyInfoRecordReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_MYINFO_BASIC_REQ:	OnGetMyInfoBasicReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_MYINFO_ALL_REQ:		OnGetMyInfoAllReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_GET_RECORD_INFO_DB_REQ:	OnGetRecordInfoDBReq(pData, dataSize);	break;
+
+	// ---- Title (Phase 4D) ----
+	case PROTOCOL_BASE_USER_TITLE_EQUIP_REQ:	OnTitleEquipReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_USER_TITLE_RELEASE_REQ:	OnTitleReleaseReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_USER_TITLE_CHANGE_REQ:	OnTitleChangeReq(pData, dataSize);		break;
 
 	// ---- Map/Stage Data (Phase 4B, GameSessionChannel.cpp) ----
 	case PROTOCOL_BASE_MAP_VERSION_REQ:		OnMapVersionReq(pData, dataSize);		break;
@@ -210,6 +223,11 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ:			OnShopBuyReq(pData, dataSize);				break;
 	case PROTOCOL_SHOP_REPAIR_REQ:					OnShopRepairReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_GET_POINT_CASH_REQ:			OnGetPointCashReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_VERSION_REQ:			OnShopVersionReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_LIST_REQ:				OnShopListReq(pData, dataSize);				break;
+	case PROTOCOL_AUTH_SHOP_GOODSLIST_REQ:			OnShopGoodsListReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_ITEMLIST_REQ:			OnShopItemListReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ:		OnShopMatchingListReq(pData, dataSize);		break;
 
 	// ---- Quest (GameSessionQuest.cpp) ----
 	case PROTOCOL_BASE_QUEST_GET_REQ:				OnQuestGetReq(pData, dataSize);				break;
@@ -541,6 +559,305 @@ void GameSession::CheckRankUp()
 }
 
 // ============================================================================
+// Phase 4C - User Info Handlers
+// ============================================================================
+
+void GameSession::OnGetMyInfoRecordReq(char* pData, INT32 i32Size)
+{
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_MYINFO_RECORD_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// K/D/Headshot/Win/Loss stats
+	memcpy(buffer + offset, &m_i32Kills, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Deaths, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Headshots, sizeof(int));	offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Wins, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Losses, sizeof(int));		offset += sizeof(int);
+
+	// Total matches
+	int totalMatches = m_i32Wins + m_i32Losses;
+	memcpy(buffer + offset, &totalMatches, sizeof(int));	offset += sizeof(int);
+
+	// K/D ratio * 100 (integer percentage)
+	int kdRatio = (m_i32Deaths > 0) ? (m_i32Kills * 100 / m_i32Deaths) : (m_i32Kills * 100);
+	memcpy(buffer + offset, &kdRatio, sizeof(int));			offset += sizeof(int);
+
+	// Headshot rate * 100
+	int hsRate = (m_i32Kills > 0) ? (m_i32Headshots * 100 / m_i32Kills) : 0;
+	memcpy(buffer + offset, &hsRate, sizeof(int));			offset += sizeof(int);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetMyInfoBasicReq(char* pData, INT32 i32Size)
+{
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_MYINFO_BASIC_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
+	memcpy(buffer + offset, &m_i32Level, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i64Exp, sizeof(int64_t));	offset += sizeof(int64_t);
+	memcpy(buffer + offset, &m_i32Cash, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32GP, sizeof(int));			offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32RankId, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32ClanId, sizeof(int));		offset += sizeof(int);
+
+	// Title slots
+	for (int i = 0; i < MAX_EQUIPPED_TITLES; i++)
+		memcpy(buffer + offset, &m_TitleData.ui8EquippedSlots[i], 1), offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetMyInfoAllReq(char* pData, INT32 i32Size)
+{
+	// Combines basic + record in one response
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_MYINFO_ALL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Basic info
+	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
+	memcpy(buffer + offset, &m_i32Level, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i64Exp, sizeof(int64_t));	offset += sizeof(int64_t);
+	memcpy(buffer + offset, &m_i32Cash, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32GP, sizeof(int));			offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32RankId, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32ClanId, sizeof(int));		offset += sizeof(int);
+
+	// Record
+	memcpy(buffer + offset, &m_i32Kills, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Deaths, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Headshots, sizeof(int));	offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Wins, sizeof(int));		offset += sizeof(int);
+	memcpy(buffer + offset, &m_i32Losses, sizeof(int));		offset += sizeof(int);
+
+	// Title slots
+	for (int i = 0; i < MAX_EQUIPPED_TITLES; i++)
+		memcpy(buffer + offset, &m_TitleData.ui8EquippedSlots[i], 1), offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetRecordInfoDBReq(char* pData, INT32 i32Size)
+{
+	// Same as MyInfoRecord but fetched from DB (for now identical)
+	OnGetMyInfoRecordReq(pData, i32Size);
+}
+
+// ============================================================================
+// Phase 4D - Title System Handlers
+// ============================================================================
+
+void GameSession::OnTitleEquipReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_EQUIP_ACK, 1);
+		return;
+	}
+
+	uint8_t titleId = *(uint8_t*)pData;
+	uint8_t slotIdx = *(uint8_t*)(pData + 1);
+
+	if (titleId == 0 || titleId > MAX_TITLE_COUNT || slotIdx >= MAX_EQUIPPED_TITLES)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_EQUIP_ACK, 2);	// Invalid
+		return;
+	}
+
+	if (!m_TitleData.ui8OwnedTitles[titleId - 1])
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_EQUIP_ACK, 3);	// Not owned
+		return;
+	}
+
+	// Check if title is already equipped in another slot
+	for (int i = 0; i < MAX_EQUIPPED_TITLES; i++)
+	{
+		if (m_TitleData.ui8EquippedSlots[i] == titleId)
+		{
+			SendSimpleAck(PROTOCOL_BASE_USER_TITLE_EQUIP_ACK, 4);	// Already equipped
+			return;
+		}
+	}
+
+	m_TitleData.ui8EquippedSlots[slotIdx] = titleId;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_USER_TITLE_EQUIP_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &titleId, 1);				offset += 1;
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnTitleReleaseReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_RELEASE_ACK, 1);
+		return;
+	}
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	if (slotIdx >= MAX_EQUIPPED_TITLES)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_RELEASE_ACK, 2);
+		return;
+	}
+
+	m_TitleData.ui8EquippedSlots[slotIdx] = 0;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_USER_TITLE_RELEASE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnTitleChangeReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_CHANGE_ACK, 1);
+		return;
+	}
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	uint8_t newTitleId = *(uint8_t*)(pData + 1);
+
+	if (slotIdx >= MAX_EQUIPPED_TITLES)
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_CHANGE_ACK, 2);
+		return;
+	}
+
+	if (newTitleId > 0 && (newTitleId > MAX_TITLE_COUNT || !m_TitleData.ui8OwnedTitles[newTitleId - 1]))
+	{
+		SendSimpleAck(PROTOCOL_BASE_USER_TITLE_CHANGE_ACK, 3);
+		return;
+	}
+
+	m_TitleData.ui8EquippedSlots[slotIdx] = newTitleId;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_USER_TITLE_CHANGE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+	memcpy(buffer + offset, &newTitleId, 1);			offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Phase 9B - GameGuard Stub
+// ============================================================================
+
+void GameSession::OnGameGuardReq(char* pData, INT32 i32Size)
+{
+	// GameGuard stub - respond with dummy valid data so client doesn't disconnect
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GAMEGUARD_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Echo back the client's GameGuard data (16 bytes typically)
+	int copySize = min(i32Size, 32);
+	if (copySize > 0)
+		memcpy(buffer + offset, pData, copySize);
+	else
+		memset(buffer + offset, 0, 16);
+	offset += max(copySize, 16);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
 // Player Data Load (from DataServer)
 // ============================================================================
 
@@ -852,6 +1169,7 @@ void GameSession::ResetSessionData()
 	m_AttendanceData.Reset();
 	m_DailyRecord.Reset();
 	m_SkillData.Reset();
+	m_TitleData.Reset();
 
 	m_dwConnectTime = 0;
 	m_dwLastPacketTime = 0;

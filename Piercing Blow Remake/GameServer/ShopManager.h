@@ -46,6 +46,7 @@ public:
 	const ShopItem*	GetItem(int i32Index) const;
 	const ShopItem*	FindByGoodsId(uint32_t ui32GoodsId) const;
 	bool			IsLoaded() const				{ return m_bLoaded; }
+	uint32_t		GetVersion() const				{ return m_ui32Version; }
 
 	// Access all items (for sending to client)
 	const ShopItem*	GetItems() const				{ return m_Items; }
@@ -54,6 +55,7 @@ private:
 	ShopItem		m_Items[MAX_SHOP_ITEMS];
 	int				m_i32ItemCount;
 	bool			m_bLoaded;
+	uint32_t		m_ui32Version;
 };
 
 extern ShopManager* g_pShopManager;

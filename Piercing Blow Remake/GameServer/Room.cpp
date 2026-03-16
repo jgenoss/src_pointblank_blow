@@ -555,7 +555,7 @@ void Room::SendToAllExcept(GameSession* pExcept, i3NetworkPacket* pPacket)
 
 void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 {
-	// Serialize in ROOM_INFO_BASIC compatible format
+	// Serialize in ROOM_INFO_BASIC compatible format (Phase 3B - complete)
 	if (!pBuffer || !pSize)
 		return;
 
@@ -567,6 +567,10 @@ void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 	memcpy(pBuffer + offset, m_szTitle, NET_ROOM_NAME_SIZE);		offset += NET_ROOM_NAME_SIZE;
 	// _StageID
 	memcpy(pBuffer + offset, &m_ui32StageId, sizeof(uint32_t));		offset += sizeof(uint32_t);
+	// _GameMode
+	memcpy(pBuffer + offset, &m_ui8GameMode, sizeof(uint8_t));		offset += sizeof(uint8_t);
+	// _MapIndex
+	memcpy(pBuffer + offset, &m_ui8MapIndex, sizeof(uint8_t));		offset += sizeof(uint8_t);
 	// _State
 	memcpy(pBuffer + offset, &m_ui8RoomState, sizeof(uint8_t));		offset += sizeof(uint8_t);
 	// _PersonNow
@@ -578,6 +582,10 @@ void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 	// _Ping
 	uint8_t ping = 0;
 	memcpy(pBuffer + offset, &ping, sizeof(uint8_t));				offset += sizeof(uint8_t);
+	// _RoundType
+	memcpy(pBuffer + offset, &m_ui8RoundType, sizeof(uint8_t));		offset += sizeof(uint8_t);
+	// _SubType
+	memcpy(pBuffer + offset, &m_ui8SubType, sizeof(uint8_t));		offset += sizeof(uint8_t);
 	// _WeaponFlag
 	memcpy(pBuffer + offset, &m_ui8WeaponFlag, sizeof(uint8_t));	offset += sizeof(uint8_t);
 	// _InfoFlag
@@ -587,6 +595,16 @@ void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 	// _IsClanMatch
 	uint8_t isClan = m_bIsClanMatch ? 1 : 0;
 	memcpy(pBuffer + offset, &isClan, sizeof(uint8_t));				offset += sizeof(uint8_t);
+	// _HasPassword
+	uint8_t hasPw = HasPassword() ? 1 : 0;
+	memcpy(pBuffer + offset, &hasPw, sizeof(uint8_t));				offset += sizeof(uint8_t);
+	// _OwnerSlot
+	uint8_t ownerSlot = (uint8_t)m_i32OwnerSlot;
+	memcpy(pBuffer + offset, &ownerSlot, sizeof(uint8_t));			offset += sizeof(uint8_t);
+	// _Score (Red, Blue, CurrentRound)
+	memcpy(pBuffer + offset, &m_Score.i32RedScore, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(pBuffer + offset, &m_Score.i32BlueScore, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(pBuffer + offset, &m_Score.i32CurrentRound, sizeof(int32_t));offset += sizeof(int32_t);
 
 	*pSize = offset;
 }
