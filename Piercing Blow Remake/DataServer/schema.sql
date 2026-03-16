@@ -23,6 +23,7 @@ CREATE TABLE IF NOT EXISTS pb_users (
     gp              INTEGER         DEFAULT 10000,       -- Game Points
     rank_id         INTEGER         DEFAULT 0,
     clan_id         INTEGER         DEFAULT 0,
+    active_class    SMALLINT        DEFAULT 0,           -- GameCharaClass (0=Assault)
     created_at      TIMESTAMP       DEFAULT NOW(),
     last_login      TIMESTAMP
 );
@@ -36,6 +37,8 @@ CREATE TABLE IF NOT EXISTS pb_inventory (
     item_id         INTEGER         NOT NULL,
     item_count      INTEGER         DEFAULT 1,
     slot_idx        INTEGER         DEFAULT -1,
+    item_type       SMALLINT        DEFAULT 0,           -- GameItemAttrType: 0=permanent, 1=count, 2=period
+    item_arg        INTEGER         DEFAULT 0,            -- For count: remaining. For period: expire timestamp
     expire_date     TIMESTAMP,                           -- NULL = permanente
     is_equipped     BOOLEAN         DEFAULT FALSE
 );
@@ -58,21 +61,194 @@ CREATE TABLE IF NOT EXISTS pb_stats (
 );
 
 -- ============================================
--- Trigger: crear stats automaticamente al crear usuario
+-- Equipamiento de personaje (5 character slots x 15 equip slots)
 -- ============================================
-CREATE OR REPLACE FUNCTION fn_create_user_stats()
+CREATE TABLE IF NOT EXISTS pb_equipment (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    chara_slot      SMALLINT        NOT NULL DEFAULT 0,  -- 0-4 (MAX_CHARA_SLOT)
+    slot_state      SMALLINT        DEFAULT 0,           -- MultiSlotState
+    chara_id        INTEGER         DEFAULT 0,           -- Character ItemID
+    -- Weapon slots (5)
+    weapon_primary  INTEGER         DEFAULT 0,
+    weapon_secondary INTEGER        DEFAULT 0,
+    weapon_melee    INTEGER         DEFAULT 0,
+    weapon_throw1   INTEGER         DEFAULT 0,
+    weapon_throw2   INTEGER         DEFAULT 0,
+    -- Parts slots (10)
+    parts_chara     INTEGER         DEFAULT 0,
+    parts_head      INTEGER         DEFAULT 0,
+    parts_face      INTEGER         DEFAULT 0,
+    parts_upper     INTEGER         DEFAULT 0,
+    parts_lower     INTEGER         DEFAULT 0,
+    parts_glove     INTEGER         DEFAULT 0,
+    parts_belt      INTEGER         DEFAULT 0,
+    parts_holster   INTEGER         DEFAULT 0,
+    parts_skin      INTEGER         DEFAULT 0,
+    parts_beret     INTEGER         DEFAULT 0,
+    PRIMARY KEY (uid, chara_slot)
+);
+
+-- ============================================
+-- Medallas de jugadores
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_medals (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    medal_idx       SMALLINT        NOT NULL,            -- Medal unique index
+    action_id       SMALLINT        DEFAULT 0,           -- GameMedalActionId
+    current_count   INTEGER         DEFAULT 0,           -- Progress count
+    get_reward      SMALLINT        DEFAULT 0,           -- Bitmask: bit N = level N reward claimed
+    PRIMARY KEY (uid, medal_idx)
+);
+
+CREATE INDEX IF NOT EXISTS idx_medals_uid ON pb_medals(uid);
+
+-- ============================================
+-- Asistencia diaria (attendance)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_attendance (
+    uid             BIGINT          PRIMARY KEY REFERENCES pb_users(uid) ON DELETE CASCADE,
+    total_days      INTEGER         DEFAULT 0,
+    current_streak  INTEGER         DEFAULT 0,
+    last_attend_date INTEGER        DEFAULT 0,           -- YYYYMMDD format
+    attend_data     BYTEA                                -- 30 bytes, ui8Days[30]
+);
+
+-- ============================================
+-- Skills de personaje (por clase)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_skills (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    class_id        SMALLINT        NOT NULL,            -- GameCharaClass (0-4)
+    main_levels     BYTEA           NOT NULL DEFAULT E'\\x0000000000',   -- 5 bytes, level per main skill
+    assist_levels   BYTEA           NOT NULL DEFAULT E'\\x00000000',     -- 4 bytes, level per assist skill
+    common_levels   BYTEA           NOT NULL DEFAULT E'\\x0000000000',   -- 5 bytes, level per common skill
+    skill_points    SMALLINT        DEFAULT 10,          -- Available skill points
+    PRIMARY KEY (uid, class_id)
+);
+
+-- ============================================
+-- Quest progress (cardsets activos)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_quests (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    set_index       SMALLINT        NOT NULL,            -- 0-3 (MAX_CARDSET_PER_USER)
+    set_type        SMALLINT        DEFAULT 0,           -- GameQuestCardSetType
+    active_card     SMALLINT        DEFAULT 0,           -- Active card index (0-9)
+    quest_data      BYTEA,                               -- Serialized quest progress
+    PRIMARY KEY (uid, set_index)
+);
+
+CREATE INDEX IF NOT EXISTS idx_quests_uid ON pb_quests(uid);
+
+-- ============================================
+-- Clanes
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_clans (
+    clan_id         SERIAL          PRIMARY KEY,
+    name            VARCHAR(32)     UNIQUE NOT NULL,
+    notice          VARCHAR(256)    DEFAULT '',
+    intro           VARCHAR(128)    DEFAULT '',
+    master_uid      BIGINT          NOT NULL REFERENCES pb_users(uid),
+    master_nickname VARCHAR(64)     DEFAULT '',
+    member_count    INTEGER         DEFAULT 1,
+    max_members     INTEGER         DEFAULT 10,
+    clan_exp        INTEGER         DEFAULT 0,
+    clan_rank       INTEGER         DEFAULT 0,
+    wins            INTEGER         DEFAULT 0,
+    losses          INTEGER         DEFAULT 0,
+    unit            SMALLINT        DEFAULT 0,           -- GameClanUnit
+    mark_id         SMALLINT        DEFAULT 0,
+    mark_color      SMALLINT        DEFAULT 0,
+    is_active       BOOLEAN         DEFAULT TRUE,
+    created_at      TIMESTAMP       DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_clans_master ON pb_clans(master_uid);
+
+-- ============================================
+-- Miembros de clan
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_clan_members (
+    clan_id         INTEGER         NOT NULL REFERENCES pb_clans(clan_id) ON DELETE CASCADE,
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    member_level    SMALLINT        DEFAULT 3,           -- GameClanMemberLevel: 1=Master,2=Staff,3=Regular
+    joined_at       TIMESTAMP       DEFAULT NOW(),
+    PRIMARY KEY (clan_id, uid)
+);
+
+CREATE INDEX IF NOT EXISTS idx_clan_members_uid ON pb_clan_members(uid);
+
+-- ============================================
+-- Lista de amigos
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_friends (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    friend_uid      BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    accepted        BOOLEAN         DEFAULT FALSE,       -- FALSE = pending request
+    created_at      TIMESTAMP       DEFAULT NOW(),
+    PRIMARY KEY (uid, friend_uid)
+);
+
+CREATE INDEX IF NOT EXISTS idx_friends_uid ON pb_friends(uid);
+CREATE INDEX IF NOT EXISTS idx_friends_friend ON pb_friends(friend_uid);
+
+-- ============================================
+-- Lista de bloqueo
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_blocks (
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    blocked_uid     BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    created_at      TIMESTAMP       DEFAULT NOW(),
+    PRIMARY KEY (uid, blocked_uid)
+);
+
+CREATE INDEX IF NOT EXISTS idx_blocks_uid ON pb_blocks(uid);
+
+-- ============================================
+-- Notas/mensajes (mail system)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_notes (
+    id              BIGSERIAL       PRIMARY KEY,
+    sender_uid      BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    receiver_uid    BIGINT          NOT NULL REFERENCES pb_users(uid) ON DELETE CASCADE,
+    subject         VARCHAR(128)    DEFAULT '',
+    body            VARCHAR(512)    DEFAULT '',
+    note_type       SMALLINT        DEFAULT 0,           -- 0=normal, 1=notice, 2=gift
+    is_read         BOOLEAN         DEFAULT FALSE,
+    gift_item_id    INTEGER         DEFAULT 0,           -- Item attached as gift
+    created_at      TIMESTAMP       DEFAULT NOW()
+);
+
+CREATE INDEX IF NOT EXISTS idx_notes_receiver ON pb_notes(receiver_uid, is_read);
+
+-- ============================================
+-- Trigger: crear stats y datos iniciales al crear usuario
+-- ============================================
+CREATE OR REPLACE FUNCTION fn_create_user_data()
 RETURNS TRIGGER AS $$
 BEGIN
+    -- Create stats
     INSERT INTO pb_stats (uid) VALUES (NEW.uid);
+    -- Create attendance
+    INSERT INTO pb_attendance (uid) VALUES (NEW.uid);
+    -- Create default equipment (slot 0 = active)
+    INSERT INTO pb_equipment (uid, chara_slot, slot_state) VALUES (NEW.uid, 0, 20);
+    -- Create default skills for all 5 classes
+    INSERT INTO pb_skills (uid, class_id) VALUES (NEW.uid, 0);
+    INSERT INTO pb_skills (uid, class_id) VALUES (NEW.uid, 1);
+    INSERT INTO pb_skills (uid, class_id) VALUES (NEW.uid, 2);
+    INSERT INTO pb_skills (uid, class_id) VALUES (NEW.uid, 3);
+    INSERT INTO pb_skills (uid, class_id) VALUES (NEW.uid, 4);
     RETURN NEW;
 END;
 $$ LANGUAGE plpgsql;
 
 DROP TRIGGER IF EXISTS trg_create_user_stats ON pb_users;
-CREATE TRIGGER trg_create_user_stats
+DROP TRIGGER IF EXISTS trg_create_user_data ON pb_users;
+CREATE TRIGGER trg_create_user_data
     AFTER INSERT ON pb_users
     FOR EACH ROW
-    EXECUTE FUNCTION fn_create_user_stats();
+    EXECUTE FUNCTION fn_create_user_data();
 
 -- ============================================
 -- Datos de prueba
@@ -98,9 +274,36 @@ INSERT INTO pb_inventory (uid, item_id, item_count, slot_idx, is_equipped)
 SELECT uid, 3001, 1, 2, FALSE FROM pb_users WHERE username = 'testuser'
 ON CONFLICT DO NOTHING;
 
+-- Default medals for testuser
+INSERT INTO pb_medals (uid, medal_idx, action_id, current_count, get_reward)
+SELECT uid, 0, 1, 0, 0 FROM pb_users WHERE username = 'testuser'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO pb_medals (uid, medal_idx, action_id, current_count, get_reward)
+SELECT uid, 1, 2, 0, 0 FROM pb_users WHERE username = 'testuser'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO pb_medals (uid, medal_idx, action_id, current_count, get_reward)
+SELECT uid, 2, 3, 0, 0 FROM pb_users WHERE username = 'testuser'
+ON CONFLICT DO NOTHING;
+
+INSERT INTO pb_medals (uid, medal_idx, action_id, current_count, get_reward)
+SELECT uid, 3, 5, 0, 0 FROM pb_users WHERE username = 'testuser'
+ON CONFLICT DO NOTHING;
+
 -- ============================================
 -- Verificar
 -- ============================================
 -- SELECT * FROM pb_users;
 -- SELECT * FROM pb_stats;
 -- SELECT * FROM pb_inventory;
+-- SELECT * FROM pb_equipment;
+-- SELECT * FROM pb_medals;
+-- SELECT * FROM pb_attendance;
+-- SELECT * FROM pb_skills;
+-- SELECT * FROM pb_quests;
+-- SELECT * FROM pb_clans;
+-- SELECT * FROM pb_clan_members;
+-- SELECT * FROM pb_friends;
+-- SELECT * FROM pb_blocks;
+-- SELECT * FROM pb_notes;

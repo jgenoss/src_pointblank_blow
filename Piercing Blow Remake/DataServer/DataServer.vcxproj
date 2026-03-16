@@ -144,6 +144,8 @@
     <ClCompile Include="ModuleDBAuth.cpp" />
     <ClCompile Include="ModuleDBUserLoad.cpp" />
     <ClCompile Include="ModuleDBUserSave.cpp" />
+    <ClCompile Include="ModuleDBGameData.cpp" />
+    <ClCompile Include="ModuleDBSocial.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -155,6 +157,8 @@
     <ClInclude Include="ModuleDBAuth.h" />
     <ClInclude Include="ModuleDBUserLoad.h" />
     <ClInclude Include="ModuleDBUserSave.h" />
+    <ClInclude Include="ModuleDBGameData.h" />
+    <ClInclude Include="ModuleDBSocial.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

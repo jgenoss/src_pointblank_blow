@@ -72,6 +72,54 @@ enum Protocol_InterServer_Data
 	// Stats operations (GameServer/BattleServer -> DataServer)
 	PROTOCOL_IS_STATS_SAVE_REQ,
 	PROTOCOL_IS_STATS_SAVE_ACK,
+
+	// Equipment operations (GameServer <-> DataServer)
+	PROTOCOL_IS_EQUIPMENT_SAVE_REQ,
+	PROTOCOL_IS_EQUIPMENT_SAVE_ACK,
+
+	// Medal operations (GameServer <-> DataServer)
+	PROTOCOL_IS_MEDAL_SAVE_REQ,
+	PROTOCOL_IS_MEDAL_SAVE_ACK,
+
+	// Attendance operations (GameServer <-> DataServer)
+	PROTOCOL_IS_ATTENDANCE_SAVE_REQ,
+	PROTOCOL_IS_ATTENDANCE_SAVE_ACK,
+
+	// Skill operations (GameServer <-> DataServer)
+	PROTOCOL_IS_SKILL_SAVE_REQ,
+	PROTOCOL_IS_SKILL_SAVE_ACK,
+
+	// Quest operations (GameServer <-> DataServer)
+	PROTOCOL_IS_QUEST_SAVE_REQ,
+	PROTOCOL_IS_QUEST_SAVE_ACK,
+
+	// Clan operations (GameServer <-> DataServer)
+	PROTOCOL_IS_CLAN_CREATE_REQ,
+	PROTOCOL_IS_CLAN_CREATE_ACK,
+	PROTOCOL_IS_CLAN_DISBAND_REQ,
+	PROTOCOL_IS_CLAN_DISBAND_ACK,
+	PROTOCOL_IS_CLAN_JOIN_REQ,
+	PROTOCOL_IS_CLAN_JOIN_ACK,
+	PROTOCOL_IS_CLAN_LEAVE_REQ,
+	PROTOCOL_IS_CLAN_LEAVE_ACK,
+	PROTOCOL_IS_CLAN_LOAD_REQ,
+	PROTOCOL_IS_CLAN_LOAD_ACK,
+
+	// Friend operations (GameServer <-> DataServer)
+	PROTOCOL_IS_FRIEND_ADD_REQ,
+	PROTOCOL_IS_FRIEND_ADD_ACK,
+	PROTOCOL_IS_FRIEND_REMOVE_REQ,
+	PROTOCOL_IS_FRIEND_REMOVE_ACK,
+	PROTOCOL_IS_FRIEND_LIST_REQ,
+	PROTOCOL_IS_FRIEND_LIST_ACK,
+
+	// Block operations (GameServer <-> DataServer)
+	PROTOCOL_IS_BLOCK_ADD_REQ,
+	PROTOCOL_IS_BLOCK_ADD_ACK,
+	PROTOCOL_IS_BLOCK_REMOVE_REQ,
+	PROTOCOL_IS_BLOCK_REMOVE_ACK,
+	PROTOCOL_IS_BLOCK_LIST_REQ,
+	PROTOCOL_IS_BLOCK_LIST_ACK,
 };
 
 enum Protocol_InterServer_Battle
@@ -275,6 +323,289 @@ struct IS_PLAYER_INVENTORY_ITEM
 	int			i32ItemCount;
 	int			i32SlotIdx;
 	uint8_t		ui8IsEquipped;
+};
+
+// Equipment Save (GameServer -> DataServer)
+struct IS_EQUIPMENT_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8CharaSlot;			// 0-4
+	uint8_t		ui8SlotState;			// MultiSlotState
+	uint32_t	ui32CharaId;
+	uint32_t	ui32WeaponIds[5];		// CHAR_EQUIP_WEAPON_COUNT
+	uint32_t	ui32PartsIds[10];		// CHAR_EQUIP_PARTS_COUNT
+};
+
+struct IS_EQUIPMENT_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Medal Save (GameServer -> DataServer)
+struct IS_MEDAL_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint16_t	ui16MedalIdx;
+	uint8_t		ui8ActionId;
+	uint16_t	ui16Count;
+	uint8_t		ui8GetReward;			// Bitmask
+};
+
+struct IS_MEDAL_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Attendance Save (GameServer -> DataServer)
+struct IS_ATTENDANCE_SAVE_REQ
+{
+	int64_t		i64UID;
+	int			i32TotalDays;
+	int			i32CurrentStreak;
+	uint32_t	ui32LastAttendDate;		// YYYYMMDD
+	uint8_t		ui8Days[30];			// MAX_ATTENDANCE_DAYS
+};
+
+struct IS_ATTENDANCE_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Skill Save (GameServer -> DataServer)
+struct IS_SKILL_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8ClassId;				// GameCharaClass (0-4)
+	uint8_t		ui8MainLevels[5];		// MAX_MAIN_SKILLS
+	uint8_t		ui8AssistLevels[4];		// MAX_ASSIST_SKILLS
+	uint8_t		ui8CommonLevels[5];		// MAX_COMMON_SKILLS
+	uint16_t	ui16SkillPoints;
+};
+
+struct IS_SKILL_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Quest Save (GameServer -> DataServer)
+struct IS_QUEST_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8SetIndex;			// 0-3
+	uint8_t		ui8SetType;				// GameQuestCardSetType
+	uint8_t		ui8ActiveCard;			// Active card (0-9)
+	uint16_t	ui16DataSize;			// Size of quest_data payload following
+	// Followed by quest_data bytes (serialized quest progress)
+};
+
+struct IS_QUEST_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Clan Create (GameServer -> DataServer)
+struct IS_CLAN_CREATE_REQ
+{
+	int64_t		i64MasterUID;
+	int			i32SessionIdx;
+	char		szClanName[32];
+	char		szMasterNickname[64];
+};
+
+struct IS_CLAN_CREATE_ACK
+{
+	int64_t		i64MasterUID;
+	int			i32SessionIdx;
+	int			i32ClanId;				// Assigned ID, 0 = error
+	int			i32Result;				// 0=OK, 1=name_taken, 2=error
+};
+
+// Clan Disband (GameServer -> DataServer)
+struct IS_CLAN_DISBAND_REQ
+{
+	int			i32ClanId;
+	int64_t		i64MasterUID;
+};
+
+struct IS_CLAN_DISBAND_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+};
+
+// Clan Join (GameServer -> DataServer)
+struct IS_CLAN_JOIN_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	char		szNickname[64];
+	uint8_t		ui8MemberLevel;			// GameClanMemberLevel
+};
+
+struct IS_CLAN_JOIN_ACK
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;
+};
+
+// Clan Leave (GameServer -> DataServer)
+struct IS_CLAN_LEAVE_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+};
+
+struct IS_CLAN_LEAVE_ACK
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// Clan Load (DataServer -> GameServer on startup/request)
+struct IS_CLAN_LOAD_REQ
+{
+	int			i32ClanId;
+};
+
+struct IS_CLAN_LOAD_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+	char		szName[32];
+	char		szNotice[256];
+	char		szIntro[128];
+	int64_t		i64MasterUID;
+	char		szMasterNickname[64];
+	int			i32MemberCount;
+	int			i32MaxMembers;
+	int			i32ClanExp;
+	int			i32ClanRank;
+	int			i32Wins;
+	int			i32Losses;
+	uint8_t		ui8Unit;
+	uint16_t	ui16MarkId;
+	uint8_t		ui8MarkColor;
+	// Followed by i32MemberCount * IS_CLAN_MEMBER_INFO
+};
+
+struct IS_CLAN_MEMBER_INFO
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	uint8_t		ui8MemberLevel;
+};
+
+// Friend Add (GameServer -> DataServer)
+struct IS_FRIEND_ADD_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64FriendUID;
+	int			i32SessionIdx;
+};
+
+struct IS_FRIEND_ADD_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64FriendUID;
+	int			i32SessionIdx;
+	int			i32Result;				// 0=OK, 1=already_friends, 2=not_found
+};
+
+// Friend Remove
+struct IS_FRIEND_REMOVE_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64FriendUID;
+};
+
+struct IS_FRIEND_REMOVE_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64FriendUID;
+	int			i32Result;
+};
+
+// Friend List
+struct IS_FRIEND_LIST_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+};
+
+struct IS_FRIEND_LIST_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Count;
+	// Followed by i32Count * IS_FRIEND_ENTRY
+};
+
+struct IS_FRIEND_ENTRY
+{
+	int64_t		i64FriendUID;
+	char		szNickname[64];
+	int			i32Level;
+	bool		bAccepted;
+};
+
+// Block Add
+struct IS_BLOCK_ADD_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64BlockedUID;
+	int			i32SessionIdx;
+};
+
+struct IS_BLOCK_ADD_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64BlockedUID;
+	int			i32SessionIdx;
+	int			i32Result;
+};
+
+// Block Remove
+struct IS_BLOCK_REMOVE_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64BlockedUID;
+};
+
+struct IS_BLOCK_REMOVE_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64BlockedUID;
+	int			i32Result;
+};
+
+// Block List
+struct IS_BLOCK_LIST_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+};
+
+struct IS_BLOCK_LIST_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Count;
+	// Followed by i32Count * IS_BLOCK_ENTRY
+};
+
+struct IS_BLOCK_ENTRY
+{
+	int64_t		i64BlockedUID;
+	char		szNickname[64];
 };
 
 // Battle Create (GameServer -> BattleServer)

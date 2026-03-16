@@ -5,6 +5,8 @@
 #include "ModuleDBAuth.h"
 #include "ModuleDBUserLoad.h"
 #include "ModuleDBUserSave.h"
+#include "ModuleDBGameData.h"
+#include "ModuleDBSocial.h"
 #include <cstdio>
 #include <cstring>
 
@@ -24,6 +26,8 @@ DataServerContext::DataServerContext()
 	, m_pModuleAuth(nullptr)
 	, m_pModuleUserLoad(nullptr)
 	, m_pModuleUserSave(nullptr)
+	, m_pModuleGameData(nullptr)
+	, m_pModuleSocial(nullptr)
 {
 }
 
@@ -63,8 +67,10 @@ bool DataServerContext::InitializeDBModules(const DBConfig& config, int i32PoolS
 	m_pModuleAuth = new ModuleDBAuth(m_pDBPool);
 	m_pModuleUserLoad = new ModuleDBUserLoad(m_pDBPool);
 	m_pModuleUserSave = new ModuleDBUserSave(m_pDBPool);
+	m_pModuleGameData = new ModuleDBGameData(m_pDBPool);
+	m_pModuleSocial = new ModuleDBSocial(m_pDBPool);
 
-	printf("[DataServerContext] DB modules initialized\n");
+	printf("[DataServerContext] DB modules initialized (5 modules)\n");
 	return true;
 }
 
@@ -77,11 +83,17 @@ void DataServerContext::OnUpdate(INT32 Command)
 		m_pModuleUserLoad->ProcessResponses(this);
 	if (m_pModuleUserSave)
 		m_pModuleUserSave->ProcessResponses(this);
+	if (m_pModuleGameData)
+		m_pModuleGameData->ProcessResponses(this);
+	if (m_pModuleSocial)
+		m_pModuleSocial->ProcessResponses(this);
 }
 
 BOOL DataServerContext::OnDestroy()
 {
 	// Destruir modulos
+	if (m_pModuleSocial)	{ delete m_pModuleSocial; m_pModuleSocial = nullptr; }
+	if (m_pModuleGameData)	{ delete m_pModuleGameData; m_pModuleGameData = nullptr; }
 	if (m_pModuleUserSave)	{ delete m_pModuleUserSave; m_pModuleUserSave = nullptr; }
 	if (m_pModuleUserLoad)	{ delete m_pModuleUserLoad; m_pModuleUserLoad = nullptr; }
 	if (m_pModuleAuth)		{ delete m_pModuleAuth; m_pModuleAuth = nullptr; }
