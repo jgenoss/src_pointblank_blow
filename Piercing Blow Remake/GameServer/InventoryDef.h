@@ -162,4 +162,48 @@ inline bool IsPartsItem(uint32_t itemId)
 	return (type >= ITEM_TYPE_CHARA && type <= ITEM_TYPE_SKIN) || type == ITEM_TYPE_BERET;
 }
 
+// ============================================================================
+// Cash Item Group Types (from CASHITEM_GROUP_TYPE enum)
+// Used for ITEM_TYPE_MAINTENANCE items - the "number" part of ItemID
+// ============================================================================
+
+enum CashItemGroupType
+{
+	CASHITEM_GROUP_UNKNOWN = 0,
+	CASHITEM_GROUP_XP_PLUS_110 = 1,		// 110% EXP
+	CASHITEM_GROUP_XP_PLUS_130 = 2,		// 130% EXP
+	CASHITEM_GROUP_XP_PLUS_150 = 3,		// 150% EXP
+	CASHITEM_GROUP_PT_PLUS_130 = 4,		// 130% GP (Point)
+	CASHITEM_GROUP_COLOR_CLAN = 5,
+	CASHITEM_GROUP_COLOR_NICK = 6,
+	CASHITEM_GROUP_SHORT_RESPAWN = 7,
+	CASHITEM_GROUP_AMMO_UP = 8,
+	CASHITEM_GROUP_XP_PLUS_200 = 37,	// 200% EXP
+	CASHITEM_GROUP_PT_PLUS_200 = 38,	// 200% GP (Point)
+};
+
+// Helper: Get EXP multiplier from CASHITEM_GROUP (returns 100-based, 100 = 1x)
+inline uint16_t GetExpMultiplierFromCashGroup(int groupType)
+{
+	switch (groupType)
+	{
+	case CASHITEM_GROUP_XP_PLUS_110:	return 110;
+	case CASHITEM_GROUP_XP_PLUS_130:	return 130;
+	case CASHITEM_GROUP_XP_PLUS_150:	return 150;
+	case CASHITEM_GROUP_XP_PLUS_200:	return 200;
+	default: return 100;
+	}
+}
+
+// Helper: Get GP multiplier from CASHITEM_GROUP (returns 100-based, 100 = 1x)
+inline uint16_t GetPointMultiplierFromCashGroup(int groupType)
+{
+	switch (groupType)
+	{
+	case CASHITEM_GROUP_PT_PLUS_130:	return 130;
+	case CASHITEM_GROUP_PT_PLUS_200:	return 200;
+	default: return 100;
+	}
+}
+
 #endif // __INVENTORYDEF_H__

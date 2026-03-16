@@ -118,9 +118,30 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 		return 0;
 
 	uint16_t packetSize = *(uint16_t*)pPacket;
+
+	// Phase 9A: Packet encryption validation
+	// Bit 0x8000 in size field indicates the packet is encrypted
+	bool bEncrypted = (packetSize & 0x8000) != 0;
+	if (bEncrypted)
+	{
+		packetSize &= 0x7FFF;	// Clear encryption flag to get actual size
+
+		if (m_ui32EncriptKey > 0)
+		{
+			// Decrypt: skip first 2 bytes (size field), decrypt protocol+payload
+			// PACKETENCRIPTSIZE = 2 (size field excluded from encryption)
+			uint32_t decryptLen = packetSize;	// size includes header, encrypt covers [2..size)
+			if (decryptLen > 2)
+				BitRotateDecript((UINT8*)&pPacket[2], decryptLen - 2, m_ui32EncriptKey);
+		}
+
+		// Write back the decrypted size (without 0x8000 flag)
+		*(uint16_t*)pPacket = packetSize;
+	}
+
 	uint16_t protocolId = *(uint16_t*)(pPacket + 2);
 
-	if (iSize < packetSize)
+	if (iSize < (int)packetSize)
 		return 0;
 
 	// Phase 9A: Rate limiting - max 100 packets per second
@@ -395,7 +416,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 
 void GameSession::OnBaseConnectReq(char* pData, INT32 i32Size)
 {
-	m_ui32EncriptKey = (uint32_t)(GetTickCount() ^ (DWORD)GetIndex());
+	// Key must be 1-7 for BitRotateEncript/Decript (bit rotation count)
+	m_ui32EncriptKey = (GetIndex() % 7) + 1;
 	m_eMainTask = GAME_TASK_CONNECT;
 	SendConnectAck();
 }
@@ -667,6 +689,37 @@ void GameSession::OnRankUpReq(char* pData, INT32 i32Size)
 	CheckRankUp();
 }
 
+// Rank-up reward table (Phase 10B): GP bonus + optional item per rank
+struct RankUpReward
+{
+	int			i32BonusGP;
+	uint32_t	ui32RewardItemId;	// 0 = no item
+};
+
+static const RankUpReward s_RankUpRewards[] =
+{
+	{     0, 0 },	// Rank 0: Trainee (no reward)
+	{  1000, 0 },	// Rank 1: Private
+	{  1500, 0 },	// Rank 2: Private First Class
+	{  2000, 0 },	// Rank 3: Corporal
+	{  3000, 0 },	// Rank 4: Sergeant
+	{  4000, 0 },	// Rank 5: Staff Sergeant
+	{  5000, MAKE_ITEM_ID(ITEM_TYPE_MELEE, WEAPON_CLASS_KNIFE, 2) },	// Rank 6: SFC + Kukri
+	{  6000, 0 },	// Rank 7: Master Sergeant
+	{  7000, 0 },	// Rank 8: Sergeant Major
+	{  8000, MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 2) },	// Rank 9: 2LT + Desert Eagle
+	{ 10000, 0 },	// Rank 10: First Lieutenant
+	{ 12000, 0 },	// Rank 11: Captain
+	{ 15000, MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_ASSAULT, 3) },	// Rank 12: Major + SG550
+	{ 18000, 0 },	// Rank 13: Lieutenant Colonel
+	{ 20000, 0 },	// Rank 14: Colonel
+	{ 25000, MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_SNIPER, 2) },	// Rank 15: BG + PSG-1
+	{ 30000, 0 },	// Rank 16: Major General
+	{ 35000, 0 },	// Rank 17: Lieutenant General
+	{ 50000, MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_MG, 1) },		// Rank 18: General + MG36
+};
+static const int RANKUP_REWARD_COUNT = sizeof(s_RankUpRewards) / sizeof(s_RankUpRewards[0]);
+
 void GameSession::CheckRankUp()
 {
 	if (!g_pContextMain)
@@ -679,9 +732,36 @@ void GameSession::CheckRankUp()
 	int oldRank = m_i32RankId;
 	m_i32RankId = newRank;
 
-	// Send rank up notification
+	// Phase 10B: Grant rank-up rewards for each rank gained
+	int totalBonusGP = 0;
+	uint32_t rewardItemId = 0;
+	for (int r = oldRank + 1; r <= newRank && r < RANKUP_REWARD_COUNT; r++)
+	{
+		totalBonusGP += s_RankUpRewards[r].i32BonusGP;
+		if (s_RankUpRewards[r].ui32RewardItemId != 0)
+			rewardItemId = s_RankUpRewards[r].ui32RewardItemId;	// Last reward item
+	}
+
+	if (totalBonusGP > 0)
+		m_i32GP += totalBonusGP;
+
+	// Grant reward item if applicable
+	uint32_t grantedDBIdx = 0;
+	if (rewardItemId != 0 && !HasInventoryItem(rewardItemId) && m_i32InventoryCount < MAX_INVEN_COUNT)
+	{
+		GameInventoryItem rewardItem;
+		rewardItem.ui32ItemDBIdx = (uint32_t)(GetTickCount() & 0xFFFFFF) | ((uint32_t)m_i32InventoryCount << 24);
+		rewardItem.ui32ItemId = rewardItemId;
+		rewardItem.ui8ItemType = ITEM_ATTR_UNUSED;	// Permanent
+		rewardItem.ui32ItemArg = 0;
+		rewardItem.ui8Durability = DURABILITY_MAX;
+		AddInventoryItem(rewardItem);
+		grantedDBIdx = rewardItem.ui32ItemDBIdx;
+	}
+
+	// Send rank up notification with reward info
 	i3NetworkPacket packet;
-	char buffer[32];
+	char buffer[48];
 	int offset = 0;
 
 	uint16_t size = 0;
@@ -693,13 +773,22 @@ void GameSession::CheckRankUp()
 	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 	memcpy(buffer + offset, &m_i32RankId, sizeof(int));		offset += sizeof(int);
 
+	// Bonus GP and reward item
+	memcpy(buffer + offset, &totalBonusGP, sizeof(int));	offset += sizeof(int);
+	memcpy(buffer + offset, &rewardItemId, 4);				offset += 4;
+
+	// Updated GP balance
+	uint32_t gpBalance = (uint32_t)m_i32GP;
+	memcpy(buffer + offset, &gpBalance, 4);					offset += 4;
+
 	size = (uint16_t)offset;
 	memcpy(buffer, &size, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 
-	printf("[GameSession] Rank up! UID=%lld, %d -> %d\n", m_i64UID, oldRank, newRank);
+	printf("[GameSession] Rank up! UID=%lld, %d -> %d, BonusGP=%d, RewardItem=%u\n",
+		m_i64UID, oldRank, newRank, totalBonusGP, rewardItemId);
 }
 
 // ============================================================================
@@ -1271,12 +1360,21 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 	int gpReward = baseGP + killBonusGP + headshotBonusGP;
 	int64_t expReward = baseExp + killBonusExp + headshotBonusExp;
 
-	// Apply boost event multipliers (Phase 14B)
+	// Apply boost multipliers: max of (server event boost, inventory boost)
 	int boostGP = 0, boostExp = 0;
-	if (g_pContextMain)
 	{
-		uint16_t expMult = g_pContextMain->GetCurrentExpMultiplier();
-		uint16_t pointMult = g_pContextMain->GetCurrentPointMultiplier();
+		// Server-wide event multiplier (Phase 14B)
+		uint16_t eventExpMult = g_pContextMain ? g_pContextMain->GetCurrentExpMultiplier() : 100;
+		uint16_t eventPtMult = g_pContextMain ? g_pContextMain->GetCurrentPointMultiplier() : 100;
+
+		// Per-player inventory boost item multiplier (Phase 10A)
+		uint16_t itemExpMult = GetInventoryExpMultiplier();
+		uint16_t itemPtMult = GetInventoryPointMultiplier();
+
+		// Use the higher of event or inventory boost (they don't stack)
+		uint16_t expMult = (eventExpMult > itemExpMult) ? eventExpMult : itemExpMult;
+		uint16_t pointMult = (eventPtMult > itemPtMult) ? eventPtMult : itemPtMult;
+
 		if (expMult != 100)
 		{
 			int64_t boosted = expReward * expMult / 100;
@@ -1318,6 +1416,71 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 
 	// Update quest progress (Phase 7I)
 	UpdateQuestProgress(i32Kills, i32Deaths, i32Headshots, bWin);
+}
+
+// ============================================================================
+// Inventory Boost Items (Phase 10A)
+// Scan inventory for active ITEM_TYPE_MAINTENANCE boost items
+// ============================================================================
+
+uint16_t GameSession::GetInventoryExpMultiplier() const
+{
+	uint16_t maxMult = 100;
+	DWORD dwNow = (DWORD)time(nullptr);
+
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		const GameInventoryItem& item = m_Inventory[i];
+		if (!item.IsValid())
+			continue;
+
+		int itemType = GET_ITEM_TYPE(item.ui32ItemId);
+		if (itemType != ITEM_TYPE_MAINTENANCE)
+			continue;
+
+		// Period-based items: check expiration
+		if (item.ui8ItemType == ITEM_ATTR_PERIOD && item.ui32ItemArg > 0)
+		{
+			if (dwNow > item.ui32ItemArg)
+				continue;	// Expired
+		}
+
+		int groupType = GET_ITEM_NUMBER(item.ui32ItemId);
+		uint16_t mult = GetExpMultiplierFromCashGroup(groupType);
+		if (mult > maxMult)
+			maxMult = mult;
+	}
+	return maxMult;
+}
+
+uint16_t GameSession::GetInventoryPointMultiplier() const
+{
+	uint16_t maxMult = 100;
+	DWORD dwNow = (DWORD)time(nullptr);
+
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		const GameInventoryItem& item = m_Inventory[i];
+		if (!item.IsValid())
+			continue;
+
+		int itemType = GET_ITEM_TYPE(item.ui32ItemId);
+		if (itemType != ITEM_TYPE_MAINTENANCE)
+			continue;
+
+		// Period-based items: check expiration
+		if (item.ui8ItemType == ITEM_ATTR_PERIOD && item.ui32ItemArg > 0)
+		{
+			if (dwNow > item.ui32ItemArg)
+				continue;	// Expired
+		}
+
+		int groupType = GET_ITEM_NUMBER(item.ui32ItemId);
+		uint16_t mult = GetPointMultiplierFromCashGroup(groupType);
+		if (mult > maxMult)
+			maxMult = mult;
+	}
+	return maxMult;
 }
 
 // ============================================================================
@@ -1494,6 +1657,22 @@ void GameSession::SendConnectAck()
 	memcpy(buffer, &size, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::SendGamePacket(char* pBuffer, int i32Size)
+{
+	// Encrypt outgoing packet if encryption key is set (post-handshake)
+	if (m_ui32EncriptKey > 0 && i32Size > 2)
+	{
+		// Encrypt bytes [2..size) - skip size field, encrypt protocol+payload
+		BitRotateEncript((UINT8*)&pBuffer[2], i32Size - 2, m_ui32EncriptKey);
+		// Set encryption flag (bit 0x8000) on size
+		*(uint16_t*)pBuffer = (uint16_t)(i32Size | 0x8000);
+	}
+
+	i3NetworkPacket packet;
+	packet.SetPacketData(pBuffer, i32Size);
 	SendMessage(&packet);
 }
 

@@ -181,6 +181,10 @@ public:
 	void			CheckExpiredItems();
 	int				RemoveExpiredItems();
 
+	// Inventory boost items (Phase 10A)
+	uint16_t		GetInventoryExpMultiplier() const;	// 100-based (100 = 1x)
+	uint16_t		GetInventoryPointMultiplier() const;
+
 	// Item durability (Phase 14C)
 	void			DecreaseEquippedDurability();
 	int				RepairItem(uint32_t ui32ItemDBIdx);
@@ -417,6 +421,7 @@ private:
 	void			SendHeartBitAck();
 	void			SendLoginAck(int i32Result);
 	void			SendSimpleAck(uint16_t protocolAck, int32_t result);
+	void			SendGamePacket(char* pBuffer, int i32Size);	// Encrypt + send
 	void			ResetSessionData();
 
 	// Battle helpers

@@ -633,12 +633,12 @@ void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 	// _PersonPlayerMax
 	uint8_t personMax = (uint8_t)m_i32MaxPlayers;
 	memcpy(pBuffer + offset, &personMax, sizeof(uint8_t));			offset += sizeof(uint8_t);
-	// _Ping
+	// _Ping (average of all players - 0 for now)
 	uint8_t ping = 0;
 	memcpy(pBuffer + offset, &ping, sizeof(uint8_t));				offset += sizeof(uint8_t);
 	// _RoundType
 	memcpy(pBuffer + offset, &m_ui8RoundType, sizeof(uint8_t));		offset += sizeof(uint8_t);
-	// _SubType
+	// _SubType (kill count | time limit)
 	memcpy(pBuffer + offset, &m_ui8SubType, sizeof(uint8_t));		offset += sizeof(uint8_t);
 	// _WeaponFlag
 	memcpy(pBuffer + offset, &m_ui8WeaponFlag, sizeof(uint8_t));	offset += sizeof(uint8_t);
@@ -655,10 +655,19 @@ void Room::FillRoomInfoBasic(char* pBuffer, int* pSize) const
 	// _OwnerSlot
 	uint8_t ownerSlot = (uint8_t)m_i32OwnerSlot;
 	memcpy(pBuffer + offset, &ownerSlot, sizeof(uint8_t));			offset += sizeof(uint8_t);
-	// _Score (Red, Blue, CurrentRound)
+	// _Score (Red, Blue, NowRound)
 	memcpy(pBuffer + offset, &m_Score.i32RedScore, sizeof(int32_t));	offset += sizeof(int32_t);
 	memcpy(pBuffer + offset, &m_Score.i32BlueScore, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(pBuffer + offset, &m_Score.i32CurrentRound, sizeof(int32_t));offset += sizeof(int32_t);
+	memcpy(pBuffer + offset, &m_Score.i32NowRound, sizeof(int32_t));	offset += sizeof(int32_t);
+	// _MaxRound
+	memcpy(pBuffer + offset, &m_Score.i32MaxRound, sizeof(int32_t));	offset += sizeof(int32_t);
+	// _TimeElapsed (seconds since battle started, 0 if not in battle)
+	uint16_t timeElapsed = 0;
+	if (m_ui8RoomState >= ROOM_STATE_BATTLE && m_dwBattleStartTime > 0)
+		timeElapsed = (uint16_t)((GetTickCount() - m_dwBattleStartTime) / 1000);
+	memcpy(pBuffer + offset, &timeElapsed, sizeof(uint16_t));			offset += sizeof(uint16_t);
+	// _TimeMax
+	memcpy(pBuffer + offset, &m_Score.ui16MaxTime, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	*pSize = offset;
 }

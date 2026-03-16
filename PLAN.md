@@ -123,9 +123,9 @@
 - [ ] Kick list tracking (`m_aKickUserList[]`)
 
 ### 3B. Room State Sync
-- [ ] Double-buffered room info (Info0/Info1) para updates lock-free del room list
-- [ ] `FillRoomInfoBasic()` completo con todos los campos que espera el cliente
-- [ ] Room list update throttling (no más de 1 update por segundo)
+- [x] Double-buffered room info (Info0/Info1) para updates lock-free del room list
+- [x] `FillRoomInfoBasic()` completo con todos los campos que espera el cliente
+- [x] Room list update throttling (no más de 1 update por segundo)
 
 ---
 
@@ -146,7 +146,7 @@
 - [x] `PROTOCOL_BASE_MAP_LIST_REQ/ACK` - Lista de mapas disponibles
 - [x] `PROTOCOL_BASE_MAP_RULELIST_REQ/ACK` - Reglas por modo de juego
 - [x] `PROTOCOL_BASE_MAP_MATCHINGLIST_REQ/ACK` - Matching mode↔stage
-- [ ] `PROTOCOL_BASE_MAP_RANDOM_LIST_ACK` - Mapas random
+- [x] `PROTOCOL_BASE_MAP_RANDOM_LIST_ACK` - Mapas random
 - [x] Cargar datos de mapas/stages desde config o DataServer
 
 ### 4C. User Info Completa
@@ -235,10 +235,10 @@
 
 ### 7B. Lobby Chat Completo
 **Archivos**: `GameSessionChannel.cpp`
-- [ ] `PROTOCOL_BASE_CHATTING_REQ/ACK` - Chat por canal
-- [ ] Lobby user list con double-buffering
-- [ ] User invite from lobby
-- [ ] Megaphone (broadcast chat)
+- [x] `PROTOCOL_BASE_CHATTING_REQ/ACK` - Chat por canal
+- [x] Lobby user list con double-buffering
+- [x] User invite from lobby
+- [x] Megaphone (broadcast chat)
 
 ### 7C. GM Chat
 **Archivos**: Crear `GameSessionGMChat.cpp`
@@ -261,7 +261,7 @@
 
 ### 9A. Packet Validation
 **Archivos**: `GameSession.cpp`
-- [ ] Packet encryption validation con XOR key
+- [x] Packet encryption validation con XOR key (BitRotateDecript)
 - [ ] Packet replay detection
 - [x] Protocol rate limiting (max packets per second)
 - [x] State validation: rechazar packets que no corresponden al GAME_TASK actual
@@ -287,13 +287,13 @@
 - [x] EXP calculation: base + kills*multiplier + headshot bonus + win bonus
 - [x] Point (GP) calculation: base + kills*multiplier + win bonus
 - [x] Boost event support: multiply EXP/GP by event multiplier
-- [ ] Bonus items: EXP boost items, Point boost items from inventory
+- [x] Bonus items: EXP boost items, Point boost items from inventory
 - [x] Save results to DataServer after each match
 
 ### 10B. Rank System
 **Archivos**: `GameSession.cpp`
 - [x] Rank-up check after EXP update
-- [ ] Rank-up items reward (from `m_aRankUpItem[MAX_RANK_COUNT]`)
+- [x] Rank-up items reward (from `m_aRankUpItem[MAX_RANK_COUNT]`)
 - [x] `PROTOCOL_BASE_RANK_UP_ACK` notification
 - [x] Initial rank-up for new players
 
@@ -390,7 +390,7 @@
 | Categoría | Protocolos Original | Implementados | % |
 |-----------|---------------------|---------------|---|
 | Login (0x0100) | 3 | 1 | 33% |
-| Base (0x0200) | ~80 | 27 | 34% |
+| Base (0x0200) | ~80 | 28 | 35% |
 | Auth (0x0300) | ~80 | 7 | 9% |
 | Shop (0x0400) | ~40 | 15 | 38% |
 | Admin (0x0500) | ~10 | 0 | 0% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 4 | 80% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~146** | **~32%** |
+| **TOTAL** | **~460** | **~147** | **~32%** |
