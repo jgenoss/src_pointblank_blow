@@ -77,6 +77,14 @@ BOOL GameSession::OnDisconnect(BOOL bForceMainThread)
 	if (m_pRoom && m_i32RoomIdx >= 0 && g_pRoomManager)
 		g_pRoomManager->OnLeaveRoom(this, m_i32ChannelNum);
 
+	// Decrement channel user count
+	if (m_i32ChannelNum >= 0 && m_i32ChannelNum < MAX_GAME_CHANNELS && g_pContextMain)
+	{
+		GameChannelInfo& ch = g_pContextMain->GetChannelInfoMut(m_i32ChannelNum);
+		if (ch.ui16CurrentUsers > 0)
+			ch.ui16CurrentUsers--;
+	}
+
 	ResetSessionData();
 	return TRUE;
 }

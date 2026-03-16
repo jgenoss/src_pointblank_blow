@@ -17,6 +17,25 @@ GameContextMain::GameContextMain()
 {
 	m_szServerName[0] = '\0';
 	memset(m_pRSAKey, 0, sizeof(m_pRSAKey));
+
+	// Initialize default channel layout
+	for (int i = 0; i < MAX_GAME_CHANNELS; i++)
+		m_Channels[i].Reset();
+
+	// Default 4 channels: Normal, Beginner, Expert, Clan
+	m_Channels[0].eType = GAME_CHANNEL_TYPE_NORMAL;
+	strcpy_s(m_Channels[0].szName, "Normal");
+
+	m_Channels[1].eType = GAME_CHANNEL_TYPE_BEGIN1;
+	strcpy_s(m_Channels[1].szName, "Beginner");
+	m_Channels[1].i32MaxLevel = 10;
+
+	m_Channels[2].eType = GAME_CHANNEL_TYPE_EXPERT;
+	strcpy_s(m_Channels[2].szName, "Expert");
+	m_Channels[2].i32MinLevel = 20;
+
+	m_Channels[3].eType = GAME_CHANNEL_TYPE_CLAN;
+	strcpy_s(m_Channels[3].szName, "Clan");
 }
 
 GameContextMain::~GameContextMain()

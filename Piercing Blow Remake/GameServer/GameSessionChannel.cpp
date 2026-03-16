@@ -15,7 +15,7 @@ void GameSession::OnChannelListReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[256];
+	char buffer[512];
 	int offset = 0;
 
 	uint16_t size = 0;
@@ -26,10 +26,14 @@ void GameSession::OnChannelListReq(char* pData, INT32 i32Size)
 	uint8_t channelCount = g_pContextMain->m_ui8ChannelCount;
 	memcpy(buffer + offset, &channelCount, sizeof(uint8_t));	offset += sizeof(uint8_t);
 
+	// Per-channel: type(1) + userCount(2) + maxUsers(2)
 	for (uint8_t i = 0; i < channelCount; i++)
 	{
-		uint16_t userCount = 0;	// TODO: Get from GameSessionManager
-		memcpy(buffer + offset, &userCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+		const GameChannelInfo& ch = g_pContextMain->GetChannelInfo(i);
+		uint8_t chType = (uint8_t)ch.eType;
+		memcpy(buffer + offset, &chType, 1);					offset += 1;
+		memcpy(buffer + offset, &ch.ui16CurrentUsers, 2);		offset += 2;
+		memcpy(buffer + offset, &ch.ui16MaxUsers, 2);			offset += 2;
 	}
 
 	size = (uint16_t)offset;
@@ -41,17 +45,70 @@ void GameSession::OnChannelListReq(char* pData, INT32 i32Size)
 
 void GameSession::OnChannelEnterReq(char* pData, INT32 i32Size)
 {
-	if (m_eMainTask < GAME_TASK_CHANNEL)
+	if (m_eMainTask < GAME_TASK_CHANNEL || !g_pContextMain)
 		return;
 
 	if (i32Size < (int)sizeof(uint32_t))
 		return;
 
 	uint32_t channel = *(uint32_t*)pData;
+	int32_t result = 0;
 
-	// TODO: Validate channel type restrictions (beginner, expert, clan, etc.)
-	m_i32ChannelNum = (int)channel;
-	m_eMainTask = GAME_TASK_CHANNEL;
+	if (channel >= g_pContextMain->m_ui8ChannelCount)
+	{
+		result = 1;	// Invalid channel
+	}
+	else
+	{
+		const GameChannelInfo& ch = g_pContextMain->GetChannelInfo((int)channel);
+
+		// Check channel capacity
+		if (ch.ui16CurrentUsers >= ch.ui16MaxUsers)
+		{
+			result = 2;	// Channel full
+		}
+		// Check channel type restrictions
+		else switch (ch.eType)
+		{
+		case GAME_CHANNEL_TYPE_BEGIN1:
+		case GAME_CHANNEL_TYPE_BEGIN2:
+			if (ch.i32MaxLevel > 0 && m_i32Level > ch.i32MaxLevel)
+				result = 3;	// Level too high for beginner channel
+			break;
+
+		case GAME_CHANNEL_TYPE_EXPERT:
+		case GAME_CHANNEL_TYPE_EXPERT2:
+			if (ch.i32MinLevel > 0 && m_i32Level < ch.i32MinLevel)
+				result = 4;	// Level too low for expert channel
+			break;
+
+		case GAME_CHANNEL_TYPE_CLAN:
+		case GAME_CHANNEL_TYPE_PCCAFE_CLAN:
+			if (m_i32ClanId <= 0)
+				result = 5;	// Must be in a clan
+			break;
+
+		default:
+			break;
+		}
+	}
+
+	if (result == 0)
+	{
+		// Leave old channel if any
+		if (m_i32ChannelNum >= 0 && m_i32ChannelNum < MAX_GAME_CHANNELS)
+		{
+			GameChannelInfo& oldCh = g_pContextMain->GetChannelInfoMut(m_i32ChannelNum);
+			if (oldCh.ui16CurrentUsers > 0)
+				oldCh.ui16CurrentUsers--;
+		}
+
+		m_i32ChannelNum = (int)channel;
+		m_eMainTask = GAME_TASK_CHANNEL;
+
+		// Increment user count
+		g_pContextMain->GetChannelInfoMut((int)channel).ui16CurrentUsers++;
+	}
 
 	i3NetworkPacket packet;
 	char buffer[32];
@@ -61,8 +118,6 @@ void GameSession::OnChannelEnterReq(char* pData, INT32 i32Size)
 	uint16_t proto = PROTOCOL_BASE_SELECT_CHANNEL_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
-	int32_t result = 0;
 	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 	memcpy(buffer + offset, &channel, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
@@ -72,7 +127,8 @@ void GameSession::OnChannelEnterReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 
-	printf("[GameSession] Channel enter - Index=%d, Channel=%d\n", GetIndex(), channel);
+	if (result == 0)
+		printf("[GameSession] Channel enter - Index=%d, Channel=%d, Type=%d\n", GetIndex(), channel, g_pContextMain->GetChannelInfo((int)channel).eType);
 }
 
 void GameSession::OnChannelLeaveReq(char* pData, INT32 i32Size)
@@ -81,6 +137,15 @@ void GameSession::OnChannelLeaveReq(char* pData, INT32 i32Size)
 		return;
 
 	int oldChannel = m_i32ChannelNum;
+
+	// Decrement user count
+	if (g_pContextMain && oldChannel >= 0 && oldChannel < MAX_GAME_CHANNELS)
+	{
+		GameChannelInfo& ch = g_pContextMain->GetChannelInfoMut(oldChannel);
+		if (ch.ui16CurrentUsers > 0)
+			ch.ui16CurrentUsers--;
+	}
+
 	m_i32ChannelNum = -1;
 	m_eMainTask = GAME_TASK_CHANNEL;
 
