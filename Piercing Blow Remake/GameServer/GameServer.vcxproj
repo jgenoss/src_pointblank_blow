@@ -150,6 +150,7 @@
     <ClCompile Include="GameSessionClanMatch.cpp" />
     <ClCompile Include="GameSessionClanWar.cpp" />
     <ClCompile Include="ClanMatchManager.cpp" />
+    <ClCompile Include="..\ServerCommon\ServerLog.cpp" />
     <ClCompile Include="GameSessionRoulette.cpp" />
     <ClCompile Include="GameSessionCheat.cpp" />
     <ClCompile Include="GameSessionGM.cpp" />
@@ -176,6 +177,8 @@
     <ClInclude Include="ClanDef.h" />
     <ClInclude Include="ClanMatchDef.h" />
     <ClInclude Include="ClanMatchManager.h" />
+    <ClInclude Include="..\ServerCommon\ServerLog.h" />
+    <ClInclude Include="..\ServerCommon\RingBuffer.h" />
     <ClInclude Include="RouletteDef.h" />
     <ClInclude Include="GameContextMain.h" />
     <ClInclude Include="GameServerContext.h" />

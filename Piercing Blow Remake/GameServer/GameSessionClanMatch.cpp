@@ -530,7 +530,10 @@ void GameSession::CreateClanMatchRoom(ClanMatchTeam* pTeam1, ClanMatchTeam* pTea
 
 	Room* pRoom = pRoomMgr->GetRoom(channel, roomIdx);
 	if (pRoom)
+	{
 		pRoom->SetClanMatch(true);
+		pRoom->SetClanMatchTeams(pTeam1->i32TeamIdx, pTeam2->i32TeamIdx);
+	}
 
 	printf("[ClanMatch] Room created - Idx=%d, Ch=%d, %s vs %s\n",
 		roomIdx, channel, pTeam1->szClanName, pTeam2->szClanName);

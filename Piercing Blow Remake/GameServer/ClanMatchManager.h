@@ -34,9 +34,20 @@ public:
 	int						GetTeamListForClan(int clanId, int* pOutIndices, int maxCount) const;
 	int						GetAllActiveTeams(int* pOutIndices, int maxCount) const;
 
+	// Match results
+	void					AddMatchResult(int team1ClanId, const char* team1Name,
+								int team2ClanId, const char* team2Name,
+								int team1Score, int team2Score, int winnerTeam);
+	int						GetMatchResults(const ClanMatchResultEntry** ppOut) const;
+	int						GetMatchResultsForClan(int clanId, ClanMatchResultEntry* pOut, int maxCount) const;
+
 private:
-	ClanMatchTeam	m_Teams[MAX_CLAN_MATCH_TEAMS];
-	int				m_i32ActiveCount;
+	ClanMatchTeam			m_Teams[MAX_CLAN_MATCH_TEAMS];
+	int						m_i32ActiveCount;
+
+	ClanMatchResultEntry	m_Results[MAX_CLAN_MATCH_RESULTS];
+	int						m_i32ResultCount;
+	int						m_i32ResultWriteIdx;	// Circular buffer index
 };
 
 extern ClanMatchManager* g_pClanMatchManager;

@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "GameContextMain.h"
+#include "ClanMatchManager.h"
 
 I3_CLASS_INSTANCE(Room);
 
@@ -52,6 +53,31 @@ Room::Room()
 	, m_bMapRotationEnabled(false)
 	, m_bSoloPlay(false)
 	, m_ui64BattleUniqueNum(0)
+	, m_i32CrossCountKillMultiplier(CROSSCOUNT_HUMAN_KILL_BONUS)
+	, m_i32ConvoyHP(CONVOY_DEFAULT_HP)
+	, m_i32ConvoyMaxHP(CONVOY_DEFAULT_HP)
+	, m_i32ConvoyCheckpoint(0)
+	, m_i32ConvoyMaxCheckpoints(CONVOY_MAX_CHECKPOINTS)
+	, m_fConvoyPosX(0.0f)
+	, m_fConvoyPosY(0.0f)
+	, m_fConvoyPosZ(0.0f)
+	, m_ui8AIMode(0)
+	, m_ui8AIDifficulty(AI_DIFFICULTY_NORMAL)
+	, m_i32AIStage(0)
+	, m_i32AIMaxStage(AI_MAX_STAGES)
+	, m_i32AIBotCount(0)
+	, m_i32AIBotsKilled(0)
+	, m_i32AIBotsToKill(10)
+	, m_dwAILastSpawnTime(0)
+	, m_i32DefenceWave(0)
+	, m_i32DefenceMaxWaves(DEFENCE_MAX_WAVES)
+	, m_i32DefenceNPCsAlive(0)
+	, m_i32DefenceNPCsSpawned(0)
+	, m_i32DefenceNPCsTotal(DEFENCE_NPCS_PER_WAVE_BASE)
+	, m_dwDefenceWaveStartTime(0)
+	, m_dwDefenceLastSpawnTime(0)
+	, m_i32ClanMatchTeam1Idx(-1)
+	, m_i32ClanMatchTeam2Idx(-1)
 {
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
@@ -160,6 +186,50 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 	}
 
 	m_i32OwnerSlot = slot;
+
+	// Initialize mode-specific state
+	if (m_ui8GameMode == STAGE_MODE_CROSSCOUNT)
+	{
+		m_i32CrossCountKillMultiplier = CROSSCOUNT_DINO_KILL_BONUS;
+	}
+
+	if (m_ui8GameMode == STAGE_MODE_CONVOY)
+	{
+		m_i32ConvoyHP = CONVOY_DEFAULT_HP;
+		m_i32ConvoyMaxHP = CONVOY_DEFAULT_HP;
+		m_i32ConvoyCheckpoint = 0;
+		m_i32ConvoyMaxCheckpoints = CONVOY_MAX_CHECKPOINTS;
+		m_fConvoyPosX = m_fConvoyPosY = m_fConvoyPosZ = 0.0f;
+	}
+
+	// Extract AI mode from StageID
+	m_ui8AIMode = (uint8_t)((m_ui32StageId >> 17) & 0x0F);
+	if (m_ui8AIMode > 0)
+	{
+		m_ui8AIDifficulty = AI_DIFFICULTY_NORMAL;
+		m_i32AIStage = 0;
+		m_i32AIMaxStage = AI_MAX_STAGES;
+		m_i32AIBotCount = 0;
+		m_i32AIBotsKilled = 0;
+		m_i32AIBotsToKill = 10 + (m_ui8AIDifficulty * 5);
+		m_dwAILastSpawnTime = 0;
+	}
+
+	// Defence wave mode init
+	if (m_ui8GameMode == STAGE_MODE_DEFENCE)
+	{
+		m_i32DefenceWave = 0;
+		m_i32DefenceMaxWaves = DEFENCE_MAX_WAVES;
+		m_i32DefenceNPCsAlive = 0;
+		m_i32DefenceNPCsSpawned = 0;
+		m_i32DefenceNPCsTotal = DEFENCE_NPCS_PER_WAVE_BASE;
+		m_dwDefenceWaveStartTime = 0;
+		m_dwDefenceLastSpawnTime = 0;
+	}
+
+	// Clan match team links
+	m_i32ClanMatchTeam1Idx = -1;
+	m_i32ClanMatchTeam2Idx = -1;
 
 	printf("[Room] Created - Ch=%d, Mode=%d, Map=%d, MaxP=%d, Round=%d, Title=%s\n",
 		m_i32ChannelNum, m_ui8GameMode, m_ui8MapIndex,
@@ -354,6 +424,14 @@ void Room::OnEndBattle()
 	{
 		if (m_pSlotSession[i])
 			m_Slots[i].ui8State = SLOT_STATE_NORMAL;
+	}
+
+	// Apply clan match results if this was a clan match room
+	if (m_bIsClanMatch)
+	{
+		int winnerTeam = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED :
+						 (m_Score.i32BlueScore > m_Score.i32RedScore) ? TEAM_BLUE : -1;
+		ApplyClanMatchResult(winnerTeam);
 	}
 
 	// Advance map rotation if enabled
@@ -1096,6 +1174,38 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 		}
 	}
 
+	// Defence mode wave updates
+	if (m_ui8GameMode == STAGE_MODE_DEFENCE)
+		UpdateDefenceWaves(dwNow);
+
+	// AI mode bot spawn updates
+	if (m_ui8AIMode > 0 && m_dwAILastSpawnTime > 0)
+	{
+		if ((dwNow - m_dwAILastSpawnTime) >= AI_BOT_SPAWN_INTERVAL_MS &&
+			m_i32AIBotCount < AI_MAX_BOTS)
+		{
+			// Signal client to spawn a bot (broadcast spawn notify)
+			m_i32AIBotCount++;
+			m_dwAILastSpawnTime = dwNow;
+
+			i3NetworkPacket spawnPkt;
+			char spBuf[16];
+			int spOff = 0;
+			uint16_t spSz = 0;
+			uint16_t spProto = PROTOCOL_BATTLE_AI_COLLISION_ACK;
+			spOff += sizeof(uint16_t);
+			memcpy(spBuf + spOff, &spProto, sizeof(uint16_t));		spOff += sizeof(uint16_t);
+			uint8_t botDiff = m_ui8AIDifficulty;
+			int32_t botStage = m_i32AIStage;
+			memcpy(spBuf + spOff, &botDiff, 1);					spOff += 1;
+			memcpy(spBuf + spOff, &botStage, sizeof(int32_t));		spOff += sizeof(int32_t);
+			spSz = (uint16_t)spOff;
+			memcpy(spBuf, &spSz, sizeof(uint16_t));
+			spawnPkt.SetPacketData(spBuf, spOff);
+			SendToAll(&spawnPkt);
+		}
+	}
+
 	// For mission mode: check if all players on one team are dead
 	if (IsMissionMode(m_ui8GameMode))
 	{
@@ -1267,7 +1377,17 @@ void Room::OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32Weapon
 		if (!IsMissionMode(m_ui8GameMode))
 		{
 			const GameSlotInfo& killerInfo = m_Slots[i32KillerSlot];
-			OnAddKill(killerInfo.ui8Team);
+
+			// CrossCount (Dino DM): kills count for more points
+			if (m_ui8GameMode == STAGE_MODE_CROSSCOUNT)
+			{
+				for (int k = 0; k < m_i32CrossCountKillMultiplier; k++)
+					OnAddKill(killerInfo.ui8Team);
+			}
+			else
+			{
+				OnAddKill(killerInfo.ui8Team);
+			}
 		}
 	}
 
@@ -2254,4 +2374,375 @@ void Room::LogBattleResult()
 	}
 
 	printf("[BattleLog] ============================\n");
+}
+
+// ============================================================================
+// Convoy Mode
+// ============================================================================
+
+void Room::OnConvoyDamage(int i32Damage, int i32AttackerSlot)
+{
+	if (m_ui8GameMode != STAGE_MODE_CONVOY)
+		return;
+
+	m_i32ConvoyHP -= i32Damage;
+	if (m_i32ConvoyHP < 0)
+		m_i32ConvoyHP = 0;
+
+	// Broadcast convoy HP update
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK;	// Reuse generator protocol
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t hp = m_i32ConvoyHP;
+	int32_t maxHp = m_i32ConvoyMaxHP;
+	int32_t checkpoint = m_i32ConvoyCheckpoint;
+	memcpy(buffer + offset, &hp, sizeof(int32_t));			offset += sizeof(int32_t);
+	memcpy(buffer + offset, &maxHp, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &checkpoint, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+
+	// Convoy destroyed = DEF wins
+	if (m_i32ConvoyHP <= 0)
+	{
+		printf("[Room] Convoy destroyed - Room=%d, Attacker=Slot%d\n",
+			m_i32RoomIdx, i32AttackerSlot);
+		OnRoundEnd(TEAM_BLUE);
+
+		if (CheckMatchEnd())
+		{
+			int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+			CalculateBattleRewards(finalWinner);
+			m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+			m_dwStateStartTime = GetTickCount();
+			SendBattleResultToAll(finalWinner);
+		}
+	}
+}
+
+void Room::OnConvoyCheckpoint(int i32CheckpointIdx)
+{
+	if (m_ui8GameMode != STAGE_MODE_CONVOY)
+		return;
+
+	if (i32CheckpointIdx <= m_i32ConvoyCheckpoint)
+		return;	// Already passed this checkpoint
+
+	m_i32ConvoyCheckpoint = i32CheckpointIdx;
+
+	printf("[Room] Convoy checkpoint %d reached - Room=%d\n",
+		i32CheckpointIdx, m_i32RoomIdx);
+
+	// Last checkpoint = ATK wins the round
+	if (m_i32ConvoyCheckpoint >= m_i32ConvoyMaxCheckpoints)
+	{
+		OnRoundEnd(TEAM_RED);
+
+		if (CheckMatchEnd())
+		{
+			int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+			CalculateBattleRewards(finalWinner);
+			m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+			m_dwStateStartTime = GetTickCount();
+			SendBattleResultToAll(finalWinner);
+		}
+	}
+
+	// Broadcast checkpoint to all
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;	// Reuse touchdown for checkpoint notify
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t cp = m_i32ConvoyCheckpoint;
+	memcpy(buffer + offset, &cp, sizeof(int32_t));			offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+}
+
+// ============================================================================
+// Challenge/AI Mode
+// ============================================================================
+
+void Room::OnAIBotKilled(int i32KillerSlot)
+{
+	if (m_ui8AIMode == 0)
+		return;
+
+	m_i32AIBotCount--;
+	if (m_i32AIBotCount < 0)
+		m_i32AIBotCount = 0;
+
+	m_i32AIBotsKilled++;
+
+	// Award kill points based on difficulty
+	int points = GetAIKillPoints(m_ui8AIDifficulty);
+	if (i32KillerSlot >= 0 && i32KillerSlot < SLOT_MAX_COUNT && m_pSlotSession[i32KillerSlot])
+	{
+		m_SlotStats[i32KillerSlot].i32Kills++;
+		// Team score for AI kills
+		OnAddKill(m_Slots[i32KillerSlot].ui8Team);
+	}
+
+	CheckAIStageAdvance();
+}
+
+void Room::CheckAIStageAdvance()
+{
+	if (m_i32AIBotsKilled < m_i32AIBotsToKill)
+		return;
+
+	m_i32AIStage++;
+	m_i32AIBotsKilled = 0;
+
+	printf("[Room] AI Stage advance - Room=%d, Stage=%d/%d\n",
+		m_i32RoomIdx, m_i32AIStage, m_i32AIMaxStage);
+
+	if (m_i32AIStage >= m_i32AIMaxStage)
+	{
+		// All stages cleared - battle ends, players win
+		CalculateBattleRewards(TEAM_RED);
+		m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+		m_dwStateStartTime = GetTickCount();
+		SendBattleResultToAll(TEAM_RED);
+		return;
+	}
+
+	// Increase required kills for next stage
+	m_i32AIBotsToKill = 10 + (m_i32AIStage * 5) + (m_ui8AIDifficulty * 3);
+
+	// Broadcast stage advance
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_ROUND_START_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t stage = m_i32AIStage;
+	int32_t maxStage = m_i32AIMaxStage;
+	memcpy(buffer + offset, &stage, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &maxStage, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+}
+
+// ============================================================================
+// Defence Wave System
+// ============================================================================
+
+void Room::OnDefenceWaveStart(int i32Wave)
+{
+	if (m_ui8GameMode != STAGE_MODE_DEFENCE)
+		return;
+
+	m_i32DefenceWave = i32Wave;
+	m_i32DefenceNPCsAlive = 0;
+	m_i32DefenceNPCsSpawned = 0;
+	m_i32DefenceNPCsTotal = DEFENCE_NPCS_PER_WAVE_BASE + (i32Wave * DEFENCE_NPCS_PER_WAVE_SCALE);
+	m_dwDefenceWaveStartTime = GetTickCount();
+	m_dwDefenceLastSpawnTime = GetTickCount();
+
+	printf("[Room] Defence wave %d started - Room=%d, NPCs=%d\n",
+		i32Wave, m_i32RoomIdx, m_i32DefenceNPCsTotal);
+
+	// Broadcast wave start
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t wave = m_i32DefenceWave;
+	int32_t maxWaves = m_i32DefenceMaxWaves;
+	int32_t npcTotal = m_i32DefenceNPCsTotal;
+	memcpy(buffer + offset, &wave, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &maxWaves, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &npcTotal, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+}
+
+void Room::OnDefenceNPCKilled(int i32KillerSlot)
+{
+	if (m_ui8GameMode != STAGE_MODE_DEFENCE)
+		return;
+
+	m_i32DefenceNPCsAlive--;
+	if (m_i32DefenceNPCsAlive < 0)
+		m_i32DefenceNPCsAlive = 0;
+
+	if (i32KillerSlot >= 0 && i32KillerSlot < SLOT_MAX_COUNT && m_pSlotSession[i32KillerSlot])
+		m_SlotStats[i32KillerSlot].i32Kills++;
+
+	// Check if all NPCs in wave are killed
+	if (m_i32DefenceNPCsSpawned >= m_i32DefenceNPCsTotal && m_i32DefenceNPCsAlive <= 0)
+	{
+		// Wave complete
+		if (m_i32DefenceWave + 1 >= m_i32DefenceMaxWaves)
+		{
+			// All waves complete - defenders win
+			printf("[Room] Defence all waves cleared - Room=%d\n", m_i32RoomIdx);
+			OnRoundEnd(TEAM_BLUE);
+
+			if (CheckMatchEnd())
+			{
+				int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+				CalculateBattleRewards(finalWinner);
+				m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+				m_dwStateStartTime = GetTickCount();
+				SendBattleResultToAll(finalWinner);
+			}
+		}
+		else
+		{
+			// Start next wave
+			OnDefenceWaveStart(m_i32DefenceWave + 1);
+		}
+	}
+}
+
+void Room::UpdateDefenceWaves(DWORD dwNow)
+{
+	// Only in BATTLE state with active wave
+	if (m_ui8RoomState != ROOM_STATE_BATTLE)
+		return;
+
+	if (m_dwDefenceWaveStartTime == 0)
+	{
+		// Start first wave
+		OnDefenceWaveStart(0);
+		return;
+	}
+
+	// Spawn NPCs at intervals
+	if (m_i32DefenceNPCsSpawned < m_i32DefenceNPCsTotal)
+	{
+		if ((dwNow - m_dwDefenceLastSpawnTime) >= DEFENCE_WAVE_SPAWN_INTERVAL_MS)
+		{
+			m_i32DefenceNPCsSpawned++;
+			m_i32DefenceNPCsAlive++;
+			m_dwDefenceLastSpawnTime = dwNow;
+
+			// Broadcast NPC spawn to clients
+			i3NetworkPacket packet;
+			char buffer[16];
+			int offset = 0;
+
+			uint16_t sz = 0;
+			uint16_t proto = PROTOCOL_BATTLE_AI_COLLISION_ACK;
+			offset += sizeof(uint16_t);
+			memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+			int32_t wave = m_i32DefenceWave;
+			int32_t spawned = m_i32DefenceNPCsSpawned;
+			int32_t total = m_i32DefenceNPCsTotal;
+			memcpy(buffer + offset, &wave, sizeof(int32_t));		offset += sizeof(int32_t);
+			memcpy(buffer + offset, &spawned, sizeof(int32_t));		offset += sizeof(int32_t);
+			memcpy(buffer + offset, &total, sizeof(int32_t));		offset += sizeof(int32_t);
+
+			sz = (uint16_t)offset;
+			memcpy(buffer, &sz, sizeof(uint16_t));
+			packet.SetPacketData(buffer, offset);
+			SendToAll(&packet);
+		}
+	}
+}
+
+// ============================================================================
+// Clan Match Team Links & Results
+// ============================================================================
+
+void Room::SetClanMatchTeams(int team1Idx, int team2Idx)
+{
+	m_i32ClanMatchTeam1Idx = team1Idx;
+	m_i32ClanMatchTeam2Idx = team2Idx;
+}
+
+void Room::ApplyClanMatchResult(int i32WinnerTeam)
+{
+	if (!m_bIsClanMatch)
+		return;
+
+	extern ClanMatchManager* g_pClanMatchManager;
+	if (!g_pClanMatchManager)
+		return;
+
+	ClanMatchTeam* pTeam1 = g_pClanMatchManager->GetTeam(m_i32ClanMatchTeam1Idx);
+	ClanMatchTeam* pTeam2 = g_pClanMatchManager->GetTeam(m_i32ClanMatchTeam2Idx);
+
+	if (pTeam1)
+	{
+		if (i32WinnerTeam == TEAM_RED)
+		{
+			pTeam1->i32Wins++;
+			pTeam1->i32MatchPoints += 3;	// 3 points for win
+		}
+		else if (i32WinnerTeam == TEAM_BLUE)
+		{
+			pTeam1->i32Losses++;
+		}
+		else
+		{
+			pTeam1->i32MatchPoints += 1;	// 1 point for draw
+		}
+		pTeam1->ui8State = CLAN_MATCH_TEAM_ENDED;
+	}
+
+	if (pTeam2)
+	{
+		if (i32WinnerTeam == TEAM_BLUE)
+		{
+			pTeam2->i32Wins++;
+			pTeam2->i32MatchPoints += 3;
+		}
+		else if (i32WinnerTeam == TEAM_RED)
+		{
+			pTeam2->i32Losses++;
+		}
+		else
+		{
+			pTeam2->i32MatchPoints += 1;
+		}
+		pTeam2->ui8State = CLAN_MATCH_TEAM_ENDED;
+	}
+
+	// Store result in history
+	g_pClanMatchManager->AddMatchResult(
+		pTeam1 ? pTeam1->i32ClanId : 0, pTeam1 ? pTeam1->szClanName : "",
+		pTeam2 ? pTeam2->i32ClanId : 0, pTeam2 ? pTeam2->szClanName : "",
+		m_Score.i32RedScore, m_Score.i32BlueScore, i32WinnerTeam);
+
+	printf("[ClanMatch] Result applied - %s vs %s, Winner=%s\n",
+		pTeam1 ? pTeam1->szClanName : "?",
+		pTeam2 ? pTeam2->szClanName : "?",
+		i32WinnerTeam == TEAM_RED ? "Team1/RED" :
+		i32WinnerTeam == TEAM_BLUE ? "Team2/BLUE" : "DRAW");
 }

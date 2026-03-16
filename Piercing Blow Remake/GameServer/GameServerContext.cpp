@@ -11,6 +11,7 @@
 #include "RouletteDef.h"
 #include "ShopManager.h"
 #include "i3IniParser.h"
+#include "ServerLog.h"
 
 // ============================================================================
 // GameServerContext
@@ -220,6 +221,11 @@ bool GameServer::OnInitialize()
 
 	g_pContextMain = pCtxMain;
 
+	// Initialize persistent logging
+	ServerLog::GetInstance()->Initialize(m_GameConfig.szServerName, "logs");
+	SLOG_INFO("GameServer initializing - Id=%d, Name=%s",
+		m_GameConfig.i32ServerId, m_GameConfig.szServerName);
+
 	// Create shop manager
 	g_pShopManager = new ShopManager();
 
@@ -313,6 +319,9 @@ void GameServer::OnShutdown()
 		delete g_pContextMain;
 		g_pContextMain = nullptr;
 	}
+
+	SLOG_INFO("GameServer shutdown complete");
+	ServerLog::GetInstance()->Shutdown();
 
 	printf("[GameServer] Shutdown complete\n");
 }

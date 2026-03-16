@@ -304,6 +304,71 @@ private:
 	// Battle unique number for logging
 	uint64_t			m_ui64BattleUniqueNum;
 	static volatile long s_BattleCounter;		// Global counter for unique IDs
+
+	// CrossCount (Dino DM) mode state
+	int					m_i32CrossCountKillMultiplier;	// Per-kill point multiplier
+
+	// Convoy mode state
+	int					m_i32ConvoyHP;			// Convoy object current HP
+	int					m_i32ConvoyMaxHP;		// Convoy object max HP
+	int					m_i32ConvoyCheckpoint;	// Current checkpoint (0-based)
+	int					m_i32ConvoyMaxCheckpoints;
+	float				m_fConvoyPosX;			// Convoy position
+	float				m_fConvoyPosY;
+	float				m_fConvoyPosZ;
+
+	// Challenge/AI mode state
+	uint8_t				m_ui8AIMode;			// AI_USE enum (0=none)
+	uint8_t				m_ui8AIDifficulty;		// 0=Easy, 1=Normal, 2=Hard
+	int					m_i32AIStage;			// Current stage (0-based)
+	int					m_i32AIMaxStage;		// Max stages
+	int					m_i32AIBotCount;		// Current active bot count
+	int					m_i32AIBotsKilled;		// Total bots killed this stage
+	int					m_i32AIBotsToKill;		// Required kills to advance stage
+	DWORD				m_dwAILastSpawnTime;	// Last bot spawn tick
+
+	// Defence wave mode state
+	int					m_i32DefenceWave;		// Current wave number (0-based)
+	int					m_i32DefenceMaxWaves;	// Max waves for this map
+	int					m_i32DefenceNPCsAlive;	// Active NPCs in current wave
+	int					m_i32DefenceNPCsSpawned;// NPCs spawned in current wave
+	int					m_i32DefenceNPCsTotal;	// Total NPCs to spawn this wave
+	DWORD				m_dwDefenceWaveStartTime;
+	DWORD				m_dwDefenceLastSpawnTime;
+
+	// Clan match team references (for result distribution)
+	int					m_i32ClanMatchTeam1Idx;	// ClanMatchManager team index for RED
+	int					m_i32ClanMatchTeam2Idx;	// ClanMatchManager team index for BLUE
+
+public:
+	// CrossCount mode
+	bool		IsCrossCountMode() const	{ return m_ui8GameMode == STAGE_MODE_CROSSCOUNT; }
+	int			GetCrossCountMultiplier() const { return m_i32CrossCountKillMultiplier; }
+
+	// Convoy mode
+	bool		IsConvoyMode() const		{ return m_ui8GameMode == STAGE_MODE_CONVOY; }
+	int			GetConvoyHP() const			{ return m_i32ConvoyHP; }
+	int			GetConvoyCheckpoint() const	{ return m_i32ConvoyCheckpoint; }
+	void		OnConvoyDamage(int i32Damage, int i32AttackerSlot);
+	void		OnConvoyCheckpoint(int i32CheckpointIdx);
+
+	// Challenge/AI mode
+	bool		IsAIMode() const			{ return m_ui8AIMode > 0; }
+	uint8_t		GetAIMode() const			{ return m_ui8AIMode; }
+	void		OnAIBotKilled(int i32KillerSlot);
+	void		CheckAIStageAdvance();
+
+	// Defence wave system
+	void		OnDefenceWaveStart(int i32Wave);
+	void		OnDefenceNPCKilled(int i32KillerSlot);
+	void		UpdateDefenceWaves(DWORD dwNow);
+	int			GetDefenceWave() const		{ return m_i32DefenceWave; }
+
+	// Clan match team links
+	void		SetClanMatchTeams(int team1Idx, int team2Idx);
+	int			GetClanMatchTeam1() const	{ return m_i32ClanMatchTeam1Idx; }
+	int			GetClanMatchTeam2() const	{ return m_i32ClanMatchTeam2Idx; }
+	void		ApplyClanMatchResult(int i32WinnerTeam);
 };
 
 #endif // __ROOM_H__

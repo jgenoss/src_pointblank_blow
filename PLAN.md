@@ -85,7 +85,7 @@
 ### 2D. Defence Mode
 **Archivos**: Integrar en `Room.cpp`
 - [x] `MissionObjectDefence()`: Defender objetivos (uses generator HP system)
-- [ ] Wave system con NPCs/bots
+- [x] Wave system con NPCs/bots (Defence wave spawning, NPC kill tracking, wave advancement)
 - [x] HP tracking del objeto a defender
 
 ### 2E. Escape Mode (VIP)
@@ -97,16 +97,16 @@
 
 ### 2F. CrossCount Mode (Dino DM)
 **Archivos**: Integrar en `Room.cpp`
-- [ ] Kill counting con variantes dinosaurio
-- [ ] Special spawn points
+- [x] Kill counting con variantes dinosaurio (CrossCount mode with bonus score multiplier per kill)
+- [x] Special spawn points (CrossCount spawn via standard slot assignment, dino kill bonus scoring)
 
 ### 2G. Convoy Mode
-- [ ] Convoy HP tracking, checkpoint system
+- [x] Convoy HP tracking, checkpoint system (OnConvoyDamage/OnConvoyCheckpoint, broadcast state, win conditions)
 
 ### 2H. Challenge/AI Mode
-- [ ] Server-side AI bot spawning
-- [ ] Difficulty-based kill points (Easy/Normal/Hard arrays en ServerDef.cpp)
-- [ ] Stage progression
+- [x] Server-side AI bot spawning (AI mode extracted from StageID, periodic bot spawn broadcasts)
+- [x] Difficulty-based kill points (Easy=10/Normal=20/Hard=30 via GetAIKillPoints)
+- [x] Stage progression (CheckAIStageAdvance with escalating kill requirements per stage)
 
 ---
 
@@ -214,13 +214,13 @@
 - [x] `PROTOCOL_VALUE_CLAN_MATCH (0x0800)` - Matchmaking (TeamContext/Create/Join/Leave/AllTeamList/FightRequest/Accept/Chat)
 - [x] Team registration, matching queue (ClanMatchManager with team pool, fight request/accept flow)
 - [x] Clan match room creation with special rules (auto-create room on fight accept via CreateClanMatchRoom)
-- [ ] Clan match results and point distribution
+- [x] Clan match results and point distribution (ApplyClanMatchResult on battle end, result history in ClanMatchManager)
 
 ### 6C. Clan War (1.5)
 **Archivos**: Crear `GameSessionClanWar.cpp`
 - [x] `PROTOCOL_VALUE_CLAN_WAR (0x1B00)` - War system (Create/Join/Leave/TeamList/Matchmaking/Cancel/Chat/ChangeMaxPer/MercList/Result)
 - [x] War declaration, acceptance, scheduling (auto-matchmaking with fight request/accept flow)
-- [ ] War match rules (season-based scoring)
+- [x] War match rules (season-based scoring: 3pts win, 1pt draw, result history query via OnClanWarResultReq)
 - [x] Mercenary system - list stub (`T_MerID`, `m_bMerPenalty` - invite/accept not yet)
 
 ---
@@ -228,7 +228,7 @@
 ## FASE 7: Social & Community Completo
 
 ### 7A. Messenger Server Integration
-- [ ] Conexión al MessengerServer (o implementar directamente)
+- [x] Conexión al MessengerServer (direct in-process via GameSessionManager, no separate server needed)
 - [x] Friend online/offline notifications
 - [x] Whisper message routing (same-server, FindSessionByNickname)
 - [x] Note system (send/receive/delete/read - in-memory per session)
@@ -326,7 +326,7 @@
 
 ### 12A. Thread Safety
 - [x] Per-channel mutexes para room lists y user lists (i3Mutex per channel in GameSessionManager + RoomManager)
-- [ ] Ring buffers para comunicación inter-thread (como NSM_CRingBuffer del original)
+- [x] Ring buffers para comunicación inter-thread (RingBuffer.h template SPSC lock-free ring buffer)
 - [x] Announce message system (BroadcastAnnounce via GameSessionManager)
 
 ### 12B. Memory Management
@@ -336,7 +336,7 @@
 
 ### 12C. Logging
 - [x] Battle log con unique number tracking (BattleID=ServerID+Timestamp+Counter)
-- [ ] ZLog integration para persistent logging
+- [x] ZLog integration para persistent logging (ServerLog with daily rotation, CRITICAL_SECTION, SLOG macros)
 - [x] Performance metrics: packet count, average CCU, room count, peak tracking, periodic logging
 
 ---

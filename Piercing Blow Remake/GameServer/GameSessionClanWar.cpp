@@ -292,9 +292,18 @@ void GameSession::OnClanWarMercenaryListReq(char* pData, INT32 i32Size)
 
 void GameSession::OnClanWarResultReq(char* pData, INT32 i32Size)
 {
-	// Match history - return empty for now
+	if (!g_pClanMatchManager || m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_RESULT_ACK, -1);
+		return;
+	}
+
+	// Get match results for this clan
+	ClanMatchResultEntry results[20];
+	int count = g_pClanMatchManager->GetMatchResultsForClan(m_i32ClanId, results, 20);
+
 	i3NetworkPacket packet;
-	char buffer[32];
+	char buffer[4096];
 	int offset = 0;
 
 	uint16_t sz = 0;
@@ -305,8 +314,22 @@ void GameSession::OnClanWarResultReq(char* pData, INT32 i32Size)
 	int32_t result = 0;
 	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
-	uint16_t matchCount = 0;
+	uint16_t matchCount = (uint16_t)count;
 	memcpy(buffer + offset, &matchCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	for (int i = 0; i < count; i++)
+	{
+		if (offset + 144 > (int)sizeof(buffer))
+			break;
+
+		const ClanMatchResultEntry& entry = results[i];
+		memcpy(buffer + offset, entry.szTeam1ClanName, 64);	offset += 64;
+		memcpy(buffer + offset, entry.szTeam2ClanName, 64);	offset += 64;
+		memcpy(buffer + offset, &entry.i32Team1Score, sizeof(int32_t));	offset += sizeof(int32_t);
+		memcpy(buffer + offset, &entry.i32Team2Score, sizeof(int32_t));	offset += sizeof(int32_t);
+		memcpy(buffer + offset, &entry.i32WinnerTeam, sizeof(int32_t));	offset += sizeof(int32_t);
+		memcpy(buffer + offset, &entry.dwMatchTime, sizeof(DWORD));		offset += sizeof(DWORD);
+	}
 
 	sz = (uint16_t)offset;
 	memcpy(buffer, &sz, sizeof(uint16_t));

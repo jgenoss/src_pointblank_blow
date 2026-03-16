@@ -120,4 +120,28 @@ struct ClanMatchTeam
 	bool IsActive() const { return ui8State != CLAN_MATCH_TEAM_NONE; }
 };
 
+// Match result history entry
+#define MAX_CLAN_MATCH_RESULTS		50
+
+struct ClanMatchResultEntry
+{
+	DWORD		dwMatchTime;		// Tick when match ended
+	int			i32Team1ClanId;
+	int			i32Team2ClanId;
+	char		szTeam1ClanName[64];
+	char		szTeam2ClanName[64];
+	int			i32Team1Score;		// Round wins
+	int			i32Team2Score;
+	int			i32WinnerTeam;		// TEAM_RED=0 (team1), TEAM_BLUE=1 (team2), -1=draw
+
+	void Reset()
+	{
+		dwMatchTime = 0;
+		i32Team1ClanId = i32Team2ClanId = 0;
+		szTeam1ClanName[0] = szTeam2ClanName[0] = '\0';
+		i32Team1Score = i32Team2Score = 0;
+		i32WinnerTeam = -1;
+	}
+};
+
 #endif // __CLANMATCHDEF_H__

@@ -477,6 +477,49 @@ inline bool IsAtkDefMode(uint8_t ui8GameMode)
 			ui8GameMode == STAGE_MODE_ESCAPE);
 }
 
+// CrossCount (Dino DM) constants
+#define CROSSCOUNT_DINO_KILL_BONUS		2		// Dino kills give 2x score
+#define CROSSCOUNT_HUMAN_KILL_BONUS		1		// Human kills give 1x score
+
+// Convoy mode constants
+#define CONVOY_MAX_CHECKPOINTS			5
+#define CONVOY_DEFAULT_HP				3000
+#define CONVOY_SPEED_PER_PLAYER			1.0f	// Speed multiplier per nearby player
+#define CONVOY_CHECKPOINT_RADIUS		10.0f	// Radius to capture checkpoint
+
+// Challenge/AI mode constants
+#define AI_MAX_BOTS						16
+#define AI_BOT_SPAWN_INTERVAL_MS		5000	// 5 seconds between spawns
+#define AI_MAX_STAGES					10
+#define AI_DIFFICULTY_EASY				0
+#define AI_DIFFICULTY_NORMAL			1
+#define AI_DIFFICULTY_HARD				2
+
+// Kill points by difficulty (from ServerDef.cpp)
+inline int GetAIKillPoints(int difficulty)
+{
+	switch (difficulty)
+	{
+	case AI_DIFFICULTY_EASY:	return 10;
+	case AI_DIFFICULTY_NORMAL:	return 20;
+	case AI_DIFFICULTY_HARD:	return 30;
+	default: return 10;
+	}
+}
+
+// Defence wave constants
+#define DEFENCE_MAX_WAVES				10
+#define DEFENCE_WAVE_SPAWN_INTERVAL_MS	3000
+#define DEFENCE_NPCS_PER_WAVE_BASE		4		// Base NPCs per wave
+#define DEFENCE_NPCS_PER_WAVE_SCALE		2		// Additional per wave number
+
+// Check if a game mode is deathmatch-style (kill limit + respawn)
+inline bool IsDeathmatchMode(uint8_t ui8GameMode)
+{
+	return (ui8GameMode == STAGE_MODE_DEATHMATCH ||
+			ui8GameMode == STAGE_MODE_CROSSCOUNT);
+}
+
 // QuickJoin constants
 #define MAX_QUICK_JOIN_INFO_COUNT	3
 #define QUICK_JOIN_SEARCH_FAIL_IDX	(-1)

@@ -5,9 +5,13 @@ ClanMatchManager* g_pClanMatchManager = nullptr;
 
 ClanMatchManager::ClanMatchManager()
 	: m_i32ActiveCount(0)
+	, m_i32ResultCount(0)
+	, m_i32ResultWriteIdx(0)
 {
 	for (int i = 0; i < MAX_CLAN_MATCH_TEAMS; i++)
 		m_Teams[i].Reset();
+	for (int i = 0; i < MAX_CLAN_MATCH_RESULTS; i++)
+		m_Results[i].Reset();
 }
 
 ClanMatchManager::~ClanMatchManager()
@@ -327,6 +331,54 @@ int ClanMatchManager::GetAllActiveTeams(int* pOutIndices, int maxCount) const
 	{
 		if (m_Teams[i].IsActive())
 			pOutIndices[count++] = i;
+	}
+	return count;
+}
+
+// ============================================================================
+// Match Result History
+// ============================================================================
+
+void ClanMatchManager::AddMatchResult(int team1ClanId, const char* team1Name,
+	int team2ClanId, const char* team2Name,
+	int team1Score, int team2Score, int winnerTeam)
+{
+	ClanMatchResultEntry& entry = m_Results[m_i32ResultWriteIdx];
+	entry.dwMatchTime = GetTickCount();
+	entry.i32Team1ClanId = team1ClanId;
+	entry.i32Team2ClanId = team2ClanId;
+	strncpy_s(entry.szTeam1ClanName, team1Name ? team1Name : "", _TRUNCATE);
+	strncpy_s(entry.szTeam2ClanName, team2Name ? team2Name : "", _TRUNCATE);
+	entry.i32Team1Score = team1Score;
+	entry.i32Team2Score = team2Score;
+	entry.i32WinnerTeam = winnerTeam;
+
+	m_i32ResultWriteIdx = (m_i32ResultWriteIdx + 1) % MAX_CLAN_MATCH_RESULTS;
+	if (m_i32ResultCount < MAX_CLAN_MATCH_RESULTS)
+		m_i32ResultCount++;
+
+	printf("[ClanMatch] Result stored - %s(%d) vs %s(%d) = %d-%d Winner=%d\n",
+		team1Name, team1ClanId, team2Name, team2ClanId,
+		team1Score, team2Score, winnerTeam);
+}
+
+int ClanMatchManager::GetMatchResults(const ClanMatchResultEntry** ppOut) const
+{
+	*ppOut = m_Results;
+	return m_i32ResultCount;
+}
+
+int ClanMatchManager::GetMatchResultsForClan(int clanId, ClanMatchResultEntry* pOut, int maxCount) const
+{
+	int count = 0;
+	for (int i = 0; i < m_i32ResultCount && count < maxCount; i++)
+	{
+		// Walk backwards from most recent
+		int idx = (m_i32ResultWriteIdx - 1 - i + MAX_CLAN_MATCH_RESULTS) % MAX_CLAN_MATCH_RESULTS;
+		if (m_Results[idx].i32Team1ClanId == clanId || m_Results[idx].i32Team2ClanId == clanId)
+		{
+			pOut[count++] = m_Results[idx];
+		}
 	}
 	return count;
 }
