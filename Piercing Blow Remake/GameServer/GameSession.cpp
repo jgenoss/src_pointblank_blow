@@ -438,6 +438,16 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CS_CLIENT_ENTER_REQ:				OnClanEnterReq(pData, dataSize);			break;
 	case PROTOCOL_CS_CLIENT_LEAVE_REQ:				OnClanLeaveReq(pData, dataSize);			break;
 	case PROTOCOL_CS_CLIENT_CLAN_LIST_REQ:			OnClanListReq(pData, dataSize);				break;
+	case PROTOCOL_CS_JOIN_REQUEST_REQ:				OnClanJoinReq(pData, dataSize);				break;
+	case PROTOCOL_CS_SECESSION_CLAN_REQ:			OnClanLeaveReq(pData, dataSize);			break;
+	case PROTOCOL_CS_DEPORTATION_REQ:				OnClanDeportationReq(pData, dataSize);		break;
+	case PROTOCOL_CS_COMMISSION_MASTER_REQ:			OnClanCommissionMasterReq(pData, dataSize);	break;
+	case PROTOCOL_CS_COMMISSION_STAFF_REQ:			OnClanCommissionStaffReq(pData, dataSize);	break;
+	case PROTOCOL_CS_COMMISSION_REGULAR_REQ:		OnClanCommissionRegularReq(pData, dataSize);break;
+	case PROTOCOL_CS_CHATTING_REQ:					OnClanChatReq(pData, dataSize);				break;
+	case PROTOCOL_CS_REPLACE_NOTICE_REQ:			OnClanReplaceNoticeReq(pData, dataSize);	break;
+	case PROTOCOL_CS_REPLACE_INTRO_REQ:				OnClanReplaceIntroReq(pData, dataSize);		break;
+	case PROTOCOL_CS_REPLACE_MARK_REQ:				OnClanReplaceMarkReq(pData, dataSize);		break;
 
 	// ---- Roulette/Gacha (GameSessionRoulette.cpp) ----
 	case PROTOCOL_RS_ENTER_REQ:						OnRouletteEnterReq(pData, dataSize);		break;

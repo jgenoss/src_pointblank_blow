@@ -68,7 +68,7 @@
 - [x] `MissionBombUnInstall()`: Desinstalar bomba, broadcast, award puntos
 - [x] Round win conditions: bomba explota = ATK wins, bomba desinstalada = DEF wins, timer expira sin bomba = DEF wins, todos muertos = team opuesto wins
 - [x] Atk/Def team swap entre rounds (`m_ui8AtkDefChange`)
-- [ ] Smoke/flash/position validation
+- [x] Smoke/flash/grenade validation (ValidateGrenadeUse: type, position, alive check)
 
 ### 2B. Annihilation Mode (Eliminar a Todos)
 **Archivos**: Integrar en `Room.cpp`
@@ -93,7 +93,7 @@
 - [x] VIP selection (aleatorio de ATK team)
 - [x] `MissionTouchDown()`: VIP llega a zona de escape = win
 - [x] VIP muerto = DEF wins
-- [ ] VIP tiene más HP, restricciones de arma
+- [x] VIP tiene más HP (150%), restricciones de arma (ValidateDamage + IsVIPSlot)
 
 ### 2F. CrossCount Mode (Dino DM)
 **Archivos**: Integrar en `Room.cpp`
@@ -202,11 +202,11 @@
 
 ### 6A. Clan Server Integration
 **Archivos**: Crear `ModuleClanServer.h/.cpp`
-- [ ] Conexión al ClanServer (o implementar directamente en DataServer)
-- [ ] Clan creation/dissolution con validación (nivel mínimo, GP cost)
-- [ ] Member management: join requests, accept/deny, kick, authority levels
-- [ ] Clan mark/name/notice updates
-- [ ] Clan EXP and ranking
+- [x] Clan system in-memory (GameClanManager + ClanDef.h)
+- [x] Clan creation/dissolution con validación (nivel mínimo, GP cost)
+- [x] Member management: join, kick (deportation), promote/demote (master/staff/regular)
+- [x] Clan mark/notice/intro updates (ReplaceNotice, ReplaceIntro, ReplaceMark)
+- [ ] Clan EXP and ranking (TODO: earn EXP from battles)
 
 ### 6B. Clan Match
 **Archivos**: Crear `GameSessionClanBattle.cpp`
@@ -394,7 +394,7 @@
 | Auth (0x0300) | ~80 | 11 | 14% |
 | Shop (0x0400) | ~40 | 16 | 40% |
 | Admin (0x0500) | ~10 | 0 | 0% |
-| Clan (0x0700) | ~60 | 9 | 15% |
+| Clan (0x0700) | ~60 | 20 | 33% |
 | Clan Match (0x0800) | ~20 | 0 | 0% |
 | Server Msg (0x0A00) | ~10 | 4 | 40% |
 | Lobby (0x0C00) | ~10 | 7 | 70% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 5 | 100% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~160** | **~35%** |
+| **TOTAL** | **~460** | **~175** | **~38%** |

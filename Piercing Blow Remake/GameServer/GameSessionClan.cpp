@@ -332,13 +332,13 @@ void GameSession::OnClanJoinReq(char* pData, INT32 i32Size)
 		}
 	}
 
-	// Send generic ACK
+	// Send join ACK
 	i3NetworkPacket packet;
 	char buffer[32];
 	int offset = 0;
 
 	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_DETAIL_INFO_ACK;	// Reuse for join response
+	uint16_t proto = PROTOCOL_CS_JOIN_REQUEST_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
@@ -426,7 +426,7 @@ void GameSession::OnClanChatReq(char* pData, INT32 i32Size)
 	int offset = 0;
 
 	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_DETAIL_INFO_ACK;	// Use a clan protocol for chat
+	uint16_t proto = PROTOCOL_CS_CHATTING_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
@@ -455,6 +455,349 @@ void GameSession::OnClanChatReq(char* pData, INT32 i32Size)
 		if (pMember && pMember->GetTask() >= GAME_TASK_CHANNEL)
 			pMember->SendMessage(&packet);
 	}
+}
+
+// ============================================================================
+// Clan Member Management (Deportation, Commission)
+// ============================================================================
+
+void GameSession::OnClanDeportationReq(char* pData, INT32 i32Size)
+{
+	// Kick a member from the clan (master/staff only)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 8)
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+		{
+			result = 2;
+		}
+		else if (!pClan->IsStaffOrMaster(m_i64UID))
+		{
+			result = 3;	// Not authorized
+		}
+		else if (pClan->IsMaster(targetUID))
+		{
+			result = 4;	// Cannot kick master
+		}
+		else
+		{
+			GameClanMember* pMember = pClan->FindMember(targetUID);
+			if (!pMember)
+			{
+				result = 5;	// Not a member
+			}
+			else
+			{
+				printf("[Clan] Deportation - ClanId=%d, GM_UID=%lld kicked UID=%lld (%s)\n",
+					m_i32ClanId, m_i64UID, targetUID, pMember->szNickname);
+
+				pClan->RemoveMember(targetUID);
+
+				// Clear clan ID if target is online
+				if (g_pGameSessionManager)
+				{
+					GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+					if (pTarget)
+					{
+						pTarget->m_i32ClanId = 0;
+						// Notify target
+						pTarget->SendSimpleAck(PROTOCOL_CS_DEPORTATION_RESULT_ACK, 0);
+					}
+				}
+			}
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_DEPORTATION_ACK, result);
+}
+
+void GameSession::OnClanCommissionMasterReq(char* pData, INT32 i32Size)
+{
+	// Transfer master role to another member
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 8)
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+		{
+			result = 2;
+		}
+		else if (!pClan->IsMaster(m_i64UID))
+		{
+			result = 3;	// Only master can transfer
+		}
+		else
+		{
+			GameClanMember* pNewMaster = pClan->FindMember(targetUID);
+			GameClanMember* pOldMaster = pClan->FindMember(m_i64UID);
+			if (!pNewMaster)
+			{
+				result = 4;	// Target not a member
+			}
+			else
+			{
+				printf("[Clan] Commission Master - ClanId=%d, Old=%lld -> New=%lld (%s)\n",
+					m_i32ClanId, m_i64UID, targetUID, pNewMaster->szNickname);
+
+				pNewMaster->ui8Level = CLAN_MEMBER_MASTER;
+				if (pOldMaster) pOldMaster->ui8Level = CLAN_MEMBER_REGULAR;
+				pClan->i64MasterUID = targetUID;
+				strncpy_s(pClan->szMasterNickname, pNewMaster->szNickname, _TRUNCATE);
+
+				// Notify new master if online
+				if (g_pGameSessionManager)
+				{
+					GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+					if (pTarget)
+						pTarget->SendSimpleAck(PROTOCOL_CS_COMMISSION_MASTER_RESULT_ACK, 0);
+				}
+			}
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_COMMISSION_MASTER_ACK, result);
+}
+
+void GameSession::OnClanCommissionStaffReq(char* pData, INT32 i32Size)
+{
+	// Promote a member to staff
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 8)
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+			result = 2;
+		else if (!pClan->IsMaster(m_i64UID))
+			result = 3;	// Only master can promote
+		else
+		{
+			GameClanMember* pMember = pClan->FindMember(targetUID);
+			if (!pMember)
+				result = 4;
+			else if (pMember->ui8Level <= CLAN_MEMBER_STAFF)
+				result = 5;	// Already staff or master
+			else
+			{
+				pMember->ui8Level = CLAN_MEMBER_STAFF;
+				printf("[Clan] Commission Staff - ClanId=%d, UID=%lld promoted (%s)\n",
+					m_i32ClanId, targetUID, pMember->szNickname);
+
+				if (g_pGameSessionManager)
+				{
+					GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+					if (pTarget)
+						pTarget->SendSimpleAck(PROTOCOL_CS_COMMISSION_STAFF_RESULT_ACK, 0);
+				}
+			}
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_COMMISSION_STAFF_ACK, result);
+}
+
+void GameSession::OnClanCommissionRegularReq(char* pData, INT32 i32Size)
+{
+	// Demote a staff member to regular
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 8)
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+			result = 2;
+		else if (!pClan->IsMaster(m_i64UID))
+			result = 3;
+		else
+		{
+			GameClanMember* pMember = pClan->FindMember(targetUID);
+			if (!pMember)
+				result = 4;
+			else if (pMember->ui8Level != CLAN_MEMBER_STAFF)
+				result = 5;	// Not staff
+			else
+			{
+				pMember->ui8Level = CLAN_MEMBER_REGULAR;
+				printf("[Clan] Commission Regular - ClanId=%d, UID=%lld demoted (%s)\n",
+					m_i32ClanId, targetUID, pMember->szNickname);
+
+				if (g_pGameSessionManager)
+				{
+					GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+					if (pTarget)
+						pTarget->SendSimpleAck(PROTOCOL_CS_COMMISSION_REGULAR_RESULT_ACK, 0);
+				}
+			}
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_COMMISSION_REGULAR_ACK, result);
+}
+
+// ============================================================================
+// Clan Info Updates (Notice, Intro, Mark)
+// ============================================================================
+
+void GameSession::OnClanReplaceNoticeReq(char* pData, INT32 i32Size)
+{
+	// Update clan notice (master/staff only)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	uint16_t noticeLen = *(uint16_t*)pData;
+	if (noticeLen > MAX_CLAN_NOTICE_LEN - 1)
+		noticeLen = MAX_CLAN_NOTICE_LEN - 1;
+	if (i32Size < (int)(2 + noticeLen))
+		return;
+
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+			result = 2;
+		else if (!pClan->IsStaffOrMaster(m_i64UID))
+			result = 3;
+		else
+		{
+			memcpy(pClan->szNotice, pData + 2, noticeLen);
+			pClan->szNotice[noticeLen] = '\0';
+			printf("[Clan] Notice updated - ClanId=%d, by UID=%lld\n", m_i32ClanId, m_i64UID);
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_REPLACE_NOTICE_ACK, result);
+}
+
+void GameSession::OnClanReplaceIntroReq(char* pData, INT32 i32Size)
+{
+	// Update clan intro (master/staff only)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	uint16_t introLen = *(uint16_t*)pData;
+	if (introLen > MAX_CLAN_INTRO_LEN - 1)
+		introLen = MAX_CLAN_INTRO_LEN - 1;
+	if (i32Size < (int)(2 + introLen))
+		return;
+
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+			result = 2;
+		else if (!pClan->IsStaffOrMaster(m_i64UID))
+			result = 3;
+		else
+		{
+			memcpy(pClan->szIntro, pData + 2, introLen);
+			pClan->szIntro[introLen] = '\0';
+			printf("[Clan] Intro updated - ClanId=%d, by UID=%lld\n", m_i32ClanId, m_i64UID);
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_REPLACE_INTRO_ACK, result);
+}
+
+void GameSession::OnClanReplaceMarkReq(char* pData, INT32 i32Size)
+{
+	// Update clan mark/emblem (master only)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 3)	// markId(2) + markColor(1)
+		return;
+
+	uint16_t markId = *(uint16_t*)pData;
+	uint8_t markColor = *(uint8_t*)(pData + 2);
+
+	int32_t result = 0;
+
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (!pClan)
+			result = 2;
+		else if (!pClan->IsMaster(m_i64UID))
+			result = 3;
+		else
+		{
+			pClan->ui16MarkId = markId;
+			pClan->ui8MarkColor = markColor;
+			printf("[Clan] Mark updated - ClanId=%d, Mark=%d, Color=%d\n",
+				m_i32ClanId, markId, markColor);
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_REPLACE_MARK_ACK, result);
 }
 
 void GameSession::OnClanListReq(char* pData, INT32 i32Size)

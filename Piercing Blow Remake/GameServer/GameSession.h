@@ -425,6 +425,13 @@ private:
 	void			OnClanEnterReq(char* pData, INT32 i32Size);
 	void			OnClanChatReq(char* pData, INT32 i32Size);
 	void			OnClanListReq(char* pData, INT32 i32Size);
+	void			OnClanDeportationReq(char* pData, INT32 i32Size);
+	void			OnClanCommissionMasterReq(char* pData, INT32 i32Size);
+	void			OnClanCommissionStaffReq(char* pData, INT32 i32Size);
+	void			OnClanCommissionRegularReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceNoticeReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceIntroReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceMarkReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
 	void			OnRouletteEnterReq(char* pData, INT32 i32Size);
@@ -457,6 +464,7 @@ private:
 								uint8_t ui8HitPart, int i32Damage);
 	bool			ValidateSpeedHack(DWORD dwClientTime);
 	bool			ValidatePosition(float fX, float fY, float fZ);
+	bool			ValidateGrenadeUse(uint32_t ui32WeaponId, float fX, float fY, float fZ);
 	void			OnCheatDetected(int i32CheatType, const char* pszDescription);
 
 	// Boost event info (Phase 14B)

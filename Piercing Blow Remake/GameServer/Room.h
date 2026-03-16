@@ -102,6 +102,11 @@ public:
 	uint8_t		GetWeaponFlag() const		{ return m_ui8WeaponFlag; }
 	uint8_t		GetInfoFlag() const			{ return m_ui8InfoFlag; }
 	bool		HasPassword() const			{ return m_szPassword[0] != '\0'; }
+
+	// Escape/VIP mode
+	bool		IsVIPSlot(int slot) const	{ return m_i32VIPSlot == slot && m_ui8GameMode == STAGE_MODE_ESCAPE; }
+	int			GetVIPSlot() const			{ return m_i32VIPSlot; }
+	int			GetEffectiveHP(int slot) const { return IsVIPSlot(slot) ? ESCAPE_VIP_EXTRA_HP : 100; }
 	bool		CheckPassword(const char* pw) const;
 	bool		IsClanMatch() const			{ return m_bIsClanMatch; }
 
