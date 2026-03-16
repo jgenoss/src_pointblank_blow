@@ -11,6 +11,7 @@
 #include "MedalDef.h"
 #include "EventDef.h"
 #include "SkillDef.h"
+#include "ClanDef.h"
 
 class Room;
 
@@ -257,6 +258,17 @@ private:
 	void			OnSkillResetReq(char* pData, INT32 i32Size);
 	void			OnSkillClassSetReq(char* pData, INT32 i32Size);
 	void			OnSkillGetInfoReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Clan (GameSessionClan.cpp)
+	void			OnClanCreateReq(char* pData, INT32 i32Size);
+	void			OnClanCloseReq(char* pData, INT32 i32Size);
+	void			OnClanDetailInfoReq(char* pData, INT32 i32Size);
+	void			OnClanMemberListReq(char* pData, INT32 i32Size);
+	void			OnClanJoinReq(char* pData, INT32 i32Size);
+	void			OnClanLeaveReq(char* pData, INT32 i32Size);
+	void			OnClanEnterReq(char* pData, INT32 i32Size);
+	void			OnClanChatReq(char* pData, INT32 i32Size);
+	void			OnClanListReq(char* pData, INT32 i32Size);
 
 	// Helpers
 	void			SendConnectAck();

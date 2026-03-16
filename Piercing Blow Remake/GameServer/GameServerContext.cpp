@@ -6,6 +6,7 @@
 #include "ModuleConnectServer.h"
 #include "ModuleDataServer.h"
 #include "ModuleBattleServer.h"
+#include "ClanDef.h"
 #include "i3IniParser.h"
 
 // ============================================================================
@@ -16,6 +17,7 @@ I3_CLASS_INSTANCE(GameServerContext);
 
 GameServerContext* g_pGameServerContext = nullptr;
 GameSessionManager* g_pGameSessionManager = nullptr;
+GameClanManager* g_pClanManager = nullptr;
 
 GameServerContext::GameServerContext()
 	: m_pGameSessionManager(nullptr)
@@ -179,6 +181,9 @@ bool GameServer::OnInitialize()
 
 	g_pContextMain = pCtxMain;
 
+	// Create clan manager
+	g_pClanManager = new GameClanManager();
+
 	printf("[GameServer] Initialized successfully\n");
 	return true;
 }
@@ -221,6 +226,13 @@ void GameServer::OnShutdown()
 		m_pModuleBattle->Destroy();
 		delete m_pModuleBattle;
 		m_pModuleBattle = nullptr;
+	}
+
+	// Cleanup clan manager
+	if (g_pClanManager)
+	{
+		delete g_pClanManager;
+		g_pClanManager = nullptr;
 	}
 
 	// Cleanup global context

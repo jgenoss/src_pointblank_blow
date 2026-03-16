@@ -226,6 +226,15 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_SKILL_RESET_REQ:					OnSkillResetReq(pData, dataSize);			break;
 	case PROTOCOL_SKILL_CLASS_SET_REQ:				OnSkillClassSetReq(pData, dataSize);		break;
 
+	// ---- Clan (GameSessionClan.cpp) ----
+	case PROTOCOL_CS_CREATE_CLAN_REQ:				OnClanCreateReq(pData, dataSize);			break;
+	case PROTOCOL_CS_CLOSE_CLAN_REQ:				OnClanCloseReq(pData, dataSize);			break;
+	case PROTOCOL_CS_DETAIL_INFO_REQ:				OnClanDetailInfoReq(pData, dataSize);		break;
+	case PROTOCOL_CS_MEMBER_LIST_REQ:				OnClanMemberListReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CLIENT_ENTER_REQ:				OnClanEnterReq(pData, dataSize);			break;
+	case PROTOCOL_CS_CLIENT_LEAVE_REQ:				OnClanLeaveReq(pData, dataSize);			break;
+	case PROTOCOL_CS_CLIENT_CLAN_LIST_REQ:			OnClanListReq(pData, dataSize);				break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
