@@ -34,6 +34,12 @@ public:
 	// Shop catalog
 	int LoadShopItems(IS_SHOP_ITEM_ENTRY* pOut, int i32MaxCount);
 
+	// Shop buy (deduct currency, add inventory)
+	void BuyShopItem(IS_SHOP_BUY_REQ* pReq, IS_SHOP_BUY_ACK* pAck);
+
+	// Inventory update (add/remove/modify)
+	bool UpdateInventory(IS_INVEN_UPDATE_REQ* pReq);
+
 	// Placeholder para futuro async
 	void ProcessResponses(DataServerContext* pContext);
 

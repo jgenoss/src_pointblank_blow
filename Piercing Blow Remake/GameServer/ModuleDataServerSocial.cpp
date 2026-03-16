@@ -3,6 +3,7 @@
 #include "GameSession.h"
 #include "GameSessionManager.h"
 #include "GameServerContext.h"
+#include "ClanDef.h"
 
 // ============================================================================
 // Request operations - Clan
@@ -170,6 +171,73 @@ void ModuleDataServer::OnClanJoinAck(char* pData, int i32Size)
 	if (pSession && pSession->GetUID() == pAck->i64UID)
 	{
 		pSession->OnClanJoinResult(pAck->i32ClanId, pAck->i32Result);
+	}
+}
+
+void ModuleDataServer::RequestClanLoad(int i32ClanId)
+{
+	IS_CLAN_LOAD_REQ req;
+	req.i32ClanId = i32ClanId;
+	SendRequest(PROTOCOL_IS_CLAN_LOAD_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::OnClanLoadAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_CLAN_LOAD_ACK))
+		return;
+
+	IS_CLAN_LOAD_ACK* pAck = (IS_CLAN_LOAD_ACK*)pData;
+
+	printf("[ModuleDataServer] Clan load result - ClanId=%d, Name='%s', Result=%d, Members=%d\n",
+		pAck->i32ClanId, pAck->szName, pAck->i32Result, pAck->i32MemberCount);
+
+	if (pAck->i32Result != 0)
+		return;
+
+	// Load clan data into GameClanManager
+	extern GameClanManager* g_pClanManager;
+	if (!g_pClanManager)
+		return;
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(pAck->i32ClanId);
+	if (!pClan)
+	{
+		// Clan not in memory yet - find empty slot and populate
+		// For now we just log; the clan create flow already adds to manager
+		printf("[ModuleDataServer] Clan %d not found in local manager, skipping load\n",
+			pAck->i32ClanId);
+		return;
+	}
+
+	// Update clan info from DB
+	strncpy_s(pClan->szName, pAck->szName, _TRUNCATE);
+	strncpy_s(pClan->szNotice, pAck->szNotice, _TRUNCATE);
+	strncpy_s(pClan->szIntro, pAck->szIntro, _TRUNCATE);
+	pClan->i64MasterUID = pAck->i64MasterUID;
+	strncpy_s(pClan->szMasterNickname, pAck->szMasterNickname, _TRUNCATE);
+	pClan->i32MaxMembers = pAck->i32MaxMembers;
+	pClan->i32ClanExp = pAck->i32ClanExp;
+	pClan->i32ClanRank = pAck->i32ClanRank;
+	pClan->i32Wins = pAck->i32Wins;
+	pClan->i32Losses = pAck->i32Losses;
+	pClan->ui8Unit = pAck->ui8Unit;
+	pClan->ui16MarkId = pAck->ui16MarkId;
+	pClan->ui8MarkColor = pAck->ui8MarkColor;
+
+	// Load members
+	if (pAck->i32MemberCount > 0)
+	{
+		IS_CLAN_MEMBER_INFO* pMembers = (IS_CLAN_MEMBER_INFO*)(pData + sizeof(IS_CLAN_LOAD_ACK));
+		for (int i = 0; i < pAck->i32MemberCount && i < MAX_CLAN_MEMBERS; i++)
+		{
+			// Check if member already exists
+			GameClanMember* pExisting = pClan->FindMember(pMembers[i].i64UID);
+			if (!pExisting)
+			{
+				pClan->AddMember(pMembers[i].i64UID, pMembers[i].szNickname,
+								 pMembers[i].ui8MemberLevel, 0, 0);
+			}
+		}
 	}
 }
 

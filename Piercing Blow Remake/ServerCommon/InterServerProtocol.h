@@ -637,6 +637,46 @@ struct IS_SHOP_ITEM_ENTRY
 	uint8_t		ui8Category;
 };
 
+// Shop Buy (GameServer -> DataServer)
+struct IS_SHOP_BUY_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	uint32_t	ui32GoodsId;
+	uint32_t	ui32ItemId;
+	uint8_t		ui8PayType;				// 0=GP, 1=Cash
+	int			i32Price;
+};
+
+struct IS_SHOP_BUY_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;				// 0=OK, 1=insufficient_funds, 2=item_not_found, 3=error
+	uint32_t	ui32ItemId;
+	int			i32RemainingGP;
+	int			i32RemainingCash;
+};
+
+// Inventory Update (GameServer -> DataServer)
+struct IS_INVEN_UPDATE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8Operation;			// 0=add, 1=remove, 2=update_count
+	uint32_t	ui32ItemId;
+	int			i32ItemCount;
+	int			i32SlotIdx;
+	uint8_t		ui8IsEquipped;
+};
+
+struct IS_INVEN_UPDATE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;				// 0=OK, 1=inventory_full, 2=item_not_found, 3=error
+	uint32_t	ui32ItemId;
+	int			i32SlotIdx;
+};
+
 // Battle Create (GameServer -> BattleServer)
 struct IS_BATTLE_CREATE_REQ
 {

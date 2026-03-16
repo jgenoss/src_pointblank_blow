@@ -23,6 +23,10 @@ public:
 	bool JoinClan(IS_CLAN_JOIN_REQ* pReq);
 	bool LeaveClan(int i32ClanId, int64_t i64UID);
 
+	// Clan load from DB
+	bool LoadClan(int i32ClanId, IS_CLAN_LOAD_ACK* pOut,
+				  IS_CLAN_MEMBER_INFO* pMembers, int i32MaxMembers, int* pMemberCount);
+
 	// Friend operations
 	int  AddFriend(int64_t i64UID, int64_t i64FriendUID);		// 0=OK, 1=exists, 2=not_found
 	bool RemoveFriend(int64_t i64UID, int64_t i64FriendUID);

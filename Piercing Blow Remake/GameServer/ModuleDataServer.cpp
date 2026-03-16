@@ -163,6 +163,13 @@ void ModuleDataServer::OnProcessPacket(char* pData, int i32Size)
 
 	// Shop
 	case PROTOCOL_IS_SHOP_LIST_ACK:			OnShopListAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_SHOP_BUY_ACK:			OnShopBuyAck(pPayload, payloadSize);		break;
+
+	// Inventory
+	case PROTOCOL_IS_INVEN_UPDATE_ACK:		OnInvenUpdateAck(pPayload, payloadSize);	break;
+
+	// Clan load
+	case PROTOCOL_IS_CLAN_LOAD_ACK:			OnClanLoadAck(pPayload, payloadSize);		break;
 
 	default:
 		printf("[ModuleDataServer] Unknown protocol 0x%04X\n", protocolId);

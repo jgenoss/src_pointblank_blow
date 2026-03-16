@@ -150,9 +150,22 @@ INT32 DataSession::PacketParsing(char* pPacket, INT32 iSize)
 		OnBlockListReq(pData, ui16DataSize);
 		break;
 
-	// Shop catalog
+	// Shop
 	case PROTOCOL_IS_SHOP_LIST_REQ:
 		OnShopListReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_SHOP_BUY_REQ:
+		OnShopBuyReq(pData, ui16DataSize);
+		break;
+
+	// Inventory
+	case PROTOCOL_IS_INVEN_UPDATE_REQ:
+		OnInvenUpdateReq(pData, ui16DataSize);
+		break;
+
+	// Clan load
+	case PROTOCOL_IS_CLAN_LOAD_REQ:
+		OnClanLoadReq(pData, ui16DataSize);
 		break;
 
 	default:
@@ -628,6 +641,91 @@ void DataSession::OnShopListReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 
 	printf("[DataSession:%d] SHOP_LIST_ACK: sent %d items\n", m_SessionIdx, i32Count);
+}
+
+// -- Shop Buy Handler --
+
+void DataSession::OnShopBuyReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetModuleDBGameData())
+		return;
+	if (i32Size < (INT32)sizeof(IS_SHOP_BUY_REQ))
+		return;
+
+	IS_SHOP_BUY_REQ* pReq = (IS_SHOP_BUY_REQ*)pData;
+
+	printf("[DataSession:%d] SHOP_BUY_REQ: UID=%lld, GoodsId=%u, PayType=%d, Price=%d\n",
+		m_SessionIdx, pReq->i64UID, pReq->ui32GoodsId, pReq->ui8PayType, pReq->i32Price);
+
+	IS_SHOP_BUY_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i64UID = pReq->i64UID;
+	ack.i32SessionIdx = pReq->i32SessionIdx;
+	ack.ui32ItemId = pReq->ui32ItemId;
+
+	g_pDataServerContext->GetModuleDBGameData()->BuyShopItem(pReq, &ack);
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_SHOP_BUY_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendMessage(&packet);
+}
+
+// -- Inventory Update Handler --
+
+void DataSession::OnInvenUpdateReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetModuleDBGameData())
+		return;
+	if (i32Size < (INT32)sizeof(IS_INVEN_UPDATE_REQ))
+		return;
+
+	IS_INVEN_UPDATE_REQ* pReq = (IS_INVEN_UPDATE_REQ*)pData;
+
+	bool bResult = g_pDataServerContext->GetModuleDBGameData()->UpdateInventory(pReq);
+
+	IS_INVEN_UPDATE_ACK ack;
+	ack.i64UID = pReq->i64UID;
+	ack.i32Result = bResult ? 0 : 3;
+	ack.ui32ItemId = pReq->ui32ItemId;
+	ack.i32SlotIdx = pReq->i32SlotIdx;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_INVEN_UPDATE_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendMessage(&packet);
+}
+
+// -- Clan Load Handler --
+
+void DataSession::OnClanLoadReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetModuleDBSocial())
+		return;
+	if (i32Size < (INT32)sizeof(IS_CLAN_LOAD_REQ))
+		return;
+
+	IS_CLAN_LOAD_REQ* pReq = (IS_CLAN_LOAD_REQ*)pData;
+
+	printf("[DataSession:%d] CLAN_LOAD_REQ: ClanId=%d\n", m_SessionIdx, pReq->i32ClanId);
+
+	IS_CLAN_LOAD_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i32ClanId = pReq->i32ClanId;
+
+	IS_CLAN_MEMBER_INFO members[50];
+	memset(members, 0, sizeof(members));
+	int memberCount = 0;
+
+	bool bResult = g_pDataServerContext->GetModuleDBSocial()->LoadClan(
+		pReq->i32ClanId, &ack, members, 50, &memberCount);
+
+	ack.i32Result = bResult ? 0 : 1;
+	ack.i32MemberCount = memberCount;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_CLAN_LOAD_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	if (memberCount > 0)
+		packet.WriteData(members, memberCount * sizeof(IS_CLAN_MEMBER_INFO));
+	SendMessage(&packet);
 }
 
 void DataSession::SendHeartbeatAck()

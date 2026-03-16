@@ -284,6 +284,174 @@ int ModuleDBGameData::LoadShopItems(IS_SHOP_ITEM_ENTRY* pOut, int i32MaxCount)
 	return count;
 }
 
+void ModuleDBGameData::BuyShopItem(IS_SHOP_BUY_REQ* pReq, IS_SHOP_BUY_ACK* pAck)
+{
+	if (!m_pPool || !pReq || !pAck)
+	{
+		if (pAck) pAck->i32Result = 3;	// error
+		return;
+	}
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+	{
+		pAck->i32Result = 3;
+		return;
+	}
+
+	// Check current balance
+	char szUID[32];
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+
+	const char* balParams[1] = { szUID };
+	DBResult balResult = pConn->ExecuteParams(
+		"SELECT gp, cash FROM pb_users WHERE uid = $1", 1, balParams);
+
+	if (!balResult.IsSuccess() || balResult.GetRowCount() == 0)
+	{
+		m_pPool->ReleaseConnection(pConn);
+		pAck->i32Result = 3;	// DB error
+		return;
+	}
+
+	int currentGP = atoi(balResult.GetValue(0, 0));
+	int currentCash = atoi(balResult.GetValue(0, 1));
+	int price = pReq->i32Price;
+
+	// Check sufficient funds
+	if (pReq->ui8PayType == 0)	// GP
+	{
+		if (currentGP < price)
+		{
+			m_pPool->ReleaseConnection(pConn);
+			pAck->i32Result = 1;	// Insufficient GP
+			pAck->i32RemainingGP = currentGP;
+			pAck->i32RemainingCash = currentCash;
+			return;
+		}
+		currentGP -= price;
+	}
+	else	// Cash
+	{
+		if (currentCash < price)
+		{
+			m_pPool->ReleaseConnection(pConn);
+			pAck->i32Result = 1;	// Insufficient Cash
+			pAck->i32RemainingGP = currentGP;
+			pAck->i32RemainingCash = currentCash;
+			return;
+		}
+		currentCash -= price;
+	}
+
+	// Deduct currency
+	char szGP[16], szCash[16];
+	snprintf(szGP, sizeof(szGP), "%d", currentGP);
+	snprintf(szCash, sizeof(szCash), "%d", currentCash);
+
+	const char* updateParams[3] = { szGP, szCash, szUID };
+	DBResult updateResult = pConn->ExecuteParams(
+		"UPDATE pb_users SET gp = $1, cash = $2 WHERE uid = $3", 3, updateParams);
+
+	if (!updateResult.IsSuccess())
+	{
+		m_pPool->ReleaseConnection(pConn);
+		pAck->i32Result = 3;
+		return;
+	}
+
+	// Add item to inventory
+	char szItemId[16], szItemCount[8], szSlot[8], szEquipped[8];
+	snprintf(szItemId, sizeof(szItemId), "%u", pReq->ui32ItemId);
+	snprintf(szItemCount, sizeof(szItemCount), "1");
+	snprintf(szSlot, sizeof(szSlot), "-1");
+	snprintf(szEquipped, sizeof(szEquipped), "0");
+
+	const char* invenParams[5] = { szUID, szItemId, szItemCount, szSlot, szEquipped };
+	DBResult invenResult = pConn->ExecuteParams(
+		"INSERT INTO pb_inventory (uid, item_id, item_count, slot_idx, is_equipped) "
+		"VALUES ($1, $2, $3, $4, $5::boolean)",
+		5, invenParams);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!invenResult.IsSuccess())
+	{
+		pAck->i32Result = 3;	// DB error
+		return;
+	}
+
+	pAck->i32Result = 0;	// OK
+	pAck->i32RemainingGP = currentGP;
+	pAck->i32RemainingCash = currentCash;
+
+	printf("[ModuleDBGameData] Shop buy OK - UID=%lld, Item=0x%08X, GP=%d, Cash=%d\n",
+		pReq->i64UID, pReq->ui32ItemId, currentGP, currentCash);
+}
+
+bool ModuleDBGameData::UpdateInventory(IS_INVEN_UPDATE_REQ* pReq)
+{
+	if (!m_pPool || !pReq)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szUID[32], szItemId[16], szCount[16], szSlot[16], szEquipped[8];
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+	snprintf(szItemId, sizeof(szItemId), "%u", pReq->ui32ItemId);
+	snprintf(szCount, sizeof(szCount), "%d", pReq->i32ItemCount);
+	snprintf(szSlot, sizeof(szSlot), "%d", pReq->i32SlotIdx);
+	snprintf(szEquipped, sizeof(szEquipped), "%d", pReq->ui8IsEquipped ? 1 : 0);
+
+	DBResult result;
+
+	switch (pReq->ui8Operation)
+	{
+	case 0:	// Add item
+	{
+		const char* params[5] = { szUID, szItemId, szCount, szSlot, szEquipped };
+		result = pConn->ExecuteParams(
+			"INSERT INTO pb_inventory (uid, item_id, item_count, slot_idx, is_equipped) "
+			"VALUES ($1, $2, $3, $4, $5::boolean)",
+			5, params);
+		break;
+	}
+	case 1:	// Remove item
+	{
+		const char* params[2] = { szUID, szItemId };
+		result = pConn->ExecuteParams(
+			"DELETE FROM pb_inventory WHERE uid = $1 AND item_id = $2",
+			2, params);
+		break;
+	}
+	case 2:	// Update count/equipped
+	{
+		const char* params[4] = { szCount, szEquipped, szUID, szItemId };
+		result = pConn->ExecuteParams(
+			"UPDATE pb_inventory SET item_count = $1, is_equipped = $2::boolean "
+			"WHERE uid = $3 AND item_id = $4",
+			4, params);
+		break;
+	}
+	default:
+		m_pPool->ReleaseConnection(pConn);
+		return false;
+	}
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+	{
+		printf("[ModuleDBGameData] ERROR: UpdateInventory failed - UID=%lld, Op=%d, Item=0x%08X\n",
+			pReq->i64UID, pReq->ui8Operation, pReq->ui32ItemId);
+		return false;
+	}
+
+	return true;
+}
+
 void ModuleDBGameData::ProcessResponses(DataServerContext* pContext)
 {
 	// Placeholder para futuro async con ring buffers

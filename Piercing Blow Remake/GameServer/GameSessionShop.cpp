@@ -1965,3 +1965,25 @@ void GameSession::OnFieldshopSendNewversionReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// DataServer callback: shop buy result
+// ============================================================================
+
+void GameSession::OnShopBuyResult(uint32_t ui32ItemId, int i32Result, int i32RemainingGP, int i32RemainingCash)
+{
+	if (i32Result == 0)
+	{
+		// Update local currency from authoritative DataServer values
+		m_i32GP = i32RemainingGP;
+		m_i32Cash = i32RemainingCash;
+
+		printf("[GameSession] Shop buy confirmed by DataServer - UID=%lld, Item=0x%08X, GP=%d, Cash=%d\n",
+			m_i64UID, ui32ItemId, m_i32GP, m_i32Cash);
+	}
+	else
+	{
+		printf("[GameSession] Shop buy rejected by DataServer - UID=%lld, Item=0x%08X, Result=%d\n",
+			m_i64UID, ui32ItemId, i32Result);
+	}
+}

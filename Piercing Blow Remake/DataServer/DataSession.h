@@ -67,6 +67,13 @@ private:
 
 	// Shop
 	void				OnShopListReq(char* pData, INT32 i32Size);
+	void				OnShopBuyReq(char* pData, INT32 i32Size);
+
+	// Inventory
+	void				OnInvenUpdateReq(char* pData, INT32 i32Size);
+
+	// Clan load
+	void				OnClanLoadReq(char* pData, INT32 i32Size);
 
 	// Helpers
 	void				SendHeartbeatAck();

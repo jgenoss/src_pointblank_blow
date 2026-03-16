@@ -448,6 +448,84 @@ int ModuleDBSocial::LoadBlockList(int64_t i64UID, IS_BLOCK_ENTRY* pOut, int i32M
 	return i32Count;
 }
 
+// ============================================================================
+// Clan Load
+// ============================================================================
+
+bool ModuleDBSocial::LoadClan(int i32ClanId, IS_CLAN_LOAD_ACK* pOut,
+							  IS_CLAN_MEMBER_INFO* pMembers, int i32MaxMembers, int* pMemberCount)
+{
+	if (!m_pPool || !pOut || !pMembers || !pMemberCount)
+		return false;
+
+	*pMemberCount = 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szClanId[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+
+	// Load clan info
+	const char* clanParams[1] = { szClanId };
+	DBResult clanResult = pConn->ExecuteParams(
+		"SELECT name, notice, intro, master_uid, master_nickname, "
+		"member_count, max_members, clan_exp, clan_rank, wins, losses, "
+		"unit, mark_id, mark_color "
+		"FROM pb_clans WHERE clan_id = $1 AND is_active = TRUE",
+		1, clanParams);
+
+	if (!clanResult.IsSuccess() || clanResult.GetRowCount() == 0)
+	{
+		m_pPool->ReleaseConnection(pConn);
+		printf("[ModuleDBSocial] LoadClan: clan %d not found\n", i32ClanId);
+		return false;
+	}
+
+	strncpy_s(pOut->szName, clanResult.GetValue(0, 0), _TRUNCATE);
+	strncpy_s(pOut->szNotice, clanResult.GetValue(0, 1), _TRUNCATE);
+	strncpy_s(pOut->szIntro, clanResult.GetValue(0, 2), _TRUNCATE);
+	pOut->i64MasterUID = _atoi64(clanResult.GetValue(0, 3));
+	strncpy_s(pOut->szMasterNickname, clanResult.GetValue(0, 4), _TRUNCATE);
+	pOut->i32MemberCount = atoi(clanResult.GetValue(0, 5));
+	pOut->i32MaxMembers = atoi(clanResult.GetValue(0, 6));
+	pOut->i32ClanExp = atoi(clanResult.GetValue(0, 7));
+	pOut->i32ClanRank = atoi(clanResult.GetValue(0, 8));
+	pOut->i32Wins = atoi(clanResult.GetValue(0, 9));
+	pOut->i32Losses = atoi(clanResult.GetValue(0, 10));
+	pOut->ui8Unit = (uint8_t)atoi(clanResult.GetValue(0, 11));
+	pOut->ui16MarkId = (uint16_t)atoi(clanResult.GetValue(0, 12));
+	pOut->ui8MarkColor = (uint8_t)atoi(clanResult.GetValue(0, 13));
+
+	// Load members
+	DBResult memberResult = pConn->ExecuteParams(
+		"SELECT cm.uid, u.nickname, cm.member_level "
+		"FROM pb_clan_members cm "
+		"JOIN pb_users u ON cm.uid = u.uid "
+		"WHERE cm.clan_id = $1 ORDER BY cm.member_level ASC",
+		1, clanParams);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (memberResult.IsSuccess())
+	{
+		int count = 0;
+		for (int i = 0; i < memberResult.GetRowCount() && count < i32MaxMembers; i++)
+		{
+			pMembers[count].i64UID = _atoi64(memberResult.GetValue(i, 0));
+			strncpy_s(pMembers[count].szNickname, memberResult.GetValue(i, 1), _TRUNCATE);
+			pMembers[count].ui8MemberLevel = (uint8_t)atoi(memberResult.GetValue(i, 2));
+			count++;
+		}
+		*pMemberCount = count;
+	}
+
+	printf("[ModuleDBSocial] LoadClan: loaded clan %d '%s' with %d members\n",
+		i32ClanId, pOut->szName, *pMemberCount);
+	return true;
+}
+
 void ModuleDBSocial::ProcessResponses(DataServerContext* pContext)
 {
 	// Placeholder para futuro async con ring buffers

@@ -64,6 +64,15 @@ public:
 
 	// Request operations - Shop
 	void		RequestShopList();
+	void		RequestShopBuy(int64_t i64UID, int i32SessionIdx, uint32_t ui32GoodsId,
+							   uint32_t ui32ItemId, uint8_t ui8PayType, int i32Price);
+
+	// Request operations - Inventory
+	void		RequestInventoryUpdate(int64_t i64UID, uint8_t ui8Operation, uint32_t ui32ItemId,
+									   int i32ItemCount, int i32SlotIdx, uint8_t ui8IsEquipped);
+
+	// Request operations - Clan Load
+	void		RequestClanLoad(int i32ClanId);
 
 protected:
 	// ModuleBase overrides
@@ -103,6 +112,13 @@ private:
 
 	// Response handlers - Shop
 	void		OnShopListAck(char* pData, int i32Size);
+	void		OnShopBuyAck(char* pData, int i32Size);
+
+	// Response handlers - Inventory
+	void		OnInvenUpdateAck(char* pData, int i32Size);
+
+	// Response handlers - Clan Load
+	void		OnClanLoadAck(char* pData, int i32Size);
 
 	// Helper: build and send a packet with a struct body
 	void		SendRequest(uint16_t ui16Protocol, const void* pStruct, int i32StructSize);
