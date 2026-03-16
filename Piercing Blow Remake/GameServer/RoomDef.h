@@ -181,6 +181,31 @@ enum BattleRoundType
 #define LOADING_TIMEOUT				60		// Max loading time before kicking
 #define BATTLE_RESULT_DISPLAY_TIME	5		// Result screen display time
 
+// Bomb mode constants (from WeaponDefine.h & CommonDef_Room.h)
+#define BOMB_INSTALL_TIME			5.5f		// Seconds to plant C4
+#define BOMB_DISARM_TIME			7.0f		// Seconds to defuse C4
+#define BOMB_EXPLOSION_DELAY_MS		40000		// 40 seconds after plant to explode
+
+// Bomb area
+enum BombArea
+{
+	BOMB_AREA_A = 0,
+	BOMB_AREA_B,
+	BOMB_AREA_COUNT,
+};
+
+// Mission end types (from CommonDef_Room.h)
+enum MissionEndType
+{
+	MISSION_END_TYPE_NONE = 0,
+	MISSION_END_TIMEOUT = 1,
+	MISSION_END_BOMBFIRE = 2,		// Bomb exploded (ATK wins)
+	MISSION_END_UNINSTALL = 3,		// Bomb defused (DEF wins)
+	MISSION_END_ALLDEATH = 4,		// All enemies dead
+	MISSION_END_GENERATOR_DESTROY = 5,
+	MISSION_END_DEFENCE_DESTROY = 6,
+};
+
 // Respawn types and their times (seconds)
 enum RespawnType
 {

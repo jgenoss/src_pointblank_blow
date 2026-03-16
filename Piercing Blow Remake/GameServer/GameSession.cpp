@@ -34,6 +34,8 @@ GameSession::GameSession()
 	, m_i32BlockCount(0)
 	, m_dwConnectTime(0)
 	, m_dwLastPacketTime(0)
+	, m_dwRateLimitWindow(0)
+	, m_ui16PacketCount(0)
 {
 	m_szUsername[0] = '\0';
 	m_szNickname[0] = '\0';
@@ -117,7 +119,50 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	if (iSize < packetSize)
 		return 0;
 
-	m_dwLastPacketTime = GetTickCount();
+	// Phase 9A: Rate limiting - max 100 packets per second
+	DWORD dwNow = GetTickCount();
+	if (dwNow - m_dwRateLimitWindow > 1000)
+	{
+		m_dwRateLimitWindow = dwNow;
+		m_ui16PacketCount = 0;
+	}
+	m_ui16PacketCount++;
+	if (m_ui16PacketCount > 100)
+	{
+		// Rate limit exceeded - drop packet (except heartbeat)
+		if (protocolId != PROTOCOL_BASE_HEART_BIT_REQ)
+			return packetSize;
+	}
+
+	// Phase 9A: State validation - reject packets from wrong states
+	// Always allow: connect, heartbeat, login
+	if (protocolId != PROTOCOL_BASE_CONNECT_REQ &&
+		protocolId != PROTOCOL_BASE_HEART_BIT_REQ &&
+		protocolId != PROTOCOL_LOGIN_REQ &&
+		protocolId != PROTOCOL_BASE_GAMEGUARD_REQ)
+	{
+		// Must be at least logged in for most packets
+		if (m_eMainTask < GAME_TASK_LOGIN)
+			return packetSize;
+
+		// Battle packets require GAME_TASK_BATTLE
+		if (protocolId >= PROTOCOL_BATTLE_READYBATTLE_REQ &&
+			protocolId <= PROTOCOL_BATTLE_SENDPING_ACK)
+		{
+			if (m_eMainTask != GAME_TASK_BATTLE && m_eMainTask != GAME_TASK_READY_ROOM)
+				return packetSize;
+		}
+
+		// Room packets require GAME_TASK_READY_ROOM or GAME_TASK_BATTLE
+		if (protocolId >= PROTOCOL_ROOM_CREATE_REQ &&
+			protocolId <= PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK)
+		{
+			if (m_eMainTask < GAME_TASK_LOBBY)
+				return packetSize;
+		}
+	}
+
+	m_dwLastPacketTime = dwNow;
 
 	char* pData = pPacket + SOCKET_HEAD_SIZE;
 	INT32 dataSize = packetSize - SOCKET_HEAD_SIZE;
@@ -164,7 +209,10 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_LOBBY_ENTER_REQ:			OnLobbyEnterReq(pData, dataSize);		break;
 	case PROTOCOL_LOBBY_LEAVE_REQ:			OnLobbyLeaveReq(pData, dataSize);		break;
 	case PROTOCOL_LOBBY_GET_ROOMLIST_REQ:	OnGetRoomListReq(pData, dataSize);		break;
-	case PROTOCOL_LOBBY_QUICKJOIN_ROOM_REQ:	OnQuickJoinRoomReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_QUICKJOIN_ROOM_REQ:		OnQuickJoinRoomReq(pData, dataSize);		break;
+	case PROTOCOL_LOBBY_VIEW_USER_ITEM_REQ:		OnLobbyViewUserItemReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_FIND_NICK_NAME_REQ:		OnLobbyFindNickNameReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_MEGAPHONE_REQ:			OnMegaphoneReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_CHATTING_REQ:
 		if (m_eMainTask == GAME_TASK_READY_ROOM || m_eMainTask == GAME_TASK_BATTLE)
 			OnRoomChatReq(pData, dataSize);
@@ -213,6 +261,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_MISSION_ROUND_PRE_START_REQ:	OnBattleMissionRoundPreStartReq(pData, dataSize);	break;
 	case PROTOCOL_BATTLE_MISSION_ROUND_START_REQ:		OnBattleMissionRoundStartReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_ROUND_END_REQ:			OnBattleMissionRoundEndReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_REQ:		OnBattleMissionBombInstallReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_REQ:	OnBattleMissionBombUninstallReq(pData, dataSize);	break;
 	case PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ:			OnBattleSuggestKickVoteReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ:				OnBattleVoteKickVoteReq(pData, dataSize);			break;
 	case PROTOCOL_BATTLE_SENDPING_REQ:					OnBattleSendPingReq(pData, dataSize);				break;
@@ -222,6 +272,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_SHOP_LEAVE_REQ:					OnShopLeaveReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ:			OnShopBuyReq(pData, dataSize);				break;
 	case PROTOCOL_SHOP_REPAIR_REQ:					OnShopRepairReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ:			OnShopGiftReq(pData, dataSize);				break;
+	case PROTOCOL_AUTH_SHOP_ITEM_EXTEND_REQ:		OnShopItemExtendReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_GET_POINT_CASH_REQ:			OnGetPointCashReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_VERSION_REQ:			OnShopVersionReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_LIST_REQ:				OnShopListReq(pData, dataSize);				break;
@@ -1148,6 +1200,9 @@ void GameSession::ResetSessionData()
 	m_i32Wins = 0;
 	m_i32Losses = 0;
 	m_stUsedWeapon = 0;
+
+	m_dwRateLimitWindow = 0;
+	m_ui16PacketCount = 0;
 
 	m_ui8ActiveCharaSlot = 0;
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)

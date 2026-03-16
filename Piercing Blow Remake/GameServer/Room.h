@@ -46,6 +46,16 @@ public:
 	void		OnAddKill(int i32Team);
 	bool		CheckMatchEnd() const;
 
+	// Bomb mode (Phase 2A)
+	void		OnBombInstall(int i32InstallerSlot, uint8_t ui8BombArea);
+	void		OnBombUninstall(int i32DefuserSlot);
+	void		OnBombExplode();
+	bool		IsBombInstalled() const		{ return m_bBombInstalled; }
+	int			GetBombInstallerSlot() const	{ return m_i32BombInstallerSlot; }
+	uint8_t		GetBombArea() const			{ return m_ui8BombArea; }
+	bool		IsBombMode() const			{ return m_ui8GameMode == STAGE_MODE_BOMB; }
+	void		SwapTeams();				// ATK/DEF swap between rounds
+
 	// Death & Kill processing
 	void		OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32WeaponId,
 						 uint8_t ui8HitPart, float fX, float fY, float fZ, int i32AssistSlot);
@@ -201,6 +211,14 @@ private:
 
 	// Respawn type (from room SubType)
 	uint8_t				m_ui8RespawnType;
+
+	// Bomb mode state (Phase 2A)
+	bool				m_bBombInstalled;		// C4 currently planted
+	int					m_i32BombInstallerSlot;	// Slot that planted the bomb
+	uint8_t				m_ui8BombArea;			// 0=A, 1=B
+	DWORD				m_dwBombInstallTime;	// When bomb was planted
+	uint32_t			m_ui32BombExplosionTime;// Explosion delay in ms (default 40000 = 40s)
+	bool				m_bAtkDefSwap;			// true = teams have been swapped (ATK was RED at start)
 
 	// Loading timeout tracking
 	DWORD				m_dwLoadingTimeout;		// Max loading time (60s default)

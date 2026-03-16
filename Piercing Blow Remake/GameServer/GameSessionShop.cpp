@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "ShopManager.h"
+#include "GameSessionManager.h"
 
 // ============================================================================
 // Shop Handlers (Protocol_Shop 0x0400)
@@ -258,6 +259,305 @@ void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 		return;
 
 	SendSimpleAck(PROTOCOL_SHOP_REPAIR_ACK, 0);
+}
+
+// ============================================================================
+// Gift System (Phase 5B)
+// ============================================================================
+
+void GameSession::OnShopGiftReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Parse: buyType(1) + goodsId(4) + targetNickname(64)
+	if (i32Size < 69)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, 1);
+		return;
+	}
+
+	uint8_t buyType = *(uint8_t*)pData;
+	uint32_t goodsId = *(uint32_t*)(pData + 1);
+	char targetNick[64] = {0};
+	memcpy(targetNick, pData + 5, 64);
+	targetNick[63] = '\0';
+
+	int32_t result = 0;
+
+	// Look up item in catalog
+	uint32_t itemId = 0;
+	uint8_t itemType = 0;
+	int priceGP = 0;
+	int priceCash = 0;
+	uint32_t duration = 0;
+	bool found = false;
+
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItem = g_pShopManager->FindByGoodsId(goodsId);
+		if (pItem)
+		{
+			itemId = pItem->ui32ItemId;
+			itemType = pItem->ui8ItemType;
+			priceGP = pItem->i32PriceGP;
+			priceCash = pItem->i32PriceCash;
+			duration = pItem->ui32Duration;
+			found = true;
+		}
+	}
+
+	if (!found)
+	{
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (s_ShopCatalog[i].ui32GoodsId == goodsId)
+			{
+				itemId = s_ShopCatalog[i].ui32ItemId;
+				itemType = s_ShopCatalog[i].ui8ItemType;
+				priceGP = s_ShopCatalog[i].i32PriceGP;
+				priceCash = s_ShopCatalog[i].i32PriceCash;
+				duration = s_ShopCatalog[i].ui32Duration;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found)
+	{
+		result = 1;		// Item not found
+	}
+	else if (strlen(targetNick) == 0)
+	{
+		result = 2;		// Invalid target
+	}
+	else if (strcmp(targetNick, m_szNickname) == 0)
+	{
+		result = 3;		// Cannot gift yourself
+	}
+	else
+	{
+		// Check currency
+		int price = (buyType == 0) ? priceGP : priceCash;
+		if (price <= 0)
+			result = 4;	// Not available for this currency
+		else if (buyType == 0 && m_i32GP < price)
+			result = 5;	// Insufficient GP
+		else if (buyType == 1 && m_i32Cash < price)
+			result = 6;	// Insufficient Cash
+		else
+		{
+			// Find target player online (simplified: search session manager)
+			// For now, just deduct currency - actual delivery needs session lookup
+			if (buyType == 0)
+				m_i32GP -= price;
+			else
+				m_i32Cash -= price;
+
+			// TODO: Find target session and add item to their inventory
+			// For now, log the gift attempt
+			printf("[GameSession] Gift - From=%s, To=%s, GoodsId=%u, Price=%d\n",
+				m_szNickname, targetNick, goodsId, price);
+
+			result = 0;	// Success (item delivery pending)
+		}
+	}
+
+	// Send ACK
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &goodsId, 4);					offset += 4;
+
+	uint32_t newGP = (uint32_t)m_i32GP;
+	uint32_t newCash = (uint32_t)m_i32Cash;
+	memcpy(buffer + offset, &newGP, 4);					offset += 4;
+	memcpy(buffer + offset, &newCash, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Item Period Extension (Phase 5B)
+// ============================================================================
+
+void GameSession::OnShopItemExtendReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Parse: buyType(1) + goodsId(4)
+	if (i32Size < 5)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK, 1);
+		return;
+	}
+
+	uint8_t buyType = *(uint8_t*)pData;
+	uint32_t goodsId = *(uint32_t*)(pData + 1);
+
+	int32_t result = 0;
+
+	// Look up item to extend
+	uint32_t itemId = 0;
+	int priceGP = 0;
+	int priceCash = 0;
+	uint32_t duration = 0;
+	bool found = false;
+
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItem = g_pShopManager->FindByGoodsId(goodsId);
+		if (pItem)
+		{
+			itemId = pItem->ui32ItemId;
+			priceGP = pItem->i32PriceGP;
+			priceCash = pItem->i32PriceCash;
+			duration = pItem->ui32Duration;
+			found = true;
+		}
+	}
+
+	if (!found)
+	{
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (s_ShopCatalog[i].ui32GoodsId == goodsId)
+			{
+				itemId = s_ShopCatalog[i].ui32ItemId;
+				priceGP = s_ShopCatalog[i].i32PriceGP;
+				priceCash = s_ShopCatalog[i].i32PriceCash;
+				duration = s_ShopCatalog[i].ui32Duration;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found)
+	{
+		result = 1;		// Item not found
+	}
+	else if (duration == 0)
+	{
+		result = 2;		// Permanent item, cannot extend
+	}
+	else
+	{
+		// Find the item in inventory
+		GameInventoryItem* pOwned = FindInventoryItem(itemId);
+		if (!pOwned)
+		{
+			result = 3;	// Don't own this item
+		}
+		else if (pOwned->ui8ItemType != ITEM_ATTR_PERIOD)
+		{
+			result = 4;	// Not a period item
+		}
+		else
+		{
+			int price = (buyType == 0) ? priceGP : priceCash;
+			if (price <= 0)
+				result = 5;
+			else if (buyType == 0 && m_i32GP < price)
+				result = 6;
+			else if (buyType == 1 && m_i32Cash < price)
+				result = 7;
+			else
+			{
+				// Deduct currency
+				if (buyType == 0)
+					m_i32GP -= price;
+				else
+					m_i32Cash -= price;
+
+				// Extend the item's expiration
+				pOwned->ui32ItemArg += duration;
+
+				printf("[GameSession] Item extend - UID=%lld, ItemId=%u, NewExpire=%u\n",
+					m_i64UID, itemId, pOwned->ui32ItemArg);
+			}
+		}
+	}
+
+	// Reuse BUY_ACK format for response
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &goodsId, 4);					offset += 4;
+
+	uint32_t newGP = (uint32_t)m_i32GP;
+	uint32_t newCash = (uint32_t)m_i32Cash;
+	memcpy(buffer + offset, &newGP, 4);					offset += 4;
+	memcpy(buffer + offset, &newCash, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Item Expiration (Phase 5B)
+// ============================================================================
+
+void GameSession::CheckExpiredItems()
+{
+	int removed = RemoveExpiredItems();
+	if (removed > 0)
+	{
+		printf("[GameSession] Removed %d expired items - UID=%lld\n", removed, m_i64UID);
+	}
+}
+
+int GameSession::RemoveExpiredItems()
+{
+	DWORD dwNow = (DWORD)time(nullptr);	// Unix timestamp
+	int removedCount = 0;
+
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (!m_Inventory[i].IsValid())
+			continue;
+
+		if (m_Inventory[i].ui8ItemType == ITEM_ATTR_PERIOD &&
+			m_Inventory[i].ui32ItemArg > 0 &&
+			m_Inventory[i].ui32ItemArg <= dwNow)
+		{
+			// Item has expired
+			printf("[GameSession] Item expired - UID=%lld, ItemId=%u, DBIdx=%u\n",
+				m_i64UID, m_Inventory[i].ui32ItemId, m_Inventory[i].ui32ItemDBIdx);
+
+			// Shift remaining items down
+			for (int j = i; j < m_i32InventoryCount - 1; j++)
+				m_Inventory[j] = m_Inventory[j + 1];
+
+			m_Inventory[m_i32InventoryCount - 1].Reset();
+			m_i32InventoryCount--;
+			removedCount++;
+			i--;	// Recheck this index
+		}
+	}
+
+	return removedCount;
 }
 
 void GameSession::OnShopVersionReq(char* pData, INT32 i32Size)

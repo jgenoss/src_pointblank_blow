@@ -26,6 +26,12 @@ Room::Room()
 	, m_dwStateStartTime(0)
 	, m_dwRoundStartTime(0)
 	, m_ui8RespawnType(RESPAWN_TYPE_NO)
+	, m_bBombInstalled(false)
+	, m_i32BombInstallerSlot(-1)
+	, m_ui8BombArea(BOMB_AREA_A)
+	, m_dwBombInstallTime(0)
+	, m_ui32BombExplosionTime(BOMB_EXPLOSION_DELAY_MS)
+	, m_bAtkDefSwap(false)
 	, m_dwLoadingTimeout(LOADING_TIMEOUT * 1000)
 	, m_i32BattleRoomIdx(-1)
 	, m_ui16BattleUdpPort(0)
@@ -81,6 +87,13 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 	m_Score.Reset();
 	m_Score.i32MaxRound = GetRoundCount(m_ui8RoundType);
 	m_Score.ui16MaxTime = GetTimeLimit(m_ui8SubType, m_ui8GameMode);
+
+	// Reset bomb state
+	m_bBombInstalled = false;
+	m_i32BombInstallerSlot = -1;
+	m_ui8BombArea = BOMB_AREA_A;
+	m_dwBombInstallTime = 0;
+	m_bAtkDefSwap = false;
 
 	if (m_i32MaxPlayers > SLOT_MAX_COUNT)
 		m_i32MaxPlayers = SLOT_MAX_COUNT;
@@ -899,6 +912,10 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 
 			if (IsMissionMode(m_ui8GameMode))
 			{
+				// In bomb mode with bomb planted, let the bomb timer handle it
+				if (m_ui8GameMode == STAGE_MODE_BOMB && m_bBombInstalled)
+					return;	// Bomb timer will handle round end
+
 				// In mission mode, time expiry = DEF wins the round
 				OnRoundEnd(TEAM_BLUE);	// DEF wins on timeout
 
@@ -912,13 +929,20 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 				}
 				else
 				{
-					// Next round - reset round timer and alive status
+					// Next round - reset round timer, alive status, bomb state
 					m_dwRoundStartTime = dwNow;
+					m_bBombInstalled = false;
+					m_i32BombInstallerSlot = -1;
+					m_dwBombInstallTime = 0;
 					for (int i = 0; i < SLOT_MAX_COUNT; i++)
 					{
 						if (m_pSlotSession[i])
 							m_SlotStats[i].bAlive = true;
 					}
+
+					if (m_ui8GameMode == STAGE_MODE_BOMB &&
+						(m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE))
+						SwapTeams();
 				}
 			}
 			else
@@ -935,6 +959,17 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 				m_dwStateStartTime = dwNow;
 				SendBattleResultToAll(finalWinner);
 			}
+			return;
+		}
+	}
+
+	// Check bomb explosion timer (Phase 2A)
+	if (m_ui8GameMode == STAGE_MODE_BOMB && m_bBombInstalled && m_dwBombInstallTime > 0)
+	{
+		DWORD dwBombElapsed = dwNow - m_dwBombInstallTime;
+		if (dwBombElapsed >= m_ui32BombExplosionTime)
+		{
+			OnBombExplode();
 			return;
 		}
 	}
@@ -963,10 +998,19 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 		int redAlive = GetAliveCount(TEAM_RED);
 		int blueAlive = GetAliveCount(TEAM_BLUE);
 
+		// In bomb mode: if ATK all dead but bomb is planted, bomb timer keeps running
+		if (m_ui8GameMode == STAGE_MODE_BOMB && m_bBombInstalled && redAlive == 0)
+			return;	// Bomb is ticking, DEF must defuse
+
 		if (redAlive == 0 || blueAlive == 0)
 		{
 			int roundWinner = (redAlive == 0) ? TEAM_BLUE : TEAM_RED;
 			OnRoundEnd(roundWinner);
+
+			// Reset bomb state for next round
+			m_bBombInstalled = false;
+			m_i32BombInstallerSlot = -1;
+			m_dwBombInstallTime = 0;
 
 			if (CheckMatchEnd())
 			{
@@ -985,6 +1029,10 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 					if (m_pSlotSession[i])
 						m_SlotStats[i].bAlive = true;
 				}
+
+				if (m_ui8GameMode == STAGE_MODE_BOMB &&
+					(m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE))
+					SwapTeams();
 
 				// Broadcast round end/start
 				BroadcastRoomStateChange();
@@ -1401,6 +1449,160 @@ void Room::SendBattleResultToAll(int i32WinnerTeam)
 		winner == TEAM_RED ? "RED" :
 		winner == TEAM_BLUE ? "BLUE" : "DRAW",
 		m_Score.i32RedScore, m_Score.i32BlueScore, battleTime);
+}
+
+// ============================================================================
+// Bomb Mode (Phase 2A)
+// ============================================================================
+
+void Room::OnBombInstall(int i32InstallerSlot, uint8_t ui8BombArea)
+{
+	if (m_ui8GameMode != STAGE_MODE_BOMB)
+		return;
+	if (m_bBombInstalled)
+		return;		// Already installed
+
+	m_bBombInstalled = true;
+	m_i32BombInstallerSlot = i32InstallerSlot;
+	m_ui8BombArea = ui8BombArea;
+	m_dwBombInstallTime = GetTickCount();
+
+	printf("[Room] Bomb installed - Room=%d, Slot=%d, Area=%c\n",
+		m_i32RoomIdx, i32InstallerSlot, (ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
+
+	// Broadcast BOMB_INSTALL_ACK to all
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t installerSlot = (uint8_t)i32InstallerSlot;
+	memcpy(buffer + offset, &installerSlot, 1);		offset += 1;
+	memcpy(buffer + offset, &ui8BombArea, 1);		offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+}
+
+void Room::OnBombUninstall(int i32DefuserSlot)
+{
+	if (m_ui8GameMode != STAGE_MODE_BOMB)
+		return;
+	if (!m_bBombInstalled)
+		return;		// Nothing to defuse
+
+	m_bBombInstalled = false;
+	m_i32BombInstallerSlot = -1;
+	m_dwBombInstallTime = 0;
+
+	printf("[Room] Bomb defused - Room=%d, Defuser=%d\n", m_i32RoomIdx, i32DefuserSlot);
+
+	// Broadcast BOMB_UNINSTALL_ACK to all
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t defuserSlot = (uint8_t)i32DefuserSlot;
+	memcpy(buffer + offset, &defuserSlot, 1);		offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+
+	// Bomb defused = DEF (BLUE) wins the round
+	OnRoundEnd(TEAM_BLUE);
+
+	if (CheckMatchEnd())
+	{
+		int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+		CalculateBattleRewards(finalWinner);
+		m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+		m_dwStateStartTime = GetTickCount();
+		SendBattleResultToAll(finalWinner);
+	}
+	else
+	{
+		// Next round with team swap
+		m_dwRoundStartTime = GetTickCount();
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_SlotStats[i].bAlive = true;
+		}
+
+		if (m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE)
+			SwapTeams();
+
+		BroadcastRoomStateChange();
+	}
+}
+
+void Room::OnBombExplode()
+{
+	if (!m_bBombInstalled)
+		return;
+
+	m_bBombInstalled = false;
+	m_dwBombInstallTime = 0;
+
+	printf("[Room] Bomb exploded - Room=%d, Area=%c\n",
+		m_i32RoomIdx, (m_ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
+
+	// Bomb explosion = ATK (RED) wins the round
+	OnRoundEnd(TEAM_RED);
+
+	if (CheckMatchEnd())
+	{
+		int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+		CalculateBattleRewards(finalWinner);
+		m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+		m_dwStateStartTime = GetTickCount();
+		SendBattleResultToAll(finalWinner);
+	}
+	else
+	{
+		// Next round with team swap
+		m_dwRoundStartTime = GetTickCount();
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_SlotStats[i].bAlive = true;
+		}
+
+		if (m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE)
+			SwapTeams();
+
+		BroadcastRoomStateChange();
+	}
+}
+
+void Room::SwapTeams()
+{
+	// Swap RED/BLUE for all players (ATK/DEF role swap)
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i])
+		{
+			m_Slots[i].ui8Team = (m_Slots[i].ui8Team == TEAM_RED) ? TEAM_BLUE : TEAM_RED;
+		}
+	}
+	m_bAtkDefSwap = !m_bAtkDefSwap;
+
+	printf("[Room] Teams swapped - Room=%d, SwapState=%d\n", m_i32RoomIdx, m_bAtkDefSwap ? 1 : 0);
 }
 
 void Room::BroadcastRoomStateChange()

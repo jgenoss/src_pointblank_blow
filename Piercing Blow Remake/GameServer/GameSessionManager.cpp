@@ -255,6 +255,11 @@ void GameSessionManager::OnSendChannelUser(int i32ChannelNum, i3NetworkPacket* p
 	m_pcsChannelUser[i32ChannelNum]->Unlock();
 }
 
+void GameSessionManager::BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* pPacket)
+{
+	OnSendChannelUser(i32ChannelNum, pPacket);
+}
+
 void GameSessionManager::CheckTimeouts()
 {
 	if (!g_pContextMain)

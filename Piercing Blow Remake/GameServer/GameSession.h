@@ -173,6 +173,10 @@ public:
 	// Battle results from BattleServer (applied via ModuleBattleServer)
 	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin);
 
+	// Item expiration (Phase 5B)
+	void			CheckExpiredItems();
+	int				RemoveExpiredItems();
+
 	// Save all player stats at end of battle
 	void			SaveAllPlayerStats();
 
@@ -228,6 +232,9 @@ private:
 	void			OnGetRoomListReq(char* pData, INT32 i32Size);
 	void			OnLobbyChatReq(char* pData, INT32 i32Size);
 	void			OnQuickJoinRoomReq(char* pData, INT32 i32Size);
+	void			OnLobbyViewUserItemReq(char* pData, INT32 i32Size);
+	void			OnLobbyFindNickNameReq(char* pData, INT32 i32Size);
+	void			OnMegaphoneReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Room (GameSessionRoom.cpp)
 	void			OnRoomCreateReq(char* pData, INT32 i32Size);
@@ -258,6 +265,8 @@ private:
 	void			OnBattleMissionRoundPreStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundEndReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionBombInstallReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionBombUninstallReq(char* pData, INT32 i32Size);
 	void			OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleVoteKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleSendPingReq(char* pData, INT32 i32Size);
@@ -279,6 +288,8 @@ private:
 	void			OnShopLeaveReq(char* pData, INT32 i32Size);
 	void			OnShopBuyReq(char* pData, INT32 i32Size);
 	void			OnShopRepairReq(char* pData, INT32 i32Size);
+	void			OnShopGiftReq(char* pData, INT32 i32Size);
+	void			OnShopItemExtendReq(char* pData, INT32 i32Size);
 	void			OnGetPointCashReq(char* pData, INT32 i32Size);
 	void			OnShopVersionReq(char* pData, INT32 i32Size);
 	void			OnShopListReq(char* pData, INT32 i32Size);
@@ -430,6 +441,10 @@ private:
 	// Timing
 	DWORD			m_dwConnectTime;
 	DWORD			m_dwLastPacketTime;
+
+	// Rate limiting (Phase 9A)
+	DWORD			m_dwRateLimitWindow;
+	uint16_t		m_ui16PacketCount;
 };
 
 #endif // __GAMESESSION_H__

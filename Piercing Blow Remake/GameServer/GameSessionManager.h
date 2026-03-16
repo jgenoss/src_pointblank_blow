@@ -44,6 +44,7 @@ public:
 	// Broadcast
 	void				OnSendLobbyChatting(GameSession* pSender, char* pMessage, uint16_t ui16Size);
 	void				OnSendChannelUser(int i32ChannelNum, i3NetworkPacket* pPacket);
+	void				BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* pPacket);
 
 	// Stats
 	int					GetActiveCount() const		{ return m_i32ActiveCount; }

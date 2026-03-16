@@ -356,6 +356,78 @@ void GameSession::OnBattleMissionRoundStartReq(char* pData, INT32 i32Size)
 	m_pRoom->SendToAll(&packet);
 }
 
+// ============================================================================
+// Bomb Mode Handlers (Phase 2A)
+// ============================================================================
+
+void GameSession::OnBattleMissionBombInstallReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (!m_pRoom->IsBombMode())
+		return;
+
+	// Parse bomb area (0=A, 1=B)
+	uint8_t bombArea = BOMB_AREA_A;
+	if (i32Size >= 1)
+		bombArea = *(uint8_t*)pData;
+
+	if (bombArea >= BOMB_AREA_COUNT)
+		bombArea = BOMB_AREA_A;
+
+	// Only ATK team (RED) can plant
+	if (m_i32SlotIdx < 0 || m_i32SlotIdx >= SLOT_MAX_COUNT)
+		return;
+
+	const GameSlotInfo& mySlot = m_pRoom->GetSlotInfo(m_i32SlotIdx);
+	if (mySlot.ui8Team != TEAM_RED)
+		return;		// Only ATK team can plant
+
+	// Must be alive
+	if (!m_pRoom->IsPlayerAlive(m_i32SlotIdx))
+		return;
+
+	m_pRoom->OnBombInstall(m_i32SlotIdx, bombArea);
+}
+
+void GameSession::OnBattleMissionBombUninstallReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (!m_pRoom->IsBombMode())
+		return;
+
+	// Only DEF team (BLUE) can defuse
+	if (m_i32SlotIdx < 0 || m_i32SlotIdx >= SLOT_MAX_COUNT)
+		return;
+
+	const GameSlotInfo& mySlot = m_pRoom->GetSlotInfo(m_i32SlotIdx);
+	if (mySlot.ui8Team != TEAM_BLUE)
+		return;		// Only DEF team can defuse
+
+	// Must be alive
+	if (!m_pRoom->IsPlayerAlive(m_i32SlotIdx))
+		return;
+
+	// Bomb must be installed
+	if (!m_pRoom->IsBombInstalled())
+		return;
+
+	m_pRoom->OnBombUninstall(m_i32SlotIdx);
+}
+
+// ============================================================================
+// Mission Mode Round Management (continued)
+// ============================================================================
+
 void GameSession::OnBattleMissionRoundEndReq(char* pData, INT32 i32Size)
 {
 	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
@@ -415,6 +487,12 @@ void GameSession::OnBattleMissionRoundEndReq(char* pData, INT32 i32Size)
 	{
 		if (m_pRoom->GetSlotSession(i))
 			m_pRoom->GetSlotBattleStatsMutable(i).bAlive = true;
+	}
+
+	// Reset bomb state for next round (Phase 2A)
+	if (m_pRoom->IsBombMode() && m_pRoom->IsBombInstalled())
+	{
+		// Shouldn't happen normally, but safety reset
 	}
 }
 

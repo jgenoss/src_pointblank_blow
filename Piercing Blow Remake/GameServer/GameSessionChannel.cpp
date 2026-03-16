@@ -385,3 +385,198 @@ void GameSession::OnQuickJoinRoomReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Lobby User Features (Phase 7B)
+// ============================================================================
+
+void GameSession::OnLobbyViewUserItemReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	// Parse target nickname
+	if (i32Size < 64)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_VIEW_USER_ITEM_ACK, 1);
+		return;
+	}
+
+	char targetNick[64] = {0};
+	memcpy(targetNick, pData, 64);
+	targetNick[63] = '\0';
+
+	// Find target session
+	GameSession* pTarget = nullptr;
+	if (g_pGameSessionManager)
+		pTarget = g_pGameSessionManager->FindSessionByNickname(targetNick);
+
+	i3NetworkPacket packet;
+	char buffer[2048];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_VIEW_USER_ITEM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	if (!pTarget)
+	{
+		int32_t result = 1;	// User not found
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	}
+	else
+	{
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		// Target player info
+		char nick[64] = {0};
+		strncpy_s(nick, pTarget->GetNickname(), _TRUNCATE);
+		memcpy(buffer + offset, nick, 64);					offset += 64;
+
+		int32_t level = pTarget->GetLevel();
+		int32_t rankId = pTarget->GetRankId();
+		int32_t kills = pTarget->GetKills();
+		int32_t deaths = pTarget->GetDeaths();
+		memcpy(buffer + offset, &level, 4);					offset += 4;
+		memcpy(buffer + offset, &rankId, 4);				offset += 4;
+		memcpy(buffer + offset, &kills, 4);					offset += 4;
+		memcpy(buffer + offset, &deaths, 4);				offset += 4;
+
+		// Equipment info
+		const GameCharaEquip& equip = pTarget->GetActiveEquipment();
+		memcpy(buffer + offset, &equip.ui32CharaId, 4);	offset += 4;
+		for (int i = 0; i < WEAPON_SLOT_COUNT; i++)
+		{
+			memcpy(buffer + offset, &equip.ui32WeaponIds[i], 4);	offset += 4;
+		}
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnLobbyFindNickNameReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	if (i32Size < 64)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_FIND_NICK_NAME_ACK, 1);
+		return;
+	}
+
+	char searchNick[64] = {0};
+	memcpy(searchNick, pData, 64);
+	searchNick[63] = '\0';
+
+	// Search for user online
+	GameSession* pTarget = nullptr;
+	if (g_pGameSessionManager)
+		pTarget = g_pGameSessionManager->FindSessionByNickname(searchNick);
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_FIND_NICK_NAME_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	if (!pTarget)
+	{
+		int32_t result = 1;	// Not found
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	}
+	else
+	{
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		char nick[64] = {0};
+		strncpy_s(nick, pTarget->GetNickname(), _TRUNCATE);
+		memcpy(buffer + offset, nick, 64);					offset += 64;
+
+		int32_t level = pTarget->GetLevel();
+		int32_t rankId = pTarget->GetRankId();
+		int32_t channelNum = pTarget->GetChannelNum();
+		int32_t roomIdx = pTarget->GetRoomIdx();
+		memcpy(buffer + offset, &level, 4);					offset += 4;
+		memcpy(buffer + offset, &rankId, 4);				offset += 4;
+		memcpy(buffer + offset, &channelNum, 4);			offset += 4;
+		memcpy(buffer + offset, &roomIdx, 4);				offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Megaphone (Phase 7B)
+// ============================================================================
+
+void GameSession::OnMegaphoneReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Parse message
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_BASE_MEGAPHONE_ACK, 1);
+		return;
+	}
+
+	uint16_t msgLen = *(uint16_t*)pData;
+	if (msgLen <= 0 || msgLen > 256 || i32Size < 2 + (int)msgLen)
+	{
+		SendSimpleAck(PROTOCOL_BASE_MEGAPHONE_ACK, 2);
+		return;
+	}
+
+	char message[258] = {0};
+	memcpy(message, pData + 2, msgLen);
+	message[msgLen] = '\0';
+
+	printf("[GameSession] Megaphone - %s: %s\n", m_szNickname, message);
+
+	// Broadcast to all players in the same channel
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_MEGAPHONE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Sender nickname
+	char nick[64] = {0};
+	strncpy_s(nick, m_szNickname, _TRUNCATE);
+	memcpy(buffer + offset, nick, 64);						offset += 64;
+
+	// Message
+	memcpy(buffer + offset, &msgLen, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, message, msgLen);				offset += msgLen;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+
+	// Broadcast to all sessions in same channel
+	if (g_pGameSessionManager)
+		g_pGameSessionManager->BroadcastToChannel(m_i32ChannelNum, &packet);
+}
