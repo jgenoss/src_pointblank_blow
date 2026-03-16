@@ -12,7 +12,6 @@
 #include "shellapi.h"
 #include "resource.h"
 #include "Msi.h"
-#include "../../Themida/ThemidaSDK/Include/C/ThemidaSDK.h"
 #include "GlobalVar.h"
 #include "ConfigEx.h"
 #include "i3Base/string/ext/contain_string.h"
@@ -25,145 +24,15 @@
 #include "i3Base/string/compare/generic_compare.h"
 #include "GameLoginContext.h"
 
-
-
-#include "../../LeucoShell/Include/Client/Lib/LeucoShell.h"
-
-//#include "./Arxan/HWAD.h"
-
-#ifndef USE_I3EXEC
-#include "pch.h"
-#include "GlobalVariables.h"
-#include "GameInterface.h"
-#endif
-
 #include "i3Gfx/i3ShaderSourceCodeMgr.h"
-
-#if defined( USE_HACK_DETECTED ) || defined( USE_DLL_DETECTED )
-	#include "DllGuard.h"
-#endif
 
 #if defined( I3_DEBUG)
 	#include "DebugPanel.h"
 #endif
-
-
-#if defined( _XIGNCODE_) 
-xstatus XCALL MyUserInfoCallBack(xuint iid, xstr buffer, xsize size, xpvoid context)
-{
-	if ( GameLoginContext::i()->getUserUID() != -1 )
-	{
-		if (iid == XUID_USER_ACCOUNT)
-		{
-			char strUID[256] = { 0, };
-
-#if defined( LOCALE_NORTHAMERICA)
-			i3::sprintf(strUID, "%d_%d", _i64toa(GameLoginContext::i()->getUserUID(), strUID, 10), g_pServerInfo->GetCurrentIPIdx());
-			StringCbCopyA(buffer, size, strUID);
-#else
-			StringCbCopyA(buffer, size, _i64toa(GameLoginContext::i()->getUserUID(), strUID, 10));
-#endif
-			I3PRINTLOG(I3LOG_NOTICE, "X::OK: %d", GameLoginContext::i()->getUserUID());
-			return ZCWAVE_OK;
-		}
-		else
-		{
-			I3PRINTLOG(I3LOG_NOTICE, "X::DENIED: %d", GameLoginContext::i()->getUserUID());
-			return ZCWAVE_E_USER_INFO_ACCESS_DENIED;
-		}
-	}
-	I3PRINTLOG(I3LOG_NOTICE, "X::NOT_READY: %d", GameLoginContext::i()->getUserUID());
-	return ZCWAVE_E_USER_INFO_IS_NOT_READY;
-}
-#define XIGNCODE_PATH  "\\XignCode"
-#define XIGNCODE_KEY "Nw_cjspitNrb"
-#endif
-
-#include "../Source/SteamContext.h"
-
-#if defined( LOCALE_BRAZIL)
-// X-TRAP 스타트시 요구되는 키  2010-08-10 komet
-// 이 키값은 X-TRAP 회사에서 받는다. 또한 X-TRAP FTP 서버 주소에 따라 값이 바뀐다.
-// X-TRAP FTP 서버가 바뀔 경우 X-TRAP 회사에 다시 요청해서 받아야 한다.
-// 소스의 Winmain.cpp와 파일 업데이터 소스 공용으로 사용된다. 파일 업데이터 소스에서 사용하는 값과 동일한 키여야 한다.
-// 현재 아래 주소는 http://Path.pointblankonline.com.br/xtrap/ 사이트 값이다.
-#define XTRAP_ARGUMENT_KEY				"660970B448EBDD3290256D9844CFE8620A40CEE085F1215ADA56B0D591F9B8FD613A943317CA9FE20D68BA611AF8A29956A80163AF23B3B437EECA91DCCF8EC60F7D04245246E437A4610510CB5F7E0399D78FF8DD262E24ABB0515BE770BA7A2BC783B2B0D2DCF58998"
-
-// X-TRAP 테스트 서버
-//#define XTRAP_ARGUMENT_KEY				"660970B448EBDD3290256D9844CFE8620A40CEE085F1215ADA56B0D591F9B8FD613A943317CA9FE20D68BA611AF8A29956A80163AF23B3B437EECA91DCCF8EC60F7D04245246E417A4610E5695477E1EF47455B309945CB0D27B7C7D383D0C40DBC997C22DB0B6C35D7EEE51C30CBE893F089AAE398F"
-
-#endif
-
-#if defined (LOCALE_LATIN_AMERICA)
-// X-TRAP 스타트시 요구되는 키
-// Patch URL : http://fhl-lcdn.pandonetworks.com/Xtrap-pb
-#define XTRAP_ARGUMENT_KEY				"660970B496EBDDBEC5456D9844CFEF62F07458A929B9A6F47331DC64FC773FB6CD7535CE211ED52CF255E5836C73D4DC0D175E29D1CFD8C8666F340C1800318F0F7D04245246E401AD79435DDF5E391FB2443FCC992B7072B7375C4C8CD27E8D0DD34F06D669D2D9"
-#endif
-
-///////////////////////////////////////////	X-TRAP 연동 (Winmain에서 해야 함)
-#if defined( _XTRAP_) 
-
-#ifdef _MT
-	#ifdef _DLL	//다중 스레드(/MT)
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_mtDll.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap_Unipher_mtDll.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_ClientPart_mtDll.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_ServerPart_mtDll.lib")
-	#else	//다중 스레드 DLL(/MD)
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_mt.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap_Unipher_mt.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_ClientPart_mt.lib")
-		#pragma comment(lib, "../../Xtrap/Lib/XTrap4Client_ServerPart_mt.lib")
-	#endif
-#endif
-
-#include "../../Xtrap/Include/Xtrap_C_Interface.h"
-#include "../../Xtrap/Include/Xtrap_S_Interface.h"
-#include "../../Xtrap/Include/Xtrap_C_XtrapCode.h"	// revision 32248 해킹 탐지 코드 추가
-
-#ifdef _XTRAP_DUMP
-#include "../../Xtrap/Etc/HexaDump4XTrap.h"
-#endif
-
-// X-TRAP 자체에서 단독 쓰레드로 주기적으로 Alive 체크하기 위해
-DWORD WINAPI XTrapCallbackAliveThreadFunc( LPVOID loParam)
-{
-	DWORD dwPeriod = 20000; // 20 sec
-	while(TRUE)
-	{
-		Sleep( dwPeriod);
-
-		XTrap_C_CallbackAlive( dwPeriod);
-	}
-
-	return 0;
-}
-
-//	X-TRAP 과 서버와 연동하기 위해 등록된 콜백 함수. komet
-//  XTrap_CS_Step2 함수가 GameInterface DLL 에서 실행하지 않고 Winmain 에서 직접 실행하기위해 콜백을 등록하여 이용한다.
-static INT32 CSStep2Proc( void * pInBuffer, void * pOutBuffer, void * pLength)
-{		
-#ifdef _XTRAP_DUMP
-	HexaDump4XTrap_V1( "XtrapCheck.txt", pInBuffer, XTRAP_SETINFO_PACKETBUFF_SIZE, "[*2 In Callback]");
-#endif
-
-	XTrap_CS_Step2( pInBuffer, pOutBuffer, XTRAP_PROTECT_PE | XTRAP_PROTECT_TEXT | XTRAP_PROTECT_EXCEPT_VIRUS );
-
-#ifdef _XTRAP_DUMP	
-	HexaDump4XTrap_V1( "XtrapCheck.txt", pOutBuffer, XTRAP_SETINFO_PACKETBUFF_SIZE, "[*3 Out Callback]");
-#endif
-
-	return 0;
-}
-#endif
-
-#if defined(WINDOW_MODE_DISABLE)
-extern "C"
-{
-#include "../WinLockDLL/WinLockDll.h"
-};
-#pragma comment (lib, "WinLockDLL.lib")
-#endif
+#include <GameInterface.h>
+#include <EnvSet.h>
+#include <GameFramework.h>
+#include <GameStringMap.h>
 
 typedef void (* PROHIBIT_PROC)();
 typedef void (* LOG_PROC)(LPCSTR logName);
@@ -319,13 +188,8 @@ static i3GameInterface * TryLoadSymbol( const char * pszPath)
 
 static i3GameInterface *	TryLoadGame()
 {
-#ifdef USE_I3EXEC
-	return g_pProc( g_szPath );
-#else
-	return i3CreateGameInterface( g_szPath );
-#endif
 
-//	return NULL;
+	return i3CreateGameInterface( g_szPath );
 }
 
 
@@ -593,11 +457,6 @@ void _ProhibitFile_GetUserFileListMD5_();
 #endif
 
 
-BOOL _XignCode_Start_();
-void _XignCode_Release_();
-void _Xtrap_Start_();
-void _Xtrap_Register_();
-
 
 bool _WebLogin_();
 void _InstallKeyhook_();
@@ -652,18 +511,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	//_CrtSetBreakAlloc(1202853); //여기에 몇번째 메모리 할당이 일어나며 브레이크 포인터를 설정하게 셋팅한다.
 	//	new int[32];
 
-#ifdef USE_I3EXEC
-	g_hInstance = hInstance; 
-#endif
-
-#if defined( USE_DLL_DETECTED )
-	Install_ProcessModules();
-#endif
-
-#if defined( USE_HACK_DETECTED )
-	Enable_GuardDll(hInstance, NULL, NULL);
-#endif 
-
 #if defined(I3_DEBUG)
 	char ExecName[MAX_STRING_COUNT] = "";
 	#ifdef USE_I3EXEC
@@ -700,41 +547,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 	I3PRINTLOG(I3LOG_VIEWER, lpCmdLine);
 #endif
 
-#if defined( USE_DLL_DETECTED )
-	ModuleList List;
-	Detect_ProcessModule(List);
-#endif
-
-	SteamContext::i()->SteamAPI_Init(lpCmdLine);
-
 	AddRegestryGameFile();
-
-	if (!_XignCode_Start_())
-	{
-		return 0;
-	}
-
-#ifdef USE_LEUCO_SHELL
-	FILE* LS_LOG_FILE = fopen("./SET_LS_LOG.log", "rt");
-	if (LS_LOG_FILE)
-	{
-		INT32 LogFlag = 0;
-		fscanf(LS_LOG_FILE, "%d", &LogFlag);
-		LS::COMMON::FUNCTION::SET_LOG_FLAG((BYTE)LogFlag);
-		fclose(LS_LOG_FILE);
-	}
-	//
-	X_LEUCO_SHELL_X
-
-#endif
-
-
-#if defined( USE_DLL_DETECTED )
-	ModuleList List2;
-	Detect_ProcessModule(List2);
-#endif
-
-	_Xtrap_Start_();
 
 	//	InstallVCRedist();
 	TryLoadSymbol( ExecName );
@@ -749,9 +562,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	if( !_WebLogin_() )
 	{
-#if defined( USE_HACK_DETECTED )
-		Disable_GuardDll();
-#endif
 		return 0;
 	}
 
@@ -789,17 +599,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 		_Message_Fail_i3ExecFile_();
 		goto ExitPart;
 	}
-
-#ifdef USE_I3EXEC
-	I3PRINTLOG(I3LOG_VIEWER, "CheckModule >>>");
-	if ( ! CheckModule() )
-	{
-		goto ExitPart;
-	}
-	I3PRINTLOG(I3LOG_VIEWER, "CheckModule <<<");
-#endif
-
-	_Xtrap_Register_();
 	
 
 	if( !_CheckMultiRunning_() )
@@ -953,11 +752,7 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			g_szStartStage[0] = 0; 
 		}
 
-#ifdef USE_I3EXEC
-		_pFramework = _pInterface->CreateFramework( _pViewer);
-#else
 		_pFramework = (CGameFramework*)_pInterface->CreateFramework( _pViewer);
-#endif
 		//UI  초기화
 		((CGameFramework*)_pFramework)->SetMainLocale();
 
@@ -1048,10 +843,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	_ApplyLeftHander_();
 
-#ifndef USE_I3EXEC
-	SetForegroundWindowForce(g_hWnd);
-#endif
-
 	//////////////////////////////////////////////////////////////////////////
 
 	hAccel = LoadAccelerators(hInstance, (LPCTSTR)IDC_I3VIEWER);
@@ -1065,9 +856,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 
 	g_bCanUnhook = true;
 
-#ifdef USE_LEUCO_SHELL
-	LEUCO_SHELL_START();
-#endif
 	while((bContinue ) && (WM_QUIT != msg.message  ))
 	{
 
@@ -1087,9 +875,6 @@ int APIENTRY _tWinMain(HINSTANCE hInstance,
 			bContinue = FALSE;
 		else
 			bContinue = _pInterface->OnDrive( _pViewer);
-#ifdef USE_LEUCO_SHELL
-		LEUCO_SHELL_RUN((PDWORD*)g_pViewer->GetRenderContext()->GetNativeDevice());
-#endif
 	}
 
 ExitPart:
@@ -1132,12 +917,6 @@ ExitPart:
 	I3PRINTLOG(I3LOG_VIEWER, "* 4");
 	I3_SAFE_RELEASE( _pViewer);
 
-#ifndef USE_I3EXEC
-	g_pViewer		= NULL;
-	g_pFramework	= NULL;
-#endif
-
-
 	i3System::TerminateSys();
 
 	#if defined( I3_DEBUG)
@@ -1147,20 +926,10 @@ ExitPart:
 	#endif
 
 	I3PRINTLOG(I3LOG_VIEWER, "* 5");
-#ifdef USE_I3EXEC
-	if( g_hModule != NULL)
-	{
-		FreeLibrary( g_hModule);
-	}
-#else
-
-#endif
 	I3PRINTLOG(I3LOG_VIEWER, "* 6");
 	CoUninitialize();
 
 	I3PRINTLOG(I3LOG_VIEWER, "Finish Game <<<");
-
-	_XignCode_Release_();
 
 #if defined( I3_DEBUG)
 	// _pInterface를 delete하면 특정 컴퓨터에서 종료시 크래쉬하는 현상이 발생하여
@@ -1170,10 +939,6 @@ ExitPart:
 	CloseDebugPanel();
 #endif
 
-#if defined( USE_HACK_DETECTED )
-	Disable_GuardDll();
-#endif
-
 	::SetErrorMode(old_error_mode);
 	
 	return (int) msg.wParam;
@@ -1181,50 +946,7 @@ ExitPart:
 
 void _RegistryLogName_()
 {
-#ifdef USE_I3EXEC
-	LOG_PROC pProc = (LOG_PROC)GetProcAddress(g_hModule, "_setLogName_");
-	if( pProc == NULL) 
-	{
-		I3PRINTLOG(I3LOG_VIEWER, "can not found _setLogName_ Proc");
-	}
-	else
-	{
-		pProc( __getLogName() ); 
-	}
-#else
 	_setLogName_( __getLogName() );
-#endif
-}
-BOOL _XignCode_Start_()
-{
-#if defined(_XIGNCODE_)
-
-	if (!ZCWAVE_SysInit())
-	{
-		ULONG ErrorCode = GetLastError();
-		I3PRINTLOG(I3LOG_NOTICE, "ErrorCode %08x \n", ErrorCode);
-		return FALSE;
-	}
-
-
-	if (!ZCWAVE_SysEnter(XIGNCODE_KEY, XIGNCODE_PATH, 0))
-	{
-		ULONG ErrorCode = GetLastError();
-		I3PRINTLOG(I3LOG_NOTICE, "ErrorCode %08x \n", ErrorCode);
-		return FALSE;
-	}
-
-	if (!ZCWAVE_SendCommand(ZCMD_SET_USER_INFO_CALLBACKA, MyUserInfoCallBack, NULL))
-	{
-		ULONG ErrorCode = GetLastError();
-		I3PRINTLOG(I3LOG_NOTICE, "ErrorCode %08x \n", ErrorCode);
-		return FALSE;
-	}
-
-
-#endif
-
-	return TRUE;
 }
 #ifdef NC_BUILD
 void _ProhibitFile_Install_()
@@ -1315,34 +1037,6 @@ void _XTRAP_CALLBACK__XtrapCallbackProcedure (IN unsigned int Reserve1,
 	GameEventSender::i()->SetEvent(EVENT_XTRAP_HACK_DETECTED, &pXtrapCode->Status);
 } 
 #endif
-
-void _Xtrap_Start_()
-{
-#if defined( _XTRAP_)
-	I3PRINTLOG(I3LOG_VIEWER, "_Xtrap_ >>>");
-	char szXTrapArg[] = XTRAP_ARGUMENT_KEY;
-
-	// revision 32248 해킹 탐지 코드 추가
-	XTrap_C_Start_Callback( (LPCSTR) szXTrapArg, NULL, static_cast<void*>(_XTRAP_CALLBACK__XtrapCallbackProcedure));
-
-	// X-TRAP 주기적인 Alive check하는 쓰레드 생성
-	DWORD dwThreadId;
-	CreateThread( NULL, 0, XTrapCallbackAliveThreadFunc, NULL, 0, &dwThreadId);
-
-	I3PRINTLOG(I3LOG_VIEWER, "X-TRAP Start");
-	I3PRINTLOG(I3LOG_VIEWER, "_Xtrap_ <<<");
-#endif
-}
-
-void _Xtrap_Register_()
-{
-#if defined( _XTRAP_)
-	// i3GameInterface에 X-TRAP과 연동할 콜백 함수 등록
-	_pInterface->SetInteractProc3( CSStep2Proc);
-#endif
-}
-
-
 
 bool _WebLogin_()
 {
@@ -1612,14 +1306,6 @@ bool _PreGameExecution_(LPTSTR lpCmdLine)
 		}
         if(h_key != NULL) RegCloseKey(h_key);
 #endif
-		
-
-#if defined (NC_BUILD) 
-	#if defined (LOCALE_INDONESIA) || defined (LOCALE_BRAZIL) || defined (LOCALE_TURKEY) \
-		|| defined (LOCALE_NORTHAMERICA) || defined ( LOCALE_ITALY ) || defined (LOCALE_PHILIPPINES)|| defined( LOCALE_MIDDLE_EAST)
-		//	라이브 경우 인도네시아는 업데이터 실행이 우선이다.
-		//  업데이터에서 보내주는 인자로 실행을 확인한다.
-		//  인자가 0이면 런쳐를 통해 실행한것이 아니다.
 
 		if (i3::generic_string_size(lpCmdLine) <= 0)
 		{
@@ -1649,49 +1335,14 @@ bool _PreGameExecution_(LPTSTR lpCmdLine)
 			I3PRINTLOG(I3LOG_VIEWER, "_ParseParameters_ <<<");
 			return true;
 		}
-	#elif defined( LOCALE_JAPAN)
-
-		if (i3::generic_string_size(lpCmdLine) <= 0)
-		{
-			SHELLEXECUTEINFO shellInfo;
-			shellInfo.cbSize = sizeof(SHELLEXECUTEINFO);
-			shellInfo.fMask = NULL;
-			shellInfo.hwnd = NULL;
-			shellInfo.lpVerb = NULL;		//	vista에서 실행시 권한 상승
-
-			shellInfo.lpFile = _T("AraGameLauncher.exe");
-
-			shellInfo.lpParameters = NULL;
-			shellInfo.lpDirectory = NULL;
-			shellInfo.nShow = SW_SHOW;
-			shellInfo.hInstApp = NULL;
-
-			// AraGameLauncher 실행시킨다.
-			::ShellExecuteEx(&shellInfo);
-
-			HANDLE hProcess = ::GetCurrentProcess();
-
-			DWORD dwExitCode = 0;
-
-			// AraGameLauncher를 실행했으므로 게임 프로세스틑 종료한다.
-			GetExitCodeProcess(hProcess, &dwExitCode);
-			TerminateProcess(hProcess, dwExitCode);
-			I3PRINTLOG(I3LOG_VIEWER, "_ParseParameters_ <<<");
-			return true;
-		}
-	#endif
-#endif
 		I3PRINTLOG(I3LOG_VIEWER, "_ParseParameters_ <<<");
 	return false;
 }
 
 static void _OutOfMemoryHandler()
 {
-#ifdef USE_I3EXEC
-	MessageBoxW(g_hwndMain, L"Out of Memory!", L"", MB_OK);
-#else
+
 	MessageBoxW(g_hwndMain, GAME_STRING("STR_POPUP_MESSAGE_WARNING"), L"" ,MB_OK);
-#endif
 }
 
 
@@ -1924,8 +1575,6 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 	}
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
-
-#endif I3_WINDOWS
 
 
 void AddRegestryGameFile()

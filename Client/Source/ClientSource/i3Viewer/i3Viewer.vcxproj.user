@@ -7,11 +7,13 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug_NorthAmerica|Win32'">
     <LocalDebuggerCommandArguments>admin admin</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
+    <LocalDebuggerCommandArgumentsHistory>admin admin|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Distribute_NorthAmerica|Win32'">
     <LocalDebuggerCommand>F:\Downloads\Compressed\Piercing Blow\PiercingBlow.exe</LocalDebuggerCommand>
     <LocalDebuggerCommandArguments>admin admin</LocalDebuggerCommandArguments>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerWorkingDirectory>F:\Downloads\Compressed\Piercing Blow</LocalDebuggerWorkingDirectory>
+    <LocalDebuggerCommandArgumentsHistory>admin admin|</LocalDebuggerCommandArgumentsHistory>
   </PropertyGroup>
 </Project>

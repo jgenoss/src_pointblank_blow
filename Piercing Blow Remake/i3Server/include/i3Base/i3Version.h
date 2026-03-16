@@ -1,0 +1,20 @@
+#if !defined( __I3_VERSION_H)
+#define __I3_VERSION_H
+
+#define	I3_VERSION_CONFIG_DEBUG		0x80000000
+#define	I3_VERSION_MAJOR			0x02000000
+#define	I3_VERSION_MINOR			0x00030000
+#define	I3_VERSION_REVISION			0x00000001
+
+#if defined( I3_DEBUG)
+#define	I3_VERSION					(I3_VERSION_MAJOR | I3_VERSION_MINOR | I3_VERSION_REVISION | I3_VERSION_CONFIG_DEBUG)				
+#else
+#define	I3_VERSION					(I3_VERSION_MAJOR | I3_VERSION_MINOR | I3_VERSION_REVISION)
+#endif
+
+#define	I3_GETMAJOR(a)				(( (a) & 0x0F000000) >> 24)
+#define	I3_GETMINOR(a)				(( (a) & 0x00FF0000) >> 16)
+#define	I3_GETREVISION(a)			(( (a) & 0x0000FFFF))
+#define	I3_GETDEBUGBUILD(a)			(( (a) & I3_VERSION_CONFIG_DEBUG) != 0)
+
+#endif

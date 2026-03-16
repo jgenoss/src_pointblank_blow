@@ -1,0 +1,157 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Korean resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_KOR)
+#ifdef _WIN32
+LANGUAGE LANG_KOREAN, SUBLANG_DEFAULT
+#pragma code_page(949)
+#endif //_WIN32
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_LOGPOPUP DIALOGEX 0, 0, 344, 90
+STYLE DS_SYSMODAL | DS_SETFONT | DS_MODALFRAME | DS_3DLOOK | DS_FIXEDSYS | DS_NOFAILCREATE | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+EXSTYLE WS_EX_TOOLWINDOW
+CAPTION "i3Engine Event Log"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "Break",IDOK,117,73,50,14
+    PUSHBUTTON      "Continue",IDCANCEL,171,73,50,14
+    CONTROL         107,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE | SS_SUNKEN,5,5,33,31
+    LTEXT           "Where",IDC_STATIC,54,5,22,8
+    EDITTEXT        IDC_ED_WHERE,80,3,261,12,ES_AUTOHSCROLL | ES_READONLY | NOT WS_BORDER,WS_EX_STATICEDGE
+    LTEXT           "Message",IDC_STATIC,48,18,29,8
+    EDITTEXT        IDC_ED_MSG,80,18,261,20,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+    LTEXT           "System",IDC_STATIC,52,41,24,8
+    EDITTEXT        IDC_ED_SYS,80,40,261,31,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | NOT WS_BORDER | WS_VSCROLL,WS_EX_STATICEDGE
+    PUSHBUTTON      "More...",IDC_BUTTON1,291,73,50,14,WS_DISABLED
+END
+
+IDD_UNEXPECTION DIALOGEX 0, 0, 320, 168
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | DS_CENTER | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "오류보고"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "오류 보고 보냄",IDC_B_SEND,106,144,68,16
+    CONTROL         107,IDC_STATIC,"Static",SS_BITMAP | SS_REALSIZEIMAGE | SS_SUNKEN,7,7,33,31
+    LTEXT           "프로그램에 문제가 있어서 프로그램을 종료해야 합니다.\n\n불편을 끼쳐드려서 죄송합니다.\n\n\n제페토(주)에 보낼 수 있는 오류 보고를 작성했습니다.\n\n이 내용은 기밀로 간주되며 익명으로 관리합니다.\n\n\n보내주신 오류보고는 저희에게 큰 힘이 됩니다.\n\n\n제페토(주)에 오류 보고에 대한 메일을 보내시겠습니까 ?",IDC_STATIC,84,14,216,116
+    PUSHBUTTON      "보내지 않음",IDOK,245,144,68,16
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO 
+BEGIN
+    IDD_LOGPOPUP, DIALOG
+    BEGIN
+        LEFTMARGIN, 3
+        RIGHTMARGIN, 341
+        TOPMARGIN, 3
+        BOTTOMMARGIN, 87
+    END
+
+    IDD_UNEXPECTION, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 313
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 160
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_I3ICON16            ICON                    "i3Icon16.ico"
+IDI_I3ICON32            ICON                    "i3Icon32.ico"
+IDI_I3ICON48            ICON                    "i3Icon48.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_I3LOGO16            BITMAP                  "i3Icon16.bmp"
+IDB_I3LOGO32            BITMAP                  "i3Icon32.bmp"
+IDB_I3LOGO48            BITMAP                  "i3Icon48.bmp"
+#endif    // Korean resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (U.S.) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+#ifdef _WIN32
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+#endif //_WIN32
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (U.S.) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

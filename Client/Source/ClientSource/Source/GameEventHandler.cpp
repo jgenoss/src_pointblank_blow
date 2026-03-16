@@ -679,45 +679,10 @@ bool CGameEventHandler::__evtLogin( GAMEEVENTINFO * pInfo)
 	//LS CHECK
 	HACK_CHECK_LOGIN hcLogin;
 	memset(&hcLogin, 1, sizeof(HACK_CHECK_LOGIN));
-#ifdef USE_LEUCO_SHELL
-	LeucoShellCore* pLSCore = LeucoShellCore::GetInstance();
-	if (pLSCore)
-	{
-		memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-		memcpy(hcLogin.m_strDXMD5, pLSCore->GetDXG()->GetDxModuleMD5(), 32);
-		//MODULE FILE
-		hcLogin.m_ui8Type[0] = (UINT16)pLSCore->GetMFV()->GetResult();
-		hcLogin.m_ui8Type[1] = (UINT16)pLSCore->GetMFV()->GetDetectIndex();
-
-		//RESOURCE FILE 잠수패치 이슈로 리소스 해킹 탐지는 기능제거..
-		//hcLogin.m_ui8Type[2];
-		//hcLogin.m_ui8Type[3];
-
-		//추가된 로그인 탐지 항목들
-		//hcLogin.m_ui8Type[4];
-		//hcLogin.m_ui8Type[5];
-		//hcLogin.m_ui8Type[6];
-		//hcLogin.m_ui8Type[7];
-	}
-	else
-	{
-		memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-		hcLogin.m_ui8Type[0] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[1] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[2] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[3] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[4] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[5] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[6] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[7] = (UINT16)MFV_CORE_NULL;
-	}
-#else
-	memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-#endif
 	pSend->m_stHackCheckLogin = hcLogin;
 	//LS END
 
-#if defined( LOCALE_INDONESIA)
+
 	//pSend->m_strNesiaPCbangKey			= Warnet_Premium::g_szRegKey;
 	//pSend->m_dwNesiaPCbangHWKey			= 0;	
 	
@@ -728,7 +693,6 @@ bool CGameEventHandler::__evtLogin( GAMEEVENTINFO * pInfo)
 		I3PRINTLOG(I3LOG_NOTICE, "[MAC ADDRESS] Can not Read Connected Mac Address.");
 	}
 	pSend->m_i64ActiveMacAddress		= ui64RealMacAddress;
-#endif
 
 	// 2016-11-02 User PC Specs 추가
 	USER_INFO_PCSPECS tPcSpecInfo;
@@ -886,41 +850,7 @@ bool CGameEventHandler::__evtLoginWebkey( GAMEEVENTINFO * pInfo)
 	//LS CHECK
 	HACK_CHECK_LOGIN hcLogin;
 	memset(&hcLogin, 1, sizeof(HACK_CHECK_LOGIN));
-#ifdef USE_LEUCO_SHELL
-	LeucoShellCore* pLSCore = LeucoShellCore::GetInstance();
-	if (pLSCore)
-	{
-		memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-		memcpy(hcLogin.m_strDXMD5, pLSCore->GetDXG()->GetDxModuleMD5(), 32);
-		//MODULE FILE
-		hcLogin.m_ui8Type[0] = (UINT16)pLSCore->GetMFV()->GetResult();
-		hcLogin.m_ui8Type[1] = (UINT16)pLSCore->GetMFV()->GetDetectIndex();
 
-		//RESOURCE FILE 잠수패치 이슈로 리소스 해킹 탐지는 기능제거..
-		//hcLogin.m_ui8Type[2];
-		//hcLogin.m_ui8Type[3];
-
-		//추가된 로그인 탐지 항목들
-		//hcLogin.m_ui8Type[4];
-		//hcLogin.m_ui8Type[5];
-		//hcLogin.m_ui8Type[6];
-		//hcLogin.m_ui8Type[7];
-	}
-	else
-	{
-		memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-		hcLogin.m_ui8Type[0] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[1] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[2] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[3] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[4] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[5] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[6] = (UINT16)MFV_CORE_NULL;
-		hcLogin.m_ui8Type[7] = (UINT16)MFV_CORE_NULL;
-	}
-#else
-	memset(&hcLogin, 0, sizeof(HACK_CHECK_LOGIN));
-#endif
 	pSend->m_stHackCheckLogin = hcLogin;
 	//LS END
 	// 2016-11-02 User PC Specs 추가

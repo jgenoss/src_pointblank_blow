@@ -123,24 +123,7 @@ namespace GlobalFunc
 	T_ItemID	GetRandWeapon( WEAPON_SLOT_TYPE type);
 
 	// 값이 없으면 pValue의 값 건드리지 않고 false 값 보냄.
-#ifdef USE_LEUCO_SHELL
-	template<typename T, INT32 VarIndex, ENCRYPT_LEVEL EncLv, BOOL VerifyFlag, BOOL SystemFlag>
-	bool VAR_FIND_REG_DATA(i3RegKey * pKey, const char * pszDataName, VAR<T, VarIndex, EncLv, VerifyFlag, SystemFlag>& pValue)
-	{
-		T temp = T(NULL);
-		FIND_REG_DATA(pKey, pszDataName, &temp);
 
-		if(temp != T(NULL))
-		{
-			pValue = temp;
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-#else
 	template<typename T>
 	bool VAR_FIND_REG_DATA(i3RegKey * pKey, const char * pszDataName, T& pValue)
 	{
@@ -157,7 +140,6 @@ namespace GlobalFunc
 			return false;
 		}
 	}
-#endif
 }
 
 #if defined( MEM_ENCRYPTION)

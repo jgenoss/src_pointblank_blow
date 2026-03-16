@@ -1,0 +1,14 @@
+<Solution>
+  <Configurations>
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Project Path="BattleServer/BattleServer.vcxproj" Id="867673a9-5161-45a2-8296-98b3de6ebeef" />
+  <Project Path="ConnectServer/ConnectServer.vcxproj" Id="031da820-5bde-4412-a98d-fbf2fff0dae2" />
+  <Project Path="DataServer/DataServer.vcxproj" Id="c398c444-e135-453f-801e-fedad8745c93" />
+  <Project Path="GameServer/GameServer.vcxproj" Id="74622044-678b-40ce-89b6-e61cdf89ad10" />
+  <Project Path="i3Server/Project/I3_DX/i3Server/i3Server.vcxproj" Id="9351551b-71b9-4000-ac64-f55678384abf" />
+  <Project Path="S2MO/S2MO/S2MO.vcxproj" Id="a8f3678e-3884-4ea4-b2ae-a395fc69264d">
+    <Platform Project="Win32" />
+  </Project>
+</Solution>

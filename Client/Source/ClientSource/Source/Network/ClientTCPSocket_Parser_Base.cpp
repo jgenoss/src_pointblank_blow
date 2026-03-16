@@ -59,75 +59,6 @@
 
 #define  MAX_MULTIWEAPON_SLOT 10
 #define	 MIN_MULTIWEAPON_SLOT 0
-#if defined( _XIGNCODE_)
-extern void XCALL OnProbeComplete(xhandle CodeBox,
-	CPACKETDATA ReceivedPacket,
-	PACKETDATA Buffer,
-	SIZE_T BufferSize,
-	xpvoid Context)
-{
-	i3NetworkPacket SendPacket;
-	SC_VERSION	ClientVersion;
-	SendPacket.SetProtocol(PROTOCOL_BASE_GAMEGUARD_ACK);
-
-	//LS CHECK
-	HACK_CHECK_REALTIME hcRealTime;
-	memset(&hcRealTime, 1, sizeof(HACK_CHECK_REALTIME));
-#ifdef USE_LEUCO_SHELL
-	LeucoShellCore* pLSCore = LeucoShellCore::GetInstance();
-	if (pLSCore)
-	{
-		memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-		
-		// DIRECT X
-		hcRealTime.m_ui8Type[0] = (UINT16)pLSCore->GetDXG()->GetVFResult();
-		hcRealTime.m_ui8Type[1] = (UINT16)pLSCore->GetDXG()->GetVDResult();
-
-		hcRealTime.m_ui64DXFunction[0] = pLSCore->GetDXG()->GetDectectVF(0);
-		hcRealTime.m_ui64DXFunction[1] = pLSCore->GetDXG()->GetDectectVF(1);
-
-		hcRealTime.m_ui64DXDevice[0] = pLSCore->GetDXG()->GetDectectVD(0);
-		hcRealTime.m_ui64DXDevice[1] = pLSCore->GetDXG()->GetDectectVD(1);
-
-		// FUNC
-		hcRealTime.m_ui8Type[2] = (UINT16)pLSCore->GetFCG()->GetResult();
-		hcRealTime.m_ui8Type[3] = (UINT16)pLSCore->GetFCG()->GetDetectIndex();
-		
-		// VALUE
-		hcRealTime.m_ui8Type[4] = (UINT16)LS::GLOBAL::FUNCTION::GetFakeValueIndex();
-
-		//추가된 로그인 탐지 항목들
-		//hcRealTime.m_ui8Type[5];
-		//hcRealTime.m_ui8Type[6];
-		//hcRealTime.m_ui8Type[7];
-	}
-	else
-	{
-		memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-		hcRealTime.m_ui8Type[0] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[1] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[2] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[3] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[4] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[5] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[6] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[7] = (UINT16)MFV_CORE_NULL;
-	}
-#else
-	memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-#endif
-	SendPacket.WriteData(&hcRealTime, sizeof(HACK_CHECK_REALTIME));
-	//LS END
-
-
-	SendPacket.WriteData(&ClientVersion, sizeof(SC_VERSION));
-	SendPacket.WriteData(Buffer, sizeof(char) * XIGNCODE_PACKET_SIZE);
-
-	CGameNetworkManager::i()->SendTCPMessage(&SendPacket);
-}
-
-#endif
-
 
 namespace
 {
@@ -640,134 +571,6 @@ void ClientTCPSocket::__Parse_Base_EnterPassword( i3NetworkPacket * pPacket)
 
 void ClientTCPSocket::__Parse_Base_StartGameGuard( i3NetworkPacket * pPacket)
 {
-#if defined (_NPROTECT_)
-	I3PRINTLOG(I3LOG_DEFALUT,  "[nProtect] : 1" );  //서버에서 CS 인증 요청
-
-	// 서버로부터 인증 패킷을 수신
-	UINT32 size = 0;
-	pPacket->ReadData( &size, sizeof(UINT32) );
-
-	PBYTE pRecvPacket = new BYTE[size];
-	MEMDUMP_NEW( pRecvPacket, sizeof(BYTE) * size);
-	pPacket->ReadData(pRecvPacket, size);
-
-	nProtect::SetServerAuth3( pRecvPacket, size );
-
-	I3_SAFE_DELETE( pRecvPacket);
-#elif defined (_XTRAP_)
-	// XTrap 입니다.
-	// 받아서 처리하시면 됩니다.
-	char pXTrapInBuffer[ XTRAP_SETINFO_PACKETBUFF_SIZE ];
-	char pXTrapOutBuffer[ XTRAP_SETINFO_PACKETBUFF_SIZE ];
-
-	pPacket->ReadData( pXTrapInBuffer, XTRAP_SETINFO_PACKETBUFF_SIZE );
-
-	#ifdef _XTRAP_DUMP
-	HexaDump4XTrap_V1( "XtrapCheck.txt", pXTrapInBuffer, XTRAP_SETINFO_PACKETBUFF_SIZE, "[*1 In DLL]");
-	#endif
-
-	// Winmain에서 CSStep2Proc로 등록된 콜백 함수에게 값을 전달후 다시 값을 받아온다.
-	INT32 len = XTRAP_SETINFO_PACKETBUFF_SIZE;
-	
-	/* 아래 함수에서 해킹 감지 등의 에러가 발생하면 XTRAP이 클라이언트를 바로 종료한 후 에러창을 띄우고 XTRAP Web Manager로 
-	   에러 로그를 보냅니다. 따라서 클라이언트에서는 반환값 검사에 따른 예외 처리를 하지 않습니다. 할 필요도 없습니다.
-	   * 반환값 형태를 지니고 있으나 실질적으로 무용지물임(함정 코드) : XTRAP 측에 건의함.
-	     - EX. 2011년 11월에 아래의 PROTOCOL_BASE_GAMEGUARD_ACK 패킷을 서버에서 받는데 실패하여 접속종료 건이 상당히 많은 관계로 원인분석을 하였음.
-	           아래의 CallInteractProc3 함수 에러 발생시 반환값을 서버에 패킷을 보내 로그를 남기도록 기능을 추가하였으나 서버에 아무런 로그가 남지 않음.
-	           에러 발생시 XTRAP에서 바로 클라이언트 종료를 하기 때문에 응답 패킷을 못 보내서 서버에 로그가 남지 않음. 
-			   XTRAP 회사에 연락해서 XTRAP Web Manager 계정을 할당받고 접속해서 확인해보니 에러로그를 확인할 수 있었음. 
-	
-	  - XTRAP Web Manager 참조 :  svn://pbsvn/PointBlank/trunk/Source_New/Xtrap/Doc 
-
-		2011.11.28. ugeun.ji
-	*/
-	g_pInterface->CallInteractProc3((void*)pXTrapInBuffer, (void*)pXTrapOutBuffer, (void*)len);
-
-	#ifdef _XTRAP_DUMP
-	HexaDump4XTrap_V1( "XtrapCheck.txt", pXTrapOutBuffer, XTRAP_SETINFO_PACKETBUFF_SIZE, "[*4 Out DLL]");
-	#endif
-
-	// 바로 응답을 보낸다.
-	{
-		i3NetworkPacket SendPacket;
-		SC_VERSION	ClientVersion;
-
-		SendPacket.SetProtocol( PROTOCOL_BASE_GAMEGUARD_ACK );
-
-
-		//LS CHECK
-		HACK_CHECK_REALTIME hcRealTime;
-		memset(&hcRealTime, 1, sizeof(HACK_CHECK_REALTIME));
-#ifdef USE_LEUCO_SHELL
-		LeucoShellCore* pLSCore = LeucoShellCore::GetInstance();
-		if (pLSCore)
-		{
-			memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-
-			// DIRECT X
-			hcRealTime.m_ui8Type[0] = (UINT16)pLSCore->GetDXG()->GetVFResult();
-			hcRealTime.m_ui8Type[1] = (UINT16)pLSCore->GetDXG()->GetVDResult();
-
-			hcRealTime.m_ui64DXFunction[0] = pLSCore->GetDXG()->GetDectectVF(0);
-			hcRealTime.m_ui64DXFunction[1] = pLSCore->GetDXG()->GetDectectVF(1);
-
-			hcRealTime.m_ui64DXDevice[0] = pLSCore->GetDXG()->GetDectectVD(0);
-			hcRealTime.m_ui64DXDevice[1] = pLSCore->GetDXG()->GetDectectVD(1);
-
-			// FUNC
-			hcRealTime.m_ui8Type[2] = (UINT16)pLSCore->GetFCG()->GetResult();
-			hcRealTime.m_ui8Type[3] = (UINT16)pLSCore->GetFCG()->GetDetectIndex();
-
-			// VALUE
-			hcRealTime.m_ui8Type[4] = (UINT16)LS::GLOBAL::FUNCTION::GetFakeValueIndex();
-
-			//추가된 로그인 탐지 항목들
-			//hcRealTime.m_ui8Type[5];
-			//hcRealTime.m_ui8Type[6];
-			//hcRealTime.m_ui8Type[7];
-		}
-		else
-		{
-			memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-			hcRealTime.m_ui8Type[0] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[1] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[2] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[3] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[4] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[5] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[6] = (UINT16)MFV_CORE_NULL;
-			hcRealTime.m_ui8Type[7] = (UINT16)MFV_CORE_NULL;
-		}
-#else
-		memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-#endif
-		SendPacket.WriteData(&hcRealTime, sizeof(HACK_CHECK_REALTIME));
-		//LS END
-
-
-		SendPacket.WriteData(&ClientVersion, sizeof(SC_VERSION));
-		SendPacket.WriteData( pXTrapOutBuffer,	XTRAP_SETINFO_PACKETBUFF_SIZE );
-		SendMessage(&SendPacket);
-	}
-#elif defined (_XIGNCODE_)
-
-	//pPacket->ReadData( &ui8Len, sizeof(UINT8));
-
-	// 확인용 로그 추후제거.
-	I3PRINTLOG(I3LOG_NOTICE, "#### Rcv XCXC \n");
-
-	char  pXignCodeBuffer[XIGNCODE_PACKET_SIZE];
-
-	pPacket->ReadData(pXignCodeBuffer, sizeof(char)* XIGNCODE_PACKET_SIZE);
-	//	서버로부터 응답 요청을 받는다.
-	if (!ZCWAVE_ProbeEx(pXignCodeBuffer, XIGNCODE_PACKET_SIZE, OnProbeComplete, NULL))
-	{
-		I3TRACE("Taht's NONO\n");
-		I3PRINTLOG(I3LOG_NOTICE, "#### Rcv XCXC \n");
-	}
-	else I3PRINTLOG(I3LOG_NOTICE, "#### Rcv XCXC \n");
-
-#else
 	i3NetworkPacket SendPacket;
 	SC_VERSION	ClientVersion;
 
@@ -776,56 +579,14 @@ void ClientTCPSocket::__Parse_Base_StartGameGuard( i3NetworkPacket * pPacket)
 	//LS CHECK
 	HACK_CHECK_REALTIME hcRealTime;
 	memset(&hcRealTime, 1, sizeof(HACK_CHECK_REALTIME));
-#ifdef USE_LEUCO_SHELL
-	LeucoShellCore* pLSCore = LeucoShellCore::GetInstance();
-	if (pLSCore)
-	{
-		memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-
-		// DIRECT X
-		hcRealTime.m_ui8Type[0] = (UINT16)pLSCore->GetDXG()->GetVFResult();
-		hcRealTime.m_ui8Type[1] = (UINT16)pLSCore->GetDXG()->GetVDResult();
-
-		hcRealTime.m_ui64DXFunction[0] = pLSCore->GetDXG()->GetDectectVF(0);
-		hcRealTime.m_ui64DXFunction[1] = pLSCore->GetDXG()->GetDectectVF(1);
-
-		hcRealTime.m_ui64DXDevice[0] = pLSCore->GetDXG()->GetDectectVD(0);
-		hcRealTime.m_ui64DXDevice[1] = pLSCore->GetDXG()->GetDectectVD(1);
-
-		// FUNC
-		hcRealTime.m_ui8Type[2] = (UINT16)pLSCore->GetFCG()->GetResult();
-		hcRealTime.m_ui8Type[3] = (UINT16)pLSCore->GetFCG()->GetDetectIndex();
-
-		// VALUE
-		hcRealTime.m_ui8Type[4] = (UINT16)LS::GLOBAL::FUNCTION::GetFakeValueIndex();
-
-		//추가된 로그인 탐지 항목들
-		//hcRealTime.m_ui8Type[5];
-		//hcRealTime.m_ui8Type[6];
-		//hcRealTime.m_ui8Type[7];
-	}
-	else
-	{
-		memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-		hcRealTime.m_ui8Type[0] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[1] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[2] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[3] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[4] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[5] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[6] = (UINT16)MFV_CORE_NULL;
-		hcRealTime.m_ui8Type[7] = (UINT16)MFV_CORE_NULL;
-	}
-#else
 	memset(&hcRealTime, 0, sizeof(HACK_CHECK_REALTIME));
-#endif
+
 	SendPacket.WriteData(&hcRealTime, sizeof(HACK_CHECK_REALTIME));
 	//LS END
 
 
 	SendPacket.WriteData(&ClientVersion, sizeof(SC_VERSION));
 	SendMessage(&SendPacket);
-#endif
 }
 
 void ClientTCPSocket::__Parse_Base_GetMyInfo_Record( i3NetworkPacket * pPacket)

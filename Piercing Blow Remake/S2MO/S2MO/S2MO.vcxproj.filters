@@ -1,0 +1,329 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="RSA">
+      <UniqueIdentifier>{14f4dfa4-b61c-4861-86ab-e2b3b7b1aa8c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RSA\Header">
+      <UniqueIdentifier>{e689ae70-7571-4b64-a4e5-9ab359c91d8b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="RSA\Source">
+      <UniqueIdentifier>{2cd2d8bc-8ada-465c-8561-bace9b4f45f8}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="RSA\algebra.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\algparam.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\asn.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\basecode.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\cpu.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\cryptlib.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\des.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\dessp.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\dh.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\dll.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\emsa2.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\eprecomp.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\filters.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\fips140.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\gfpcrypt.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\hex.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\hmac.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\hrtimer.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\integer.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\iterhash.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\luc.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\mars.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\marss.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\misc.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\modes.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\mqueue.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\nbtheory.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\oaep.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\osrng.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\pch_rsa.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\pkcspad.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\pssr.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\pubkey.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\queue.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\randpool.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\rdtables.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\rijndael.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\rng.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\rsa.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\seed.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\sha.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\simple.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="RSA\strciphr.cpp">
+      <Filter>RSA\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="S2MOBase.cpp" />
+    <ClCompile Include="S2MORSA.cpp" />
+    <ClCompile Include="S2MODataType.cpp" />
+    <ClCompile Include="S2MODatFile.cpp" />
+    <ClCompile Include="S2MOMD5.cpp" />
+    <ClCompile Include="S2MOPacketClass.cpp" />
+    <ClCompile Include="pch.cpp" />
+    <ClCompile Include="S2MO.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="RSA\aes.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\algebra.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\algparam.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\argnames.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\asn.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\basecode.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\config.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\cpu.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\cryptlib.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\des.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\dh.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\dll.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\dmac.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\emsa2.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\eprecomp.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\filters.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\fips140.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\fltrimpl.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\gfpcrypt.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\hex.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\hmac.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\hrtimer.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\integer.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\iterhash.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\luc.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\mars.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\misc.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\modarith.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\modes.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\modexppc.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\mqueue.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\nbtheory.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\oaep.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\oids.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\osrng.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\pch_rsa.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\pkcspad.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\pssr.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\pubkey.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\queue.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\randpool.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\rijndael.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\rng.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\rsa.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\secblock.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\seckey.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\seed.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\sha.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\simple.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\smartptr.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\stdcpp.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\strciphr.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\trunhash.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="RSA\words.h">
+      <Filter>RSA\Header</Filter>
+    </ClInclude>
+    <ClInclude Include="ProtocolDef.h" />
+    <ClInclude Include="ErrorCode.h" />
+    <ClInclude Include="S2MOBase.h" />
+    <ClInclude Include="S2MORSA.h" />
+    <ClInclude Include="S2MODataType.h" />
+    <ClInclude Include="S2MODatFile.h" />
+    <ClInclude Include="S2MOMD5.h" />
+    <ClInclude Include="S2MOPacketClass.h" />
+    <ClInclude Include="S2MOStruct.h" />
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="S2MO.h" />
+    <ClInclude Include="targetver.h" />
+  </ItemGroup>
+</Project>
