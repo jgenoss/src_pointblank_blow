@@ -258,7 +258,49 @@ void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
-	SendSimpleAck(PROTOCOL_SHOP_REPAIR_ACK, 0);
+	int32_t result = 0;
+	uint32_t newGP = (uint32_t)m_i32GP;
+
+	// Parse: repairType(1) + itemDBIdx(4)
+	// repairType: 0 = single item, 1 = repair all
+	if (i32Size >= 1)
+	{
+		uint8_t repairType = *(uint8_t*)pData;
+
+		if (repairType == 1)
+		{
+			int ret = RepairAllItems();
+			if (ret < 0)
+				result = 1;
+		}
+		else if (i32Size >= 5)
+		{
+			uint32_t itemDBIdx = *(uint32_t*)(pData + 1);
+			int ret = RepairItem(itemDBIdx);
+			if (ret < 0)
+				result = 1;
+		}
+
+		newGP = (uint32_t)m_i32GP;
+	}
+
+	// Send ACK with updated GP
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_SHOP_REPAIR_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &newGP, 4);						offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
 }
 
 // ============================================================================

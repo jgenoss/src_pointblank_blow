@@ -243,6 +243,67 @@ void GameSession::OnLobbyGMExitUserReq(char* pData, INT32 i32Size)
 	SendSimpleAck(PROTOCOL_LOBBY_GM_EXIT_USER_ACK, 0);
 }
 
+// GM destroys a room (kick all players and destroy)
+void GameSession::OnGMDestroyRoomReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+	{
+		printf("[GM] Unauthorized GM_DESTROY_ROOM attempt - UID=%lld\n", m_i64UID);
+		return;
+	}
+
+	if (i32Size < (int)(sizeof(int) + sizeof(int)))
+		return;
+
+	// Parse: channelIdx(4) + roomIdx(4)
+	int channelIdx = *(int*)pData;
+	int roomIdx = *(int*)(pData + 4);
+
+	RoomManager* pRoomMgr = g_pGameServerContext->GetRoomManager();
+	if (!pRoomMgr)
+		return;
+
+	Room* pRoom = pRoomMgr->GetRoom(channelIdx, roomIdx);
+	if (!pRoom || !pRoom->IsCreated())
+	{
+		printf("[GM] GM_DESTROY_ROOM - Room not found, Ch=%d, Idx=%d\n", channelIdx, roomIdx);
+		return;
+	}
+
+	printf("[GM] Destroying room - GM_UID=%lld, Ch=%d, Idx=%d\n",
+		m_i64UID, channelIdx, roomIdx);
+
+	// Send destroy notification to all players in the room
+	{
+		i3NetworkPacket packet;
+		char buffer[16];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_SERVER_MESSAGE_ROOM_DESTROY;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		pRoom->SendToAll(&packet);
+	}
+
+	// Kick all players from the room
+	for (int s = 0; s < SLOT_MAX_COUNT; s++)
+	{
+		GameSession* pSess = pRoom->GetSlotSession(s);
+		if (pSess)
+		{
+			pRoomMgr->OnLeaveRoom(pSess, channelIdx);
+		}
+	}
+
+	printf("[GM] Room destroyed - Ch=%d, Idx=%d\n", channelIdx, roomIdx);
+}
+
 // Send server announcement to this session
 void GameSession::SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen)
 {

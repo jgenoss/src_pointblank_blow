@@ -177,6 +177,11 @@ public:
 	void			CheckExpiredItems();
 	int				RemoveExpiredItems();
 
+	// Item durability (Phase 14C)
+	void			DecreaseEquippedDurability();
+	int				RepairItem(uint32_t ui32ItemDBIdx);
+	int				RepairAllItems();
+
 	// Save all player stats at end of battle
 	void			SaveAllPlayerStats();
 
@@ -389,6 +394,9 @@ private:
 
 	// Boost event info (Phase 14B)
 	void			SendBoostEventInfo();
+
+	// Title info (Phase 4D)
+	void			SendTitleInfo();
 
 	// Rank helpers (Phase 10)
 	void			CheckRankUp();

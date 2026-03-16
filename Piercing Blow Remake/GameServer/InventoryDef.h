@@ -99,12 +99,19 @@ enum GameItemAttrType
 
 #pragma pack(push, 1)
 
+// Durability constants (Phase 14C)
+#define DURABILITY_MAX				100		// 100% durability
+#define DURABILITY_DECREASE_PER_BATTLE	5	// -5% per battle
+#define DURABILITY_BROKEN_THRESHOLD		0	// 0% = broken, cannot equip
+#define DURABILITY_REPAIR_COST_PER_POINT	50	// 50 GP per durability point
+
 struct GameInventoryItem
 {
 	uint32_t	ui32ItemDBIdx;		// DB unique index (T_ItemDBIdx)
 	uint32_t	ui32ItemId;			// Item ID (T_ItemID)
 	uint8_t		ui8ItemType;		// GameItemAttrType (0=unused/permanent, 1=count, 2=period)
 	uint32_t	ui32ItemArg;		// For count: remaining count. For period: expire timestamp.
+	uint8_t		ui8Durability;		// 0-100, weapon/parts durability (Phase 14C)
 
 	void Reset()
 	{
@@ -112,12 +119,34 @@ struct GameInventoryItem
 		ui32ItemId = 0;
 		ui8ItemType = 0;
 		ui32ItemArg = 0;
+		ui8Durability = DURABILITY_MAX;
 	}
 
 	bool IsValid() const { return ui32ItemId != 0; }
+	bool IsBroken() const { return ui8Durability <= DURABILITY_BROKEN_THRESHOLD; }
+	bool HasDurability() const;	// Only weapons and parts have durability
+	int  GetRepairCost() const;	// GP cost to repair to full
 };
 
 #pragma pack(pop)
+
+// Durability helpers
+inline bool GameInventoryItem::HasDurability() const
+{
+	if (!IsValid()) return false;
+	int type = GET_ITEM_TYPE(ui32ItemId);
+	// Weapons and character parts have durability
+	return (type >= ITEM_TYPE_PRIMARY && type <= ITEM_TYPE_THROWING2) ||
+		   (type >= ITEM_TYPE_CHARA && type <= ITEM_TYPE_SKIN) ||
+		   type == ITEM_TYPE_BERET;
+}
+
+inline int GameInventoryItem::GetRepairCost() const
+{
+	if (!HasDurability() || ui8Durability >= DURABILITY_MAX)
+		return 0;
+	return (DURABILITY_MAX - ui8Durability) * DURABILITY_REPAIR_COST_PER_POINT;
+}
 
 // Helper: Check if an ItemID is a weapon type
 inline bool IsWeaponItem(uint32_t itemId)

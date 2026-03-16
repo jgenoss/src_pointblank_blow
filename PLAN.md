@@ -19,44 +19,44 @@
 
 ### 1A. Room State Machine Completa
 **Archivos**: `Room.cpp`, `Room.h`
-- [ ] Implementar `OnUpdateRoom()` con timer-driven state machine (como original `_OnUpdateRoom_*_M`)
-- [ ] Estados faltantes: `ROOM_STATE_COUNTDOWN_R` (3s countdown), `ROOM_STATE_LOADING` (timeout 60s), `ROOM_STATE_RENDEZVOUS`, `ROOM_STATE_PRE_BATTLE` (hole punch), `ROOM_STATE_COUNTDOWN_B` (3s), `ROOM_STATE_BATTLE_RESULT` (5s scoreboard)
-- [ ] Transiciones automáticas por timeout entre estados
-- [ ] Agregar `m_dwStateStartTime` para tracking de cuando entró en cada estado
-- [ ] Loading timeout: si un jugador no carga en 60s, sacarlo
+- [x] Implementar `OnUpdateRoom()` con timer-driven state machine (como original `_OnUpdateRoom_*_M`)
+- [x] Estados faltantes: `ROOM_STATE_COUNTDOWN_R` (3s countdown), `ROOM_STATE_LOADING` (timeout 60s), `ROOM_STATE_RENDEZVOUS`, `ROOM_STATE_PRE_BATTLE` (hole punch), `ROOM_STATE_COUNTDOWN_B` (3s), `ROOM_STATE_BATTLE_RESULT` (5s scoreboard)
+- [x] Transiciones automáticas por timeout entre estados
+- [x] Agregar `m_dwStateStartTime` para tracking de cuando entró en cada estado
+- [x] Loading timeout: si un jugador no carga en 60s, sacarlo
 
 ### 1B. Battle Flow Completo con BattleServer
 **Archivos**: `GameSessionBattle.cpp`, `ModuleBattleServer.cpp`
-- [ ] En `OnBattleReadyBattleReq`: Solicitar creación de room al BattleServer via `IS_BATTLE_CREATE_REQ`
-- [ ] Esperar `IS_BATTLE_CREATE_ACK` antes de avanzar a LOADING
-- [ ] En `OnBattlePreStartBattleReq`: Enviar IP/Puerto UDP del BattleServer al cliente
-- [ ] Tracking per-slot de estado de loading (`SLOT_STATE_LOAD` → `SLOT_STATE_BATTLE_LOADOK` → `SLOT_STATE_BATTLE_READY`)
-- [ ] Cuando TODOS los slots están en `BATTLE_READY`, avanzar a `COUNTDOWN_B`
-- [ ] En `OnBattleStartBattleReq`: Solo avanzar a BATTLE si room está en COUNTDOWN_B
+- [x] En `OnBattleReadyBattleReq`: Solicitar creación de room al BattleServer via `IS_BATTLE_CREATE_REQ`
+- [x] Esperar `IS_BATTLE_CREATE_ACK` antes de avanzar a LOADING
+- [x] En `OnBattlePreStartBattleReq`: Enviar IP/Puerto UDP del BattleServer al cliente
+- [x] Tracking per-slot de estado de loading (`SLOT_STATE_LOAD` → `SLOT_STATE_BATTLE_LOADOK` → `SLOT_STATE_BATTLE_READY`)
+- [x] Cuando TODOS los slots están en `BATTLE_READY`, avanzar a `COUNTDOWN_B`
+- [x] En `OnBattleStartBattleReq`: Solo avanzar a BATTLE si room está en COUNTDOWN_B
 
 ### 1C. Battle Result Screen
 **Archivos**: `GameSessionBattle.cpp`, `Room.cpp`
-- [ ] Cuando el match termina, cambiar a `ROOM_STATE_BATTLE_RESULT` (no directamente a READY)
-- [ ] Enviar packet con estadísticas completas por jugador: kills, deaths, headshots, assists, exp ganada, puntos ganados
-- [ ] Timer de 5 segundos en BATTLE_RESULT
-- [ ] Al terminar timer, calcular recompensas, guardar stats en DataServer, y volver a READY
+- [x] Cuando el match termina, cambiar a `ROOM_STATE_BATTLE_RESULT` (no directamente a READY)
+- [x] Enviar packet con estadísticas completas por jugador: kills, deaths, headshots, assists, exp ganada, puntos ganados
+- [x] Timer de 5 segundos en BATTLE_RESULT
+- [x] Al terminar timer, calcular recompensas, guardar stats en DataServer, y volver a READY
 - [ ] Implementar `SLOT_BONUS` tracking: EXP y POINT bonuses por performance
 
 ### 1D. Death & Kill Processing Completo
 **Archivos**: `GameSessionBattle.cpp`
-- [ ] Parsear `DEATH_INFO_HEADER` completo: weaponId, hitPart, position(x,y,z), assistSlot
-- [ ] Multi-kill tracking (double, triple, multi, ultra, unbelievable)
-- [ ] Headshot tracking
-- [ ] Assist tracking (último jugador que dañó antes del kill)
-- [ ] Actualizar `m_stUsedWeapon` en sesión para tracking de arma usada
-- [ ] Broadcasting de death con toda la info a todos los jugadores
+- [x] Parsear `DEATH_INFO_HEADER` completo: weaponId, hitPart, position(x,y,z), assistSlot
+- [x] Multi-kill tracking (double, triple, multi, ultra, unbelievable)
+- [x] Headshot tracking
+- [x] Assist tracking (último jugador que dañó antes del kill)
+- [x] Actualizar `m_stUsedWeapon` en sesión para tracking de arma usada
+- [x] Broadcasting de death con toda la info a todos los jugadores
 
 ### 1E. Respawn System
 **Archivos**: `GameSessionBattle.cpp`, `Room.cpp`
-- [ ] Implementar respawn timers configurables (NO=6s, SHORT_20=5s, SHORT_30=4s, MID_30=3s, MID_40=2s, MID_50=1s)
-- [ ] `m_bReSpawnFlag[SLOT_MAX_COUNT]` y `m_bDeathFlag[SLOT_MAX_COUNT]` tracking
-- [ ] `m_bAlive[SLOT_MAX_COUNT]` para saber quién está vivo
-- [ ] Validar respawn: no permitir si el round ya acabó
+- [x] Implementar respawn timers configurables (NO=6s, SHORT_20=5s, SHORT_30=4s, MID_30=3s, MID_40=2s, MID_50=1s)
+- [x] `m_bReSpawnFlag[SLOT_MAX_COUNT]` y `m_bDeathFlag[SLOT_MAX_COUNT]` tracking
+- [x] `m_bAlive[SLOT_MAX_COUNT]` para saber quién está vivo
+- [x] Validar respawn: no permitir si el round ya acabó
 
 ---
 
@@ -113,13 +113,13 @@
 ## FASE 3: Protocolo Completo de Room
 
 ### 3A. Room Protocols Faltantes
-**Archivos**: `GameSessionRoom.cpp`
-- [ ] `PROTOCOL_ROOM_INVITE_REQ/ACK` - Invitar jugador a la sala
+**Archivos**: `GameSessionRoom.cpp`, `GameSessionBattle.cpp`
+- [x] `PROTOCOL_ROOM_INVITE_REQ/ACK` - Invitar jugador a la sala
 - [ ] `PROTOCOL_ROOM_OBSERVER_REQ/ACK` - Modo observador
-- [ ] `PROTOCOL_ROOM_DECIDE_VOTE_REQ/ACK` - Votación de kick
-- [ ] `PROTOCOL_ROOM_DECIDE_VOTE_RESULT_ACK` - Resultado de votación
-- [ ] `PROTOCOL_ROOM_GET_PING_REQ/ACK` - Ping measurement
-- [ ] Lógica de votación: mínimo 3 jugadores, timeout 20s, cooldown 60s
+- [x] `PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ/ACK` - Votación de kick
+- [x] `PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ/ACK` - Resultado de votación
+- [x] `PROTOCOL_BATTLE_SENDPING_REQ/ACK` - Ping measurement
+- [ ] Lógica de votación avanzada: mínimo 3 jugadores, timeout 20s, cooldown 60s
 - [ ] Kick list tracking (`m_aKickUserList[]`)
 
 ### 3B. Room State Sync
@@ -133,35 +133,35 @@
 
 ### 4A. Login Flow Completo
 **Archivos**: `GameSession.cpp`
-- [ ] `PROTOCOL_BASE_GET_SYSTEM_INFO_REQ/ACK` - Enviar versión del server, MD5 key, GameGuard type
-- [ ] `PROTOCOL_BASE_GET_OPTION_REQ/ACK` - Enviar opciones del jugador (controles, sensibilidad)
-- [ ] `PROTOCOL_BASE_OPTION_SAVE_REQ/ACK` - Guardar opciones
-- [ ] `PROTOCOL_BASE_CHECK_NICK_NAME_REQ/ACK` - Verificar nickname disponible
-- [ ] `PROTOCOL_BASE_CREATE_NICK_REQ/ACK` - Crear nickname (primera vez)
-- [ ] `PROTOCOL_BASE_RANK_UP_REQ/ACK` - Rank up automático al alcanzar EXP requerida
+- [x] `PROTOCOL_BASE_GET_SYSTEM_INFO_REQ/ACK` - Enviar versión del server, MD5 key, GameGuard type
+- [x] `PROTOCOL_BASE_GET_OPTION_REQ/ACK` - Enviar opciones del jugador (controles, sensibilidad)
+- [x] `PROTOCOL_BASE_OPTION_SAVE_REQ/ACK` - Guardar opciones
+- [x] `PROTOCOL_BASE_CHECK_NICK_NAME_REQ/ACK` - Verificar nickname disponible
+- [x] `PROTOCOL_BASE_CREATE_NICK_REQ/ACK` - Crear nickname (primera vez)
+- [x] `PROTOCOL_BASE_RANK_UP_REQ/ACK` - Rank up automático al alcanzar EXP requerida
 
 ### 4B. Map/Stage Data
-**Archivos**: `GameContextMain.cpp`, nuevo `GameSessionChannel.cpp`
-- [ ] `PROTOCOL_BASE_MAP_VERSION_REQ/ACK` - Versión del map list
-- [ ] `PROTOCOL_BASE_MAP_LIST_REQ/ACK` - Lista de mapas disponibles
-- [ ] `PROTOCOL_BASE_MAP_RULELIST_REQ/ACK` - Reglas por modo de juego
-- [ ] `PROTOCOL_BASE_MAP_MATCHINGLIST_REQ/ACK` - Matching mode↔stage
+**Archivos**: `GameContextMain.cpp`, `GameSessionChannel.cpp`
+- [x] `PROTOCOL_BASE_MAP_VERSION_REQ/ACK` - Versión del map list
+- [x] `PROTOCOL_BASE_MAP_LIST_REQ/ACK` - Lista de mapas disponibles
+- [x] `PROTOCOL_BASE_MAP_RULELIST_REQ/ACK` - Reglas por modo de juego
+- [x] `PROTOCOL_BASE_MAP_MATCHINGLIST_REQ/ACK` - Matching mode↔stage
 - [ ] `PROTOCOL_BASE_MAP_RANDOM_LIST_ACK` - Mapas random
-- [ ] Cargar datos de mapas/stages desde config o DataServer
+- [x] Cargar datos de mapas/stages desde config o DataServer
 
 ### 4C. User Info Completa
 **Archivos**: `GameSession.cpp`
-- [ ] `PROTOCOL_BASE_GET_MYINFO_RECORD_REQ/ACK` - Record del jugador (K/D/Win/Loss)
-- [ ] `PROTOCOL_BASE_GET_MYINFO_BASIC_REQ/ACK` - Info básica
-- [ ] `PROTOCOL_BASE_GET_MYINFO_ALL_REQ/ACK` - Todo junto
-- [ ] `PROTOCOL_BASE_GET_RECORD_INFO_DB_REQ/ACK` - Record desde DB
+- [x] `PROTOCOL_BASE_GET_MYINFO_RECORD_REQ/ACK` - Record del jugador (K/D/Win/Loss)
+- [x] `PROTOCOL_BASE_GET_MYINFO_BASIC_REQ/ACK` - Info básica
+- [x] `PROTOCOL_BASE_GET_MYINFO_ALL_REQ/ACK` - Todo junto
+- [x] `PROTOCOL_BASE_GET_RECORD_INFO_DB_REQ/ACK` - Record desde DB
 - [ ] `PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK` - Info detallada de otro jugador
 
 ### 4D. Title System
-- [ ] `PROTOCOL_BASE_USER_TITLE_CHANGE_REQ/ACK`
-- [ ] `PROTOCOL_BASE_USER_TITLE_EQUIP_REQ/ACK`
-- [ ] `PROTOCOL_BASE_USER_TITLE_RELEASE_REQ/ACK`
-- [ ] `PROTOCOL_BASE_USER_TITLE_INFO_ACK`
+- [x] `PROTOCOL_BASE_USER_TITLE_CHANGE_REQ/ACK`
+- [x] `PROTOCOL_BASE_USER_TITLE_EQUIP_REQ/ACK`
+- [x] `PROTOCOL_BASE_USER_TITLE_RELEASE_REQ/ACK`
+- [x] `PROTOCOL_BASE_USER_TITLE_INFO_ACK`
 
 ---
 
@@ -169,22 +169,22 @@
 
 ### 5A. Shop Version & Catalog
 **Archivos**: `GameSessionShop.cpp`, `ShopManager.cpp`
-- [ ] `PROTOCOL_AUTH_SHOP_VERSION_REQ/ACK` - Shop version check
-- [ ] `PROTOCOL_AUTH_SHOP_LIST_REQ/ACK` - Shop list
-- [ ] `PROTOCOL_AUTH_SHOP_GOODSLIST_REQ/ACK` - Goods list
-- [ ] `PROTOCOL_AUTH_SHOP_ITEMLIST_REQ/ACK` - Item list
-- [ ] `PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ/ACK` - Matching list
+- [x] `PROTOCOL_AUTH_SHOP_VERSION_REQ/ACK` - Shop version check
+- [x] `PROTOCOL_AUTH_SHOP_LIST_REQ/ACK` - Shop list
+- [x] `PROTOCOL_AUTH_SHOP_GOODSLIST_REQ/ACK` - Goods list
+- [x] `PROTOCOL_AUTH_SHOP_ITEMLIST_REQ/ACK` - Item list
+- [x] `PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ/ACK` - Matching list
 - [ ] `PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ/ACK` - Repair data
 - [ ] Double-buffered shop data (UseShopData/NotUseShopData) para actualizaciones atómicas
 
 ### 5B. Purchase & Gift
-- [ ] `PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ/ACK` - Compra con validación GP/Cash
-- [ ] `PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ/ACK` - Regalar items
+- [x] `PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ/ACK` - Compra con validación GP/Cash
+- [x] `PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ/ACK` - Regalar items
 - [ ] `PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ/ACK` - Activar item
 - [ ] `PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ/ACK` - Agregar item al inventario
 - [ ] `PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ/ACK` - Eliminar item
-- [ ] Item expiration checking
-- [ ] Durability system
+- [x] Item expiration checking
+- [x] Durability system
 
 ### 5C. Capsule/Gacha Shop
 - [ ] `PROTOCOL_AUTH_SHOP_CAPSULE_REQ/ACK`
@@ -263,13 +263,13 @@
 **Archivos**: `GameSession.cpp`
 - [ ] Packet encryption validation con XOR key
 - [ ] Packet replay detection
-- [ ] Protocol rate limiting (max packets per second)
+- [x] Protocol rate limiting (max packets per second)
 - [ ] State validation: rechazar packets que no corresponden al GAME_TASK actual
-- [ ] Timeout por estado: 30s para NOT_LOGIN, 600s para LOGIN, 120s para NORMAL, 3600s para CHANNEL
+- [x] Timeout por estado: 30s para NOT_LOGIN, 600s para LOGIN, 120s para NORMAL, 3600s para CHANNEL
 
 ### 9B. GameGuard Stub
-- [ ] Stub para GameGuard handshake (para que el cliente no se desconecte)
-- [ ] `PROTOCOL_BASE_GAMEGUARD_REQ/ACK` - Responder con datos dummy válidos
+- [x] Stub para GameGuard handshake (para que el cliente no se desconecte)
+- [x] `PROTOCOL_BASE_GAMEGUARD_REQ/ACK` - Responder con datos dummy válidos
 
 ### 9C. Cheat Detection
 **Archivos**: Crear `GameSessionCheat.cpp`
@@ -292,10 +292,10 @@
 
 ### 10B. Rank System
 **Archivos**: `GameSession.cpp`
-- [ ] Rank-up check after EXP update
+- [x] Rank-up check after EXP update
 - [ ] Rank-up items reward (from `m_aRankUpItem[MAX_RANK_COUNT]`)
-- [ ] `PROTOCOL_BASE_RANK_UP_ACK` notification
-- [ ] Initial rank-up for new players
+- [x] `PROTOCOL_BASE_RANK_UP_ACK` notification
+- [x] Initial rank-up for new players
 
 ---
 
@@ -306,7 +306,7 @@
 - [x] `GM_KickUser_U` - Kick player from room
 - [x] `GM_ExitUser_U` - Force disconnect
 - [ ] `GM_BlockUser_U` - Ban with comment
-- [ ] `GM_DestroyRoom_U` - Force destroy room
+- [x] `GM_DestroyRoom_U` - Force destroy room
 - [ ] `GMPause` / `GMResume` - Pause/resume battle
 - [ ] Damage console for debugging
 - [x] Server announce message (`SendServerAnnounce`)
@@ -362,9 +362,10 @@
 - [x] `PROTOCOL_BASE_BOOSTEVENT_INFO_ACK`
 
 ### 14C. Item Durability
-- [ ] Durability decrease per battle
-- [ ] Repair cost calculation
-- [ ] Item break notification
+- [x] Durability decrease per battle
+- [x] Repair cost calculation
+- [x] Item break notification
+- [x] Repair single/all items via shop
 
 ### 14D. Random Map System
 - [ ] Random map selection per channel
@@ -389,23 +390,25 @@
 | Categoría | Protocolos Original | Implementados | % |
 |-----------|---------------------|---------------|---|
 | Login (0x0100) | 3 | 1 | 33% |
-| Base (0x0200) | ~80 | 8 | 10% |
+| Base (0x0200) | ~80 | 25 | 31% |
 | Auth (0x0300) | ~80 | 7 | 9% |
-| Shop (0x0400) | ~40 | 5 | 13% |
+| Shop (0x0400) | ~40 | 12 | 30% |
+| Admin (0x0500) | ~10 | 0 | 0% |
 | Clan (0x0700) | ~60 | 9 | 15% |
 | Clan Match (0x0800) | ~20 | 0 | 0% |
-| Lobby (0x0C00) | ~10 | 5 | 50% |
+| Server Msg (0x0A00) | ~10 | 4 | 40% |
+| Lobby (0x0C00) | ~10 | 7 | 70% |
 | Inventory (0x0D00) | ~10 | 3 | 30% |
 | RS/IGS (0x0E00) | ~10 | 5 | 50% |
-| Room (0x0F00) | ~30 | 14 | 47% |
-| Battle (0x1000) | ~40 | 10 | 25% |
+| Room (0x0F00) | ~30 | 18 | 60% |
+| Battle (0x1000) | ~40 | 18 | 45% |
 | Medal (0x1200) | ~10 | 7 | 70% |
-| Cheat (0x1300) | ~10 | 0 | 0% |
+| Cheat (0x1300) | ~10 | 3 | 30% |
 | Gacha (0x1400) | ~10 | 5 | 50% |
-| QuickJoin (0x1500) | ~5 | 1 | 20% |
+| QuickJoin (0x1500) | ~5 | 3 | 60% |
 | Skill (0x1700) | ~5 | 4 | 80% |
 | Char (0x1800) | ~5 | 3 | 60% |
-| MyInfo (0x1900) | ~5 | 0 | 0% |
-| GMChat (0x1A00) | ~5 | 0 | 0% |
+| MyInfo (0x1900) | ~5 | 3 | 60% |
+| GMChat (0x1A00) | ~5 | 4 | 80% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~87** | **~19%** |
+| **TOTAL** | **~460** | **~141** | **~31%** |

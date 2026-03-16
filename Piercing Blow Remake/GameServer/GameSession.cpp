@@ -461,6 +461,9 @@ void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
 	// Send boost event info (Phase 14B)
 	SendBoostEventInfo();
 
+	// Send title info (Phase 4D)
+	SendTitleInfo();
+
 	m_eMainTask = GAME_TASK_CHANNEL;
 }
 
@@ -936,6 +939,37 @@ void GameSession::OnTitleChangeReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 }
 
+// Send title info to client (Phase 4D)
+void GameSession::SendTitleInfo()
+{
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_USER_TITLE_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	// Owned title count
+	uint8_t ownedCount = (uint8_t)m_TitleData.i32OwnedCount;
+	memcpy(buffer + offset, &ownedCount, 1);				offset += 1;
+
+	// Owned title bitmask (MAX_TITLE_COUNT bytes)
+	memcpy(buffer + offset, m_TitleData.ui8OwnedTitles, MAX_TITLE_COUNT);
+	offset += MAX_TITLE_COUNT;
+
+	// Equipped slots
+	memcpy(buffer + offset, m_TitleData.ui8EquippedSlots, MAX_EQUIPPED_TITLES);
+	offset += MAX_EQUIPPED_TITLES;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 // ============================================================================
 // Phase 9B - GameGuard Stub
 // ============================================================================
@@ -1216,6 +1250,9 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 
 	// Check for rank up after EXP gain
 	CheckRankUp();
+
+	// Decrease durability of equipped items (Phase 14C)
+	DecreaseEquippedDurability();
 }
 
 // ============================================================================
