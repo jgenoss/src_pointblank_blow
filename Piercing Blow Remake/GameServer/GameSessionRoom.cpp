@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "GameContextMain.h"
+#include "GameSessionManager.h"
 #include "Room.h"
 #include "RoomManager.h"
 
@@ -545,6 +546,143 @@ void GameSession::OnRoomChatReq(char* pData, INT32 i32Size)
 	uint16_t msgSize = (uint16_t)min(i32Size, 256);
 	memcpy(buffer + offset, &msgSize, sizeof(uint16_t));	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, pData, msgSize);				offset += msgSize;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+// ============================================================================
+// Room Invite, Observer, Loading (Phase 3A)
+// ============================================================================
+
+void GameSession::OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_i32ChannelNum < 0)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK, 1);
+		return;
+	}
+
+	// Parse: count(4) + sessionIdx(4) * count (max 5)
+	if (i32Size < (int)sizeof(int32_t))
+		return;
+
+	int32_t inviteCount = *(int32_t*)pData;
+	if (inviteCount <= 0 || inviteCount > 5)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK, 2);
+		return;
+	}
+
+	if (i32Size < (int)(sizeof(int32_t) + inviteCount * sizeof(int32_t)))
+		return;
+
+	int32_t* pSessionIds = (int32_t*)(pData + sizeof(int32_t));
+
+	// Send invite notification to each target session
+	for (int i = 0; i < inviteCount; i++)
+	{
+		int32_t targetIdx = pSessionIds[i];
+		if (!g_pGameSessionManager)
+			continue;
+
+		GameSession* pTarget = g_pGameSessionManager->GetSession(targetIdx);
+		if (!pTarget || pTarget->GetTask() != GAME_TASK_LOBBY)
+			continue;
+
+		// Build invite notification for target
+		i3NetworkPacket invitePacket;
+		char invBuf[256];
+		int invOff = 0;
+
+		uint16_t invSize = 0;
+		uint16_t invProto = PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK;
+		invOff += sizeof(uint16_t);
+		memcpy(invBuf + invOff, &invProto, sizeof(uint16_t));	invOff += sizeof(uint16_t);
+
+		int32_t invResult = 0;
+		memcpy(invBuf + invOff, &invResult, sizeof(int32_t));	invOff += sizeof(int32_t);
+
+		// Inviter info
+		int32_t roomIdx = m_i32RoomIdx;
+		memcpy(invBuf + invOff, &roomIdx, sizeof(int32_t));	invOff += sizeof(int32_t);
+
+		char nick[64] = {0};
+		strncpy_s(nick, m_szNickname, _TRUNCATE);
+		memcpy(invBuf + invOff, nick, 64);						invOff += 64;
+
+		invSize = (uint16_t)invOff;
+		memcpy(invBuf, &invSize, sizeof(uint16_t));
+
+		invitePacket.SetPacketData(invBuf, invOff);
+		pTarget->SendMessage(&invitePacket);
+	}
+
+	SendSimpleAck(PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK, 0);
+}
+
+void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK, 1);
+		return;
+	}
+
+	// ui8Direction: 0 = move to normal slot, 1 = move to observer slot
+	uint8_t direction = *(uint8_t*)pData;
+
+	// For now, just acknowledge - full observer slot management is future work
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);					offset += 1;
+	memcpy(buffer + offset, &direction, 1);					offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnRoomLoadingStartReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom)
+		return;
+
+	// Room master signals that loading should begin
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_LOADING_START_ACK, 1);
+		return;
+	}
+
+	// Broadcast loading start to all players in room
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_ROOM_LOADING_START_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	size = (uint16_t)offset;
 	memcpy(buffer, &size, sizeof(uint16_t));

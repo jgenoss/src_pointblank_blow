@@ -470,3 +470,133 @@ void GameSession::SaveAllPlayerStats()
 			pSlot->GetCash(), pSlot->GetGP());
 	}
 }
+
+// ============================================================================
+// Vote Kick & Ping (Phase 3A)
+// ============================================================================
+
+void GameSession::OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK, 1);
+		return;
+	}
+
+	if (i32Size < 1)
+		return;
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+	if (targetSlot >= SLOT_MAX_COUNT || m_pRoom->IsSlotEmpty(targetSlot))
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK, 2);	// Invalid target
+		return;
+	}
+
+	// Cannot kick yourself
+	if (targetSlot == (uint8_t)m_i32SlotIdx)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK, 3);
+		return;
+	}
+
+	// Need at least 3 players in room for vote kick
+	if (m_pRoom->GetPlayerCount() < 3)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK, 4);	// Not enough players
+		return;
+	}
+
+	// Accept the vote suggestion, broadcast to all players to vote
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint8_t suggestSlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &suggestSlot, 1);				offset += 1;
+	memcpy(buffer + offset, &targetSlot, 1);				offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleVoteKickVoteReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_VOTE_KICKVOTE_ACK, 1);
+		return;
+	}
+
+	if (i32Size < 2)
+		return;
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+	uint8_t vote = *(uint8_t*)(pData + 1);	// 0 = disagree, 1 = agree
+
+	// Acknowledge the vote
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_VOTE_KICKVOTE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint8_t voterSlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &voterSlot, 1);				offset += 1;
+	memcpy(buffer + offset, &targetSlot, 1);			offset += 1;
+	memcpy(buffer + offset, &vote, 1);					offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleSendPingReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom)
+		return;
+
+	if (i32Size < (int)sizeof(uint32_t))
+		return;
+
+	uint32_t pingMs = *(uint32_t*)pData;
+
+	// Broadcast ping to all players in room
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_SENDPING_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+	memcpy(buffer + offset, &pingMs, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}

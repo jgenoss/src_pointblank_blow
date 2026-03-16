@@ -129,6 +129,20 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_LOGIN_REQ:			OnLoginReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_GET_USER_INFO_REQ:	OnGetUserInfoReq(pData, dataSize);	break;
 
+	// ---- System/Login Flow (Phase 4A) ----
+	case PROTOCOL_BASE_GET_SYSTEM_INFO_REQ:	OnGetSystemInfoReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_OPTION_REQ:		OnGetOptionReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_OPTION_SAVE_REQ:		OnOptionSaveReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_CHECK_NICK_NAME_REQ:	OnCheckNickNameReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_CREATE_NICK_REQ:		OnCreateNickReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_RANK_UP_REQ:			OnRankUpReq(pData, dataSize);			break;
+
+	// ---- Map/Stage Data (Phase 4B, GameSessionChannel.cpp) ----
+	case PROTOCOL_BASE_MAP_VERSION_REQ:		OnMapVersionReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_MAP_LIST_REQ:		OnMapListReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_MAP_RULELIST_REQ:	OnMapRuleListReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_MAP_MATCHINGLIST_REQ:OnMapMatchingListReq(pData, dataSize);	break;
+
 	// ---- Channel (GameSessionChannel.cpp) ----
 	case PROTOCOL_BASE_GET_CHANNELLIST_REQ:	OnChannelListReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_SELECT_CHANNEL_REQ:	OnChannelEnterReq(pData, dataSize);	break;
@@ -159,6 +173,9 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_REQUEST_MAIN_REQ:		OnRoomRequestMainReq(pData, dataSize);		break;
 	case PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_REQ:	OnRoomRequestMainChangeReq(pData, dataSize);break;
 	case PROTOCOL_ROOM_CHANGE_ROOM_OPTIONINFO_REQ:	OnRoomChangeOptionInfoReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_INVITE_LOBBY_USER_REQ:		OnRoomInviteLobbyUserReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_REQ:	OnRoomChangeObserverSlotReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_LOADING_START_REQ:			OnRoomLoadingStartReq(pData, dataSize);		break;
 
 	// ---- Equipment (GameSessionEquipment.cpp) ----
 	case PROTOCOL_BASE_GET_EQUIPMENT_INFO_REQ:		OnGetEquipmentInfoReq(pData, dataSize);		break;
@@ -183,6 +200,9 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_MISSION_ROUND_PRE_START_REQ:	OnBattleMissionRoundPreStartReq(pData, dataSize);	break;
 	case PROTOCOL_BATTLE_MISSION_ROUND_START_REQ:		OnBattleMissionRoundStartReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_ROUND_END_REQ:			OnBattleMissionRoundEndReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ:			OnBattleSuggestKickVoteReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ:				OnBattleVoteKickVoteReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_SENDPING_REQ:					OnBattleSendPingReq(pData, dataSize);				break;
 
 	// ---- Shop (GameSessionShop.cpp) ----
 	case PROTOCOL_SHOP_ENTER_REQ:					OnShopEnterReq(pData, dataSize);			break;
@@ -357,6 +377,170 @@ void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
 }
 
 // ============================================================================
+// Phase 4A - System/Login Flow Handlers
+// ============================================================================
+
+void GameSession::OnGetSystemInfoReq(char* pData, INT32 i32Size)
+{
+	// Send server system info: version, MD5 key, GameGuard type
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_SYSTEM_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Server version string
+	char szVersion[32] = "1.0.0";
+	memcpy(buffer + offset, szVersion, 32);					offset += 32;
+
+	// MD5 key (16 bytes, zeroed = no check)
+	memset(buffer + offset, 0, 16);							offset += 16;
+
+	// GameGuard type: 0 = disabled
+	uint8_t ggType = 0;
+	memcpy(buffer + offset, &ggType, 1);					offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetOptionReq(char* pData, INT32 i32Size)
+{
+	// Send player options (controls, sensitivity, key bindings)
+	// Currently a stub - send empty options
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_OPTION_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Option data (128 bytes, zeroed = defaults)
+	memset(buffer + offset, 0, 128);						offset += 128;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnOptionSaveReq(char* pData, INT32 i32Size)
+{
+	// Accept and acknowledge option save
+	// TODO: Forward to DataServer for persistent storage
+	SendSimpleAck(PROTOCOL_BASE_OPTION_SAVE_ACK, 0);
+}
+
+void GameSession::OnCheckNickNameReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 64)
+	{
+		SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, 2);	// Invalid
+		return;
+	}
+
+	char szNickname[64];
+	memcpy(szNickname, pData, 64);
+	szNickname[63] = '\0';
+
+	// Validate nickname length
+	size_t len = strlen(szNickname);
+	if (len < 2 || len > 16)
+	{
+		SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, 2);	// Invalid length
+		return;
+	}
+
+	// TODO: Forward to DataServer for duplicate check
+	// For now, always return available
+	SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, 0);	// 0 = available
+
+	printf("[GameSession] CheckNickName - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+}
+
+void GameSession::OnCreateNickReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 64)
+	{
+		OnCreateNickResult(2, nullptr);
+		return;
+	}
+
+	char szNickname[64];
+	memcpy(szNickname, pData, 64);
+	szNickname[63] = '\0';
+
+	size_t len = strlen(szNickname);
+	if (len < 2 || len > 16)
+	{
+		OnCreateNickResult(2, nullptr);	// Invalid
+		return;
+	}
+
+	// TODO: Forward to DataServer
+	// For now, accept directly
+	OnCreateNickResult(0, szNickname);
+
+	printf("[GameSession] CreateNick - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+}
+
+void GameSession::OnRankUpReq(char* pData, INT32 i32Size)
+{
+	// Client requests rank-up check
+	CheckRankUp();
+}
+
+void GameSession::CheckRankUp()
+{
+	if (!g_pContextMain)
+		return;
+
+	int newRank = g_pContextMain->GetRankForExp(m_i64Exp);
+	if (newRank <= m_i32RankId)
+		return;	// No rank up
+
+	int oldRank = m_i32RankId;
+	m_i32RankId = newRank;
+
+	// Send rank up notification
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_RANK_UP_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32RankId, sizeof(int));		offset += sizeof(int);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+
+	printf("[GameSession] Rank up! UID=%lld, %d -> %d\n", m_i64UID, oldRank, newRank);
+}
+
+// ============================================================================
 // Player Data Load (from DataServer)
 // ============================================================================
 
@@ -421,7 +605,7 @@ void GameSession::OnCreateNickResult(int i32Result, const char* pszNickname)
 	int offset = 0;
 
 	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BASE_CREATE_NICKNAME_ACK;
+	uint16_t proto = PROTOCOL_BASE_CREATE_NICK_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &i32Result, sizeof(int32_t));	offset += sizeof(int32_t);
@@ -441,7 +625,7 @@ void GameSession::OnCreateNickResult(int i32Result, const char* pszNickname)
 
 void GameSession::OnCheckNickResult(int i32Result)
 {
-	SendSimpleAck(PROTOCOL_BASE_CHECK_NICKNAME_ACK, i32Result);
+	SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, i32Result);
 }
 
 void GameSession::OnClanCreateResult(int i32ClanId, int i32Result)
@@ -591,6 +775,9 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 
 	printf("[GameSession] Battle result applied - UID=%lld, K=%d D=%d H=%d Win=%d, GP+%d, EXP+%lld\n",
 		m_i64UID, i32Kills, i32Deaths, i32Headshots, bWin ? 1 : 0, gpReward, expReward);
+
+	// Check for rank up after EXP gain
+	CheckRankUp();
 }
 
 // ============================================================================

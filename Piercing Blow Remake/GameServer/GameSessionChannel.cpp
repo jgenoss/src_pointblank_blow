@@ -201,6 +201,154 @@ void GameSession::OnLobbyChatReq(char* pData, INT32 i32Size)
 		g_pGameSessionManager->OnSendLobbyChatting(this, pData, (uint16_t)i32Size);
 }
 
+// ============================================================================
+// Map/Stage Data Handlers (Phase 4B)
+// ============================================================================
+
+void GameSession::OnMapVersionReq(char* pData, INT32 i32Size)
+{
+	if (!g_pContextMain)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_MAP_VERSION_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	uint32_t mapVersion = g_pContextMain->m_ui32MapVersion;
+	memcpy(buffer + offset, &mapVersion, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnMapListReq(char* pData, INT32 i32Size)
+{
+	if (!g_pContextMain)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_MAP_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t mapCount = g_pContextMain->m_i32MapCount;
+	memcpy(buffer + offset, &mapCount, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	for (int i = 0; i < mapCount && offset < 4000; i++)
+	{
+		const auto& map = g_pContextMain->m_Maps[i];
+		memcpy(buffer + offset, &map.ui32StageId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+		memcpy(buffer + offset, map.szName, 32);						offset += 32;
+		memcpy(buffer + offset, &map.ui8MinPlayers, 1);				offset += 1;
+		memcpy(buffer + offset, &map.ui8MaxPlayers, 1);				offset += 1;
+		uint8_t active = map.bActive ? 1 : 0;
+		memcpy(buffer + offset, &active, 1);							offset += 1;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnMapRuleListReq(char* pData, INT32 i32Size)
+{
+	if (!g_pContextMain)
+		return;
+
+	// Send which maps support which game modes
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_MAP_RULELIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t mapCount = g_pContextMain->m_i32MapCount;
+	memcpy(buffer + offset, &mapCount, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	for (int i = 0; i < mapCount && offset < 4000; i++)
+	{
+		const auto& map = g_pContextMain->m_Maps[i];
+		memcpy(buffer + offset, &map.ui32StageId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+		memcpy(buffer + offset, &map.ui8SupportedModes, 1);			offset += 1;
+		memcpy(buffer + offset, &map.ui8SupportedModes2, 1);			offset += 1;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnMapMatchingListReq(char* pData, INT32 i32Size)
+{
+	if (!g_pContextMain)
+		return;
+
+	// Send mode -> map matching table
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_MAP_MATCHINGLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	// For each game mode, list available map indices
+	uint8_t modeCount = GameContextMain::MAX_STAGE_MODE_COUNT;
+	memcpy(buffer + offset, &modeCount, 1);					offset += 1;
+
+	for (int mode = 0; mode < modeCount && offset < 3900; mode++)
+	{
+		uint8_t modeId = (uint8_t)mode;
+		memcpy(buffer + offset, &modeId, 1);				offset += 1;
+
+		// Count maps for this mode
+		int countPos = offset;
+		uint8_t mapCountForMode = 0;
+		offset += 1;	// Reserve for count
+
+		for (int m = 0; m < g_pContextMain->m_i32MapCount && offset < 3950; m++)
+		{
+			if (g_pContextMain->IsMapValidForMode(m, mode))
+			{
+				uint32_t stageId = g_pContextMain->m_Maps[m].ui32StageId;
+				memcpy(buffer + offset, &stageId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+				mapCountForMode++;
+			}
+		}
+		memcpy(buffer + countPos, &mapCountForMode, 1);
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Quick Join
+// ============================================================================
+
 void GameSession::OnQuickJoinRoomReq(char* pData, INT32 i32Size)
 {
 	if (m_eMainTask != GAME_TASK_LOBBY || m_i32ChannelNum < 0 || !g_pRoomManager)

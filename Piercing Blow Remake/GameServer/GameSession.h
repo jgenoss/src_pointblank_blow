@@ -173,6 +173,20 @@ private:
 	// Packet handlers - Info phase
 	void			OnGetUserInfoReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - System/Login flow (Phase 4A - GameSession.cpp)
+	void			OnGetSystemInfoReq(char* pData, INT32 i32Size);
+	void			OnGetOptionReq(char* pData, INT32 i32Size);
+	void			OnOptionSaveReq(char* pData, INT32 i32Size);
+	void			OnCheckNickNameReq(char* pData, INT32 i32Size);
+	void			OnCreateNickReq(char* pData, INT32 i32Size);
+	void			OnRankUpReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Map/Stage data (Phase 4B - GameSessionChannel.cpp)
+	void			OnMapVersionReq(char* pData, INT32 i32Size);
+	void			OnMapListReq(char* pData, INT32 i32Size);
+	void			OnMapRuleListReq(char* pData, INT32 i32Size);
+	void			OnMapMatchingListReq(char* pData, INT32 i32Size);
+
 	// Packet handlers - Channel (GameSessionChannel.cpp)
 	void			OnChannelListReq(char* pData, INT32 i32Size);
 	void			OnChannelEnterReq(char* pData, INT32 i32Size);
@@ -200,6 +214,9 @@ private:
 	void			OnRoomChangeOptionInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomChatReq(char* pData, INT32 i32Size);
 	void			OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size);
+	void			OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size);
+	void			OnRoomLoadingStartReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Battle flow (GameSessionBattle.cpp)
 	void			OnBattleReadyBattleReq(char* pData, INT32 i32Size);
@@ -211,6 +228,9 @@ private:
 	void			OnBattleMissionRoundPreStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundEndReq(char* pData, INT32 i32Size);
+	void			OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size);
+	void			OnBattleVoteKickVoteReq(char* pData, INT32 i32Size);
+	void			OnBattleSendPingReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Equipment (GameSessionEquipment.cpp)
 	void			OnGetEquipmentInfoReq(char* pData, INT32 i32Size);
@@ -292,6 +312,9 @@ private:
 	void			OnRouletteItemInfoReq(char* pData, INT32 i32Size);
 	void			OnRouletteStartReq(char* pData, INT32 i32Size);
 	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
+
+	// Rank helpers (Phase 10)
+	void			CheckRankUp();
 
 	// Helpers
 	void			SendConnectAck();

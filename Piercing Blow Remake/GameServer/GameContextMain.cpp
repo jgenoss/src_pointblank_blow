@@ -48,6 +48,61 @@ GameContextMain::GameContextMain()
 
 	m_Channels[3].eType = GAME_CHANNEL_TYPE_CLAN;
 	strcpy_s(m_Channels[3].szName, "Clan");
+
+	// Initialize rank EXP table (Point Blank military ranks)
+	// Trainee(0) through General(51)
+	memset(m_aRankExpTable, 0, sizeof(m_aRankExpTable));
+	m_aRankExpTable[0]  = 0;		// Trainee
+	m_aRankExpTable[1]  = 3000;		// Private
+	m_aRankExpTable[2]  = 8000;		// Private First Class
+	m_aRankExpTable[3]  = 15000;	// Corporal
+	m_aRankExpTable[4]  = 25000;	// Sergeant
+	m_aRankExpTable[5]  = 40000;	// Staff Sergeant
+	m_aRankExpTable[6]  = 60000;	// Sergeant First Class
+	m_aRankExpTable[7]  = 85000;	// Master Sergeant
+	m_aRankExpTable[8]  = 115000;	// Sergeant Major
+	m_aRankExpTable[9]  = 150000;	// Second Lieutenant
+	m_aRankExpTable[10] = 200000;	// First Lieutenant
+	m_aRankExpTable[11] = 260000;	// Captain
+	m_aRankExpTable[12] = 330000;	// Major
+	m_aRankExpTable[13] = 420000;	// Lieutenant Colonel
+	m_aRankExpTable[14] = 530000;	// Colonel
+	m_aRankExpTable[15] = 660000;	// Brigadier General
+	m_aRankExpTable[16] = 820000;	// Major General
+	m_aRankExpTable[17] = 1010000;	// Lieutenant General
+	m_aRankExpTable[18] = 1240000;	// General
+	// Beyond 18: each rank +300k
+	for (int i = 19; i < MAX_RANK_COUNT; i++)
+		m_aRankExpTable[i] = m_aRankExpTable[i - 1] + 300000 + (i - 18) * 50000;
+
+	// Initialize map data with defaults
+	m_i32MapCount = 0;
+	m_ui32MapVersion = 1;
+	for (int i = 0; i < MAX_MAP_COUNT; i++)
+		m_Maps[i].Reset();
+
+	// Default maps (common Point Blank maps)
+	auto addMap = [this](uint32_t stageId, const char* name, uint8_t modes1, uint8_t modes2) {
+		if (m_i32MapCount >= MAX_MAP_COUNT) return;
+		int idx = m_i32MapCount++;
+		m_Maps[idx].ui32StageId = stageId;
+		strcpy_s(m_Maps[idx].szName, name);
+		m_Maps[idx].ui8SupportedModes = modes1;
+		m_Maps[idx].ui8SupportedModes2 = modes2;
+		m_Maps[idx].bActive = true;
+	};
+
+	// stageId, name, mode bitmask (low=DM|Bomb|Annih|Destroy|Defence|Escape|Cross|Tut, high=Chall|Dino|Convoy|Run|Champ|Train|TDM|Zombie)
+	addMap(1001, "Downtown",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1002, "Luxville",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1003, "Burning Hall",	0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1004, "Kick Point",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1005, "Storm Tube",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1006, "Mid Town",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1007, "Library",			0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1008, "Red Rock",		0x07, 0x40);	// DM, Bomb, Annihilation, TDM
+	addMap(1009, "Base Camp",		0x0F, 0x40);	// DM, Bomb, Annihilation, Destroy, TDM
+	addMap(1010, "Training Camp",	0x80, 0x20);	// Tutorial, Training
 }
 
 GameContextMain::~GameContextMain()
@@ -65,4 +120,38 @@ void GameContextMain::OnUpdate()
 {
 	DWORD dwNow = GetTickCount();
 	m_i32LastUpdateTime = (int)dwNow;
+}
+
+int64_t GameContextMain::GetRankExp(int rankId) const
+{
+	if (rankId < 0 || rankId >= MAX_RANK_COUNT)
+		return 0;
+	return m_aRankExpTable[rankId];
+}
+
+int GameContextMain::GetRankForExp(int64_t exp) const
+{
+	int rank = 0;
+	for (int i = 1; i < MAX_RANK_COUNT; i++)
+	{
+		if (exp >= m_aRankExpTable[i])
+			rank = i;
+		else
+			break;
+	}
+	return rank;
+}
+
+bool GameContextMain::IsMapValidForMode(int mapIdx, int mode) const
+{
+	if (mapIdx < 0 || mapIdx >= m_i32MapCount)
+		return false;
+	if (!m_Maps[mapIdx].bActive)
+		return false;
+
+	if (mode < 8)
+		return (m_Maps[mapIdx].ui8SupportedModes & (1 << mode)) != 0;
+	else if (mode < 16)
+		return (m_Maps[mapIdx].ui8SupportedModes2 & (1 << (mode - 8))) != 0;
+	return false;
 }

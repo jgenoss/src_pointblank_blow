@@ -101,6 +101,46 @@ public:
 	int			m_i32DefaultMaxRound;
 	int			m_i32MinPlayersToStart;
 	int			m_i32AFKTimeout;
+
+	// Rank/EXP table (Phase 10)
+	// 52 military ranks: Trainee(0) through General(51)
+	static const int MAX_RANK_COUNT = 52;
+	int64_t		m_aRankExpTable[MAX_RANK_COUNT];	// EXP required per rank
+
+	// Map/Stage data (Phase 4B)
+	static const int MAX_MAP_COUNT = 64;
+	static const int MAX_STAGE_MODE_COUNT = 17;
+
+	struct MapInfo
+	{
+		uint32_t	ui32StageId;
+		char		szName[32];
+		uint8_t		ui8SupportedModes;		// Bitmask of supported STAGE_MODEs (low byte)
+		uint8_t		ui8SupportedModes2;		// High byte
+		uint8_t		ui8MinPlayers;
+		uint8_t		ui8MaxPlayers;
+		bool		bActive;
+
+		void Reset()
+		{
+			ui32StageId = 0;
+			szName[0] = '\0';
+			ui8SupportedModes = 0xFF;
+			ui8SupportedModes2 = 0xFF;
+			ui8MinPlayers = 2;
+			ui8MaxPlayers = 16;
+			bActive = false;
+		}
+	};
+
+	MapInfo		m_Maps[MAX_MAP_COUNT];
+	int			m_i32MapCount;
+	uint32_t	m_ui32MapVersion;
+
+	// Helper methods
+	int64_t		GetRankExp(int rankId) const;
+	int			GetRankForExp(int64_t exp) const;
+	bool		IsMapValidForMode(int mapIdx, int mode) const;
 };
 
 extern GameContextMain* g_pContextMain;
