@@ -482,6 +482,18 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CS_MATCH_FIGHT_ACCECT_REQ:		OnClanMatchFightAcceptReq(pData, dataSize);	break;
 	case PROTOCOL_CS_MATCH_CHATING_REQ:				OnClanMatchChatReq(pData, dataSize);		break;
 
+	// ---- Clan War 1.5 (GameSessionClanWar.cpp - 0x1B00) ----
+	case PROTOCOL_CLAN_WAR_CREATE_TEAM_REQ:			OnClanWarCreateTeamReq(pData, dataSize);	break;
+	case PROTOCOL_CLAN_WAR_JOIN_TEAM_REQ:			OnClanWarJoinTeamReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_LEAVE_TEAM_REQ:			OnClanWarLeaveTeamReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_MATCH_TEAM_LIST_REQ:		OnClanWarTeamListReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_MATCHMAKING_REQ:			OnClanWarMatchmakingReq(pData, dataSize);	break;
+	case PROTOCOL_CLAN_WAR_CANCEL_MATCHMAKING_REQ:	OnClanWarCancelMatchmakingReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_TEAM_CHATTING_REQ:		OnClanWarTeamChatReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_CHANGE_MAX_PER_REQ:		OnClanWarChangeMaxPerReq(pData, dataSize);	break;
+	case PROTOCOL_CLAN_WAR_MERCENARY_LIST_REQ:		OnClanWarMercenaryListReq(pData, dataSize);	break;
+	case PROTOCOL_CLAN_WAR_RESULT_REQ:				OnClanWarResultReq(pData, dataSize);		break;
+
 	// ---- GM Commands (GameSessionGM.cpp - Phase 11A) ----
 	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
 	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;

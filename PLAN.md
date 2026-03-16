@@ -213,15 +213,15 @@
 **Archivos**: Crear `GameSessionClanBattle.cpp`
 - [x] `PROTOCOL_VALUE_CLAN_MATCH (0x0800)` - Matchmaking (TeamContext/Create/Join/Leave/AllTeamList/FightRequest/Accept/Chat)
 - [x] Team registration, matching queue (ClanMatchManager with team pool, fight request/accept flow)
-- [ ] Clan match room creation with special rules (auto-create room on fight accept)
+- [x] Clan match room creation with special rules (auto-create room on fight accept via CreateClanMatchRoom)
 - [ ] Clan match results and point distribution
 
 ### 6C. Clan War (1.5)
 **Archivos**: Crear `GameSessionClanWar.cpp`
-- [ ] `PROTOCOL_VALUE_CLAN_WAR (0x1B00)` - War system
-- [ ] War declaration, acceptance, scheduling
-- [ ] War match rules
-- [ ] Mercenary system (`T_MerID`, `m_bMerPenalty`)
+- [x] `PROTOCOL_VALUE_CLAN_WAR (0x1B00)` - War system (Create/Join/Leave/TeamList/Matchmaking/Cancel/Chat/ChangeMaxPer/MercList/Result)
+- [x] War declaration, acceptance, scheduling (auto-matchmaking with fight request/accept flow)
+- [ ] War match rules (season-based scoring)
+- [x] Mercenary system - list stub (`T_MerID`, `m_bMerPenalty` - invite/accept not yet)
 
 ---
 

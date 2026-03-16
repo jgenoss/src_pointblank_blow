@@ -109,6 +109,7 @@ public:
 	int			GetEffectiveHP(int slot) const { return IsVIPSlot(slot) ? ESCAPE_VIP_EXTRA_HP : 100; }
 	bool		CheckPassword(const char* pw) const;
 	bool		IsClanMatch() const			{ return m_bIsClanMatch; }
+	void		SetClanMatch(bool b)		{ m_bIsClanMatch = b; }
 
 	// Score
 	const GameRoomScore& GetScore() const	{ return m_Score; }

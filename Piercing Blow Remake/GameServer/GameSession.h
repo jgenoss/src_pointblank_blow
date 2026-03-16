@@ -446,6 +446,20 @@ private:
 	void			OnClanMatchFightAcceptReq(char* pData, INT32 i32Size);
 	void			OnClanMatchChatReq(char* pData, INT32 i32Size);
 	void			SendClanMatchTeamInfo(int teamIdx);
+	void			CreateClanMatchRoom(struct ClanMatchTeam* pTeam1, struct ClanMatchTeam* pTeam2);
+	void			SendClanMatchRoomNotify(struct ClanMatchTeam* pTeam, int channel, int roomIdx);
+
+	// Packet handlers - Clan War 1.5 (GameSessionClanWar.cpp)
+	void			OnClanWarCreateTeamReq(char* pData, INT32 i32Size);
+	void			OnClanWarJoinTeamReq(char* pData, INT32 i32Size);
+	void			OnClanWarLeaveTeamReq(char* pData, INT32 i32Size);
+	void			OnClanWarTeamListReq(char* pData, INT32 i32Size);
+	void			OnClanWarMatchmakingReq(char* pData, INT32 i32Size);
+	void			OnClanWarCancelMatchmakingReq(char* pData, INT32 i32Size);
+	void			OnClanWarTeamChatReq(char* pData, INT32 i32Size);
+	void			OnClanWarChangeMaxPerReq(char* pData, INT32 i32Size);
+	void			OnClanWarMercenaryListReq(char* pData, INT32 i32Size);
+	void			OnClanWarResultReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
 	void			OnRouletteEnterReq(char* pData, INT32 i32Size);

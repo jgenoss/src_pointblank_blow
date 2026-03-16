@@ -3,6 +3,8 @@
 #include "GameProtocol.h"
 #include "ClanMatchManager.h"
 #include "GameSessionManager.h"
+#include "RoomManager.h"
+#include "GameServerContext.h"
 
 // ============================================================================
 // Clan Match Handlers (Protocol_ClanMatch 0x0800)
@@ -346,8 +348,8 @@ void GameSession::OnClanMatchFightAcceptReq(char* pData, INT32 i32Size)
 				pOppLeader->SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_ACCECT_RESULT_ACK, 0);
 		}
 
-		// TODO: Auto-create clan match room via PROTOCOL_CS_MATCH_ROOM_CREATE_ACK
-		printf("[ClanMatch] Fight started - creating match room...\n");
+		// Auto-create clan match room
+		CreateClanMatchRoom(pTeam, pOpp);
 	}
 	else if (!accept)
 	{
@@ -469,6 +471,103 @@ void GameSession::SendClanMatchTeamInfo(int teamIdx)
 	packet.SetPacketData(buffer, offset);
 
 	// Send to all team members
+	for (int i = 0; i < MAX_CLAN_MATCH_TEAM_SIZE; i++)
+	{
+		if (!pTeam->members[i].bActive)
+			continue;
+
+		GameSession* pMember = g_pGameSessionManager->GetSession(pTeam->members[i].i32SessionIdx);
+		if (pMember && pMember->GetUID() == pTeam->members[i].i64UID)
+			pMember->SendMessage(&packet);
+	}
+}
+
+// ============================================================================
+// Auto-create a clan match room when fight is accepted
+// ============================================================================
+void GameSession::CreateClanMatchRoom(ClanMatchTeam* pTeam1, ClanMatchTeam* pTeam2)
+{
+	if (!pTeam1 || !pTeam2)
+		return;
+
+	RoomManager* pRoomMgr = g_pGameServerContext ? g_pGameServerContext->GetRoomManager() : nullptr;
+	if (!pRoomMgr)
+		return;
+
+	// Find the leader session to create the room
+	GameSession* pLeader = g_pGameSessionManager ?
+		g_pGameSessionManager->FindSessionByUID(pTeam1->i64LeaderUID) : nullptr;
+	if (!pLeader)
+		return;
+
+	int channel = pLeader->GetChannelNum();
+	if (channel < 0)
+		channel = 0;
+
+	// Build room create info for clan match
+	GameRoomCreateInfo info;
+	memset(&info, 0, sizeof(info));
+	snprintf(info.szTitle, sizeof(info.szTitle), "[ClanMatch] %s vs %s",
+		pTeam1->szClanName, pTeam2->szClanName);
+	info.ui8GameMode = STAGE_MODE_DEATHMATCH;
+	info.ui8MapIndex = 0;
+	info.ui8MaxPlayers = pTeam1->ui8MaxMembers + pTeam2->ui8MaxMembers;
+	if (info.ui8MaxPlayers > SLOT_MAX_COUNT)
+		info.ui8MaxPlayers = SLOT_MAX_COUNT;
+	info.ui8RoundType = BATTLE_ROUND_TYPE_5;
+	info.ui8SubType = 0;
+	info.ui8WeaponFlag = LOCK_BASIC;
+	info.ui8InfoFlag = 0;
+
+	// Create the room (channel derived from leader's session)
+	int roomIdx = pRoomMgr->OnCreateRoom(pLeader, &info);
+	if (roomIdx < 0)
+	{
+		printf("[ClanMatch] Failed to create match room for %s vs %s\n",
+			pTeam1->szClanName, pTeam2->szClanName);
+		return;
+	}
+
+	Room* pRoom = pRoomMgr->GetRoom(channel, roomIdx);
+	if (pRoom)
+		pRoom->SetClanMatch(true);
+
+	printf("[ClanMatch] Room created - Idx=%d, Ch=%d, %s vs %s\n",
+		roomIdx, channel, pTeam1->szClanName, pTeam2->szClanName);
+
+	// Notify both teams about the room
+	SendClanMatchRoomNotify(pTeam1, channel, roomIdx);
+	SendClanMatchRoomNotify(pTeam2, channel, roomIdx);
+}
+
+void GameSession::SendClanMatchRoomNotify(ClanMatchTeam* pTeam, int channel, int roomIdx)
+{
+	if (!pTeam || !g_pGameSessionManager)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_CS_MATCH_ROOM_CREATE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	int32_t ch = channel;
+	memcpy(buffer + offset, &ch, sizeof(int32_t));			offset += sizeof(int32_t);
+
+	int32_t idx = roomIdx;
+	memcpy(buffer + offset, &idx, sizeof(int32_t));			offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+
 	for (int i = 0; i < MAX_CLAN_MATCH_TEAM_SIZE; i++)
 	{
 		if (!pTeam->members[i].bActive)
