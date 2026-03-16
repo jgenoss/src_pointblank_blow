@@ -8,6 +8,9 @@
 #include "CharacterDef.h"
 #include "InventoryDef.h"
 #include "QuestDef.h"
+#include "MedalDef.h"
+#include "EventDef.h"
+#include "SkillDef.h"
 
 class Room;
 
@@ -235,6 +238,26 @@ private:
 	// Quest helpers
 	void			UpdateQuestProgress(int kills, int deaths, int headshots, bool won);
 
+	// Packet handlers - Medal (GameSessionMedal.cpp)
+	void			OnGetMedalSystemReq(char* pData, INT32 i32Size);
+	void			OnRefreshMedalSystemReq(char* pData, INT32 i32Size);
+	void			OnMedalGetInfoReq(char* pData, INT32 i32Size);
+	void			OnGetCurMedalSetInfoReq(char* pData, INT32 i32Size);
+	void			OnGetComMedalSetInfoReq(char* pData, INT32 i32Size);
+	void			OnGetMedalRewardReq(char* pData, INT32 i32Size);
+	void			OnSetNotifyMedalReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Event/Attendance (GameSessionEvent.cpp)
+	void			OnAttendanceReq(char* pData, INT32 i32Size);
+	void			OnAttendanceClearItemReq(char* pData, INT32 i32Size);
+	void			OnDailyRecordReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Skill (GameSessionSkill.cpp)
+	void			OnSkillSetReq(char* pData, INT32 i32Size);
+	void			OnSkillResetReq(char* pData, INT32 i32Size);
+	void			OnSkillClassSetReq(char* pData, INT32 i32Size);
+	void			OnSkillGetInfoReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();
@@ -294,6 +317,16 @@ private:
 	int				m_i32FriendCount;
 	GameBlockInfo	m_BlockList[MAX_BLOCK_COUNT];
 	int				m_i32BlockCount;
+
+	// Medal (7J) - Medal progress and sets
+	GameMedalData	m_MedalData;
+
+	// Event/Attendance (7N)
+	GameAttendanceData	m_AttendanceData;
+	GameDailyRecord		m_DailyRecord;
+
+	// Skill (7O) - Character class skills
+	GameSkillData	m_SkillData;
 
 	// Timing
 	DWORD			m_dwConnectTime;

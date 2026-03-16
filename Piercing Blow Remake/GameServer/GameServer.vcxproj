@@ -143,6 +143,9 @@
     <ClCompile Include="GameSessionShop.cpp" />
     <ClCompile Include="GameSessionSocial.cpp" />
     <ClCompile Include="GameSessionQuest.cpp" />
+    <ClCompile Include="GameSessionMedal.cpp" />
+    <ClCompile Include="GameSessionEvent.cpp" />
+    <ClCompile Include="GameSessionSkill.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
@@ -156,6 +159,9 @@
     <ClInclude Include="CharacterDef.h" />
     <ClInclude Include="InventoryDef.h" />
     <ClInclude Include="QuestDef.h" />
+    <ClInclude Include="MedalDef.h" />
+    <ClInclude Include="EventDef.h" />
+    <ClInclude Include="SkillDef.h" />
     <ClInclude Include="GameContextMain.h" />
     <ClInclude Include="GameServerContext.h" />
     <ClInclude Include="GameSession.h" />

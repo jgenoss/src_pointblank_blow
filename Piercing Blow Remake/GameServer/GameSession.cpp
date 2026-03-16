@@ -44,6 +44,10 @@ GameSession::GameSession()
 		m_Friends[i].Reset();
 	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
 		m_BlockList[i].Reset();
+	m_MedalData.Reset();
+	m_AttendanceData.Reset();
+	m_DailyRecord.Reset();
+	m_SkillData.Reset();
 }
 
 GameSession::~GameSession()
@@ -202,6 +206,26 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_BLOCK_DELETE_REQ:			OnBlockDeleteReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FIND_USER_REQ:				OnFindUserReq(pData, dataSize);				break;
 
+	// ---- Medal (GameSessionMedal.cpp) ----
+	case PROTOCOL_BASE_GET_MEDALSYSTEM_REQ:			OnGetMedalSystemReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_REFRESH_MEDALSYSTEM_REQ:		OnRefreshMedalSystemReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_MEDAL_GET_INFO_REQ:			OnMedalGetInfoReq(pData, dataSize);			break;
+	case PROTOCOL_GET_MEDAL_INFO_REQ:				OnMedalGetInfoReq(pData, dataSize);			break;
+	case PROTOCOL_GET_CUR_MEDAL_SET_INFO_REQ:		OnGetCurMedalSetInfoReq(pData, dataSize);	break;
+	case PROTOCOL_GET_COM_MEDAL_SET_INFO_REQ:		OnGetComMedalSetInfoReq(pData, dataSize);	break;
+	case PROTOCOL_GET_MEDAL_REWARD_REQ:				OnGetMedalRewardReq(pData, dataSize);		break;
+	case PROTOCOL_SET_NOTIFY_MEDAL_REQ:				OnSetNotifyMedalReq(pData, dataSize);		break;
+
+	// ---- Event/Attendance (GameSessionEvent.cpp) ----
+	case PROTOCOL_BASE_ATTENDANCE_REQ:				OnAttendanceReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_ATTENDANCE_CLEAR_ITEM_REQ:	OnAttendanceClearItemReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_DAILY_RECORD_REQ:			OnDailyRecordReq(pData, dataSize);			break;
+
+	// ---- Skill (GameSessionSkill.cpp) ----
+	case PROTOCOL_SKILL_SET_REQ:					OnSkillSetReq(pData, dataSize);				break;
+	case PROTOCOL_SKILL_RESET_REQ:					OnSkillResetReq(pData, dataSize);			break;
+	case PROTOCOL_SKILL_CLASS_SET_REQ:				OnSkillClassSetReq(pData, dataSize);		break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
@@ -268,6 +292,10 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 
 	// Initialize tutorial quest cardset
 	m_QuestData.InitTutorial();
+
+	// Initialize default medals and skills
+	m_MedalData.InitDefaults();
+	m_SkillData.Reset();
 
 	m_eMainTask = GAME_TASK_INFO;
 	SendLoginAck(0);
@@ -418,6 +446,11 @@ void GameSession::ResetSessionData()
 	m_i32BlockCount = 0;
 	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
 		m_BlockList[i].Reset();
+
+	m_MedalData.Reset();
+	m_AttendanceData.Reset();
+	m_DailyRecord.Reset();
+	m_SkillData.Reset();
 
 	m_dwConnectTime = 0;
 	m_dwLastPacketTime = 0;
