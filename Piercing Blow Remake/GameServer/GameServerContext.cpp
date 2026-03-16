@@ -8,6 +8,7 @@
 #include "ModuleBattleServer.h"
 #include "ClanDef.h"
 #include "RouletteDef.h"
+#include "ShopManager.h"
 #include "i3IniParser.h"
 
 // ============================================================================
@@ -20,6 +21,8 @@ GameServerContext* g_pGameServerContext = nullptr;
 GameSessionManager* g_pGameSessionManager = nullptr;
 GameClanManager* g_pClanManager = nullptr;
 GameRouletteData* g_pRouletteData = nullptr;
+ModuleDataServer* g_pModuleDataServer = nullptr;
+ModuleBattleServer* g_pModuleBattleServer = nullptr;
 
 GameServerContext::GameServerContext()
 	: m_pGameSessionManager(nullptr)
@@ -175,6 +178,34 @@ bool GameServer::OnInitialize()
 	pCtxMain->m_ui16MaxUsersPerChannel = m_GameConfig.ui16MaxUsersPerChannel;
 	pCtxMain->m_ui16MaxRoomsPerChannel = m_GameConfig.ui16MaxRoomsPerChannel;
 
+	// Load Economy config
+	{
+		i3IniParser ini;
+		if (ini.Load("config.ini"))
+		{
+			pCtxMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
+			pCtxMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
+			pCtxMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
+			pCtxMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
+			pCtxMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
+			pCtxMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
+			pCtxMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
+			pCtxMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+
+			pCtxMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
+			pCtxMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
+			pCtxMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
+			pCtxMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+
+			printf("[GameServer] Economy config: KillGP=%d, WinGP=%d, LoseGP=%d, StartGP=%d\n",
+				pCtxMain->m_i32KillGPReward, pCtxMain->m_i32WinGPReward,
+				pCtxMain->m_i32LoseGPReward, pCtxMain->m_i32StartingGP);
+			printf("[GameServer] Battle config: TimeLimit=%d, MaxRound=%d, MinPlayers=%d\n",
+				pCtxMain->m_i32DefaultTimeLimit, pCtxMain->m_i32DefaultMaxRound,
+				pCtxMain->m_i32MinPlayersToStart);
+		}
+	}
+
 	if (!pCtxMain->Create())
 	{
 		delete pCtxMain;
@@ -182,6 +213,9 @@ bool GameServer::OnInitialize()
 	}
 
 	g_pContextMain = pCtxMain;
+
+	// Create shop manager
+	g_pShopManager = new ShopManager();
 
 	// Create clan manager
 	g_pClanManager = new GameClanManager();
@@ -225,6 +259,7 @@ void GameServer::OnShutdown()
 		m_pModuleData->Destroy();
 		delete m_pModuleData;
 		m_pModuleData = nullptr;
+		g_pModuleDataServer = nullptr;
 	}
 
 	if (m_pModuleBattle)
@@ -232,6 +267,14 @@ void GameServer::OnShutdown()
 		m_pModuleBattle->Destroy();
 		delete m_pModuleBattle;
 		m_pModuleBattle = nullptr;
+		g_pModuleBattleServer = nullptr;
+	}
+
+	// Cleanup shop manager
+	if (g_pShopManager)
+	{
+		delete g_pShopManager;
+		g_pShopManager = nullptr;
 	}
 
 	// Cleanup roulette data
@@ -286,6 +329,7 @@ bool GameServer::InitializeModules()
 	{
 		printf("[GameServer] WARNING: ModuleDataServer initialization failed\n");
 	}
+	g_pModuleDataServer = m_pModuleData;
 
 	// Initialize ModuleBattleServer
 	m_pModuleBattle = new ModuleBattleServer();
@@ -304,6 +348,7 @@ bool GameServer::InitializeModules()
 			m_GameConfig.ui16PublicPort,
 			m_GameConfig.i32MaxSessions);
 	}
+	g_pModuleBattleServer = m_pModuleBattle;
 
 	return true;
 }

@@ -153,6 +153,10 @@
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="ModuleConnectServer.cpp" />
     <ClCompile Include="ModuleDataServer.cpp" />
+    <ClCompile Include="ModuleDataServerGameData.cpp" />
+    <ClCompile Include="ModuleDataServerSocial.cpp" />
+    <ClCompile Include="ModuleDataServerShop.cpp" />
+    <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="ModuleBattleServer.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -175,6 +179,7 @@
     <ClInclude Include="RoomDef.h" />
     <ClInclude Include="ModuleConnectServer.h" />
     <ClInclude Include="ModuleDataServer.h" />
+    <ClInclude Include="ShopManager.h" />
     <ClInclude Include="ModuleBattleServer.h" />
   </ItemGroup>
   <ItemGroup>

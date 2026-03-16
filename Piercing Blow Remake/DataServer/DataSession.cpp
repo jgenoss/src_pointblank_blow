@@ -150,6 +150,11 @@ INT32 DataSession::PacketParsing(char* pPacket, INT32 iSize)
 		OnBlockListReq(pData, ui16DataSize);
 		break;
 
+	// Shop catalog
+	case PROTOCOL_IS_SHOP_LIST_REQ:
+		OnShopListReq(pData, ui16DataSize);
+		break;
+
 	default:
 		printf("[DataSession:%d] Unknown protocol: 0x%04X\n", m_SessionIdx, protocolID);
 		break;
@@ -599,6 +604,30 @@ void DataSession::OnBlockListReq(char* pData, INT32 i32Size)
 	if (i32Count > 0)
 		packet.WriteData(blocks, i32Count * sizeof(IS_BLOCK_ENTRY));
 	SendMessage(&packet);
+}
+
+// -- Shop Handler --
+
+void DataSession::OnShopListReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetModuleDBGameData())
+		return;
+
+	IS_SHOP_ITEM_ENTRY items[500];
+	memset(items, 0, sizeof(items));
+	int i32Count = g_pDataServerContext->GetModuleDBGameData()->LoadShopItems(items, 500);
+
+	IS_SHOP_LIST_ACK ack;
+	ack.i32Result = 0;
+	ack.i32ItemCount = i32Count;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_SHOP_LIST_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	if (i32Count > 0)
+		packet.WriteData(items, i32Count * sizeof(IS_SHOP_ITEM_ENTRY));
+	SendMessage(&packet);
+
+	printf("[DataSession:%d] SHOP_LIST_ACK: sent %d items\n", m_SessionIdx, i32Count);
 }
 
 void DataSession::SendHeartbeatAck()

@@ -31,6 +31,9 @@ public:
 	// Quests
 	bool SaveQuest(int64_t i64UID, IS_QUEST_SAVE_REQ* pReq, const char* pQuestData, int i32DataSize);
 
+	// Shop catalog
+	int LoadShopItems(IS_SHOP_ITEM_ENTRY* pOut, int i32MaxCount);
+
 	// Placeholder para futuro async
 	void ProcessResponses(DataServerContext* pContext);
 

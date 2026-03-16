@@ -300,7 +300,8 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 	strncpy_s(m_szNickname, m_szUsername, _TRUNCATE);
 	m_i32Level = 1;
 	m_i64Exp = 0;
-	m_i32GP = 10000;
+	m_i32GP = g_pContextMain ? g_pContextMain->m_i32StartingGP : 10000;
+	m_i32Cash = g_pContextMain ? g_pContextMain->m_i32StartingCash : 0;
 
 	// Initialize default character slot 0 with default equipment
 	m_ui8ActiveCharaSlot = 0;
@@ -399,6 +400,196 @@ void GameSession::OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize)
 
 	printf("[GameSession] Player data loaded - UID=%lld, Nick=%s, Level=%d\n",
 		m_i64UID, m_szNickname, m_i32Level);
+}
+
+// ============================================================================
+// DataServer Callback Results
+// ============================================================================
+
+void GameSession::OnCreateNickResult(int i32Result, const char* pszNickname)
+{
+	if (i32Result == 0 && pszNickname)
+	{
+		strncpy_s(m_szNickname, pszNickname, _TRUNCATE);
+		printf("[GameSession] Nickname created - UID=%lld, Nick=%s\n", m_i64UID, m_szNickname);
+	}
+
+	// Send result to client
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_CREATE_NICKNAME_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &i32Result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	if (i32Result == 0 && pszNickname)
+		memcpy(buffer + offset, pszNickname, 64);
+	else
+		memset(buffer + offset, 0, 64);
+	offset += 64;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnCheckNickResult(int i32Result)
+{
+	SendSimpleAck(PROTOCOL_BASE_CHECK_NICKNAME_ACK, i32Result);
+}
+
+void GameSession::OnClanCreateResult(int i32ClanId, int i32Result)
+{
+	if (i32Result == 0 && i32ClanId > 0)
+		m_i32ClanId = i32ClanId;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_CS_CREATE_CLAN_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &i32Result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &i32ClanId, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanJoinResult(int i32ClanId, int i32Result)
+{
+	if (i32Result == 0 && i32ClanId > 0)
+		m_i32ClanId = i32ClanId;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_CS_CLIENT_ENTER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &i32Result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &i32ClanId, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnFriendAddResult(int64_t i64FriendUID, int i32Result)
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_FRIEND_INSERT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));			offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &i32Result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &i64FriendUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnFriendListLoaded(IS_FRIEND_ENTRY* pEntries, int i32Count)
+{
+	m_i32FriendCount = 0;
+
+	for (int i = 0; i < i32Count && i < MAX_FRIEND_COUNT; i++)
+	{
+		m_Friends[i].i64UID = pEntries[i].i64FriendUID;
+		strncpy_s(m_Friends[i].szNickname, pEntries[i].szNickname, _TRUNCATE);
+		m_Friends[i].i32Level = pEntries[i].i32Level;
+		m_i32FriendCount++;
+	}
+
+	printf("[GameSession] Friend list loaded - UID=%lld, Count=%d\n", m_i64UID, m_i32FriendCount);
+}
+
+void GameSession::OnBlockAddResult(int64_t i64BlockedUID, int i32Result)
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_BLOCK_INSERT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));			offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &i32Result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &i64BlockedUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBlockListLoaded(IS_BLOCK_ENTRY* pEntries, int i32Count)
+{
+	m_i32BlockCount = 0;
+
+	for (int i = 0; i < i32Count && i < MAX_BLOCK_COUNT; i++)
+	{
+		m_BlockList[i].i64UID = pEntries[i].i64BlockedUID;
+		strncpy_s(m_BlockList[i].szNickname, pEntries[i].szNickname, _TRUNCATE);
+		m_i32BlockCount++;
+	}
+
+	printf("[GameSession] Block list loaded - UID=%lld, Count=%d\n", m_i64UID, m_i32BlockCount);
+}
+
+void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin)
+{
+	m_i32Kills += i32Kills;
+	m_i32Deaths += i32Deaths;
+	m_i32Headshots += i32Headshots;
+
+	if (bWin)
+		m_i32Wins++;
+	else
+		m_i32Losses++;
+
+	// Use config-driven rewards
+	int killGP = 50, winGP = 200, loseGP = 50;
+	int killExp = 100, winExp = 500, loseExp = 100;
+	if (g_pContextMain)
+	{
+		killGP = g_pContextMain->m_i32KillGPReward;
+		winGP = g_pContextMain->m_i32WinGPReward;
+		loseGP = g_pContextMain->m_i32LoseGPReward;
+		killExp = g_pContextMain->m_i32KillExpReward;
+		winExp = g_pContextMain->m_i32WinExpReward;
+		loseExp = g_pContextMain->m_i32LoseExpReward;
+	}
+
+	int gpReward = i32Kills * killGP + (bWin ? winGP : loseGP);
+	m_i32GP += gpReward;
+
+	int64_t expReward = (int64_t)(i32Kills * killExp + (bWin ? winExp : loseExp));
+	m_i64Exp += expReward;
+
+	printf("[GameSession] Battle result applied - UID=%lld, K=%d D=%d H=%d Win=%d, GP+%d, EXP+%lld\n",
+		m_i64UID, i32Kills, i32Deaths, i32Headshots, bWin ? 1 : 0, gpReward, expReward);
 }
 
 // ============================================================================

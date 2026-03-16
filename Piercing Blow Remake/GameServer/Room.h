@@ -43,6 +43,9 @@ public:
 	void		OnAddKill(int i32Team);
 	bool		CheckMatchEnd() const;
 
+	// Battle timer
+	void		UpdateBattleTimer(DWORD dwNow);
+
 	// State queries
 	bool		IsCreated() const			{ return m_bIsCreate; }
 	int			GetChannelNum() const		{ return m_i32ChannelNum; }
@@ -68,6 +71,14 @@ public:
 
 	// Score
 	const GameRoomScore& GetScore() const	{ return m_Score; }
+
+	// Battle info (from BattleServer)
+	void		SetBattleInfo(int i32BattleRoomIdx, const char* pszUdpIP, uint16_t ui16UdpPort);
+	void		ClearBattleInfo();
+	int			GetBattleRoomIdx() const	{ return m_i32BattleRoomIdx; }
+	const char*	GetBattleUdpIP() const		{ return m_szBattleUdpIP; }
+	uint16_t	GetBattleUdpPort() const	{ return m_ui16BattleUdpPort; }
+	uint32_t	GetBattleUdpIPAddr() const	{ return m_ui32BattleUdpIPAddr; }
 
 	// Slot queries
 	bool		IsSlotEmpty(int i32Slot) const;
@@ -117,6 +128,12 @@ private:
 
 	// Battle timing
 	DWORD				m_dwBattleStartTime;
+
+	// BattleServer info (stored from IS_BATTLE_CREATE_ACK)
+	int					m_i32BattleRoomIdx;
+	char				m_szBattleUdpIP[MAX_SERVER_IP_LENGTH];
+	uint16_t			m_ui16BattleUdpPort;
+	uint32_t			m_ui32BattleUdpIPAddr;	// Packed IPv4 for client
 
 	// Slots
 	GameSlotInfo		m_Slots[SLOT_MAX_COUNT];

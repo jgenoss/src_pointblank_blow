@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "Room.h"
 #include "GameSession.h"
+#include "GameProtocol.h"
 
 I3_CLASS_INSTANCE(Room);
 
@@ -22,9 +23,13 @@ Room::Room()
 	, m_ui32OptionFlag(0)
 	, m_bIsClanMatch(false)
 	, m_dwBattleStartTime(0)
+	, m_i32BattleRoomIdx(-1)
+	, m_ui16BattleUdpPort(0)
+	, m_ui32BattleUdpIPAddr(0)
 {
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
+	m_szBattleUdpIP[0] = '\0';
 
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
@@ -475,6 +480,65 @@ bool Room::CheckMatchEnd() const
 	return false;
 }
 
+void Room::UpdateBattleTimer(DWORD dwNow)
+{
+	if (m_ui8RoomState != ROOM_STATE_BATTLE)
+		return;
+
+	if (m_dwBattleStartTime == 0)
+		return;
+
+	// Check if time limit exceeded
+	DWORD dwElapsed = (dwNow - m_dwBattleStartTime) / 1000;
+	if (m_Score.ui16MaxTime > 0 && dwElapsed >= m_Score.ui16MaxTime)
+	{
+		// Time's up - determine winner by score
+		int winnerTeam = -1;	// Draw
+		if (m_Score.i32RedScore > m_Score.i32BlueScore)
+			winnerTeam = TEAM_RED;
+		else if (m_Score.i32BlueScore > m_Score.i32RedScore)
+			winnerTeam = TEAM_BLUE;
+
+		printf("[Room] Battle timer expired - Room=%d, Elapsed=%ds, Winner=%s\n",
+			m_i32RoomIdx, (int)dwElapsed,
+			winnerTeam == TEAM_RED ? "RED" :
+			winnerTeam == TEAM_BLUE ? "BLUE" : "DRAW");
+
+		// End battle for all players in room
+		OnEndBattle();
+
+		// Notify all players of battle end
+		i3NetworkPacket packet;
+		char buffer[64];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_ENDBATTLE_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t winner = (uint8_t)(winnerTeam < 0 ? 0 : winnerTeam);
+		int32_t redScore = m_Score.i32RedScore;
+		int32_t blueScore = m_Score.i32BlueScore;
+		memcpy(buffer + offset, &winner, 1);		offset += 1;
+		memcpy(buffer + offset, &redScore, 4);		offset += 4;
+		memcpy(buffer + offset, &blueScore, 4);		offset += 4;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendToAll(&packet);
+
+		// Return players to ready room
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_pSlotSession[i]->SetTask(GAME_TASK_READY_ROOM);
+		}
+	}
+}
+
 bool Room::CheckPassword(const char* pw) const
 {
 	if (m_szPassword[0] == '\0')
@@ -611,4 +675,30 @@ void Room::UpdateOwner()
 			break;
 		}
 	}
+}
+
+void Room::SetBattleInfo(int i32BattleRoomIdx, const char* pszUdpIP, uint16_t ui16UdpPort)
+{
+	m_i32BattleRoomIdx = i32BattleRoomIdx;
+	m_ui16BattleUdpPort = ui16UdpPort;
+
+	if (pszUdpIP)
+		strncpy_s(m_szBattleUdpIP, pszUdpIP, _TRUNCATE);
+
+	// Convert IP string to packed uint32 for client
+	m_ui32BattleUdpIPAddr = 0;
+	if (pszUdpIP)
+	{
+		struct in_addr addr;
+		if (inet_pton(AF_INET, pszUdpIP, &addr) == 1)
+			m_ui32BattleUdpIPAddr = addr.s_addr;
+	}
+}
+
+void Room::ClearBattleInfo()
+{
+	m_i32BattleRoomIdx = -1;
+	m_szBattleUdpIP[0] = '\0';
+	m_ui16BattleUdpPort = 0;
+	m_ui32BattleUdpIPAddr = 0;
 }

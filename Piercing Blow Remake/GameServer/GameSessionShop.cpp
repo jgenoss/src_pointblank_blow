@@ -1,23 +1,23 @@
 #include "pch.h"
 #include "GameSession.h"
 #include "GameProtocol.h"
+#include "ShopManager.h"
 
 // ============================================================================
 // Shop Handlers (Protocol_Shop 0x0400)
 // ============================================================================
 
-// Shop item definition for server-side shop catalog
+// Hardcoded fallback shop catalog (used when ShopManager has no data from DataServer)
 struct ShopGoodsItem
 {
-	uint32_t	ui32GoodsId;		// Unique goods ID
-	uint32_t	ui32ItemId;			// Item ID (MAKE_ITEM_ID)
-	uint8_t		ui8ItemType;		// Item type for inventory
-	int			i32PriceGP;			// GP price (0 = not available for GP)
-	int			i32PriceCash;		// Cash price (0 = not available for Cash)
-	uint32_t	ui32Duration;		// Duration in seconds (0 = permanent)
+	uint32_t	ui32GoodsId;
+	uint32_t	ui32ItemId;
+	uint8_t		ui8ItemType;
+	int			i32PriceGP;
+	int			i32PriceCash;
+	uint32_t	ui32Duration;
 };
 
-// Simplified shop catalog (hardcoded for v1)
 static const ShopGoodsItem s_ShopCatalog[] =
 {
 	// GoodsId, ItemId, Type, GP, Cash, Duration
@@ -49,24 +49,13 @@ static const ShopGoodsItem s_ShopCatalog[] =
 
 static const int SHOP_CATALOG_SIZE = sizeof(s_ShopCatalog) / sizeof(s_ShopCatalog[0]);
 
-static const ShopGoodsItem* FindShopGoods(uint32_t goodsId)
-{
-	for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
-	{
-		if (s_ShopCatalog[i].ui32GoodsId == goodsId)
-			return &s_ShopCatalog[i];
-	}
-	return nullptr;
-}
-
 void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_SHOP_ENTER_REQ -> ACK
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[2048];
+	char buffer[4096];
 	int offset = 0;
 
 	uint16_t sz = 0;
@@ -81,21 +70,44 @@ void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));		offset += sizeof(int32_t);
 	memcpy(buffer + offset, &m_i32Cash, sizeof(int32_t));	offset += sizeof(int32_t);
 
-	// Send shop catalog count and items
-	uint16_t itemCount = (uint16_t)SHOP_CATALOG_SIZE;
-	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+	// Use dynamic catalog from ShopManager if available, otherwise fallback to hardcoded
+	if (g_pShopManager && g_pShopManager->IsLoaded())
 	{
-		if (offset + 20 > (int)sizeof(buffer))
-			break;
+		int itemCount = g_pShopManager->GetItemCount();
+		uint16_t count16 = (uint16_t)itemCount;
+		memcpy(buffer + offset, &count16, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
-		const ShopGoodsItem& goods = s_ShopCatalog[i];
-		memcpy(buffer + offset, &goods.ui32GoodsId, 4);		offset += 4;
-		memcpy(buffer + offset, &goods.ui32ItemId, 4);		offset += 4;
-		memcpy(buffer + offset, &goods.i32PriceGP, 4);		offset += 4;
-		memcpy(buffer + offset, &goods.i32PriceCash, 4);	offset += 4;
-		memcpy(buffer + offset, &goods.ui32Duration, 4);	offset += 4;
+		const ShopItem* pItems = g_pShopManager->GetItems();
+		for (int i = 0; i < itemCount; i++)
+		{
+			if (offset + 20 > (int)sizeof(buffer))
+				break;
+
+			memcpy(buffer + offset, &pItems[i].ui32GoodsId, 4);		offset += 4;
+			memcpy(buffer + offset, &pItems[i].ui32ItemId, 4);		offset += 4;
+			memcpy(buffer + offset, &pItems[i].i32PriceGP, 4);		offset += 4;
+			memcpy(buffer + offset, &pItems[i].i32PriceCash, 4);	offset += 4;
+			memcpy(buffer + offset, &pItems[i].ui32Duration, 4);	offset += 4;
+		}
+	}
+	else
+	{
+		// Fallback to hardcoded catalog
+		uint16_t itemCount = (uint16_t)SHOP_CATALOG_SIZE;
+		memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (offset + 20 > (int)sizeof(buffer))
+				break;
+
+			const ShopGoodsItem& goods = s_ShopCatalog[i];
+			memcpy(buffer + offset, &goods.ui32GoodsId, 4);		offset += 4;
+			memcpy(buffer + offset, &goods.ui32ItemId, 4);		offset += 4;
+			memcpy(buffer + offset, &goods.i32PriceGP, 4);		offset += 4;
+			memcpy(buffer + offset, &goods.i32PriceCash, 4);	offset += 4;
+			memcpy(buffer + offset, &goods.ui32Duration, 4);	offset += 4;
+		}
 	}
 
 	sz = (uint16_t)offset;
@@ -107,7 +119,6 @@ void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 
 void GameSession::OnShopLeaveReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_SHOP_LEAVE_REQ -> ACK
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
@@ -116,8 +127,6 @@ void GameSession::OnShopLeaveReq(char* pData, INT32 i32Size)
 
 void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ -> ACK
-	// Parse: buyType(1) + goodsId(4)
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
@@ -131,8 +140,47 @@ void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 	uint32_t newGP = (uint32_t)m_i32GP;
 	uint32_t newCash = (uint32_t)m_i32Cash;
 
-	const ShopGoodsItem* pGoods = FindShopGoods(goodsId);
-	if (!pGoods)
+	// Look up item in dynamic catalog first, then fallback
+	uint32_t itemId = 0;
+	uint8_t itemType = 0;
+	int priceGP = 0;
+	int priceCash = 0;
+	uint32_t duration = 0;
+	bool found = false;
+
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItem = g_pShopManager->FindByGoodsId(goodsId);
+		if (pItem)
+		{
+			itemId = pItem->ui32ItemId;
+			itemType = pItem->ui8ItemType;
+			priceGP = pItem->i32PriceGP;
+			priceCash = pItem->i32PriceCash;
+			duration = pItem->ui32Duration;
+			found = true;
+		}
+	}
+
+	if (!found)
+	{
+		// Fallback to hardcoded catalog
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (s_ShopCatalog[i].ui32GoodsId == goodsId)
+			{
+				itemId = s_ShopCatalog[i].ui32ItemId;
+				itemType = s_ShopCatalog[i].ui8ItemType;
+				priceGP = s_ShopCatalog[i].i32PriceGP;
+				priceCash = s_ShopCatalog[i].i32PriceCash;
+				duration = s_ShopCatalog[i].ui32Duration;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found)
 	{
 		result = 1;	// Item not found
 	}
@@ -140,13 +188,13 @@ void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 	{
 		result = 2;	// Inventory full
 	}
-	else if (HasInventoryItem(pGoods->ui32ItemId))
+	else if (HasInventoryItem(itemId))
 	{
 		result = 3;	// Already owned
 	}
 	else
 	{
-		int price = (buyType == 0) ? pGoods->i32PriceGP : pGoods->i32PriceCash;
+		int price = (buyType == 0) ? priceGP : priceCash;
 		if (price <= 0)
 		{
 			result = 4;	// Not available for this currency
@@ -170,16 +218,16 @@ void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 			// Add item to inventory
 			GameInventoryItem newItem;
 			newItem.ui32ItemDBIdx = (uint32_t)(GetTickCount() & 0xFFFFFF) | ((uint32_t)m_i32InventoryCount << 24);
-			newItem.ui32ItemId = pGoods->ui32ItemId;
-			newItem.ui8ItemType = pGoods->ui8ItemType;
-			newItem.ui32ItemArg = pGoods->ui32Duration;
+			newItem.ui32ItemId = itemId;
+			newItem.ui8ItemType = itemType;
+			newItem.ui32ItemArg = duration;
 			AddInventoryItem(newItem);
 
 			newGP = (uint32_t)m_i32GP;
 			newCash = (uint32_t)m_i32Cash;
 
 			printf("[GameSession] Shop buy - UID=%lld, GoodsId=%u, ItemId=%u, BuyType=%d, Price=%d\n",
-				m_i64UID, goodsId, pGoods->ui32ItemId, buyType, price);
+				m_i64UID, goodsId, itemId, buyType, price);
 		}
 	}
 
@@ -206,9 +254,6 @@ void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 
 void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_SHOP_REPAIR_REQ -> ACK
-	// In PB, items can have durability. Repair costs GP.
-	// Simplified: just acknowledge the request
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
@@ -217,8 +262,6 @@ void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 
 void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_AUTH_GET_POINT_CASH_REQ -> ACK
-	// Client requests current GP and Cash balance
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 

@@ -82,14 +82,28 @@ void RoomManager::OnCreate()
 
 void RoomManager::OnUpdate()
 {
-	// Update room count stats
+	DWORD dwNow = GetTickCount();
+
+	// Update room count stats and battle timers
 	int totalRooms = 0;
 	for (uint32_t ch = 0; ch < m_ui32ChannelCount; ch++)
 	{
-		totalRooms += m_pChannelRoomList[ch]->GetCount();
+		int roomCount = m_pChannelRoomList[ch]->GetCount();
+		totalRooms += roomCount;
+
+		// Update battle timers for active rooms
+		m_pcsChannelRoom[ch]->Lock();
+		i3ListNode* pNode = m_pChannelRoomList[ch]->Begin();
+		while (pNode)
+		{
+			Room* pRoom = (Room*)pNode->pData;
+			if (pRoom && pRoom->IsCreated())
+				pRoom->UpdateBattleTimer(dwNow);
+			pNode = pNode->pNext;
+		}
+		m_pcsChannelRoom[ch]->Unlock();
 
 		// Periodic double-buffer update
-		DWORD dwNow = GetTickCount();
 		if (dwNow - m_pChangeRoomListTime[ch] > 1000)	// Update every 1 second
 		{
 			UpdateRoomInfo(ch);

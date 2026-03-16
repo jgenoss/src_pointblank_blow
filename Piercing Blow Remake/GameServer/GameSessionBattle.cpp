@@ -119,9 +119,14 @@ void GameSession::OnBattlePreStartBattleReq(char* pData, INT32 i32Size)
 	int32_t result = 0;
 	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
-	// TODO: Include BattleServer UDP IP/port from ModuleBattleServer
-	uint32_t udpIP = 0x0100007F;	// 127.0.0.1 in network byte order
-	uint16_t udpPort = 41000;
+	// Use BattleServer UDP IP/port stored in Room from OnBattleCreateAck
+	uint32_t udpIP = m_pRoom->GetBattleUdpIPAddr();
+	uint16_t udpPort = m_pRoom->GetBattleUdpPort();
+	if (udpIP == 0)
+	{
+		udpIP = 0x0100007F;		// Fallback: 127.0.0.1
+		udpPort = 41000;
+	}
 	memcpy(buffer + offset, &udpIP, 4);		offset += 4;
 	memcpy(buffer + offset, &udpPort, 2);	offset += 2;
 

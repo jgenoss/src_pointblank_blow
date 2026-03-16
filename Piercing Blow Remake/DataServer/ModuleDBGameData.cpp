@@ -246,6 +246,44 @@ bool ModuleDBGameData::SaveQuest(int64_t i64UID, IS_QUEST_SAVE_REQ* pReq,
 	return true;
 }
 
+int ModuleDBGameData::LoadShopItems(IS_SHOP_ITEM_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	DBResult result = pConn->Execute(
+		"SELECT goods_id, item_id, item_type, price_gp, price_cash, duration, category "
+		"FROM pb_shop_items WHERE is_active = TRUE ORDER BY goods_id");
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+	{
+		printf("[ModuleDBGameData] ERROR: LoadShopItems failed\n");
+		return 0;
+	}
+
+	int count = 0;
+	for (int i = 0; i < result.GetRowCount() && count < i32MaxCount; i++)
+	{
+		pOut[count].ui32GoodsId	= (uint32_t)atoi(result.GetValue(i, 0));
+		pOut[count].ui32ItemId	= (uint32_t)atoi(result.GetValue(i, 1));
+		pOut[count].ui8ItemType	= (uint8_t)atoi(result.GetValue(i, 2));
+		pOut[count].i32PriceGP	= atoi(result.GetValue(i, 3));
+		pOut[count].i32PriceCash = atoi(result.GetValue(i, 4));
+		pOut[count].ui32Duration = (uint32_t)atoi(result.GetValue(i, 5));
+		pOut[count].ui8Category	= (uint8_t)atoi(result.GetValue(i, 6));
+		count++;
+	}
+
+	printf("[ModuleDBGameData] Loaded %d shop items\n", count);
+	return count;
+}
+
 void ModuleDBGameData::ProcessResponses(DataServerContext* pContext)
 {
 	// Placeholder para futuro async con ring buffers

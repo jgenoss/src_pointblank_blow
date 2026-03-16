@@ -205,6 +205,22 @@ CREATE TABLE IF NOT EXISTS pb_blocks (
 CREATE INDEX IF NOT EXISTS idx_blocks_uid ON pb_blocks(uid);
 
 -- ============================================
+-- Tienda (shop catalog)
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_shop_items (
+    goods_id        SERIAL          PRIMARY KEY,
+    item_id         INTEGER         NOT NULL,
+    item_type       SMALLINT        DEFAULT 0,           -- GameItemAttrType
+    price_gp        INTEGER         DEFAULT 0,           -- 0 = not available for GP
+    price_cash      INTEGER         DEFAULT 0,           -- 0 = not available for Cash
+    duration        INTEGER         DEFAULT 0,           -- 0 = permanent, seconds
+    level_req       INTEGER         DEFAULT 0,           -- Minimum level required
+    rank_req        INTEGER         DEFAULT 0,           -- Minimum rank required
+    is_active       BOOLEAN         DEFAULT TRUE,
+    category        SMALLINT        DEFAULT 0            -- 0=Primary,1=Secondary,2=Melee,3=Character,4=Parts
+);
+
+-- ============================================
 -- Notas/mensajes (mail system)
 -- ============================================
 CREATE TABLE IF NOT EXISTS pb_notes (
@@ -290,6 +306,40 @@ ON CONFLICT DO NOTHING;
 INSERT INTO pb_medals (uid, medal_idx, action_id, current_count, get_reward)
 SELECT uid, 3, 5, 0, 0 FROM pb_users WHERE username = 'testuser'
 ON CONFLICT DO NOTHING;
+
+-- Shop items (matching the hardcoded s_ShopCatalog)
+-- Primary weapons (category 0)
+INSERT INTO pb_shop_items (goods_id, item_id, item_type, price_gp, price_cash, duration, category) VALUES
+(1001, 4097,  0, 5000,    0, 0, 0),   -- M4A1       (ASSAULT/1)
+(1002, 4098,  0, 8000,    0, 0, 0),   -- AK-47      (ASSAULT/2)
+(1003, 4099,  0, 12000,   0, 0, 0),   -- SG550      (ASSAULT/3)
+(1004, 4100,  0, 3000,    0, 0, 0),   -- K-2        (ASSAULT/4)
+(1005, 4353,  0, 4000,    0, 0, 0),   -- P90        (SMG/1)
+(1006, 4354,  0, 6000,    0, 0, 0),   -- MP5        (SMG/2)
+(1007, 4609,  0, 10000,   0, 0, 0),   -- AWP        (SNIPER/1)
+(1008, 4610,  0, 15000,   0, 0, 0),   -- PSG-1      (SNIPER/2)
+(1009, 4865,  0, 7000,    0, 0, 0),   -- Benelli    (SHOTGUN/1)
+(1010, 5121,  0, 20000,   0, 0, 0)    -- MG36       (MG/1)
+ON CONFLICT (goods_id) DO NOTHING;
+
+-- Secondary weapons (category 1)
+INSERT INTO pb_shop_items (goods_id, item_id, item_type, price_gp, price_cash, duration, category) VALUES
+(2001, 8449,  0, 2000,    0, 0, 1),   -- Glock      (HANDGUN/1)
+(2002, 8450,  0, 3000,    0, 0, 1),   -- Desert Eagle (HANDGUN/2)
+(2003, 8451,  0, 1500,    0, 0, 1)    -- K5         (HANDGUN/3)
+ON CONFLICT (goods_id) DO NOTHING;
+
+-- Melee weapons (category 2)
+INSERT INTO pb_shop_items (goods_id, item_id, item_type, price_gp, price_cash, duration, category) VALUES
+(3001, 12545, 0, 1000,    0, 0, 2),   -- M7         (KNIFE/1)
+(3002, 12546, 0, 5000,    0, 0, 2)    -- Kukri      (KNIFE/2)
+ON CONFLICT (goods_id) DO NOTHING;
+
+-- Characters (category 3)
+INSERT INTO pb_shop_items (goods_id, item_id, item_type, price_gp, price_cash, duration, category) VALUES
+(5001, 53505, 0, 10000,   0, 0, 3),   -- Character 1
+(5002, 53506, 0, 15000,   0, 0, 3)    -- Character 2
+ON CONFLICT (goods_id) DO NOTHING;
 
 -- ============================================
 -- Verificar

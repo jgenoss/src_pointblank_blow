@@ -65,6 +65,9 @@ private:
 	void				OnBlockRemoveReq(char* pData, INT32 i32Size);
 	void				OnBlockListReq(char* pData, INT32 i32Size);
 
+	// Shop
+	void				OnShopListReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void				SendHeartbeatAck();
 

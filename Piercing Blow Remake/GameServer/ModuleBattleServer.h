@@ -58,4 +58,6 @@ private:
 	bool			m_bRegistered;
 };
 
+extern ModuleBattleServer* g_pModuleBattleServer;
+
 #endif // __MODULEBATTLESERVER_H__

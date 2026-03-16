@@ -142,6 +142,19 @@ public:
 	// Load player data from DataServer response
 	void			OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize);
 
+	// DataServer callback results (called from ModuleDataServer response handlers)
+	void			OnCreateNickResult(int i32Result, const char* pszNickname);
+	void			OnCheckNickResult(int i32Result);
+	void			OnClanCreateResult(int i32ClanId, int i32Result);
+	void			OnClanJoinResult(int i32ClanId, int i32Result);
+	void			OnFriendAddResult(int64_t i64FriendUID, int i32Result);
+	void			OnFriendListLoaded(struct IS_FRIEND_ENTRY* pEntries, int i32Count);
+	void			OnBlockAddResult(int64_t i64BlockedUID, int i32Result);
+	void			OnBlockListLoaded(struct IS_BLOCK_ENTRY* pEntries, int i32Count);
+
+	// Battle results from BattleServer (applied via ModuleBattleServer)
+	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin);
+
 	// Timeout
 	bool			IsTimedOut() const;
 	DWORD			GetLastPacketTime() const	{ return m_dwLastPacketTime; }

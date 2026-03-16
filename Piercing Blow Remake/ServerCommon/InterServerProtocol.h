@@ -120,6 +120,10 @@ enum Protocol_InterServer_Data
 	PROTOCOL_IS_BLOCK_REMOVE_ACK,
 	PROTOCOL_IS_BLOCK_LIST_REQ,
 	PROTOCOL_IS_BLOCK_LIST_ACK,
+
+	// Shop catalog (GameServer -> DataServer)
+	PROTOCOL_IS_SHOP_LIST_REQ,
+	PROTOCOL_IS_SHOP_LIST_ACK,
 };
 
 enum Protocol_InterServer_Battle
@@ -264,6 +268,7 @@ struct IS_PLAYER_CREATE_NICK_ACK
 	int64_t		i64UID;
 	int			i32SessionIdx;
 	int			i32Result;				// 0=OK, 1=exists, 2=invalid
+	char		szNickname[64];			// Nickname created (echoed back)
 };
 
 // Nick Check (GameServer -> DataServer)
@@ -606,6 +611,30 @@ struct IS_BLOCK_ENTRY
 {
 	int64_t		i64BlockedUID;
 	char		szNickname[64];
+};
+
+// Shop List (GameServer -> DataServer)
+struct IS_SHOP_LIST_REQ
+{
+	int			i32SessionIdx;			// 0 = server startup request
+};
+
+struct IS_SHOP_LIST_ACK
+{
+	int			i32Result;
+	int			i32ItemCount;
+	// Followed by i32ItemCount * IS_SHOP_ITEM_ENTRY
+};
+
+struct IS_SHOP_ITEM_ENTRY
+{
+	uint32_t	ui32GoodsId;
+	uint32_t	ui32ItemId;
+	uint8_t		ui8ItemType;
+	int			i32PriceGP;
+	int			i32PriceCash;
+	uint32_t	ui32Duration;
+	uint8_t		ui8Category;
 };
 
 // Battle Create (GameServer -> BattleServer)

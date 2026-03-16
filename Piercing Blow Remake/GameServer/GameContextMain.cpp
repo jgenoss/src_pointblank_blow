@@ -14,6 +14,18 @@ GameContextMain::GameContextMain()
 	, m_i16RSAKeySize(0)
 	, m_i32UpdateTimeSS(0)
 	, m_i32LastUpdateTime(0)
+	, m_i32KillGPReward(50)
+	, m_i32WinGPReward(200)
+	, m_i32LoseGPReward(50)
+	, m_i32KillExpReward(100)
+	, m_i32WinExpReward(500)
+	, m_i32LoseExpReward(100)
+	, m_i32StartingGP(10000)
+	, m_i32StartingCash(0)
+	, m_i32DefaultTimeLimit(300)
+	, m_i32DefaultMaxRound(7)
+	, m_i32MinPlayersToStart(1)
+	, m_i32AFKTimeout(0)
 {
 	m_szServerName[0] = '\0';
 	memset(m_pRSAKey, 0, sizeof(m_pRSAKey));

@@ -85,6 +85,22 @@ public:
 	// Timers
 	int			m_i32UpdateTimeSS;
 	int			m_i32LastUpdateTime;
+
+	// Economy config (from [Economy] section)
+	int			m_i32KillGPReward;
+	int			m_i32WinGPReward;
+	int			m_i32LoseGPReward;
+	int			m_i32KillExpReward;
+	int			m_i32WinExpReward;
+	int			m_i32LoseExpReward;
+	int			m_i32StartingGP;
+	int			m_i32StartingCash;
+
+	// Battle config (from [Battle] section)
+	int			m_i32DefaultTimeLimit;
+	int			m_i32DefaultMaxRound;
+	int			m_i32MinPlayersToStart;
+	int			m_i32AFKTimeout;
 };
 
 extern GameContextMain* g_pContextMain;

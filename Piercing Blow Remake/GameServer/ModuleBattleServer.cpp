@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "ModuleBattleServer.h"
+#include "ModuleDataServer.h"
 #include "GameSession.h"
 #include "GameSessionManager.h"
 #include "GameServerContext.h"
@@ -261,9 +262,22 @@ void ModuleBattleServer::OnBattleCreateAck(char* pData, int i32Size)
 		return;
 	}
 
-	// TODO: Notify the room that battle was created successfully
-	// Store battle room info (UDP IP/port) in the Room so clients can connect
-	// For now just log it
+	// Store battle room info in the Room so clients can connect via UDP
+	if (!g_pRoomManager)
+		return;
+
+	// Find the room across all channels
+	for (uint32_t ch = 0; ch < g_pRoomManager->GetChannelCount(); ch++)
+	{
+		Room* pRoom = g_pRoomManager->GetRoom(ch, pAck->i32RoomIdx);
+		if (pRoom && pRoom->IsCreated())
+		{
+			pRoom->SetBattleInfo(pAck->i32BattleRoomIdx, pAck->szUdpIP, pAck->ui16UdpPort);
+			printf("[ModuleBattleServer] Battle info stored in Room=%d, BattleRoom=%d, UDP=%s:%d\n",
+				pAck->i32RoomIdx, pAck->i32BattleRoomIdx, pAck->szUdpIP, pAck->ui16UdpPort);
+			break;
+		}
+	}
 }
 
 void ModuleBattleServer::OnBattleEndNotify(char* pData, int i32Size)
@@ -280,9 +294,11 @@ void ModuleBattleServer::OnBattleEndNotify(char* pData, int i32Size)
 		pNotify->i32RedScore, pNotify->i32BlueScore,
 		pNotify->i32PlayerCount);
 
-	// Parse player results
+	// Parse player results and apply to sessions
 	char* pPlayerData = pData + sizeof(IS_BATTLE_END_NOTIFY);
 	int remainingSize = i32Size - sizeof(IS_BATTLE_END_NOTIFY);
+
+	GameSessionManager* pMgr = g_pGameServerContext ? g_pGameServerContext->GetSessionManager() : nullptr;
 
 	for (int i = 0; i < pNotify->i32PlayerCount && remainingSize >= (int)sizeof(IS_BATTLE_PLAYER_RESULT); i++)
 	{
@@ -292,12 +308,51 @@ void ModuleBattleServer::OnBattleEndNotify(char* pData, int i32Size)
 			pResult->i64UID, pResult->i32Kills, pResult->i32Deaths,
 			pResult->i32Headshots, pResult->i32Team);
 
+		// Find player session and apply results
+		if (pMgr)
+		{
+			GameSession* pSession = pMgr->FindSessionByUID(pResult->i64UID);
+			if (pSession)
+			{
+				bool bWin = (pResult->i32Team == pNotify->i32WinnerTeam);
+				pSession->ApplyBattleResult(pResult->i32Kills, pResult->i32Deaths,
+					pResult->i32Headshots, bWin);
+
+				// Save stats to DataServer
+				if (g_pModuleDataServer)
+				{
+					g_pModuleDataServer->RequestStatsSave(
+						pResult->i64UID,
+						pSession->GetKills(), pSession->GetDeaths(),
+						pResult->i32Headshots,
+						0, 0);	// Wins/Losses are cumulative on session, send deltas via PlayerSave
+
+					g_pModuleDataServer->RequestPlayerSave(
+						pResult->i64UID,
+						pSession->GetLevel(), pSession->GetExp(),
+						pSession->GetCash(), pSession->GetGP());
+				}
+			}
+		}
+
 		pPlayerData += sizeof(IS_BATTLE_PLAYER_RESULT);
 		remainingSize -= sizeof(IS_BATTLE_PLAYER_RESULT);
 	}
 
-	// TODO: Update room state back to READY, apply results to player stats,
-	// save stats to DataServer via ModuleDataServer
+	// Update room state back to READY
+	if (g_pRoomManager)
+	{
+		for (uint32_t ch = 0; ch < g_pRoomManager->GetChannelCount(); ch++)
+		{
+			Room* pRoom = g_pRoomManager->GetRoom(ch, pNotify->i32RoomIdx);
+			if (pRoom && pRoom->IsCreated())
+			{
+				pRoom->OnEndBattle();
+				pRoom->ClearBattleInfo();
+				break;
+			}
+		}
+	}
 }
 
 void ModuleBattleServer::OnPlayerMigrateAck(char* pData, int i32Size)
