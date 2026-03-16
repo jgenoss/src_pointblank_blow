@@ -1323,3 +1323,191 @@ void GameSession::OnShopPlusPointReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 17 - Shop extras
+// ============================================================================
+
+void GameSession::OnShopGetGiftListReq(char* pData, INT32 i32Size)
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_GET_GIFTLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint16_t giftCount = 0;
+	memcpy(buffer + offset, &giftCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopExpireDeleteItemReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (int)sizeof(uint16_t))
+		return;
+
+	uint16_t itemCount = 0;
+	memcpy(&itemCount, pData, sizeof(uint16_t));
+
+	if (itemCount == 0 || itemCount > 100)
+		return;
+
+	int offset = sizeof(uint16_t);
+	int deleted = 0;
+
+	for (uint16_t i = 0; i < itemCount && offset + 4 <= i32Size; i++)
+	{
+		uint32_t itemId = 0;
+		memcpy(&itemId, pData + offset, sizeof(uint32_t));
+		offset += sizeof(uint32_t);
+
+		for (int j = 0; j < m_i32InventoryCount; j++)
+		{
+			if (m_Inventory[j].ui32ItemId == itemId)
+			{
+				for (int k = j; k < m_i32InventoryCount - 1; k++)
+					m_Inventory[k] = m_Inventory[k + 1];
+				m_i32InventoryCount--;
+				deleted++;
+				break;
+			}
+		}
+	}
+
+	printf("[GameSession] Deleted %d expired items for UID=%lld\n", deleted, m_i64UID);
+}
+
+void GameSession::OnShopRewardItemReq(char* pData, INT32 i32Size)
+{
+	// Reward item claim - fire-and-forget (no ACK protocol defined)
+	if (i32Size < (int)sizeof(uint32_t))
+		return;
+
+	uint32_t rewardId = 0;
+	memcpy(&rewardId, pData, sizeof(uint32_t));
+
+	printf("[GameSession] Reward item claim: rewardId=%u, UID=%lld\n", rewardId, m_i64UID);
+}
+
+void GameSession::OnShopSaleCouponListReq(char* pData, INT32 i32Size)
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_SALECOUPONLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint16_t couponCount = 0;
+	memcpy(buffer + offset, &couponCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopAuthGiftReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (int)(sizeof(uint32_t) + sizeof(int64_t)))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, -1);
+		return;
+	}
+
+	int offset = 0;
+	uint32_t goodsId = 0;
+	int64_t targetUID = 0;
+	memcpy(&goodsId, pData + offset, sizeof(uint32_t));		offset += sizeof(uint32_t);
+	memcpy(&targetUID, pData + offset, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, -2);
+		return;
+	}
+
+	// Look up item in catalog
+	uint32_t itemId = 0;
+	int priceGP = 0;
+	uint32_t duration = 0;
+	bool found = false;
+
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItem = g_pShopManager->FindByGoodsId(goodsId);
+		if (pItem)
+		{
+			itemId = pItem->ui32ItemId;
+			priceGP = pItem->i32PriceGP;
+			duration = pItem->ui32Duration;
+			found = true;
+		}
+	}
+
+	if (!found)
+	{
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (s_ShopCatalog[i].ui32GoodsId == goodsId)
+			{
+				itemId = s_ShopCatalog[i].ui32ItemId;
+				priceGP = s_ShopCatalog[i].i32PriceGP;
+				duration = s_ShopCatalog[i].ui32Duration;
+				found = true;
+				break;
+			}
+		}
+	}
+
+	if (!found)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, -3);
+		return;
+	}
+
+	if (m_i32GP < priceGP)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, -4);
+		return;
+	}
+
+	m_i32GP -= priceGP;
+
+	if (pTarget->m_i32InventoryCount < MAX_INVEN_COUNT)
+	{
+		GameInventoryItem& item = pTarget->m_Inventory[pTarget->m_i32InventoryCount];
+		item.ui32ItemId = itemId;
+		item.ui32Count = 1;
+		item.i32SlotIdx = -1;
+		item.ui8IsEquipped = 0;
+		item.ui32Duration = duration;
+		pTarget->m_i32InventoryCount++;
+	}
+
+	pTarget->SendSimpleAck(PROTOCOL_AUTH_SHOP_NOTIFY_GIFT_ACK, 0);
+	SendSimpleAck(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK, 0);
+}
+
+void GameSession::OnShopNotifyGiftReq(char* pData, INT32 i32Size)
+{
+	SendSimpleAck(PROTOCOL_AUTH_SHOP_NOTIFY_GIFT_ACK, 0);
+}

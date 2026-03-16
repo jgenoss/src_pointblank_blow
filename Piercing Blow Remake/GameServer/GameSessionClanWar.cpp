@@ -493,3 +493,184 @@ void GameSession::OnClanWarInviteDenialReq(char* pData, INT32 i32Size)
 
 	SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_DENIAL_ACK, 0);
 }
+
+// ============================================================================
+// Batch 17 - ClanWar extras
+// ============================================================================
+
+void GameSession::OnClanWarCreateRoomReq(char* pData, INT32 i32Size)
+{
+	// Clan war leader creates a match room for the clan war battle
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(int))
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -1);
+		return;
+	}
+
+	int teamIdx = 0;
+	memcpy(&teamIdx, pData, sizeof(int));
+
+	if (!g_pClanMatchManager)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -1);
+		return;
+	}
+
+	ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIdx);
+	if (!pTeam || !pTeam->IsLeader(m_i64UID))
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -2);
+		return;
+	}
+
+	if (pTeam->i32OpponentTeamIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -3);
+		return;
+	}
+
+	ClanMatchTeam* pOpp = g_pClanMatchManager->GetTeam(pTeam->i32OpponentTeamIdx);
+	if (!pOpp)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, -3);
+		return;
+	}
+
+	// Use the existing CreateClanMatchRoom helper
+	CreateClanMatchRoom(pTeam, pOpp);
+	SendSimpleAck(PROTOCOL_CLAN_WAR_CREATE_ROOM_ACK, 0);
+}
+
+void GameSession::OnClanWarJoinRoomReq(char* pData, INT32 i32Size)
+{
+	// Clan war member joins the match room
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)(sizeof(int) * 2))
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, -1);
+		return;
+	}
+
+	int offset = 0;
+	int channel = 0;
+	int roomIdx = 0;
+	memcpy(&channel, pData + offset, sizeof(int));		offset += sizeof(int);
+	memcpy(&roomIdx, pData + offset, sizeof(int));		offset += sizeof(int);
+
+	if (!g_pRoomManager)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, -1);
+		return;
+	}
+
+	Room* pRoom = g_pRoomManager->GetRoom(channel, roomIdx);
+	if (!pRoom || !pRoom->IsActive())
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, -2);
+		return;
+	}
+
+	// Auto-assign team based on clan ID
+	int team = 0;  // default RED
+	if (m_i32ClanId > 0 && pRoom->GetPlayerCount() > 0)
+		team = 1;  // second clan goes BLUE
+
+	int slot = pRoom->OnJoin(this, team);
+	if (slot < 0)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, -3);
+		return;
+	}
+
+	m_i32RoomIdx = roomIdx;
+	m_i32SlotIdx = slot;
+	m_i32ChannelNum = channel;
+	m_pRoom = pRoom;
+	m_eMainTask = GAME_TASK_READY_ROOM;
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_JOIN_ROOM_ACK, 0);
+}
+
+void GameSession::OnClanWarLeaveRoomReq(char* pData, INT32 i32Size)
+{
+	// Clan war member leaves the match room
+	if (m_eMainTask != GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_LEAVE_ROOM_ACK, -1);
+		return;
+	}
+
+	m_pRoom->OnLeave(this);
+	m_pRoom = nullptr;
+	m_i32RoomIdx = -1;
+	m_i32SlotIdx = -1;
+	m_eMainTask = GAME_TASK_LOBBY;
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_LEAVE_ROOM_ACK, 0);
+}
+
+void GameSession::OnClanWarMercenaryDetailInfoReq(char* pData, INT32 i32Size)
+{
+	// Request detailed info about a mercenary
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_MERCENARY_DETAIL_INFO_ACK, -1);
+		return;
+	}
+
+	int64_t mercUID = 0;
+	memcpy(&mercUID, pData, sizeof(int64_t));
+
+	GameSession* pMerc = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(mercUID) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_CLAN_WAR_MERCENARY_DETAIL_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = pMerc ? 0 : -1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	if (pMerc)
+	{
+		memcpy(buffer + offset, &mercUID, sizeof(int64_t));		offset += sizeof(int64_t);
+
+		char nick[64] = {};
+		strncpy(nick, pMerc->GetNickname(), 63);
+		memcpy(buffer + offset, nick, 64);						offset += 64;
+
+		int32_t level = pMerc->GetLevel();
+		int32_t rank = pMerc->GetRankId();
+		int32_t kills = pMerc->GetKills();
+		int32_t deaths = pMerc->GetDeaths();
+		int32_t wins = pMerc->GetWins();
+		int32_t losses = pMerc->GetLosses();
+		memcpy(buffer + offset, &level, 4);		offset += 4;
+		memcpy(buffer + offset, &rank, 4);		offset += 4;
+		memcpy(buffer + offset, &kills, 4);		offset += 4;
+		memcpy(buffer + offset, &deaths, 4);	offset += 4;
+		memcpy(buffer + offset, &wins, 4);		offset += 4;
+		memcpy(buffer + offset, &losses, 4);	offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

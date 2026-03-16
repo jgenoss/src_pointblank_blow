@@ -544,6 +544,51 @@ private:
 	void			OnClanWarInviteMercenaryReq(char* pData, INT32 i32Size);
 	void			OnClanWarInviteAcceptReq(char* pData, INT32 i32Size);
 	void			OnClanWarInviteDenialReq(char* pData, INT32 i32Size);
+	void			OnClanWarCreateRoomReq(char* pData, INT32 i32Size);
+	void			OnClanWarJoinRoomReq(char* pData, INT32 i32Size);
+	void			OnClanWarLeaveRoomReq(char* pData, INT32 i32Size);
+	void			OnClanWarMercenaryDetailInfoReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Clan extras (GameSessionClan.cpp)
+	void			OnClanInviteAcceptReq(char* pData, INT32 i32Size);
+	void			OnClanCancelRequestReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceNameReq(char* pData, INT32 i32Size);
+	void			OnClanNoteReq(char* pData, INT32 i32Size);
+	void			OnClanReplacePersonmaxReq(char* pData, INT32 i32Size);
+	void			OnClanCheckJoinAuthorityReq(char* pData, INT32 i32Size);
+	void			OnClanCheckMarkReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Auth/Social extras (GameSessionSocial.cpp)
+	void			OnAuthGetMyInfoReq(char* pData, INT32 i32Size);
+	void			OnAuthFriendRoomEnterReq(char* pData, INT32 i32Size);
+	void			OnAuthFriendRoomLeaveReq(char* pData, INT32 i32Size);
+	void			OnWhisperFindUIDReq(char* pData, INT32 i32Size);
+	void			OnAuthRecvWhisperReq(char* pData, INT32 i32Size);
+	void			OnAuthUsedWeaponReq(char* pData, INT32 i32Size);
+	void			OnAuthFCMInfoReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Base extras (GameSession.cpp)
+	void			OnBaseUrlListReq(char* pData, INT32 i32Size);
+	void			OnBaseServerInfoReq(char* pData, INT32 i32Size);
+	void			OnBaseClientEndTypeReq(char* pData, INT32 i32Size);
+	void			OnBaseUserTitleInfoReq(char* pData, INT32 i32Size);
+	void			OnBaseQuestFinishNoticeReq(char* pData, INT32 i32Size);
+	void			OnBaseRegistTrainingScoreReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUserListReq(char* pData, INT32 i32Size);
+	void			OnBaseChangeClanNameReq(char* pData, INT32 i32Size);
+	void			OnBaseChangeClanMarkReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Shop extras (GameSessionShop.cpp)
+	void			OnShopGetGiftListReq(char* pData, INT32 i32Size);
+	void			OnShopExpireDeleteItemReq(char* pData, INT32 i32Size);
+	void			OnShopRewardItemReq(char* pData, INT32 i32Size);
+	void			OnShopSaleCouponListReq(char* pData, INT32 i32Size);
+	void			OnShopAuthGiftReq(char* pData, INT32 i32Size);
+	void			OnShopNotifyGiftReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Battle extras (GameSessionBattle.cpp)
+	void			OnBattleStartKickVoteReq(char* pData, INT32 i32Size);
+	void			OnBattleCheatMessageReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
 	void			OnRouletteEnterReq(char* pData, INT32 i32Size);

@@ -1079,3 +1079,263 @@ bool GameSession::IsBlocked(int64_t uid) const
 	}
 	return false;
 }
+
+// ============================================================================
+// Batch 17 - Auth/Social extras
+// ============================================================================
+
+void GameSession::OnAuthGetMyInfoReq(char* pData, INT32 i32Size)
+{
+	// Return player's own info summary
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_GET_MYINFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// UID
+	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	// Nickname
+	char nick[64] = {};
+	strncpy(nick, m_szNickname, 63);
+	memcpy(buffer + offset, nick, 64);						offset += 64;
+
+	// Basic stats
+	int32_t level = m_i32Level;
+	int32_t rank = m_i32RankId;
+	int64_t exp = m_i64Exp;
+	int32_t gp = m_i32GP;
+	int32_t cash = m_i32Cash;
+	int32_t kills = m_i32Kills;
+	int32_t deaths = m_i32Deaths;
+	int32_t headshots = m_i32Headshots;
+	int32_t wins = m_i32Wins;
+	int32_t losses = m_i32Losses;
+	int32_t clanId = m_i32ClanId;
+
+	memcpy(buffer + offset, &level, 4);		offset += 4;
+	memcpy(buffer + offset, &rank, 4);		offset += 4;
+	memcpy(buffer + offset, &exp, 8);		offset += 8;
+	memcpy(buffer + offset, &gp, 4);		offset += 4;
+	memcpy(buffer + offset, &cash, 4);		offset += 4;
+	memcpy(buffer + offset, &kills, 4);		offset += 4;
+	memcpy(buffer + offset, &deaths, 4);	offset += 4;
+	memcpy(buffer + offset, &headshots, 4);	offset += 4;
+	memcpy(buffer + offset, &wins, 4);		offset += 4;
+	memcpy(buffer + offset, &losses, 4);	offset += 4;
+	memcpy(buffer + offset, &clanId, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthFriendRoomEnterReq(char* pData, INT32 i32Size)
+{
+	// Request to enter the room where a friend is
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK, -1);
+		return;
+	}
+
+	int64_t friendUID = 0;
+	memcpy(&friendUID, pData, sizeof(int64_t));
+
+	GameSession* pFriend = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(friendUID) : nullptr;
+	if (!pFriend)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK, -2);
+		return;
+	}
+
+	if (!pFriend->GetRoom())
+	{
+		SendSimpleAck(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK, -3);
+		return;
+	}
+
+	// Send friend's room info so client can join
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t channel = pFriend->GetChannelNum();
+	int32_t roomIdx = pFriend->GetRoomIdx();
+	memcpy(buffer + offset, &channel, 4);	offset += 4;
+	memcpy(buffer + offset, &roomIdx, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthFriendRoomLeaveReq(char* pData, INT32 i32Size)
+{
+	// Notification that friend left room (client-side tracking)
+	SendSimpleAck(PROTOCOL_AUTH_FRIEND_ROOM_LEAVE_ACK, 0);
+}
+
+void GameSession::OnWhisperFindUIDReq(char* pData, INT32 i32Size)
+{
+	// Whisper to a player by UID instead of nickname
+	if (i32Size < (int)(sizeof(int64_t) + 4))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, -1);
+		return;
+	}
+
+	int offset = 0;
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData + offset, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	uint16_t msgLen = 0;
+	memcpy(&msgLen, pData + offset, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	if (msgLen == 0 || msgLen > 256 || offset + msgLen > i32Size)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, -1);
+		return;
+	}
+
+	char msg[260] = {};
+	memcpy(msg, pData + offset, msgLen);
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, -2);
+		return;
+	}
+
+	if (pTarget->IsBlocked(m_i64UID))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, -3);
+		return;
+	}
+
+	// Send whisper to target
+	i3NetworkPacket recvPacket;
+	char recvBuf[400];
+	int recvOff = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_RECV_WHISPER_ACK;
+	recvOff += sizeof(uint16_t);
+	memcpy(recvBuf + recvOff, &proto, sizeof(uint16_t));	recvOff += sizeof(uint16_t);
+
+	memcpy(recvBuf + recvOff, &m_i64UID, sizeof(int64_t));	recvOff += sizeof(int64_t);
+
+	char senderNick[64] = {};
+	strncpy(senderNick, m_szNickname, 63);
+	memcpy(recvBuf + recvOff, senderNick, 64);				recvOff += 64;
+
+	memcpy(recvBuf + recvOff, &msgLen, sizeof(uint16_t));	recvOff += sizeof(uint16_t);
+	memcpy(recvBuf + recvOff, msg, msgLen);					recvOff += msgLen;
+
+	sz = (uint16_t)recvOff;
+	memcpy(recvBuf, &sz, sizeof(uint16_t));
+
+	recvPacket.SetPacketData(recvBuf, recvOff);
+	pTarget->SendMessage(&recvPacket);
+
+	// Confirm to sender
+	SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, 0);
+}
+
+void GameSession::OnAuthRecvWhisperReq(char* pData, INT32 i32Size)
+{
+	// Client acknowledges receiving a whisper
+	SendSimpleAck(PROTOCOL_AUTH_RECV_WHISPER_ACK, 0);
+}
+
+void GameSession::OnAuthUsedWeaponReq(char* pData, INT32 i32Size)
+{
+	// Request player's used weapon stats
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_USED_WEAPON_ACK, -1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	// Return empty weapon usage list for now
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_USED_WEAPON_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	uint16_t weaponCount = 0;
+	memcpy(buffer + offset, &weaponCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthFCMInfoReq(char* pData, INT32 i32Size)
+{
+	// FCM (Fatigue Control Mechanism) - anti-addiction system
+	// Return that player is not subject to FCM restrictions
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_FCM_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;  // 0 = not restricted
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint32_t playTimeSec = 0;
+	memcpy(buffer + offset, &playTimeSec, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	uint8_t fcmState = 0;  // 0 = normal, 1 = warning, 2 = restricted
+	memcpy(buffer + offset, &fcmState, sizeof(uint8_t));		offset += sizeof(uint8_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

@@ -1591,3 +1591,73 @@ void GameSession::OnBattleReportScreenshotReq(char* pData, INT32 i32Size)
 
 	SendSimpleAck(PROTOCOL_BATTLE_REPORTSCREENSHOT_ACK, 0);
 }
+
+// ============================================================================
+// Batch 17 - Battle extras
+// ============================================================================
+
+void GameSession::OnBattleStartKickVoteReq(char* pData, INT32 i32Size)
+{
+	// Player initiates a kick vote against another player
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_START_KICKVOTE_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(uint8_t))
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_START_KICKVOTE_ACK, -1);
+		return;
+	}
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+
+	if (targetSlot >= SLOT_MAX_COUNT || targetSlot == (uint8_t)m_i32SlotIdx)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_START_KICKVOTE_ACK, -2);
+		return;
+	}
+
+	// Notify all players in the room about the kick vote (except initiator and target)
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_START_KICKVOTE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint8_t initiatorSlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &initiatorSlot, sizeof(uint8_t));	offset += sizeof(uint8_t);
+	memcpy(buffer + offset, &targetSlot, sizeof(uint8_t));		offset += sizeof(uint8_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleCheatMessageReq(char* pData, INT32 i32Size)
+{
+	// Anti-cheat report from client (fire-and-forget, ACK is _notuse)
+	if (m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (i32Size < (int)(sizeof(uint8_t) + sizeof(uint32_t)))
+		return;
+
+	int offset = 0;
+	uint8_t cheatType = 0;
+	uint32_t cheatData = 0;
+	memcpy(&cheatType, pData + offset, sizeof(uint8_t));	offset += sizeof(uint8_t);
+	memcpy(&cheatData, pData + offset, sizeof(uint32_t));
+
+	printf("[GameSession] Cheat report: type=%d, data=%u from slot=%d UID=%lld\n",
+		cheatType, cheatData, m_i32SlotIdx, m_i64UID);
+}

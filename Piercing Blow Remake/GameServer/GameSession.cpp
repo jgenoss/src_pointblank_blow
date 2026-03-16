@@ -607,6 +607,53 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CHEAT_REDUCE_ROUND_TIME_REQ:		OnCheatReduceRoundTimeReq(pData, dataSize);	break;
 	case PROTOCOL_CHEAT_CHARACTER_TELEPORT_REQ:		OnCheatTeleportReq(pData, dataSize);		break;
 
+	// ---- Clan War extras (GameSessionClanWar.cpp - Batch 17) ----
+	case PROTOCOL_CLAN_WAR_CREATE_ROOM_REQ:			OnClanWarCreateRoomReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_JOIN_ROOM_REQ:			OnClanWarJoinRoomReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_LEAVE_ROOM_REQ:			OnClanWarLeaveRoomReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_MERCENARY_DETAIL_INFO_REQ:OnClanWarMercenaryDetailInfoReq(pData, dataSize);break;
+
+	// ---- Clan extras (GameSessionClan.cpp - Batch 17) ----
+	case PROTOCOL_CS_INVITE_ACCEPT_REQ:				OnClanInviteAcceptReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CANCEL_REQUEST_REQ:			OnClanCancelRequestReq(pData, dataSize);	break;
+	case PROTOCOL_CS_REPLACE_NAME_REQ:				OnClanReplaceNameReq(pData, dataSize);		break;
+	case PROTOCOL_CS_NOTE_REQ:						OnClanNoteReq(pData, dataSize);				break;
+	case PROTOCOL_CS_REPLACE_PERSONMAX_REQ:			OnClanReplacePersonmaxReq(pData, dataSize);	break;
+	case PROTOCOL_CS_CHECK_JOIN_AUTHORITY_REQ:		OnClanCheckJoinAuthorityReq(pData, dataSize);break;
+	case PROTOCOL_CS_CHECK_MARK_REQ:				OnClanCheckMarkReq(pData, dataSize);		break;
+
+	// ---- Auth/Social extras (GameSessionSocial.cpp - Batch 17) ----
+	case PROTOCOL_AUTH_GET_MYINFO_REQ:				OnAuthGetMyInfoReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_FRIEND_ROOM_ENTER_REQ:		OnAuthFriendRoomEnterReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_FRIEND_ROOM_LEAVE_REQ:		OnAuthFriendRoomLeaveReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_SEND_WHISPER_FIND_UID_REQ:	OnWhisperFindUIDReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_RECV_WHISPER_REQ:			OnAuthRecvWhisperReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_USED_WEAPON_REQ:				OnAuthUsedWeaponReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_FCM_INFO_REQ:				OnAuthFCMInfoReq(pData, dataSize);			break;
+
+	// ---- Base extras (GameSession.cpp - Batch 17) ----
+	case PROTOCOL_BASE_URL_LIST_REQ:				OnBaseUrlListReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_SERVER_INFO_REQ:				OnBaseServerInfoReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_CLIENT_END_TYPE_REQ:			OnBaseClientEndTypeReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_USER_TITLE_INFO_REQ:			OnBaseUserTitleInfoReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_QUEST_FINISH_NOTICE_REQ:		OnBaseQuestFinishNoticeReq(pData, dataSize);break;
+	case PROTOCOL_BASE_REGIST_TRAINING_SCORE_REQ:	OnBaseRegistTrainingScoreReq(pData, dataSize);break;
+	case PROTOCOL_BASE_GET_USER_LIST_REQ:			OnBaseGetUserListReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_CHANGE_CLAN_NAME_REQ:		OnBaseChangeClanNameReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_CHANGE_CLAN_MARK_REQ:		OnBaseChangeClanMarkReq(pData, dataSize);	break;
+
+	// ---- Shop extras (GameSessionShop.cpp - Batch 17) ----
+	case PROTOCOL_AUTH_SHOP_GET_GIFTLIST_REQ:		OnShopGetGiftListReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_EXPIRE_DELETE_ITEM_REQ:	OnShopExpireDeleteItemReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_SHOP_REWARD_ITEM_REQ:		OnShopRewardItemReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_SALECOUPONLIST_REQ:		OnShopSaleCouponListReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ:			OnShopAuthGiftReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_NOTIFY_GIFT_REQ:		OnShopNotifyGiftReq(pData, dataSize);		break;
+
+	// ---- Battle extras (GameSessionBattle.cpp - Batch 17) ----
+	case PROTOCOL_BATTLE_START_KICKVOTE_REQ:		OnBattleStartKickVoteReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_CHEAT_MESSAGE_REQ:			OnBattleCheatMessageReq(pData, dataSize);	break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
@@ -2556,6 +2603,222 @@ void GameSession::SendLoginAck(int i32Result)
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
+}
+
+// ============================================================================
+// Batch 17 - Base extras
+// ============================================================================
+
+void GameSession::OnBaseUrlListReq(char* pData, INT32 i32Size)
+{
+	// Return list of URLs (website, forum, support, etc.)
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_URL_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// URL count
+	uint8_t urlCount = 0;
+	memcpy(buffer + offset, &urlCount, sizeof(uint8_t));	offset += sizeof(uint8_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseServerInfoReq(char* pData, INT32 i32Size)
+{
+	// Return current server info (player count, channel count, etc.)
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_SERVER_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Server name
+	char serverName[64] = {};
+	if (g_pContextMain)
+		strncpy(serverName, g_pContextMain->m_szServerName, 63);
+	memcpy(buffer + offset, serverName, 64);	offset += 64;
+
+	// Online count
+	int32_t onlineCount = 0;
+	if (g_pGameSessionManager)
+		onlineCount = g_pGameSessionManager->GetActiveCount();
+	memcpy(buffer + offset, &onlineCount, 4);	offset += 4;
+
+	// Channel count
+	uint8_t channelCount = 0;
+	if (g_pContextMain)
+		channelCount = g_pContextMain->m_ui8ChannelCount;
+	memcpy(buffer + offset, &channelCount, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseClientEndTypeReq(char* pData, INT32 i32Size)
+{
+	// Client reports disconnect reason (fire-and-forget, no ACK needed)
+	if (i32Size < (int)sizeof(uint8_t))
+		return;
+
+	uint8_t endType = *(uint8_t*)pData;
+	printf("[GameSession] Client end type %d from Index=%d UID=%lld\n",
+		endType, GetIndex(), m_i64UID);
+}
+
+void GameSession::OnBaseUserTitleInfoReq(char* pData, INT32 i32Size)
+{
+	// Return player's equipped title/designation
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_USER_TITLE_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Title ID (0 = none) - use first equipped slot
+	uint16_t titleId = (uint16_t)m_TitleData.ui8EquippedSlots[0];
+	memcpy(buffer + offset, &titleId, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseQuestFinishNoticeReq(char* pData, INT32 i32Size)
+{
+	// Client notifies server that quest completion notice was shown
+	// Fire-and-forget, no meaningful ACK needed
+	SendSimpleAck(PROTOCOL_BASE_QUEST_FINISH_NOTICE_ACK, 0);
+}
+
+void GameSession::OnBaseRegistTrainingScoreReq(char* pData, INT32 i32Size)
+{
+	// Register training/shooting range score
+	if (i32Size < (int)(sizeof(int32_t) + sizeof(int32_t)))
+	{
+		SendSimpleAck(PROTOCOL_BASE_REGIST_TRAINING_SCORE_ACK, -1);
+		return;
+	}
+
+	int offset = 0;
+	int32_t mapIdx = 0;
+	int32_t score = 0;
+	memcpy(&mapIdx, pData + offset, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(&score, pData + offset, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	printf("[GameSession] Training score: map=%d, score=%d, UID=%lld\n",
+		mapIdx, score, m_i64UID);
+
+	SendSimpleAck(PROTOCOL_BASE_REGIST_TRAINING_SCORE_ACK, 0);
+}
+
+void GameSession::OnBaseGetUserListReq(char* pData, INT32 i32Size)
+{
+	// Get list of users in current channel/lobby
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USER_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// User count (simplified - return 0 for now, full implementation needs channel user iteration)
+	uint16_t userCount = 0;
+	memcpy(buffer + offset, &userCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseChangeClanNameReq(char* pData, INT32 i32Size)
+{
+	// Change clan name via base protocol (fire-and-forget to DataServer)
+	if (m_i32ClanId <= 0)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	if (!g_pClanManager)
+		return;
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan || !pClan->IsMaster(m_i64UID))
+		return;
+
+	char newName[MAX_CLAN_NAME_LEN] = {};
+	int nameLen = (i32Size > MAX_CLAN_NAME_LEN - 1) ? MAX_CLAN_NAME_LEN - 1 : i32Size;
+	memcpy(newName, pData, nameLen);
+
+	// Update in-memory
+	strncpy(pClan->szName, newName, MAX_CLAN_NAME_LEN - 1);
+
+	printf("[GameSession] Clan name changed to '%s' by UID=%lld\n", newName, m_i64UID);
+}
+
+void GameSession::OnBaseChangeClanMarkReq(char* pData, INT32 i32Size)
+{
+	// Change clan mark via base protocol (fire-and-forget to DataServer)
+	if (m_i32ClanId <= 0)
+		return;
+
+	if (i32Size < (int)(sizeof(uint16_t) + sizeof(uint8_t)))
+		return;
+
+	if (!g_pClanManager)
+		return;
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan || !pClan->IsMaster(m_i64UID))
+		return;
+
+	int offset = 0;
+	uint16_t markId = 0;
+	uint8_t markColor = 0;
+	memcpy(&markId, pData + offset, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(&markColor, pData + offset, sizeof(uint8_t));
+
+	pClan->ui16MarkId = markId;
+	pClan->ui8MarkColor = markColor;
+
+	printf("[GameSession] Clan mark changed: markId=%d, color=%d by UID=%lld\n",
+		markId, markColor, m_i64UID);
 }
 
 void GameSession::SendSimpleAck(uint16_t protocolAck, int32_t result)
