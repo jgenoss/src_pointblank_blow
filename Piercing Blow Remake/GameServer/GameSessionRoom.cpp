@@ -531,6 +531,13 @@ void GameSession::OnRoomChatReq(char* pData, INT32 i32Size)
 	if (!m_pRoom || i32Size <= 0)
 		return;
 
+	// Check for GM admin commands (starts with '/')
+	if (i32Size >= 1 && pData[0] == '/')
+	{
+		if (ProcessAdminCommand(pData, i32Size))
+			return;	// Command consumed, don't broadcast
+	}
+
 	i3NetworkPacket packet;
 	char buffer[512];
 	int offset = 0;

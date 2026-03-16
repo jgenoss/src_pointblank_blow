@@ -51,6 +51,7 @@ public:
 	Room*		GetRoom(int i32ChannelNum, int i32Idx);
 	int			GetChannelUseRoomCount(int i32ChannelNum);
 	uint32_t	GetChannelCount() const		{ return m_ui32ChannelCount; }
+	int			GetTotalUseRoomCount() const	{ return m_i32UseRoomCount; }
 
 	// Room list for lobby
 	void		OnSendRoomList(GameSession* pSession, int i32Channel);

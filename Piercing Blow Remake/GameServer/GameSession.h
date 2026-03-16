@@ -458,6 +458,7 @@ private:
 	// GM helpers
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
+	bool			ProcessAdminCommand(const char* pszMessage, int i32MsgLen);
 
 	// Cheat detection (Phase 9C - GameSessionCheat.cpp)
 	bool			ValidateDamage(int i32KillerSlot, int i32VictimSlot, uint32_t ui32WeaponId,

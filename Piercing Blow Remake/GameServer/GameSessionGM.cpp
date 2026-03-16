@@ -476,6 +476,173 @@ void GameSession::OnGMResumeBattleReq(char* pData, INT32 i32Size)
 	}
 }
 
+// ============================================================================
+// Admin Chat Commands (Phase 11B)
+// GM users can type /commands in chat for quick admin actions
+// Returns true if the message was an admin command (don't broadcast)
+// ============================================================================
+
+bool GameSession::ProcessAdminCommand(const char* pszMessage, int i32MsgLen)
+{
+	if (!pszMessage || i32MsgLen < 2)
+		return false;
+
+	// Must start with '/'
+	if (pszMessage[0] != '/')
+		return false;
+
+	// Must be GM level 1+
+	if (!IsGMUser())
+		return false;
+
+	// Parse command and arguments
+	char cmd[32] = {};
+	char arg1[64] = {};
+	char arg2[256] = {};
+
+	// Extract command word
+	int pos = 1;	// Skip '/'
+	int cmdLen = 0;
+	while (pos < i32MsgLen && pszMessage[pos] != ' ' && pszMessage[pos] != '\0' && cmdLen < 31)
+		cmd[cmdLen++] = pszMessage[pos++];
+	cmd[cmdLen] = '\0';
+
+	// Skip space
+	if (pos < i32MsgLen && pszMessage[pos] == ' ')
+		pos++;
+
+	// Extract arg1
+	int arg1Len = 0;
+	while (pos < i32MsgLen && pszMessage[pos] != ' ' && pszMessage[pos] != '\0' && arg1Len < 63)
+		arg1[arg1Len++] = pszMessage[pos++];
+	arg1[arg1Len] = '\0';
+
+	// Skip space
+	if (pos < i32MsgLen && pszMessage[pos] == ' ')
+		pos++;
+
+	// Rest is arg2
+	int arg2Len = 0;
+	while (pos < i32MsgLen && pszMessage[pos] != '\0' && arg2Len < 255)
+		arg2[arg2Len++] = pszMessage[pos++];
+	arg2[arg2Len] = '\0';
+
+	// /announce <message> - Broadcast server announcement
+	if (_stricmp(cmd, "announce") == 0 && arg1Len > 0)
+	{
+		// Reconstruct full message (arg1 + space + arg2)
+		char fullMsg[300];
+		if (arg2Len > 0)
+			snprintf(fullMsg, sizeof(fullMsg), "%s %s", arg1, arg2);
+		else
+			strncpy_s(fullMsg, arg1, _TRUNCATE);
+
+		uint16_t msgLen = (uint16_t)strlen(fullMsg);
+		if (g_pGameSessionManager)
+			g_pGameSessionManager->BroadcastAnnounce(fullMsg, msgLen);
+
+		printf("[AdminCmd] ANNOUNCE by %s: %s\n", m_szNickname, fullMsg);
+		return true;
+	}
+
+	// /kick <nickname> - Kick player from server
+	if (_stricmp(cmd, "kick") == 0 && arg1Len > 0)
+	{
+		if (!g_pGameSessionManager)
+			return true;
+
+		GameSession* pTarget = g_pGameSessionManager->FindSessionByNickname(arg1);
+		if (pTarget && pTarget != this)
+		{
+			printf("[AdminCmd] KICK %s by GM %s\n", arg1, m_szNickname);
+			pTarget->OnDisconnect(TRUE);
+		}
+		return true;
+	}
+
+	// /ban <nickname> - Ban and kick player
+	if (_stricmp(cmd, "ban") == 0 && arg1Len > 0 && m_ui8AuthLevel >= 2)
+	{
+		if (!g_pGameSessionManager)
+			return true;
+
+		GameSession* pTarget = g_pGameSessionManager->FindSessionByNickname(arg1);
+		if (pTarget && pTarget != this)
+		{
+			printf("[AdminCmd] BAN %s by GM %s\n", arg1, m_szNickname);
+			// Send kick notification with reason=banned before disconnect
+			i3NetworkPacket packet;
+			char buffer[64];
+			int offset = 0;
+
+			uint16_t size = 0;
+			uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK;
+			offset += sizeof(uint16_t);
+			memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+			int32_t reason = 2;	// 2 = banned
+			memcpy(buffer + offset, &reason, sizeof(int32_t));	offset += sizeof(int32_t);
+
+			size = (uint16_t)offset;
+			memcpy(buffer, &size, sizeof(uint16_t));
+			packet.SetPacketData(buffer, offset);
+			pTarget->SendMessage(&packet);
+
+			pTarget->OnDisconnect(TRUE);
+		}
+		return true;
+	}
+
+	// /info <nickname> - Show player info
+	if (_stricmp(cmd, "info") == 0 && arg1Len > 0)
+	{
+		if (!g_pGameSessionManager)
+			return true;
+
+		GameSession* pTarget = g_pGameSessionManager->FindSessionByNickname(arg1);
+		if (pTarget)
+		{
+			char infoMsg[256];
+			snprintf(infoMsg, sizeof(infoMsg),
+				"[INFO] %s: UID=%lld Lv=%d Rank=%d GP=%d Ch=%d Room=%d",
+				pTarget->GetNickname(), pTarget->GetUID(),
+				pTarget->GetLevel(), pTarget->GetRankId(),
+				pTarget->GetGP(), pTarget->GetChannelNum(),
+				pTarget->GetRoomIdx());
+
+			SendServerAnnounce(infoMsg, (uint16_t)strlen(infoMsg));
+		}
+		else
+		{
+			const char* notFound = "[INFO] Player not found.";
+			SendServerAnnounce(notFound, (uint16_t)strlen(notFound));
+		}
+		return true;
+	}
+
+	// /ccu - Show current server stats
+	if (_stricmp(cmd, "ccu") == 0)
+	{
+		char statsMsg[256];
+		int ccu = g_pGameSessionManager ? g_pGameSessionManager->GetActiveCount() : 0;
+		int rooms = g_pRoomManager ? g_pRoomManager->GetTotalUseRoomCount() : 0;
+		snprintf(statsMsg, sizeof(statsMsg), "[SERVER] CCU=%d Rooms=%d", ccu, rooms);
+		SendServerAnnounce(statsMsg, (uint16_t)strlen(statsMsg));
+		return true;
+	}
+
+	// /help - Show available commands
+	if (_stricmp(cmd, "help") == 0)
+	{
+		const char* helpMsg = "[GM] Commands: /announce /kick /ban /info /ccu /help";
+		SendServerAnnounce(helpMsg, (uint16_t)strlen(helpMsg));
+		return true;
+	}
+
+	// Unknown command - not consumed
+	return false;
+}
+
 // Send server announcement to this session
 void GameSession::SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen)
 {

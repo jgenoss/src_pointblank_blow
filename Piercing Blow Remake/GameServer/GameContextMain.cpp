@@ -1,5 +1,8 @@
 #include "pch.h"
 #include "GameContextMain.h"
+#include "GameSessionManager.h"
+#include "RoomManager.h"
+#include "ClanDef.h"
 
 I3_CLASS_INSTANCE(GameContextMain);
 
@@ -55,6 +58,9 @@ GameContextMain::GameContextMain()
 
 	m_szServerName[0] = '\0';
 	memset(m_pRSAKey, 0, sizeof(m_pRSAKey));
+
+	// Initialize performance metrics
+	m_Metrics.Reset();
 
 	// Initialize default channel layout
 	for (int i = 0; i < MAX_GAME_CHANNELS; i++)
@@ -146,6 +152,9 @@ void GameContextMain::OnUpdate()
 {
 	DWORD dwNow = GetTickCount();
 	m_i32LastUpdateTime = (int)dwNow;
+
+	// Update and log performance metrics periodically
+	UpdateMetrics();
 }
 
 int64_t GameContextMain::GetRankExp(int rankId) const
@@ -242,4 +251,48 @@ uint16_t GameContextMain::GetCurrentPointMultiplier() const
 		}
 	}
 	return maxMult;
+}
+
+// ============================================================================
+// Performance Metrics
+// ============================================================================
+
+void GameContextMain::UpdateMetrics()
+{
+	DWORD dwNow = GetTickCount();
+
+	// Gather current state
+	if (g_pGameSessionManager)
+		m_Metrics.i32CCU = g_pGameSessionManager->GetActiveCount();
+
+	if (g_pRoomManager)
+		m_Metrics.i32ActiveRooms = g_pRoomManager->GetTotalUseRoomCount();
+
+	if (g_pClanManager)
+		m_Metrics.i32ActiveClans = g_pClanManager->GetActiveClanCount();
+
+	// Update peaks
+	if (m_Metrics.i32CCU > m_Metrics.i32PeakCCU)
+		m_Metrics.i32PeakCCU = m_Metrics.i32CCU;
+	if (m_Metrics.i32ActiveRooms > m_Metrics.i32PeakRooms)
+		m_Metrics.i32PeakRooms = m_Metrics.i32ActiveRooms;
+
+	// Log every 60 seconds
+	if (dwNow - m_Metrics.dwLastMetricsLog >= 60000)
+	{
+		m_Metrics.dwLastMetricsLog = dwNow;
+
+		DWORD uptimeSec = (dwNow - m_Metrics.dwStartTime) / 1000;
+		int hours = uptimeSec / 3600;
+		int mins = (uptimeSec % 3600) / 60;
+
+		printf("[Metrics] Uptime=%dh%dm | CCU=%d (peak=%d) | Rooms=%d (peak=%d) | "
+			"Clans=%d | Logins=%lld | Battles=%lld | PktIn=%lld PktOut=%lld\n",
+			hours, mins,
+			m_Metrics.i32CCU, m_Metrics.i32PeakCCU,
+			m_Metrics.i32ActiveRooms, m_Metrics.i32PeakRooms,
+			m_Metrics.i32ActiveClans,
+			m_Metrics.i64TotalLogins, m_Metrics.i64TotalBattlesPlayed,
+			m_Metrics.i64TotalPacketsIn, m_Metrics.i64TotalPacketsOut);
+	}
 }

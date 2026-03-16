@@ -175,7 +175,7 @@
 - [x] `PROTOCOL_AUTH_SHOP_ITEMLIST_REQ/ACK` - Item list
 - [x] `PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ/ACK` - Matching list
 - [x] `PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ/ACK` - Repair data
-- [ ] Double-buffered shop data (UseShopData/NotUseShopData) para actualizaciones atómicas
+- [x] Double-buffered shop data (UseShopData/NotUseShopData) para actualizaciones atómicas
 
 ### 5B. Purchase & Gift
 - [x] `PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ/ACK` - Compra con validación GP/Cash
@@ -206,7 +206,7 @@
 - [x] Clan creation/dissolution con validación (nivel mínimo, GP cost)
 - [x] Member management: join, kick (deportation), promote/demote (master/staff/regular)
 - [x] Clan mark/notice/intro updates (ReplaceNotice, ReplaceIntro, ReplaceMark)
-- [ ] Clan EXP and ranking (TODO: earn EXP from battles)
+- [x] Clan EXP and ranking (earn EXP from battles, auto rank-up, unit size upgrade)
 
 ### 6B. Clan Match
 **Archivos**: Crear `GameSessionClanBattle.cpp`
@@ -243,7 +243,7 @@
 ### 7C. GM Chat
 **Archivos**: Crear `GameSessionGMChat.cpp`
 - [x] `PROTOCOL_VALUE_GMCHAT (0x1A00)` - GM → User messaging (Start/Send/End/Penalty)
-- [ ] Admin commands via chat
+- [x] Admin commands via chat (/announce, /kick, /ban, /info, /ccu, /help)
 
 ---
 
@@ -336,7 +336,7 @@
 ### 12C. Logging
 - [ ] Battle log con unique number tracking
 - [ ] ZLog integration para persistent logging
-- [ ] Performance metrics: packet count, average CCU, room count
+- [x] Performance metrics: packet count, average CCU, room count, peak tracking, periodic logging
 
 ---
 

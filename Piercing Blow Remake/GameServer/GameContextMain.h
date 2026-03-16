@@ -154,6 +154,48 @@ public:
 	uint16_t	GetCurrentExpMultiplier() const;		// Returns 100-based multiplier (100 = 1x)
 	uint16_t	GetCurrentPointMultiplier() const;
 	bool		IsBoostEventActive(int idx) const;
+
+	// Performance metrics
+	struct ServerMetrics
+	{
+		// Current state
+		int			i32CCU;					// Concurrent connected users
+		int			i32ActiveRooms;			// Active rooms across all channels
+		int			i32ActiveClans;			// Active clans
+		int			i32ActiveBattles;		// Rooms in BATTLE state
+
+		// Cumulative counters (since server start)
+		int64_t		i64TotalPacketsIn;		// Total packets received
+		int64_t		i64TotalPacketsOut;		// Total packets sent
+		int64_t		i64TotalLogins;			// Total login attempts
+		int64_t		i64TotalBattlesPlayed;	// Total battles completed
+
+		// Peak tracking
+		int			i32PeakCCU;				// Peak CCU since start
+		int			i32PeakRooms;			// Peak room count
+
+		// Timing
+		DWORD		dwStartTime;			// Server start time (GetTickCount)
+		DWORD		dwLastMetricsLog;		// Last time metrics were printed
+
+		void Reset()
+		{
+			i32CCU = i32ActiveRooms = i32ActiveClans = i32ActiveBattles = 0;
+			i64TotalPacketsIn = i64TotalPacketsOut = 0;
+			i64TotalLogins = i64TotalBattlesPlayed = 0;
+			i32PeakCCU = i32PeakRooms = 0;
+			dwStartTime = GetTickCount();
+			dwLastMetricsLog = dwStartTime;
+		}
+	};
+
+	ServerMetrics	m_Metrics;
+
+	void			UpdateMetrics();		// Gather and optionally log metrics
+	void			IncrementPacketsIn()	{ m_Metrics.i64TotalPacketsIn++; }
+	void			IncrementPacketsOut()	{ m_Metrics.i64TotalPacketsOut++; }
+	void			IncrementLogins()		{ m_Metrics.i64TotalLogins++; }
+	void			IncrementBattles()		{ m_Metrics.i64TotalBattlesPlayed++; }
 };
 
 extern GameContextMain* g_pContextMain;

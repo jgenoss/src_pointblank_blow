@@ -4,6 +4,7 @@
 #include "GameContextMain.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "ClanDef.h"
 
 I3_CLASS_INSTANCE(GameSession);
 
@@ -121,6 +122,10 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 		return 0;
 
 	uint16_t packetSize = *(uint16_t*)pPacket;
+
+	// Track packet count for metrics
+	if (g_pContextMain)
+		g_pContextMain->IncrementPacketsIn();
 
 	// Phase 9A: Packet encryption validation
 	// Bit 0x8000 in size field indicates the packet is encrypted
@@ -510,6 +515,10 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 	}
 
 	m_eMainTask = GAME_TASK_LOGIN_ING;
+
+	// Track login attempts
+	if (g_pContextMain)
+		g_pContextMain->IncrementLogins();
 
 	if (i32Size < (int)(sizeof(uint32_t) + 64))
 	{
@@ -1651,6 +1660,53 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 
 	// Update quest progress (Phase 7I)
 	UpdateQuestProgress(i32Kills, i32Deaths, i32Headshots, bWin);
+
+	// Award clan EXP from battle results
+	if (m_i32ClanId > 0 && g_pClanManager)
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (pClan)
+		{
+			// Clan EXP: 10 per kill + 50 for win + 5 per headshot
+			int clanExp = i32Kills * 10 + i32Headshots * 5 + (bWin ? 50 : 10);
+			pClan->i32ClanExp += clanExp;
+
+			if (bWin)
+				pClan->i32Wins++;
+			else
+				pClan->i32Losses++;
+
+			// Check clan rank up (every 1000 EXP = 1 rank, max 49)
+			int newRank = pClan->i32ClanExp / 1000;
+			if (newRank > 49) newRank = 49;
+			if (newRank > pClan->i32ClanRank)
+			{
+				pClan->i32ClanRank = newRank;
+				printf("[Clan] Clan '%s' ranked up to %d (EXP=%d)\n",
+					pClan->szName, newRank, pClan->i32ClanExp);
+			}
+
+			// Check unit size upgrade based on rank
+			uint8_t newUnit = CLAN_UNIT_SQUAD;
+			if (pClan->i32ClanRank >= 40) newUnit = CLAN_UNIT_CORPS;
+			else if (pClan->i32ClanRank >= 35) newUnit = CLAN_UNIT_DIVISION;
+			else if (pClan->i32ClanRank >= 30) newUnit = CLAN_UNIT_BRIGADE;
+			else if (pClan->i32ClanRank >= 25) newUnit = CLAN_UNIT_REGIMENT;
+			else if (pClan->i32ClanRank >= 20) newUnit = CLAN_UNIT_BATTALION;
+			else if (pClan->i32ClanRank >= 15) newUnit = CLAN_UNIT_COMPANY;
+			else if (pClan->i32ClanRank >= 10) newUnit = CLAN_UNIT_PLATOON;
+
+			if (newUnit > pClan->ui8Unit)
+			{
+				pClan->ui8Unit = newUnit;
+				// Increase max members based on unit
+				static const int unitMaxMembers[] = { 10, 30, 50, 100, 150, 200, 250, 250 };
+				pClan->i32MaxMembers = unitMaxMembers[newUnit];
+				printf("[Clan] Clan '%s' unit upgraded to %d, max members=%d\n",
+					pClan->szName, newUnit, pClan->i32MaxMembers);
+			}
+		}
+	}
 }
 
 // ============================================================================

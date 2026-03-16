@@ -210,6 +210,13 @@ void GameSession::OnLobbyChatReq(char* pData, INT32 i32Size)
 	if (i32Size < 2)
 		return;
 
+	// Check for GM admin commands (starts with '/')
+	if (i32Size >= 1 && pData[0] == '/')
+	{
+		if (ProcessAdminCommand(pData, i32Size))
+			return;	// Command consumed, don't broadcast
+	}
+
 	// Forward to session manager for lobby broadcast
 	if (g_pGameSessionManager)
 		g_pGameSessionManager->OnSendLobbyChatting(this, pData, (uint16_t)i32Size);

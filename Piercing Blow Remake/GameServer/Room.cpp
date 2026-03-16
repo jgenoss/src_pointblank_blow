@@ -343,6 +343,10 @@ void Room::OnEndBattle()
 	// Advance map rotation if enabled
 	AdvanceMapRotation();
 
+	// Track total battles completed
+	if (g_pContextMain)
+		g_pContextMain->IncrementBattles();
+
 	printf("[Room] Battle ended - Ch=%d, Room=%d, Score R%d-B%d\n",
 		m_i32ChannelNum, m_i32RoomIdx, m_Score.i32RedScore, m_Score.i32BlueScore);
 }
