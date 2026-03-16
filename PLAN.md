@@ -1,6 +1,113 @@
 # Plan de Implementación - Piercing Blow Server Remake
 
-> **Última actualización**: 2026-03-16 (post Batch 20 + análisis completo original vs remake)
+> **Última actualización**: 2026-03-16 (post Batch 20 + análisis completo + bug fechas)
+
+---
+
+## BUG CRÍTICO: Fechas > 2015 crashean el cliente
+
+### Estado: PENDIENTE (documentado, no se arregla aún)
+
+### Root Cause
+
+Hay **3 problemas de fechas** que se combinan para causar el crash:
+
+#### Problema 1: DATE32.GetDateTimeYYMMDDHHMI() está HARDCODED a 2015
+**Archivo**: `Piercing Blow Remake/i3Server/src/i3Base/DATE32.cpp:107-109`
+```cpp
+UINT32 DATE32::GetDateTimeYYMMDDHHMI()
+{
+    return (2015 % 100) * 100000000 + 1 * 1000000 + 1 * 10000 + 0 * 100 + 0;  // 1501010000
+}
+```
+El código original (comentado debajo) era:
+```cpp
+return (GetYear() % 100) * 100000000 + GetMonth() * 1000000 + GetDay() * 10000 + GetHour() * 100 + GetMinute();
+```
+**Impacto**: El servidor SIEMPRE envía `1501010000` (2015-01-01 00:00) como InvenServerTime.
+
+#### Problema 2: YYMMDDHHmm overflow en INT32 para año >= 2022
+**Archivo**: `Client/Source/ClientSource/Source/TimeUtil.cpp:130`
+```cpp
+UINT32 CalcTimeDifference(INT32 tmAbs0, INT32 tmAbs1)  // <-- INT32 params!
+```
+El formato YYMMDDHHmm para año 2022+:
+| Año  | Valor YYMMDDHHmm | > INT32_MAX (2,147,483,647)? |
+|------|------------------|------------------------------|
+| 2015 | 1,512,312,359    | No - OK                      |
+| 2021 | 2,112,312,359    | No - OK                      |
+| 2022 | 2,212,312,359    | **SÍ - OVERFLOW**            |
+| 2026 | 2,612,312,359    | **SÍ - Se convierte en -1,682,654,937** |
+
+Cuando el valor overflow INT32, `CalcTimeDifference` calcula diferencias negativas → crash.
+
+#### Problema 3: DATE32 bit-packed soporta hasta año 2033
+**Archivo**: `Piercing Blow Remake/i3Server/include/i3Base/DATE32.h:9-10`
+```cpp
+#define DATE32_YEAR_INIT  1970
+#define DATE32_YEAR_MAX   (DATE32_YEAR_INIT + 63)  // = 2033
+```
+El campo Year tiene **6 bits** (max 63). Año 2034+ corrompe los otros campos (month, day, hour).
+
+### Flujo del Bug
+
+```
+Servidor envía PROTOCOL_INVENTORY_ENTER_ACK
+  → original: i3ThreadTimer::StandTime().GetDateTimeYYMMDDHHMI() = fecha real
+  → remake:   DATE32 hardcoded → siempre 1501010000 (2015-01-01)
+
+Cliente recibe en ClientTCPSocket_Parser_Inventory.cpp:89:
+  → UserInfoContext::i()->SetInvenServerTime(nReturnCode);
+  → m_InvenServerTime = 1501010000  (ó valor real si se descomenta)
+
+Items con periodo (tipo 2) tienen _ui32ItemArg = ExpireTime en formato YYMMDDHHmm
+
+Cliente calcula tiempo restante en UserInfoContext.cpp:139:
+  → TimeUtil::CalcTimeDifference(m_InvenServerTime, ExpireTime)
+  → Si ExpireTime >= 2022 → INT32 overflow → resultado negativo → crash
+
+También en InvenList.cpp:850:
+  → nCouponLimitTime - nCurServerTime <= 0 (ambos INT32)
+  → Si cualquiera overflow → comparación incorrecta
+```
+
+### Archivos Afectados
+
+| Archivo | Línea | Problema |
+|---------|-------|----------|
+| `i3Server/src/i3Base/DATE32.cpp` | 107-109 | GetDateTimeYYMMDDHHMI() hardcoded 2015 |
+| `i3Server/src/i3Base/DATE32.cpp` | 102-105 | GetDateTimeYYYYMMDD() hardcoded 2015 |
+| `i3Server/include/i3Base/DATE32.h` | 10 | DATE32_YEAR_MAX = 2033 (6 bits) |
+| `Client/Source/ClientSource/Source/TimeUtil.cpp` | 130 | CalcTimeDifference usa INT32 |
+| `Client/Source/ClientSource/Source/TimeUtil.h` | 6 | Firma usa INT32 |
+| `Client/Source/ClientSource/Source/InvenList.cpp` | 842,850 | INT32 comparación |
+| `Common/CommonSource/SIA_Define.h` | 397 | `T_ItemArg _ui32ItemArg` (UINT32 para expire) |
+| Todos los `S2MOStruct*.h` | varios | `m_ui32InvenTime` (UINT32 en protocolo) |
+
+### Solución Propuesta (NO implementar aún)
+
+**Opción A: Mantener año < 2022 (workaround simple)**
+- Enviar fechas del servidor con año fijo (ej: 2015-2020)
+- Pro: No modifica cliente
+- Con: Items solo pueden expirar hasta ~2021
+
+**Opción B: Cambiar CalcTimeDifference a UINT32 (fix cliente)**
+- Cambiar `INT32 tmAbs0, INT32 tmAbs1` → `UINT32 tmAbs0, UINT32 tmAbs1`
+- Extender rango hasta año 2042 (UINT32 max = 4,294,967,295 → YY=42)
+- Pro: Extiende soporte 20 años más
+- Con: Requiere recompilar cliente
+
+**Opción C: Cambiar formato a epoch seconds (fix completo)**
+- Usar Unix timestamps (UINT32) en lugar de YYMMDDHHmm
+- Pro: Soporte hasta 2038 (o 2106 con uint32 unsigned)
+- Con: Requiere cambiar cliente Y servidor, rompe compatibilidad
+
+**Opción D: DATE32 con más bits para año**
+- Expandir campo Year de 6 a 7+ bits, o cambiar base epoch
+- Pro: Fix para DATE32 bit-packed
+- Con: Rompe formato binario existente
+
+**Recomendación**: Opción B (cambiar cliente a UINT32) + descomentar DATE32 en servidor.
 
 ---
 
