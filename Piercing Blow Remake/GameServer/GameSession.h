@@ -731,6 +731,60 @@ private:
 	void			OnLobbyGmGetUidReq(char* pData, INT32 i32Size);
 	void			OnLobbyAbusingPopupEndReq(char* pData, INT32 i32Size);
 
+	// Batch 20 - MESSENGER_* social handlers (GameSessionSocial.cpp)
+	void			OnMessengerWhisperByUidReq(char* pData, INT32 i32Size);
+	void			OnMessengerFuserInfoReq(char* pData, INT32 i32Size);
+	void			OnMessengerKickUserReq(char* pData, INT32 i32Size);
+	void			OnMessengerFriendInviteFailReq(char* pData, INT32 i32Size);
+	void			OnMessengerNoteReceiveReq(char* pData, INT32 i32Size);
+	void			OnMessengerNoteSendFindUidReq(char* pData, INT32 i32Size);
+	void			OnMessengerNoteGiftNoticeReq(char* pData, INT32 i32Size);
+	void			OnMessengerClanNoteSendReq(char* pData, INT32 i32Size);
+	void			OnMessengerClanGroupNoteSendReq(char* pData, INT32 i32Size);
+	void			OnMessengerFriendChangeStateReq(char* pData, INT32 i32Size);
+
+	// Batch 20 - CS_* clan context (GameSessionClan.cpp)
+	void			OnClanContextReq(char* pData, INT32 i32Size);
+	void			OnClanClientContextReq(char* pData, INT32 i32Size);
+	void			OnClanCreateConditionReq(char* pData, INT32 i32Size);
+	void			OnClanRequestContextReq(char* pData, INT32 i32Size);
+	void			OnClanRequestInfoReq(char* pData, INT32 i32Size);
+	void			OnClanMemberContextReq(char* pData, INT32 i32Size);
+	void			OnClanStaffAuthorityReq(char* pData, INT32 i32Size);
+	void			OnClanRoomInvitedReq(char* pData, INT32 i32Size);
+	void			OnClanExpUpReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceMemberNickReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceMemberRankReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceMemberColorNickReq(char* pData, INT32 i32Size);
+	void			OnClanReplaceManagementReq(char* pData, INT32 i32Size);
+	void			OnClanListStreamReq(char* pData, INT32 i32Size);
+	void			OnClanListGsReq(char* pData, INT32 i32Size);
+	void			OnClanInoRankUpdateReq(char* pData, INT32 i32Size);
+	void			OnClanItemDeleteReq(char* pData, INT32 i32Size);
+	void			OnClanCheckDuplicateAzitUrlReq(char* pData, INT32 i32Size);
+	void			OnClanMatchResultContextReq(char* pData, INT32 i32Size);
+	void			OnClanMatchResultListReq(char* pData, INT32 i32Size);
+	void			OnClanMatchResultEmotionSaveReq(char* pData, INT32 i32Size);
+	void			OnClanRequestAutoAcceptReq(char* pData, INT32 i32Size);
+
+	// Batch 20 - CS_MATCH_* clan match extras (GameSessionClanWar.cpp)
+	void			OnClanMatchChannelReq(char* pData, INT32 i32Size);
+	void			OnClanMatchFightQuickRequestReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamDetailInfoReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamChangePerReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamListReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewClanInfoReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewFightQuickReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewFightOtherReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewGetRoomInfoReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewHonorReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewHonorAcceptReq(char* pData, INT32 i32Size);
+	void			OnClanMatchNewOperationReq(char* pData, INT32 i32Size);
+	void			OnClanMatchRoomCreateGsReq(char* pData, INT32 i32Size);
+	void			OnClanMatchRoomJoinGsReq(char* pData, INT32 i32Size);
+	void			OnClanMatchRoomLeaveGsReq(char* pData, INT32 i32Size);
+	void			OnClanMatchRoomLeaveReq(char* pData, INT32 i32Size);
+
 	// GM helpers
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);

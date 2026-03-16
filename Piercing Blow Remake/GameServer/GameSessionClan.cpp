@@ -1751,3 +1751,367 @@ void GameSession::OnClanNewRequestListReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 20 - CS_* Clan context/operations handlers
+// ============================================================================
+
+void GameSession::OnClanContextReq(char* pData, INT32 i32Size)
+{
+	// Clan list context info (clan directory)
+	OnClanListReq(pData, i32Size);	// Delegate to existing handler
+}
+
+void GameSession::OnClanClientContextReq(char* pData, INT32 i32Size)
+{
+	// Client's own clan context - enter clan page
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_CLIENT_CLAN_CONTEXT_ACK, 1);
+		return;
+	}
+
+	// Delegate to detail info with own clan
+	OnClanDetailInfoReq(pData, i32Size);
+}
+
+void GameSession::OnClanCreateConditionReq(char* pData, INT32 i32Size)
+{
+	// Check clan creation conditions
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_CREATE_CLAN_CONDITION_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	// Check conditions
+	if (m_i32ClanId > 0)
+		result = 1;		// Already in clan
+	else if (m_i32Level < 5)
+		result = 2;		// Level too low
+	else if (m_i32GP < 50000)
+		result = 3;		// Not enough GP
+
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanRequestContextReq(char* pData, INT32 i32Size)
+{
+	// Clan join request list context - delegate to request list
+	OnClanRequestListReq(pData, i32Size);
+}
+
+void GameSession::OnClanRequestInfoReq(char* pData, INT32 i32Size)
+{
+	// Clan join request detail info
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_CS_REQUEST_INFO_ACK, 1);
+		return;
+	}
+
+	int64_t requestUID = 0;
+	memcpy(&requestUID, pData, sizeof(int64_t));
+
+	// Look up the requesting user's info
+	GameSession* pRequester = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(requestUID) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_REQUEST_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = pRequester ? 0 : 1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &requestUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	if (pRequester)
+	{
+		char nick[64] = {};
+		strncpy(nick, pRequester->GetNickname(), 63);
+		memcpy(buffer + offset, nick, 64);	offset += 64;
+		int32_t level = pRequester->GetLevel();
+		int32_t rankId = pRequester->GetRankId();
+		memcpy(buffer + offset, &level, 4);		offset += 4;
+		memcpy(buffer + offset, &rankId, 4);	offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMemberContextReq(char* pData, INT32 i32Size)
+{
+	// Clan member list context - delegate to existing member list
+	OnClanMemberListReq(pData, i32Size);
+}
+
+void GameSession::OnClanStaffAuthorityReq(char* pData, INT32 i32Size)
+{
+	// Manage staff authority (promote/demote)
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 1);
+		return;
+	}
+
+	if (i32Size < (int)(sizeof(int64_t) + 1))
+	{
+		SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 2);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	uint8_t newRole = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+	memcpy(&newRole, pData + sizeof(int64_t), 1);
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan || !pClan->IsMaster(m_i64UID))
+	{
+		SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 3);	// Not master
+		return;
+	}
+
+	// Validate role
+	if (newRole > CLAN_MEMBER_REGULAR)
+	{
+		SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 4);
+		return;
+	}
+
+	// Find and update member role
+	GameClanMember* pMember = pClan->FindMember(targetUID);
+	if (!pMember)
+	{
+		SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 5);
+		return;
+	}
+
+	pMember->ui8Role = newRole;
+	SendSimpleAck(PROTOCOL_CS_STAFF_AUTHORITY_ACK, 0);
+}
+
+void GameSession::OnClanRoomInvitedReq(char* pData, INT32 i32Size)
+{
+	// Invite clan member to room
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_CS_ROOM_INVITED_ACK, 1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	if (m_i32RoomIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_ROOM_INVITED_ACK, 2);	// Not in a room
+		return;
+	}
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_CS_ROOM_INVITED_ACK, 3);
+		return;
+	}
+
+	// Send invite notification to target
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_ROOM_INVITED_RESULT_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
+	char nick[64] = {};
+	strncpy(nick, m_szNickname, 63);
+	memcpy(buffer + offset, nick, 64);	offset += 64;
+	memcpy(buffer + offset, &m_i32ChannelNum, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32RoomIdx, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	pTarget->SendMessage(&packet);
+
+	SendSimpleAck(PROTOCOL_CS_ROOM_INVITED_ACK, 0);
+}
+
+void GameSession::OnClanExpUpReq(char* pData, INT32 i32Size)
+{
+	// Clan EXP increase (via item)
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		SendSimpleAck(PROTOCOL_CS_EXPUP_ACK, 1);
+		return;
+	}
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan)
+	{
+		SendSimpleAck(PROTOCOL_CS_EXPUP_ACK, 2);
+		return;
+	}
+
+	// Add EXP to clan (amount from item, default 1000)
+	int32_t expAmount = 1000;
+	if (i32Size >= (int)sizeof(int32_t))
+		memcpy(&expAmount, pData, sizeof(int32_t));
+
+	pClan->i32ClanExp += expAmount;
+	SendSimpleAck(PROTOCOL_CS_EXPUP_ACK, 0);
+}
+
+void GameSession::OnClanReplaceMemberNickReq(char* pData, INT32 i32Size)
+{
+	// Update clan member's nickname (after nickname change)
+	SendSimpleAck(PROTOCOL_CS_REPLACE_MEMBER_NICK_ACK, 0);
+}
+
+void GameSession::OnClanReplaceMemberRankReq(char* pData, INT32 i32Size)
+{
+	// Update clan member's rank display
+	SendSimpleAck(PROTOCOL_CS_REPLACE_MEMBER_RANK_ACK, 0);
+}
+
+void GameSession::OnClanReplaceMemberColorNickReq(char* pData, INT32 i32Size)
+{
+	// Update clan member's color nickname
+	SendSimpleAck(PROTOCOL_CS_REPLACE_MEMBER_COLOR_NICK_ACK, 0);
+}
+
+void GameSession::OnClanReplaceManagementReq(char* pData, INT32 i32Size)
+{
+	// Clan management settings change
+	if (m_i32ClanId <= 0 || !g_pClanManager)
+	{
+		SendSimpleAck(PROTOCOL_CS_REPLACE_MANAGEMENT_ACK, 1);
+		return;
+	}
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan || !pClan->IsMaster(m_i64UID))
+	{
+		SendSimpleAck(PROTOCOL_CS_REPLACE_MANAGEMENT_ACK, 2);
+		return;
+	}
+
+	SendSimpleAck(PROTOCOL_CS_REPLACE_MANAGEMENT_ACK, 0);
+}
+
+void GameSession::OnClanListStreamReq(char* pData, INT32 i32Size)
+{
+	// Clan list streaming (continued pagination)
+	OnClanListReq(pData, i32Size);	// Delegate
+}
+
+void GameSession::OnClanListGsReq(char* pData, INT32 i32Size)
+{
+	// Individual clan list refresh from GameServer
+	OnClanListReq(pData, i32Size);	// Delegate
+}
+
+void GameSession::OnClanInoRankUpdateReq(char* pData, INT32 i32Size)
+{
+	// Update own rank in clan list display - fire and forget
+}
+
+void GameSession::OnClanItemDeleteReq(char* pData, INT32 i32Size)
+{
+	// Delete clan item (exp boost, color name item)
+	// Fire and forget - item removal from clan
+}
+
+void GameSession::OnClanCheckDuplicateAzitUrlReq(char* pData, INT32 i32Size)
+{
+	// Check duplicate Azit (clan homepage) URL
+	SendSimpleAck(PROTOCOL_CS_CHECK_DUPLICATE_AZIT_URL_ACK, 0);	// Always available
+}
+
+void GameSession::OnClanMatchResultContextReq(char* pData, INT32 i32Size)
+{
+	// Clan match result history context
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_CLAN_MATCH_RESULT_CONTEXT_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint8_t matchCount = 0;	// No match history yet
+	memcpy(buffer + offset, &matchCount, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchResultListReq(char* pData, INT32 i32Size)
+{
+	// Clan match result detailed list
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_CLAN_MATCH_RESULT_LIST_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint8_t count = 0;
+	memcpy(buffer + offset, &count, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchResultEmotionSaveReq(char* pData, INT32 i32Size)
+{
+	// Save emotion/reaction on clan match result (like button)
+	// Fire and forget
+}
+
+void GameSession::OnClanRequestAutoAcceptReq(char* pData, INT32 i32Size)
+{
+	// Toggle auto-accept join requests
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_CLAN_REQUEST_AUTO_ACCEPT_OPTION_REQ + 1, 1);
+		return;
+	}
+	SendSimpleAck(PROTOCOL_CS_CLAN_REQUEST_AUTO_ACCEPT_OPTION_REQ + 1, 0);
+}

@@ -1339,3 +1339,244 @@ void GameSession::OnAuthFCMInfoReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 20 - MESSENGER_* social handlers
+// ============================================================================
+
+void GameSession::OnMessengerWhisperByUidReq(char* pData, INT32 i32Size)
+{
+	// Whisper by UID (instead of by nickname)
+	if (i32Size < (int)(sizeof(int64_t) + 2))
+	{
+		SendSimpleAck(PROTOCOL_MESSENGER_SEND_WHISPER_ACK, 1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	char msg[256] = {};
+	int msgLen = i32Size - (int)sizeof(int64_t);
+	if (msgLen > 255) msgLen = 255;
+	memcpy(msg, pData + sizeof(int64_t), msgLen);
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_MESSENGER_SEND_WHISPER_ACK, 2);	// Target offline
+		return;
+	}
+
+	// Send whisper to target
+	i3NetworkPacket packet;
+	char buffer[384];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_RECV_WHISPER_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
+	char senderNick[64] = {};
+	strncpy(senderNick, m_szNickname, 63);
+	memcpy(buffer + offset, senderNick, 64);	offset += 64;
+
+	uint16_t msgSize = (uint16_t)msgLen;
+	memcpy(buffer + offset, &msgSize, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, msg, msgLen);	offset += msgLen;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	pTarget->SendMessage(&packet);
+}
+
+void GameSession::OnMessengerFuserInfoReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_MESSENGER_FUSER_INFO_ACK, 1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_MESSENGER_FUSER_INFO_ACK, 2);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_MESSENGER_FUSER_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	char nick[64] = {};
+	strncpy(nick, pTarget->GetNickname(), 63);
+	memcpy(buffer + offset, nick, 64);	offset += 64;
+
+	int32_t level = pTarget->GetLevel();
+	int32_t rankId = pTarget->GetRankId();
+	int32_t kills = pTarget->GetKills();
+	int32_t deaths = pTarget->GetDeaths();
+	int32_t wins = pTarget->GetWins();
+	int32_t losses = pTarget->GetLosses();
+	int32_t clanId = pTarget->GetClanId();
+	memcpy(buffer + offset, &level, 4);		offset += 4;
+	memcpy(buffer + offset, &rankId, 4);	offset += 4;
+	memcpy(buffer + offset, &kills, 4);		offset += 4;
+	memcpy(buffer + offset, &deaths, 4);	offset += 4;
+	memcpy(buffer + offset, &wins, 4);		offset += 4;
+	memcpy(buffer + offset, &losses, 4);	offset += 4;
+	memcpy(buffer + offset, &clanId, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnMessengerKickUserReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser()) return;
+	if (i32Size < (int)sizeof(int64_t)) return;
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (pTarget)
+	{
+		printf("[Messenger] KickUser UID=%lld by GM UID=%lld\n", targetUID, m_i64UID);
+		pTarget->SendSimpleAck(PROTOCOL_MESSENGER_KICKUSER_ACK, 0);
+	}
+}
+
+void GameSession::OnMessengerFriendInviteFailReq(char* pData, INT32 i32Size)
+{
+	// Friend invite failed notification - fire and forget
+}
+
+void GameSession::OnMessengerNoteReceiveReq(char* pData, INT32 i32Size)
+{
+	// Note receive acknowledgment - fire-and-forget
+}
+
+void GameSession::OnMessengerNoteSendFindUidReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < 2) return;
+
+	char nickname[64] = {};
+	int copyLen = (i32Size < 63) ? i32Size : 63;
+	memcpy(nickname, pData, copyLen);
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByNickname(nickname) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_MESSENGER_NOTE_SEND_FIND_UID_REQ + 1;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = pTarget ? 0 : 1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int64_t foundUID = pTarget ? pTarget->GetUID() : 0;
+	memcpy(buffer + offset, &foundUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnMessengerNoteGiftNoticeReq(char* pData, INT32 i32Size)
+{
+	// Gift notice via note system - fire and forget
+}
+
+void GameSession::OnMessengerClanNoteSendReq(char* pData, INT32 i32Size)
+{
+	if (m_i32ClanId <= 0 || i32Size < (int)(sizeof(int64_t) + 2)) return;
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget || pTarget->GetClanId() != m_i32ClanId) return;
+
+	char msg[256] = {};
+	int msgLen = i32Size - (int)sizeof(int64_t);
+	if (msgLen > 255) msgLen = 255;
+	memcpy(msg, pData + sizeof(int64_t), msgLen);
+
+	if (pTarget->m_i32NoteCount < MAX_NOTE_COUNT)
+	{
+		GameNoteData& note = pTarget->m_Notes[pTarget->m_i32NoteCount];
+		note.ui32NoteId = pTarget->m_ui32NextNoteId++;
+		strncpy(note.szSenderNick, m_szNickname, 63);
+		note.i64SenderUID = m_i64UID;
+		note.ui8Type = 4;	// Clan note
+		strncpy(note.szSubject, msg, 63);
+		note.bRead = false;
+		pTarget->m_i32NoteCount++;
+	}
+}
+
+void GameSession::OnMessengerClanGroupNoteSendReq(char* pData, INT32 i32Size)
+{
+	if (m_i32ClanId <= 0 || i32Size < 2) return;
+	if (!g_pClanManager) return;
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+	if (!pClan || !pClan->IsStaffOrMaster(m_i64UID)) return;
+
+	char msg[256] = {};
+	int msgLen = (i32Size < 255) ? i32Size : 255;
+	memcpy(msg, pData, msgLen);
+
+	for (int i = 0; i < pClan->i32MemberCount; i++)
+	{
+		if (pClan->members[i].i64UID == m_i64UID) continue;
+
+		GameSession* pMember = g_pGameSessionManager ?
+			g_pGameSessionManager->FindSessionByUID(pClan->members[i].i64UID) : nullptr;
+		if (!pMember) continue;
+
+		if (pMember->m_i32NoteCount < MAX_NOTE_COUNT)
+		{
+			GameNoteData& note = pMember->m_Notes[pMember->m_i32NoteCount];
+			note.ui32NoteId = pMember->m_ui32NextNoteId++;
+			strncpy(note.szSenderNick, m_szNickname, 63);
+			note.i64SenderUID = m_i64UID;
+			note.ui8Type = 4;
+			strncpy(note.szSubject, msg, 63);
+			note.bRead = false;
+			pMember->m_i32NoteCount++;
+		}
+	}
+}
+
+void GameSession::OnMessengerFriendChangeStateReq(char* pData, INT32 i32Size)
+{
+	// Friend state change notification - fire and forget
+}

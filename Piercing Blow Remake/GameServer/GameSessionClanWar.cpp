@@ -767,3 +767,874 @@ void GameSession::OnClanWarMercenaryPenaltyLoadReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 20 - CS_MATCH_* Clan Match Handlers
+// ============================================================================
+
+void GameSession::OnClanMatchChannelReq(char* pData, INT32 i32Size)
+{
+	// Clan match channel info - returns aggregate data for the clan match system
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_CHANNEL_REQ + 1, 1);	// No clan
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_CHANNEL_REQ + 1;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Team count for this clan
+	int teamIndices[16];
+	int teamCount = g_pClanMatchManager->GetTeamListForClan(m_i32ClanId, teamIndices, 16);
+
+	int32_t i32TeamCount = teamCount;
+	memcpy(buffer + offset, &i32TeamCount, 4);	offset += 4;
+
+	// Active match count (teams in FIGHTING state)
+	int32_t i32MatchCount = 0;
+	for (int i = 0; i < teamCount; i++)
+	{
+		const ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIndices[i]);
+		if (pTeam && pTeam->ui8State == CLAN_MATCH_TEAM_FIGHTING)
+			i32MatchCount++;
+	}
+	memcpy(buffer + offset, &i32MatchCount, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchFightQuickRequestReq(char* pData, INT32 i32Size)
+{
+	// Quick fight request - find any available team to fight
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_ACK, 1);
+		return;
+	}
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_ACK, 2);	// Not a team leader
+		return;
+	}
+
+	if (pMyTeam->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_ACK, 3);	// Team not in waiting state
+		return;
+	}
+
+	// Find an opponent team from another clan that's also waiting
+	int allTeams[MAX_CLAN_MATCH_TEAMS];
+	int totalTeams = g_pClanMatchManager->GetAllActiveTeams(allTeams, MAX_CLAN_MATCH_TEAMS);
+
+	int opponentIdx = -1;
+	for (int i = 0; i < totalTeams; i++)
+	{
+		ClanMatchTeam* pOther = g_pClanMatchManager->GetTeam(allTeams[i]);
+		if (!pOther) continue;
+		if (pOther->i32ClanId == m_i32ClanId) continue;	// Same clan
+		if (pOther->ui8State != CLAN_MATCH_TEAM_WAITING) continue;
+		if (pOther->ui8FightState != CLAN_MATCH_FIGHT_NONE) continue;
+		if (pOther->ui8MaxMembers != pMyTeam->ui8MaxMembers) continue;	// Size mismatch
+
+		opponentIdx = allTeams[i];
+		break;
+	}
+
+	if (opponentIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_ACK, 4);	// No opponent found
+		return;
+	}
+
+	int fightResult = g_pClanMatchManager->RequestFight(pMyTeam->i32TeamIdx, opponentIdx);
+	SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_ACK, fightResult);
+}
+
+void GameSession::OnClanMatchTeamDetailInfoReq(char* pData, INT32 i32Size)
+{
+	// Opponent team detail info
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_DETAIL_INFO_ACK, 1);
+		return;
+	}
+
+	int32_t teamIdx = 0;
+	memcpy(&teamIdx, pData, 4);
+
+	const ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIdx);
+	if (!pTeam || !pTeam->IsActive())
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_DETAIL_INFO_ACK, 2);	// Team not found
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[1024];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_TEAM_DETAIL_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Team info
+	int32_t clanId = pTeam->i32ClanId;
+	memcpy(buffer + offset, &clanId, 4);	offset += 4;
+	memcpy(buffer + offset, pTeam->szClanName, 64);	offset += 64;
+	memcpy(buffer + offset, pTeam->szLeaderNick, 64);	offset += 64;
+
+	uint8_t state = pTeam->ui8State;
+	memcpy(buffer + offset, &state, 1);	offset += 1;
+
+	uint8_t maxMembers = pTeam->ui8MaxMembers;
+	uint8_t memberCount = pTeam->ui8MemberCount;
+	memcpy(buffer + offset, &maxMembers, 1);	offset += 1;
+	memcpy(buffer + offset, &memberCount, 1);	offset += 1;
+
+	// Wins/losses/points
+	int32_t wins = pTeam->i32Wins;
+	int32_t losses = pTeam->i32Losses;
+	int32_t points = pTeam->i32MatchPoints;
+	memcpy(buffer + offset, &wins, 4);		offset += 4;
+	memcpy(buffer + offset, &losses, 4);	offset += 4;
+	memcpy(buffer + offset, &points, 4);	offset += 4;
+
+	// Member details
+	for (int i = 0; i < pTeam->ui8MemberCount && i < MAX_CLAN_MATCH_TEAM_SIZE; i++)
+	{
+		const ClanMatchMember& m = pTeam->members[i];
+		if (!m.bActive) continue;
+
+		memcpy(buffer + offset, m.szNickname, 64);	offset += 64;
+		memcpy(buffer + offset, &m.ui8Level, 1);	offset += 1;
+		memcpy(buffer + offset, &m.ui8Rank, 1);	offset += 1;
+		uint8_t ready = m.bReady ? 1 : 0;
+		memcpy(buffer + offset, &ready, 1);			offset += 1;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchTeamChangePerReq(char* pData, INT32 i32Size)
+{
+	// Change team max member count (leader only)
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK, 1);
+		return;
+	}
+
+	uint8_t newMax = 0;
+	memcpy(&newMax, pData, 1);
+
+	if (newMax < CLAN_MATCH_MIN_PLAYERS || newMax > MAX_CLAN_MATCH_TEAM_SIZE)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK, 2);	// Invalid size
+		return;
+	}
+
+	ClanMatchTeam* pTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK, 3);	// Not team leader
+		return;
+	}
+
+	if (pTeam->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK, 4);	// Can't change during match
+		return;
+	}
+
+	if (newMax < pTeam->ui8MemberCount)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK, 5);	// Would drop members
+		return;
+	}
+
+	pTeam->ui8MaxMembers = newMax;
+
+	// Send ACK with new max
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &newMax, 1);				offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchTeamListReq(char* pData, INT32 i32Size)
+{
+	// List teams from same clan
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_TEAM_LIST_ACK, 1);
+		return;
+	}
+
+	int teamIndices[MAX_CLAN_MATCH_TEAMS];
+	int teamCount = g_pClanMatchManager->GetTeamListForClan(m_i32ClanId, teamIndices, MAX_CLAN_MATCH_TEAMS);
+
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_TEAM_LIST_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t count = teamCount;
+	memcpy(buffer + offset, &count, 4);	offset += 4;
+
+	for (int i = 0; i < teamCount && offset < 3800; i++)
+	{
+		const ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIndices[i]);
+		if (!pTeam) continue;
+
+		int32_t tidx = pTeam->i32TeamIdx;
+		memcpy(buffer + offset, &tidx, 4);				offset += 4;
+		memcpy(buffer + offset, pTeam->szLeaderNick, 64);	offset += 64;
+		uint8_t state = pTeam->ui8State;
+		memcpy(buffer + offset, &state, 1);				offset += 1;
+		uint8_t maxM = pTeam->ui8MaxMembers;
+		uint8_t curM = pTeam->ui8MemberCount;
+		memcpy(buffer + offset, &maxM, 1);				offset += 1;
+		memcpy(buffer + offset, &curM, 1);				offset += 1;
+		int32_t w = pTeam->i32Wins;
+		int32_t l = pTeam->i32Losses;
+		memcpy(buffer + offset, &w, 4);				offset += 4;
+		memcpy(buffer + offset, &l, 4);				offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchNewClanInfoReq(char* pData, INT32 i32Size)
+{
+	// Get opponent clan info from within a clan match room
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_CLAN_INFO_ACK, 1);
+		return;
+	}
+
+	int32_t opponentClanId = 0;
+	memcpy(&opponentClanId, pData, 4);
+
+	GameClanInfo* pClan = g_pClanManager->FindClan(opponentClanId);
+	if (!pClan || !pClan->bActive)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_CLAN_INFO_ACK, 2);	// Clan not found
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_NEW_CLAN_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Clan info
+	int32_t clanId = pClan->i32ClanId;
+	memcpy(buffer + offset, &clanId, 4);			offset += 4;
+	memcpy(buffer + offset, pClan->szName, 32);		offset += 32;
+	memcpy(buffer + offset, pClan->szMasterNickname, 64);	offset += 64;
+
+	int32_t memberCount = pClan->i32MemberCount;
+	int32_t maxMembers = pClan->i32MaxMembers;
+	memcpy(buffer + offset, &memberCount, 4);		offset += 4;
+	memcpy(buffer + offset, &maxMembers, 4);		offset += 4;
+
+	uint16_t markId = pClan->ui16MarkId;
+	uint8_t markColor = pClan->ui8MarkColor;
+	memcpy(buffer + offset, &markId, 2);			offset += 2;
+	memcpy(buffer + offset, &markColor, 1);			offset += 1;
+
+	int32_t clanRank = pClan->i32ClanRank;
+	int32_t clanExp = pClan->i32ClanExp;
+	int32_t clanWins = pClan->i32Wins;
+	int32_t clanLosses = pClan->i32Losses;
+	memcpy(buffer + offset, &clanRank, 4);			offset += 4;
+	memcpy(buffer + offset, &clanExp, 4);			offset += 4;
+	memcpy(buffer + offset, &clanWins, 4);			offset += 4;
+	memcpy(buffer + offset, &clanLosses, 4);		offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchNewFightQuickReq(char* pData, INT32 i32Size)
+{
+	// New quick match request (v2) - registers for quick matching
+	// Response uses PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK per protocol def comment
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, 1);
+		return;
+	}
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, 2);	// Not a team leader
+		return;
+	}
+
+	if (pMyTeam->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, 3);
+		return;
+	}
+
+	if (pMyTeam->ui8MemberCount < CLAN_MATCH_MIN_PLAYERS)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, 4);	// Not enough members
+		return;
+	}
+
+	// Find a matching opponent (same size, different clan, also waiting)
+	int allTeams[MAX_CLAN_MATCH_TEAMS];
+	int totalTeams = g_pClanMatchManager->GetAllActiveTeams(allTeams, MAX_CLAN_MATCH_TEAMS);
+
+	int opponentIdx = -1;
+	for (int i = 0; i < totalTeams; i++)
+	{
+		ClanMatchTeam* pOther = g_pClanMatchManager->GetTeam(allTeams[i]);
+		if (!pOther) continue;
+		if (pOther->i32TeamIdx == pMyTeam->i32TeamIdx) continue;
+		if (pOther->i32ClanId == m_i32ClanId) continue;
+		if (pOther->ui8State != CLAN_MATCH_TEAM_WAITING) continue;
+		if (pOther->ui8FightState != CLAN_MATCH_FIGHT_NONE) continue;
+		if (pOther->ui8MaxMembers != pMyTeam->ui8MaxMembers) continue;
+		if (pOther->ui8MemberCount < CLAN_MATCH_MIN_PLAYERS) continue;
+
+		opponentIdx = allTeams[i];
+		break;
+	}
+
+	if (opponentIdx < 0)
+	{
+		// No match found - register for waiting
+		pMyTeam->ui8FightState = CLAN_MATCH_FIGHT_REQUESTED;
+		SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, 0);	// Registered, waiting for opponent
+		return;
+	}
+
+	int fightResult = g_pClanMatchManager->RequestFight(pMyTeam->i32TeamIdx, opponentIdx);
+	SendSimpleAck(PROTOCOL_CS_MATCH_FIGHT_REQUEST_ACK, fightResult);
+}
+
+void GameSession::OnClanMatchNewFightOtherReq(char* pData, INT32 i32Size)
+{
+	// Request fight against a specific team (marked 사용안함 but dispatch exists)
+	// ACK: PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, 1);
+		return;
+	}
+
+	int32_t targetTeamIdx = 0;
+	memcpy(&targetTeamIdx, pData, 4);
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, 2);
+		return;
+	}
+
+	if (pMyTeam->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, 3);
+		return;
+	}
+
+	ClanMatchTeam* pTarget = g_pClanMatchManager->GetTeam(targetTeamIdx);
+	if (!pTarget || !pTarget->IsActive())
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, 4);
+		return;
+	}
+
+	if (pTarget->i32ClanId == m_i32ClanId)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, 5);	// Same clan
+		return;
+	}
+
+	int fightResult = g_pClanMatchManager->RequestFight(pMyTeam->i32TeamIdx, targetTeamIdx);
+	SendSimpleAck(PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_ACK, fightResult);
+}
+
+void GameSession::OnClanMatchNewGetRoomInfoReq(char* pData, INT32 i32Size)
+{
+	// Clan channel aggregate info: waiting teams count, fighting teams count
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_NEW_GET_CLAN_ROOM_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Count teams by state
+	int allTeams[MAX_CLAN_MATCH_TEAMS];
+	int total = g_pClanMatchManager->GetAllActiveTeams(allTeams, MAX_CLAN_MATCH_TEAMS);
+
+	int32_t waitingCount = 0;
+	int32_t fightingCount = 0;
+	for (int i = 0; i < total; i++)
+	{
+		const ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(allTeams[i]);
+		if (!pTeam) continue;
+		if (pTeam->ui8State == CLAN_MATCH_TEAM_WAITING)
+			waitingCount++;
+		else if (pTeam->ui8State == CLAN_MATCH_TEAM_FIGHTING)
+			fightingCount++;
+	}
+
+	memcpy(buffer + offset, &waitingCount, 4);		offset += 4;
+	memcpy(buffer + offset, &fightingCount, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchNewHonorReq(char* pData, INT32 i32Size)
+{
+	// Honor match request - request an honor fight against specific clan
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 1);
+		return;
+	}
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 2);
+		return;
+	}
+
+	int32_t targetTeamIdx = 0;
+	memcpy(&targetTeamIdx, pData, 4);
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 3);	// Not team leader
+		return;
+	}
+
+	if (pMyTeam->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 4);
+		return;
+	}
+
+	ClanMatchTeam* pTarget = g_pClanMatchManager->GetTeam(targetTeamIdx);
+	if (!pTarget || !pTarget->IsActive())
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 5);	// Target not found
+		return;
+	}
+
+	if (pTarget->ui8State != CLAN_MATCH_TEAM_WAITING)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 6);	// Target busy
+		return;
+	}
+
+	// Send honor request to target team leader
+	int fightResult = g_pClanMatchManager->RequestFight(pMyTeam->i32TeamIdx, targetTeamIdx);
+	if (fightResult != 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 7);
+		return;
+	}
+
+	// Notify the target leader about the honor request
+	GameSession* pTargetLeader = g_pGameSessionManager->FindSessionByUID(pTarget->i64LeaderUID);
+	if (pTargetLeader)
+	{
+		i3NetworkPacket notifyPacket;
+		char notifyBuf[128];
+		int noff = 0;
+
+		uint16_t nsz = 0;
+		noff += sizeof(uint16_t);
+		uint16_t nproto = PROTOCOL_CS_MATCH_NEW_HONOR_REQUEST_ACK;
+		memcpy(notifyBuf + noff, &nproto, sizeof(uint16_t));	noff += sizeof(uint16_t);
+
+		int32_t nresult = 0;
+		memcpy(notifyBuf + noff, &nresult, sizeof(int32_t));	noff += sizeof(int32_t);
+
+		// Requester info
+		int32_t reqTeamIdx = pMyTeam->i32TeamIdx;
+		memcpy(notifyBuf + noff, &reqTeamIdx, 4);				noff += 4;
+		memcpy(notifyBuf + noff, pMyTeam->szClanName, 64);		noff += 64;
+		memcpy(notifyBuf + noff, pMyTeam->szLeaderNick, 64);	noff += 64;
+
+		nsz = (uint16_t)noff;
+		memcpy(notifyBuf, &nsz, sizeof(uint16_t));
+
+		notifyPacket.SetPacketData(notifyBuf, noff);
+		pTargetLeader->SendMessage(&notifyPacket);
+	}
+
+	SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACK, 0);
+}
+
+void GameSession::OnClanMatchNewHonorAcceptReq(char* pData, INT32 i32Size)
+{
+	// Accept or reject an honor fight request
+	if (i32Size < 5)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_ACK, 1);
+		return;
+	}
+
+	int32_t requesterTeamIdx = 0;
+	memcpy(&requesterTeamIdx, pData, 4);
+
+	uint8_t accept = 0;
+	memcpy(&accept, pData + 4, 1);
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_ACK, 2);
+		return;
+	}
+
+	if (pMyTeam->i32OpponentTeamIdx != requesterTeamIdx)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_ACK, 3);	// No pending request from this team
+		return;
+	}
+
+	int result = g_pClanMatchManager->AcceptFight(pMyTeam->i32TeamIdx, accept != 0);
+
+	// Notify the requester about acceptance/rejection
+	ClanMatchTeam* pReqTeam = g_pClanMatchManager->GetTeam(requesterTeamIdx);
+	if (pReqTeam)
+	{
+		GameSession* pReqLeader = g_pGameSessionManager->FindSessionByUID(pReqTeam->i64LeaderUID);
+		if (pReqLeader)
+		{
+			i3NetworkPacket notifyPacket;
+			char notifyBuf[32];
+			int noff = 0;
+
+			uint16_t nsz = 0;
+			noff += sizeof(uint16_t);
+			uint16_t nproto = PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_ACK;
+			memcpy(notifyBuf + noff, &nproto, sizeof(uint16_t));	noff += sizeof(uint16_t);
+
+			int32_t nresult = accept ? 0 : 10;	// 0=accepted, 10=rejected
+			memcpy(notifyBuf + noff, &nresult, sizeof(int32_t));	noff += sizeof(int32_t);
+
+			nsz = (uint16_t)noff;
+			memcpy(notifyBuf, &nsz, sizeof(uint16_t));
+
+			notifyPacket.SetPacketData(notifyBuf, noff);
+			pReqLeader->SendMessage(&notifyPacket);
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_ACK, result);
+}
+
+void GameSession::OnClanMatchNewOperationReq(char* pData, INT32 i32Size)
+{
+	// Set operation/mission name for the match
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_OPERATION_ACK, 1);
+		return;
+	}
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_NEW_OPERATION_ACK, 2);	// Not team leader
+		return;
+	}
+
+	// Parse operation name (up to 64 chars)
+	char szOperation[64] = {};
+	int copyLen = (i32Size < 64) ? i32Size : 63;
+	memcpy(szOperation, pData, copyLen);
+	szOperation[copyLen] = '\0';
+
+	// Broadcast operation name to all team members
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_NEW_OPERATION_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, szOperation, 64);			offset += 64;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+
+	// Send to all team members
+	for (int i = 0; i < MAX_CLAN_MATCH_TEAM_SIZE; i++)
+	{
+		if (!pMyTeam->members[i].bActive) continue;
+		GameSession* pMember = g_pGameSessionManager->FindSessionByUID(pMyTeam->members[i].i64UID);
+		if (pMember)
+			pMember->SendMessage(&packet);
+	}
+}
+
+void GameSession::OnClanMatchRoomCreateGsReq(char* pData, INT32 i32Size)
+{
+	// Create a clan match room (GameServer-side)
+	// This is triggered after both teams accept the fight
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK, 1);
+		return;
+	}
+
+	ClanMatchTeam* pMyTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pMyTeam)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK, 2);
+		return;
+	}
+
+	if (pMyTeam->ui8FightState != CLAN_MATCH_FIGHT_ACCEPTED)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK, 3);	// Fight not accepted
+		return;
+	}
+
+	if (GetMainTask() < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK, 4);	// Not in channel
+		return;
+	}
+
+	// Create room via RoomManager
+	GameRoomCreateInfo createInfo = {};
+	snprintf(createInfo.szTitle, sizeof(createInfo.szTitle), "ClanMatch: %s", pMyTeam->szClanName);
+	createInfo.ui8GameMode = 1;			// Bomb mode (typical for clan matches)
+	createInfo.ui8MaxPlayers = pMyTeam->ui8MaxMembers * 2;
+	createInfo.ui8RoundCount = 5;
+
+	int roomIdx = g_pRoomManager->OnCreateRoom(this, &createInfo);
+	if (roomIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK, 5);	// Room creation failed
+		return;
+	}
+
+	// Send room create ACK with room info
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_ROOM_CREATE_GS_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t rIdx = roomIdx;
+	memcpy(buffer + offset, &rIdx, 4);					offset += 4;
+
+	int32_t channel = m_i32ChannelNum;
+	memcpy(buffer + offset, &channel, 4);				offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchRoomJoinGsReq(char* pData, INT32 i32Size)
+{
+	// Join an existing clan match room
+	if (i32Size < 8)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK, 1);
+		return;
+	}
+
+	int32_t roomIdx = 0;
+	int32_t channel = 0;
+	memcpy(&roomIdx, pData, 4);
+	memcpy(&channel, pData + 4, 4);
+
+	if (GetMainTask() < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK, 2);
+		return;
+	}
+
+	if (m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK, 3);
+		return;
+	}
+
+	Room* pRoom = g_pRoomManager->GetRoom(channel, roomIdx);
+	if (!pRoom || !pRoom->IsCreated())
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK, 4);	// Room not found
+		return;
+	}
+
+	int slotResult = g_pRoomManager->OnJoinRoom(this, channel, roomIdx, nullptr);
+	if (slotResult < 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK, 5);	// Join failed
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CS_MATCH_ROOM_JOIN_GS_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t slot = slotResult;
+	memcpy(buffer + offset, &slot, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanMatchRoomLeaveGsReq(char* pData, INT32 i32Size)
+{
+	// Leave clan match room (GameServer-side leave request)
+	if (GetMainTask() < GAME_TASK_READY_ROOM || m_i32RoomIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_LEAVE_GS_REQ + 1, 1);	// Not in room
+		return;
+	}
+
+	Room* pRoom = m_pRoom;
+	if (pRoom)
+	{
+		g_pRoomManager->OnLeaveRoom(this, m_i32ChannelNum);
+	}
+
+	SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_LEAVE_GS_REQ + 1, 0);
+}
+
+void GameSession::OnClanMatchRoomLeaveReq(char* pData, INT32 i32Size)
+{
+	// Leave clan match team room (client-side leave)
+	// Also leave the clan match team if applicable
+	ClanMatchTeam* pMyTeam = nullptr;
+
+	// Find which team this player belongs to
+	int allTeams[MAX_CLAN_MATCH_TEAMS];
+	int total = g_pClanMatchManager->GetAllActiveTeams(allTeams, MAX_CLAN_MATCH_TEAMS);
+	for (int i = 0; i < total; i++)
+	{
+		ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(allTeams[i]);
+		if (pTeam && pTeam->FindMemberByUID(m_i64UID) >= 0)
+		{
+			pMyTeam = pTeam;
+			break;
+		}
+	}
+
+	if (pMyTeam)
+	{
+		g_pClanMatchManager->LeaveTeam(pMyTeam->i32TeamIdx, m_i64UID);
+	}
+
+	// Leave room if in one
+	if (m_pRoom && m_i32RoomIdx >= 0)
+	{
+		g_pRoomManager->OnLeaveRoom(this, m_i32ChannelNum);
+	}
+
+	SendSimpleAck(PROTOCOL_CS_MATCH_ROOM_LEAVE_REQ + 1, 0);
+}

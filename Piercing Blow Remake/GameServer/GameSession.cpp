@@ -753,6 +753,70 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_LOBBY_GM_GET_UID_REQ:				OnLobbyGmGetUidReq(pData, dataSize);		break;
 	case PROTOCOL_LOBBY_ABUSING_POPUP_END_REQ:		OnLobbyAbusingPopupEndReq(pData, dataSize);	break;
 
+	// ---- Batch 20 - MESSENGER_* aliases to existing social handlers ----
+	case PROTOCOL_MESSENGER_FRIEND_INSERT_REQ:		OnFriendInsertReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_FRIEND_DELETE_REQ:		OnFriendDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_FRIEND_ACCEPT_REQ:		OnFriendAcceptReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_FRIEND_INFO_REQ:		OnFriendInfoReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_FRIEND_INVITED_REQ:	OnFriendInviteReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_SEND_WHISPER_REQ:		OnWhisperReq(pData, dataSize);				break;
+	case PROTOCOL_MESSENGER_FIND_USER_REQ:			OnFindUserReq(pData, dataSize);				break;
+	case PROTOCOL_MESSENGER_BLOCK_INSERT_REQ:		OnBlockInsertReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_BLOCK_DELETE_REQ:		OnBlockDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_SEND_WHISPER_BY_UID_REQ:OnMessengerWhisperByUidReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_FUSER_INFO_REQ:			OnMessengerFuserInfoReq(pData, dataSize);	break;
+	case PROTOCOL_MESSENGER_KICKUSER_REQ:			OnMessengerKickUserReq(pData, dataSize);	break;
+	case PROTOCOL_MESSENGER_FRIEND_INVITE_FAIL_REQ:	OnMessengerFriendInviteFailReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_NOTE_RECEIVE_REQ:		OnMessengerNoteReceiveReq(pData, dataSize);	break;
+	case PROTOCOL_MESSENGER_NOTE_SEND_FIND_UID_REQ:OnMessengerNoteSendFindUidReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_NOTE_SEND_GIFT_NOTICE_REQ:OnMessengerNoteGiftNoticeReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_NOTE_SEND_USERGIFT_NOTICE_REQ:OnMessengerNoteGiftNoticeReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_CLAN_NOTE_SEND_REQ:	OnMessengerClanNoteSendReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_CLAN_GROUP_NOTE_SEND_REQ:OnMessengerClanGroupNoteSendReq(pData, dataSize);break;
+	case PROTOCOL_MESSENGER_FRIEND_CHANGE_STATE_REQ:OnMessengerFriendChangeStateReq(pData, dataSize);break;
+
+	// ---- Batch 20 - CS_* clan context/operations (GameSessionClan.cpp) ----
+	case PROTOCOL_CS_CLAN_CONTEXT_REQ:				OnClanContextReq(pData, dataSize);			break;
+	case PROTOCOL_CS_CLIENT_CLAN_CONTEXT_REQ:		OnClanClientContextReq(pData, dataSize);	break;
+	case PROTOCOL_CS_CREATE_CLAN_CONDITION_REQ:		OnClanCreateConditionReq(pData, dataSize);	break;
+	case PROTOCOL_CS_REQUEST_CONTEXT_REQ:			OnClanRequestContextReq(pData, dataSize);	break;
+	case PROTOCOL_CS_REQUEST_INFO_REQ:				OnClanRequestInfoReq(pData, dataSize);		break;
+	case PROTOCOL_CS_MEMBER_CONTEXT_REQ:			OnClanMemberContextReq(pData, dataSize);	break;
+	case PROTOCOL_CS_STAFF_AUTHORITY_REQ:			OnClanStaffAuthorityReq(pData, dataSize);	break;
+	case PROTOCOL_CS_ROOM_INVITED_REQ:				OnClanRoomInvitedReq(pData, dataSize);		break;
+	case PROTOCOL_CS_EXPUP_REQ:						OnClanExpUpReq(pData, dataSize);			break;
+	case PROTOCOL_CS_REPLACE_MEMBER_NICK_REQ:		OnClanReplaceMemberNickReq(pData, dataSize);break;
+	case PROTOCOL_CS_REPLACE_MEMBER_RANK_REQ:		OnClanReplaceMemberRankReq(pData, dataSize);break;
+	case PROTOCOL_CS_REPLACE_MEMBER_COLOR_NICK_REQ:	OnClanReplaceMemberColorNickReq(pData, dataSize);break;
+	case PROTOCOL_CS_REPLACE_MANAGEMENT_REQ:		OnClanReplaceManagementReq(pData, dataSize);break;
+	case PROTOCOL_CS_CLAN_LIST_STREAM_REQ:			OnClanListStreamReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CLAN_LIST_GS_REQ:				OnClanListGsReq(pData, dataSize);			break;
+	case PROTOCOL_CS_CLAN_INO_RANK_UPDATE_REQ:		OnClanInoRankUpdateReq(pData, dataSize);	break;
+	case PROTOCOL_CS_CLAN_ITEM_DELETE_REQ:			OnClanItemDeleteReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CHECK_DUPLICATE_AZIT_URL_REQ:	OnClanCheckDuplicateAzitUrlReq(pData, dataSize);break;
+	case PROTOCOL_CS_CLAN_MATCH_RESULT_CONTEXT_REQ:	OnClanMatchResultContextReq(pData, dataSize);break;
+	case PROTOCOL_CS_CLAN_MATCH_RESULT_LIST_REQ:	OnClanMatchResultListReq(pData, dataSize);	break;
+	case PROTOCOL_CS_CLAN_MATCH_RESULT_EMOTION_SAVE_REQ:OnClanMatchResultEmotionSaveReq(pData, dataSize);break;
+	case PROTOCOL_CS_CLAN_REQUEST_AUTO_ACCEPT_OPTION_REQ:OnClanRequestAutoAcceptReq(pData, dataSize);break;
+
+	// ---- Batch 20 - CS_MATCH_* clan match extras (GameSessionClanWar.cpp) ----
+	case PROTOCOL_CS_MATCH_CHANNEL_REQ:				OnClanMatchChannelReq(pData, dataSize);		break;
+	case PROTOCOL_CS_MATCH_FIGHT_QUICK_REQUEST_REQ:	OnClanMatchFightQuickRequestReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_TEAM_DETAIL_INFO_REQ:	OnClanMatchTeamDetailInfoReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_TEAM_CHANGE_PER_REQ:	OnClanMatchTeamChangePerReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_TEAM_LIST_REQ:			OnClanMatchTeamListReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_NEW_CLAN_INFO_REQ:		OnClanMatchNewClanInfoReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_NEW_FIGHT_QUICK_REQUEST_REQ:OnClanMatchNewFightQuickReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_NEW_FIGHT_REQUEST_OTHER_REQ:OnClanMatchNewFightOtherReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_NEW_GET_CLAN_ROOM_INFO_REQ:OnClanMatchNewGetRoomInfoReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_NEW_HONOR_REQ:			OnClanMatchNewHonorReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_NEW_HONOR_ACCEPT_REQ:	OnClanMatchNewHonorAcceptReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_NEW_OPERATION_REQ:		OnClanMatchNewOperationReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_ROOM_CREATE_GS_REQ:		OnClanMatchRoomCreateGsReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_ROOM_JOIN_GS_REQ:		OnClanMatchRoomJoinGsReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_ROOM_LEAVE_GS_REQ:		OnClanMatchRoomLeaveGsReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_ROOM_LEAVE_REQ:			OnClanMatchRoomLeaveReq(pData, dataSize);	break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
