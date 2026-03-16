@@ -634,8 +634,47 @@ void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
 
 	// ui8Direction: 0 = move to normal slot, 1 = move to observer slot
 	uint8_t direction = *(uint8_t*)pData;
+	int32_t result = 0;
 
-	// For now, just acknowledge - full observer slot management is future work
+	// Room must have observer mode enabled
+	if (!(m_pRoom->GetInfoFlag() & ROOM_INFO_FLAG_OBSERVER_MODE))
+	{
+		result = 2;		// Observer mode not enabled
+	}
+	// Cannot change during battle
+	else if (m_pRoom->GetRoomState() >= ROOM_STATE_COUNTDOWN_R)
+	{
+		result = 3;		// Cannot change during battle
+	}
+	else if (m_i32SlotIdx < 0 || m_i32SlotIdx >= SLOT_MAX_COUNT)
+	{
+		result = 1;
+	}
+	else
+	{
+		GameSlotInfo& slot = m_pRoom->GetSlotInfoMutable(m_i32SlotIdx);
+
+		if (direction == 1 && !slot.bIsObserver)
+		{
+			// Move to observer
+			slot.bIsObserver = true;
+			slot.ui8State = SLOT_STATE_NORMAL;	// Reset ready state
+			printf("[GameSession] Observer: slot %d -> observer, UID=%lld\n", m_i32SlotIdx, m_i64UID);
+		}
+		else if (direction == 0 && slot.bIsObserver)
+		{
+			// Move back to normal
+			slot.bIsObserver = false;
+			slot.ui8State = SLOT_STATE_NORMAL;
+			printf("[GameSession] Observer: slot %d -> normal, UID=%lld\n", m_i32SlotIdx, m_i64UID);
+		}
+		else
+		{
+			result = 4;		// Already in requested state
+		}
+	}
+
+	// Broadcast to all in room
 	i3NetworkPacket packet;
 	char buffer[32];
 	int offset = 0;
@@ -644,8 +683,6 @@ void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
 	uint16_t proto = PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
-	int32_t result = 0;
 	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;

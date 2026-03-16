@@ -336,6 +336,7 @@ struct GameSlotInfo
 	uint32_t	ui32ClanMark;		// Clan mark
 	uint32_t	ui32Item;			// Consumable item flags
 	uint32_t	ui32CharaItemId;	// Character item ID
+	bool		bIsObserver;		// Observer slot (spectator, not playing)
 
 	GameSlotInfo()
 		: ui8State(SLOT_STATE_EMPTY)
@@ -346,6 +347,7 @@ struct GameSlotInfo
 		, ui32ClanMark(0)
 		, ui32Item(0)
 		, ui32CharaItemId(0)
+		, bIsObserver(false)
 	{
 	}
 
@@ -359,6 +361,7 @@ struct GameSlotInfo
 		ui32ClanMark = 0;
 		ui32Item = 0;
 		ui32CharaItemId = 0;
+		bIsObserver = false;
 	}
 };
 

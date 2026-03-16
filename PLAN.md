@@ -115,12 +115,12 @@
 ### 3A. Room Protocols Faltantes
 **Archivos**: `GameSessionRoom.cpp`, `GameSessionBattle.cpp`
 - [x] `PROTOCOL_ROOM_INVITE_REQ/ACK` - Invitar jugador a la sala
-- [ ] `PROTOCOL_ROOM_OBSERVER_REQ/ACK` - Modo observador
+- [x] `PROTOCOL_ROOM_OBSERVER_REQ/ACK` - Modo observador (observer slot toggle with validation)
 - [x] `PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ/ACK` - Votación de kick
 - [x] `PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ/ACK` - Resultado de votación
 - [x] `PROTOCOL_BATTLE_SENDPING_REQ/ACK` - Ping measurement
-- [ ] Lógica de votación avanzada: mínimo 3 jugadores, timeout 20s, cooldown 60s
-- [ ] Kick list tracking (`m_aKickUserList[]`)
+- [x] Lógica de votación avanzada: mínimo 3 jugadores, timeout 20s, cooldown 60s
+- [x] Kick list tracking (vote state per slot in Room)
 
 ### 3B. Room State Sync
 - [x] Double-buffered room info (Info0/Info1) para updates lock-free del room list
@@ -155,7 +155,7 @@
 - [x] `PROTOCOL_BASE_GET_MYINFO_BASIC_REQ/ACK` - Info básica
 - [x] `PROTOCOL_BASE_GET_MYINFO_ALL_REQ/ACK` - Todo junto
 - [x] `PROTOCOL_BASE_GET_RECORD_INFO_DB_REQ/ACK` - Record desde DB
-- [ ] `PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK` - Info detallada de otro jugador
+- [x] `PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK` - Info detallada de otro jugador (lobby + room)
 
 ### 4D. Title System
 - [x] `PROTOCOL_BASE_USER_TITLE_CHANGE_REQ/ACK`
@@ -262,7 +262,7 @@
 ### 9A. Packet Validation
 **Archivos**: `GameSession.cpp`
 - [x] Packet encryption validation con XOR key (BitRotateDecript)
-- [ ] Packet replay detection
+- [x] Packet replay detection (hash-based duplicate detection within 100ms window)
 - [x] Protocol rate limiting (max packets per second)
 - [x] State validation: rechazar packets que no corresponden al GAME_TASK actual
 - [x] Timeout por estado: 30s para NOT_LOGIN, 600s para LOGIN, 120s para NORMAL, 3600s para CHANNEL
@@ -390,7 +390,7 @@
 | Categoría | Protocolos Original | Implementados | % |
 |-----------|---------------------|---------------|---|
 | Login (0x0100) | 3 | 1 | 33% |
-| Base (0x0200) | ~80 | 28 | 35% |
+| Base (0x0200) | ~80 | 30 | 38% |
 | Auth (0x0300) | ~80 | 7 | 9% |
 | Shop (0x0400) | ~40 | 16 | 40% |
 | Admin (0x0500) | ~10 | 0 | 0% |
@@ -400,7 +400,7 @@
 | Lobby (0x0C00) | ~10 | 7 | 70% |
 | Inventory (0x0D00) | ~10 | 3 | 30% |
 | RS/IGS (0x0E00) | ~10 | 5 | 50% |
-| Room (0x0F00) | ~30 | 18 | 60% |
+| Room (0x0F00) | ~30 | 19 | 63% |
 | Battle (0x1000) | ~40 | 18 | 45% |
 | Medal (0x1200) | ~10 | 7 | 70% |
 | Cheat (0x1300) | ~10 | 3 | 30% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 4 | 80% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~148** | **~32%** |
+| **TOTAL** | **~460** | **~151** | **~33%** |

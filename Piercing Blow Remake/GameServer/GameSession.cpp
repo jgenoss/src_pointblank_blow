@@ -36,7 +36,10 @@ GameSession::GameSession()
 	, m_dwLastPacketTime(0)
 	, m_dwRateLimitWindow(0)
 	, m_ui16PacketCount(0)
+	, m_i32ReplayIdx(0)
+	, m_i32ReplayDetections(0)
 {
+	memset(m_ReplayHistory, 0, sizeof(m_ReplayHistory));
 	m_szUsername[0] = '\0';
 	m_szNickname[0] = '\0';
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)
@@ -159,6 +162,46 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 			return packetSize;
 	}
 
+	// Phase 9A: Replay detection - detect identical packets within short window
+	// Skip heartbeat and high-frequency protocols
+	if (protocolId != PROTOCOL_BASE_HEART_BIT_REQ)
+	{
+		// Simple hash of first 8 bytes of payload
+		uint32_t dataHash = 0;
+		char* pPayload = pPacket + 4;	// Skip size(2) + proto(2)
+		int payloadLen = (int)packetSize - 4;
+		if (payloadLen > 0)
+		{
+			int hashLen = (payloadLen > 8) ? 8 : payloadLen;
+			for (int i = 0; i < hashLen; i++)
+				dataHash = dataHash * 31 + (uint8_t)pPayload[i];
+		}
+
+		// Check if this exact packet was seen recently (within 100ms)
+		for (int i = 0; i < REPLAY_HISTORY_SIZE; i++)
+		{
+			if (m_ReplayHistory[i].ui16Protocol == protocolId &&
+				m_ReplayHistory[i].ui32DataHash == dataHash &&
+				(dwNow - m_ReplayHistory[i].dwTime) < 100)
+			{
+				// Duplicate detected - drop packet
+				m_i32ReplayDetections++;
+				if (m_i32ReplayDetections > 50)
+				{
+					printf("[GameSession] Replay flood detected - UID=%lld, Proto=0x%04X, Count=%d\n",
+						m_i64UID, protocolId, m_i32ReplayDetections);
+				}
+				return packetSize;
+			}
+		}
+
+		// Record this packet in history
+		m_ReplayHistory[m_i32ReplayIdx].ui16Protocol = protocolId;
+		m_ReplayHistory[m_i32ReplayIdx].dwTime = dwNow;
+		m_ReplayHistory[m_i32ReplayIdx].ui32DataHash = dataHash;
+		m_i32ReplayIdx = (m_i32ReplayIdx + 1) % REPLAY_HISTORY_SIZE;
+	}
+
 	// Phase 9A: State validation - reject packets from wrong states
 	// Always allow: connect, heartbeat, login
 	if (protocolId != PROTOCOL_BASE_CONNECT_REQ &&
@@ -232,6 +275,10 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_CREATE_NICK_REQ:		OnCreateNickReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_RANK_UP_REQ:			OnRankUpReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_GAMEGUARD_REQ:		OnGameGuardReq(pData, dataSize);		break;
+
+	// ---- User Detail Info (Phase 4B) ----
+	case PROTOCOL_BASE_GET_USER_INFO_LOBBY_REQ:	OnGetUserInfoLobbyReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_USER_INFO_ROOM_REQ:	OnGetUserInfoRoomReq(pData, dataSize);	break;
 
 	// ---- User Info (Phase 4C) ----
 	case PROTOCOL_BASE_GET_MYINFO_RECORD_REQ:	OnGetMyInfoRecordReq(pData, dataSize);	break;
@@ -519,6 +566,167 @@ void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
 	CheckAttendanceOnLogin();
 
 	m_eMainTask = GAME_TASK_CHANNEL;
+}
+
+// ============================================================================
+// User Detail Info (Phase 4B)
+// ============================================================================
+
+// Helper: fill user detail info into buffer, returns bytes written
+static int FillUserDetailInfo(char* buf, GameSession* pTarget)
+{
+	int off = 0;
+
+	// S2_USER_DETAIL_INFO layout (from S2MODefine.h):
+	// UID(8) + NickName(64) + ClanName(64) + ClanMark(4) + Rank(1)
+	// + Exp(4) + Match(4) + Win(4) + Draw(4) + Lose(4) + DisConnect(4)
+	// + Kill(4) + Death(4) + HeadShot(4)
+	// + State(4) + ServerIdx(4) + ChannelNum(4) + RoomIdx(4)
+
+	int64_t uid = pTarget->GetUID();
+	memcpy(buf + off, &uid, 8);						off += 8;
+	memcpy(buf + off, pTarget->GetNickname(), 64);	off += 64;
+
+	// Clan name (empty for now)
+	char clanName[64] = {0};
+	memcpy(buf + off, clanName, 64);				off += 64;
+
+	uint32_t clanMark = 0;
+	memcpy(buf + off, &clanMark, 4);				off += 4;
+
+	uint8_t rank = (uint8_t)pTarget->GetRankId();
+	memcpy(buf + off, &rank, 1);					off += 1;
+
+	uint32_t exp32 = (uint32_t)pTarget->GetExp();
+	memcpy(buf + off, &exp32, 4);					off += 4;
+
+	// Match count (wins + losses)
+	uint32_t wins = (uint32_t)pTarget->GetWins();
+	uint32_t losses = (uint32_t)pTarget->GetLosses();
+	uint32_t match = wins + losses;
+	memcpy(buf + off, &match, 4);					off += 4;
+	memcpy(buf + off, &wins, 4);					off += 4;
+
+	uint32_t draw = 0;
+	memcpy(buf + off, &draw, 4);					off += 4;
+	memcpy(buf + off, &losses, 4);					off += 4;
+
+	uint32_t disconnect = 0;
+	memcpy(buf + off, &disconnect, 4);				off += 4;
+
+	uint32_t kills = (uint32_t)pTarget->GetKills();
+	uint32_t deaths = (uint32_t)pTarget->GetDeaths();
+	uint32_t headshots = (uint32_t)pTarget->GetHeadshots();
+	memcpy(buf + off, &kills, 4);					off += 4;
+	memcpy(buf + off, &deaths, 4);					off += 4;
+	memcpy(buf + off, &headshots, 4);				off += 4;
+
+	// State, ServerIdx, ChannelNum, RoomIdx
+	uint32_t state = (uint32_t)pTarget->GetMainTask();
+	uint32_t serverIdx = 1;
+	uint32_t channelNum = (uint32_t)pTarget->GetChannelNum();
+	uint32_t roomIdx = (pTarget->GetRoomIdx() >= 0) ? (uint32_t)pTarget->GetRoomIdx() : 0xFFFFFFFF;
+	memcpy(buf + off, &state, 4);					off += 4;
+	memcpy(buf + off, &serverIdx, 4);				off += 4;
+	memcpy(buf + off, &channelNum, 4);				off += 4;
+	memcpy(buf + off, &roomIdx, 4);				off += 4;
+
+	return off;
+}
+
+void GameSession::OnGetUserInfoLobbyReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK, 1);
+		return;
+	}
+
+	int32_t targetSessionIdx = *(int32_t*)pData;
+	int32_t result = 0;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	// Find target session
+	GameSession* pTarget = nullptr;
+	if (g_pGameServerContext)
+	{
+		GameSessionManager* pMgr = (GameSessionManager*)g_pGameServerContext->GetSessionManager();
+		if (pMgr)
+			pTarget = pMgr->GetSession(targetSessionIdx);
+	}
+
+	if (pTarget && pTarget->GetMainTask() >= GAME_TASK_CHANNEL)
+	{
+		memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+		offset += FillUserDetailInfo(buffer + offset, pTarget);
+	}
+	else
+	{
+		result = 1;
+		memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+		// Zero-fill the detail info
+		memset(buffer + offset, 0, 200);
+		offset += 200;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetUserInfoRoomReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK, 1);
+		return;
+	}
+
+	int32_t targetSlotIdx = *(int32_t*)pData;
+	int32_t result = 0;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	GameSession* pTarget = m_pRoom->GetSlotSession(targetSlotIdx);
+
+	if (pTarget)
+	{
+		memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+		offset += FillUserDetailInfo(buffer + offset, pTarget);
+	}
+	else
+	{
+		result = 1;
+		memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+		memset(buffer + offset, 0, 200);
+		offset += 200;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
 }
 
 // ============================================================================
@@ -1541,6 +1749,9 @@ void GameSession::ResetSessionData()
 
 	m_dwRateLimitWindow = 0;
 	m_ui16PacketCount = 0;
+	m_i32ReplayIdx = 0;
+	m_i32ReplayDetections = 0;
+	memset(m_ReplayHistory, 0, sizeof(m_ReplayHistory));
 
 	m_ui8ActiveCharaSlot = 0;
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)

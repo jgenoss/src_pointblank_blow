@@ -142,6 +142,10 @@ public:
 	// Stats
 	int				GetKills() const			{ return m_i32Kills; }
 	int				GetDeaths() const			{ return m_i32Deaths; }
+	int				GetHeadshots() const		{ return m_i32Headshots; }
+	int				GetWins() const				{ return m_i32Wins; }
+	int				GetLosses() const			{ return m_i32Losses; }
+	GameTask		GetMainTask() const			{ return m_eMainTask; }
 
 	// Equipment (7E)
 	uint8_t			GetActiveCharaSlot() const				{ return m_ui8ActiveCharaSlot; }
@@ -207,6 +211,8 @@ private:
 
 	// Packet handlers - Info phase
 	void			OnGetUserInfoReq(char* pData, INT32 i32Size);
+	void			OnGetUserInfoLobbyReq(char* pData, INT32 i32Size);
+	void			OnGetUserInfoRoomReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - System/Login flow (Phase 4A - GameSession.cpp)
 	void			OnGetSystemInfoReq(char* pData, INT32 i32Size);
@@ -506,6 +512,18 @@ private:
 	// Rate limiting (Phase 9A)
 	DWORD			m_dwRateLimitWindow;
 	uint16_t		m_ui16PacketCount;
+
+	// Replay detection (Phase 9A) - track last N protocol IDs+timestamps
+	#define REPLAY_HISTORY_SIZE		16
+	struct ReplayEntry
+	{
+		uint16_t	ui16Protocol;
+		DWORD		dwTime;
+		uint32_t	ui32DataHash;	// Simple hash of first 8 bytes of data
+	};
+	ReplayEntry		m_ReplayHistory[REPLAY_HISTORY_SIZE];
+	int				m_i32ReplayIdx;
+	int				m_i32ReplayDetections;
 
 	// Cheat detection (Phase 9C)
 	DWORD			m_dwCheatLastClientTime;
