@@ -172,6 +172,13 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_MISSION_ROUND_START_REQ:		OnBattleMissionRoundStartReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_ROUND_END_REQ:			OnBattleMissionRoundEndReq(pData, dataSize);		break;
 
+	// ---- Shop (GameSessionShop.cpp) ----
+	case PROTOCOL_SHOP_ENTER_REQ:					OnShopEnterReq(pData, dataSize);			break;
+	case PROTOCOL_SHOP_LEAVE_REQ:					OnShopLeaveReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ:			OnShopBuyReq(pData, dataSize);				break;
+	case PROTOCOL_SHOP_REPAIR_REQ:					OnShopRepairReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_GET_POINT_CASH_REQ:			OnGetPointCashReq(pData, dataSize);			break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;

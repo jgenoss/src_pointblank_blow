@@ -169,6 +169,13 @@ private:
 	void			OnInventoryEnterReq(char* pData, INT32 i32Size);
 	void			OnInventoryLeaveReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - Shop (GameSessionShop.cpp)
+	void			OnShopEnterReq(char* pData, INT32 i32Size);
+	void			OnShopLeaveReq(char* pData, INT32 i32Size);
+	void			OnShopBuyReq(char* pData, INT32 i32Size);
+	void			OnShopRepairReq(char* pData, INT32 i32Size);
+	void			OnGetPointCashReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();

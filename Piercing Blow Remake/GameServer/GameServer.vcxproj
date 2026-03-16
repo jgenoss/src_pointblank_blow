@@ -140,6 +140,7 @@
     <ClCompile Include="GameSessionBattle.cpp" />
     <ClCompile Include="GameSessionEquipment.cpp" />
     <ClCompile Include="GameSessionInventory.cpp" />
+    <ClCompile Include="GameSessionShop.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
