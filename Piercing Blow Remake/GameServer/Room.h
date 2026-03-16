@@ -283,6 +283,11 @@ public:
 	void		AdvanceMapRotation();
 	bool		IsMapRotationEnabled() const { return m_bMapRotationEnabled; }
 
+	// GM debug/cheat helpers
+	bool		ToggleSoloPlay()				{ m_bSoloPlay = !m_bSoloPlay; return m_bSoloPlay; }
+	bool		IsSoloPlay() const				{ return m_bSoloPlay; }
+	void		ReduceBattleTime(int seconds)	{ m_dwBattleStartTime -= (DWORD)(seconds * 1000); }
+
 	// Battle log
 	uint64_t	GetBattleUniqueNumber() const { return m_ui64BattleUniqueNum; }
 	void		LogBattleResult();
@@ -291,6 +296,9 @@ private:
 	// Slots
 	GameSlotInfo		m_Slots[SLOT_MAX_COUNT];
 	GameSession*		m_pSlotSession[SLOT_MAX_COUNT];
+
+	// GM debug flags
+	bool				m_bSoloPlay;			// Allow 1-player start (GM cheat)
 
 	// Battle unique number for logging
 	uint64_t			m_ui64BattleUniqueNum;

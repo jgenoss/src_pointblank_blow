@@ -187,9 +187,9 @@
 - [x] Durability system
 
 ### 5C. Capsule/Gacha Shop
-- [ ] `PROTOCOL_AUTH_SHOP_CAPSULE_REQ/ACK`
-- [ ] `PROTOCOL_AUTH_SHOP_JACKPOT_REQ/ACK`
-- [ ] Random item selection con pesos
+- [x] `PROTOCOL_AUTH_SHOP_CAPSULE_REQ/ACK`
+- [x] `PROTOCOL_AUTH_SHOP_JACKPOT_REQ/ACK`
+- [x] Random item selection con pesos
 
 ### 5D. Field Shop (Roulette)
 - [ ] RS_IGS protocols completos
@@ -273,7 +273,7 @@
 
 ### 9C. Cheat Detection
 **Archivos**: Crear `GameSessionCheat.cpp`
-- [ ] `PROTOCOL_VALUE_CHEAT (0x1300)` handlers (GM cheat commands - low priority)
+- [x] `PROTOCOL_VALUE_CHEAT (0x1300)` handlers (IncreaseKill, PlaySolo, ReduceRoundTime, Teleport)
 - [x] Speed hack detection (comparing client-reported time vs server time)
 - [x] Damage validation
 - [x] Position validation
@@ -308,7 +308,7 @@
 - [x] `GM_BlockUser_U` - Ban with comment (OnGMBlockUserReq)
 - [x] `GM_DestroyRoom_U` - Force destroy room
 - [x] `GMPause` / `GMResume` - Pause/resume battle (broadcast to room)
-- [ ] Damage console for debugging
+- [x] Damage console for debugging
 - [x] Server announce message (`SendServerAnnounce`)
 - [x] Lobby GM exit user
 
@@ -343,7 +343,7 @@
 ## FASE 13: ConnectServer Completo
 
 - [x] Auth token generation y validación (ModuleConnectServer validates, fallback dev mode)
-- [ ] Server list transmission al cliente
+- [x] Server list transmission al cliente (ConnectSession::SendServerList)
 - [ ] Load balancing: redirect clientes al server con menos carga
 - [ ] Server heartbeat monitoring
 
@@ -403,7 +403,7 @@
 | Room (0x0F00) | ~30 | 20 | 67% |
 | Battle (0x1000) | ~40 | 20 | 50% |
 | Medal (0x1200) | ~10 | 7 | 70% |
-| Cheat (0x1300) | ~10 | 3 | 30% |
+| Cheat (0x1300) | ~10 | 7 | 70% |
 | Gacha (0x1400) | ~10 | 5 | 50% |
 | QuickJoin (0x1500) | ~5 | 3 | 60% |
 | Skill (0x1700) | ~5 | 4 | 80% |

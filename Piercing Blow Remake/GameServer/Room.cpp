@@ -50,6 +50,7 @@ Room::Room()
 	, m_i32MapRotationCount(0)
 	, m_i32MapRotationIdx(0)
 	, m_bMapRotationEnabled(false)
+	, m_bSoloPlay(false)
 	, m_ui64BattleUniqueNum(0)
 {
 	m_szTitle[0] = '\0';
@@ -179,6 +180,7 @@ void Room::OnDestroy()
 	m_i32PlayerCount = 0;
 	m_i32OwnerSlot = -1;
 	m_ui8RoomState = ROOM_STATE_READY;
+	m_bSoloPlay = false;
 
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
@@ -277,13 +279,16 @@ bool Room::OnStartBattle()
 	if (m_i32PlayerCount < 1)
 		return false;
 
-	// Check all non-owner players are ready
-	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	// Check all non-owner players are ready (skip if solo play enabled by GM)
+	if (!m_bSoloPlay)
 	{
-		if (m_pSlotSession[i] && i != m_i32OwnerSlot)
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
 		{
-			if (m_Slots[i].ui8State != SLOT_STATE_READY)
-				return false;
+			if (m_pSlotSession[i] && i != m_i32OwnerSlot)
+			{
+				if (m_Slots[i].ui8State != SLOT_STATE_READY)
+					return false;
+			}
 		}
 	}
 
@@ -1306,6 +1311,27 @@ void Room::OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32Weapon
 
 	packet.SetPacketData(buffer, offset);
 	SendToAll(&packet);
+
+	// Send damage console info to GMs in room
+	{
+		static const char* hitPartNames[] = { "Head", "Body", "LeftArm", "RightArm", "LeftLeg", "RightLeg" };
+		const char* hitName = (ui8HitPart < 6) ? hitPartNames[ui8HitPart] : "Unknown";
+		const char* killerName = (i32KillerSlot >= 0 && m_pSlotSession[i32KillerSlot]) ?
+			m_pSlotSession[i32KillerSlot]->GetNickname() : "?";
+		const char* deadName = m_pSlotSession[i32DeadSlot] ?
+			m_pSlotSession[i32DeadSlot]->GetNickname() : "?";
+
+		char dmgInfo[200];
+		snprintf(dmgInfo, sizeof(dmgInfo), "[DMG] %s -> %s [%s] Wpn=%u Pos=(%.0f,%.0f,%.0f)%s",
+			killerName, deadName, hitName, ui32WeaponId, fX, fY, fZ,
+			ui8MultiKill > 0 ? " MULTI" : "");
+
+		for (int s = 0; s < SLOT_MAX_COUNT; s++)
+		{
+			if (m_pSlotSession[s] && m_pSlotSession[s]->m_bDamageConsole)
+				m_pSlotSession[s]->SendServerAnnounce(dmgInfo, (uint16_t)strlen(dmgInfo));
+		}
+	}
 
 	// Check deathmatch kill limit
 	if (!IsMissionMode(m_ui8GameMode) && CheckMatchEnd())

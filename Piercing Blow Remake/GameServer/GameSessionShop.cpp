@@ -1113,3 +1113,131 @@ void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Capsule/Gacha (Phase 5C)
+// ============================================================================
+
+void GameSession::OnShopCapsuleReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_CAPSULE_REQ -> ACK
+	// Capsule = random item box. Client sends capsule item ID, server picks random result.
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < (int)(sizeof(uint32_t) + sizeof(uint32_t)))
+		return;
+
+	uint32_t capsuleItemId = *(uint32_t*)pData;
+	uint32_t useCash = *(uint32_t*)(pData + 4);	// 0=GP, 1=Cash
+	(void)useCash;
+
+	// Validate capsule exists in inventory
+	int invIdx = FindInventoryItem(capsuleItemId);
+	if (invIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_CAPSULE_ACK, 1);	// 1 = item not found
+		return;
+	}
+
+	// Random item selection from capsule pool
+	uint32_t resultItemId = 0;
+	int resultCount = 1;
+	bool isJackpot = false;
+
+	// Simple random item pool (would be data-driven in production)
+	int roll = rand() % 100;
+	if (roll < 5)
+	{
+		// 5% chance: rare item (jackpot)
+		resultItemId = MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_SNIPER, 10);
+		isJackpot = true;
+	}
+	else if (roll < 25)
+	{
+		// 20% chance: uncommon
+		resultItemId = MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_ASSAULT, 8);
+	}
+	else if (roll < 60)
+	{
+		// 35% chance: common weapon
+		resultItemId = MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_SMG, 5);
+	}
+	else
+	{
+		// 40% chance: consumable/common
+		resultItemId = MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 4);
+	}
+
+	// Remove capsule from inventory (consume it)
+	RemoveInventoryItem(invIdx);
+
+	// Add result item to inventory
+	AddInventoryItem(resultItemId, resultCount, 0);
+
+	// Send capsule result
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_CAPSULE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;	// 0 = success
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &resultItemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &resultCount, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint8_t jackpotFlag = isJackpot ? 1 : 0;
+	memcpy(buffer + offset, &jackpotFlag, sizeof(uint8_t));		offset += sizeof(uint8_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+
+	printf("[Shop] Capsule opened - UID=%lld, CapsuleId=%u, Result=%u, Jackpot=%d\n",
+		m_i64UID, capsuleItemId, resultItemId, isJackpot ? 1 : 0);
+
+	// If jackpot, broadcast notification to all players
+	if (isJackpot && g_pGameSessionManager)
+	{
+		char jackpotMsg[128];
+		snprintf(jackpotMsg, sizeof(jackpotMsg), "%s won a JACKPOT item!", m_szNickname);
+		g_pGameSessionManager->BroadcastAnnounce(jackpotMsg, (uint16_t)strlen(jackpotMsg));
+	}
+}
+
+void GameSession::OnShopJackpotReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_JACKPOT_REQ -> ACK
+	// Client requests recent jackpot winners list
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Send empty jackpot list for now
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_JACKPOT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t jackpotCount = 0;	// No recent jackpots
+	memcpy(buffer + offset, &jackpotCount, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

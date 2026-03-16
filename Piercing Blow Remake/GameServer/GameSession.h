@@ -355,6 +355,8 @@ private:
 	void			OnShopItemAuthReq(char* pData, INT32 i32Size);
 	void			OnShopInsertItemReq(char* pData, INT32 i32Size);
 	void			OnShopDeleteItemReq(char* pData, INT32 i32Size);
+	void			OnShopCapsuleReq(char* pData, INT32 i32Size);
+	void			OnShopJackpotReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Social (GameSessionSocial.cpp)
 	void			OnFriendInfoReq(char* pData, INT32 i32Size);
@@ -455,6 +457,12 @@ private:
 	void			OnGMPauseBattleReq(char* pData, INT32 i32Size);
 	void			OnGMResumeBattleReq(char* pData, INT32 i32Size);
 
+	// GM Cheat/Debug commands (Phase 13)
+	void			OnCheatIncreaseKillReq(char* pData, INT32 i32Size);
+	void			OnCheatPlaySoloReq(char* pData, INT32 i32Size);
+	void			OnCheatReduceRoundTimeReq(char* pData, INT32 i32Size);
+	void			OnCheatTeleportReq(char* pData, INT32 i32Size);
+
 	// GM helpers
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
@@ -517,6 +525,7 @@ private:
 	int				m_i32RankId;
 	int				m_i32ClanId;
 	uint8_t			m_ui8AuthLevel;			// 0=normal, 1+=GM
+	bool			m_bDamageConsole;		// GM debug: show damage events
 
 	// Stats
 	int				m_i32Kills;

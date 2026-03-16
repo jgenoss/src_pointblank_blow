@@ -394,6 +394,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ:			OnShopItemAuthReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ:		OnShopInsertItemReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ:		OnShopDeleteItemReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_CAPSULE_REQ:		OnShopCapsuleReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_JACKPOT_REQ:		OnShopJackpotReq(pData, dataSize);			break;
 
 	// ---- Quest (GameSessionQuest.cpp) ----
 	case PROTOCOL_BASE_QUEST_GET_REQ:				OnQuestGetReq(pData, dataSize);				break;
@@ -482,6 +484,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_GMCHAT_SEND_CHAT_REQ:				OnGMChatSendReq(pData, dataSize);			break;
 	case PROTOCOL_GMCHAT_END_CHAT_REQ:				OnGMChatEndReq(pData, dataSize);			break;
 	case PROTOCOL_GMCHAT_APPLY_PENALTY_REQ:			OnGMChatPenaltyReq(pData, dataSize);		break;
+
+	// ---- Cheat/Debug Commands (GameSessionGM.cpp - Phase 13) ----
+	case PROTOCOL_CHEAT_INCREASE_KILL_COUNT_REQ:	OnCheatIncreaseKillReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_PLAY_SOLO_REQ:				OnCheatPlaySoloReq(pData, dataSize);		break;
+	case PROTOCOL_CHEAT_REDUCE_ROUND_TIME_REQ:		OnCheatReduceRoundTimeReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_CHARACTER_TELEPORT_REQ:		OnCheatTeleportReq(pData, dataSize);		break;
 
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
@@ -1843,6 +1851,7 @@ void GameSession::ResetSessionData()
 	m_i32RankId = 0;
 	m_i32ClanId = 0;
 	m_ui8AuthLevel = 0;
+	m_bDamageConsole = false;
 
 	m_i32Kills = 0;
 	m_i32Deaths = 0;

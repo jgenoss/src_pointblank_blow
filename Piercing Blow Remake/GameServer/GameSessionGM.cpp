@@ -698,16 +698,232 @@ bool GameSession::ProcessAdminCommand(const char* pszMessage, int i32MsgLen)
 		return true;
 	}
 
+	// /damage - Toggle damage console (shows all damage events in your room)
+	if (_stricmp(cmd, "damage") == 0)
+	{
+		m_bDamageConsole = !m_bDamageConsole;
+		char dmgMsg[64];
+		snprintf(dmgMsg, sizeof(dmgMsg), "[GM] Damage console %s", m_bDamageConsole ? "ON" : "OFF");
+		SendServerAnnounce(dmgMsg, (uint16_t)strlen(dmgMsg));
+		return true;
+	}
+
 	// /help - Show available commands
 	if (_stricmp(cmd, "help") == 0)
 	{
-		const char* helpMsg = "[GM] Commands: /announce /kick /ban /info /ccu /rooms /users /reload /help";
+		const char* helpMsg = "[GM] /announce /kick /ban /info /ccu /rooms /users /damage /reload /help";
 		SendServerAnnounce(helpMsg, (uint16_t)strlen(helpMsg));
 		return true;
 	}
 
 	// Unknown command - not consumed
 	return false;
+}
+
+// ============================================================================
+// GM Cheat/Debug Commands (Phase 13)
+// These are protocol-based cheat commands from the client's debug menu.
+// Only GM users (auth level 1+) can execute these.
+// ============================================================================
+
+// Increase kill count for the GM player (debug testing)
+void GameSession::OnCheatIncreaseKillReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom || m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_INCREASE_KILL_COUNT_ACK, -1);
+		return;
+	}
+
+	// Parse: killCount(4) to add
+	int addKills = 1;
+	if (i32Size >= (int)sizeof(int))
+		memcpy(&addKills, pData, sizeof(int));
+
+	if (addKills < 1) addKills = 1;
+	if (addKills > 100) addKills = 100;
+
+	m_i32Kills += addKills;
+
+	printf("[Cheat] IncreaseKill - GM_UID=%lld, Added=%d, Total=%d\n",
+		m_i64UID, addKills, m_i32Kills);
+
+	// ACK with new kill count
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_CHEAT_INCREASE_KILL_COUNT_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int32_t totalKills = m_i32Kills;
+		memcpy(buffer + offset, &totalKills, sizeof(int32_t)); offset += sizeof(int32_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendMessage(&packet);
+	}
+}
+
+// Allow starting a game with only 1 player (solo mode for testing)
+void GameSession::OnCheatPlaySoloReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_PLAY_SOLO_ACK, -1);
+		return;
+	}
+
+	// Toggle solo play flag on the room
+	bool bSolo = m_pRoom->ToggleSoloPlay();
+
+	printf("[Cheat] PlaySolo - GM_UID=%lld, Solo=%s, Room Ch=%d Idx=%d\n",
+		m_i64UID, bSolo ? "ON" : "OFF", m_i32ChannelNum, m_pRoom->GetRoomIdx());
+
+	// ACK
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_CHEAT_PLAY_SOLO_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		uint8_t soloFlag = bSolo ? 1 : 0;
+		memcpy(buffer + offset, &soloFlag, 1);				offset += 1;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendMessage(&packet);
+	}
+}
+
+// Reduce remaining round time (to quickly end a round for testing)
+void GameSession::OnCheatReduceRoundTimeReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom || m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_REDUCE_ROUND_TIME_ACK, -1);
+		return;
+	}
+
+	// Parse: reduceSeconds(4)
+	int reduceSec = 60;
+	if (i32Size >= (int)sizeof(int))
+		memcpy(&reduceSec, pData, sizeof(int));
+
+	if (reduceSec < 1) reduceSec = 1;
+	if (reduceSec > 600) reduceSec = 600;
+
+	// Advance battle start time to simulate time passing
+	m_pRoom->ReduceBattleTime(reduceSec);
+
+	printf("[Cheat] ReduceRoundTime - GM_UID=%lld, Reduced=%ds, Room Ch=%d Idx=%d\n",
+		m_i64UID, reduceSec, m_i32ChannelNum, m_pRoom->GetRoomIdx());
+
+	// ACK - broadcast to all in room so clients sync
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_CHEAT_REDUCE_ROUND_TIME_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int32_t reduced = reduceSec;
+		memcpy(buffer + offset, &reduced, sizeof(int32_t)); offset += sizeof(int32_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		m_pRoom->SendToAll(&packet);
+	}
+}
+
+// Teleport character to a position (GM debug movement)
+void GameSession::OnCheatTeleportReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom || m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_CHARACTER_TELEPORT_ACK, -1);
+		return;
+	}
+
+	// Parse: posX(4) + posY(4) + posZ(4) = 12 bytes (float positions)
+	if (i32Size < 12)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_CHARACTER_TELEPORT_ACK, -2);
+		return;
+	}
+
+	float posX = 0.0f, posY = 0.0f, posZ = 0.0f;
+	memcpy(&posX, pData, sizeof(float));
+	memcpy(&posY, pData + 4, sizeof(float));
+	memcpy(&posZ, pData + 8, sizeof(float));
+
+	printf("[Cheat] Teleport - GM_UID=%lld, Pos=(%.1f, %.1f, %.1f)\n",
+		m_i64UID, posX, posY, posZ);
+
+	// ACK - broadcast to all in room so clients update the GM's position
+	{
+		i3NetworkPacket packet;
+		char buffer[48];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_CHEAT_CHARACTER_TELEPORT_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int32_t slot = m_i32SlotIdx;
+		memcpy(buffer + offset, &slot, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		memcpy(buffer + offset, &posX, sizeof(float));		offset += sizeof(float);
+		memcpy(buffer + offset, &posY, sizeof(float));		offset += sizeof(float);
+		memcpy(buffer + offset, &posZ, sizeof(float));		offset += sizeof(float);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		m_pRoom->SendToAll(&packet);
+	}
 }
 
 // Send server announcement to this session
