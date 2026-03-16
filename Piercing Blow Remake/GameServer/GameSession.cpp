@@ -654,6 +654,52 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_START_KICKVOTE_REQ:		OnBattleStartKickVoteReq(pData, dataSize);	break;
 	case PROTOCOL_BATTLE_CHEAT_MESSAGE_REQ:			OnBattleCheatMessageReq(pData, dataSize);	break;
 
+	// ---- Battle extras (GameSessionBattle.cpp - Batch 18) ----
+	case PROTOCOL_BATTLE_START_COUNTDOWN_REQ:		OnBattleStartCountdownReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_START_LOADING_REQ:			OnBattleStartLoadingReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_PRESTARTBATTLE_DSERVER_REQ:OnBattlePrestartBattleDServerReq(pData, dataSize);break;
+	case PROTOCOL_BATTLE_PRESTARTBATTLE_RELAY_REQ:	OnBattlePrestartBattleRelayReq(pData, dataSize);break;
+	case PROTOCOL_BATTLE_RESULT_REQ:				OnBattleResultReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_RESPAWN_FOR_AI_REQ:		OnBattleRespawnForAIReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_NOTIFY_KICKVOTE_RESULT_REQ:OnBattleNotifyKickVoteResultReq(pData, dataSize);break;
+	case PROTOCOL_BATTLE_NOTIFY_KICKVOTE_CANCEL_REQ:OnBattleNotifyKickVoteCancelReq(pData, dataSize);break;
+
+	// ---- Room extras (GameSessionRoom.cpp - Batch 18) ----
+	case PROTOCOL_ROOM_NEW_GET_SLOTINFO_REQ:		OnRoomNewGetSlotInfoReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_REQ:	OnRoomNewGetSlotOneInfoReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_NEW_GET_PLAYERINFO_REQ:		OnRoomNewGetPlayerInfoReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_REQ:		OnRoomChangeHiddenSlotReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_TEAM_BALANCE_REQ:			OnRoomTeamBalanceReq(pData, dataSize);		break;
+
+	// ---- Lobby extras (GameSessionLobby.cpp - Batch 18) ----
+	case PROTOCOL_LOBBY_CHECK_NICK_NAME_REQ:		OnLobbyCheckNickNameReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_CREATE_NICK_NAME_REQ:		OnLobbyCreateNickNameReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_NEW_CREATE_ROOM_REQ:		OnLobbyNewCreateRoomReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_NEW_JOIN_ROOM_REQ:			OnLobbyNewJoinRoomReq(pData, dataSize);		break;
+	case PROTOCOL_LOBBY_NEW_VIEW_USER_ITEM_REQ:	OnLobbyNewViewUserItemReq(pData, dataSize);	break;
+
+	// ---- Base extras (GameSession.cpp - Batch 18) ----
+	case PROTOCOL_BASE_USER_ENTER_REQ:				OnBaseUserEnterReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_USER_LEAVE_REQ:				OnBaseUserLeaveReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_GAME_SERVER_STATE_REQ:		OnBaseGameServerStateReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_READY_HEART_BIT_REQ:			OnBaseReadyHeartBitReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_MYCLAN_REQ:				OnBaseGetMyClanReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_GET_USERINFO_ALL_REQ:		OnBaseGetUserInfoAllReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_USERINFO_ALL_DB_REQ:		OnBaseGetUserInfoAllDBReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_ENTER_PASS_REQ:				OnBaseEnterPassReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_GET_UID_LOBBY_REQ:			OnBaseGetUidLobbyReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_GET_UID_ROOM_REQ:			OnBaseGetUidRoomReq(pData, dataSize);		break;
+
+	// ---- Cheat extras (GameSessionGM.cpp - Batch 18) ----
+	case PROTOCOL_CHEAT_CLAN_WAR_MATCHING_POINT_REQ:OnCheatClanWarMatchingPointReq(pData, dataSize);break;
+	case PROTOCOL_CHEAT_CLAN_WAR_RESULT_REQ:		OnCheatClanWarResultReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_REQ:	OnCheatDamageGameObjectReq(pData, dataSize);break;
+	case PROTOCOL_CHEAT_DETECT_HACK_OFF_REQ:		OnCheatDetectHackOffReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_ITEM_AUTH_REQ:				OnCheatItemAuthReq(pData, dataSize);		break;
+	case PROTOCOL_CHEAT_MEDAL_COMMAND_REQ:			OnCheatMedalCommandReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_REDUCE_TS_EVENT_REQ:		OnCheatReduceTsEventReq(pData, dataSize);	break;
+	case PROTOCOL_CHEAT_TIMER_GM_PAUSE_REQ:			OnCheatTimerGMPauseReq(pData, dataSize);	break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
@@ -2819,6 +2865,282 @@ void GameSession::OnBaseChangeClanMarkReq(char* pData, INT32 i32Size)
 
 	printf("[GameSession] Clan mark changed: markId=%d, color=%d by UID=%lld\n",
 		markId, markColor, m_i64UID);
+}
+
+// ============================================================================
+// Batch 18 - Base extras
+// ============================================================================
+
+void GameSession::OnBaseUserEnterReq(char* pData, INT32 i32Size)
+{
+	// Server transfer: player enters from another server
+	// In distributed architecture, this comes with an auth token
+	SendSimpleAck(PROTOCOL_BASE_USER_ENTER_ACK, 0);
+}
+
+void GameSession::OnBaseUserLeaveReq(char* pData, INT32 i32Size)
+{
+	// Server transfer: player wants to leave to another server
+	// Save data before allowing transfer
+	if (m_i64UID > 0 && g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestPlayerSave(m_i64UID, m_i32Level,
+			m_i64Exp, m_i32Cash, m_i32GP);
+	}
+
+	SendSimpleAck(PROTOCOL_BASE_USER_LEAVE_ACK, 0);
+}
+
+void GameSession::OnBaseGameServerStateReq(char* pData, INT32 i32Size)
+{
+	// Return current game server state (online count, channels, etc.)
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GAME_SERVER_STATE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Server state info
+	int32_t onlineCount = g_pGameSessionManager ? g_pGameSessionManager->GetActiveCount() : 0;
+	uint8_t channelCount = g_pContextMain ? g_pContextMain->m_ui8ChannelCount : 4;
+	uint8_t serverState = 1;  // 1 = online
+
+	memcpy(buffer + offset, &onlineCount, 4);	offset += 4;
+	memcpy(buffer + offset, &channelCount, 1);	offset += 1;
+	memcpy(buffer + offset, &serverState, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseReadyHeartBitReq(char* pData, INT32 i32Size)
+{
+	// Ready-state heartbeat (client is in loading/ready screen)
+	SendSimpleAck(PROTOCOL_BASE_READY_HEART_BIT_ACK, 0);
+}
+
+void GameSession::OnBaseGetMyClanReq(char* pData, INT32 i32Size)
+{
+	// Get player's own clan info
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_MYCLAN_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = (m_i32ClanId > 0) ? 0 : -1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	if (m_i32ClanId > 0 && g_pClanManager)
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (pClan)
+		{
+			memcpy(buffer + offset, &pClan->i32ClanId, 4);				offset += 4;
+			memcpy(buffer + offset, pClan->szName, MAX_CLAN_NAME_LEN);	offset += MAX_CLAN_NAME_LEN;
+			memcpy(buffer + offset, &pClan->i32MemberCount, 4);		offset += 4;
+			memcpy(buffer + offset, &pClan->i32ClanRank, 4);			offset += 4;
+			memcpy(buffer + offset, &pClan->i32ClanExp, 4);			offset += 4;
+			memcpy(buffer + offset, &pClan->ui16MarkId, 2);			offset += 2;
+			memcpy(buffer + offset, &pClan->ui8MarkColor, 1);			offset += 1;
+		}
+		else
+		{
+			result = -1;
+			memcpy(buffer + 4, &result, sizeof(int32_t));
+		}
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseGetUserInfoAllReq(char* pData, INT32 i32Size)
+{
+	// Get detailed user info (self or target)
+	int64_t targetUID = m_i64UID;
+	if (i32Size >= (int)sizeof(int64_t))
+		memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = (targetUID == m_i64UID) ? this :
+		(g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr);
+
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_USERINFO_ALL_ACK, -1);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USERINFO_ALL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int64_t uid = pTarget->GetUID();
+	memcpy(buffer + offset, &uid, sizeof(int64_t));		offset += sizeof(int64_t);
+
+	char nick[64] = {};
+	strncpy(nick, pTarget->GetNickname(), 63);
+	memcpy(buffer + offset, nick, 64);					offset += 64;
+
+	int32_t level = pTarget->GetLevel();
+	int32_t rankId = pTarget->GetRankId();
+	int64_t exp = pTarget->m_i64Exp;
+	int32_t gp = pTarget->m_i32GP;
+	int32_t cash = pTarget->m_i32Cash;
+	int32_t kills = pTarget->GetKills();
+	int32_t deaths = pTarget->GetDeaths();
+	int32_t headshots = pTarget->GetHeadshots();
+	int32_t wins = pTarget->GetWins();
+	int32_t losses = pTarget->GetLosses();
+	int32_t clanId = pTarget->GetClanId();
+
+	memcpy(buffer + offset, &level, 4);		offset += 4;
+	memcpy(buffer + offset, &rankId, 4);	offset += 4;
+	memcpy(buffer + offset, &exp, 8);		offset += 8;
+	memcpy(buffer + offset, &gp, 4);		offset += 4;
+	memcpy(buffer + offset, &cash, 4);		offset += 4;
+	memcpy(buffer + offset, &kills, 4);		offset += 4;
+	memcpy(buffer + offset, &deaths, 4);	offset += 4;
+	memcpy(buffer + offset, &headshots, 4);	offset += 4;
+	memcpy(buffer + offset, &wins, 4);		offset += 4;
+	memcpy(buffer + offset, &losses, 4);	offset += 4;
+	memcpy(buffer + offset, &clanId, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseGetUserInfoAllDBReq(char* pData, INT32 i32Size)
+{
+	// Get user info from DB (same as above for now, DB-backed version)
+	OnBaseGetUserInfoAllReq(pData, i32Size);
+}
+
+void GameSession::OnBaseEnterPassReq(char* pData, INT32 i32Size)
+{
+	// Server entrance password check
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_BASE_ENTER_PASS_ACK, -1);
+		return;
+	}
+
+	// In simplified version, no server password required
+	SendSimpleAck(PROTOCOL_BASE_ENTER_PASS_ACK, 0);
+}
+
+void GameSession::OnBaseGetUidLobbyReq(char* pData, INT32 i32Size)
+{
+	// Find a user's UID in the lobby by some identifier
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_UID_LOBBY_ACK, -1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_UID_LOBBY_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = pTarget ? 0 : -1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	if (pTarget)
+	{
+		int32_t channel = pTarget->GetChannelNum();
+		int32_t roomIdx = pTarget->GetRoomIdx();
+		memcpy(buffer + offset, &channel, 4);	offset += 4;
+		memcpy(buffer + offset, &roomIdx, 4);	offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseGetUidRoomReq(char* pData, INT32 i32Size)
+{
+	// Find what room a UID is in
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_UID_ROOM_ACK, -1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_UID_ROOM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = (pTarget && pTarget->GetRoom()) ? 0 : -1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	if (pTarget && pTarget->GetRoom())
+	{
+		int32_t channel = pTarget->GetChannelNum();
+		int32_t roomIdx = pTarget->GetRoomIdx();
+		int32_t slotIdx = pTarget->GetSlotIdx();
+		memcpy(buffer + offset, &channel, 4);	offset += 4;
+		memcpy(buffer + offset, &roomIdx, 4);	offset += 4;
+		memcpy(buffer + offset, &slotIdx, 4);	offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
 }
 
 void GameSession::SendSimpleAck(uint16_t protocolAck, int32_t result)

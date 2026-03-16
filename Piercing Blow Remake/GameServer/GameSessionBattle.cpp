@@ -1661,3 +1661,225 @@ void GameSession::OnBattleCheatMessageReq(char* pData, INT32 i32Size)
 	printf("[GameSession] Cheat report: type=%d, data=%u from slot=%d UID=%lld\n",
 		cheatType, cheatData, m_i32SlotIdx, m_i64UID);
 }
+
+// ============================================================================
+// Batch 18 - Battle extras
+// ============================================================================
+
+void GameSession::OnBattleStartCountdownReq(char* pData, INT32 i32Size)
+{
+	// Room master triggers countdown before battle starts
+	if (m_eMainTask != GAME_TASK_READY_ROOM || !m_pRoom)
+		return;
+
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+		return;
+
+	// Broadcast countdown to all players in room
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_START_COUNTDOWN_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleStartLoadingReq(char* pData, INT32 i32Size)
+{
+	// Client notifies server that map loading has started (fire-and-forget)
+	if (m_eMainTask != GAME_TASK_READY_ROOM && m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (!m_pRoom)
+		return;
+
+	printf("[GameSession] Battle loading started: slot=%d room=%d\n",
+		m_i32SlotIdx, m_pRoom->GetRoomIdx());
+}
+
+void GameSession::OnBattlePrestartBattleDServerReq(char* pData, INT32 i32Size)
+{
+	// Client finished loading and is ready for dedicated server battle
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_PRESTARTBATTLE_DSERVER_ACK, -1);
+		return;
+	}
+
+	// Send battle server connection info
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_PRESTARTBATTLE_DSERVER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// UDP IP and port from room's battle info
+	uint32_t udpIP = 0;
+	uint16_t udpPort = 0;
+	if (m_pRoom->GetBattleRoomIdx() >= 0)
+	{
+		inet_pton(AF_INET, m_pRoom->GetBattleUdpIP(), &udpIP);
+		udpPort = m_pRoom->GetBattleUdpPort();
+	}
+	memcpy(buffer + offset, &udpIP, sizeof(uint32_t));		offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &udpPort, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBattlePrestartBattleRelayReq(char* pData, INT32 i32Size)
+{
+	// Client ready for relay-mode battle (P2P/relay instead of dedicated server)
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_PRESTARTBATTLE_RELAY_ACK, -1);
+		return;
+	}
+
+	SendSimpleAck(PROTOCOL_BATTLE_PRESTARTBATTLE_RELAY_ACK, 0);
+}
+
+void GameSession::OnBattleResultReq(char* pData, INT32 i32Size)
+{
+	// Client reports individual battle result (client-side score summary)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_RESULT_ACK, -1);
+		return;
+	}
+
+	// Parse results if available
+	if (i32Size >= (int)(sizeof(int32_t) * 4))
+	{
+		int offset = 0;
+		int32_t kills = 0, deaths = 0, headshots = 0, assists = 0;
+		memcpy(&kills, pData + offset, 4);		offset += 4;
+		memcpy(&deaths, pData + offset, 4);		offset += 4;
+		memcpy(&headshots, pData + offset, 4);	offset += 4;
+		memcpy(&assists, pData + offset, 4);	offset += 4;
+
+		printf("[GameSession] Battle result from slot=%d: K=%d D=%d HS=%d A=%d\n",
+			m_i32SlotIdx, kills, deaths, headshots, assists);
+	}
+
+	SendSimpleAck(PROTOCOL_BATTLE_RESULT_ACK, 0);
+}
+
+void GameSession::OnBattleRespawnForAIReq(char* pData, INT32 i32Size)
+{
+	// AI/bot respawn request (PvE modes like Dino, Zombie)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_RESPAWN_FOR_AI_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(uint8_t))
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_RESPAWN_FOR_AI_ACK, -1);
+		return;
+	}
+
+	uint8_t aiSlot = *(uint8_t*)pData;
+
+	// Broadcast AI respawn to room
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_RESPAWN_FOR_AI_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &aiSlot, sizeof(uint8_t));	offset += sizeof(uint8_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleNotifyKickVoteResultReq(char* pData, INT32 i32Size)
+{
+	// Client reports their kick vote (agree/disagree)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+	uint8_t vote = *(uint8_t*)(pData + 1);  // 1=agree, 2=disagree
+
+	// Broadcast vote result to room
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_NOTIFY_KICKVOTE_RESULT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t voterSlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &voterSlot, 1);		offset += 1;
+	memcpy(buffer + offset, &targetSlot, 1);	offset += 1;
+	memcpy(buffer + offset, &vote, 1);			offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleNotifyKickVoteCancelReq(char* pData, INT32 i32Size)
+{
+	// Kick vote is cancelled (timeout or initiator left)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	// Broadcast cancellation to room
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BATTLE_NOTIFY_KICKVOTE_CANCEL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}

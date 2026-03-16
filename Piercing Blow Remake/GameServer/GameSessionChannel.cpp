@@ -1097,3 +1097,136 @@ void GameSession::OnLobbyGetUIDByNickNameReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 18 - Lobby extras
+// ============================================================================
+
+void GameSession::OnLobbyCheckNickNameReq(char* pData, INT32 i32Size)
+{
+	// Check if a nickname is available (new protocol version)
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_CHECK_NICK_NAME_ACK, -1);
+		return;
+	}
+
+	char nickname[64] = {};
+	int copyLen = (i32Size > 63) ? 63 : i32Size;
+	memcpy(nickname, pData, copyLen);
+
+	// Check if nickname is already in use
+	int32_t result = 0;
+	if (g_pGameSessionManager)
+	{
+		GameSession* pExisting = g_pGameSessionManager->FindSessionByNickname(nickname);
+		if (pExisting)
+			result = -1;  // Name taken
+	}
+
+	// Check via DataServer if available
+	if (result == 0 && g_pModuleDataServer)
+		g_pModuleDataServer->RequestCheckNick(GetIndex(), nickname);
+	else
+		SendSimpleAck(PROTOCOL_LOBBY_CHECK_NICK_NAME_ACK, result);
+}
+
+void GameSession::OnLobbyCreateNickNameReq(char* pData, INT32 i32Size)
+{
+	// Create nickname (new protocol version for lobby-based nick creation)
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_CREATE_NICK_NAME_ACK, -1);
+		return;
+	}
+
+	char nickname[64] = {};
+	int copyLen = (i32Size > 63) ? 63 : i32Size;
+	memcpy(nickname, pData, copyLen);
+
+	if (strlen(m_szNickname) > 0)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_CREATE_NICK_NAME_ACK, -2);
+		return;
+	}
+
+	if (g_pModuleDataServer)
+		g_pModuleDataServer->RequestCreateNick(m_i64UID, GetIndex(), nickname);
+	else
+	{
+		strncpy(m_szNickname, nickname, 63);
+		SendSimpleAck(PROTOCOL_LOBBY_CREATE_NICK_NAME_ACK, 0);
+	}
+}
+
+void GameSession::OnLobbyNewCreateRoomReq(char* pData, INT32 i32Size)
+{
+	// New version of room creation - delegates to existing handler
+	OnRoomCreateReq(pData, i32Size);
+}
+
+void GameSession::OnLobbyNewJoinRoomReq(char* pData, INT32 i32Size)
+{
+	// New version of room join - delegates to existing handler
+	OnRoomJoinReq(pData, i32Size);
+}
+
+void GameSession::OnLobbyNewViewUserItemReq(char* pData, INT32 i32Size)
+{
+	// View another user's items in lobby
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_NEW_VIEW_USER_ITEM_ACK, -1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_NEW_VIEW_USER_ITEM_ACK, -2);
+		return;
+	}
+
+	// Send target's equipped items
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_NEW_VIEW_USER_ITEM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	// Equipment item count
+	uint16_t equipCount = 0;
+	for (int i = 0; i < pTarget->GetInventoryCount() && equipCount < 50; i++)
+	{
+		if (pTarget->m_Inventory[i].ui8IsEquipped)
+			equipCount++;
+	}
+	memcpy(buffer + offset, &equipCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Write equipped items
+	for (int i = 0; i < pTarget->GetInventoryCount() && offset < 450; i++)
+	{
+		if (pTarget->m_Inventory[i].ui8IsEquipped)
+		{
+			memcpy(buffer + offset, &pTarget->m_Inventory[i].ui32ItemId, 4);	offset += 4;
+			memcpy(buffer + offset, &pTarget->m_Inventory[i].ui32Duration, 4);	offset += 4;
+		}
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

@@ -970,3 +970,168 @@ void GameSession::SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 18 - Cheat extras
+// ============================================================================
+
+void GameSession::OnCheatClanWarMatchingPointReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (i32Size < (int)sizeof(int32_t))
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_CLAN_WAR_MATCHING_POINT_ACK, -1);
+		return;
+	}
+
+	int32_t points = 0;
+	memcpy(&points, pData, sizeof(int32_t));
+
+	printf("[GM] Cheat: Set clan war matching points to %d by UID=%lld\n", points, m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_CLAN_WAR_MATCHING_POINT_ACK, 0);
+}
+
+void GameSession::OnCheatClanWarResultReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (i32Size < (int)(sizeof(int32_t) * 2))
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_CLAN_WAR_RESULT_ACK, -1);
+		return;
+	}
+
+	int32_t winnerTeam = 0;
+	int32_t resultType = 0;
+	memcpy(&winnerTeam, pData, sizeof(int32_t));
+	memcpy(&resultType, pData + 4, sizeof(int32_t));
+
+	printf("[GM] Cheat: Force clan war result team=%d type=%d by UID=%lld\n",
+		winnerTeam, resultType, m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_CLAN_WAR_RESULT_ACK, 0);
+}
+
+void GameSession::OnCheatDamageGameObjectReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)(sizeof(int32_t) + sizeof(int32_t)))
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_ACK, -1);
+		return;
+	}
+
+	int32_t objectId = 0;
+	int32_t damage = 0;
+	memcpy(&objectId, pData, sizeof(int32_t));
+	memcpy(&damage, pData + 4, sizeof(int32_t));
+
+	printf("[GM] Cheat: Damage game object %d by %d, UID=%lld\n",
+		objectId, damage, m_i64UID);
+
+	// Broadcast to room
+	i3NetworkPacket packet;
+	char buffer[24];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &objectId, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &damage, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnCheatDetectHackOffReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	printf("[GM] Cheat: Hack detection disabled by UID=%lld\n", m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_DETECT_HACK_OFF_ACK, 0);
+}
+
+void GameSession::OnCheatItemAuthReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (i32Size < (int)sizeof(uint32_t))
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_ITEM_AUTH_ACK, -1);
+		return;
+	}
+
+	uint32_t itemId = 0;
+	memcpy(&itemId, pData, sizeof(uint32_t));
+
+	// Grant item to self for testing
+	if (m_i32InventoryCount < MAX_INVEN_COUNT)
+	{
+		GameInventoryItem& item = m_Inventory[m_i32InventoryCount];
+		item.ui32ItemId = itemId;
+		item.ui32Count = 1;
+		item.i32SlotIdx = -1;
+		item.ui8IsEquipped = 0;
+		item.ui32Duration = 0;
+		m_i32InventoryCount++;
+	}
+
+	printf("[GM] Cheat: Item 0x%08X granted to UID=%lld\n", itemId, m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_ITEM_AUTH_ACK, 0);
+}
+
+void GameSession::OnCheatMedalCommandReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (i32Size < (int)(sizeof(uint16_t) + sizeof(uint8_t)))
+	{
+		SendSimpleAck(PROTOCOL_CHEAT_MEDAL_COMMAND_ACK, -1);
+		return;
+	}
+
+	uint16_t medalIdx = 0;
+	uint8_t command = 0;
+	memcpy(&medalIdx, pData, sizeof(uint16_t));
+	memcpy(&command, pData + 2, sizeof(uint8_t));
+
+	printf("[GM] Cheat: Medal command idx=%d cmd=%d by UID=%lld\n",
+		medalIdx, command, m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_MEDAL_COMMAND_ACK, 0);
+}
+
+void GameSession::OnCheatReduceTsEventReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	printf("[GM] Cheat: Reduce TS event timer by UID=%lld\n", m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_REDUCE_TS_EVENT_ACK, 0);
+}
+
+void GameSession::OnCheatTimerGMPauseReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	printf("[GM] Cheat: GM pause timer by UID=%lld\n", m_i64UID);
+	SendSimpleAck(PROTOCOL_CHEAT_TIMER_GM_PAUSE_ACK, 0);
+}

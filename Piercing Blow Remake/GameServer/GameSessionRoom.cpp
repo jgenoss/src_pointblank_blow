@@ -1335,3 +1335,258 @@ void GameSession::OnRoomRequestMainChangeWhoReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	m_pRoom->SendToAll(&packet);
 }
+
+// ============================================================================
+// Batch 18 - Room extras
+// ============================================================================
+
+void GameSession::OnRoomNewGetSlotInfoReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_SLOTINFO_ACK, -1);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[1024];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_NEW_GET_SLOTINFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	for (int i = 0; i < SLOT_MAX_COUNT && offset < 900; i++)
+	{
+		const GameSlotInfo& slot = m_pRoom->GetSlotInfo(i);
+		memcpy(buffer + offset, &slot.ui8State, 1);		offset += 1;
+		memcpy(buffer + offset, &slot.ui8Team, 1);			offset += 1;
+		memcpy(buffer + offset, &slot.i32SessionIdx, 4);	offset += 4;
+		memcpy(buffer + offset, &slot.ui8Rank, 1);			offset += 1;
+		memcpy(buffer + offset, &slot.ui32ClanIdx, 4);		offset += 4;
+		memcpy(buffer + offset, &slot.ui32ClanMark, 4);	offset += 4;
+		memcpy(buffer + offset, &slot.bIsObserver, 1);		offset += 1;
+
+		char nick[32] = {};
+		GameSession* pSlotSess = m_pRoom->GetSlotSession(i);
+		if (pSlotSess)
+			strncpy(nick, pSlotSess->GetNickname(), 31);
+		memcpy(buffer + offset, nick, 32);					offset += 32;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnRoomNewGetSlotOneInfoReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || i32Size < (int)sizeof(uint8_t))
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_ACK, -1);
+		return;
+	}
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	if (slotIdx >= SLOT_MAX_COUNT)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_ACK, -2);
+		return;
+	}
+
+	const GameSlotInfo& slot = m_pRoom->GetSlotInfo(slotIdx);
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+	memcpy(buffer + offset, &slot.ui8State, 1);			offset += 1;
+	memcpy(buffer + offset, &slot.ui8Team, 1);			offset += 1;
+	memcpy(buffer + offset, &slot.i32SessionIdx, 4);	offset += 4;
+	memcpy(buffer + offset, &slot.ui8Rank, 1);			offset += 1;
+	memcpy(buffer + offset, &slot.ui32ClanIdx, 4);		offset += 4;
+	memcpy(buffer + offset, &slot.ui32ClanMark, 4);	offset += 4;
+	memcpy(buffer + offset, &slot.bIsObserver, 1);		offset += 1;
+
+	char nick[32] = {};
+	GameSession* pSlotSess = m_pRoom->GetSlotSession(slotIdx);
+	if (pSlotSess)
+		strncpy(nick, pSlotSess->GetNickname(), 31);
+	memcpy(buffer + offset, nick, 32);					offset += 32;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnRoomNewGetPlayerInfoReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || i32Size < (int)sizeof(uint8_t))
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -1);
+		return;
+	}
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	if (slotIdx >= SLOT_MAX_COUNT)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -2);
+		return;
+	}
+
+	GameSession* pTarget = m_pRoom->GetSlotSession(slotIdx);
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -3);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+
+	int64_t uid = pTarget->GetUID();
+	memcpy(buffer + offset, &uid, sizeof(int64_t));		offset += sizeof(int64_t);
+
+	char nick[64] = {};
+	strncpy(nick, pTarget->GetNickname(), 63);
+	memcpy(buffer + offset, nick, 64);					offset += 64;
+
+	int32_t level = pTarget->GetLevel();
+	int32_t rankId = pTarget->GetRankId();
+	int32_t kills = pTarget->GetKills();
+	int32_t deaths = pTarget->GetDeaths();
+	int32_t headshots = pTarget->GetHeadshots();
+	int32_t wins = pTarget->GetWins();
+	int32_t losses = pTarget->GetLosses();
+	int32_t clanId = pTarget->GetClanId();
+
+	memcpy(buffer + offset, &level, 4);		offset += 4;
+	memcpy(buffer + offset, &rankId, 4);	offset += 4;
+	memcpy(buffer + offset, &kills, 4);		offset += 4;
+	memcpy(buffer + offset, &deaths, 4);	offset += 4;
+	memcpy(buffer + offset, &headshots, 4);	offset += 4;
+	memcpy(buffer + offset, &wins, 4);		offset += 4;
+	memcpy(buffer + offset, &losses, 4);	offset += 4;
+	memcpy(buffer + offset, &clanId, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnRoomChangeHiddenSlotReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK, -1);
+		return;
+	}
+
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK, -1);
+		return;
+	}
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	uint8_t hidden = *(uint8_t*)(pData + 1);
+
+	if (slotIdx >= SLOT_MAX_COUNT)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK, -2);
+		return;
+	}
+
+	if (!m_pRoom->IsSlotEmpty(slotIdx))
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK, -3);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t resultVal = 0;
+	memcpy(buffer + offset, &resultVal, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);					offset += 1;
+	memcpy(buffer + offset, &hidden, 1);					offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnRoomTeamBalanceReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_TEAM_BALANCE_ACK, -1);
+		return;
+	}
+
+	int assignTeam = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (!m_pRoom->IsSlotEmpty(i))
+		{
+			GameSlotInfo& slot = m_pRoom->GetSlotInfoMutable(i);
+			slot.ui8Team = (uint8_t)(assignTeam % 2);
+			assignTeam++;
+		}
+	}
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_TEAM_BALANCE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint8_t team = m_pRoom->GetSlotInfo(i).ui8Team;
+		memcpy(buffer + offset, &team, 1);	offset += 1;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}

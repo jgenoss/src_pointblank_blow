@@ -632,6 +632,52 @@ private:
 	void			OnCheatReduceRoundTimeReq(char* pData, INT32 i32Size);
 	void			OnCheatTeleportReq(char* pData, INT32 i32Size);
 
+	// Batch 18 - Battle extras (GameSessionBattle.cpp)
+	void			OnBattleStartCountdownReq(char* pData, INT32 i32Size);
+	void			OnBattleStartLoadingReq(char* pData, INT32 i32Size);
+	void			OnBattlePrestartBattleDServerReq(char* pData, INT32 i32Size);
+	void			OnBattlePrestartBattleRelayReq(char* pData, INT32 i32Size);
+	void			OnBattleResultReq(char* pData, INT32 i32Size);
+	void			OnBattleRespawnForAIReq(char* pData, INT32 i32Size);
+	void			OnBattleNotifyKickVoteResultReq(char* pData, INT32 i32Size);
+	void			OnBattleNotifyKickVoteCancelReq(char* pData, INT32 i32Size);
+
+	// Batch 18 - Room extras (GameSessionRoom.cpp)
+	void			OnRoomNewGetSlotInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomNewGetSlotOneInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomNewGetPlayerInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeHiddenSlotReq(char* pData, INT32 i32Size);
+	void			OnRoomTeamBalanceReq(char* pData, INT32 i32Size);
+
+	// Batch 18 - Lobby extras (GameSessionLobby.cpp)
+	void			OnLobbyCheckNickNameReq(char* pData, INT32 i32Size);
+	void			OnLobbyCreateNickNameReq(char* pData, INT32 i32Size);
+	void			OnLobbyNewCreateRoomReq(char* pData, INT32 i32Size);
+	void			OnLobbyNewJoinRoomReq(char* pData, INT32 i32Size);
+	void			OnLobbyNewViewUserItemReq(char* pData, INT32 i32Size);
+
+	// Batch 18 - Base extras (GameSession.cpp)
+	void			OnBaseUserEnterReq(char* pData, INT32 i32Size);
+	void			OnBaseUserLeaveReq(char* pData, INT32 i32Size);
+	void			OnBaseGameServerStateReq(char* pData, INT32 i32Size);
+	void			OnBaseReadyHeartBitReq(char* pData, INT32 i32Size);
+	void			OnBaseGetMyClanReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUserInfoAllReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUserInfoAllDBReq(char* pData, INT32 i32Size);
+	void			OnBaseEnterPassReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUidLobbyReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUidRoomReq(char* pData, INT32 i32Size);
+
+	// Batch 18 - Cheat extras (GameSessionGM.cpp)
+	void			OnCheatClanWarMatchingPointReq(char* pData, INT32 i32Size);
+	void			OnCheatClanWarResultReq(char* pData, INT32 i32Size);
+	void			OnCheatDamageGameObjectReq(char* pData, INT32 i32Size);
+	void			OnCheatDetectHackOffReq(char* pData, INT32 i32Size);
+	void			OnCheatItemAuthReq(char* pData, INT32 i32Size);
+	void			OnCheatMedalCommandReq(char* pData, INT32 i32Size);
+	void			OnCheatReduceTsEventReq(char* pData, INT32 i32Size);
+	void			OnCheatTimerGMPauseReq(char* pData, INT32 i32Size);
+
 	// GM helpers
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
