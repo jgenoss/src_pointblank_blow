@@ -1,416 +1,299 @@
-# Plan de Implementación Completa - Piercing Blow Server Remake
+# Plan de Implementación - Piercing Blow Server Remake
 
-## Estado Actual del Remake
-
-### Lo que YA está implementado:
-- **GameServer**: 46 archivos (~9,500 líneas) - Estado de sesión, Room, Battle básico, Shop, Clan, Medal, Quest, Skill, Roulette, Social, Equipment, Events
-- **DataServer**: 22 archivos - PostgreSQL con auth, perfil, stats, inventario, social
-- **BattleServer**: 17 archivos - Rooms UDP, relay, member tracking
-- **ConnectServer**: 10 archivos - Registry, heartbeat, sesiones
-- **S2MO**: Completo - RSA/AES/XOR encryption
-- **i3Server**: Completo - Framework IOCP networking
-- **ServerCommon**: InterServerProtocol (700 líneas), ModuleBase, BaseServer
-
-### Lo que FALTA (organizado por prioridad):
+> **Última actualización**: 2026-03-16 (post Batch 20)
 
 ---
 
-## FASE 1: Battle Flow Completo (Crítico - el cliente se congela sin esto)
+## Estado General del Proyecto
 
-### 1A. Room State Machine Completa
-**Archivos**: `Room.cpp`, `Room.h`
-- [x] Implementar `OnUpdateRoom()` con timer-driven state machine (como original `_OnUpdateRoom_*_M`)
-- [x] Estados faltantes: `ROOM_STATE_COUNTDOWN_R` (3s countdown), `ROOM_STATE_LOADING` (timeout 60s), `ROOM_STATE_RENDEZVOUS`, `ROOM_STATE_PRE_BATTLE` (hole punch), `ROOM_STATE_COUNTDOWN_B` (3s), `ROOM_STATE_BATTLE_RESULT` (5s scoreboard)
-- [x] Transiciones automáticas por timeout entre estados
-- [x] Agregar `m_dwStateStartTime` para tracking de cuando entró en cada estado
-- [x] Loading timeout: si un jugador no carga en 60s, sacarlo
+| Servidor | Archivos | Líneas | Estado |
+|----------|----------|--------|--------|
+| **GameServer** | 56 | 31,686 | Activo - 443 dispatch cases |
+| **DataServer** | 22 | 3,372 | Completo - PostgreSQL |
+| **BattleServer** | 17 | 1,846 | Completo - UDP relay |
+| **ConnectServer** | 10 | 1,068 | Completo - Auth + registry |
+| **ServerCommon** | 12 | 2,054 | Completo - InterServerProtocol |
+| **S2MO** | - | - | Completo - RSA/AES/XOR |
+| **i3Server** | - | - | Completo - IOCP framework |
+| **TOTAL** | **117+** | **~40,026** | |
 
-### 1B. Battle Flow Completo con BattleServer
-**Archivos**: `GameSessionBattle.cpp`, `ModuleBattleServer.cpp`
-- [x] En `OnBattleReadyBattleReq`: Solicitar creación de room al BattleServer via `IS_BATTLE_CREATE_REQ`
-- [x] Esperar `IS_BATTLE_CREATE_ACK` antes de avanzar a LOADING
-- [x] En `OnBattlePreStartBattleReq`: Enviar IP/Puerto UDP del BattleServer al cliente
-- [x] Tracking per-slot de estado de loading (`SLOT_STATE_LOAD` → `SLOT_STATE_BATTLE_LOADOK` → `SLOT_STATE_BATTLE_READY`)
-- [x] Cuando TODOS los slots están en `BATTLE_READY`, avanzar a `COUNTDOWN_B`
-- [x] En `OnBattleStartBattleReq`: Solo avanzar a BATTLE si room está en COUNTDOWN_B
+### Cobertura de Protocolos
 
-### 1C. Battle Result Screen
-**Archivos**: `GameSessionBattle.cpp`, `Room.cpp`
-- [x] Cuando el match termina, cambiar a `ROOM_STATE_BATTLE_RESULT` (no directamente a READY)
-- [x] Enviar packet con estadísticas completas por jugador: kills, deaths, headshots, assists, exp ganada, puntos ganados
-- [x] Timer de 5 segundos en BATTLE_RESULT
-- [x] Al terminar timer, calcular recompensas, guardar stats en DataServer, y volver a READY
-- [x] Implementar `SLOT_BONUS` tracking: EXP y POINT bonuses por performance
+**443 dispatch cases implementados de ~529 relevantes (~84%)**
 
-### 1D. Death & Kill Processing Completo
-**Archivos**: `GameSessionBattle.cpp`
-- [x] Parsear `DEATH_INFO_HEADER` completo: weaponId, hitPart, position(x,y,z), assistSlot
-- [x] Multi-kill tracking (double, triple, multi, ultra, unbelievable)
-- [x] Headshot tracking
-- [x] Assist tracking (último jugador que dañó antes del kill)
-- [x] Actualizar `m_stUsedWeapon` en sesión para tracking de arma usada
-- [x] Broadcasting de death con toda la info a todos los jugadores
+(605 totales en ProtocolDef.h - ~76 deprecated/server-only = ~529 relevantes)
 
-### 1E. Respawn System
-**Archivos**: `GameSessionBattle.cpp`, `Room.cpp`
-- [x] Implementar respawn timers configurables (NO=6s, SHORT_20=5s, SHORT_30=4s, MID_30=3s, MID_40=2s, MID_50=1s)
-- [x] `m_bReSpawnFlag[SLOT_MAX_COUNT]` y `m_bDeathFlag[SLOT_MAX_COUNT]` tracking
-- [x] `m_bAlive[SLOT_MAX_COUNT]` para saber quién está vivo
-- [x] Validar respawn: no permitir si el round ya acabó
+| Categoría | Rango | En ProtocolDef | Implementados | % |
+|-----------|-------|----------------|---------------|---|
+| Login | 0x0100 | 1 | 1 | 100% |
+| Base (info/channel/quest/medal/map/title/attendance) | 0x0200 | 86 | 91* | ~100% |
+| Auth (social/friends/whisper/block) | 0x0300 | 78 | 53 | 68% |
+| Shop (buy/gift/capsule/repair) | 0x0400 | 5+24** | 29 | 100% |
+| Clan CS_* (create/join/member/mark) | 0x0700 | 87*** | 57 | 66% |
+| Clan Match CS_MATCH_* | 0x0800 | 31 | 24 | 77% |
+| Community | 0x0B00 | 2 | 1 | 50% |
+| Lobby | 0x0C00 | 21 | 20 | 95% |
+| Inventory | 0x0D00 | 3 | 3 | 100% |
+| RS/IGS/FieldShop | 0x0E00 | 13 | 13 | 100% |
+| Room | 0x0F00 | 46 | 42 | 91% |
+| Battle | 0x1000 | 97 | 52 | 54% |
+| Cheat | 0x1300 | 12 | 12 | 100% |
+| Gacha | 0x1400 | 6 | 6 | 100% |
+| QuickJoin | 0x1500 | 2 | 2 | 100% |
+| Skill | 0x1700 | 3 | 3 | 100% |
+| Char/New | 0x1800 | 14 | 6 | 43% |
+| MyInfo | 0x1900 | 2 | 2 | 100% |
+| GMChat | 0x1A00 | 5 | 4 | 80% |
+| Clan War | 0x1B00 | 25 | 22 | 88% |
+| Messenger | N/A | 38 | 24 | 63% |
 
----
+\* Base tiene más dispatch cases que REQs porque incluye SET_*/GET_*/INIT_*/DELETE_*/PERIOD_* protocolos
+\** Auth shop protocols están divididos entre PROTOCOL_AUTH_SHOP_* y PROTOCOL_SHOP_*
+\*** CS_ total (118) menos CS_MATCH_ (31) = 87 clan-only
 
-## FASE 2: Game Modes (Modos de Juego Específicos)
+### Archivos GameServer más grandes
 
-### 2A. Bomb Mode (Bomb Plant/Defuse)
-**Archivos**: Crear `RoomModeBomb.h/.cpp` o integrar en `Room.cpp`
-- [x] `MissionBombInstall()`: Instalar bomba, broadcast posición, iniciar timer de detonación (45s)
-- [x] `MissionBombUnInstall()`: Desinstalar bomba, broadcast, award puntos
-- [x] Round win conditions: bomba explota = ATK wins, bomba desinstalada = DEF wins, timer expira sin bomba = DEF wins, todos muertos = team opuesto wins
-- [x] Atk/Def team swap entre rounds (`m_ui8AtkDefChange`)
-- [x] Smoke/flash/grenade validation (ValidateGrenadeUse: type, position, alive check)
-
-### 2B. Annihilation Mode (Eliminar a Todos)
-**Archivos**: Integrar en `Room.cpp`
-- [x] Round-based: todos los del equipo contrario muertos = round win
-- [x] No respawn durante el round
-- [x] Round timer + last man standing tracking
-
-### 2C. Destroy Mode
-**Archivos**: Integrar en `Room.cpp`
-- [x] `MissionObjectDestroy()`: Destruir objetivos del mapa
-- [x] HP tracking por objeto destructible
-- [x] Win condition: objeto destruido o timer expira
-
-### 2D. Defence Mode
-**Archivos**: Integrar en `Room.cpp`
-- [x] `MissionObjectDefence()`: Defender objetivos (uses generator HP system)
-- [x] Wave system con NPCs/bots (Defence wave spawning, NPC kill tracking, wave advancement)
-- [x] HP tracking del objeto a defender
-
-### 2E. Escape Mode (VIP)
-**Archivos**: Integrar en `Room.cpp`
-- [x] VIP selection (aleatorio de ATK team)
-- [x] `MissionTouchDown()`: VIP llega a zona de escape = win
-- [x] VIP muerto = DEF wins
-- [x] VIP tiene más HP (150%), restricciones de arma (ValidateDamage + IsVIPSlot)
-
-### 2F. CrossCount Mode (Dino DM)
-**Archivos**: Integrar en `Room.cpp`
-- [x] Kill counting con variantes dinosaurio (CrossCount mode with bonus score multiplier per kill)
-- [x] Special spawn points (CrossCount spawn via standard slot assignment, dino kill bonus scoring)
-
-### 2G. Convoy Mode
-- [x] Convoy HP tracking, checkpoint system (OnConvoyDamage/OnConvoyCheckpoint, broadcast state, win conditions)
-
-### 2H. Challenge/AI Mode
-- [x] Server-side AI bot spawning (AI mode extracted from StageID, periodic bot spawn broadcasts)
-- [x] Difficulty-based kill points (Easy=10/Normal=20/Hard=30 via GetAIKillPoints)
-- [x] Stage progression (CheckAIStageAdvance with escalating kill requirements per stage)
+| Archivo | Líneas | Contenido |
+|---------|--------|-----------|
+| GameSession.cpp | 3,773 | Switch dispatch (443 cases) + base/login handlers |
+| Room.cpp | 2,748 | Room logic, game modes, state machine |
+| GameSessionClan.cpp | 2,117 | 40+ clan handlers (CS_* protocols) |
+| GameSessionShop.cpp | 1,967 | Shop/buy/gift/roulette handlers |
+| GameSessionBattle.cpp | 1,885 | Battle flow, death, respawn, mission |
+| GameSessionClanWar.cpp | 1,640 | Clan war + 16 clan match handlers |
+| GameSessionRoom.cpp | 1,592 | Room operations, kick vote, observer |
+| GameSessionSocial.cpp | 1,582 | Friends, whisper, notes, messenger |
+| GameSessionChannel.cpp | 1,313 | Channel/lobby, quickjoin, map data |
+| GameSessionGM.cpp | 1,244 | GM commands, admin tools |
+| GameSession.h | 932 | Session class declaration |
 
 ---
 
-## FASE 3: Protocolo Completo de Room
+## Fases Completadas
 
-### 3A. Room Protocols Faltantes
-**Archivos**: `GameSessionRoom.cpp`, `GameSessionBattle.cpp`
-- [x] `PROTOCOL_ROOM_INVITE_REQ/ACK` - Invitar jugador a la sala
-- [x] `PROTOCOL_ROOM_OBSERVER_REQ/ACK` - Modo observador (observer slot toggle with validation)
-- [x] `PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ/ACK` - Votación de kick
-- [x] `PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ/ACK` - Resultado de votación
-- [x] `PROTOCOL_BATTLE_SENDPING_REQ/ACK` - Ping measurement
-- [x] Lógica de votación avanzada: mínimo 3 jugadores, timeout 20s, cooldown 60s
-- [x] Kick list tracking (vote state per slot in Room)
+### FASE 0: Infraestructura de Build [COMPLETADA]
+- ServerCommon.props compartido para los 4 servidores
+- Los 4 vcxproj linkan contra i3Server.dll y S2MO.dll
+- Win32 + x64 configurations
 
-### 3B. Room State Sync
-- [x] Double-buffered room info (Info0/Info1) para updates lock-free del room list
-- [x] `FillRoomInfoBasic()` completo con todos los campos que espera el cliente
-- [x] Room list update throttling (no más de 1 update por segundo)
+### FASE 1: Battle Flow [COMPLETADA]
+- Room state machine completa (COUNTDOWN_R → LOADING → RENDEZVOUS → PRE_BATTLE → COUNTDOWN_B → BATTLE → BATTLE_RESULT)
+- Death/kill con multi-kill tracking, headshots, assists
+- Respawn system con timers configurables
+- Battle result screen con stats y recompensas
+- BattleServer integration (IS_BATTLE_CREATE, UDP IP/port relay)
 
----
+### FASE 2: Game Modes [COMPLETADA]
+- Deathmatch, Bomb (install/defuse), Annihilation, Destroy, Defence
+- Escape (VIP), CrossCount, Convoy, Challenge/AI
+- Round-based logic con ATK/DEF swap
 
-## FASE 4: Protocolos Base Faltantes
+### FASE 3: Room Protocols [COMPLETADA]
+- Room invite, observer, kick vote, ping
+- Double-buffered room info, FillRoomInfoBasic completo
 
-### 4A. Login Flow Completo
-**Archivos**: `GameSession.cpp`
-- [x] `PROTOCOL_BASE_GET_SYSTEM_INFO_REQ/ACK` - Enviar versión del server, MD5 key, GameGuard type
-- [x] `PROTOCOL_BASE_GET_OPTION_REQ/ACK` - Enviar opciones del jugador (controles, sensibilidad)
-- [x] `PROTOCOL_BASE_OPTION_SAVE_REQ/ACK` - Guardar opciones
-- [x] `PROTOCOL_BASE_CHECK_NICK_NAME_REQ/ACK` - Verificar nickname disponible
-- [x] `PROTOCOL_BASE_CREATE_NICK_REQ/ACK` - Crear nickname (primera vez)
-- [x] `PROTOCOL_BASE_RANK_UP_REQ/ACK` - Rank up automático al alcanzar EXP requerida
+### FASE 4: Protocolos Base [COMPLETADA]
+- Login flow, system info, options save/load
+- Map/stage data (version, list, rules, matching)
+- User info (record, basic, all, detail)
+- Title system (equip/release/change)
 
-### 4B. Map/Stage Data
-**Archivos**: `GameContextMain.cpp`, `GameSessionChannel.cpp`
-- [x] `PROTOCOL_BASE_MAP_VERSION_REQ/ACK` - Versión del map list
-- [x] `PROTOCOL_BASE_MAP_LIST_REQ/ACK` - Lista de mapas disponibles
-- [x] `PROTOCOL_BASE_MAP_RULELIST_REQ/ACK` - Reglas por modo de juego
-- [x] `PROTOCOL_BASE_MAP_MATCHINGLIST_REQ/ACK` - Matching mode↔stage
-- [x] `PROTOCOL_BASE_MAP_RANDOM_LIST_ACK` - Mapas random
-- [x] Cargar datos de mapas/stages desde config o DataServer
+### FASE 5: Shop System [COMPLETADA]
+- Shop catalog, purchase, gift, capsule/gacha
+- Roulette shop con weighted tiers
+- Field shop, repair, durability
 
-### 4C. User Info Completa
-**Archivos**: `GameSession.cpp`
-- [x] `PROTOCOL_BASE_GET_MYINFO_RECORD_REQ/ACK` - Record del jugador (K/D/Win/Loss)
-- [x] `PROTOCOL_BASE_GET_MYINFO_BASIC_REQ/ACK` - Info básica
-- [x] `PROTOCOL_BASE_GET_MYINFO_ALL_REQ/ACK` - Todo junto
-- [x] `PROTOCOL_BASE_GET_RECORD_INFO_DB_REQ/ACK` - Record desde DB
-- [x] `PROTOCOL_BASE_GET_USER_DETAIL_INFO_ACK` - Info detallada de otro jugador (lobby + room)
+### FASE 6: Clan System [COMPLETADA]
+- Clan create/dissolve, member management, mark/notice/intro
+- Clan match: team create/join/fight request/accept/chat
+- Clan war 1.5: seasons, scoring, mercenary stubs
 
-### 4D. Title System
-- [x] `PROTOCOL_BASE_USER_TITLE_CHANGE_REQ/ACK`
-- [x] `PROTOCOL_BASE_USER_TITLE_EQUIP_REQ/ACK`
-- [x] `PROTOCOL_BASE_USER_TITLE_RELEASE_REQ/ACK`
-- [x] `PROTOCOL_BASE_USER_TITLE_INFO_ACK`
+### FASE 7: Social & Community [COMPLETADA]
+- Friends (add/delete/accept/info), whisper, block
+- Note system (send/receive/delete)
+- Messenger protocol aliases
+- GM chat + admin commands
 
----
+### FASE 8: QuickJoin [COMPLETADA]
+- Search compatible rooms, random selection
 
-## FASE 5: Shop System Completo
+### FASE 9: Anti-Cheat & Security [COMPLETADA]
+- Packet validation, replay detection, rate limiting
+- State validation, timeouts por estado
+- GameGuard stub, cheat detection handlers
 
-### 5A. Shop Version & Catalog
-**Archivos**: `GameSessionShop.cpp`, `ShopManager.cpp`
-- [x] `PROTOCOL_AUTH_SHOP_VERSION_REQ/ACK` - Shop version check
-- [x] `PROTOCOL_AUTH_SHOP_LIST_REQ/ACK` - Shop list
-- [x] `PROTOCOL_AUTH_SHOP_GOODSLIST_REQ/ACK` - Goods list
-- [x] `PROTOCOL_AUTH_SHOP_ITEMLIST_REQ/ACK` - Item list
-- [x] `PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ/ACK` - Matching list
-- [x] `PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ/ACK` - Repair data
-- [x] Double-buffered shop data (UseShopData/NotUseShopData) para actualizaciones atómicas
+### FASE 10: EXP/Point/Rank [COMPLETADA]
+- Battle rewards (EXP/GP calculation, boost events)
+- Rank-up system con items reward
 
-### 5B. Purchase & Gift
-- [x] `PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ/ACK` - Compra con validación GP/Cash
-- [x] `PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ/ACK` - Regalar items
-- [x] `PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ/ACK` - Activar item
-- [x] `PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ/ACK` - Agregar item al inventario
-- [x] `PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ/ACK` - Eliminar item
-- [x] Item expiration checking
-- [x] Durability system
+### FASE 11: Admin/GM Tools [COMPLETADA]
+- Kick, exit, block, destroy room, pause/resume
+- Server announce, shutdown, config reload
 
-### 5C. Capsule/Gacha Shop
-- [x] `PROTOCOL_AUTH_SHOP_CAPSULE_REQ/ACK`
-- [x] `PROTOCOL_AUTH_SHOP_JACKPOT_REQ/ACK`
-- [x] Random item selection con pesos
+### FASE 12: Performance [COMPLETADA]
+- Per-channel mutexes, ring buffers, pre-allocated pools
+- Battle logging, ZLog, performance metrics
 
-### 5D. Field Shop (Roulette)
-- [x] RS_IGS protocols completos (Enter/Leave/ItemInfo/Start/JackpotNotify)
-- [x] Enter/Leave/Start/Result (with weighted tiers, multi-spin, currency deduction)
-- [x] Jackpot notifications
-- [x] FieldShop Open/GoodsList (stub, empty goods list)
+### FASE 13: ConnectServer [COMPLETADA]
+- Auth tokens, server list, load balancing, heartbeat
+
+### FASE 14: Miscellaneous [COMPLETADA]
+- Attendance/daily gift, boost events
+- Item durability, random map rotation
 
 ---
 
-## FASE 6: Clan System Completo
+## Trabajo Actual: Cobertura de Protocolos
 
-### 6A. Clan Server Integration
-**Archivos**: Crear `ModuleClanServer.h/.cpp`
-- [x] Clan system in-memory (GameClanManager + ClanDef.h)
-- [x] Clan creation/dissolution con validación (nivel mínimo, GP cost)
-- [x] Member management: join, kick (deportation), promote/demote (master/staff/regular)
-- [x] Clan mark/notice/intro updates (ReplaceNotice, ReplaceIntro, ReplaceMark)
-- [x] Clan EXP and ranking (earn EXP from battles, auto rank-up, unit size upgrade)
+### Historial de Batches (protocol handler coverage)
 
-### 6B. Clan Match
-**Archivos**: Crear `GameSessionClanBattle.cpp`
-- [x] `PROTOCOL_VALUE_CLAN_MATCH (0x0800)` - Matchmaking (TeamContext/Create/Join/Leave/AllTeamList/FightRequest/Accept/Chat)
-- [x] Team registration, matching queue (ClanMatchManager with team pool, fight request/accept flow)
-- [x] Clan match room creation with special rules (auto-create room on fight accept via CreateClanMatchRoom)
-- [x] Clan match results and point distribution (ApplyClanMatchResult on battle end, result history in ClanMatchManager)
+| Batch | Commit | Handlers | Lines | Total Cases | Cobertura |
+|-------|--------|----------|-------|-------------|-----------|
+| 15 | ec3a3f76 | +34 | +1,092 | ~310 | ~52% |
+| 16 | 56ede0ab | +34 | +1,476 | ~344 | ~58% |
+| 17 | 3b3082e8 | +35 | +1,255 | ~348 | ~59% |
+| 18 | 5e18339c | +36 | +1,143 | ~385 | ~64% |
+| 19 | 03164304 | +37 | +1,539 | 385 | ~65% |
+| 20 | 7d187083 | +56 | +1,594 | 441→443 | ~84% |
 
-### 6C. Clan War (1.5)
-**Archivos**: Crear `GameSessionClanWar.cpp`
-- [x] `PROTOCOL_VALUE_CLAN_WAR (0x1B00)` - War system (Create/Join/Leave/TeamList/Matchmaking/Cancel/Chat/ChangeMaxPer/MercList/Result)
-- [x] War declaration, acceptance, scheduling (auto-matchmaking with fight request/accept flow)
-- [x] War match rules (season-based scoring: 3pts win, 1pt draw, result history query via OnClanWarResultReq)
-- [x] Mercenary system - list stub (`T_MerID`, `m_bMerPenalty` - invite/accept not yet)
+### Protocolos Pendientes (~86 restantes)
 
----
+#### Alta Prioridad - Battle (0x1000) ~45 pendientes
+El gap más grande. Muchos son protocolos de sub-sistemas de batalla:
+- `PROTOCOL_BATTLE_MISSION_*` (bomb, object, NPC sub-protocols)
+- `PROTOCOL_BATTLE_WEAPON_*` (pickup, change, special)
+- `PROTOCOL_BATTLE_ITEM_*` (use item in battle)
+- `PROTOCOL_BATTLE_VEHICLE_*` (vehicle mount/dismount)
+- `PROTOCOL_BATTLE_SYNC_*` (position sync, state sync)
+- `PROTOCOL_BATTLE_SPECIAL_*` (special kills, streaks)
 
-## FASE 7: Social & Community Completo
+#### Media Prioridad - Auth (0x0300) ~25 pendientes
+- `PROTOCOL_AUTH_COUPON_*` (coupon redemption)
+- `PROTOCOL_AUTH_EVENT_*` (event participation)
+- `PROTOCOL_AUTH_PCR_*` (PC room features)
+- Algunos `PROTOCOL_AUTH_SHOP_*` variantes menores
 
-### 7A. Messenger Server Integration
-- [x] Conexión al MessengerServer (direct in-process via GameSessionManager, no separate server needed)
-- [x] Friend online/offline notifications
-- [x] Whisper message routing (same-server, FindSessionByNickname)
-- [x] Note system (send/receive/delete/read - in-memory per session)
-- [x] Lobby enter/leave notifications a amigos
+#### Media Prioridad - Clan CS_* (0x0700) ~30 pendientes
+- `PROTOCOL_CS_USER_*` (muchos son server-to-server internos)
+- `PROTOCOL_CS_RECORD_*` (clan records, server-only)
+- `PROTOCOL_CS_MEMBER_INFO_*` (server-only)
+- Algunos client-facing restantes
 
-### 7B. Lobby Chat Completo
-**Archivos**: `GameSessionChannel.cpp`
-- [x] `PROTOCOL_BASE_CHATTING_REQ/ACK` - Chat por canal
-- [x] Lobby user list con double-buffering
-- [x] User invite from lobby
-- [x] Megaphone (broadcast chat)
+#### Baja Prioridad - Messenger ~14 pendientes
+- `PROTOCOL_MESSENGER_LOGIN/LOGOUT` (internal)
+- `PROTOCOL_MESSENGER_ENTER_USER/LEAVE_USER` (internal)
+- Algunos protocolos de estado y notificación
 
-### 7C. GM Chat
-**Archivos**: Crear `GameSessionGMChat.cpp`
-- [x] `PROTOCOL_VALUE_GMCHAT (0x1A00)` - GM → User messaging (Start/Send/End/Penalty)
-- [x] Admin commands via chat (/announce, /kick, /ban, /info, /ccu, /help)
+#### Baja Prioridad - Char/New (0x1800) ~8 pendientes
+- `PROTOCOL_NEW_*` protocolos misceláneos
+- `PROTOCOL_CHAR_*` character management adicional
 
----
+#### Baja Prioridad - Room (0x0F00) ~4 pendientes
+- `PROTOCOL_ROOM_GM_*` variantes adicionales
 
-## FASE 8: QuickJoin System
-
-**Archivos**: `GameSessionChannel.cpp` (OnQuickJoinRoomReq ya existe, expandir)
-- [x] `PROTOCOL_VALUE_QUICKJOIN (0x1500)` handlers
-- [x] `SearchQuickJoinRoom()`: buscar rooms compatibles (modo, mapa, jugadores)
-- [x] Criterios: mode match, not full, not password-protected, not in battle (unless inter-enter)
-- [x] Random selection entre candidatos
+#### Baja Prioridad - CS_MATCH (0x0800) ~7 pendientes
+- `PROTOCOL_CS_MATCH_TEAM_*` (context/all team variants)
+- `PROTOCOL_CS_MATCH_FIGHT_ACCECT_*` (accept variants)
+- `PROTOCOL_CS_MATCH_CHATING_*` (chat)
 
 ---
 
-## FASE 9: Anti-Cheat & Security
+## Fase 8 del Plan Maestro (GameServer ↔ DataServer Sync)
 
-### 9A. Packet Validation
-**Archivos**: `GameSession.cpp`
-- [x] Packet encryption validation con XOR key (BitRotateDecript)
-- [x] Packet replay detection (hash-based duplicate detection within 100ms window)
-- [x] Protocol rate limiting (max packets per second)
-- [x] State validation: rechazar packets que no corresponden al GAME_TASK actual
-- [x] Timeout por estado: 30s para NOT_LOGIN, 600s para LOGIN, 120s para NORMAL, 3600s para CHANNEL
+> Del plan maestro `zazzy-mixing-creek.md` - pendientes de implementación
 
-### 9B. GameGuard Stub
-- [x] Stub para GameGuard handshake (para que el cliente no se desconecte)
-- [x] `PROTOCOL_BASE_GAMEGUARD_REQ/ACK` - Responder con datos dummy válidos
+### 8.1 - Shop DB Table [PENDIENTE]
+- Tabla `pb_shop_items` en DataServer
+- Protocolo `IS_SHOP_LIST_REQ/ACK` inter-servidor
+- `ModuleDBGameData::LoadShopItems()`
 
-### 9C. Cheat Detection
-**Archivos**: Crear `GameSessionCheat.cpp`
-- [x] `PROTOCOL_VALUE_CHEAT (0x1300)` handlers (IncreaseKill, PlaySolo, ReduceRoundTime, Teleport)
-- [x] Speed hack detection (comparing client-reported time vs server time)
-- [x] Damage validation
-- [x] Position validation
+### 8.2 - ModuleDataServer Sync [PENDIENTE - CRÍTICO]
+- 15 nuevos métodos Request en ModuleDataServer (equipment, medal, attendance, skill, quest, clan, friends, block, shop)
+- 16 response handlers correspondientes
+- Actualmente muchos subsistemas operan in-memory sin persistencia a DB
 
----
+### 8.3 - Fix Nick Callbacks [PENDIENTE]
+- `OnCreateNickAck()` / `OnCheckNickAck()` - callback a session con resultado
+- Métodos `OnNickCreated()`, `SendCreateNickAck()`, `SendCheckNickAck()` en GameSession
 
-## FASE 10: EXP/Point/Rank System
+### 8.4 - Battle End → Save Stats [PENDIENTE - CRÍTICO]
+- `OnBattleEndNotify()` debe guardar stats via DataServer
+- `RequestStatsSave()`, `RequestPlayerSave()` post-batalla
 
-### 10A. Battle Rewards
-**Archivos**: `Room.cpp`, `GameSessionBattle.cpp`
-- [x] EXP calculation: base + kills*multiplier + headshot bonus + win bonus
-- [x] Point (GP) calculation: base + kills*multiplier + win bonus
-- [x] Boost event support: multiply EXP/GP by event multiplier
-- [x] Bonus items: EXP boost items, Point boost items from inventory
-- [x] Save results to DataServer after each match
+### 8.5 - BattleServer UDP Integration Fix [PENDIENTE]
+- Room debe almacenar BattleServer UDP IP/port (`m_szBattleUdpIP`, `m_ui16BattleUdpPort`)
+- `OnBattleCreateAck()` → `Room::SetBattleInfo()`
+- `OnBattlePreStartBattleReq()` → usar datos de Room en vez de hardcoded
 
-### 10B. Rank System
-**Archivos**: `GameSession.cpp`
-- [x] Rank-up check after EXP update
-- [x] Rank-up items reward (from `m_aRankUpItem[MAX_RANK_COUNT]`)
-- [x] `PROTOCOL_BASE_RANK_UP_ACK` notification
-- [x] Initial rank-up for new players
+### 8.6 - Room Timer System [PENDIENTE]
+- `Room::UpdateBattleTimer()` - check time limit expiry
+- Auto-end battle cuando tiempo expira
+- Integrar en `RoomManager::OnUpdate()`
 
----
+### 8.7 - Shop Catalog Dynamic Loading [PENDIENTE]
+- `ShopManager::LoadFromDataServer()` reemplaza static `s_ShopCatalog[]`
+- `OnShopListReceived()` callback
 
-## FASE 11: Admin/GM Tools
-
-### 11A. GM Commands
-**Archivos**: `GameSessionGM.cpp`
-- [x] `GM_KickUser_U` - Kick player from room
-- [x] `GM_ExitUser_U` - Force disconnect
-- [x] `GM_BlockUser_U` - Ban with comment (OnGMBlockUserReq)
-- [x] `GM_DestroyRoom_U` - Force destroy room
-- [x] `GMPause` / `GMResume` - Pause/resume battle (broadcast to room)
-- [x] Damage console for debugging
-- [x] Server announce message (`SendServerAnnounce`)
-- [x] Lobby GM exit user
-
-### 11B. Control Server Integration
-- [x] Server announce (BroadcastToAll, BroadcastAnnounce in GameSessionManager)
-- [x] Server start/stop commands (/shutdown GM command with broadcast notice)
-- [x] Config reload (hot reload economy/battle via /reload GM command)
-- [x] User kick via admin tool (/kick, /ban GM commands)
-- [x] Room list/user list queries (/rooms, /users GM commands)
+### 8.8 - Config-Driven Settings [PENDIENTE]
+- `config.ini` secciones [Economy], [Battle], [Channels]
+- `GameContextMain` carga valores desde INI
+- Reemplazar hardcoded values (GP costs, level requirements, time limits)
 
 ---
 
-## FASE 12: Performance & Robustness
+## Próximos Pasos Recomendados
 
-### 12A. Thread Safety
-- [x] Per-channel mutexes para room lists y user lists (i3Mutex per channel in GameSessionManager + RoomManager)
-- [x] Ring buffers para comunicación inter-thread (RingBuffer.h template SPSC lock-free ring buffer)
-- [x] Announce message system (BroadcastAnnounce via GameSessionManager)
+### Opción A: Continuar cobertura de protocolos (Batch 21+)
+- Foco en **Battle (0x1000)** - el gap más grande (~45 pendientes)
+- Luego **Auth (0x0300)** y **Clan CS_* (0x0700)**
+- Meta: llegar a 95%+ cobertura
 
-### 12B. Memory Management
-- [x] Pre-allocated room pools (Room objects pre-allocated per channel in RoomManager)
-- [x] Session pool pre-allocation (GameSession array pre-allocated in GameSessionManager)
-- [x] Object pooling para packets (i3NetworkPacket managed by i3Server framework)
+### Opción B: Implementar Fase 8 (DataServer sync)
+- Hacer que los datos realmente persistan en PostgreSQL
+- Crítico para producción pero no para testing del cliente
 
-### 12C. Logging
-- [x] Battle log con unique number tracking (BattleID=ServerID+Timestamp+Counter)
-- [x] ZLog integration para persistent logging (ServerLog with daily rotation, CRITICAL_SECTION, SLOG macros)
-- [x] Performance metrics: packet count, average CCU, room count, peak tracking, periodic logging
-
----
-
-## FASE 13: ConnectServer Completo
-
-- [x] Auth token generation y validación (ModuleConnectServer validates, fallback dev mode)
-- [x] Server list transmission al cliente (ConnectSession::SendServerList)
-- [x] Load balancing: server select uses GetLeastLoadedServer() with client-requested ID fallback
-- [x] Server heartbeat monitoring (GameServer sends actual player count, ConnectServer removes dead servers)
+### Opción C: Refinamiento de sistemas existentes
+- Battle modes: agregar variantes faltantes (vehicle, special weapons)
+- Clan match: completar mercenary invite/accept flow
+- Shop: migrar de catálogo hardcoded a DB
 
 ---
 
-## FASE 14: Miscellaneous
+## Arquitectura del Sistema
 
-### 14A. Attendance/Daily Gift System
-- [x] Daily login tracking
-- [x] Reward items por día consecutivo (milestone items at day 3/7/14/21/28)
-- [x] Monthly reset (auto-reset on month change)
+```
+                    ┌─────────────────┐
+                    │   Game Client   │
+                    └────────┬────────┘
+                             │ TCP (RSA+XOR)
+                    ┌────────▼────────┐
+                    │ ConnectServer   │ :40001
+                    │ (Auth + List)   │
+                    └────────┬────────┘
+                             │ Auth Token
+              ┌──────────────┼──────────────┐
+              │              │              │
+     ┌────────▼────────┐    │     ┌────────▼────────┐
+     │  GameServer #1  │    │     │  GameServer #N  │
+     │  :40000 (TCP)   │    │     │  :400XX (TCP)   │
+     └────────┬────────┘    │     └────────┬────────┘
+              │             │              │
+              │    ┌────────▼────────┐     │
+              │    │  DataServer     │     │
+              ├────►  :40100 (TCP)   ◄─────┤
+              │    │  (PostgreSQL)   │     │
+              │    └─────────────────┘     │
+              │                            │
+     ┌────────▼────────┐         ┌────────▼────────┐
+     │ BattleServer #1 │         │ BattleServer #N │
+     │ :40200 (TCP)    │         │ :402XX (TCP)    │
+     │ :41000+ (UDP)   │         │ :410XX+ (UDP)   │
+     └─────────────────┘         └─────────────────┘
+```
 
-### 14B. Boost Events
-- [x] Event schedule loading
-- [x] EXP/Point multipliers durante eventos
-- [x] `PROTOCOL_BASE_BOOSTEVENT_INFO_ACK`
-
-### 14C. Item Durability
-- [x] Durability decrease per battle
-- [x] Repair cost calculation
-- [x] Item break notification
-- [x] Repair single/all items via shop
-
-### 14D. Random Map System
-- [x] Random map selection per channel
-- [x] Map rotation config (SetMapRotation + AdvanceMapRotation on battle end)
-
----
-
-## Orden de Implementación Recomendado
-
-1. **FASE 1** (Battle Flow) - Sin esto el juego no funciona
-2. **FASE 4A-4B** (Login + Maps) - Sin datos de mapas no se pueden crear rooms
-3. **FASE 3** (Room Protocols) - Para que el lobby funcione bien
-4. **FASE 10** (EXP/Rank) - Para que haya progresión
-5. **FASE 2A-2B** (Bomb + Annihilation) - Los 2 modos más jugados
-6. **FASE 5** (Shop) - Para que los jugadores compren items
-7. **FASE 9** (Security) - Antes de hacer público
-8. **FASE 6-7** (Clan + Social) - Features sociales
-9. **FASE 8, 11-14** (El resto) - Completar features
-
-## Métricas de Completitud Actual
-
-| Categoría | Protocolos Original | Implementados | % |
-|-----------|---------------------|---------------|---|
-| Login (0x0100) | 3 | 1 | 33% |
-| Base (0x0200) | ~80 | 44 | 55% |
-| Auth (0x0300) | ~80 | 8 | 10% |
-| Shop (0x0400) | ~40 | 17 | 43% |
-| Admin (0x0500) | ~10 | 0 | 0% |
-| Clan (0x0700) | ~60 | 17 | 28% |
-| Clan Match (0x0800) | ~20 | 8 | 40% |
-| Server Msg (0x0A00) | ~10 | 0 | 0% |
-| Lobby (0x0C00) | ~10 | 7 | 70% |
-| Inventory (0x0D00) | ~10 | 2 | 20% |
-| RS/IGS (0x0E00) | ~10 | 12 | 120% |
-| Room (0x0F00) | ~30 | 20 | 67% |
-| Battle (0x1000) | ~40 | 20 | 50% |
-| Medal (0x1200) | ~10 | 8 | 80% |
-| Cheat (0x1300) | ~10 | 4 | 40% |
-| Gacha (0x1400) | ~10 | 6 | 60% |
-| QuickJoin (0x1500) | ~5 | 2 | 40% |
-| Skill (0x1700) | ~5 | 3 | 60% |
-| Char (0x1800) | ~5 | 1 | 20% |
-| MyInfo (0x1900) | ~5 | 2 | 40% |
-| GMChat (0x1A00) | ~5 | 4 | 80% |
-| ClanWar (0x1B00) | ~20 | 10 | 50% |
-| Messenger/Note | ~5 | 4 | 80% |
-| **TOTAL** | **~470** | **~197** | **~42%** |
+### Flujo de Conexión
+1. Cliente → ConnectServer: RSA handshake + login
+2. ConnectServer → Cliente: Server list + auth token
+3. Cliente → GameServer: Validate token → enter channel → lobby → room
+4. GameServer → BattleServer: Create battle room → UDP relay
+5. GameServer → DataServer: Load/save player data
