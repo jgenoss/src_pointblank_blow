@@ -335,3 +335,175 @@ void GameSession::OnFieldShopGoodsListReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Gacha System (0x1400)
+// Gacha is a separate random item shop distinct from the roulette (RS_IGS).
+// ============================================================================
+
+void GameSession::OnGachaItemInfoReq(char* pData, INT32 i32Size)
+{
+	// Return gacha item info - empty item list for now
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_GACHA_ITEM_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint16_t itemCount = 0;
+	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGachaShopStateReq(char* pData, INT32 i32Size)
+{
+	// Return gacha shop state: open=1, closed=0
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_GACHA_SHOP_STATE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint8_t isOpen = 1;	// Shop is open
+	memcpy(buffer + offset, &isOpen, 1);					offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGachaEnterReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_GACHA_ENTER_ACK, -1);
+		return;
+	}
+
+	SendSimpleAck(PROTOCOL_GACHA_ENTER_ACK, 0);
+}
+
+void GameSession::OnGachaLeaveReq(char* pData, INT32 i32Size)
+{
+	SendSimpleAck(PROTOCOL_GACHA_LEAVE_ACK, 0);
+}
+
+void GameSession::OnGachaPurchaseReq(char* pData, INT32 i32Size)
+{
+	// Gacha purchase - random item selection
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_GACHA_PURCHASE_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(int))
+	{
+		SendSimpleAck(PROTOCOL_GACHA_PURCHASE_ACK, -2);
+		return;
+	}
+
+	int gachaId = 0;
+	memcpy(&gachaId, pData, sizeof(int));
+
+	// Check if player has enough currency (GP)
+	int gachaCost = 5000;	// Default gacha cost
+	if (m_i32GP < gachaCost)
+	{
+		SendSimpleAck(PROTOCOL_GACHA_PURCHASE_ACK, -3); // Insufficient GP
+		return;
+	}
+
+	// Deduct currency
+	m_i32GP -= gachaCost;
+
+	// Generate random reward item
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_GACHA_PURCHASE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;	// Success
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Reward item info
+	int32_t rewardItemId = 1001 + (rand() % 100);	// Random item ID
+	int32_t rewardCount = 1;
+	int32_t remainGP = m_i32GP;
+	memcpy(buffer + offset, &rewardItemId, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &rewardCount, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &remainGP, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+
+	printf("[Gacha] Purchase - UID=%lld, GachaId=%d, Reward=%d, RemainGP=%d\n",
+		m_i64UID, gachaId, rewardItemId, m_i32GP);
+}
+
+void GameSession::OnGachaGetPurchaseCountReq(char* pData, INT32 i32Size)
+{
+	// Return purchase count for this session
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_GACHA_GET_PURCHASE_COUNT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	int32_t purchaseCount = 0;	// No purchases tracked yet
+	memcpy(buffer + offset, &purchaseCount, sizeof(int32_t)); offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// MyInfo UI State (0x1900)
+// ============================================================================
+
+void GameSession::OnMyInfoEnterReq(char* pData, INT32 i32Size)
+{
+	// Client entered MyInfo screen - acknowledge
+	SendSimpleAck(PROTOCOL_MYINFO_ENTER_ACK, 0);
+}
+
+void GameSession::OnMyInfoLeaveReq(char* pData, INT32 i32Size)
+{
+	// Client left MyInfo screen - acknowledge
+	SendSimpleAck(PROTOCOL_MYINFO_LEAVE_ACK, 0);
+}

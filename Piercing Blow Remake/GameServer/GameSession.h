@@ -470,6 +470,18 @@ private:
 	void			OnFieldShopOpenReq(char* pData, INT32 i32Size);
 	void			OnFieldShopGoodsListReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - Gacha (0x1400) (GameSessionRoulette.cpp)
+	void			OnGachaItemInfoReq(char* pData, INT32 i32Size);
+	void			OnGachaShopStateReq(char* pData, INT32 i32Size);
+	void			OnGachaEnterReq(char* pData, INT32 i32Size);
+	void			OnGachaLeaveReq(char* pData, INT32 i32Size);
+	void			OnGachaPurchaseReq(char* pData, INT32 i32Size);
+	void			OnGachaGetPurchaseCountReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - MyInfo (0x1900) (GameSessionRoulette.cpp)
+	void			OnMyInfoEnterReq(char* pData, INT32 i32Size);
+	void			OnMyInfoLeaveReq(char* pData, INT32 i32Size);
+
 	// Packet handlers - GM Commands (GameSessionGM.cpp - Phase 11A)
 	// GM Chat handlers (GameSessionGMChat.cpp)
 	void			OnGMChatStartReq(char* pData, INT32 i32Size);

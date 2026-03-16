@@ -494,6 +494,18 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CLAN_WAR_MERCENARY_LIST_REQ:		OnClanWarMercenaryListReq(pData, dataSize);	break;
 	case PROTOCOL_CLAN_WAR_RESULT_REQ:				OnClanWarResultReq(pData, dataSize);		break;
 
+	// ---- Gacha (GameSessionRoulette.cpp - 0x1400) ----
+	case PROTOCOL_GACHA_ITEM_INFO_REQ:				OnGachaItemInfoReq(pData, dataSize);		break;
+	case PROTOCOL_GACHA_SHOP_STATE_REQ:				OnGachaShopStateReq(pData, dataSize);		break;
+	case PROTOCOL_GACHA_ENTER_REQ:					OnGachaEnterReq(pData, dataSize);			break;
+	case PROTOCOL_GACHA_LEAVE_REQ:					OnGachaLeaveReq(pData, dataSize);			break;
+	case PROTOCOL_GACHA_PURCHASE_REQ:				OnGachaPurchaseReq(pData, dataSize);		break;
+	case PROTOCOL_GACHA_GET_PURCHASE_COUNT_REQ:		OnGachaGetPurchaseCountReq(pData, dataSize);break;
+
+	// ---- MyInfo (GameSessionRoulette.cpp - 0x1900) ----
+	case PROTOCOL_MYINFO_ENTER_REQ:					OnMyInfoEnterReq(pData, dataSize);			break;
+	case PROTOCOL_MYINFO_LEAVE_REQ:					OnMyInfoLeaveReq(pData, dataSize);			break;
+
 	// ---- GM Commands (GameSessionGM.cpp - Phase 11A) ----
 	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
 	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;
