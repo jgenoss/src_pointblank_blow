@@ -7,6 +7,7 @@
 #include "ModuleDataServer.h"
 #include "ModuleBattleServer.h"
 #include "ClanDef.h"
+#include "ClanMatchManager.h"
 #include "RouletteDef.h"
 #include "ShopManager.h"
 #include "i3IniParser.h"
@@ -69,6 +70,10 @@ void GameServerContext::OnUpdate(INT32 Command)
 	// Update context main
 	if (g_pContextMain)
 		g_pContextMain->OnUpdate();
+
+	// Update clan match manager (cleanup stale teams)
+	if (g_pClanMatchManager)
+		g_pClanMatchManager->Update();
 }
 
 BOOL GameServerContext::OnDestroy()
@@ -221,6 +226,9 @@ bool GameServer::OnInitialize()
 	// Create clan manager
 	g_pClanManager = new GameClanManager();
 
+	// Create clan match manager
+	g_pClanMatchManager = new ClanMatchManager();
+
 	// Create roulette data with defaults
 	g_pRouletteData = new GameRouletteData();
 	g_pRouletteData->InitDefaults();
@@ -283,6 +291,13 @@ void GameServer::OnShutdown()
 	{
 		delete g_pRouletteData;
 		g_pRouletteData = nullptr;
+	}
+
+	// Cleanup clan match manager
+	if (g_pClanMatchManager)
+	{
+		delete g_pClanMatchManager;
+		g_pClanMatchManager = nullptr;
 	}
 
 	// Cleanup clan manager

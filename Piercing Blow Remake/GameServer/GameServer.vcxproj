@@ -147,6 +147,8 @@
     <ClCompile Include="GameSessionEvent.cpp" />
     <ClCompile Include="GameSessionSkill.cpp" />
     <ClCompile Include="GameSessionClan.cpp" />
+    <ClCompile Include="GameSessionClanMatch.cpp" />
+    <ClCompile Include="ClanMatchManager.cpp" />
     <ClCompile Include="GameSessionRoulette.cpp" />
     <ClCompile Include="GameSessionCheat.cpp" />
     <ClCompile Include="GameSessionGM.cpp" />
@@ -171,6 +173,8 @@
     <ClInclude Include="EventDef.h" />
     <ClInclude Include="SkillDef.h" />
     <ClInclude Include="ClanDef.h" />
+    <ClInclude Include="ClanMatchDef.h" />
+    <ClInclude Include="ClanMatchManager.h" />
     <ClInclude Include="RouletteDef.h" />
     <ClInclude Include="GameContextMain.h" />
     <ClInclude Include="GameServerContext.h" />

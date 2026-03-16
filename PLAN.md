@@ -211,9 +211,9 @@
 
 ### 6B. Clan Match
 **Archivos**: Crear `GameSessionClanBattle.cpp`
-- [ ] `PROTOCOL_VALUE_CLAN_MATCH (0x0800)` - Matchmaking
-- [ ] Team registration, matching queue
-- [ ] Clan match room creation with special rules
+- [x] `PROTOCOL_VALUE_CLAN_MATCH (0x0800)` - Matchmaking (TeamContext/Create/Join/Leave/AllTeamList/FightRequest/Accept/Chat)
+- [x] Team registration, matching queue (ClanMatchManager with team pool, fight request/accept flow)
+- [ ] Clan match room creation with special rules (auto-create room on fight accept)
 - [ ] Clan match results and point distribution
 
 ### 6C. Clan War (1.5)
@@ -325,14 +325,14 @@
 ## FASE 12: Performance & Robustness
 
 ### 12A. Thread Safety
-- [ ] Per-channel mutexes para room lists y user lists
+- [x] Per-channel mutexes para room lists y user lists (i3Mutex per channel in GameSessionManager + RoomManager)
 - [ ] Ring buffers para comunicación inter-thread (como NSM_CRingBuffer del original)
-- [ ] Announce message system con ring buffers
+- [x] Announce message system (BroadcastAnnounce via GameSessionManager)
 
 ### 12B. Memory Management
-- [ ] Pre-allocated room pools (no dynamic allocation durante gameplay)
-- [ ] Session pool pre-allocation
-- [ ] Object pooling para packets
+- [x] Pre-allocated room pools (Room objects pre-allocated per channel in RoomManager)
+- [x] Session pool pre-allocation (GameSession array pre-allocated in GameSessionManager)
+- [x] Object pooling para packets (i3NetworkPacket managed by i3Server framework)
 
 ### 12C. Logging
 - [x] Battle log con unique number tracking (BattleID=ServerID+Timestamp+Counter)
@@ -396,11 +396,11 @@
 | Shop (0x0400) | ~40 | 16 | 40% |
 | Admin (0x0500) | ~10 | 0 | 0% |
 | Clan (0x0700) | ~60 | 20 | 33% |
-| Clan Match (0x0800) | ~20 | 0 | 0% |
+| Clan Match (0x0800) | ~20 | 8 | 40% |
 | Server Msg (0x0A00) | ~10 | 4 | 40% |
 | Lobby (0x0C00) | ~10 | 7 | 70% |
 | Inventory (0x0D00) | ~10 | 3 | 30% |
-| RS/IGS (0x0E00) | ~10 | 5 | 50% |
+| RS/IGS (0x0E00) | ~10 | 7 | 70% |
 | Room (0x0F00) | ~30 | 20 | 67% |
 | Battle (0x1000) | ~40 | 20 | 50% |
 | Medal (0x1200) | ~10 | 7 | 70% |

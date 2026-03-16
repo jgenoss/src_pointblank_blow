@@ -167,6 +167,7 @@ public:
 	int				GetGP() const				{ return m_i32GP; }
 	int				GetRankId() const			{ return m_i32RankId; }
 	int				GetClanId() const			{ return m_i32ClanId; }
+	const char*		GetClanName() const			{ return m_szClanName; }
 
 	// Stats
 	int				GetKills() const			{ return m_i32Kills; }
@@ -435,6 +436,17 @@ private:
 	void			OnClanReplaceIntroReq(char* pData, INT32 i32Size);
 	void			OnClanReplaceMarkReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - Clan Match (GameSessionClanMatch.cpp)
+	void			OnClanMatchTeamContextReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamCreateReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamJoinReq(char* pData, INT32 i32Size);
+	void			OnClanMatchTeamLeaveReq(char* pData, INT32 i32Size);
+	void			OnClanMatchAllTeamListReq(char* pData, INT32 i32Size);
+	void			OnClanMatchFightRequestReq(char* pData, INT32 i32Size);
+	void			OnClanMatchFightAcceptReq(char* pData, INT32 i32Size);
+	void			OnClanMatchChatReq(char* pData, INT32 i32Size);
+	void			SendClanMatchTeamInfo(int teamIdx);
+
 	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
 	void			OnRouletteEnterReq(char* pData, INT32 i32Size);
 	void			OnRouletteLeaveReq(char* pData, INT32 i32Size);
@@ -526,6 +538,7 @@ private:
 	int				m_i32GP;
 	int				m_i32RankId;
 	int				m_i32ClanId;
+	char			m_szClanName[64];
 	uint8_t			m_ui8AuthLevel;			// 0=normal, 1+=GM
 	bool			m_bDamageConsole;		// GM debug: show damage events
 

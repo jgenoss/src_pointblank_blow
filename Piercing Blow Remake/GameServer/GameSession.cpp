@@ -472,6 +472,16 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_FIELDSHOP_OPEN_REQ:				OnFieldShopOpenReq(pData, dataSize);		break;
 	case PROTOCOL_FIELDSHOP_GOODSLIST_REQ:			OnFieldShopGoodsListReq(pData, dataSize);	break;
 
+	// ---- Clan Match (GameSessionClanMatch.cpp - 0x0800) ----
+	case PROTOCOL_CS_MATCH_TEAM_CONTEXT_REQ:		OnClanMatchTeamContextReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_TEAM_CREATE_REQ:			OnClanMatchTeamCreateReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_TEAM_JOIN_REQ:			OnClanMatchTeamJoinReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_TEAM_LEAVE_REQ:			OnClanMatchTeamLeaveReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_ALL_TEAM_LIST_REQ:		OnClanMatchAllTeamListReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_FIGHT_REQUEST_REQ:		OnClanMatchFightRequestReq(pData, dataSize);break;
+	case PROTOCOL_CS_MATCH_FIGHT_ACCECT_REQ:		OnClanMatchFightAcceptReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MATCH_CHATING_REQ:				OnClanMatchChatReq(pData, dataSize);		break;
+
 	// ---- GM Commands (GameSessionGM.cpp - Phase 11A) ----
 	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
 	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;
@@ -1418,6 +1428,12 @@ void GameSession::OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize)
 	m_i32GP = pData->i32GP;
 	m_i32RankId = pData->i32RankId;
 	m_i32ClanId = pData->i32ClanId;
+	if (m_i32ClanId > 0 && g_pClanManager)
+	{
+		GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
+		if (pClan)
+			strncpy_s(m_szClanName, pClan->szName, _TRUNCATE);
+	}
 
 	m_i32Kills = pData->i32Kills;
 	m_i32Deaths = pData->i32Deaths;
@@ -1852,6 +1868,7 @@ void GameSession::ResetSessionData()
 	m_i32GP = 0;
 	m_i32RankId = 0;
 	m_i32ClanId = 0;
+	m_szClanName[0] = '\0';
 	m_ui8AuthLevel = 0;
 	m_bDamageConsole = false;
 
