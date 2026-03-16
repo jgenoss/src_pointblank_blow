@@ -186,8 +186,6 @@ void ConnectSession::OnPacketServerSelectReq(char* pData, INT32 i32Size)
 
 	printf("[ConnectSession:%d] SERVER_SELECT_REQ\n", m_SessionIdx);
 
-	// TODO: Leer server ID seleccionado del paquete
-	// Por ahora seleccion del primer servidor disponible
 	if (!g_pConnectServerContext || !g_pConnectServerContext->GetRegistry())
 	{
 		SendServerSelectAck(1, "", 0); // Error: no servers
@@ -195,7 +193,20 @@ void ConnectSession::OnPacketServerSelectReq(char* pData, INT32 i32Size)
 	}
 
 	GameServerRegistry* pRegistry = g_pConnectServerContext->GetRegistry();
-	const ServerInfo* pServer = pRegistry->GetFirstAvailableServer();
+	const ServerInfo* pServer = nullptr;
+
+	// Read server ID from client packet (if provided)
+	if (i32Size >= (INT32)sizeof(int))
+	{
+		int requestedServerId = 0;
+		memcpy(&requestedServerId, pData, sizeof(int));
+		pServer = pRegistry->GetServerById(requestedServerId);
+	}
+
+	// Fallback to least-loaded server (load balancing)
+	if (!pServer)
+		pServer = pRegistry->GetLeastLoadedServer();
+
 	if (!pServer)
 	{
 		SendServerSelectAck(1, "", 0); // Error: no servers available

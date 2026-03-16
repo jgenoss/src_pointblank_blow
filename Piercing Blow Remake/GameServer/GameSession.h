@@ -441,6 +441,8 @@ private:
 	void			OnRouletteItemInfoReq(char* pData, INT32 i32Size);
 	void			OnRouletteStartReq(char* pData, INT32 i32Size);
 	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
+	void			OnFieldShopOpenReq(char* pData, INT32 i32Size);
+	void			OnFieldShopGoodsListReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - GM Commands (GameSessionGM.cpp - Phase 11A)
 	// GM Chat handlers (GameSessionGMChat.cpp)

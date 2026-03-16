@@ -266,3 +266,72 @@ void GameSession::OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size)
 	// For now, just send ACK back
 	SendSimpleAck(PROTOCOL_RS_JACKPOT_NOTIFY_ACK, 0);
 }
+
+// ============================================================================
+// Field Shop Handlers (in-battle shop)
+// ============================================================================
+
+void GameSession::OnFieldShopOpenReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_FIELDSHOP_OPEN_REQ -> ACK
+	// Client requests to open field shop during battle
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Send ACK with current version (0 = no field shop data available)
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_FIELDSHOP_OPEN_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Field shop version (client compares to decide if it needs to re-download)
+	uint32_t version = 1;
+	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	// Item count in field shop
+	uint16_t itemCount = 0;
+	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnFieldShopGoodsListReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_FIELDSHOP_GOODSLIST_REQ -> ACK
+	// Client requests the field shop goods list
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Send empty goods list (field shop not populated yet)
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_FIELDSHOP_GOODSLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	uint16_t goodsCount = 0;
+	memcpy(buffer + offset, &goodsCount, sizeof(uint16_t)); offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

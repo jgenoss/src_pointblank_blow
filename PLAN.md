@@ -192,9 +192,10 @@
 - [x] Random item selection con pesos
 
 ### 5D. Field Shop (Roulette)
-- [ ] RS_IGS protocols completos
-- [ ] Enter/Leave/Start/Result
-- [ ] Jackpot notifications
+- [x] RS_IGS protocols completos (Enter/Leave/ItemInfo/Start/JackpotNotify)
+- [x] Enter/Leave/Start/Result (with weighted tiers, multi-spin, currency deduction)
+- [x] Jackpot notifications
+- [x] FieldShop Open/GoodsList (stub, empty goods list)
 
 ---
 
@@ -314,7 +315,7 @@
 
 ### 11B. Control Server Integration
 - [x] Server announce (BroadcastToAll, BroadcastAnnounce in GameSessionManager)
-- [ ] Server start/stop commands
+- [x] Server start/stop commands (/shutdown GM command with broadcast notice)
 - [x] Config reload (hot reload economy/battle via /reload GM command)
 - [x] User kick via admin tool (/kick, /ban GM commands)
 - [x] Room list/user list queries (/rooms, /users GM commands)
@@ -344,8 +345,8 @@
 
 - [x] Auth token generation y validación (ModuleConnectServer validates, fallback dev mode)
 - [x] Server list transmission al cliente (ConnectSession::SendServerList)
-- [ ] Load balancing: redirect clientes al server con menos carga
-- [ ] Server heartbeat monitoring
+- [x] Load balancing: server select uses GetLeastLoadedServer() with client-requested ID fallback
+- [x] Server heartbeat monitoring (GameServer sends actual player count, ConnectServer removes dead servers)
 
 ---
 

@@ -708,10 +708,26 @@ bool GameSession::ProcessAdminCommand(const char* pszMessage, int i32MsgLen)
 		return true;
 	}
 
+	// /shutdown - Graceful server shutdown (requires auth level 2+)
+	if (_stricmp(cmd, "shutdown") == 0 && m_ui8AuthLevel >= 2)
+	{
+		printf("[AdminCmd] SHUTDOWN initiated by GM %s (UID=%lld)\n", m_szNickname, m_i64UID);
+
+		// Broadcast shutdown notice to all players
+		const char* notice = "[SERVER] Server shutting down in 5 seconds...";
+		if (g_pGameSessionManager)
+			g_pGameSessionManager->BroadcastAnnounce(notice, (uint16_t)strlen(notice));
+
+		// Signal the main loop to stop
+		extern volatile bool g_bRunning;
+		g_bRunning = false;
+		return true;
+	}
+
 	// /help - Show available commands
 	if (_stricmp(cmd, "help") == 0)
 	{
-		const char* helpMsg = "[GM] /announce /kick /ban /info /ccu /rooms /users /damage /reload /help";
+		const char* helpMsg = "[GM] /announce /kick /ban /info /ccu /rooms /users /damage /reload /shutdown /help";
 		SendServerAnnounce(helpMsg, (uint16_t)strlen(helpMsg));
 		return true;
 	}

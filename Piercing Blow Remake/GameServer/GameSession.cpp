@@ -469,6 +469,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_RS_GRADE3_ITEM_INFO_REQ:			OnRouletteItemInfoReq(pData, dataSize);		break;
 	case PROTOCOL_RS_ROULETTE_START_REQ:			OnRouletteStartReq(pData, dataSize);		break;
 	case PROTOCOL_RS_JACKPOT_NOTIFY_REQ:			OnRouletteJackpotNotifyReq(pData, dataSize);break;
+	case PROTOCOL_FIELDSHOP_OPEN_REQ:				OnFieldShopOpenReq(pData, dataSize);		break;
+	case PROTOCOL_FIELDSHOP_GOODSLIST_REQ:			OnFieldShopGoodsListReq(pData, dataSize);	break;
 
 	// ---- GM Commands (GameSessionGM.cpp - Phase 11A) ----
 	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
