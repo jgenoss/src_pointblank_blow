@@ -32,7 +32,7 @@ enum GameTask
 #define SESSION_CHECK_TIMEOUT_NOT_LOGIN		30		// 30 seconds
 
 // Max inventory for simplified version
-#define MAX_GAME_INVENTORY		200
+#define MAX_GAME_INVENTORY		450
 
 // Simplified inventory item for GameSession
 struct GameInventoryItem
@@ -90,6 +90,7 @@ public:
 	int				GetCash() const				{ return m_i32Cash; }
 	int				GetGP() const				{ return m_i32GP; }
 	int				GetRankId() const			{ return m_i32RankId; }
+	int				GetClanId() const			{ return m_i32ClanId; }
 
 	// Stats
 	int				GetKills() const			{ return m_i32Kills; }
@@ -123,20 +124,46 @@ private:
 	void			OnLobbyLeaveReq(char* pData, INT32 i32Size);
 	void			OnGetRoomListReq(char* pData, INT32 i32Size);
 	void			OnLobbyChatReq(char* pData, INT32 i32Size);
+	void			OnQuickJoinRoomReq(char* pData, INT32 i32Size);
 
-	// Packet handlers - Room
+	// Packet handlers - Room creation & join
 	void			OnRoomCreateReq(char* pData, INT32 i32Size);
 	void			OnRoomJoinReq(char* pData, INT32 i32Size);
 	void			OnRoomLeaveReq(char* pData, INT32 i32Size);
-	void			OnRoomReadyReq(char* pData, INT32 i32Size);
-	void			OnRoomStartReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Room operations (7C)
+	void			OnRoomGetSlotInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomGetPlayerInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeRoomInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomChangePasswdReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeSlotReq(char* pData, INT32 i32Size);
+	void			OnRoomTeamChangeReq(char* pData, INT32 i32Size);
+	void			OnRoomRequestMainReq(char* pData, INT32 i32Size);
+	void			OnRoomRequestMainChangeReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeOptionInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomChatReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Battle flow (7D)
+	void			OnBattleReadyBattleReq(char* pData, INT32 i32Size);
+	void			OnBattlePreStartBattleReq(char* pData, INT32 i32Size);
+	void			OnBattleStartBattleReq(char* pData, INT32 i32Size);
+	void			OnBattleGiveUpBattleReq(char* pData, INT32 i32Size);
+	void			OnBattleDeathReq(char* pData, INT32 i32Size);
+	void			OnBattleRespawnReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionRoundPreStartReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionRoundStartReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionRoundEndReq(char* pData, INT32 i32Size);
 
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();
 	void			SendLoginAck(int i32Result);
+	void			SendSimpleAck(uint16_t protocolAck, int32_t result);
 	void			ResetSessionData();
+
+	// Battle helpers
+	void			SendSlotInfoToAll();
+	void			SendBattleEndToAll(int i32WinnerTeam);
 
 private:
 	// State machine

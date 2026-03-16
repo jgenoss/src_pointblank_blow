@@ -2,6 +2,7 @@
 #include "RoomManager.h"
 #include "Room.h"
 #include "GameSession.h"
+#include "GameProtocol.h"
 #include "GameContextMain.h"
 
 I3_CLASS_INSTANCE(RoomManager);
@@ -303,17 +304,17 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 	uint32_t count = (side == 0) ? m_pRoomCount0[i32Channel] : m_pRoomCount1[i32Channel];
 
 	// Build room list packet
-	// For now just send room count - full packet building requires S2MO structures
 	i3NetworkPacket packet;
-
-	// Header: protocol + room count
-	uint16_t protocolId = 0x0800;	// PROTOCOL_LOBBY_GET_ROOMLIST_ACK placeholder
-	uint32_t roomCount = count;
-
 	char buffer[4096];
 	int offset = 0;
-	memcpy(buffer + offset, &protocolId, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &roomCount, sizeof(uint32_t));		offset += sizeof(uint32_t);
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_GET_ROOMLIST_ACK;
+	offset += sizeof(uint16_t);	// Reserve space for size
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	uint32_t roomCount = count;
+	memcpy(buffer + offset, &roomCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Serialize each room's basic info
 	for (uint32_t i = 0; i < count && i < 10; i++)	// Max 10 rooms per page (SEND_MAX_ROOM_COUNT)
@@ -327,6 +328,9 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 			offset += roomInfoSize;
 		}
 	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
 	pSession->SendMessage(&packet);
