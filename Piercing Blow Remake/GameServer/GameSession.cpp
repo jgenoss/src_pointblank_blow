@@ -700,6 +700,59 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CHEAT_REDUCE_TS_EVENT_REQ:		OnCheatReduceTsEventReq(pData, dataSize);	break;
 	case PROTOCOL_CHEAT_TIMER_GM_PAUSE_REQ:			OnCheatTimerGMPauseReq(pData, dataSize);	break;
 
+	// ---- Batch 19 - Roulette/RS/FieldShop (GameSessionShop.cpp) ----
+	case PROTOCOL_AUTH_RS_ENTER_REQ:				OnAuthRsEnterReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_RS_ITEM_INFO_REQ:			OnAuthRsItemInfoReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_RS_JACKPOT_REQ:				OnAuthRsJackpotReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_RS_START_REQ:				OnAuthRsStartReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FCM_LOGOUT_REQ:				OnAuthFcmLogoutReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_AUTH_GIFT_REQ:			OnAuthShopAuthGiftReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_REQ:		OnAuthShopItemAuthDataReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_SHOP_ITEM_CHANGE_DATA_REQ:	OnAuthShopItemChangeDataReq(pData, dataSize);break;
+	case PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_REQ:		OnAuthShopUseGiftcouponReq(pData, dataSize);break;
+	case PROTOCOL_AUTH_USE_GIFTCOUPON_REQ:			OnAuthUseGiftcouponReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_USE_ITEM_CHECK_NICK_REQ:		OnAuthUseItemCheckNickReq(pData, dataSize);	break;
+	case PROTOCOL_AUTH_USER_NOW_INFO_REQ:			OnAuthUserNowInfoReq(pData, dataSize);		break;
+	case PROTOCOL_FIELDSHOP_SEND_NEWVERSION_REQ:	OnFieldshopSendNewversionReq(pData, dataSize);break;
+
+	// ---- Batch 19 - ClanWar extras (GameSessionClanWar.cpp) ----
+	case PROTOCOL_CLAN_WAR_CHANGE_OPERATION_REQ:	OnClanWarChangeOperationReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_CHECK_PRESEASON_RANKING_REQ:OnClanWarCheckPreseasonRankingReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_MERCENARY_PENALTY_LOAD_REQ:OnClanWarMercenaryPenaltyLoadReq(pData, dataSize);break;
+
+	// ---- Batch 19 - Clan CS_NEW (GameSessionClan.cpp) ----
+	case PROTOCOL_CS_NEW_DETAIL_INFO_REQ:			OnClanNewDetailInfoReq(pData, dataSize);	break;
+	case PROTOCOL_CS_NEW_CREATE_CLAN_REQ:			OnClanNewCreateClanReq(pData, dataSize);	break;
+	case PROTOCOL_CS_NEW_REQUEST_LIST_REQ:			OnClanNewRequestListReq(pData, dataSize);	break;
+
+	// ---- Batch 19 - Base extras (GameSession.cpp) ----
+	case PROTOCOL_BASE_RENDEZVOUS_NAT_STATE_REQ:	OnBaseRendezvousNatStateReq(pData, dataSize);break;
+	case PROTOCOL_BASE_RENDEZVOUS_HOLEPUNCH_REQ:	OnBaseRendezvousHolepunchReq(pData, dataSize);break;
+	case PROTOCOL_BASE_HACKING_CHECK_KICK_REQ:		OnBaseHackingCheckKickReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_CHANGE_PCCAFE_STATUS_REQ:	OnBaseChangePccafeStatusReq(pData, dataSize);break;
+	case PROTOCOL_BASE_GET_USER_SUBTASK_REQ:		OnBaseGetUserSubtaskReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_LOGIN_THAI_REQ:				OnBaseLoginThaiReq(pData, dataSize);		break;
+
+	// ---- Batch 19 - Character/Chara (GameSession.cpp) ----
+	case PROTOCOL_DELETE_CHARA_REQ:					OnDeleteCharaReq(pData, dataSize);			break;
+	case PROTOCOL_NEW_SET_CURRENT_CHARA_REQ:		OnNewSetCurrentCharaReq(pData, dataSize);	break;
+	case PROTOCOL_NEW_GAME_SERVER_STATE_REQ:		OnNewGameServerStateReq(pData, dataSize);	break;
+
+	// ---- Batch 19 - Skill (GameSession.cpp) ----
+	case PROTOCOL_SET_SPECIALITY_REQ:				OnSetSpecialityReq(pData, dataSize);		break;
+	case PROTOCOL_INIT_SPECIALITY_REQ:				OnInitSpecialityReq(pData, dataSize);		break;
+
+	// ---- Batch 19 - Quest extras (GameSession.cpp) ----
+	case PROTOCOL_GET_ALL_QUEST_INFO_REQ:			OnGetAllQuestInfoReq(pData, dataSize);		break;
+	case PROTOCOL_GET_HONOR_QUEST_INFO_REQ:			OnGetHonorQuestInfoReq(pData, dataSize);	break;
+	case PROTOCOL_PERIOD_QUEST_SETTING_REQ:			OnPeriodQuestSettingReq(pData, dataSize);	break;
+
+	// ---- Batch 19 - Room/Lobby GM (GameSessionGM.cpp / GameSessionChannel.cpp) ----
+	case PROTOCOL_ROOM_GM_DESTROY_ROOM_REQ:			OnRoomGmDestroyRoomReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_GM_GET_UID_REQ:				OnRoomGmGetUidReq(pData, dataSize);			break;
+	case PROTOCOL_LOBBY_GM_GET_UID_REQ:				OnLobbyGmGetUidReq(pData, dataSize);		break;
+	case PROTOCOL_LOBBY_ABUSING_POPUP_END_REQ:		OnLobbyAbusingPopupEndReq(pData, dataSize);	break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
@@ -3141,6 +3194,500 @@ void GameSession::OnBaseGetUidRoomReq(char* pData, INT32 i32Size)
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
+}
+
+// ============================================================================
+// Batch 19 - Base extras
+// ============================================================================
+
+void GameSession::OnBaseRendezvousNatStateReq(char* pData, INT32 i32Size)
+{
+	// Client reports its NAT type state
+	// Parse NAT type and echo back as ACK
+	if (i32Size < 4) return;
+
+	int32_t natType = 0;
+	memcpy(&natType, pData, sizeof(int32_t));
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_BASE_RENDEZVOUS_NAT_STATE_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &natType, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseRendezvousHolepunchReq(char* pData, INT32 i32Size)
+{
+	// Client requests hole-punch relay
+	// In distributed architecture, BattleServer handles UDP relay
+	// Echo back the client's external IP and port for NAT traversal
+	if (i32Size < 8) return;
+
+	uint32_t clientIP = 0;
+	uint16_t clientPort = 0;
+	memcpy(&clientIP, pData, sizeof(uint32_t));
+	memcpy(&clientPort, pData + 4, sizeof(uint16_t));
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_BASE_RENDEZVOUS_HOLEPUNCH_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &clientIP, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &clientPort, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseHackingCheckKickReq(char* pData, INT32 i32Size)
+{
+	// Client-side hack detection reported a violation
+	// Log and optionally kick
+	if (i32Size < 4) return;
+
+	int32_t hackType = 0;
+	memcpy(&hackType, pData, sizeof(int32_t));
+
+	printf("[GameSession] HackingCheckKick Index=%d UID=%lld HackType=%d\n",
+		GetIndex(), m_i64UID, hackType);
+
+	// Fire-and-forget - no ACK protocol defined
+	// Could add kick logic here if hack type is severe
+}
+
+void GameSession::OnBaseChangePccafeStatusReq(char* pData, INT32 i32Size)
+{
+	// PC cafe status change notification
+	if (i32Size < 4) return;
+
+	int32_t pccafeStatus = 0;
+	memcpy(&pccafeStatus, pData, sizeof(int32_t));
+
+	// Echo back the status change
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_BASE_CHANGE_PCCAFE_STATUS_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	int32_t result = 0;	// success
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &pccafeStatus, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseGetUserSubtaskReq(char* pData, INT32 i32Size)
+{
+	// Query what a user is currently doing (channel, room, battle state)
+	if (i32Size < (int)sizeof(int64_t))
+	{
+		SendSimpleAck(PROTOCOL_BASE_GET_USER_SUBTASK_ACK, -1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_BASE_GET_USER_SUBTASK_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = pTarget ? 0 : 1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	if (pTarget)
+	{
+		int32_t mainTask = (int32_t)pTarget->GetMainTask();
+		int32_t channel = pTarget->GetChannelNum();
+		int32_t roomIdx = pTarget->GetRoomIdx();
+		memcpy(buffer + offset, &mainTask, sizeof(int32_t));	offset += sizeof(int32_t);
+		memcpy(buffer + offset, &channel, sizeof(int32_t));		offset += sizeof(int32_t);
+		memcpy(buffer + offset, &roomIdx, sizeof(int32_t));		offset += sizeof(int32_t);
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBaseLoginThaiReq(char* pData, INT32 i32Size)
+{
+	// Thailand Garena-specific login - not applicable to remake
+	// Send failure to redirect to normal login
+	SendSimpleAck(PROTOCOL_BASE_LOGIN_THAI_REQ + 1, 1);	// +1 = ACK enum offset, result=fail
+}
+
+// ============================================================================
+// Batch 19 - Character/Chara
+// ============================================================================
+
+void GameSession::OnDeleteCharaReq(char* pData, INT32 i32Size)
+{
+	// Delete a character slot (reset to empty)
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_DELETE_CHARA_ACK, 1);
+		return;
+	}
+
+	uint8_t slotIdx = (uint8_t)pData[0];
+
+	if (slotIdx >= MAX_CHARA_SLOT)
+	{
+		SendSimpleAck(PROTOCOL_DELETE_CHARA_ACK, 2);
+		return;
+	}
+
+	// Cannot delete active slot
+	if (slotIdx == m_ui8ActiveCharaSlot)
+	{
+		SendSimpleAck(PROTOCOL_DELETE_CHARA_ACK, 3);
+		return;
+	}
+
+	// Reset the slot
+	m_CharaSlots[slotIdx].Reset();
+
+	// Save via DataServer
+	if (g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestEquipmentSave(m_i64UID, slotIdx,
+			MULTI_SLOT_NONE, 0, nullptr, nullptr);
+	}
+
+	SendSimpleAck(PROTOCOL_DELETE_CHARA_ACK, 0);
+}
+
+void GameSession::OnNewSetCurrentCharaReq(char* pData, INT32 i32Size)
+{
+	// Set the representative character (3 slots for display)
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_NEW_SET_CURRENT_CHARA_ACK, 1);
+		return;
+	}
+
+	uint8_t slotIdx = (uint8_t)pData[0];
+
+	if (slotIdx >= MAX_CHARA_SLOT)
+	{
+		SendSimpleAck(PROTOCOL_NEW_SET_CURRENT_CHARA_ACK, 2);
+		return;
+	}
+
+	// Check slot has a character
+	if (m_CharaSlots[slotIdx].ui8State == MULTI_SLOT_NONE)
+	{
+		SendSimpleAck(PROTOCOL_NEW_SET_CURRENT_CHARA_ACK, 3);
+		return;
+	}
+
+	m_ui8ActiveCharaSlot = slotIdx;
+	SendSimpleAck(PROTOCOL_NEW_SET_CURRENT_CHARA_ACK, 0);
+}
+
+void GameSession::OnNewGameServerStateReq(char* pData, INT32 i32Size)
+{
+	// Client requests current server state info
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_NEW_GAME_SERVER_STATE_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Server state info
+	int32_t onlineCount = g_pGameSessionManager ? g_pGameSessionManager->GetActiveCount() : 0;
+	int32_t maxCount = g_pContextMain ? g_pContextMain->m_i32SessionCount : 1000;
+	uint8_t channelCount = g_pContextMain ? g_pContextMain->m_ui8ChannelCount : 4;
+
+	memcpy(buffer + offset, &onlineCount, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &maxCount, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &channelCount, sizeof(uint8_t));	offset += sizeof(uint8_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Batch 19 - Skill (Speciality)
+// ============================================================================
+
+void GameSession::OnSetSpecialityReq(char* pData, INT32 i32Size)
+{
+	// Set skill levels for the active class
+	// Expected: classId(1) + skillSlot(1) + skillType(1) + level(1)
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_SET_SPECIALITY_ACK, 1);
+		return;
+	}
+
+	uint8_t classId = (uint8_t)pData[0];
+	uint8_t skillSlot = (uint8_t)pData[1];		// 0=main, 1=assist, 2=common
+	uint8_t skillIdx = (uint8_t)pData[2];
+	uint8_t newLevel = (uint8_t)pData[3];
+
+	if (classId >= CHARA_CLASS_MAX)
+	{
+		SendSimpleAck(PROTOCOL_SET_SPECIALITY_ACK, 2);
+		return;
+	}
+
+	GameClassSkills& skills = m_SkillData.classSkills[classId];
+
+	// Validate skill index and level
+	bool valid = false;
+	uint8_t maxLevel = 0;
+	uint8_t* pLevel = nullptr;
+
+	if (skillSlot == 0 && skillIdx < MAX_MAIN_SKILLS)
+	{
+		maxLevel = MAX_SKILL_LEVEL;
+		pLevel = &skills.ui8MainLevels[skillIdx];
+		valid = true;
+	}
+	else if (skillSlot == 1 && skillIdx < MAX_ASSIST_SKILLS)
+	{
+		maxLevel = MAX_ASSIST_SKILL_LEVEL;
+		pLevel = &skills.ui8AssistLevels[skillIdx];
+		valid = true;
+	}
+	else if (skillSlot == 2 && skillIdx < MAX_COMMON_SKILLS)
+	{
+		maxLevel = MAX_SKILL_LEVEL;
+		pLevel = &skills.ui8CommonLevels[skillIdx];
+		valid = true;
+	}
+
+	if (!valid || newLevel > maxLevel)
+	{
+		SendSimpleAck(PROTOCOL_SET_SPECIALITY_ACK, 3);
+		return;
+	}
+
+	// Check skill points
+	if (newLevel > *pLevel)
+	{
+		uint8_t cost = newLevel - *pLevel;
+		if (skills.ui16SkillPoints < cost)
+		{
+			SendSimpleAck(PROTOCOL_SET_SPECIALITY_ACK, 4);	// Not enough points
+			return;
+		}
+		skills.ui16SkillPoints -= cost;
+	}
+
+	*pLevel = newLevel;
+
+	// Save via DataServer
+	if (g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestSkillSave(m_i64UID, classId,
+			skills.ui8MainLevels, skills.ui8AssistLevels, skills.ui8CommonLevels,
+			skills.ui16SkillPoints);
+	}
+
+	SendSimpleAck(PROTOCOL_SET_SPECIALITY_ACK, 0);
+}
+
+void GameSession::OnInitSpecialityReq(char* pData, INT32 i32Size)
+{
+	// Reset all skills for a class
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_INIT_SPECIALITY_ACK, 1);
+		return;
+	}
+
+	uint8_t classId = (uint8_t)pData[0];
+
+	if (classId >= CHARA_CLASS_MAX)
+	{
+		SendSimpleAck(PROTOCOL_INIT_SPECIALITY_ACK, 2);
+		return;
+	}
+
+	GameClassSkills& skills = m_SkillData.classSkills[classId];
+
+	// Refund all spent points
+	int totalSpent = skills.GetTotalSkillPoints();
+	skills.Reset();
+	skills.ui8Class = classId;
+	skills.ui16SkillPoints = (uint16_t)(totalSpent + 10);	// Refund + base 10
+
+	// Save via DataServer
+	if (g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestSkillSave(m_i64UID, classId,
+			skills.ui8MainLevels, skills.ui8AssistLevels, skills.ui8CommonLevels,
+			skills.ui16SkillPoints);
+	}
+
+	SendSimpleAck(PROTOCOL_INIT_SPECIALITY_ACK, 0);
+}
+
+// ============================================================================
+// Batch 19 - Quest extras
+// ============================================================================
+
+void GameSession::OnGetAllQuestInfoReq(char* pData, INT32 i32Size)
+{
+	// Send all quest cardset data to client
+	i3NetworkPacket packet;
+	char buffer[2048];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_GET_ALL_QUEST_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Active set index
+	memcpy(buffer + offset, &m_QuestData.ui8ActiveSetIndex, 1);	offset += 1;
+
+	// Count active sets
+	uint8_t activeCount = 0;
+	for (int i = 0; i < MAX_CARDSET_PER_USER; i++)
+	{
+		if (m_QuestData.cardSets[i].IsActive())
+			activeCount++;
+	}
+	memcpy(buffer + offset, &activeCount, 1);	offset += 1;
+
+	// Send each active cardset
+	for (int i = 0; i < MAX_CARDSET_PER_USER; i++)
+	{
+		const GameQuestCardSet& cs = m_QuestData.cardSets[i];
+		if (!cs.IsActive()) continue;
+
+		uint8_t setIdx = (uint8_t)i;
+		memcpy(buffer + offset, &setIdx, 1);			offset += 1;
+		memcpy(buffer + offset, &cs.ui8Type, 1);		offset += 1;
+		memcpy(buffer + offset, &cs.ui8ActiveCard, 1);	offset += 1;
+
+		// Send card data for active card
+		const GameQuestCard& card = cs.cards[cs.ui8ActiveCard];
+		for (int q = 0; q < MAX_QUEST_PER_CARD; q++)
+		{
+			memcpy(buffer + offset, &card.quests[q].ui8Condition, 1);		offset += 1;
+			memcpy(buffer + offset, &card.quests[q].ui32Target, 4);			offset += 4;
+			memcpy(buffer + offset, &card.quests[q].ui32Current, 4);		offset += 4;
+			memcpy(buffer + offset, &card.quests[q].ui32RewardGP, 4);		offset += 4;
+			memcpy(buffer + offset, &card.quests[q].ui32RewardExp, 4);		offset += 4;
+		}
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetHonorQuestInfoReq(char* pData, INT32 i32Size)
+{
+	// Honor quest info - send empty/stub response
+	// Honor quests are a special subset tracked separately
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	// No explicit ACK defined - use REQ+1 convention
+	uint16_t proto = PROTOCOL_GET_HONOR_QUEST_INFO_REQ + 1;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint8_t count = 0;	// No honor quests yet
+	memcpy(buffer + offset, &count, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnPeriodQuestSettingReq(char* pData, INT32 i32Size)
+{
+	// Set period quest (daily/event quest) configuration
+	if (i32Size < 3)
+	{
+		SendSimpleAck(PROTOCOL_PERIOD_QUEST_SETTING_ACK, 1);
+		return;
+	}
+
+	uint8_t setIndex = (uint8_t)pData[0];
+	uint8_t setType = (uint8_t)pData[1];
+	uint8_t activeCard = (uint8_t)pData[2];
+
+	if (setIndex >= MAX_CARDSET_PER_USER)
+	{
+		SendSimpleAck(PROTOCOL_PERIOD_QUEST_SETTING_ACK, 2);
+		return;
+	}
+
+	// Update the quest cardset
+	GameQuestCardSet& cs = m_QuestData.cardSets[setIndex];
+	cs.ui8Type = setType;
+	cs.ui8ActiveCard = (activeCard < MAX_CARD_PER_CARDSET) ? activeCard : 0;
+
+	// Save via DataServer
+	if (g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestQuestSave(m_i64UID, setIndex, setType,
+			cs.ui8ActiveCard, (const char*)&cs, sizeof(GameQuestCardSet));
+	}
+
+	SendSimpleAck(PROTOCOL_PERIOD_QUEST_SETTING_ACK, 0);
 }
 
 void GameSession::SendSimpleAck(uint16_t protocolAck, int32_t result)

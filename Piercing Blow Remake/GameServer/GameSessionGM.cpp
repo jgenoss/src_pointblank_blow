@@ -1135,3 +1135,110 @@ void GameSession::OnCheatTimerGMPauseReq(char* pData, INT32 i32Size)
 	printf("[GM] Cheat: GM pause timer by UID=%lld\n", m_i64UID);
 	SendSimpleAck(PROTOCOL_CHEAT_TIMER_GM_PAUSE_ACK, 0);
 }
+
+// ============================================================================
+// Batch 19 - Room/Lobby GM commands
+// ============================================================================
+
+void GameSession::OnRoomGmDestroyRoomReq(char* pData, INT32 i32Size)
+{
+	// GM force-destroys a room
+	if (!IsGMUser())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, -1);
+		return;
+	}
+
+	if (i32Size < 8)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, 1);
+		return;
+	}
+
+	int32_t channel = 0;
+	int32_t roomIdx = 0;
+	memcpy(&channel, pData, sizeof(int32_t));
+	memcpy(&roomIdx, pData + 4, sizeof(int32_t));
+
+	if (!g_pRoomManager)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, 2);
+		return;
+	}
+
+	Room* pRoom = g_pRoomManager->GetRoom(channel, roomIdx);
+	if (!pRoom || !pRoom->IsCreated())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, 3);
+		return;
+	}
+
+	printf("[GM] Destroying room ch=%d idx=%d by UID=%lld\n", channel, roomIdx, m_i64UID);
+
+	// Kick all players from the room
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		GameSession* pSlotSession = pRoom->GetSlotSession(i);
+		if (pSlotSession)
+		{
+			pSlotSession->SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, 0);
+			// Session leave will be handled by Room::OnDestroy calling OnLeave for each
+		}
+	}
+
+	pRoom->OnDestroy();
+	SendSimpleAck(PROTOCOL_ROOM_GM_DESTROY_ROOM_ACK, 0);
+}
+
+void GameSession::OnRoomGmGetUidReq(char* pData, INT32 i32Size)
+{
+	// GM queries a user's UID in a room
+	if (!IsGMUser())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_GET_UID_ACK, -1);
+		return;
+	}
+
+	if (i32Size < (int)sizeof(int32_t))
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_GET_UID_ACK, 1);
+		return;
+	}
+
+	int32_t slotIdx = 0;
+	memcpy(&slotIdx, pData, sizeof(int32_t));
+
+	if (!m_pRoom || slotIdx < 0 || slotIdx >= SLOT_MAX_COUNT)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_GET_UID_ACK, 2);
+		return;
+	}
+
+	GameSession* pTarget = m_pRoom->GetSlotSession(slotIdx);
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_GET_UID_ACK, 3);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_ROOM_GM_GET_UID_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int64_t targetUID = pTarget->GetUID();
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

@@ -674,3 +674,96 @@ void GameSession::OnClanWarMercenaryDetailInfoReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 19 - ClanWar extras
+// ============================================================================
+
+void GameSession::OnClanWarChangeOperationReq(char* pData, INT32 i32Size)
+{
+	// Change match team operation/mission setting
+	if (!g_pClanMatchManager || m_i32ClanId <= 0)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CHANGE_OPERATION_ACK, 1);
+		return;
+	}
+
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CHANGE_OPERATION_ACK, 2);
+		return;
+	}
+
+	uint8_t operationType = (uint8_t)pData[0];
+
+	// Find the team this user leads
+	ClanMatchTeam* pTeam = g_pClanMatchManager->FindTeamByLeader(m_i64UID);
+	if (!pTeam)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_CHANGE_OPERATION_ACK, 3);	// Not team leader
+		return;
+	}
+
+	// Operation type is stored for match rules
+	// (e.g., bomb mission, deathmatch, etc.)
+	SendSimpleAck(PROTOCOL_CLAN_WAR_CHANGE_OPERATION_ACK, 0);
+}
+
+void GameSession::OnClanWarCheckPreseasonRankingReq(char* pData, INT32 i32Size)
+{
+	// Check previous season clan ranking
+	// No explicit ACK defined, use REQ+1 pattern
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CLAN_WAR_CHECK_PRESEASON_RANKING_REQ + 1;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Preseason ranking info (stub: no previous season data)
+	int32_t prevRank = 0;		// 0 = unranked
+	int32_t prevWins = 0;
+	int32_t prevLosses = 0;
+	int32_t prevPoints = 0;
+	memcpy(buffer + offset, &prevRank, 4);		offset += 4;
+	memcpy(buffer + offset, &prevWins, 4);		offset += 4;
+	memcpy(buffer + offset, &prevLosses, 4);	offset += 4;
+	memcpy(buffer + offset, &prevPoints, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnClanWarMercenaryPenaltyLoadReq(char* pData, INT32 i32Size)
+{
+	// Load mercenary desertion penalty timer
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_CLAN_WAR_MERCENARY_PENALTY_LOAD_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Penalty time remaining (0 = no penalty)
+	int32_t penaltySeconds = 0;
+	memcpy(buffer + offset, &penaltySeconds, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

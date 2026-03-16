@@ -1511,3 +1511,457 @@ void GameSession::OnShopNotifyGiftReq(char* pData, INT32 i32Size)
 {
 	SendSimpleAck(PROTOCOL_AUTH_SHOP_NOTIFY_GIFT_ACK, 0);
 }
+
+// ============================================================================
+// Batch 19 - Roulette Shop (RS) handlers
+// ============================================================================
+
+void GameSession::OnAuthRsEnterReq(char* pData, INT32 i32Size)
+{
+	// Enter roulette shop
+	// Send roulette shop enter response with available tabs
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_RS_ENTER_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;	// success
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Tab count (simplified: 1 tab)
+	uint8_t tabCount = 1;
+	memcpy(buffer + offset, &tabCount, 1);	offset += 1;
+
+	// Tab info: id, cost type, cost amount
+	uint8_t tabId = 0;
+	memcpy(buffer + offset, &tabId, 1);	offset += 1;
+	int32_t costGP = 1000;		// 1000 GP per spin
+	memcpy(buffer + offset, &costGP, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthRsItemInfoReq(char* pData, INT32 i32Size)
+{
+	// Request roulette item pool info for a tab
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_RS_ITEM_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Item count in the pool (simplified: 5 sample items)
+	uint8_t itemCount = 5;
+	memcpy(buffer + offset, &itemCount, 1);	offset += 1;
+
+	// Sample roulette items: itemId, grade(0=lose,1-3=prize), probability weight
+	struct RsItem { uint32_t itemId; uint8_t grade; uint16_t weight; };
+	RsItem items[] = {
+		{ 0,		0, 500 },	// Lose (50%)
+		{ 1101001,	1, 250 },	// Grade 1 (25%)
+		{ 1201001,	1, 150 },	// Grade 1 (15%)
+		{ 2101001,	2, 80 },	// Grade 2 (8%)
+		{ 3101001,	3, 20 },	// Grade 3 (2%)
+	};
+
+	for (int i = 0; i < 5; i++)
+	{
+		memcpy(buffer + offset, &items[i].itemId, 4);	offset += 4;
+		memcpy(buffer + offset, &items[i].grade, 1);	offset += 1;
+		memcpy(buffer + offset, &items[i].weight, 2);	offset += 2;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthRsJackpotReq(char* pData, INT32 i32Size)
+{
+	// Request jackpot winner info
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_RS_JACKPOT_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Jackpot winner count (0 = no recent winners)
+	uint8_t winnerCount = 0;
+	memcpy(buffer + offset, &winnerCount, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthRsStartReq(char* pData, INT32 i32Size)
+{
+	// Start a roulette spin
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_RS_RESULT_ACK, 1);
+		return;
+	}
+
+	uint8_t tabId = (uint8_t)pData[0];
+
+	// Check GP balance (1000 GP per spin)
+	int32_t spinCost = 1000;
+	if (m_i32GP < spinCost)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_RS_RESULT_ACK, 2);	// Not enough GP
+		return;
+	}
+
+	m_i32GP -= spinCost;
+
+	// Simple random result (weighted)
+	uint32_t roll = (uint32_t)(rand() % 1000);
+	uint32_t resultItemId = 0;
+	uint8_t resultGrade = 0;
+
+	if (roll < 500)
+	{
+		// Lose (50%)
+		resultItemId = 0;
+		resultGrade = 0;
+	}
+	else if (roll < 750)
+	{
+		// Grade 1 (25%)
+		resultItemId = 1101001;
+		resultGrade = 1;
+	}
+	else if (roll < 900)
+	{
+		// Grade 1 (15%)
+		resultItemId = 1201001;
+		resultGrade = 1;
+	}
+	else if (roll < 980)
+	{
+		// Grade 2 (8%)
+		resultItemId = 2101001;
+		resultGrade = 2;
+	}
+	else
+	{
+		// Grade 3 (2%)
+		resultItemId = 3101001;
+		resultGrade = 3;
+	}
+
+	// Add item to inventory if won
+	if (resultItemId > 0 && m_i32InventoryCount < MAX_INVEN_COUNT)
+	{
+		GameInventoryItem& item = m_Inventory[m_i32InventoryCount];
+		item.ui32ItemId = resultItemId;
+		item.ui32Count = 1;
+		item.i32SlotIdx = -1;
+		item.ui8IsEquipped = 0;
+		item.ui32Duration = 0;	// Permanent
+		m_i32InventoryCount++;
+	}
+
+	// Send result
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_RS_RESULT_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &resultItemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &resultGrade, 1);	offset += 1;
+
+	// Remaining GP
+	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthFcmLogoutReq(char* pData, INT32 i32Size)
+{
+	// FCM (Fatigue Control Mechanism) logout notification
+	// Fire-and-forget - client is already exiting
+	printf("[GameSession] FCM logout Index=%d UID=%lld\n", GetIndex(), m_i64UID);
+}
+
+void GameSession::OnAuthShopAuthGiftReq(char* pData, INT32 i32Size)
+{
+	// Gift authentication/verification request
+	// Validate that a gift can be sent to the target user
+	if (i32Size < (int)(sizeof(int64_t) + sizeof(uint32_t)))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_AUTH_GIFT_ACK, 1);
+		return;
+	}
+
+	int64_t targetUID = 0;
+	uint32_t goodsId = 0;
+	memcpy(&targetUID, pData, sizeof(int64_t));
+	memcpy(&goodsId, pData + sizeof(int64_t), sizeof(uint32_t));
+
+	// Check target exists
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(targetUID) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_AUTH_GIFT_ACK, 2);	// Target not found
+		return;
+	}
+
+	// Check item exists in shop
+	bool found = false;
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+	{
+		const ShopItem* pItem = g_pShopManager->FindByGoodsId(goodsId);
+		if (pItem) found = true;
+	}
+	if (!found)
+	{
+		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
+		{
+			if (s_ShopCatalog[i].ui32GoodsId == goodsId) { found = true; break; }
+		}
+	}
+
+	if (!found)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_AUTH_GIFT_ACK, 3);	// Item not found
+		return;
+	}
+
+	// Check target inventory space
+	if (pTarget->m_i32InventoryCount >= MAX_INVEN_COUNT)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_AUTH_GIFT_ACK, 4);	// Target inventory full
+		return;
+	}
+
+	SendSimpleAck(PROTOCOL_AUTH_SHOP_AUTH_GIFT_ACK, 0);	// Gift verified OK
+}
+
+void GameSession::OnAuthShopItemAuthDataReq(char* pData, INT32 i32Size)
+{
+	// Request item authentication data (item verification for anti-cheat)
+	if (i32Size < (int)sizeof(uint32_t))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_ACK, 1);
+		return;
+	}
+
+	uint32_t itemId = 0;
+	memcpy(&itemId, pData, sizeof(uint32_t));
+
+	// Check if user owns this item
+	bool found = false;
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemId == itemId)
+		{
+			found = true;
+			break;
+		}
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = found ? 0 : 1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &itemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnAuthShopItemChangeDataReq(char* pData, INT32 i32Size)
+{
+	// Change item settings (e.g., item option configuration)
+	if (i32Size < (int)(sizeof(uint32_t) + sizeof(uint32_t)))
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_ITEM_CHANGE_DATA_ACK, 1);
+		return;
+	}
+
+	uint32_t itemId = 0;
+	uint32_t newData = 0;
+	memcpy(&itemId, pData, sizeof(uint32_t));
+	memcpy(&newData, pData + sizeof(uint32_t), sizeof(uint32_t));
+
+	// Find and update item
+	bool found = false;
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemId == itemId)
+		{
+			// Update item data/option
+			found = true;
+			break;
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_AUTH_SHOP_ITEM_CHANGE_DATA_ACK, found ? 0 : 2);
+}
+
+void GameSession::OnAuthShopUseGiftcouponReq(char* pData, INT32 i32Size)
+{
+	// Use a gift coupon (shop-side coupon redemption)
+	if (i32Size < 16)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_ACK, 1);
+		return;
+	}
+
+	char couponCode[17] = {};
+	memcpy(couponCode, pData, 16);
+
+	// Coupon validation would go to DataServer
+	// For now, always fail (no coupon system implemented)
+	SendSimpleAck(PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_ACK, 2);	// Invalid coupon
+}
+
+void GameSession::OnAuthUseGiftcouponReq(char* pData, INT32 i32Size)
+{
+	// Use a gift coupon (auth-side coupon)
+	if (i32Size < 16)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_USE_GIFTCOUPON_ACK, 1);
+		return;
+	}
+
+	char couponCode[17] = {};
+	memcpy(couponCode, pData, 16);
+
+	// Coupon validation not implemented yet
+	SendSimpleAck(PROTOCOL_AUTH_USE_GIFTCOUPON_ACK, 2);	// Invalid coupon
+}
+
+void GameSession::OnAuthUseItemCheckNickReq(char* pData, INT32 i32Size)
+{
+	// Check nickname availability (via item use, e.g., nick change coupon)
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_USE_ITEM_CHECK_NICK_ACK, 1);
+		return;
+	}
+
+	char nickname[64] = {};
+	int copyLen = (i32Size < 63) ? i32Size : 63;
+	memcpy(nickname, pData, copyLen);
+
+	// Delegate to DataServer nick check
+	if (g_pModuleDataServer)
+	{
+		g_pModuleDataServer->RequestCheckNick(GetIndex(), nickname);
+		// Response will come async via OnCheckNickAck
+	}
+	else
+	{
+		SendSimpleAck(PROTOCOL_AUTH_USE_ITEM_CHECK_NICK_ACK, 0);	// Available (offline mode)
+	}
+}
+
+void GameSession::OnAuthUserNowInfoReq(char* pData, INT32 i32Size)
+{
+	// Request current user state/info update
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_AUTH_USER_NOW_INFO_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	// Current state
+	int32_t mainTask = (int32_t)m_eMainTask;
+	memcpy(buffer + offset, &mainTask, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32ChannelNum, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32RoomIdx, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32Level, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));			offset += sizeof(int32_t);
+	memcpy(buffer + offset, &m_i32Cash, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnFieldshopSendNewversionReq(char* pData, INT32 i32Size)
+{
+	// Field shop version request - send current field shop item list
+	// Field shop is the in-battle shop for temporary items
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_FIELDSHOP_SEND_NEWVERSION_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Version number
+	uint32_t version = 1;
+	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	// Item count (0 = no field shop items configured)
+	uint8_t itemCount = 0;
+	memcpy(buffer + offset, &itemCount, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

@@ -678,6 +678,59 @@ private:
 	void			OnCheatReduceTsEventReq(char* pData, INT32 i32Size);
 	void			OnCheatTimerGMPauseReq(char* pData, INT32 i32Size);
 
+	// Batch 19 - Roulette/RS/FieldShop (GameSessionShop.cpp)
+	void			OnAuthRsEnterReq(char* pData, INT32 i32Size);
+	void			OnAuthRsItemInfoReq(char* pData, INT32 i32Size);
+	void			OnAuthRsJackpotReq(char* pData, INT32 i32Size);
+	void			OnAuthRsStartReq(char* pData, INT32 i32Size);
+	void			OnAuthFcmLogoutReq(char* pData, INT32 i32Size);
+	void			OnAuthShopAuthGiftReq(char* pData, INT32 i32Size);
+	void			OnAuthShopItemAuthDataReq(char* pData, INT32 i32Size);
+	void			OnAuthShopItemChangeDataReq(char* pData, INT32 i32Size);
+	void			OnAuthShopUseGiftcouponReq(char* pData, INT32 i32Size);
+	void			OnAuthUseGiftcouponReq(char* pData, INT32 i32Size);
+	void			OnAuthUseItemCheckNickReq(char* pData, INT32 i32Size);
+	void			OnAuthUserNowInfoReq(char* pData, INT32 i32Size);
+	void			OnFieldshopSendNewversionReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - ClanWar extras (GameSessionClanWar.cpp)
+	void			OnClanWarChangeOperationReq(char* pData, INT32 i32Size);
+	void			OnClanWarCheckPreseasonRankingReq(char* pData, INT32 i32Size);
+	void			OnClanWarMercenaryPenaltyLoadReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Clan CS_NEW (GameSessionClan.cpp)
+	void			OnClanNewDetailInfoReq(char* pData, INT32 i32Size);
+	void			OnClanNewCreateClanReq(char* pData, INT32 i32Size);
+	void			OnClanNewRequestListReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Base extras (GameSession.cpp)
+	void			OnBaseRendezvousNatStateReq(char* pData, INT32 i32Size);
+	void			OnBaseRendezvousHolepunchReq(char* pData, INT32 i32Size);
+	void			OnBaseHackingCheckKickReq(char* pData, INT32 i32Size);
+	void			OnBaseChangePccafeStatusReq(char* pData, INT32 i32Size);
+	void			OnBaseGetUserSubtaskReq(char* pData, INT32 i32Size);
+	void			OnBaseLoginThaiReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Character/Chara (GameSession.cpp)
+	void			OnDeleteCharaReq(char* pData, INT32 i32Size);
+	void			OnNewSetCurrentCharaReq(char* pData, INT32 i32Size);
+	void			OnNewGameServerStateReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Skill (GameSession.cpp)
+	void			OnSetSpecialityReq(char* pData, INT32 i32Size);
+	void			OnInitSpecialityReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Quest extras (GameSession.cpp)
+	void			OnGetAllQuestInfoReq(char* pData, INT32 i32Size);
+	void			OnGetHonorQuestInfoReq(char* pData, INT32 i32Size);
+	void			OnPeriodQuestSettingReq(char* pData, INT32 i32Size);
+
+	// Batch 19 - Room/Lobby GM (GameSessionGM.cpp / GameSessionChannel.cpp)
+	void			OnRoomGmDestroyRoomReq(char* pData, INT32 i32Size);
+	void			OnRoomGmGetUidReq(char* pData, INT32 i32Size);
+	void			OnLobbyGmGetUidReq(char* pData, INT32 i32Size);
+	void			OnLobbyAbusingPopupEndReq(char* pData, INT32 i32Size);
+
 	// GM helpers
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);

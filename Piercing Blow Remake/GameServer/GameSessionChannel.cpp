@@ -1230,3 +1230,84 @@ void GameSession::OnLobbyNewViewUserItemReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Batch 19 - Lobby GM/misc handlers
+// ============================================================================
+
+void GameSession::OnLobbyGmGetUidReq(char* pData, INT32 i32Size)
+{
+	// GM queries a user's UID by nickname (from lobby context)
+	if (!IsGMUser())
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GM_GET_UID_ACK, -1);
+		return;
+	}
+
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GM_GET_UID_ACK, 1);
+		return;
+	}
+
+	char nickname[64] = {};
+	int copyLen = (i32Size < 63) ? i32Size : 63;
+	memcpy(nickname, pData, copyLen);
+
+	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByNickname(nickname) : nullptr;
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GM_GET_UID_ACK, 2);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_LOBBY_GM_GET_UID_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int64_t targetUID = pTarget->GetUID();
+	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnLobbyAbusingPopupEndReq(char* pData, INT32 i32Size)
+{
+	// Abusing-flagged user waited out the penalty popup timer
+	// Now grant them the previously withheld EXP/GP rewards
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	offset += sizeof(uint16_t);
+	uint16_t proto = PROTOCOL_LOBBY_ABUSING_POPUP_END_ACK;
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Grant held rewards (stub: no abusing system tracking rewards yet)
+	int32_t grantedExp = 0;
+	int32_t grantedGP = 0;
+	memcpy(buffer + offset, &grantedExp, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &grantedGP, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
