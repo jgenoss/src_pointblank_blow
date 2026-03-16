@@ -361,9 +361,12 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
 | Task | Descripción | Estado |
 |------|-------------|--------|
 | **8.2 ModuleDataServer Sync** | 15 Request + 16 Response handlers para persistir datos | PENDIENTE |
-| **8.4 Battle End → Save Stats** | Guardar stats post-batalla via DataServer | PENDIENTE |
 | **8.3 Fix Nick Callbacks** | Callbacks de CreateNick/CheckNick a session | PENDIENTE |
+| **8.4 Battle End → Save Stats** | Guardar stats post-batalla via DataServer | PENDIENTE |
 | **8.5 BattleServer UDP Fix** | Room almacena IP/port del BattleServer | PENDIENTE |
+| **8.9 Date Fix (Server)** | Descomentar DATE32::GetDateTimeYYMMDDHHMI() para usar fecha real; enviar InvenServerTime correcto en INVENTORY_ENTER_ACK y shop packets | PENDIENTE |
+| **8.10 Date Fix (Cliente)** | Cambiar TimeUtil::CalcTimeDifference() de INT32 a UINT32; fix InvenList::DeleteTimeOverCouponBuffers() INT32 comparación | PENDIENTE |
+| **8.11 Date Fix (DATE32 range)** | Ampliar DATE32_YEAR_MAX o cambiar base epoch para soportar > 2033 | PENDIENTE |
 
 ### P1 - Importante para Experiencia
 
@@ -384,12 +387,13 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
 | Error message system | _SendErrorMessage unificado | PENDIENTE |
 | Ranking/Leaderboard | GeneralRankup en DataServer | PENDIENTE |
 | Ban persistence | ModuleDBKickList en DataServer | PENDIENTE |
+| GetTickCount overflow | Reemplazar GetTickCount() con timer de 64-bit para uptimes > 49.7 días | PENDIENTE |
 
 ### P3 - Producción (si se va a hacer público)
 
 | Task | Descripción | Estado |
 |------|-------------|--------|
-| BattleServer anti-cheat | HMSParser básico (speed, damage, position) | PENDIENTE |
+| BattleServer anti-cheat | HMSParser básico (speed, damage, position) | NO SE IMPLEMENTARÁ |
 | BattleServer character state | CCharacter con HP y position tracking | PENDIENTE |
 | Async DB operations | Ring buffers para DataServer non-blocking | PENDIENTE |
 | Admin panel | ASC_* protocol handlers (o web panel) | PENDIENTE |

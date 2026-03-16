@@ -102,6 +102,16 @@ void BattleRoom::RemoveMember(int i32Slot)
 	}
 }
 
+int BattleRoom::FindFreeSlot() const
+{
+	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
+	{
+		if (!m_Members[i].IsMember())
+			return i;
+	}
+	return -1;
+}
+
 int BattleRoom::GetActiveMemberCount() const
 {
 	int count = 0;

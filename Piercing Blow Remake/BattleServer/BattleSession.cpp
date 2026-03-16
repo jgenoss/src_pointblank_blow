@@ -168,13 +168,9 @@ void BattleSession::OnBattleCreateReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// Get the public IP from config
-	const char* pszUdpIP = "127.0.0.1";
-	if (g_pBattleServerContext)
-	{
-		// Use the BattleServer's public IP
-		// Will be set from config in BattleServerContext
-	}
+	// Get the public IP from global config (set by BattleServer::OnInitialize)
+	extern char g_szBattlePublicIP[MAX_SERVER_IP_LENGTH];
+	const char* pszUdpIP = g_szBattlePublicIP[0] != '\0' ? g_szBattlePublicIP : "127.0.0.1";
 
 	SendBattleCreateAck(pReq->i32RoomIdx, 0, battleRoomIdx, pszUdpIP, pRoom->GetUdpPort());
 }
@@ -186,10 +182,40 @@ void BattleSession::OnPlayerMigrateReq(char* pData, INT32 i32Size)
 
 	IS_PLAYER_MIGRATE_REQ* pReq = (IS_PLAYER_MIGRATE_REQ*)pData;
 
-	printf("[BattleSession:%d] PLAYER_MIGRATE_REQ: UID=%lld\n",
-		m_SessionIdx, pReq->i64UID);
+	printf("[BattleSession:%d] PLAYER_MIGRATE_REQ: UID=%lld, Room=%d, Slot=%d, Team=%d\n",
+		m_SessionIdx, pReq->i64UID, pReq->i32BattleRoomIdx, pReq->i32SlotIdx, pReq->i32Team);
 
-	// TODO: Add player to the battle room when full migrate protocol is implemented
+	// Find the battle room
+	BattleRoom* pRoom = g_pBattleRoomManager ? g_pBattleRoomManager->GetRoom(pReq->i32BattleRoomIdx) : nullptr;
+	if (!pRoom || !pRoom->IsActive())
+	{
+		printf("[BattleSession:%d] PLAYER_MIGRATE failed: room %d not found/active\n",
+			m_SessionIdx, pReq->i32BattleRoomIdx);
+		SendPlayerMigrateAck(pReq->i64UID, 1);	// Error: room not found
+		return;
+	}
+
+	// Add member to room - IP/port will be resolved when first UDP packet arrives
+	// (UdpRelay auto-registers members by matching UID from header)
+	int slotIdx = pReq->i32SlotIdx;
+	if (slotIdx < 0 || slotIdx >= BATTLE_SLOT_MAX)
+	{
+		// Auto-assign slot
+		slotIdx = pRoom->FindFreeSlot();
+		if (slotIdx < 0)
+		{
+			printf("[BattleSession:%d] PLAYER_MIGRATE failed: room %d full\n",
+				m_SessionIdx, pReq->i32BattleRoomIdx);
+			SendPlayerMigrateAck(pReq->i64UID, 2);	// Error: room full
+			return;
+		}
+	}
+
+	// Add with IP/Port from request (may be 0 - will be filled by UdpRelay on first packet)
+	pRoom->AddMember(pReq->i64UID, pReq->ui32ClientIP, pReq->ui16ClientPort, pReq->i32Team, slotIdx);
+
+	printf("[BattleSession:%d] PLAYER_MIGRATE success: UID=%lld -> Room=%d Slot=%d\n",
+		m_SessionIdx, pReq->i64UID, pReq->i32BattleRoomIdx, slotIdx);
 	SendPlayerMigrateAck(pReq->i64UID, 0);
 }
 

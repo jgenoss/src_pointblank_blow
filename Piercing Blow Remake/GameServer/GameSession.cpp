@@ -7,6 +7,7 @@
 #include "ClanDef.h"
 #include "GameServerContext.h"
 #include "ModuleConnectServer.h"
+#include "ModuleDataServer.h"
 
 I3_CLASS_INSTANCE(GameSession);
 
@@ -893,34 +894,24 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 
 	m_eMainTask = GAME_TASK_LOGIN;
 
-	// TODO: Request player data from DataServer (for now use defaults)
-	strncpy_s(m_szNickname, m_szUsername, _TRUNCATE);
-	m_i32Level = 1;
-	m_i64Exp = 0;
-	m_i32GP = g_pContextMain ? g_pContextMain->m_i32StartingGP : 10000;
-	m_i32Cash = g_pContextMain ? g_pContextMain->m_i32StartingCash : 0;
+	// Request player data from DataServer
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestPlayerLoad(GetIndex(), m_i64UID);
+		// Response will arrive in OnPlayerDataLoaded() which calls SendLoginAck
+		printf("[GameSession] Login - requesting player data - Index=%d, User=%s, UID=%lld\n",
+			GetIndex(), m_szUsername, m_i64UID);
+	}
+	else
+	{
+		// No DataServer - use defaults (development mode)
+		InitDefaultPlayerData();
+		m_eMainTask = GAME_TASK_INFO;
+		SendLoginAck(0);
 
-	// Initialize default character slot 0 with default equipment
-	m_ui8ActiveCharaSlot = 0;
-	m_CharaSlots[0].ui8State = MULTI_SLOT_NORMAL;
-	m_CharaSlots[0].ui32CharaId = MAKE_ITEM_ID(ITEM_TYPE_CHARA, 1, 1);	// Default RED team char
-	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_PRIMARY]		= MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_ASSAULT, 4);		// K-2
-	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_SECONDARY]	= MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 3);	// K5
-	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_MELEE]		= MAKE_ITEM_ID(ITEM_TYPE_MELEE, WEAPON_CLASS_KNIFE, 1);			// M7
-	m_CharaSlots[0].equip.ui32PartsIds[EQUIP_PARTS_CHARA] = m_CharaSlots[0].ui32CharaId;
-
-	// Initialize tutorial quest cardset
-	m_QuestData.InitTutorial();
-
-	// Initialize default medals and skills
-	m_MedalData.InitDefaults();
-	m_SkillData.Reset();
-
-	m_eMainTask = GAME_TASK_INFO;
-	SendLoginAck(0);
-
-	printf("[GameSession] Login success - Index=%d, User=%s, UID=%lld\n",
-		GetIndex(), m_szUsername, m_i64UID);
+		printf("[GameSession] Login success (defaults) - Index=%d, User=%s, UID=%lld\n",
+			GetIndex(), m_szUsername, m_i64UID);
+	}
 }
 
 void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
@@ -1252,11 +1243,17 @@ void GameSession::OnCheckNickNameReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// TODO: Forward to DataServer for duplicate check
-	// For now, always return available
-	SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, 0);	// 0 = available
-
-	printf("[GameSession] CheckNickName - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestCheckNick(GetIndex(), szNickname);
+		printf("[GameSession] CheckNickName via DataServer - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	}
+	else
+	{
+		// No DataServer - always return available
+		SendSimpleAck(PROTOCOL_BASE_CHECK_NICK_NAME_ACK, 0);
+		printf("[GameSession] CheckNickName (no DS) - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	}
 }
 
 void GameSession::OnCreateNickReq(char* pData, INT32 i32Size)
@@ -1278,11 +1275,17 @@ void GameSession::OnCreateNickReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// TODO: Forward to DataServer
-	// For now, accept directly
-	OnCreateNickResult(0, szNickname);
-
-	printf("[GameSession] CreateNick - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestCreateNick(m_i64UID, GetIndex(), szNickname);
+		printf("[GameSession] CreateNick via DataServer - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	}
+	else
+	{
+		// No DataServer - accept directly
+		OnCreateNickResult(0, szNickname);
+		printf("[GameSession] CreateNick (no DS) - Index=%d, Nick=%s\n", GetIndex(), szNickname);
+	}
 }
 
 void GameSession::OnRankUpReq(char* pData, INT32 i32Size)
@@ -2154,10 +2157,43 @@ void GameSession::OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize)
 		m_Inventory[i].ui32ItemArg = (uint32_t)pItems[i].i32ItemCount;
 	}
 
-	m_eMainTask = GAME_TASK_INFO;
+	// Initialize default equipment if no character data loaded
+	if (m_CharaSlots[0].ui32CharaId == 0)
+	{
+		InitDefaultPlayerData();
+		// Keep loaded stats/level/exp/gp, just ensure defaults for equipment
+	}
 
-	printf("[GameSession] Player data loaded - UID=%lld, Nick=%s, Level=%d\n",
-		m_i64UID, m_szNickname, m_i32Level);
+	m_eMainTask = GAME_TASK_INFO;
+	SendLoginAck(0);
+
+	printf("[GameSession] Player data loaded - UID=%lld, Nick=%s, Level=%d, Items=%d\n",
+		m_i64UID, m_szNickname, m_i32Level, m_i32InventoryCount);
+}
+
+void GameSession::InitDefaultPlayerData()
+{
+	strncpy_s(m_szNickname, m_szUsername, _TRUNCATE);
+	m_i32Level = 1;
+	m_i64Exp = 0;
+	m_i32GP = g_pContextMain ? g_pContextMain->m_i32StartingGP : 10000;
+	m_i32Cash = g_pContextMain ? g_pContextMain->m_i32StartingCash : 0;
+
+	// Initialize default character slot 0 with default equipment
+	m_ui8ActiveCharaSlot = 0;
+	m_CharaSlots[0].ui8State = MULTI_SLOT_NORMAL;
+	m_CharaSlots[0].ui32CharaId = MAKE_ITEM_ID(ITEM_TYPE_CHARA, 1, 1);	// Default RED team char
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_PRIMARY]		= MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_ASSAULT, 4);		// K-2
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_SECONDARY]	= MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 3);	// K5
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_MELEE]		= MAKE_ITEM_ID(ITEM_TYPE_MELEE, WEAPON_CLASS_KNIFE, 1);			// M7
+	m_CharaSlots[0].equip.ui32PartsIds[EQUIP_PARTS_CHARA] = m_CharaSlots[0].ui32CharaId;
+
+	// Initialize tutorial quest cardset
+	m_QuestData.InitTutorial();
+
+	// Initialize default medals and skills
+	m_MedalData.InitDefaults();
+	m_SkillData.Reset();
 }
 
 // ============================================================================

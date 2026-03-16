@@ -24,6 +24,7 @@ public:
 	// Member management
 	bool			AddMember(int64_t i64UID, uint32_t ui32IP, uint16_t ui16Port, int i32Team, int i32Slot);
 	void			RemoveMember(int i32Slot);
+	int				FindFreeSlot() const;
 	int				GetActiveMemberCount() const;
 	BattleMember*	GetMember(int i32Slot);
 	BattleMember*	FindMemberByUID(int64_t i64UID);

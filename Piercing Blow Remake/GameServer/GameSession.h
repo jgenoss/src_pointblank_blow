@@ -193,6 +193,9 @@ public:
 	int					AddInventoryItem(const GameInventoryItem& item);
 	bool				RemoveInventoryItem(uint32_t dbIdx);
 
+	// Initialize default player data (when DataServer is not connected)
+	void			InitDefaultPlayerData();
+
 	// Load player data from DataServer response
 	void			OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize);
 
