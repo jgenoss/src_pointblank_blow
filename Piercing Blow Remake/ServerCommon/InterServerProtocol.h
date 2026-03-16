@@ -186,6 +186,97 @@ struct IS_PLAYER_LOAD_ACK
 	// El resto de los datos del jugador se envia como payload adicional
 };
 
+// Player Save (GameServer -> DataServer)
+struct IS_PLAYER_SAVE_REQ
+{
+	int64_t		i64UID;
+	int			i32Level;
+	int64_t		i64Exp;
+	int			i32Cash;
+	int			i32GP;
+};
+
+struct IS_PLAYER_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;				// 0 = OK
+};
+
+// Nick Create (GameServer -> DataServer)
+struct IS_PLAYER_CREATE_NICK_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	char		szNickname[64];
+};
+
+struct IS_PLAYER_CREATE_NICK_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;				// 0=OK, 1=exists, 2=invalid
+};
+
+// Nick Check (GameServer -> DataServer)
+struct IS_PLAYER_CHECK_NICK_REQ
+{
+	int			i32SessionIdx;
+	char		szNickname[64];
+};
+
+struct IS_PLAYER_CHECK_NICK_ACK
+{
+	int			i32SessionIdx;
+	int			i32Result;				// 0=available, 1=taken
+};
+
+// Stats Save (GameServer/BattleServer -> DataServer)
+struct IS_STATS_SAVE_REQ
+{
+	int64_t		i64UID;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+	int			i32Wins;
+	int			i32Losses;
+};
+
+struct IS_STATS_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;				// 0 = OK
+};
+
+// Player data payload para PLAYER_LOAD_ACK
+struct IS_PLAYER_LOAD_DATA
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Level;
+	int64_t		i64Exp;
+	int			i32Cash;
+	int			i32GP;
+	int			i32RankId;
+	int			i32ClanId;
+	// Stats
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+	int			i32Wins;
+	int			i32Losses;
+	// Inventory count (IS_PLAYER_INVENTORY_ITEM items follow after this struct)
+	int			i32InventoryCount;
+};
+
+struct IS_PLAYER_INVENTORY_ITEM
+{
+	int			i32ItemId;
+	int			i32ItemCount;
+	int			i32SlotIdx;
+	uint8_t		ui8IsEquipped;
+};
+
 // Battle Create (GameServer -> BattleServer)
 struct IS_BATTLE_CREATE_REQ
 {
