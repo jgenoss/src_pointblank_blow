@@ -8,6 +8,14 @@
 #define MAX_ATTENDANCE_DAYS		30		// Max days in attendance tracking
 #define MAX_DAILY_REWARDS		7		// Days per weekly reward cycle
 
+// Attendance milestone item IDs (using MAKE_ITEM_ID convention from InventoryDef.h)
+// These can be overridden by config later
+#define ATTENDANCE_ITEM_DAY3	0x00130001	// Supply box (type 19, sub 0, num 1)
+#define ATTENDANCE_ITEM_DAY7	0x00100001	// 1-day EXP boost card (type 16, sub 0, num 1 = XP_PLUS_110)
+#define ATTENDANCE_ITEM_DAY14	0x00100004	// 3-day GP boost card (type 16, sub 0, num 4 = PT_PLUS_130)
+#define ATTENDANCE_ITEM_DAY21	0x000F0001	// Weapon coupon (type 15, sub 0, num 1)
+#define ATTENDANCE_ITEM_DAY28	0x000D0101	// Special character (type 13, sub 1, num 1)
+
 // Attendance states
 enum GameAttendanceState
 {
@@ -52,20 +60,67 @@ struct GameAttendanceData
 		bAttendedToday = false;
 	}
 
-	// Get daily reward based on streak
-	GameAttendanceReward GetDailyReward(int dayIndex) const
+	// Get daily reward based on consecutive streak day
+	// Streak-based: better rewards for longer streaks, item rewards at milestones
+	GameAttendanceReward GetDailyReward(int streakDay) const
 	{
 		GameAttendanceReward reward;
-		reward.ui32RewardGP = 500 + (dayIndex % MAX_DAILY_REWARDS) * 200;
-		reward.ui32RewardExp = 100 + (dayIndex % MAX_DAILY_REWARDS) * 50;
-		reward.ui32RewardItemId = 0;
-		// Day 7 bonus
-		if ((dayIndex + 1) % MAX_DAILY_REWARDS == 0)
+		reward.Reset();
+
+		// Base GP/Exp scales with streak position in weekly cycle
+		int dayInCycle = streakDay % MAX_DAILY_REWARDS;
+		reward.ui32RewardGP = 500 + dayInCycle * 200;
+		reward.ui32RewardExp = 100 + dayInCycle * 50;
+
+		// Day 7 weekly bonus (every 7th consecutive day)
+		if (dayInCycle == MAX_DAILY_REWARDS - 1)
 		{
 			reward.ui32RewardGP = 3000;
 			reward.ui32RewardExp = 500;
 		}
+
+		// Item rewards at streak milestones
+		// Day 3: supply box (ITEM_TYPE_SUPPLY = type 19, subtype 0, number 1)
+		if (streakDay == 2)
+			reward.ui32RewardItemId = ATTENDANCE_ITEM_DAY3;
+		// Day 7: 1-day EXP boost (ITEM_TYPE_MAINTENANCE, CASHITEM_GROUP_XP_PLUS_110)
+		else if (streakDay == 6)
+			reward.ui32RewardItemId = ATTENDANCE_ITEM_DAY7;
+		// Day 14: 3-day GP boost
+		else if (streakDay == 13)
+			reward.ui32RewardItemId = ATTENDANCE_ITEM_DAY14;
+		// Day 21: random weapon coupon
+		else if (streakDay == 20)
+			reward.ui32RewardItemId = ATTENDANCE_ITEM_DAY21;
+		// Day 28 (monthly): special character skin
+		else if (streakDay == 27)
+			reward.ui32RewardItemId = ATTENDANCE_ITEM_DAY28;
+
 		return reward;
+	}
+
+	// Check if month changed and reset
+	bool ShouldMonthlyReset(uint32_t today) const
+	{
+		if (ui32LastAttendDate == 0)
+			return false;
+
+		// Extract month from YYYYMMDD
+		uint32_t lastMonth = (ui32LastAttendDate / 100) % 100;
+		uint32_t lastYear = ui32LastAttendDate / 10000;
+		uint32_t curMonth = (today / 100) % 100;
+		uint32_t curYear = today / 10000;
+
+		return (curYear > lastYear) || (curYear == lastYear && curMonth > lastMonth);
+	}
+
+	void MonthlyReset()
+	{
+		memset(ui8Days, 0, sizeof(ui8Days));
+		i32TotalDays = 0;
+		i32CurrentStreak = 0;
+		bAttendedToday = false;
+		// ui32LastAttendDate preserved - updated on next attend
 	}
 };
 

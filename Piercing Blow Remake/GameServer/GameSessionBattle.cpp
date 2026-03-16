@@ -729,6 +729,13 @@ void GameSession::OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size)
 		return;
 	}
 
+	// Phase 3A: Use Room's kick vote system with cooldown tracking
+	if (!m_pRoom->StartKickVote(m_i32SlotIdx, targetSlot))
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_SUGGEST_KICKVOTE_ACK, 5);	// Vote in progress or cooldown
+		return;
+	}
+
 	// Accept the vote suggestion, broadcast to all players to vote
 	i3NetworkPacket packet;
 	char buffer[32];
@@ -767,7 +774,10 @@ void GameSession::OnBattleVoteKickVoteReq(char* pData, INT32 i32Size)
 	uint8_t targetSlot = *(uint8_t*)pData;
 	uint8_t vote = *(uint8_t*)(pData + 1);	// 0 = disagree, 1 = agree
 
-	// Acknowledge the vote
+	// Phase 3A: Register vote with Room's kick vote system
+	m_pRoom->CastKickVote(m_i32SlotIdx, targetSlot, vote);
+
+	// Broadcast the vote to all players
 	i3NetworkPacket packet;
 	char buffer[32];
 	int offset = 0;

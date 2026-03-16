@@ -316,6 +316,7 @@ private:
 	void			OnShopGoodsListReq(char* pData, INT32 i32Size);
 	void			OnShopItemListReq(char* pData, INT32 i32Size);
 	void			OnShopMatchingListReq(char* pData, INT32 i32Size);
+	void			OnShopRepairListReq(char* pData, INT32 i32Size);
 	void			OnShopItemAuthReq(char* pData, INT32 i32Size);
 	void			OnShopInsertItemReq(char* pData, INT32 i32Size);
 	void			OnShopDeleteItemReq(char* pData, INT32 i32Size);

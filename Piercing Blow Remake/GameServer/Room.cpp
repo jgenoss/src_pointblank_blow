@@ -40,10 +40,16 @@ Room::Room()
 	, m_i32BattleRoomIdx(-1)
 	, m_ui16BattleUdpPort(0)
 	, m_ui32BattleUdpIPAddr(0)
+	, m_bKickVoteActive(false)
+	, m_i32KickVoteTarget(-1)
+	, m_i32KickVoteSuggestor(-1)
+	, m_dwKickVoteStartTime(0)
+	, m_dwLastKickVoteTime(0)
 {
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
 	m_szBattleUdpIP[0] = '\0';
+	memset(m_KickVotes, 0, sizeof(m_KickVotes));
 
 	for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
 	{
@@ -942,6 +948,10 @@ void Room::OnUpdateRoom_CountdownB(DWORD dwNow)
 
 void Room::OnUpdateRoom_Battle(DWORD dwNow)
 {
+	// Check kick vote timeout (Phase 3A)
+	if (m_bKickVoteActive && (dwNow - m_dwKickVoteStartTime) >= KICK_VOTE_TIMEOUT_MS)
+		ResolveKickVote();
+
 	// Check time limit
 	if (m_dwRoundStartTime > 0 && m_Score.ui16MaxTime > 0)
 	{
@@ -2014,4 +2024,107 @@ void Room::BroadcastRoomStateChange()
 
 	packet.SetPacketData(buffer, offset);
 	SendToAll(&packet);
+}
+
+// ============================================================================
+// Kick Vote System (Phase 3A)
+// ============================================================================
+
+#define KICK_VOTE_TIMEOUT_MS		20000	// 20 seconds to vote
+#define KICK_VOTE_COOLDOWN_MS		60000	// 60 seconds between votes
+
+bool Room::StartKickVote(int suggestSlot, int targetSlot)
+{
+	// Already a vote in progress
+	if (m_bKickVoteActive)
+		return false;
+
+	// Cooldown check
+	DWORD dwNow = GetTickCount();
+	if (m_dwLastKickVoteTime > 0 && (dwNow - m_dwLastKickVoteTime) < KICK_VOTE_COOLDOWN_MS)
+		return false;
+
+	m_bKickVoteActive = true;
+	m_i32KickVoteTarget = targetSlot;
+	m_i32KickVoteSuggestor = suggestSlot;
+	m_dwKickVoteStartTime = dwNow;
+	memset(m_KickVotes, 0, sizeof(m_KickVotes));
+
+	// Suggestor automatically votes agree
+	m_KickVotes[suggestSlot] = 1;
+
+	return true;
+}
+
+bool Room::CastKickVote(int voterSlot, int targetSlot, uint8_t vote)
+{
+	if (!m_bKickVoteActive || targetSlot != m_i32KickVoteTarget)
+		return false;
+
+	if (voterSlot < 0 || voterSlot >= SLOT_MAX_COUNT)
+		return false;
+
+	// Can't vote on yourself being kicked
+	if (voterSlot == m_i32KickVoteTarget)
+		return false;
+
+	// Already voted
+	if (m_KickVotes[voterSlot] != 0)
+		return false;
+
+	m_KickVotes[voterSlot] = (vote > 0) ? 1 : 2;	// 1=agree, 2=disagree
+
+	// Check if all eligible players have voted
+	int totalVoters = 0, totalVoted = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && i != m_i32KickVoteTarget)
+		{
+			totalVoters++;
+			if (m_KickVotes[i] != 0)
+				totalVoted++;
+		}
+	}
+
+	// All votes are in - resolve
+	if (totalVoted >= totalVoters)
+		ResolveKickVote();
+
+	return true;
+}
+
+void Room::ResolveKickVote()
+{
+	if (!m_bKickVoteActive)
+		return;
+
+	int agrees = 0, disagrees = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_KickVotes[i] == 1)
+			agrees++;
+		else if (m_KickVotes[i] == 2)
+			disagrees++;
+	}
+
+	// Majority vote wins
+	if (agrees > disagrees && m_i32KickVoteTarget >= 0 &&
+		m_i32KickVoteTarget < SLOT_MAX_COUNT && m_pSlotSession[m_i32KickVoteTarget])
+	{
+		OnKickPlayer(nullptr, m_i32KickVoteTarget);
+		printf("[Room] Kick vote passed - target slot %d kicked (%d agree, %d disagree)\n",
+			m_i32KickVoteTarget, agrees, disagrees);
+	}
+	else
+	{
+		printf("[Room] Kick vote failed - target slot %d stays (%d agree, %d disagree)\n",
+			m_i32KickVoteTarget, agrees, disagrees);
+	}
+
+	// Reset vote state
+	m_bKickVoteActive = false;
+	m_i32KickVoteTarget = -1;
+	m_i32KickVoteSuggestor = -1;
+	m_dwLastKickVoteTime = GetTickCount();
+	memset(m_KickVotes, 0, sizeof(m_KickVotes));
 }

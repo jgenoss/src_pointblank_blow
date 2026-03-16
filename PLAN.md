@@ -174,7 +174,7 @@
 - [x] `PROTOCOL_AUTH_SHOP_GOODSLIST_REQ/ACK` - Goods list
 - [x] `PROTOCOL_AUTH_SHOP_ITEMLIST_REQ/ACK` - Item list
 - [x] `PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ/ACK` - Matching list
-- [ ] `PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ/ACK` - Repair data
+- [x] `PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ/ACK` - Repair data
 - [ ] Double-buffered shop data (UseShopData/NotUseShopData) para actualizaciones atómicas
 
 ### 5B. Purchase & Gift
@@ -353,8 +353,8 @@
 
 ### 14A. Attendance/Daily Gift System
 - [x] Daily login tracking
-- [ ] Reward items por día consecutivo
-- [ ] Monthly reset
+- [x] Reward items por día consecutivo (milestone items at day 3/7/14/21/28)
+- [x] Monthly reset (auto-reset on month change)
 
 ### 14B. Boost Events
 - [x] Event schedule loading
@@ -392,7 +392,7 @@
 | Login (0x0100) | 3 | 1 | 33% |
 | Base (0x0200) | ~80 | 28 | 35% |
 | Auth (0x0300) | ~80 | 7 | 9% |
-| Shop (0x0400) | ~40 | 15 | 38% |
+| Shop (0x0400) | ~40 | 16 | 40% |
 | Admin (0x0500) | ~10 | 0 | 0% |
 | Clan (0x0700) | ~60 | 9 | 15% |
 | Clan Match (0x0800) | ~20 | 0 | 0% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 4 | 80% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~147** | **~32%** |
+| **TOTAL** | **~460** | **~148** | **~32%** |

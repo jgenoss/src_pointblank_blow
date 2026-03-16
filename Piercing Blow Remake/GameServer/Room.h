@@ -251,6 +251,22 @@ private:
 	uint16_t			m_ui16BattleUdpPort;
 	uint32_t			m_ui32BattleUdpIPAddr;	// Packed IPv4 for client
 
+	// Kick vote state (Phase 3A)
+	bool				m_bKickVoteActive;
+	int					m_i32KickVoteTarget;	// Slot being voted on (-1 = none)
+	int					m_i32KickVoteSuggestor;	// Slot that started the vote
+	DWORD				m_dwKickVoteStartTime;	// When vote started
+	DWORD				m_dwLastKickVoteTime;	// Cooldown tracking
+	uint8_t				m_KickVotes[SLOT_MAX_COUNT];	// 0=not voted, 1=agree, 2=disagree
+
+public:
+	// Kick vote helpers
+	bool		StartKickVote(int suggestSlot, int targetSlot);
+	bool		CastKickVote(int voterSlot, int targetSlot, uint8_t vote);
+	void		ResolveKickVote();
+	bool		IsKickVoteActive() const { return m_bKickVoteActive; }
+
+private:
 	// Slots
 	GameSlotInfo		m_Slots[SLOT_MAX_COUNT];
 	GameSession*		m_pSlotSession[SLOT_MAX_COUNT];

@@ -1005,6 +1005,86 @@ void GameSession::OnShopDeleteItemReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 }
 
+void GameSession::OnShopRepairListReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_REPAIRLIST_ACK
+	// Client format: ui32RepairCount(4) + ui32CurItemCount(4) + ui32StartIdx(4)
+	//                + SHOP_ITEM_REPAIR_DATA[count] + ui32Version(4)
+	// SHOP_ITEM_REPAIR_DATA = { ui32ItemID(4), ui32PricePoint(4), ui32PriceCash(4), ui32Durability(4) } = 16 bytes
+
+	// Build repair data from inventory - only weapon items have durability
+	struct RepairEntry
+	{
+		uint32_t ui32ItemID;
+		uint32_t ui32PricePoint;
+		uint32_t ui32PriceCash;
+		uint32_t ui32Durability;
+	};
+
+	RepairEntry entries[MAX_INVEN_COUNT];
+	int entryCount = 0;
+
+	for (int i = 0; i < m_i32InventoryCount && entryCount < MAX_INVEN_COUNT; i++)
+	{
+		if (!m_Inventory[i].IsValid())
+			continue;
+
+		int itemType = GET_ITEM_TYPE(m_Inventory[i].ui32ItemId);
+
+		// Only weapons have durability/repair data
+		if (itemType != ITEM_TYPE_PRIMARY && itemType != ITEM_TYPE_SECONDARY &&
+			itemType != ITEM_TYPE_MELEE)
+			continue;
+
+		entries[entryCount].ui32ItemID = m_Inventory[i].ui32ItemId;
+		// Repair cost scales with durability loss (simplified: 100 GP per durability point)
+		uint8_t dur = m_Inventory[i].ui8Durability;
+		uint32_t repairCost = (dur < DURABILITY_MAX) ? (uint32_t)(DURABILITY_MAX - dur) * 100 : 0;
+		entries[entryCount].ui32PricePoint = repairCost;
+		entries[entryCount].ui32PriceCash = 0;	// No cash repair
+		entries[entryCount].ui32Durability = (uint32_t)dur;
+		entryCount++;
+	}
+
+	// Send all in one packet (simplified - original splits into multiple packets for large lists)
+	char buffer[8192];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_REPAIRLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	uint32_t totalCount = (uint32_t)entryCount;
+	uint32_t curCount = (uint32_t)entryCount;
+	uint32_t startIdx = 0;
+	memcpy(buffer + offset, &totalCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &curCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &startIdx, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	// Copy repair data entries
+	for (int i = 0; i < entryCount; i++)
+	{
+		if (offset + 16 > (int)sizeof(buffer))
+			break;
+		memcpy(buffer + offset, &entries[i], sizeof(RepairEntry));
+		offset += sizeof(RepairEntry);
+	}
+
+	// Version
+	uint32_t version = 1;
+	if (g_pShopManager && g_pShopManager->IsLoaded())
+		version = g_pShopManager->GetVersion();
+	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	i3NetworkPacket packet;
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 {
 	if (m_eMainTask < GAME_TASK_INFO)

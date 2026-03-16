@@ -16,6 +16,7 @@ void GameSession::OnAttendanceReq(char* pData, INT32 i32Size)
 	int32_t result = 0;
 	uint32_t rewardGP = 0;
 	uint32_t rewardExp = 0;
+	uint32_t rewardItemId = 0;
 
 	if (m_AttendanceData.bAttendedToday)
 	{
@@ -30,13 +31,39 @@ void GameSession::OnAttendanceReq(char* pData, INT32 i32Size)
 		m_AttendanceData.i32CurrentStreak++;
 		m_AttendanceData.bAttendedToday = true;
 
-		// Get reward
-		GameAttendanceReward reward = m_AttendanceData.GetDailyReward(dayIdx);
+		// Get reward based on current streak
+		GameAttendanceReward reward = m_AttendanceData.GetDailyReward(m_AttendanceData.i32CurrentStreak - 1);
 		rewardGP = reward.ui32RewardGP;
 		rewardExp = reward.ui32RewardExp;
+		rewardItemId = reward.ui32RewardItemId;
 
 		m_i32GP += rewardGP;
 		m_i64Exp += rewardExp;
+
+		// Grant item reward if any
+		if (rewardItemId != 0 && m_i32InventoryCount < MAX_INVEN_COUNT)
+		{
+			GameInventoryItem newItem;
+			newItem.ui32ItemDBIdx = (uint32_t)(GetTickCount() & 0xFFFFFF) | ((uint32_t)m_i32InventoryCount << 24);
+			newItem.ui32ItemId = rewardItemId;
+			newItem.ui8ItemType = ITEM_ATTR_NORMAL;
+			newItem.ui32ItemArg = 0;
+
+			// Period-based items (boost cards) get 1-day or 3-day expiration
+			int itemType = GET_ITEM_TYPE(rewardItemId);
+			if (itemType == ITEM_TYPE_MAINTENANCE)
+			{
+				newItem.ui8ItemType = ITEM_ATTR_PERIOD;
+				// Day 7 = 1-day boost, Day 14 = 3-day boost
+				uint32_t durationSec = (rewardItemId == ATTENDANCE_ITEM_DAY7) ? 86400 : 86400 * 3;
+				newItem.ui32ItemArg = (uint32_t)time(nullptr) + durationSec;
+			}
+
+			AddInventoryItem(newItem);
+
+			printf("[GameSession] Attendance item reward - UID=%lld, ItemId=0x%08X, Streak=%d\n",
+				m_i64UID, rewardItemId, m_AttendanceData.i32CurrentStreak);
+		}
 
 		printf("[GameSession] Attendance checked - UID=%lld, Day=%d, Streak=%d, GP+=%u, Exp+=%u\n",
 			m_i64UID, m_AttendanceData.i32TotalDays, m_AttendanceData.i32CurrentStreak,
@@ -45,7 +72,7 @@ void GameSession::OnAttendanceReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[64];
+	char buffer[80];
 	int offset = 0;
 
 	uint16_t sz = 0;
@@ -66,6 +93,7 @@ void GameSession::OnAttendanceReq(char* pData, INT32 i32Size)
 	// Reward info
 	memcpy(buffer + offset, &rewardGP, sizeof(uint32_t));	offset += sizeof(uint32_t);
 	memcpy(buffer + offset, &rewardExp, sizeof(uint32_t));	offset += sizeof(uint32_t);
+	memcpy(buffer + offset, &rewardItemId, sizeof(uint32_t)); offset += sizeof(uint32_t);
 
 	// Updated balance
 	uint32_t gp = (uint32_t)m_i32GP;
@@ -140,6 +168,14 @@ void GameSession::CheckAttendanceOnLogin()
 	localtime_s(&tmNow, &now);
 	uint32_t today = (uint32_t)((tmNow.tm_year + 1900) * 10000 + (tmNow.tm_mon + 1) * 100 + tmNow.tm_mday);
 
+	// Monthly reset check - new month clears all attendance data
+	if (m_AttendanceData.ShouldMonthlyReset(today))
+	{
+		printf("[GameSession] Attendance monthly reset - UID=%lld, LastDate=%u, Today=%u\n",
+			m_i64UID, m_AttendanceData.ui32LastAttendDate, today);
+		m_AttendanceData.MonthlyReset();
+	}
+
 	if (m_AttendanceData.ui32LastAttendDate != today)
 	{
 		// New day - reset daily flag and record
@@ -149,10 +185,25 @@ void GameSession::CheckAttendanceOnLogin()
 		// Check if streak was broken (missed a day)
 		if (m_AttendanceData.ui32LastAttendDate > 0)
 		{
-			uint32_t yesterday = today - 1;	// Simplified (doesn't handle month boundaries perfectly)
-			if (m_AttendanceData.ui32LastAttendDate < yesterday)
+			// Proper day difference check using tm struct
+			uint32_t lastY = m_AttendanceData.ui32LastAttendDate / 10000;
+			uint32_t lastM = (m_AttendanceData.ui32LastAttendDate / 100) % 100;
+			uint32_t lastD = m_AttendanceData.ui32LastAttendDate % 100;
+			uint32_t curY = today / 10000;
+			uint32_t curM = (today / 100) % 100;
+			uint32_t curD = today % 100;
+
+			// Simple gap check: if more than 1 calendar day apart, streak broken
+			bool isConsecutive = false;
+			if (curY == lastY && curM == lastM && curD == lastD + 1)
+				isConsecutive = true;
+			else if (curY == lastY && curM == lastM + 1 && curD == 1)
+				isConsecutive = true;	// First of next month (simplified)
+			else if (curY == lastY + 1 && curM == 1 && lastM == 12 && curD == 1)
+				isConsecutive = true;	// Jan 1 after Dec 31
+
+			if (!isConsecutive)
 			{
-				// Streak broken - reset
 				m_AttendanceData.i32CurrentStreak = 0;
 				printf("[GameSession] Attendance streak broken - UID=%lld, LastDate=%u, Today=%u\n",
 					m_i64UID, m_AttendanceData.ui32LastAttendDate, today);

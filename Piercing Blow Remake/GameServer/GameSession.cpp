@@ -336,6 +336,7 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_GOODSLIST_REQ:			OnShopGoodsListReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_ITEMLIST_REQ:			OnShopItemListReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ:		OnShopMatchingListReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_REPAIRLIST_REQ:		OnShopRepairListReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ:			OnShopItemAuthReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ:		OnShopInsertItemReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ:		OnShopDeleteItemReq(pData, dataSize);		break;
