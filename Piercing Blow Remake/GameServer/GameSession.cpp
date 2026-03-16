@@ -235,6 +235,18 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CS_CLIENT_LEAVE_REQ:				OnClanLeaveReq(pData, dataSize);			break;
 	case PROTOCOL_CS_CLIENT_CLAN_LIST_REQ:			OnClanListReq(pData, dataSize);				break;
 
+	// ---- Roulette/Gacha (GameSessionRoulette.cpp) ----
+	case PROTOCOL_RS_ENTER_REQ:						OnRouletteEnterReq(pData, dataSize);		break;
+	case PROTOCOL_RS_LEAVE_REQ:						OnRouletteLeaveReq(pData, dataSize);		break;
+	case PROTOCOL_RS_ITEM_INFO_REQ:
+	case PROTOCOL_RS_HIDDEN_ITEM_INFO_REQ:
+	case PROTOCOL_RS_LOSE_ITEM_INFO_REQ:
+	case PROTOCOL_RS_GRADE1_ITEM_INFO_REQ:
+	case PROTOCOL_RS_GRADE2_ITEM_INFO_REQ:
+	case PROTOCOL_RS_GRADE3_ITEM_INFO_REQ:			OnRouletteItemInfoReq(pData, dataSize);		break;
+	case PROTOCOL_RS_ROULETTE_START_REQ:			OnRouletteStartReq(pData, dataSize);		break;
+	case PROTOCOL_RS_JACKPOT_NOTIFY_REQ:			OnRouletteJackpotNotifyReq(pData, dataSize);break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;

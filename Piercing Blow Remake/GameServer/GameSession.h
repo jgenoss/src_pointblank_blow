@@ -270,6 +270,13 @@ private:
 	void			OnClanChatReq(char* pData, INT32 i32Size);
 	void			OnClanListReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
+	void			OnRouletteEnterReq(char* pData, INT32 i32Size);
+	void			OnRouletteLeaveReq(char* pData, INT32 i32Size);
+	void			OnRouletteItemInfoReq(char* pData, INT32 i32Size);
+	void			OnRouletteStartReq(char* pData, INT32 i32Size);
+	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();

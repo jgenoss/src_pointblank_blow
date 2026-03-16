@@ -7,6 +7,7 @@
 #include "ModuleDataServer.h"
 #include "ModuleBattleServer.h"
 #include "ClanDef.h"
+#include "RouletteDef.h"
 #include "i3IniParser.h"
 
 // ============================================================================
@@ -18,6 +19,7 @@ I3_CLASS_INSTANCE(GameServerContext);
 GameServerContext* g_pGameServerContext = nullptr;
 GameSessionManager* g_pGameSessionManager = nullptr;
 GameClanManager* g_pClanManager = nullptr;
+GameRouletteData* g_pRouletteData = nullptr;
 
 GameServerContext::GameServerContext()
 	: m_pGameSessionManager(nullptr)
@@ -184,6 +186,10 @@ bool GameServer::OnInitialize()
 	// Create clan manager
 	g_pClanManager = new GameClanManager();
 
+	// Create roulette data with defaults
+	g_pRouletteData = new GameRouletteData();
+	g_pRouletteData->InitDefaults();
+
 	printf("[GameServer] Initialized successfully\n");
 	return true;
 }
@@ -226,6 +232,13 @@ void GameServer::OnShutdown()
 		m_pModuleBattle->Destroy();
 		delete m_pModuleBattle;
 		m_pModuleBattle = nullptr;
+	}
+
+	// Cleanup roulette data
+	if (g_pRouletteData)
+	{
+		delete g_pRouletteData;
+		g_pRouletteData = nullptr;
 	}
 
 	// Cleanup clan manager
