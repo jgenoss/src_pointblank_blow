@@ -172,12 +172,85 @@ enum BattleRoundType
 #define LOCK_THROW		0x01
 #define LOCK_BASIC		0x0F
 
-// Mission timing
+// Mission timing (seconds)
 #define MISSION_PREBATTLE_TIME		5
 #define MISSION_TEAM_CHANGE_TIME	5
 #define MISSION_FREE_TIME			5
 #define MISSION_RESULT_TIME			3
 #define COUNT_DOWN_TIME				3
+#define LOADING_TIMEOUT				60		// Max loading time before kicking
+#define BATTLE_RESULT_DISPLAY_TIME	5		// Result screen display time
+
+// Respawn types and their times (seconds)
+enum RespawnType
+{
+	RESPAWN_TYPE_NO = 0,			// 6 seconds
+	RESPAWN_TYPE_SHORT_20,			// 5 seconds
+	RESPAWN_TYPE_SHORT_30,			// 4 seconds
+	RESPAWN_TYPE_MID_30,			// 3 seconds
+	RESPAWN_TYPE_MID_40,			// 2 seconds
+	RESPAWN_TYPE_MID_50,			// 1 second
+};
+
+inline int GetRespawnTimeByType(uint8_t ui8Type)
+{
+	switch (ui8Type)
+	{
+	case RESPAWN_TYPE_NO:			return 6;
+	case RESPAWN_TYPE_SHORT_20:		return 5;
+	case RESPAWN_TYPE_SHORT_30:		return 4;
+	case RESPAWN_TYPE_MID_30:		return 3;
+	case RESPAWN_TYPE_MID_40:		return 2;
+	case RESPAWN_TYPE_MID_50:		return 1;
+	default: return 6;
+	}
+}
+
+// Multi-kill types
+enum MultiKillType
+{
+	MULTI_KILL_NONE = 0,
+	MULTI_KILL_DOUBLE,				// 2 kills
+	MULTI_KILL_TRIPLE,				// 3 kills
+	MULTI_KILL_MULTI,				// 4 kills
+	MULTI_KILL_ULTRA,				// 5 kills
+	MULTI_KILL_UNBELIEVABLE,		// 6+ kills
+};
+
+inline uint8_t GetMultiKillType(int i32ConsecutiveKills)
+{
+	if (i32ConsecutiveKills >= 6) return MULTI_KILL_UNBELIEVABLE;
+	if (i32ConsecutiveKills >= 5) return MULTI_KILL_ULTRA;
+	if (i32ConsecutiveKills >= 4) return MULTI_KILL_MULTI;
+	if (i32ConsecutiveKills >= 3) return MULTI_KILL_TRIPLE;
+	if (i32ConsecutiveKills >= 2) return MULTI_KILL_DOUBLE;
+	return MULTI_KILL_NONE;
+}
+
+// Hit part types
+enum HitPartType
+{
+	HIT_PART_BODY = 0,
+	HIT_PART_HEAD,
+	HIT_PART_LEFT_ARM,
+	HIT_PART_RIGHT_ARM,
+	HIT_PART_LEFT_LEG,
+	HIT_PART_RIGHT_LEG,
+};
+
+// Battle result event types (EXP/Point bonus categories)
+#define TYPE_BATTLE_RESULT_EVENT_COUNT	8
+enum BattleResultEventType
+{
+	BATTLE_RESULT_EVENT_BASE = 0,		// Base reward
+	BATTLE_RESULT_EVENT_WIN,			// Win bonus
+	BATTLE_RESULT_EVENT_KILL,			// Kill bonus
+	BATTLE_RESULT_EVENT_HEADSHOT,		// Headshot bonus
+	BATTLE_RESULT_EVENT_ASSIST,			// Assist bonus
+	BATTLE_RESULT_EVENT_BOOST,			// Event boost
+	BATTLE_RESULT_EVENT_ITEM,			// Item boost
+	BATTLE_RESULT_EVENT_RANK,			// Rank bonus
+};
 
 // ============================================================================
 // Structs

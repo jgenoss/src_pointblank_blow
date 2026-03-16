@@ -155,6 +155,9 @@ public:
 	// Battle results from BattleServer (applied via ModuleBattleServer)
 	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin);
 
+	// Save all player stats at end of battle
+	void			SaveAllPlayerStats();
+
 	// Timeout
 	bool			IsTimedOut() const;
 	DWORD			GetLastPacketTime() const	{ return m_dwLastPacketTime; }
@@ -332,6 +335,9 @@ private:
 	int				m_i32Headshots;
 	int				m_i32Wins;
 	int				m_i32Losses;
+
+	// Battle state
+	uint32_t		m_stUsedWeapon;		// Last used weapon ID in battle
 
 	// Equipment (7E) - Character slots with weapon/parts loadouts
 	uint8_t			m_ui8ActiveCharaSlot;					// Current active character slot (0-4)

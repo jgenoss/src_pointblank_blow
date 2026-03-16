@@ -23,6 +23,10 @@ Room::Room()
 	, m_ui32OptionFlag(0)
 	, m_bIsClanMatch(false)
 	, m_dwBattleStartTime(0)
+	, m_dwStateStartTime(0)
+	, m_dwRoundStartTime(0)
+	, m_ui8RespawnType(RESPAWN_TYPE_NO)
+	, m_dwLoadingTimeout(LOADING_TIMEOUT * 1000)
 	, m_i32BattleRoomIdx(-1)
 	, m_ui16BattleUdpPort(0)
 	, m_ui32BattleUdpIPAddr(0)
@@ -35,6 +39,7 @@ Room::Room()
 	{
 		m_Slots[i].Reset();
 		m_pSlotSession[i] = nullptr;
+		m_SlotStats[i].Reset();
 	}
 }
 
@@ -235,16 +240,21 @@ bool Room::OnStartBattle()
 		}
 	}
 
+	DWORD dwNow = GetTickCount();
 	m_ui8RoomState = ROOM_STATE_COUNTDOWN_R;
+	m_dwStateStartTime = dwNow;
 
 	// Set all slots to loading state
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		if (m_pSlotSession[i])
+		{
 			m_Slots[i].ui8State = SLOT_STATE_LOAD;
+			m_SlotStats[i].Reset();
+		}
 	}
 
-	m_dwBattleStartTime = GetTickCount();
+	m_dwBattleStartTime = dwNow;
 
 	// Reset score for new match
 	m_Score.Reset();
@@ -480,65 +490,6 @@ bool Room::CheckMatchEnd() const
 	return false;
 }
 
-void Room::UpdateBattleTimer(DWORD dwNow)
-{
-	if (m_ui8RoomState != ROOM_STATE_BATTLE)
-		return;
-
-	if (m_dwBattleStartTime == 0)
-		return;
-
-	// Check if time limit exceeded
-	DWORD dwElapsed = (dwNow - m_dwBattleStartTime) / 1000;
-	if (m_Score.ui16MaxTime > 0 && dwElapsed >= m_Score.ui16MaxTime)
-	{
-		// Time's up - determine winner by score
-		int winnerTeam = -1;	// Draw
-		if (m_Score.i32RedScore > m_Score.i32BlueScore)
-			winnerTeam = TEAM_RED;
-		else if (m_Score.i32BlueScore > m_Score.i32RedScore)
-			winnerTeam = TEAM_BLUE;
-
-		printf("[Room] Battle timer expired - Room=%d, Elapsed=%ds, Winner=%s\n",
-			m_i32RoomIdx, (int)dwElapsed,
-			winnerTeam == TEAM_RED ? "RED" :
-			winnerTeam == TEAM_BLUE ? "BLUE" : "DRAW");
-
-		// End battle for all players in room
-		OnEndBattle();
-
-		// Notify all players of battle end
-		i3NetworkPacket packet;
-		char buffer[64];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_ENDBATTLE_ACK;
-		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-		uint8_t winner = (uint8_t)(winnerTeam < 0 ? 0 : winnerTeam);
-		int32_t redScore = m_Score.i32RedScore;
-		int32_t blueScore = m_Score.i32BlueScore;
-		memcpy(buffer + offset, &winner, 1);		offset += 1;
-		memcpy(buffer + offset, &redScore, 4);		offset += 4;
-		memcpy(buffer + offset, &blueScore, 4);		offset += 4;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendToAll(&packet);
-
-		// Return players to ready room
-		for (int i = 0; i < SLOT_MAX_COUNT; i++)
-		{
-			if (m_pSlotSession[i])
-				m_pSlotSession[i]->SetTask(GAME_TASK_READY_ROOM);
-		}
-	}
-}
-
 bool Room::CheckPassword(const char* pw) const
 {
 	if (m_szPassword[0] == '\0')
@@ -701,4 +652,763 @@ void Room::ClearBattleInfo()
 	m_szBattleUdpIP[0] = '\0';
 	m_ui16BattleUdpPort = 0;
 	m_ui32BattleUdpIPAddr = 0;
+}
+
+// ============================================================================
+// Timer-driven Room State Machine
+// Called from RoomManager::OnUpdate() each tick
+// ============================================================================
+
+void Room::OnUpdateRoom(DWORD dwNow)
+{
+	if (!m_bIsCreate)
+		return;
+
+	switch (m_ui8RoomState)
+	{
+	case ROOM_STATE_READY:
+		// Nothing to do in ready state
+		break;
+	case ROOM_STATE_COUNTDOWN_R:
+		OnUpdateRoom_CountdownR(dwNow);
+		break;
+	case ROOM_STATE_LOADING:
+		OnUpdateRoom_Loading(dwNow);
+		break;
+	case ROOM_STATE_RENDEZVOUS:
+		OnUpdateRoom_Rendezvous(dwNow);
+		break;
+	case ROOM_STATE_PRE_BATTLE:
+		OnUpdateRoom_PreBattle(dwNow);
+		break;
+	case ROOM_STATE_COUNTDOWN_B:
+		OnUpdateRoom_CountdownB(dwNow);
+		break;
+	case ROOM_STATE_BATTLE:
+		OnUpdateRoom_Battle(dwNow);
+		break;
+	case ROOM_STATE_BATTLE_RESULT:
+		OnUpdateRoom_BattleResult(dwNow);
+		break;
+	case ROOM_STATE_BATTLE_END:
+		OnUpdateRoom_BattleEnd(dwNow);
+		break;
+	}
+}
+
+void Room::OnUpdateRoom_CountdownR(DWORD dwNow)
+{
+	// 3 second countdown before loading
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+	if (dwElapsed >= COUNT_DOWN_TIME * 1000)
+	{
+		m_ui8RoomState = ROOM_STATE_LOADING;
+		m_dwStateStartTime = dwNow;
+
+		printf("[Room] COUNTDOWN_R -> LOADING - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+void Room::OnUpdateRoom_Loading(DWORD dwNow)
+{
+	// Wait for all players to finish loading (SLOT_STATE_LOAD -> SLOT_STATE_BATTLE_LOADOK)
+	// Timeout: kick players who haven't loaded in time
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+
+	if (dwElapsed >= m_dwLoadingTimeout)
+	{
+		// Kick players who haven't loaded
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i] && m_Slots[i].ui8State == SLOT_STATE_LOAD)
+			{
+				printf("[Room] Loading timeout - kicking slot %d from Room=%d\n", i, m_i32RoomIdx);
+				GameSession* pKicked = m_pSlotSession[i];
+				m_Slots[i].Reset();
+				m_pSlotSession[i] = nullptr;
+				m_i32PlayerCount--;
+				pKicked->SetRoomIdx(-1);
+				pKicked->SetSlotIdx(-1);
+				pKicked->SetRoom(nullptr);
+				pKicked->SetTask(GAME_TASK_LOBBY);
+			}
+		}
+
+		// If no players remain, destroy room
+		if (m_i32PlayerCount <= 0)
+		{
+			OnDestroy();
+			return;
+		}
+	}
+
+	// Check if all remaining players have loaded
+	bool allLoaded = true;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i])
+		{
+			if (m_Slots[i].ui8State < SLOT_STATE_BATTLE_LOADOK)
+			{
+				allLoaded = false;
+				break;
+			}
+		}
+	}
+
+	if (allLoaded)
+	{
+		m_ui8RoomState = ROOM_STATE_RENDEZVOUS;
+		m_dwStateStartTime = dwNow;
+
+		// Set all slots to rendezvous state
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_Slots[i].ui8State = SLOT_STATE_RENDEZVOUS;
+		}
+
+		printf("[Room] LOADING -> RENDEZVOUS - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+void Room::OnUpdateRoom_Rendezvous(DWORD dwNow)
+{
+	// Wait for BattleServer to be ready / rendezvous complete
+	// Auto-advance after MISSION_PREBATTLE_TIME seconds or when all slots confirm
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+
+	bool allReady = true;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8State < SLOT_STATE_PRESTART)
+		{
+			allReady = false;
+			break;
+		}
+	}
+
+	if (allReady || dwElapsed >= MISSION_PREBATTLE_TIME * 1000)
+	{
+		m_ui8RoomState = ROOM_STATE_PRE_BATTLE;
+		m_dwStateStartTime = dwNow;
+
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_Slots[i].ui8State = SLOT_STATE_PRESTART;
+		}
+
+		printf("[Room] RENDEZVOUS -> PRE_BATTLE - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+void Room::OnUpdateRoom_PreBattle(DWORD dwNow)
+{
+	// Wait for hole punching / NAT traversal to complete
+	// Auto-advance after MISSION_PREBATTLE_TIME seconds or when all slots ready
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+
+	bool allReady = true;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8State < SLOT_STATE_BATTLE_READY)
+		{
+			allReady = false;
+			break;
+		}
+	}
+
+	if (allReady || dwElapsed >= MISSION_PREBATTLE_TIME * 1000)
+	{
+		m_ui8RoomState = ROOM_STATE_COUNTDOWN_B;
+		m_dwStateStartTime = dwNow;
+
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_Slots[i].ui8State = SLOT_STATE_BATTLE_READY;
+		}
+
+		printf("[Room] PRE_BATTLE -> COUNTDOWN_B - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+void Room::OnUpdateRoom_CountdownB(DWORD dwNow)
+{
+	// 3 second countdown before battle begins
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+	if (dwElapsed >= COUNT_DOWN_TIME * 1000)
+	{
+		m_ui8RoomState = ROOM_STATE_BATTLE;
+		m_dwStateStartTime = dwNow;
+		m_dwRoundStartTime = dwNow;
+
+		// Set all slots to battle state, all alive
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+			{
+				m_Slots[i].ui8State = SLOT_STATE_BATTLE;
+				m_SlotStats[i].bAlive = true;
+			}
+		}
+
+		printf("[Room] COUNTDOWN_B -> BATTLE - Room=%d, Round=%d\n",
+			m_i32RoomIdx, m_Score.i32NowRound);
+	}
+}
+
+void Room::OnUpdateRoom_Battle(DWORD dwNow)
+{
+	// Check time limit
+	if (m_dwRoundStartTime > 0 && m_Score.ui16MaxTime > 0)
+	{
+		DWORD dwElapsed = (dwNow - m_dwRoundStartTime) / 1000;
+		if (dwElapsed >= m_Score.ui16MaxTime)
+		{
+			// Time's up
+			int winnerTeam = -1;
+			if (m_Score.i32RedScore > m_Score.i32BlueScore)
+				winnerTeam = TEAM_RED;
+			else if (m_Score.i32BlueScore > m_Score.i32RedScore)
+				winnerTeam = TEAM_BLUE;
+
+			printf("[Room] Battle timer expired - Room=%d, Winner=%s\n",
+				m_i32RoomIdx,
+				winnerTeam == TEAM_RED ? "RED" :
+				winnerTeam == TEAM_BLUE ? "BLUE" : "DRAW");
+
+			if (IsMissionMode(m_ui8GameMode))
+			{
+				// In mission mode, time expiry = DEF wins the round
+				OnRoundEnd(TEAM_BLUE);	// DEF wins on timeout
+
+				if (CheckMatchEnd())
+				{
+					int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+					CalculateBattleRewards(finalWinner);
+					m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+					m_dwStateStartTime = dwNow;
+					SendBattleResultToAll(finalWinner);
+				}
+				else
+				{
+					// Next round - reset round timer and alive status
+					m_dwRoundStartTime = dwNow;
+					for (int i = 0; i < SLOT_MAX_COUNT; i++)
+					{
+						if (m_pSlotSession[i])
+							m_SlotStats[i].bAlive = true;
+					}
+				}
+			}
+			else
+			{
+				// Deathmatch time up -> battle result
+				int finalWinner = -1;
+				if (m_Score.i32RedScore > m_Score.i32BlueScore)
+					finalWinner = TEAM_RED;
+				else if (m_Score.i32BlueScore > m_Score.i32RedScore)
+					finalWinner = TEAM_BLUE;
+
+				CalculateBattleRewards(finalWinner);
+				m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+				m_dwStateStartTime = dwNow;
+				SendBattleResultToAll(finalWinner);
+			}
+			return;
+		}
+	}
+
+	// Check respawn timers for dead players in deathmatch
+	if (!IsMissionMode(m_ui8GameMode))
+	{
+		int respawnMs = GetRespawnTime() * 1000;
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i] && m_SlotStats[i].bRespawnPending)
+			{
+				if (m_SlotStats[i].dwDeathTime > 0 &&
+					(dwNow - m_SlotStats[i].dwDeathTime) >= (DWORD)respawnMs)
+				{
+					// Auto-respawn ready
+					m_SlotStats[i].bRespawnPending = false;
+				}
+			}
+		}
+	}
+
+	// For mission mode: check if all players on one team are dead
+	if (IsMissionMode(m_ui8GameMode))
+	{
+		int redAlive = GetAliveCount(TEAM_RED);
+		int blueAlive = GetAliveCount(TEAM_BLUE);
+
+		if (redAlive == 0 || blueAlive == 0)
+		{
+			int roundWinner = (redAlive == 0) ? TEAM_BLUE : TEAM_RED;
+			OnRoundEnd(roundWinner);
+
+			if (CheckMatchEnd())
+			{
+				int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+				CalculateBattleRewards(finalWinner);
+				m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+				m_dwStateStartTime = dwNow;
+				SendBattleResultToAll(finalWinner);
+			}
+			else
+			{
+				// Next round
+				m_dwRoundStartTime = dwNow;
+				for (int i = 0; i < SLOT_MAX_COUNT; i++)
+				{
+					if (m_pSlotSession[i])
+						m_SlotStats[i].bAlive = true;
+				}
+
+				// Broadcast round end/start
+				BroadcastRoomStateChange();
+			}
+		}
+	}
+}
+
+void Room::OnUpdateRoom_BattleResult(DWORD dwNow)
+{
+	// Display result screen for BATTLE_RESULT_DISPLAY_TIME seconds
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+	if (dwElapsed >= BATTLE_RESULT_DISPLAY_TIME * 1000)
+	{
+		m_ui8RoomState = ROOM_STATE_BATTLE_END;
+		m_dwStateStartTime = dwNow;
+
+		printf("[Room] BATTLE_RESULT -> BATTLE_END - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+void Room::OnUpdateRoom_BattleEnd(DWORD dwNow)
+{
+	// Brief cleanup phase, then back to READY
+	DWORD dwElapsed = dwNow - m_dwStateStartTime;
+	if (dwElapsed >= 1000)	// 1 second cleanup
+	{
+		OnEndBattle();
+
+		// Return all players to ready room task
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_pSlotSession[i]->SetTask(GAME_TASK_READY_ROOM);
+		}
+
+		printf("[Room] BATTLE_END -> READY - Room=%d\n", m_i32RoomIdx);
+	}
+}
+
+// ============================================================================
+// Death & Kill Processing
+// ============================================================================
+
+void Room::OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32WeaponId,
+					 uint8_t ui8HitPart, float fX, float fY, float fZ, int i32AssistSlot)
+{
+	if (i32DeadSlot < 0 || i32DeadSlot >= SLOT_MAX_COUNT)
+		return;
+	if (!m_pSlotSession[i32DeadSlot])
+		return;
+
+	// Mark dead
+	m_SlotStats[i32DeadSlot].bAlive = false;
+	m_SlotStats[i32DeadSlot].i32Deaths++;
+	m_SlotStats[i32DeadSlot].dwDeathTime = GetTickCount();
+	m_SlotStats[i32DeadSlot].i32ConsecutiveKills = 0;	// Reset streak
+
+	// In deathmatch, set respawn pending
+	if (!IsMissionMode(m_ui8GameMode))
+		m_SlotStats[i32DeadSlot].bRespawnPending = true;
+
+	// Process killer
+	uint8_t ui8MultiKill = MULTI_KILL_NONE;
+	if (i32KillerSlot >= 0 && i32KillerSlot < SLOT_MAX_COUNT &&
+		i32KillerSlot != i32DeadSlot && m_pSlotSession[i32KillerSlot])
+	{
+		m_SlotStats[i32KillerSlot].i32Kills++;
+		m_SlotStats[i32KillerSlot].i32ConsecutiveKills++;
+
+		if (m_SlotStats[i32KillerSlot].i32ConsecutiveKills > m_SlotStats[i32KillerSlot].i32MaxConsecutiveKills)
+			m_SlotStats[i32KillerSlot].i32MaxConsecutiveKills = m_SlotStats[i32KillerSlot].i32ConsecutiveKills;
+
+		ui8MultiKill = GetMultiKillType(m_SlotStats[i32KillerSlot].i32ConsecutiveKills);
+
+		// Headshot tracking
+		if (ui8HitPart == HIT_PART_HEAD)
+			m_SlotStats[i32KillerSlot].i32Headshots++;
+
+		// Add kill to team score (deathmatch only)
+		if (!IsMissionMode(m_ui8GameMode))
+		{
+			const GameSlotInfo& killerInfo = m_Slots[i32KillerSlot];
+			OnAddKill(killerInfo.ui8Team);
+		}
+	}
+
+	// Process assist
+	if (i32AssistSlot >= 0 && i32AssistSlot < SLOT_MAX_COUNT &&
+		i32AssistSlot != i32KillerSlot && i32AssistSlot != i32DeadSlot &&
+		m_pSlotSession[i32AssistSlot])
+	{
+		m_SlotStats[i32AssistSlot].i32Assists++;
+	}
+
+	// Broadcast death packet to all players
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_DEATH_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t deadSlot = (uint8_t)i32DeadSlot;
+	uint8_t killerSlot = (uint8_t)(i32KillerSlot >= 0 ? i32KillerSlot : 0xFF);
+	uint8_t assistSlot = (uint8_t)(i32AssistSlot >= 0 ? i32AssistSlot : 0xFF);
+	uint8_t hitPart = ui8HitPart;
+
+	memcpy(buffer + offset, &deadSlot, 1);		offset += 1;
+	memcpy(buffer + offset, &killerSlot, 1);	offset += 1;
+	memcpy(buffer + offset, &ui32WeaponId, 4);	offset += 4;
+	memcpy(buffer + offset, &hitPart, 1);		offset += 1;
+	memcpy(buffer + offset, &assistSlot, 1);	offset += 1;
+	memcpy(buffer + offset, &ui8MultiKill, 1);	offset += 1;
+
+	// Position
+	memcpy(buffer + offset, &fX, 4);	offset += 4;
+	memcpy(buffer + offset, &fY, 4);	offset += 4;
+	memcpy(buffer + offset, &fZ, 4);	offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+
+	// Check deathmatch kill limit
+	if (!IsMissionMode(m_ui8GameMode) && CheckMatchEnd())
+	{
+		int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+		CalculateBattleRewards(finalWinner);
+		m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+		m_dwStateStartTime = GetTickCount();
+		SendBattleResultToAll(finalWinner);
+	}
+}
+
+void Room::OnPlayerRespawn(int i32Slot)
+{
+	if (i32Slot < 0 || i32Slot >= SLOT_MAX_COUNT)
+		return;
+	if (!m_pSlotSession[i32Slot])
+		return;
+
+	// In mission mode, no respawn
+	if (IsMissionMode(m_ui8GameMode))
+		return;
+
+	// Check respawn timer
+	if (m_SlotStats[i32Slot].bRespawnPending)
+	{
+		DWORD dwNow = GetTickCount();
+		int respawnMs = GetRespawnTime() * 1000;
+		if ((dwNow - m_SlotStats[i32Slot].dwDeathTime) < (DWORD)respawnMs)
+			return;	// Not ready yet
+	}
+
+	m_SlotStats[i32Slot].bAlive = true;
+	m_SlotStats[i32Slot].bRespawnPending = false;
+
+	// Broadcast respawn to all
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_RESPAWN_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = (uint8_t)i32Slot;
+	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+}
+
+bool Room::IsPlayerAlive(int i32Slot) const
+{
+	if (i32Slot < 0 || i32Slot >= SLOT_MAX_COUNT)
+		return false;
+	if (!m_pSlotSession[i32Slot])
+		return false;
+	return m_SlotStats[i32Slot].bAlive;
+}
+
+int Room::GetAliveCount(int i32Team) const
+{
+	int count = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8Team == (uint8_t)i32Team &&
+			m_SlotStats[i].bAlive)
+		{
+			count++;
+		}
+	}
+	return count;
+}
+
+int Room::GetConsecutiveKills(int i32Slot) const
+{
+	if (i32Slot < 0 || i32Slot >= SLOT_MAX_COUNT)
+		return 0;
+	return m_SlotStats[i32Slot].i32ConsecutiveKills;
+}
+
+int Room::GetRespawnTime() const
+{
+	return GetRespawnTimeByType(m_ui8RespawnType);
+}
+
+// ============================================================================
+// Slot state helpers
+// ============================================================================
+
+bool Room::AllSlotsInState(uint8_t ui8State) const
+{
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8State != ui8State)
+			return false;
+	}
+	return true;
+}
+
+bool Room::AllSlotsMinState(uint8_t ui8MinState) const
+{
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8State < ui8MinState)
+			return false;
+	}
+	return true;
+}
+
+int Room::CountSlotsInState(uint8_t ui8State) const
+{
+	int count = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8State == ui8State)
+			count++;
+	}
+	return count;
+}
+
+void Room::SetSlotState(int i32Slot, uint8_t ui8State)
+{
+	if (i32Slot >= 0 && i32Slot < SLOT_MAX_COUNT)
+		m_Slots[i32Slot].ui8State = ui8State;
+}
+
+// ============================================================================
+// Battle Result & Rewards
+// ============================================================================
+
+void Room::CalculateBattleRewards(int i32WinnerTeam)
+{
+	// EXP/Point constants
+	const uint16_t BASE_EXP = 50;
+	const uint16_t WIN_BONUS_EXP = 30;
+	const uint16_t KILL_EXP = 5;
+	const uint16_t HEADSHOT_EXP = 3;
+	const uint16_t ASSIST_EXP = 2;
+
+	const uint16_t BASE_POINT = 30;
+	const uint16_t WIN_BONUS_POINT = 20;
+	const uint16_t KILL_POINT = 3;
+	const uint16_t HEADSHOT_POINT = 2;
+	const uint16_t ASSIST_POINT = 1;
+
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (!m_pSlotSession[i])
+			continue;
+
+		SlotBattleStats& stats = m_SlotStats[i];
+		bool bWin = (i32WinnerTeam >= 0 && m_Slots[i].ui8Team == (uint8_t)i32WinnerTeam);
+
+		uint16_t totalExp = BASE_EXP;
+		uint16_t totalPoint = BASE_POINT;
+
+		if (bWin)
+		{
+			totalExp += WIN_BONUS_EXP;
+			totalPoint += WIN_BONUS_POINT;
+		}
+
+		totalExp += (uint16_t)(stats.i32Kills * KILL_EXP);
+		totalPoint += (uint16_t)(stats.i32Kills * KILL_POINT);
+
+		totalExp += (uint16_t)(stats.i32Headshots * HEADSHOT_EXP);
+		totalPoint += (uint16_t)(stats.i32Headshots * HEADSHOT_POINT);
+
+		totalExp += (uint16_t)(stats.i32Assists * ASSIST_EXP);
+		totalPoint += (uint16_t)(stats.i32Assists * ASSIST_POINT);
+
+		stats.ui16AccExp = totalExp;
+		stats.ui16AccPoint = totalPoint;
+
+		// Apply to session
+		m_pSlotSession[i]->ApplyBattleResult(
+			stats.i32Kills, stats.i32Deaths, stats.i32Headshots, bWin);
+	}
+}
+
+void Room::SendBattleResultToAll(int i32WinnerTeam)
+{
+	// Build BATTLE_ENDBATTLE_ACK packet with full per-player stats
+	i3NetworkPacket packet;
+	char buffer[2048];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_ENDBATTLE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Winner
+	uint8_t winner = (uint8_t)(i32WinnerTeam < 0 ? 0xFF : i32WinnerTeam);
+	memcpy(buffer + offset, &winner, 1);	offset += 1;
+
+	// Battle end user flag (bitmask of occupied slots)
+	uint16_t battleEndUserFlag = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i])
+			battleEndUserFlag |= (1 << i);
+	}
+	memcpy(buffer + offset, &battleEndUserFlag, 2);	offset += 2;
+
+	// Total round count per team
+	uint16_t redRounds = (uint16_t)m_Score.i32RedScore;
+	uint16_t blueRounds = (uint16_t)m_Score.i32BlueScore;
+	memcpy(buffer + offset, &redRounds, 2);		offset += 2;
+	memcpy(buffer + offset, &blueRounds, 2);	offset += 2;
+
+	// Per-slot accumulated EXP
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint16_t exp = m_pSlotSession[i] ? m_SlotStats[i].ui16AccExp : 0;
+		memcpy(buffer + offset, &exp, 2);	offset += 2;
+	}
+
+	// Per-slot accumulated Points
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint16_t pt = m_pSlotSession[i] ? m_SlotStats[i].ui16AccPoint : 0;
+		memcpy(buffer + offset, &pt, 2);	offset += 2;
+	}
+
+	// Per-slot result icon (0=loss, 1=win, 2=draw, 3=MVP)
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint8_t icon = 0;
+		if (m_pSlotSession[i])
+		{
+			if (i32WinnerTeam < 0)
+				icon = 2;	// Draw
+			else if (m_Slots[i].ui8Team == (uint8_t)i32WinnerTeam)
+				icon = 1;	// Win
+		}
+		memcpy(buffer + offset, &icon, 1);	offset += 1;
+	}
+
+	// Per-slot mission count (kills for DM, round kills for mission)
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint8_t missionCount = m_pSlotSession[i] ? (uint8_t)m_SlotStats[i].i32Kills : 0;
+		memcpy(buffer + offset, &missionCount, 1);	offset += 1;
+	}
+
+	// Per-slot challenge score (headshots as a simple metric)
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		uint16_t challengeScore = m_pSlotSession[i] ? (uint16_t)m_SlotStats[i].i32Headshots : 0;
+		memcpy(buffer + offset, &challengeScore, 2);	offset += 2;
+	}
+
+	// Bonus EXP array [SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT]
+	for (int i = 0; i < SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT; i++)
+	{
+		uint16_t bonus = 0;
+		memcpy(buffer + offset, &bonus, 2);	offset += 2;
+	}
+
+	// Bonus Point array [SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT]
+	for (int i = 0; i < SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT; i++)
+	{
+		uint16_t bonus = 0;
+		memcpy(buffer + offset, &bonus, 2);	offset += 2;
+	}
+
+	// Battle time in seconds
+	uint32_t battleTime = 0;
+	if (m_dwBattleStartTime > 0)
+		battleTime = (GetTickCount() - m_dwBattleStartTime) / 1000;
+	memcpy(buffer + offset, &battleTime, 4);	offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
+
+	printf("[Room] Battle result sent - Room=%d, Winner=%s, Score R%d-B%d, Time=%ds\n",
+		m_i32RoomIdx,
+		winner == TEAM_RED ? "RED" :
+		winner == TEAM_BLUE ? "BLUE" : "DRAW",
+		m_Score.i32RedScore, m_Score.i32BlueScore, battleTime);
+}
+
+void Room::BroadcastRoomStateChange()
+{
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_ROUND_END_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t winner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+	int32_t redScore = m_Score.i32RedScore;
+	int32_t blueScore = m_Score.i32BlueScore;
+	int32_t nowRound = m_Score.i32NowRound;
+
+	memcpy(buffer + offset, &winner, 1);		offset += 1;
+	memcpy(buffer + offset, &redScore, 4);		offset += 4;
+	memcpy(buffer + offset, &blueScore, 4);		offset += 4;
+	memcpy(buffer + offset, &nowRound, 4);		offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendToAll(&packet);
 }

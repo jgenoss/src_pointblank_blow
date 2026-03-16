@@ -91,15 +91,16 @@ void RoomManager::OnUpdate()
 		int roomCount = m_pChannelRoomList[ch]->GetCount();
 		totalRooms += roomCount;
 
-		// Update battle timers for active rooms
+		// Update room state machines for active rooms
 		m_pcsChannelRoom[ch]->Lock();
 		i3ListNode* pNode = m_pChannelRoomList[ch]->Begin();
 		while (pNode)
 		{
 			Room* pRoom = (Room*)pNode->pData;
+			i3ListNode* pNext = pNode->pNext;	// Cache next before potential removal
 			if (pRoom && pRoom->IsCreated())
-				pRoom->UpdateBattleTimer(dwNow);
-			pNode = pNode->pNext;
+				pRoom->OnUpdateRoom(dwNow);
+			pNode = pNext;
 		}
 		m_pcsChannelRoom[ch]->Unlock();
 

@@ -4,9 +4,11 @@
 #include "GameContextMain.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "ModuleBattleServer.h"
+#include "ModuleDataServer.h"
 
 // ============================================================================
-// Battle Flow (7D)
+// Battle Flow - Phase 1 Complete Implementation
 // ============================================================================
 
 void GameSession::OnBattleReadyBattleReq(char* pData, INT32 i32Size)
@@ -22,6 +24,15 @@ void GameSession::OnBattleReadyBattleReq(char* pData, INT32 i32Size)
 		{
 			SendSimpleAck(PROTOCOL_BATTLE_READYBATTLE_ACK, 1);
 			return;
+		}
+
+		// Request BattleServer to create room (Phase 1B)
+		if (g_pModuleBattleServer && g_pModuleBattleServer->IsRegistered())
+		{
+			g_pModuleBattleServer->RequestBattleCreate(
+				m_i32RoomIdx, m_pRoom->GetChannelNum(),
+				m_pRoom->GetGameMode(), m_pRoom->GetMapIndex(),
+				(uint8_t)m_pRoom->GetMaxPlayers(), m_pRoom->GetPlayerCount());
 		}
 
 		// Transition all players to BATTLE task
@@ -104,9 +115,20 @@ void GameSession::OnBattlePreStartBattleReq(char* pData, INT32 i32Size)
 	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
 		return;
 
-	// Client finished loading, ready for UDP
-	m_pRoom->SetRoomState(ROOM_STATE_PRE_BATTLE);
+	// Client finished loading - update per-slot state (Phase 1B)
+	m_pRoom->SetSlotState(m_i32SlotIdx, SLOT_STATE_BATTLE_LOADOK);
 
+	// Migrate player to BattleServer
+	if (g_pModuleBattleServer && g_pModuleBattleServer->IsRegistered() &&
+		m_pRoom->GetBattleRoomIdx() >= 0)
+	{
+		g_pModuleBattleServer->RequestPlayerMigrate(
+			m_i64UID, m_pRoom->GetBattleRoomIdx(),
+			m_i32SlotIdx, m_pRoom->GetSlotInfo(m_i32SlotIdx).ui8Team,
+			0, 0);	// Client IP/port filled by BattleServer
+	}
+
+	// Send PreStartBattle ACK with BattleServer UDP info
 	i3NetworkPacket packet;
 	char buffer[128];
 	int offset = 0;
@@ -142,9 +164,20 @@ void GameSession::OnBattleStartBattleReq(char* pData, INT32 i32Size)
 	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
 		return;
 
-	m_pRoom->SetRoomState(ROOM_STATE_BATTLE);
+	// Mark this slot as battle-ready (Phase 1B)
+	m_pRoom->SetSlotState(m_i32SlotIdx, SLOT_STATE_BATTLE_READY);
 
-	// Send battle time info to all
+	// Only advance to BATTLE state if room is in COUNTDOWN_B or PRE_BATTLE
+	// The state machine in Room::OnUpdateRoom will handle the actual transition
+	// But for backwards compat, if all slots are ready, advance immediately
+	if (m_pRoom->GetRoomState() < ROOM_STATE_BATTLE &&
+		m_pRoom->AllSlotsMinState(SLOT_STATE_BATTLE_READY))
+	{
+		// All players ready - the state machine timer will handle the transition
+		// Don't force it here, let OnUpdateRoom_CountdownB do it
+	}
+
+	// Send battle start info to this player
 	i3NetworkPacket packet;
 	char buffer[64];
 	int offset = 0;
@@ -154,25 +187,49 @@ void GameSession::OnBattleStartBattleReq(char* pData, INT32 i32Size)
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);		offset += 1;
+
+	uint8_t interEnter = 0;
+	memcpy(buffer + offset, &interEnter, 1);	offset += 1;
+
+	// Battle user count
+	uint16_t battleUser = (uint16_t)m_pRoom->GetPlayerCount();
+	memcpy(buffer + offset, &battleUser, 2);	offset += 2;
+
+	// Total round count per team
 	const GameRoomScore& score = m_pRoom->GetScore();
-	uint16_t maxTime = score.ui16MaxTime;
-	int32_t nowRound = score.i32NowRound;
-	int32_t maxRound = score.i32MaxRound;
-	memcpy(buffer + offset, &maxTime, 2);		offset += 2;
-	memcpy(buffer + offset, &nowRound, 4);		offset += 4;
-	memcpy(buffer + offset, &maxRound, 4);		offset += 4;
+	uint16_t redRounds = (uint16_t)score.i32RedScore;
+	uint16_t blueRounds = (uint16_t)score.i32BlueScore;
+	memcpy(buffer + offset, &redRounds, 2);		offset += 2;
+	memcpy(buffer + offset, &blueRounds, 2);	offset += 2;
+
+	// Round start user count
+	uint16_t roundStartUser = battleUser;
+	memcpy(buffer + offset, &roundStartUser, 2);	offset += 2;
+
+	// Now round count
+	uint8_t nowRound = (uint8_t)score.i32NowRound;
+	memcpy(buffer + offset, &nowRound, 1);		offset += 1;
 
 	size = (uint16_t)offset;
 	memcpy(buffer, &size, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
-	m_pRoom->SendToAll(&packet);
+	SendMessage(&packet);
 }
 
 void GameSession::OnBattleGiveUpBattleReq(char* pData, INT32 i32Size)
 {
 	if (!m_pRoom)
 		return;
+
+	// Mark as not alive before leaving
+	if (m_i32SlotIdx >= 0 && m_i32SlotIdx < SLOT_MAX_COUNT)
+	{
+		Room::SlotBattleStats& stats = m_pRoom->GetSlotBattleStatsMutable(m_i32SlotIdx);
+		stats.bAlive = false;
+	}
 
 	m_pRoom->OnLeave(this);
 
@@ -184,80 +241,63 @@ void GameSession::OnBattleGiveUpBattleReq(char* pData, INT32 i32Size)
 	SendSimpleAck(PROTOCOL_BATTLE_GIVEUPBATTLE_ACK, 0);
 }
 
+// ============================================================================
+// Death & Kill Processing (Phase 1D)
+// ============================================================================
+
 void GameSession::OnBattleDeathReq(char* pData, INT32 i32Size)
 {
 	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
 		return;
 
-	// Parse: killerSlot(1) + weaponId(4) + hitPart(1)
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	// Parse DEATH_INFO_HEADER:
+	// killerSlot(1) + weaponId(4) + hitPart(1) + posX(4) + posY(4) + posZ(4) + assistSlot(1)
 	if (i32Size < 6)
 		return;
 
-	uint8_t killerSlot = *(uint8_t*)pData;
-	uint32_t weaponId = *(uint32_t*)(pData + 1);
-	uint8_t hitPart = *(uint8_t*)(pData + 5);
+	int parseOffset = 0;
+	uint8_t killerSlot = *(uint8_t*)(pData + parseOffset);		parseOffset += 1;
+	uint32_t weaponId = *(uint32_t*)(pData + parseOffset);		parseOffset += 4;
+	uint8_t hitPart = *(uint8_t*)(pData + parseOffset);			parseOffset += 1;
 
-	// Add kill to killer's team
-	if (killerSlot != m_i32SlotIdx && killerSlot < SLOT_MAX_COUNT)
+	float fX = 0.0f, fY = 0.0f, fZ = 0.0f;
+	int assistSlot = -1;
+
+	if (i32Size >= 19)
 	{
-		const GameSlotInfo& killerInfo = m_pRoom->GetSlotInfo(killerSlot);
-		if (killerInfo.ui8State != SLOT_STATE_EMPTY)
-			m_pRoom->OnAddKill(killerInfo.ui8Team);
+		fX = *(float*)(pData + parseOffset);	parseOffset += 4;
+		fY = *(float*)(pData + parseOffset);	parseOffset += 4;
+		fZ = *(float*)(pData + parseOffset);	parseOffset += 4;
+		assistSlot = (int)*(uint8_t*)(pData + parseOffset);
+		if (assistSlot == 0xFF)
+			assistSlot = -1;
 	}
 
-	// Broadcast death
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
+	// Delegate to Room for full processing (multi-kill, headshot, assist, broadcast)
+	m_pRoom->OnPlayerDeath(m_i32SlotIdx, (int)killerSlot, weaponId,
+		hitPart, fX, fY, fZ, assistSlot);
 
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_DEATH_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	uint8_t deadSlot = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &deadSlot, 1);		offset += 1;
-	memcpy(buffer + offset, &killerSlot, 1);	offset += 1;
-	memcpy(buffer + offset, &weaponId, 4);		offset += 4;
-	memcpy(buffer + offset, &hitPart, 1);		offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	m_pRoom->SendToAll(&packet);
-
-	// Check kill limit for deathmatch
-	if (m_pRoom->CheckMatchEnd())
-	{
-		const GameRoomScore& score = m_pRoom->GetScore();
-		int winner = (score.i32RedScore > score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
-		SendBattleEndToAll(winner);
-	}
+	// Update weapon tracking on session
+	m_stUsedWeapon = weaponId;
 }
+
+// ============================================================================
+// Respawn System (Phase 1E)
+// ============================================================================
 
 void GameSession::OnBattleRespawnReq(char* pData, INT32 i32Size)
 {
 	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
 
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_RESPAWN_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	m_pRoom->SendToAll(&packet);
+	// Delegate to Room for respawn validation and broadcast
+	m_pRoom->OnPlayerRespawn(m_i32SlotIdx);
 }
 
 // ============================================================================
@@ -332,7 +372,14 @@ void GameSession::OnBattleMissionRoundEndReq(char* pData, INT32 i32Size)
 	{
 		const GameRoomScore& score = m_pRoom->GetScore();
 		int finalWinner = (score.i32RedScore > score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
-		SendBattleEndToAll(finalWinner);
+
+		// Use Room's proper battle result flow (Phase 1C)
+		m_pRoom->CalculateBattleRewards(finalWinner);
+		m_pRoom->SetRoomState(ROOM_STATE_BATTLE_RESULT);
+		m_pRoom->SendBattleResultToAll(finalWinner);
+
+		// Save stats for all players via DataServer
+		SaveAllPlayerStats();
 		return;
 	}
 
@@ -362,10 +409,17 @@ void GameSession::OnBattleMissionRoundEndReq(char* pData, INT32 i32Size)
 
 	packet.SetPacketData(buffer, offset);
 	m_pRoom->SendToAll(&packet);
+
+	// Reset alive status for next round
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pRoom->GetSlotSession(i))
+			m_pRoom->GetSlotBattleStatsMutable(i).bAlive = true;
+	}
 }
 
 // ============================================================================
-// Battle End Helper
+// Battle End Helper (updated for Phase 1C result screen flow)
 // ============================================================================
 
 void GameSession::SendBattleEndToAll(int i32WinnerTeam)
@@ -373,42 +427,46 @@ void GameSession::SendBattleEndToAll(int i32WinnerTeam)
 	if (!m_pRoom)
 		return;
 
-	m_pRoom->OnEndBattle();
+	// Calculate rewards and transition to BATTLE_RESULT state
+	m_pRoom->CalculateBattleRewards(i32WinnerTeam);
+	m_pRoom->SetRoomState(ROOM_STATE_BATTLE_RESULT);
+	m_pRoom->SendBattleResultToAll(i32WinnerTeam);
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
+	// Save stats for all players
+	SaveAllPlayerStats();
 
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_ENDBATTLE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	printf("[GameSession] Battle ended via SendBattleEndToAll - Room=%d, Winner=%s\n",
+		m_i32RoomIdx,
+		(i32WinnerTeam == TEAM_RED) ? "RED" :
+		(i32WinnerTeam == TEAM_BLUE) ? "BLUE" : "DRAW");
+}
 
-	uint8_t winner = (uint8_t)i32WinnerTeam;
-	const GameRoomScore& score = m_pRoom->GetScore();
-	int32_t redScore = score.i32RedScore;
-	int32_t blueScore = score.i32BlueScore;
+// ============================================================================
+// Stats persistence helper
+// ============================================================================
 
-	memcpy(buffer + offset, &winner, 1);		offset += 1;
-	memcpy(buffer + offset, &redScore, 4);		offset += 4;
-	memcpy(buffer + offset, &blueScore, 4);		offset += 4;
+void GameSession::SaveAllPlayerStats()
+{
+	if (!m_pRoom || !g_pModuleDataServer)
+		return;
 
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	m_pRoom->SendToAll(&packet);
-
-	// Return all players to ready room
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		GameSession* pSlot = m_pRoom->GetSlotSession(i);
-		if (pSlot)
-			pSlot->SetTask(GAME_TASK_READY_ROOM);
-	}
+		if (!pSlot)
+			continue;
 
-	printf("[GameSession] Battle ended - Room=%d, Winner=%s, Red=%d, Blue=%d\n",
-		m_i32RoomIdx,
-		(i32WinnerTeam == TEAM_RED) ? "RED" : "BLUE",
-		redScore, blueScore);
+		const Room::SlotBattleStats& stats = m_pRoom->GetSlotBattleStats(i);
+
+		g_pModuleDataServer->RequestStatsSave(
+			pSlot->GetUID(),
+			pSlot->GetKills(), pSlot->GetDeaths(),
+			stats.i32Headshots,
+			0, 0);
+
+		g_pModuleDataServer->RequestPlayerSave(
+			pSlot->GetUID(),
+			pSlot->GetLevel(), pSlot->GetExp(),
+			pSlot->GetCash(), pSlot->GetGP());
+	}
 }

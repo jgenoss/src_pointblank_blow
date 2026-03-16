@@ -27,6 +27,7 @@ GameSession::GameSession()
 	, m_i32Headshots(0)
 	, m_i32Wins(0)
 	, m_i32Losses(0)
+	, m_stUsedWeapon(0)
 	, m_ui8ActiveCharaSlot(0)
 	, m_i32InventoryCount(0)
 	, m_i32FriendCount(0)
@@ -642,6 +643,7 @@ void GameSession::ResetSessionData()
 	m_i32Headshots = 0;
 	m_i32Wins = 0;
 	m_i32Losses = 0;
+	m_stUsedWeapon = 0;
 
 	m_ui8ActiveCharaSlot = 0;
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)

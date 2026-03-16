@@ -31,6 +31,9 @@ public:
 	bool		OnStartBattle();								// Returns false if not all ready
 	void		OnEndBattle();
 
+	// Timer-driven state machine update (called from RoomManager tick)
+	void		OnUpdateRoom(DWORD dwNow);
+
 	// Room operations
 	bool		OnChangeTeam(GameSession* pSession, int i32NewTeam);
 	bool		OnChangeRoomInfo(GameSession* pSession, GameRoomCreateInfo* pNewInfo);
@@ -43,8 +46,18 @@ public:
 	void		OnAddKill(int i32Team);
 	bool		CheckMatchEnd() const;
 
-	// Battle timer
-	void		UpdateBattleTimer(DWORD dwNow);
+	// Death & Kill processing
+	void		OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32WeaponId,
+						 uint8_t ui8HitPart, float fX, float fY, float fZ, int i32AssistSlot);
+	void		OnPlayerRespawn(int i32Slot);
+	bool		IsPlayerAlive(int i32Slot) const;
+	int			GetAliveCount(int i32Team) const;
+
+	// Multi-kill tracking
+	int			GetConsecutiveKills(int i32Slot) const;
+
+	// Respawn timing
+	int			GetRespawnTime() const;
 
 	// State queries
 	bool		IsCreated() const			{ return m_bIsCreate; }
@@ -85,6 +98,42 @@ public:
 	GameSession* GetSlotSession(int i32Slot) const;
 	int			GetOwnerSlot() const		{ return m_i32OwnerSlot; }
 	const GameSlotInfo& GetSlotInfo(int i32Slot) const { return m_Slots[i32Slot]; }
+	GameSlotInfo& GetSlotInfoMutable(int i32Slot) { return m_Slots[i32Slot]; }
+
+	// Per-slot battle state
+	bool		AllSlotsInState(uint8_t ui8State) const;
+	bool		AllSlotsMinState(uint8_t ui8MinState) const;
+	int			CountSlotsInState(uint8_t ui8State) const;
+	void		SetSlotState(int i32Slot, uint8_t ui8State);
+
+	// Battle stats per-slot
+	struct SlotBattleStats
+	{
+		int		i32Kills;
+		int		i32Deaths;
+		int		i32Headshots;
+		int		i32Assists;
+		int		i32ConsecutiveKills;	// Current streak (resets on death)
+		int		i32MaxConsecutiveKills;	// Max streak in match
+		uint16_t ui16AccExp;
+		uint16_t ui16AccPoint;
+		bool	bAlive;
+		DWORD	dwDeathTime;			// Tick when died (for respawn timer)
+		bool	bRespawnPending;		// Waiting for respawn timer
+
+		void Reset()
+		{
+			i32Kills = i32Deaths = i32Headshots = i32Assists = 0;
+			i32ConsecutiveKills = i32MaxConsecutiveKills = 0;
+			ui16AccExp = ui16AccPoint = 0;
+			bAlive = true;
+			dwDeathTime = 0;
+			bRespawnPending = false;
+		}
+	};
+
+	const SlotBattleStats& GetSlotBattleStats(int i32Slot) const { return m_SlotStats[i32Slot]; }
+	SlotBattleStats& GetSlotBattleStatsMutable(int i32Slot) { return m_SlotStats[i32Slot]; }
 
 	// Broadcast
 	void		SendToAll(i3NetworkPacket* pPacket);
@@ -94,9 +143,25 @@ public:
 	// Room info for lobby list (ROOM_INFO_BASIC format)
 	void		FillRoomInfoBasic(char* pBuffer, int* pSize) const;
 
+	// Battle result calculation
+	void		CalculateBattleRewards(int i32WinnerTeam);
+	void		SendBattleResultToAll(int i32WinnerTeam);
+
 private:
+	// State machine update handlers
+	void		OnUpdateRoom_CountdownR(DWORD dwNow);
+	void		OnUpdateRoom_Loading(DWORD dwNow);
+	void		OnUpdateRoom_Rendezvous(DWORD dwNow);
+	void		OnUpdateRoom_PreBattle(DWORD dwNow);
+	void		OnUpdateRoom_CountdownB(DWORD dwNow);
+	void		OnUpdateRoom_Battle(DWORD dwNow);
+	void		OnUpdateRoom_BattleResult(DWORD dwNow);
+	void		OnUpdateRoom_BattleEnd(DWORD dwNow);
+
+	// Helpers
 	int			FindEmptySlot(int i32Team) const;
 	void		UpdateOwner();
+	void		BroadcastRoomStateChange();
 
 public:
 	// Manager access
@@ -128,6 +193,17 @@ private:
 
 	// Battle timing
 	DWORD				m_dwBattleStartTime;
+	DWORD				m_dwStateStartTime;		// When current state was entered
+	DWORD				m_dwRoundStartTime;		// When current round started
+
+	// Per-slot battle stats
+	SlotBattleStats		m_SlotStats[SLOT_MAX_COUNT];
+
+	// Respawn type (from room SubType)
+	uint8_t				m_ui8RespawnType;
+
+	// Loading timeout tracking
+	DWORD				m_dwLoadingTimeout;		// Max loading time (60s default)
 
 	// BattleServer info (stored from IS_BATTLE_CREATE_ACK)
 	int					m_i32BattleRoomIdx;
