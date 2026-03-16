@@ -27,12 +27,15 @@ GameSession::GameSession()
 	, m_i32Headshots(0)
 	, m_i32Wins(0)
 	, m_i32Losses(0)
+	, m_ui8ActiveCharaSlot(0)
 	, m_i32InventoryCount(0)
 	, m_dwConnectTime(0)
 	, m_dwLastPacketTime(0)
 {
 	m_szUsername[0] = '\0';
 	m_szNickname[0] = '\0';
+	for (int i = 0; i < MAX_CHARA_SLOT; i++)
+		m_CharaSlots[i].Reset();
 	memset(m_Inventory, 0, sizeof(m_Inventory));
 }
 
@@ -137,6 +140,19 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_REQ:	OnRoomRequestMainChangeReq(pData, dataSize);break;
 	case PROTOCOL_ROOM_CHANGE_ROOM_OPTIONINFO_REQ:	OnRoomChangeOptionInfoReq(pData, dataSize);break;
 
+	// ---- Equipment (GameSessionEquipment.cpp) ----
+	case PROTOCOL_BASE_GET_EQUIPMENT_INFO_REQ:		OnGetEquipmentInfoReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_EQUIPMENT_REQ:				OnEquipmentReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_GET_CHARA_INFO_REQ:			OnGetCharaInfoReq(pData, dataSize);			break;
+	case PROTOCOL_CHAR_CREATE_CHARA_REQ:			OnCharaCreateReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_NEW_CHARA_SHIFT_POS_REQ:		OnCharaShiftPosReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_GET_USER_EQUIPMENT_REQ:		OnRoomGetUserEquipmentReq(pData, dataSize);	break;
+
+	// ---- Inventory (GameSessionInventory.cpp) ----
+	case PROTOCOL_BASE_GET_INVEN_INFO_REQ:			OnGetInvenInfoReq(pData, dataSize);			break;
+	case PROTOCOL_INVENTORY_ENTER_REQ:				OnInventoryEnterReq(pData, dataSize);		break;
+	case PROTOCOL_INVENTORY_LEAVE_REQ:				OnInventoryLeaveReq(pData, dataSize);		break;
+
 	// ---- Battle (GameSessionBattle.cpp) ----
 	case PROTOCOL_BATTLE_READYBATTLE_REQ:				OnBattleReadyBattleReq(pData, dataSize);			break;
 	case PROTOCOL_BATTLE_PRESTARTBATTLE_REQ:			OnBattlePreStartBattleReq(pData, dataSize);			break;
@@ -203,6 +219,15 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 	m_i64Exp = 0;
 	m_i32GP = 10000;
 
+	// Initialize default character slot 0 with default equipment
+	m_ui8ActiveCharaSlot = 0;
+	m_CharaSlots[0].ui8State = MULTI_SLOT_NORMAL;
+	m_CharaSlots[0].ui32CharaId = MAKE_ITEM_ID(ITEM_TYPE_CHARA, 1, 1);	// Default RED team char
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_PRIMARY]		= MAKE_ITEM_ID(ITEM_TYPE_PRIMARY, WEAPON_CLASS_ASSAULT, 4);		// K-2
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_SECONDARY]	= MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 3);	// K5
+	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_MELEE]		= MAKE_ITEM_ID(ITEM_TYPE_MELEE, WEAPON_CLASS_KNIFE, 1);			// M7
+	m_CharaSlots[0].equip.ui32PartsIds[EQUIP_PARTS_CHARA] = m_CharaSlots[0].ui32CharaId;
+
 	m_eMainTask = GAME_TASK_INFO;
 	SendLoginAck(0);
 
@@ -266,18 +291,18 @@ void GameSession::OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize)
 	m_i32Losses = pData->i32Losses;
 
 	m_i32InventoryCount = pData->i32InventoryCount;
-	if (m_i32InventoryCount > MAX_GAME_INVENTORY)
-		m_i32InventoryCount = MAX_GAME_INVENTORY;
+	if (m_i32InventoryCount > MAX_INVEN_COUNT)
+		m_i32InventoryCount = MAX_INVEN_COUNT;
 
 	const IS_PLAYER_INVENTORY_ITEM* pItems =
 		(const IS_PLAYER_INVENTORY_ITEM*)(pPayload + sizeof(IS_PLAYER_LOAD_DATA));
 
 	for (int i = 0; i < m_i32InventoryCount; i++)
 	{
-		m_Inventory[i].i32ItemId = pItems[i].i32ItemId;
-		m_Inventory[i].i32ItemCount = pItems[i].i32ItemCount;
-		m_Inventory[i].i32SlotIdx = pItems[i].i32SlotIdx;
-		m_Inventory[i].ui8IsEquipped = pItems[i].ui8IsEquipped;
+		m_Inventory[i].ui32ItemDBIdx = (uint32_t)(i + 1);
+		m_Inventory[i].ui32ItemId = (uint32_t)pItems[i].i32ItemId;
+		m_Inventory[i].ui8ItemType = pItems[i].ui8IsEquipped ? ITEM_ATTR_UNUSED : ITEM_ATTR_UNUSED;
+		m_Inventory[i].ui32ItemArg = (uint32_t)pItems[i].i32ItemCount;
 	}
 
 	m_eMainTask = GAME_TASK_INFO;
@@ -337,11 +362,76 @@ void GameSession::ResetSessionData()
 	m_i32Wins = 0;
 	m_i32Losses = 0;
 
+	m_ui8ActiveCharaSlot = 0;
+	for (int i = 0; i < MAX_CHARA_SLOT; i++)
+		m_CharaSlots[i].Reset();
+
 	m_i32InventoryCount = 0;
 	memset(m_Inventory, 0, sizeof(m_Inventory));
 
 	m_dwConnectTime = 0;
 	m_dwLastPacketTime = 0;
+}
+
+// ============================================================================
+// Inventory Helpers
+// ============================================================================
+
+GameInventoryItem* GameSession::FindInventoryItem(uint32_t itemId)
+{
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemId == itemId)
+			return &m_Inventory[i];
+	}
+	return nullptr;
+}
+
+GameInventoryItem* GameSession::FindInventoryItemByDBIdx(uint32_t dbIdx)
+{
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemDBIdx == dbIdx)
+			return &m_Inventory[i];
+	}
+	return nullptr;
+}
+
+bool GameSession::HasInventoryItem(uint32_t itemId) const
+{
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemId == itemId)
+			return true;
+	}
+	return false;
+}
+
+int GameSession::AddInventoryItem(const GameInventoryItem& item)
+{
+	if (m_i32InventoryCount >= MAX_INVEN_COUNT)
+		return -1;
+
+	m_Inventory[m_i32InventoryCount] = item;
+	return m_i32InventoryCount++;
+}
+
+bool GameSession::RemoveInventoryItem(uint32_t dbIdx)
+{
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemDBIdx == dbIdx)
+		{
+			// Shift remaining items
+			for (int j = i; j < m_i32InventoryCount - 1; j++)
+				m_Inventory[j] = m_Inventory[j + 1];
+
+			m_i32InventoryCount--;
+			m_Inventory[m_i32InventoryCount].Reset();
+			return true;
+		}
+	}
+	return false;
 }
 
 // ============================================================================

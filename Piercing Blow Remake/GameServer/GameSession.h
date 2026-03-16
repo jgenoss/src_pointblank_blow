@@ -5,6 +5,8 @@
 #include "i3NetworkSession.h"
 #include "i3NetworkPacket.h"
 #include "RoomDef.h"
+#include "CharacterDef.h"
+#include "InventoryDef.h"
 
 class Room;
 
@@ -30,18 +32,6 @@ enum GameTask
 #define SESSION_CHECK_TIMEOUT_CHANNEL		3600	// 1 hour
 #define SESSION_CHECK_TIMEOUT_LOGIN			600		// 10 minutes
 #define SESSION_CHECK_TIMEOUT_NOT_LOGIN		30		// 30 seconds
-
-// Max inventory for simplified version
-#define MAX_GAME_INVENTORY		450
-
-// Simplified inventory item for GameSession
-struct GameInventoryItem
-{
-	int		i32ItemId;
-	int		i32ItemCount;
-	int		i32SlotIdx;
-	uint8_t	ui8IsEquipped;
-};
 
 // Simplified port of CUserSession from Server/Source/Game/Game/UserSession.h
 // State machine, packet handlers for all GAME_TASK states
@@ -96,6 +86,20 @@ public:
 	int				GetKills() const			{ return m_i32Kills; }
 	int				GetDeaths() const			{ return m_i32Deaths; }
 
+	// Equipment (7E)
+	uint8_t			GetActiveCharaSlot() const				{ return m_ui8ActiveCharaSlot; }
+	const GameCharaEquip& GetActiveEquipment() const		{ return m_CharaSlots[m_ui8ActiveCharaSlot].equip; }
+	const GameCharaSlot& GetCharaSlot(int idx) const		{ return m_CharaSlots[idx]; }
+
+	// Inventory (7F)
+	int					GetInventoryCount() const			{ return m_i32InventoryCount; }
+	const GameInventoryItem* GetInventory() const			{ return m_Inventory; }
+	GameInventoryItem*	FindInventoryItem(uint32_t itemId);
+	GameInventoryItem*	FindInventoryItemByDBIdx(uint32_t dbIdx);
+	bool				HasInventoryItem(uint32_t itemId) const;
+	int					AddInventoryItem(const GameInventoryItem& item);
+	bool				RemoveInventoryItem(uint32_t dbIdx);
+
 	// Load player data from DataServer response
 	void			OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize);
 
@@ -114,24 +118,22 @@ private:
 	// Packet handlers - Info phase
 	void			OnGetUserInfoReq(char* pData, INT32 i32Size);
 
-	// Packet handlers - Channel
+	// Packet handlers - Channel (GameSessionChannel.cpp)
 	void			OnChannelListReq(char* pData, INT32 i32Size);
 	void			OnChannelEnterReq(char* pData, INT32 i32Size);
 	void			OnChannelLeaveReq(char* pData, INT32 i32Size);
 
-	// Packet handlers - Lobby
+	// Packet handlers - Lobby (GameSessionChannel.cpp)
 	void			OnLobbyEnterReq(char* pData, INT32 i32Size);
 	void			OnLobbyLeaveReq(char* pData, INT32 i32Size);
 	void			OnGetRoomListReq(char* pData, INT32 i32Size);
 	void			OnLobbyChatReq(char* pData, INT32 i32Size);
 	void			OnQuickJoinRoomReq(char* pData, INT32 i32Size);
 
-	// Packet handlers - Room creation & join
+	// Packet handlers - Room (GameSessionRoom.cpp)
 	void			OnRoomCreateReq(char* pData, INT32 i32Size);
 	void			OnRoomJoinReq(char* pData, INT32 i32Size);
 	void			OnRoomLeaveReq(char* pData, INT32 i32Size);
-
-	// Packet handlers - Room operations (7C)
 	void			OnRoomGetSlotInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomGetPlayerInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeRoomInfoReq(char* pData, INT32 i32Size);
@@ -142,8 +144,9 @@ private:
 	void			OnRoomRequestMainChangeReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeOptionInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomChatReq(char* pData, INT32 i32Size);
+	void			OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size);
 
-	// Packet handlers - Battle flow (7D)
+	// Packet handlers - Battle flow (GameSessionBattle.cpp)
 	void			OnBattleReadyBattleReq(char* pData, INT32 i32Size);
 	void			OnBattlePreStartBattleReq(char* pData, INT32 i32Size);
 	void			OnBattleStartBattleReq(char* pData, INT32 i32Size);
@@ -153,6 +156,18 @@ private:
 	void			OnBattleMissionRoundPreStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundStartReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionRoundEndReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Equipment (GameSessionEquipment.cpp)
+	void			OnGetEquipmentInfoReq(char* pData, INT32 i32Size);
+	void			OnEquipmentReq(char* pData, INT32 i32Size);
+	void			OnGetCharaInfoReq(char* pData, INT32 i32Size);
+	void			OnCharaCreateReq(char* pData, INT32 i32Size);
+	void			OnCharaShiftPosReq(char* pData, INT32 i32Size);
+
+	// Packet handlers - Inventory (GameSessionInventory.cpp)
+	void			OnGetInvenInfoReq(char* pData, INT32 i32Size);
+	void			OnInventoryEnterReq(char* pData, INT32 i32Size);
+	void			OnInventoryLeaveReq(char* pData, INT32 i32Size);
 
 	// Helpers
 	void			SendConnectAck();
@@ -197,8 +212,12 @@ private:
 	int				m_i32Wins;
 	int				m_i32Losses;
 
-	// Inventory (simplified)
-	GameInventoryItem	m_Inventory[MAX_GAME_INVENTORY];
+	// Equipment (7E) - Character slots with weapon/parts loadouts
+	uint8_t			m_ui8ActiveCharaSlot;					// Current active character slot (0-4)
+	GameCharaSlot	m_CharaSlots[MAX_CHARA_SLOT];			// Up to 5 character loadouts
+
+	// Inventory (7F) - Full inventory
+	GameInventoryItem	m_Inventory[MAX_INVEN_COUNT];
 	int				m_i32InventoryCount;
 
 	// Timing
