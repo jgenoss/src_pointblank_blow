@@ -64,35 +64,35 @@
 
 ### 2A. Bomb Mode (Bomb Plant/Defuse)
 **Archivos**: Crear `RoomModeBomb.h/.cpp` o integrar en `Room.cpp`
-- [ ] `MissionBombInstall()`: Instalar bomba, broadcast posición, iniciar timer de detonación (45s)
-- [ ] `MissionBombUnInstall()`: Desinstalar bomba, broadcast, award puntos
-- [ ] Round win conditions: bomba explota = ATK wins, bomba desinstalada = DEF wins, timer expira sin bomba = DEF wins, todos muertos = team opuesto wins
-- [ ] Atk/Def team swap entre rounds (`m_ui8AtkDefChange`)
+- [x] `MissionBombInstall()`: Instalar bomba, broadcast posición, iniciar timer de detonación (45s)
+- [x] `MissionBombUnInstall()`: Desinstalar bomba, broadcast, award puntos
+- [x] Round win conditions: bomba explota = ATK wins, bomba desinstalada = DEF wins, timer expira sin bomba = DEF wins, todos muertos = team opuesto wins
+- [x] Atk/Def team swap entre rounds (`m_ui8AtkDefChange`)
 - [ ] Smoke/flash/position validation
 
 ### 2B. Annihilation Mode (Eliminar a Todos)
 **Archivos**: Integrar en `Room.cpp`
-- [ ] Round-based: todos los del equipo contrario muertos = round win
-- [ ] No respawn durante el round
-- [ ] Round timer + last man standing tracking
+- [x] Round-based: todos los del equipo contrario muertos = round win
+- [x] No respawn durante el round
+- [x] Round timer + last man standing tracking
 
 ### 2C. Destroy Mode
 **Archivos**: Integrar en `Room.cpp`
-- [ ] `MissionObjectDestroy()`: Destruir objetivos del mapa
-- [ ] HP tracking por objeto destructible
-- [ ] Win condition: objeto destruido o timer expira
+- [x] `MissionObjectDestroy()`: Destruir objetivos del mapa
+- [x] HP tracking por objeto destructible
+- [x] Win condition: objeto destruido o timer expira
 
 ### 2D. Defence Mode
 **Archivos**: Integrar en `Room.cpp`
-- [ ] `MissionObjectDefence()`: Defender objetivos
+- [x] `MissionObjectDefence()`: Defender objetivos (uses generator HP system)
 - [ ] Wave system con NPCs/bots
-- [ ] HP tracking del objeto a defender
+- [x] HP tracking del objeto a defender
 
 ### 2E. Escape Mode (VIP)
 **Archivos**: Integrar en `Room.cpp`
-- [ ] VIP selection (aleatorio de ATK team)
-- [ ] `MissionTouchDown()`: VIP llega a zona de escape = win
-- [ ] VIP muerto = DEF wins
+- [x] VIP selection (aleatorio de ATK team)
+- [x] `MissionTouchDown()`: VIP llega a zona de escape = win
+- [x] VIP muerto = DEF wins
 - [ ] VIP tiene más HP, restricciones de arma
 
 ### 2F. CrossCount Mode (Dino DM)
@@ -250,10 +250,10 @@
 ## FASE 8: QuickJoin System
 
 **Archivos**: `GameSessionChannel.cpp` (OnQuickJoinRoomReq ya existe, expandir)
-- [ ] `PROTOCOL_VALUE_QUICKJOIN (0x1500)` handlers
-- [ ] `SearchQuickJoinRoom()`: buscar rooms compatibles (modo, mapa, jugadores)
-- [ ] Criterios: mode match, not full, not password-protected, not in battle (unless inter-enter)
-- [ ] Random selection entre candidatos
+- [x] `PROTOCOL_VALUE_QUICKJOIN (0x1500)` handlers
+- [x] `SearchQuickJoinRoom()`: buscar rooms compatibles (modo, mapa, jugadores)
+- [x] Criterios: mode match, not full, not password-protected, not in battle (unless inter-enter)
+- [x] Random selection entre candidatos
 
 ---
 
@@ -273,10 +273,10 @@
 
 ### 9C. Cheat Detection
 **Archivos**: Crear `GameSessionCheat.cpp`
-- [ ] `PROTOCOL_VALUE_CHEAT (0x1300)` handlers
-- [ ] Speed hack detection (comparing client-reported time vs server time)
-- [ ] Damage validation
-- [ ] Position validation
+- [ ] `PROTOCOL_VALUE_CHEAT (0x1300)` handlers (GM cheat commands - low priority)
+- [x] Speed hack detection (comparing client-reported time vs server time)
+- [x] Damage validation
+- [x] Position validation
 
 ---
 

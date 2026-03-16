@@ -387,6 +387,170 @@ void GameSession::OnQuickJoinRoomReq(char* pData, INT32 i32Size)
 }
 
 // ============================================================================
+// QuickJoin System (Phase 8)
+// ============================================================================
+
+void GameSession::OnQuickJoinStartReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask != GAME_TASK_LOBBY && m_eMainTask != GAME_TASK_CHANNEL)
+		return;
+
+	if (!g_pRoomManager)
+		return;
+
+	// Parse: ui8QuickJoinIdx(1) + QUICKJOIN_INFO[3] (each is uint32_t stageID)
+	uint8_t quickJoinIdx = 0;
+	uint32_t stageIds[MAX_QUICK_JOIN_INFO_COUNT] = {0};
+
+	int off = 0;
+	if (i32Size >= 1)
+	{
+		quickJoinIdx = *(uint8_t*)(pData + off);	off += 1;
+	}
+
+	for (int i = 0; i < MAX_QUICK_JOIN_INFO_COUNT && off + 4 <= i32Size; i++)
+	{
+		stageIds[i] = *(uint32_t*)(pData + off);	off += 4;
+	}
+
+	// Search for matching rooms using the selected stage ID
+	uint32_t searchStageId = (quickJoinIdx < MAX_QUICK_JOIN_INFO_COUNT) ? stageIds[quickJoinIdx] : 0;
+	RoomManager::QuickJoinResult qjResult = g_pRoomManager->SearchQuickJoinRoom(searchStageId, m_i32ChannelNum);
+
+	// Build response
+	i3NetworkPacket packet;
+	char buffer[128];
+	int wOff = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_QUICKJOIN_START_ACK;
+	wOff += sizeof(uint16_t);
+	memcpy(buffer + wOff, &proto, sizeof(uint16_t));	wOff += sizeof(uint16_t);
+
+	int32_t result = 1;	// Default: not found
+
+	if (qjResult.bFound)
+	{
+		// Try to join if same channel
+		if (qjResult.i32ChannelIdx == m_i32ChannelNum)
+		{
+			int joinSlot = g_pRoomManager->OnJoinRoom(this, qjResult.i32ChannelIdx, qjResult.i32RoomIdx, TEAM_RED);
+			if (joinSlot >= 0)
+			{
+				Room* pRoom = g_pRoomManager->GetRoom(qjResult.i32ChannelIdx, qjResult.i32RoomIdx);
+				m_i32RoomIdx = qjResult.i32RoomIdx;
+				m_pRoom = pRoom;
+				m_eMainTask = GAME_TASK_READY_ROOM;
+				result = 0;		// Perfect match, joined
+			}
+			else
+			{
+				result = 1;		// Failed to join
+			}
+		}
+		else
+		{
+			result = 2;	// 2nd best - needs channel switch
+		}
+	}
+	else if (qjResult.bHasFallback)
+	{
+		result = 2;		// 2nd best available
+	}
+
+	memcpy(buffer + wOff, &result, sizeof(int32_t));	wOff += sizeof(int32_t);
+
+	// Echo quickjoin info
+	for (int i = 0; i < MAX_QUICK_JOIN_INFO_COUNT; i++)
+	{
+		memcpy(buffer + wOff, &stageIds[i], sizeof(uint32_t));	wOff += sizeof(uint32_t);
+	}
+
+	// Channel/Room info for 2nd best
+	uint8_t chIdx = 0;
+	uint32_t rmIdx = 0;
+	uint8_t chType = 0;
+	uint8_t rmState = 0;
+
+	if (result == 0 && qjResult.bFound)
+	{
+		chIdx = (uint8_t)qjResult.i32ChannelIdx;
+		rmIdx = (uint32_t)qjResult.i32RoomIdx;
+	}
+	else if (result == 2)
+	{
+		if (qjResult.bFound)
+		{
+			chIdx = (uint8_t)qjResult.i32ChannelIdx;
+			rmIdx = (uint32_t)qjResult.i32RoomIdx;
+		}
+		else if (qjResult.bHasFallback)
+		{
+			chIdx = (uint8_t)qjResult.i32FallbackChannelIdx;
+			rmIdx = (uint32_t)qjResult.i32FallbackRoomIdx;
+		}
+	}
+
+	memcpy(buffer + wOff, &chIdx, 1);		wOff += 1;
+	memcpy(buffer + wOff, &rmIdx, 4);		wOff += 4;
+	memcpy(buffer + wOff, &chType, 1);		wOff += 1;
+	memcpy(buffer + wOff, &rmState, 1);		wOff += 1;
+
+	size = (uint16_t)wOff;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, wOff);
+	SendMessage(&packet);
+}
+
+void GameSession::OnQuickJoinEnter2ndBestReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask != GAME_TASK_LOBBY && m_eMainTask != GAME_TASK_CHANNEL)
+		return;
+
+	if (!g_pRoomManager || i32Size < 8)
+		return;
+
+	int off = 0;
+	uint32_t channelIdx = *(uint32_t*)(pData + off);	off += 4;
+	uint32_t roomIdx = *(uint32_t*)(pData + off);		off += 4;
+
+	if ((int)channelIdx >= (int)g_pRoomManager->GetChannelCount())
+		return;
+
+	int joinResult = g_pRoomManager->OnJoinRoom(this, (int)channelIdx, (int)roomIdx, TEAM_RED);
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int wOff = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_QUICKJOIN_ENTER_REC_ROOM_ACK;
+	wOff += sizeof(uint16_t);
+	memcpy(buffer + wOff, &proto, sizeof(uint16_t));	wOff += sizeof(uint16_t);
+
+	int32_t result = (joinResult >= 0) ? 0 : 1;
+	memcpy(buffer + wOff, &result, sizeof(int32_t));	wOff += sizeof(int32_t);
+
+	if (joinResult >= 0)
+	{
+		Room* pRoom = g_pRoomManager->GetRoom((int)channelIdx, (int)roomIdx);
+		m_i32RoomIdx = (int)roomIdx;
+		m_pRoom = pRoom;
+		m_eMainTask = GAME_TASK_READY_ROOM;
+
+		memcpy(buffer + wOff, &channelIdx, 4);	wOff += 4;
+		memcpy(buffer + wOff, &roomIdx, 4);		wOff += 4;
+	}
+
+	size = (uint16_t)wOff;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, wOff);
+	SendMessage(&packet);
+}
+
+// ============================================================================
 // Lobby User Features (Phase 7B)
 // ============================================================================
 

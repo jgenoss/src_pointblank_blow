@@ -550,6 +550,150 @@ void GameSession::SaveAllPlayerStats()
 }
 
 // ============================================================================
+// Destroy Mode Handlers (Phase 2C)
+// ============================================================================
+
+void GameSession::OnBattleMissionGeneratorDestroyReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (!m_pRoom->IsDestroyMode())
+		return;
+
+	if (i32Size < 5)	// generator index (1) + damage (4)
+		return;
+
+	// Parse: generator index + damage dealt
+	int offset = 0;
+	uint8_t genIdx = *(uint8_t*)(pData + offset);		offset += 1;
+	int32_t damage = *(int32_t*)(pData + offset);		offset += 4;
+
+	// Only ATK (RED) can destroy generators
+	if (m_i32SlotIdx < 0 || m_i32SlotIdx >= SLOT_MAX_COUNT)
+		return;
+
+	const GameSlotInfo& mySlot = m_pRoom->GetSlotInfo(m_i32SlotIdx);
+	if (mySlot.ui8Team != TEAM_RED)
+		return;
+
+	if (!m_pRoom->IsPlayerAlive(m_i32SlotIdx))
+		return;
+
+	// Clamp damage to reasonable range
+	if (damage <= 0 || damage > 200)
+		return;
+
+	m_pRoom->OnGeneratorDamage(genIdx, damage, m_i32SlotIdx);
+}
+
+void GameSession::OnBattleMissionGeneratorInfoReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (!m_pRoom->IsDestroyMode())
+		return;
+
+	// Send current generator HP info to requesting client
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t genCount = (uint8_t)m_pRoom->GetGeneratorCount();
+	memcpy(buffer + offset, &genCount, 1);		offset += 1;
+
+	for (int i = 0; i < genCount; i++)
+	{
+		int32_t hp = m_pRoom->GetGeneratorHP(i);
+		int32_t maxHp = GENERATOR_MAX_HP;
+		memcpy(buffer + offset, &hp, 4);		offset += 4;
+		memcpy(buffer + offset, &maxHp, 4);		offset += 4;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Escape/VIP Mode Handler (Phase 2E)
+// ============================================================================
+
+void GameSession::OnBattleMissionTouchdownReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (!m_pRoom->IsEscapeMode())
+		return;
+
+	// Only VIP can touchdown
+	if (m_i32SlotIdx != m_pRoom->GetVIPSlot())
+		return;
+
+	if (!m_pRoom->IsPlayerAlive(m_i32SlotIdx))
+		return;
+
+	m_pRoom->OnTouchdown(m_i32SlotIdx);
+}
+
+// ============================================================================
+// Defence Mode Handler (Phase 2D - stub)
+// ============================================================================
+
+void GameSession::OnBattleMissionDefenceInfoReq(char* pData, INT32 i32Size)
+{
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	// Defence mode uses the same generator HP system as Destroy
+	// but DEF team protects instead of ATK attacking
+	// For now, send generator info (same format)
+	if (m_pRoom->GetGameMode() != STAGE_MODE_DEFENCE)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t genCount = (uint8_t)m_pRoom->GetGeneratorCount();
+	memcpy(buffer + offset, &genCount, 1);		offset += 1;
+
+	for (int i = 0; i < genCount; i++)
+	{
+		int32_t hp = m_pRoom->GetGeneratorHP(i);
+		int32_t maxHp = GENERATOR_MAX_HP;
+		memcpy(buffer + offset, &hp, 4);		offset += 4;
+		memcpy(buffer + offset, &maxHp, 4);		offset += 4;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
 // Vote Kick & Ping (Phase 3A)
 // ============================================================================
 

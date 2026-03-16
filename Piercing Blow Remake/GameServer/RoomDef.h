@@ -186,6 +186,15 @@ enum BattleRoundType
 #define BOMB_DISARM_TIME			7.0f		// Seconds to defuse C4
 #define BOMB_EXPLOSION_DELAY_MS		40000		// 40 seconds after plant to explode
 
+// Destroy mode constants
+#define GENERATOR_MAX_HP			1000		// Default HP for generator/objective
+#define GENERATOR_COUNT_MAX			2			// Max generators per map
+
+// Escape/VIP mode constants
+#define ESCAPE_VIP_EXTRA_HP			150			// VIP gets 150% effective HP
+#define ESCAPE_TOUCHDOWN_RADIUS		5.0f		// Radius to touchdown zone
+#define ESCAPE_VIP_SLOT_NONE		(-1)
+
 // Bomb area
 enum BombArea
 {
@@ -456,5 +465,17 @@ inline bool IsMissionMode(uint8_t ui8GameMode)
 			ui8GameMode == STAGE_MODE_DEFENCE ||
 			ui8GameMode == STAGE_MODE_ESCAPE);
 }
+
+// Check if a game mode uses ATK/DEF teams with swap
+inline bool IsAtkDefMode(uint8_t ui8GameMode)
+{
+	return (ui8GameMode == STAGE_MODE_BOMB ||
+			ui8GameMode == STAGE_MODE_DESTROY ||
+			ui8GameMode == STAGE_MODE_ESCAPE);
+}
+
+// QuickJoin constants
+#define MAX_QUICK_JOIN_INFO_COUNT	3
+#define QUICK_JOIN_SEARCH_FAIL_IDX	(-1)
 
 #endif // __ROOMDEF_H__

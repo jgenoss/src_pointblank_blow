@@ -32,6 +32,9 @@ Room::Room()
 	, m_dwBombInstallTime(0)
 	, m_ui32BombExplosionTime(BOMB_EXPLOSION_DELAY_MS)
 	, m_bAtkDefSwap(false)
+	, m_i32GeneratorMaxHP(GENERATOR_MAX_HP)
+	, m_i32GeneratorCount(1)
+	, m_i32VIPSlot(ESCAPE_VIP_SLOT_NONE)
 	, m_dwLoadingTimeout(LOADING_TIMEOUT * 1000)
 	, m_i32BattleRoomIdx(-1)
 	, m_ui16BattleUdpPort(0)
@@ -40,6 +43,12 @@ Room::Room()
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
 	m_szBattleUdpIP[0] = '\0';
+
+	for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+	{
+		m_i32GeneratorHP[i] = GENERATOR_MAX_HP;
+		m_bGeneratorDestroyed[i] = false;
+	}
 
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
@@ -94,6 +103,17 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 	m_ui8BombArea = BOMB_AREA_A;
 	m_dwBombInstallTime = 0;
 	m_bAtkDefSwap = false;
+
+	// Reset destroy mode state
+	for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+	{
+		m_i32GeneratorHP[i] = m_i32GeneratorMaxHP;
+		m_bGeneratorDestroyed[i] = false;
+	}
+	m_i32GeneratorCount = 1;	// Default 1 generator, maps can override
+
+	// Reset escape/VIP mode state
+	m_i32VIPSlot = ESCAPE_VIP_SLOT_NONE;
 
 	if (m_i32MaxPlayers > SLOT_MAX_COUNT)
 		m_i32MaxPlayers = SLOT_MAX_COUNT;
@@ -273,6 +293,26 @@ bool Room::OnStartBattle()
 	m_Score.Reset();
 	m_Score.i32MaxRound = GetRoundCount(m_ui8RoundType);
 	m_Score.ui16MaxTime = GetTimeLimit(m_ui8SubType, m_ui8GameMode);
+
+	// Reset bomb state
+	m_bBombInstalled = false;
+	m_i32BombInstallerSlot = -1;
+	m_dwBombInstallTime = 0;
+	m_bAtkDefSwap = false;
+
+	// Reset destroy mode generators
+	if (m_ui8GameMode == STAGE_MODE_DESTROY || m_ui8GameMode == STAGE_MODE_DEFENCE)
+	{
+		for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+		{
+			m_i32GeneratorHP[i] = m_i32GeneratorMaxHP;
+			m_bGeneratorDestroyed[i] = false;
+		}
+	}
+
+	// Select VIP for escape mode
+	if (m_ui8GameMode == STAGE_MODE_ESCAPE)
+		SelectVIP();
 
 	printf("[Room] Battle started - Ch=%d, Room=%d, Mode=%d, Players=%d\n",
 		m_i32ChannelNum, m_i32RoomIdx, m_ui8GameMode, m_i32PlayerCount);
@@ -929,7 +969,7 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 				}
 				else
 				{
-					// Next round - reset round timer, alive status, bomb state
+					// Next round - reset round timer, alive status, mode state
 					m_dwRoundStartTime = dwNow;
 					m_bBombInstalled = false;
 					m_i32BombInstallerSlot = -1;
@@ -940,9 +980,23 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 							m_SlotStats[i].bAlive = true;
 					}
 
-					if (m_ui8GameMode == STAGE_MODE_BOMB &&
+					// Reset destroy mode generators
+					if (m_ui8GameMode == STAGE_MODE_DESTROY)
+					{
+						for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+						{
+							m_i32GeneratorHP[i] = m_i32GeneratorMaxHP;
+							m_bGeneratorDestroyed[i] = false;
+						}
+					}
+
+					if (IsAtkDefMode(m_ui8GameMode) &&
 						(m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE))
 						SwapTeams();
+
+					// Re-select VIP for escape mode
+					if (m_ui8GameMode == STAGE_MODE_ESCAPE)
+						SelectVIP();
 				}
 			}
 			else
@@ -1002,6 +1056,39 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 		if (m_ui8GameMode == STAGE_MODE_BOMB && m_bBombInstalled && redAlive == 0)
 			return;	// Bomb is ticking, DEF must defuse
 
+		// In escape mode: VIP death means DEF wins immediately
+		if (m_ui8GameMode == STAGE_MODE_ESCAPE && m_i32VIPSlot >= 0)
+		{
+			if (!IsPlayerAlive(m_i32VIPSlot))
+			{
+				// VIP is dead -> DEF (BLUE) wins the round
+				OnRoundEnd(TEAM_BLUE);
+
+				if (CheckMatchEnd())
+				{
+					int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+					CalculateBattleRewards(finalWinner);
+					m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+					m_dwStateStartTime = dwNow;
+					SendBattleResultToAll(finalWinner);
+				}
+				else
+				{
+					m_dwRoundStartTime = dwNow;
+					for (int i = 0; i < SLOT_MAX_COUNT; i++)
+					{
+						if (m_pSlotSession[i])
+							m_SlotStats[i].bAlive = true;
+					}
+					if (m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE)
+						SwapTeams();
+					SelectVIP();
+					BroadcastRoomStateChange();
+				}
+				return;
+			}
+		}
+
 		if (redAlive == 0 || blueAlive == 0)
 		{
 			int roundWinner = (redAlive == 0) ? TEAM_BLUE : TEAM_RED;
@@ -1030,9 +1117,23 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 						m_SlotStats[i].bAlive = true;
 				}
 
-				if (m_ui8GameMode == STAGE_MODE_BOMB &&
+				// Reset destroy mode generators for next round
+				if (m_ui8GameMode == STAGE_MODE_DESTROY)
+				{
+					for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+					{
+						m_i32GeneratorHP[i] = m_i32GeneratorMaxHP;
+						m_bGeneratorDestroyed[i] = false;
+					}
+				}
+
+				if (IsAtkDefMode(m_ui8GameMode) &&
 					(m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE))
 					SwapTeams();
+
+				// Re-select VIP for escape mode
+				if (m_ui8GameMode == STAGE_MODE_ESCAPE)
+					SelectVIP();
 
 				// Broadcast round end/start
 				BroadcastRoomStateChange();
@@ -1603,6 +1704,261 @@ void Room::SwapTeams()
 	m_bAtkDefSwap = !m_bAtkDefSwap;
 
 	printf("[Room] Teams swapped - Room=%d, SwapState=%d\n", m_i32RoomIdx, m_bAtkDefSwap ? 1 : 0);
+}
+
+// ============================================================================
+// Destroy Mode (Phase 2C) - Generator HP tracking and destruction
+// ============================================================================
+
+void Room::OnGeneratorDamage(int i32GeneratorIdx, int i32Damage, int i32AttackerSlot)
+{
+	if (m_ui8GameMode != STAGE_MODE_DESTROY)
+		return;
+
+	if (i32GeneratorIdx < 0 || i32GeneratorIdx >= m_i32GeneratorCount)
+		return;
+
+	if (m_bGeneratorDestroyed[i32GeneratorIdx])
+		return;
+
+	if (i32Damage <= 0)
+		return;
+
+	m_i32GeneratorHP[i32GeneratorIdx] -= i32Damage;
+
+	// Broadcast generator HP update to all players
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t genIdx = (uint8_t)i32GeneratorIdx;
+		int32_t hp = m_i32GeneratorHP[i32GeneratorIdx];
+		int32_t maxHp = m_i32GeneratorMaxHP;
+
+		memcpy(buffer + offset, &genIdx, 1);		offset += 1;
+		memcpy(buffer + offset, &hp, 4);			offset += 4;
+		memcpy(buffer + offset, &maxHp, 4);			offset += 4;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendToAll(&packet);
+	}
+
+	if (m_i32GeneratorHP[i32GeneratorIdx] <= 0)
+	{
+		m_i32GeneratorHP[i32GeneratorIdx] = 0;
+		OnGeneratorDestroy(i32GeneratorIdx);
+	}
+}
+
+void Room::OnGeneratorDestroy(int i32GeneratorIdx)
+{
+	if (i32GeneratorIdx < 0 || i32GeneratorIdx >= m_i32GeneratorCount)
+		return;
+
+	m_bGeneratorDestroyed[i32GeneratorIdx] = true;
+
+	printf("[Room] Generator destroyed - Room=%d, Generator=%d\n",
+		m_i32RoomIdx, i32GeneratorIdx);
+
+	// Broadcast generator destroy
+	{
+		i3NetworkPacket packet;
+		char buffer[16];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_DESTROY_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t genIdx = (uint8_t)i32GeneratorIdx;
+		memcpy(buffer + offset, &genIdx, 1);		offset += 1;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendToAll(&packet);
+	}
+
+	// Check if all generators are destroyed -> ATK wins the round
+	bool allDestroyed = true;
+	for (int i = 0; i < m_i32GeneratorCount; i++)
+	{
+		if (!m_bGeneratorDestroyed[i])
+		{
+			allDestroyed = false;
+			break;
+		}
+	}
+
+	if (allDestroyed)
+	{
+		// ATK (RED) wins by destroying all objectives
+		OnRoundEnd(TEAM_RED);
+
+		DWORD dwNow = GetTickCount();
+		if (CheckMatchEnd())
+		{
+			int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+			CalculateBattleRewards(finalWinner);
+			m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+			m_dwStateStartTime = dwNow;
+			SendBattleResultToAll(finalWinner);
+		}
+		else
+		{
+			// Reset for next round
+			m_dwRoundStartTime = dwNow;
+			for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
+			{
+				m_i32GeneratorHP[i] = m_i32GeneratorMaxHP;
+				m_bGeneratorDestroyed[i] = false;
+			}
+			for (int i = 0; i < SLOT_MAX_COUNT; i++)
+			{
+				if (m_pSlotSession[i])
+					m_SlotStats[i].bAlive = true;
+			}
+			if (m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE)
+				SwapTeams();
+			BroadcastRoomStateChange();
+		}
+	}
+}
+
+int Room::GetGeneratorHP(int i32Idx) const
+{
+	if (i32Idx < 0 || i32Idx >= m_i32GeneratorCount)
+		return 0;
+	return m_i32GeneratorHP[i32Idx];
+}
+
+// ============================================================================
+// Escape/VIP Mode (Phase 2E)
+// ============================================================================
+
+void Room::SelectVIP()
+{
+	if (m_ui8GameMode != STAGE_MODE_ESCAPE)
+		return;
+
+	m_i32VIPSlot = ESCAPE_VIP_SLOT_NONE;
+
+	// Collect ATK (RED) team members
+	int atkSlots[SLOT_MAX_COUNT];
+	int atkCount = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pSlotSession[i] && m_Slots[i].ui8Team == TEAM_RED)
+		{
+			atkSlots[atkCount++] = i;
+		}
+	}
+
+	if (atkCount == 0)
+		return;
+
+	// Random selection
+	m_i32VIPSlot = atkSlots[rand() % atkCount];
+
+	printf("[Room] VIP selected - Room=%d, Slot=%d\n", m_i32RoomIdx, m_i32VIPSlot);
+
+	// Broadcast VIP selection to all players
+	{
+		i3NetworkPacket packet;
+		char buffer[16];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t vipSlot = (uint8_t)m_i32VIPSlot;
+		uint8_t action = 0;	// 0 = VIP selected
+		memcpy(buffer + offset, &action, 1);		offset += 1;
+		memcpy(buffer + offset, &vipSlot, 1);		offset += 1;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendToAll(&packet);
+	}
+}
+
+void Room::OnTouchdown(int i32Slot)
+{
+	if (m_ui8GameMode != STAGE_MODE_ESCAPE)
+		return;
+
+	if (i32Slot != m_i32VIPSlot)
+		return;		// Only VIP can touchdown
+
+	if (!IsPlayerAlive(i32Slot))
+		return;
+
+	printf("[Room] VIP touchdown! - Room=%d, VIPSlot=%d\n", m_i32RoomIdx, i32Slot);
+
+	// Broadcast touchdown
+	{
+		i3NetworkPacket packet;
+		char buffer[16];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t vipSlot = (uint8_t)m_i32VIPSlot;
+		uint8_t action = 1;	// 1 = touchdown success
+		memcpy(buffer + offset, &action, 1);		offset += 1;
+		memcpy(buffer + offset, &vipSlot, 1);		offset += 1;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendToAll(&packet);
+	}
+
+	// ATK wins the round via touchdown
+	OnRoundEnd(TEAM_RED);
+
+	DWORD dwNow = GetTickCount();
+	if (CheckMatchEnd())
+	{
+		int finalWinner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+		CalculateBattleRewards(finalWinner);
+		m_ui8RoomState = ROOM_STATE_BATTLE_RESULT;
+		m_dwStateStartTime = dwNow;
+		SendBattleResultToAll(finalWinner);
+	}
+	else
+	{
+		// Next round - reset, re-select VIP
+		m_dwRoundStartTime = dwNow;
+		for (int i = 0; i < SLOT_MAX_COUNT; i++)
+		{
+			if (m_pSlotSession[i])
+				m_SlotStats[i].bAlive = true;
+		}
+		if (m_ui8InfoFlag & ROOM_INFO_FLAG_ATK_DEF_AUTO_CHANGE)
+			SwapTeams();
+		SelectVIP();
+		BroadcastRoomStateChange();
+	}
 }
 
 void Room::BroadcastRoomStateChange()

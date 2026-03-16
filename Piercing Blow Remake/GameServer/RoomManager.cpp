@@ -283,6 +283,133 @@ int RoomManager::OnQuickJoinRoom(GameSession* pSession, int i32ChannelNum)
 	return -1;
 }
 
+RoomManager::QuickJoinResult RoomManager::SearchQuickJoinRoom(uint32_t ui32StageId, int i32CurrentChannel)
+{
+	QuickJoinResult result;
+
+	// Extract game mode from stage ID (if encoded)
+	// Stage ID format can vary - try matching both exact stage ID and game mode
+	uint8_t targetMode = 0;
+	if (ui32StageId > 0 && ui32StageId < STAGE_MODE_MAX)
+		targetMode = (uint8_t)ui32StageId;
+
+	// Search current channel first, then other channels
+	int searchOrder[GAME_CHANNEL_COUNT];
+	int searchCount = 0;
+
+	// Current channel first
+	if (i32CurrentChannel >= 0 && i32CurrentChannel < (int)m_ui32ChannelCount)
+		searchOrder[searchCount++] = i32CurrentChannel;
+
+	// Then other channels
+	for (int i = 0; i < (int)m_ui32ChannelCount && searchCount < GAME_CHANNEL_COUNT; i++)
+	{
+		if (i != i32CurrentChannel)
+			searchOrder[searchCount++] = i;
+	}
+
+	Room* pBestRoom = nullptr;
+	int bestChannel = -1;
+	int bestRoomIdx = -1;
+	int bestScore = -1;		// Higher is better
+
+	Room* pFallbackRoom = nullptr;
+	int fallbackChannel = -1;
+	int fallbackRoomIdx = -1;
+	int fallbackScore = -1;
+
+	for (int s = 0; s < searchCount; s++)
+	{
+		int ch = searchOrder[s];
+		m_pcsChannelRoom[ch]->Lock();
+
+		for (int i = 0; i < (int)m_ui32EachChannelMaxCount; i++)
+		{
+			Room* pRoom = (Room*)m_pChannelResRoomList[ch]->GetItem(i);
+			if (!pRoom || !pRoom->IsCreated())
+				continue;
+
+			// Skip full rooms
+			if (pRoom->GetPlayerCount() >= pRoom->GetMaxPlayers())
+				continue;
+
+			// Skip password-protected rooms
+			if (pRoom->HasPassword())
+				continue;
+
+			// Skip rooms in battle (unless inter-enter allowed)
+			if (pRoom->GetRoomState() != ROOM_STATE_READY)
+			{
+				if (!(pRoom->GetInfoFlag() & ROOM_INFO_FLAG_INTER_ENTER))
+					continue;
+			}
+
+			// Calculate match score
+			int score = 0;
+
+			// Perfect game mode match
+			bool modeMatch = false;
+			if (targetMode > 0 && pRoom->GetGameMode() == targetMode)
+			{
+				modeMatch = true;
+				score += 100;
+			}
+
+			// Prefer rooms with more players (more fun)
+			score += pRoom->GetPlayerCount() * 5;
+
+			// Prefer same channel (no channel switch needed)
+			if (ch == i32CurrentChannel)
+				score += 20;
+
+			// Prefer rooms in READY state
+			if (pRoom->GetRoomState() == ROOM_STATE_READY)
+				score += 10;
+
+			if (modeMatch || targetMode == 0)
+			{
+				// Perfect or no-filter match
+				if (score > bestScore)
+				{
+					pBestRoom = pRoom;
+					bestChannel = ch;
+					bestRoomIdx = i;
+					bestScore = score;
+				}
+			}
+			else
+			{
+				// Fallback: any joinable room
+				if (score > fallbackScore)
+				{
+					pFallbackRoom = pRoom;
+					fallbackChannel = ch;
+					fallbackRoomIdx = i;
+					fallbackScore = score;
+				}
+			}
+		}
+
+		m_pcsChannelRoom[ch]->Unlock();
+	}
+
+	if (pBestRoom)
+	{
+		result.bFound = true;
+		result.i32ChannelIdx = bestChannel;
+		result.i32RoomIdx = bestRoomIdx;
+	}
+
+	if (pFallbackRoom)
+	{
+		result.bHasFallback = true;
+		result.i32FallbackChannelIdx = fallbackChannel;
+		result.i32FallbackRoomIdx = fallbackRoomIdx;
+	}
+
+	return result;
+}
+
 Room* RoomManager::GetRoom(int i32ChannelNum, int i32Idx)
 {
 	if (i32ChannelNum < 0 || i32ChannelNum >= (int)m_ui32ChannelCount)

@@ -232,6 +232,8 @@ private:
 	void			OnGetRoomListReq(char* pData, INT32 i32Size);
 	void			OnLobbyChatReq(char* pData, INT32 i32Size);
 	void			OnQuickJoinRoomReq(char* pData, INT32 i32Size);
+	void			OnQuickJoinStartReq(char* pData, INT32 i32Size);
+	void			OnQuickJoinEnter2ndBestReq(char* pData, INT32 i32Size);
 	void			OnLobbyViewUserItemReq(char* pData, INT32 i32Size);
 	void			OnLobbyFindNickNameReq(char* pData, INT32 i32Size);
 	void			OnMegaphoneReq(char* pData, INT32 i32Size);
@@ -267,6 +269,10 @@ private:
 	void			OnBattleMissionRoundEndReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionBombInstallReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionBombUninstallReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionGeneratorDestroyReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionGeneratorInfoReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionTouchdownReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionDefenceInfoReq(char* pData, INT32 i32Size);
 	void			OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleVoteKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleSendPingReq(char* pData, INT32 i32Size);
@@ -359,6 +365,13 @@ private:
 	void			OnRouletteStartReq(char* pData, INT32 i32Size);
 	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
 
+	// Cheat detection (Phase 9C - GameSessionCheat.cpp)
+	bool			ValidateDamage(int i32KillerSlot, int i32VictimSlot, uint32_t ui32WeaponId,
+								uint8_t ui8HitPart, int i32Damage);
+	bool			ValidateSpeedHack(DWORD dwClientTime);
+	bool			ValidatePosition(float fX, float fY, float fZ);
+	void			OnCheatDetected(int i32CheatType, const char* pszDescription);
+
 	// Rank helpers (Phase 10)
 	void			CheckRankUp();
 
@@ -445,6 +458,15 @@ private:
 	// Rate limiting (Phase 9A)
 	DWORD			m_dwRateLimitWindow;
 	uint16_t		m_ui16PacketCount;
+
+	// Cheat detection (Phase 9C)
+	DWORD			m_dwCheatLastClientTime;
+	DWORD			m_dwCheatLastServerTime;
+	int				m_i32SpeedHackCount;
+	int				m_i32CheatViolations;
+	float			m_fLastPosX;
+	float			m_fLastPosY;
+	float			m_fLastPosZ;
 };
 
 #endif // __GAMESESSION_H__

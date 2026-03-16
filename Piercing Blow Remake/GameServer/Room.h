@@ -56,6 +56,19 @@ public:
 	bool		IsBombMode() const			{ return m_ui8GameMode == STAGE_MODE_BOMB; }
 	void		SwapTeams();				// ATK/DEF swap between rounds
 
+	// Destroy mode (Phase 2C) - Generator/objective HP tracking
+	void		OnGeneratorDamage(int i32GeneratorIdx, int i32Damage, int i32AttackerSlot);
+	void		OnGeneratorDestroy(int i32GeneratorIdx);
+	int			GetGeneratorHP(int i32Idx) const;
+	int			GetGeneratorCount() const		{ return m_i32GeneratorCount; }
+	bool		IsDestroyMode() const			{ return m_ui8GameMode == STAGE_MODE_DESTROY; }
+
+	// Escape/VIP mode (Phase 2E) - VIP selection and touchdown
+	void		SelectVIP();					// Randomly select VIP from ATK team
+	void		OnTouchdown(int i32Slot);		// VIP reached escape zone
+	int			GetVIPSlot() const				{ return m_i32VIPSlot; }
+	bool		IsEscapeMode() const			{ return m_ui8GameMode == STAGE_MODE_ESCAPE; }
+
 	// Death & Kill processing
 	void		OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32WeaponId,
 						 uint8_t ui8HitPart, float fX, float fY, float fZ, int i32AssistSlot);
@@ -219,6 +232,15 @@ private:
 	DWORD				m_dwBombInstallTime;	// When bomb was planted
 	uint32_t			m_ui32BombExplosionTime;// Explosion delay in ms (default 40000 = 40s)
 	bool				m_bAtkDefSwap;			// true = teams have been swapped (ATK was RED at start)
+
+	// Destroy mode state (Phase 2C)
+	int					m_i32GeneratorHP[GENERATOR_COUNT_MAX];	// HP per generator
+	int					m_i32GeneratorMaxHP;	// Max HP (from config)
+	int					m_i32GeneratorCount;	// Number of active generators (1-2)
+	bool				m_bGeneratorDestroyed[GENERATOR_COUNT_MAX];	// Destroyed flags
+
+	// Escape/VIP mode state (Phase 2E)
+	int					m_i32VIPSlot;			// Slot index of the VIP (-1 = none)
 
 	// Loading timeout tracking
 	DWORD				m_dwLoadingTimeout;		// Max loading time (60s default)

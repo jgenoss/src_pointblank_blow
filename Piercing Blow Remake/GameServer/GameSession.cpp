@@ -210,6 +210,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_LOBBY_LEAVE_REQ:			OnLobbyLeaveReq(pData, dataSize);		break;
 	case PROTOCOL_LOBBY_GET_ROOMLIST_REQ:	OnGetRoomListReq(pData, dataSize);		break;
 	case PROTOCOL_LOBBY_QUICKJOIN_ROOM_REQ:		OnQuickJoinRoomReq(pData, dataSize);		break;
+	case PROTOCOL_QUICKJOIN_START_REQ:			OnQuickJoinStartReq(pData, dataSize);		break;
+	case PROTOCOL_QUICKJOIN_ENTER_2ND_BEST_ROOM_REQ:	OnQuickJoinEnter2ndBestReq(pData, dataSize);	break;
 	case PROTOCOL_LOBBY_VIEW_USER_ITEM_REQ:		OnLobbyViewUserItemReq(pData, dataSize);	break;
 	case PROTOCOL_LOBBY_FIND_NICK_NAME_REQ:		OnLobbyFindNickNameReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_MEGAPHONE_REQ:			OnMegaphoneReq(pData, dataSize);			break;
@@ -263,6 +265,10 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_MISSION_ROUND_END_REQ:			OnBattleMissionRoundEndReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_REQ:		OnBattleMissionBombInstallReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_REQ:	OnBattleMissionBombUninstallReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_MISSION_GENERATOR_DESTROY_REQ:	OnBattleMissionGeneratorDestroyReq(pData, dataSize);break;
+	case PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_REQ:	OnBattleMissionGeneratorInfoReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_MISSION_TOUCHDOWN_REQ:			OnBattleMissionTouchdownReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_REQ:		OnBattleMissionDefenceInfoReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ:			OnBattleSuggestKickVoteReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ:				OnBattleVoteKickVoteReq(pData, dataSize);			break;
 	case PROTOCOL_BATTLE_SENDPING_REQ:					OnBattleSendPingReq(pData, dataSize);				break;
@@ -1228,6 +1234,15 @@ void GameSession::ResetSessionData()
 
 	m_dwConnectTime = 0;
 	m_dwLastPacketTime = 0;
+
+	// Cheat detection
+	m_dwCheatLastClientTime = 0;
+	m_dwCheatLastServerTime = 0;
+	m_i32SpeedHackCount = 0;
+	m_i32CheatViolations = 0;
+	m_fLastPosX = 0.0f;
+	m_fLastPosY = 0.0f;
+	m_fLastPosZ = 0.0f;
 }
 
 // ============================================================================
