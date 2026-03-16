@@ -142,6 +142,7 @@
     <ClCompile Include="GameSessionInventory.cpp" />
     <ClCompile Include="GameSessionShop.cpp" />
     <ClCompile Include="GameSessionSocial.cpp" />
+    <ClCompile Include="GameSessionQuest.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
@@ -154,6 +155,7 @@
     <ClInclude Include="GameProtocol.h" />
     <ClInclude Include="CharacterDef.h" />
     <ClInclude Include="InventoryDef.h" />
+    <ClInclude Include="QuestDef.h" />
     <ClInclude Include="GameContextMain.h" />
     <ClInclude Include="GameServerContext.h" />
     <ClInclude Include="GameSession.h" />

@@ -39,6 +39,7 @@ GameSession::GameSession()
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)
 		m_CharaSlots[i].Reset();
 	memset(m_Inventory, 0, sizeof(m_Inventory));
+	m_QuestData.Reset();
 	for (int i = 0; i < MAX_FRIEND_COUNT; i++)
 		m_Friends[i].Reset();
 	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
@@ -185,6 +186,13 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_SHOP_REPAIR_REQ:					OnShopRepairReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_GET_POINT_CASH_REQ:			OnGetPointCashReq(pData, dataSize);			break;
 
+	// ---- Quest (GameSessionQuest.cpp) ----
+	case PROTOCOL_BASE_QUEST_GET_REQ:				OnQuestGetReq(pData, dataSize);				break;
+	case PROTOCOL_BASE_QUEST_GET_INFO_REQ:			OnQuestGetInfoReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_QUEST_GET_ITEM_REQ:			OnQuestGetItemReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_QUEST_CHANGE_REQ:			OnQuestChangeReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_QUEST_ACTIVE_IDX_CHANGE_REQ:	OnQuestActiveIdxChangeReq(pData, dataSize);	break;
+
 	// ---- Social (GameSessionSocial.cpp) ----
 	case PROTOCOL_AUTH_FRIEND_INFO_REQ:				OnFriendInfoReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FRIEND_INSERT_REQ:			OnFriendInsertReq(pData, dataSize);			break;
@@ -257,6 +265,9 @@ void GameSession::OnLoginReq(char* pData, INT32 i32Size)
 	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_SECONDARY]	= MAKE_ITEM_ID(ITEM_TYPE_SECONDARY, WEAPON_CLASS_HANDGUN, 3);	// K5
 	m_CharaSlots[0].equip.ui32WeaponIds[EQUIP_WEAPON_MELEE]		= MAKE_ITEM_ID(ITEM_TYPE_MELEE, WEAPON_CLASS_KNIFE, 1);			// M7
 	m_CharaSlots[0].equip.ui32PartsIds[EQUIP_PARTS_CHARA] = m_CharaSlots[0].ui32CharaId;
+
+	// Initialize tutorial quest cardset
+	m_QuestData.InitTutorial();
 
 	m_eMainTask = GAME_TASK_INFO;
 	SendLoginAck(0);
@@ -398,6 +409,8 @@ void GameSession::ResetSessionData()
 
 	m_i32InventoryCount = 0;
 	memset(m_Inventory, 0, sizeof(m_Inventory));
+
+	m_QuestData.Reset();
 
 	m_i32FriendCount = 0;
 	for (int i = 0; i < MAX_FRIEND_COUNT; i++)

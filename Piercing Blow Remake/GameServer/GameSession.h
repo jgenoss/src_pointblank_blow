@@ -7,6 +7,7 @@
 #include "RoomDef.h"
 #include "CharacterDef.h"
 #include "InventoryDef.h"
+#include "QuestDef.h"
 
 class Room;
 
@@ -224,6 +225,16 @@ private:
 	GameFriendInfo*	FindFriendByUID(int64_t uid) const;
 	bool			IsBlocked(int64_t uid) const;
 
+	// Packet handlers - Quest (GameSessionQuest.cpp)
+	void			OnQuestGetReq(char* pData, INT32 i32Size);
+	void			OnQuestGetInfoReq(char* pData, INT32 i32Size);
+	void			OnQuestGetItemReq(char* pData, INT32 i32Size);
+	void			OnQuestChangeReq(char* pData, INT32 i32Size);
+	void			OnQuestActiveIdxChangeReq(char* pData, INT32 i32Size);
+
+	// Quest helpers
+	void			UpdateQuestProgress(int kills, int deaths, int headshots, bool won);
+
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();
@@ -274,6 +285,9 @@ private:
 	// Inventory (7F) - Full inventory
 	GameInventoryItem	m_Inventory[MAX_INVEN_COUNT];
 	int				m_i32InventoryCount;
+
+	// Quest (7I) - Quest card sets and progress
+	GameQuestData	m_QuestData;
 
 	// Social (7K) - Friends and block list
 	GameFriendInfo	m_Friends[MAX_FRIEND_COUNT];
