@@ -317,6 +317,11 @@ private:
 	GameFriendInfo*	FindFriendByUID(int64_t uid) const;
 	bool			IsBlocked(int64_t uid) const;
 
+	// Friend notifications (Phase 7A)
+	void			NotifyFriendsStatusChange(uint8_t ui8NewState);
+	void			NotifyFriendLobbyEnter();
+	void			NotifyFriendLobbyLeave();
+
 	// Packet handlers - Quest (GameSessionQuest.cpp)
 	void			OnQuestGetReq(char* pData, INT32 i32Size);
 	void			OnQuestGetInfoReq(char* pData, INT32 i32Size);
@@ -365,12 +370,25 @@ private:
 	void			OnRouletteStartReq(char* pData, INT32 i32Size);
 	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - GM Commands (GameSessionGM.cpp - Phase 11A)
+	void			OnGMKickUserReq(char* pData, INT32 i32Size);
+	void			OnGMExitUserReq(char* pData, INT32 i32Size);
+	void			OnGMDestroyRoomReq(char* pData, INT32 i32Size);
+	void			OnLobbyGMExitUserReq(char* pData, INT32 i32Size);
+
+	// GM helpers
+	bool			IsGMUser() const;
+	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
+
 	// Cheat detection (Phase 9C - GameSessionCheat.cpp)
 	bool			ValidateDamage(int i32KillerSlot, int i32VictimSlot, uint32_t ui32WeaponId,
 								uint8_t ui8HitPart, int i32Damage);
 	bool			ValidateSpeedHack(DWORD dwClientTime);
 	bool			ValidatePosition(float fX, float fY, float fZ);
 	void			OnCheatDetected(int i32CheatType, const char* pszDescription);
+
+	// Boost event info (Phase 14B)
+	void			SendBoostEventInfo();
 
 	// Rank helpers (Phase 10)
 	void			CheckRankUp();
@@ -410,6 +428,7 @@ private:
 	int				m_i32GP;
 	int				m_i32RankId;
 	int				m_i32ClanId;
+	uint8_t			m_ui8AuthLevel;			// 0=normal, 1+=GM
 
 	// Stats
 	int				m_i32Kills;

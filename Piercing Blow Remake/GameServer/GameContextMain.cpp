@@ -26,7 +26,32 @@ GameContextMain::GameContextMain()
 	, m_i32DefaultMaxRound(7)
 	, m_i32MinPlayersToStart(1)
 	, m_i32AFKTimeout(0)
+	, m_i32BoostEventCount(0)
 {
+	// Initialize boost events
+	for (int i = 0; i < MAX_BOOST_EVENTS; i++)
+		m_BoostEvents[i].Reset();
+
+	// Default boost events (can be overridden by config)
+	// Weekend double EXP
+	m_BoostEvents[0].bActive = true;
+	m_BoostEvents[0].ui8BoostType = BOOST_TYPE_EXP;
+	m_BoostEvents[0].ui16Multiplier = 200;		// 2x EXP
+	m_BoostEvents[0].ui32StartTime = 0;
+	m_BoostEvents[0].ui32EndTime = 2400;
+	m_BoostEvents[0].ui8DayOfWeek = 6;			// Saturday
+	strcpy_s(m_BoostEvents[0].szDescription, "Weekend Double EXP (Sat)");
+
+	m_BoostEvents[1].bActive = true;
+	m_BoostEvents[1].ui8BoostType = BOOST_TYPE_EXP;
+	m_BoostEvents[1].ui16Multiplier = 200;		// 2x EXP
+	m_BoostEvents[1].ui32StartTime = 0;
+	m_BoostEvents[1].ui32EndTime = 2400;
+	m_BoostEvents[1].ui8DayOfWeek = 7;			// Sunday
+	strcpy_s(m_BoostEvents[1].szDescription, "Weekend Double EXP (Sun)");
+
+	m_i32BoostEventCount = 2;
+
 	m_szServerName[0] = '\0';
 	memset(m_pRSAKey, 0, sizeof(m_pRSAKey));
 
@@ -154,4 +179,66 @@ bool GameContextMain::IsMapValidForMode(int mapIdx, int mode) const
 	else if (mode < 16)
 		return (m_Maps[mapIdx].ui8SupportedModes2 & (1 << (mode - 8))) != 0;
 	return false;
+}
+
+// ============================================================================
+// Boost Events (Phase 14B)
+// ============================================================================
+
+bool GameContextMain::IsBoostEventActive(int idx) const
+{
+	if (idx < 0 || idx >= m_i32BoostEventCount)
+		return false;
+
+	const GameBoostEvent& evt = m_BoostEvents[idx];
+	if (!evt.bActive)
+		return false;
+
+	// Get current time
+	SYSTEMTIME st;
+	GetLocalTime(&st);
+
+	// Check day of week (0=everyday, 1=Mon...7=Sun)
+	if (evt.ui8DayOfWeek != 0)
+	{
+		// SYSTEMTIME.wDayOfWeek: 0=Sun, 1=Mon...6=Sat
+		int dayMap = (st.wDayOfWeek == 0) ? 7 : st.wDayOfWeek;
+		if (dayMap != evt.ui8DayOfWeek)
+			return false;
+	}
+
+	// Check time range (HHMM format)
+	uint32_t currentTime = st.wHour * 100 + st.wMinute;
+	if (currentTime < evt.ui32StartTime || currentTime >= evt.ui32EndTime)
+		return false;
+
+	return true;
+}
+
+uint16_t GameContextMain::GetCurrentExpMultiplier() const
+{
+	uint16_t maxMult = 100;
+	for (int i = 0; i < m_i32BoostEventCount; i++)
+	{
+		if (m_BoostEvents[i].ui8BoostType == BOOST_TYPE_EXP && IsBoostEventActive(i))
+		{
+			if (m_BoostEvents[i].ui16Multiplier > maxMult)
+				maxMult = m_BoostEvents[i].ui16Multiplier;
+		}
+	}
+	return maxMult;
+}
+
+uint16_t GameContextMain::GetCurrentPointMultiplier() const
+{
+	uint16_t maxMult = 100;
+	for (int i = 0; i < m_i32BoostEventCount; i++)
+	{
+		if (m_BoostEvents[i].ui8BoostType == BOOST_TYPE_POINT && IsBoostEventActive(i))
+		{
+			if (m_BoostEvents[i].ui16Multiplier > maxMult)
+				maxMult = m_BoostEvents[i].ui16Multiplier;
+		}
+	}
+	return maxMult;
 }

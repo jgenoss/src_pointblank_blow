@@ -89,6 +89,10 @@ BOOL GameSession::OnDisconnect(BOOL bForceMainThread)
 	printf("[GameSession] Client disconnected - Index=%d, UID=%lld, Task=%d\n",
 		GetIndex(), m_i64UID, m_eMainTask);
 
+	// Notify friends we went offline (Phase 7A)
+	if (m_i32FriendCount > 0 && m_eMainTask >= GAME_TASK_CHANNEL)
+		NotifyFriendsStatusChange(0);	// 0 = offline
+
 	if (m_pRoom && m_i32RoomIdx >= 0 && g_pRoomManager)
 		g_pRoomManager->OnLeaveRoom(this, m_i32ChannelNum);
 
@@ -344,6 +348,11 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_RS_ROULETTE_START_REQ:			OnRouletteStartReq(pData, dataSize);		break;
 	case PROTOCOL_RS_JACKPOT_NOTIFY_REQ:			OnRouletteJackpotNotifyReq(pData, dataSize);break;
 
+	// ---- GM Commands (GameSessionGM.cpp - Phase 11A) ----
+	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
+	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;
+	case PROTOCOL_LOBBY_GM_EXIT_USER_REQ:			OnLobbyGMExitUserReq(pData, dataSize);		break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;
@@ -449,7 +458,50 @@ void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 
+	// Send boost event info (Phase 14B)
+	SendBoostEventInfo();
+
 	m_eMainTask = GAME_TASK_CHANNEL;
+}
+
+// ============================================================================
+// Boost Event Info (Phase 14B)
+// ============================================================================
+
+void GameSession::SendBoostEventInfo()
+{
+	if (!g_pContextMain)
+		return;
+
+	uint16_t expMult = g_pContextMain->GetCurrentExpMultiplier();
+	uint16_t pointMult = g_pContextMain->GetCurrentPointMultiplier();
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BASE_BOOSTEVENT_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	// EXP multiplier (percentage, 100 = normal)
+	memcpy(buffer + offset, &expMult, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Point/GP multiplier (percentage, 100 = normal)
+	memcpy(buffer + offset, &pointMult, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+
+	if (expMult > 100 || pointMult > 100)
+	{
+		printf("[GameSession] Boost event info sent - UID=%lld, EXP=%d%%, Point=%d%%\n",
+			m_i64UID, expMult, pointMult);
+	}
 }
 
 // ============================================================================
@@ -1143,9 +1195,20 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 	}
 
 	int gpReward = i32Kills * killGP + (bWin ? winGP : loseGP);
-	m_i32GP += gpReward;
-
 	int64_t expReward = (int64_t)(i32Kills * killExp + (bWin ? winExp : loseExp));
+
+	// Apply boost event multipliers (Phase 14B)
+	if (g_pContextMain)
+	{
+		uint16_t expMult = g_pContextMain->GetCurrentExpMultiplier();
+		uint16_t pointMult = g_pContextMain->GetCurrentPointMultiplier();
+		if (expMult != 100)
+			expReward = expReward * expMult / 100;
+		if (pointMult != 100)
+			gpReward = gpReward * pointMult / 100;
+	}
+
+	m_i32GP += gpReward;
 	m_i64Exp += expReward;
 
 	printf("[GameSession] Battle result applied - UID=%lld, K=%d D=%d H=%d Win=%d, GP+%d, EXP+%lld\n",
@@ -1199,6 +1262,7 @@ void GameSession::ResetSessionData()
 	m_i32GP = 0;
 	m_i32RankId = 0;
 	m_i32ClanId = 0;
+	m_ui8AuthLevel = 0;
 
 	m_i32Kills = 0;
 	m_i32Deaths = 0;

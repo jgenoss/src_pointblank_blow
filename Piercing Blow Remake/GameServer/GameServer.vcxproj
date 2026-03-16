@@ -149,6 +149,7 @@
     <ClCompile Include="GameSessionClan.cpp" />
     <ClCompile Include="GameSessionRoulette.cpp" />
     <ClCompile Include="GameSessionCheat.cpp" />
+    <ClCompile Include="GameSessionGM.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />

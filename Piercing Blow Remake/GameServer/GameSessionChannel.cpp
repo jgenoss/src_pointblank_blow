@@ -109,6 +109,9 @@ void GameSession::OnChannelEnterReq(char* pData, INT32 i32Size)
 
 		// Increment user count
 		g_pContextMain->GetChannelInfoMut((int)channel).ui16CurrentUsers++;
+
+		// Notify friends we're online (Phase 7A)
+		NotifyFriendsStatusChange(1);	// 1 = online
 	}
 
 	i3NetworkPacket packet;
@@ -169,6 +172,9 @@ void GameSession::OnLobbyEnterReq(char* pData, INT32 i32Size)
 
 	m_eMainTask = GAME_TASK_LOBBY;
 	SendSimpleAck(PROTOCOL_LOBBY_ENTER_ACK, 0);
+
+	// Notify friends we entered lobby (Phase 7A)
+	NotifyFriendLobbyEnter();
 }
 
 void GameSession::OnLobbyLeaveReq(char* pData, INT32 i32Size)
@@ -178,6 +184,9 @@ void GameSession::OnLobbyLeaveReq(char* pData, INT32 i32Size)
 
 	m_eMainTask = GAME_TASK_CHANNEL;
 	SendSimpleAck(PROTOCOL_LOBBY_LEAVE_ACK, 0);
+
+	// Notify friends we left lobby (Phase 7A)
+	NotifyFriendLobbyLeave();
 }
 
 void GameSession::OnGetRoomListReq(char* pData, INT32 i32Size)

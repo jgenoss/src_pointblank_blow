@@ -3,6 +3,7 @@
 
 #pragma once
 #include "i3ElementBase.h"
+#include "EventDef.h"
 
 // Channel type enum (from CommonDef_System.h ChannelType)
 enum GameChannelType
@@ -137,10 +138,19 @@ public:
 	int			m_i32MapCount;
 	uint32_t	m_ui32MapVersion;
 
+	// Boost events (Phase 14B)
+	GameBoostEvent	m_BoostEvents[MAX_BOOST_EVENTS];
+	int				m_i32BoostEventCount;
+
 	// Helper methods
 	int64_t		GetRankExp(int rankId) const;
 	int			GetRankForExp(int64_t exp) const;
 	bool		IsMapValidForMode(int mapIdx, int mode) const;
+
+	// Boost event helpers (Phase 14B)
+	uint16_t	GetCurrentExpMultiplier() const;		// Returns 100-based multiplier (100 = 1x)
+	uint16_t	GetCurrentPointMultiplier() const;
+	bool		IsBoostEventActive(int idx) const;
 };
 
 extern GameContextMain* g_pContextMain;

@@ -2,6 +2,7 @@
 #include "Room.h"
 #include "GameSession.h"
 #include "GameProtocol.h"
+#include "GameContextMain.h"
 
 I3_CLASS_INSTANCE(Room);
 
@@ -1411,6 +1412,15 @@ void Room::CalculateBattleRewards(int i32WinnerTeam)
 	const uint16_t HEADSHOT_POINT = 2;
 	const uint16_t ASSIST_POINT = 1;
 
+	// Boost event multipliers (Phase 14B)
+	uint16_t expMultiplier = 100;
+	uint16_t pointMultiplier = 100;
+	if (g_pContextMain)
+	{
+		expMultiplier = g_pContextMain->GetCurrentExpMultiplier();
+		pointMultiplier = g_pContextMain->GetCurrentPointMultiplier();
+	}
+
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		if (!m_pSlotSession[i])
@@ -1419,8 +1429,8 @@ void Room::CalculateBattleRewards(int i32WinnerTeam)
 		SlotBattleStats& stats = m_SlotStats[i];
 		bool bWin = (i32WinnerTeam >= 0 && m_Slots[i].ui8Team == (uint8_t)i32WinnerTeam);
 
-		uint16_t totalExp = BASE_EXP;
-		uint16_t totalPoint = BASE_POINT;
+		uint32_t totalExp = BASE_EXP;
+		uint32_t totalPoint = BASE_POINT;
 
 		if (bWin)
 		{
@@ -1428,17 +1438,25 @@ void Room::CalculateBattleRewards(int i32WinnerTeam)
 			totalPoint += WIN_BONUS_POINT;
 		}
 
-		totalExp += (uint16_t)(stats.i32Kills * KILL_EXP);
-		totalPoint += (uint16_t)(stats.i32Kills * KILL_POINT);
+		totalExp += (uint32_t)(stats.i32Kills * KILL_EXP);
+		totalPoint += (uint32_t)(stats.i32Kills * KILL_POINT);
 
-		totalExp += (uint16_t)(stats.i32Headshots * HEADSHOT_EXP);
-		totalPoint += (uint16_t)(stats.i32Headshots * HEADSHOT_POINT);
+		totalExp += (uint32_t)(stats.i32Headshots * HEADSHOT_EXP);
+		totalPoint += (uint32_t)(stats.i32Headshots * HEADSHOT_POINT);
 
-		totalExp += (uint16_t)(stats.i32Assists * ASSIST_EXP);
-		totalPoint += (uint16_t)(stats.i32Assists * ASSIST_POINT);
+		totalExp += (uint32_t)(stats.i32Assists * ASSIST_EXP);
+		totalPoint += (uint32_t)(stats.i32Assists * ASSIST_POINT);
 
-		stats.ui16AccExp = totalExp;
-		stats.ui16AccPoint = totalPoint;
+		// Apply boost event multipliers (Phase 14B)
+		totalExp = totalExp * expMultiplier / 100;
+		totalPoint = totalPoint * pointMultiplier / 100;
+
+		// Cap to uint16_t range
+		if (totalExp > 0xFFFF) totalExp = 0xFFFF;
+		if (totalPoint > 0xFFFF) totalPoint = 0xFFFF;
+
+		stats.ui16AccExp = (uint16_t)totalExp;
+		stats.ui16AccPoint = (uint16_t)totalPoint;
 
 		// Apply to session
 		m_pSlotSession[i]->ApplyBattleResult(

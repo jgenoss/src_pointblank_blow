@@ -92,6 +92,38 @@ struct GameDailyRecord
 	}
 };
 
+// Boost event system (Phase 14B)
+#define MAX_BOOST_EVENTS	4
+
+enum GameBoostType
+{
+	BOOST_TYPE_EXP = 0,		// EXP multiplier
+	BOOST_TYPE_POINT,		// GP multiplier
+	BOOST_TYPE_MAX,
+};
+
+struct GameBoostEvent
+{
+	bool		bActive;
+	uint8_t		ui8BoostType;		// GameBoostType
+	uint16_t	ui16Multiplier;		// 100 = 1x, 150 = 1.5x, 200 = 2x
+	uint32_t	ui32StartTime;		// Hour of day (0-23) * 100 + minute
+	uint32_t	ui32EndTime;		// Hour of day (0-23) * 100 + minute
+	uint8_t		ui8DayOfWeek;		// 0=everyday, 1=Mon, 2=Tue, ... 7=Sun
+	char		szDescription[64];
+
+	void Reset()
+	{
+		bActive = false;
+		ui8BoostType = BOOST_TYPE_EXP;
+		ui16Multiplier = 100;
+		ui32StartTime = 0;
+		ui32EndTime = 2400;
+		ui8DayOfWeek = 0;
+		szDescription[0] = '\0';
+	}
+};
+
 #pragma pack(pop)
 
 #endif // __EVENTDEF_GAME_H__

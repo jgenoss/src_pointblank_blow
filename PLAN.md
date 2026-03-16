@@ -228,10 +228,10 @@
 
 ### 7A. Messenger Server Integration
 - [ ] Conexión al MessengerServer (o implementar directamente)
-- [ ] Friend online/offline notifications
+- [x] Friend online/offline notifications
 - [ ] Whisper message routing entre servidores
 - [ ] Note system (send/receive/delete/read)
-- [ ] Lobby enter/leave notifications a amigos
+- [x] Lobby enter/leave notifications a amigos
 
 ### 7B. Lobby Chat Completo
 **Archivos**: `GameSessionChannel.cpp`
@@ -284,11 +284,11 @@
 
 ### 10A. Battle Rewards
 **Archivos**: `Room.cpp`, `GameSessionBattle.cpp`
-- [ ] EXP calculation: base + kills*multiplier + headshot bonus + win bonus
-- [ ] Point (GP) calculation: base + kills*multiplier + win bonus
-- [ ] Boost event support: multiply EXP/GP by event multiplier
+- [x] EXP calculation: base + kills*multiplier + headshot bonus + win bonus
+- [x] Point (GP) calculation: base + kills*multiplier + win bonus
+- [x] Boost event support: multiply EXP/GP by event multiplier
 - [ ] Bonus items: EXP boost items, Point boost items from inventory
-- [ ] Save results to DataServer after each match
+- [x] Save results to DataServer after each match
 
 ### 10B. Rank System
 **Archivos**: `GameSession.cpp`
@@ -302,13 +302,15 @@
 ## FASE 11: Admin/GM Tools
 
 ### 11A. GM Commands
-**Archivos**: Crear `GameSessionGMChat.cpp`
-- [ ] `GM_KickUser_U` - Kick player from room
-- [ ] `GM_ExitUser_U` - Force disconnect
+**Archivos**: `GameSessionGM.cpp`
+- [x] `GM_KickUser_U` - Kick player from room
+- [x] `GM_ExitUser_U` - Force disconnect
 - [ ] `GM_BlockUser_U` - Ban with comment
 - [ ] `GM_DestroyRoom_U` - Force destroy room
 - [ ] `GMPause` / `GMResume` - Pause/resume battle
 - [ ] Damage console for debugging
+- [x] Server announce message (`SendServerAnnounce`)
+- [x] Lobby GM exit user
 
 ### 11B. Control Server Integration
 - [ ] Server announce (normal, emergency, sliding, chat notices)
@@ -355,9 +357,9 @@
 - [ ] Monthly reset
 
 ### 14B. Boost Events
-- [ ] Event schedule loading
-- [ ] EXP/Point multipliers durante eventos
-- [ ] `PROTOCOL_BASE_BOOSTEVENT_INFO_ACK`
+- [x] Event schedule loading
+- [x] EXP/Point multipliers durante eventos
+- [x] `PROTOCOL_BASE_BOOSTEVENT_INFO_ACK`
 
 ### 14C. Item Durability
 - [ ] Durability decrease per battle

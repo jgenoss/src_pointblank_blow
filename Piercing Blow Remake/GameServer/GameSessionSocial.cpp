@@ -412,6 +412,116 @@ void GameSession::OnFindUserReq(char* pData, INT32 i32Size)
 }
 
 // ============================================================================
+// Friend Status Notifications (Phase 7A)
+// ============================================================================
+
+void GameSession::NotifyFriendsStatusChange(uint8_t ui8NewState)
+{
+	if (!g_pGameSessionManager || m_i32FriendCount == 0)
+		return;
+
+	// Build status change notification packet
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_FRIEND_INFO_CHANGE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Our info
+	int64_t uid = m_i64UID;
+	memcpy(buffer + offset, &uid, 8);						offset += 8;
+	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
+	memcpy(buffer + offset, &ui8NewState, 1);				offset += 1;
+
+	int32_t level = m_i32Level;
+	int32_t rankId = m_i32RankId;
+	memcpy(buffer + offset, &level, 4);						offset += 4;
+	memcpy(buffer + offset, &rankId, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+
+	// Send to each online friend
+	for (int i = 0; i < m_i32FriendCount; i++)
+	{
+		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
+		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
+		{
+			pFriend->SendMessage(&packet);
+		}
+	}
+}
+
+void GameSession::NotifyFriendLobbyEnter()
+{
+	if (!g_pGameSessionManager || m_i32FriendCount == 0)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int64_t uid = m_i64UID;
+	memcpy(buffer + offset, &uid, 8);						offset += 8;
+	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
+
+	int32_t channelNum = m_i32ChannelNum;
+	memcpy(buffer + offset, &channelNum, 4);				offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+
+	for (int i = 0; i < m_i32FriendCount; i++)
+	{
+		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
+		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
+			pFriend->SendMessage(&packet);
+	}
+}
+
+void GameSession::NotifyFriendLobbyLeave()
+{
+	if (!g_pGameSessionManager || m_i32FriendCount == 0)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_LEAVE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int64_t uid = m_i64UID;
+	memcpy(buffer + offset, &uid, 8);						offset += 8;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+
+	for (int i = 0; i < m_i32FriendCount; i++)
+	{
+		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
+		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
+			pFriend->SendMessage(&packet);
+	}
+}
+
+// ============================================================================
 // Helper methods
 // ============================================================================
 
