@@ -297,6 +297,44 @@ struct IS_BATTLE_CREATE_ACK
 	uint16_t	ui16UdpPort;
 };
 
+// Player Migrate (GameServer -> BattleServer)
+struct IS_PLAYER_MIGRATE_REQ
+{
+	int64_t		i64UID;
+	int			i32BattleRoomIdx;		// Battle room index en BattleServer
+	int			i32SlotIdx;				// Slot en la room
+	int			i32Team;				// 0=RED, 1=BLUE
+	uint32_t	ui32ClientIP;			// IP del cliente para UDP relay
+	uint16_t	ui16ClientPort;			// Puerto UDP del cliente
+};
+
+struct IS_PLAYER_MIGRATE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;				// 0 = OK
+};
+
+// Battle End Notify (BattleServer -> GameServer)
+struct IS_BATTLE_END_NOTIFY
+{
+	int			i32RoomIdx;				// Room index en GameServer
+	int			i32ChannelNum;
+	int			i32WinnerTeam;			// 0=RED, 1=BLUE, -1=Draw
+	int			i32RedScore;
+	int			i32BlueScore;
+	int			i32PlayerCount;
+	// Followed by IS_BATTLE_PLAYER_RESULT[i32PlayerCount]
+};
+
+struct IS_BATTLE_PLAYER_RESULT
+{
+	int64_t		i64UID;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+	int			i32Team;
+};
+
 #pragma pack(pop)
 
 #endif // __INTERSERVERPROTOCOL_H__

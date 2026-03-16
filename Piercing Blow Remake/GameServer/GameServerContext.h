@@ -9,6 +9,7 @@ class GameContextMain;
 class RoomManager;
 class ModuleConnectServer;
 class ModuleDataServer;
+class ModuleBattleServer;
 
 // Configuracion especifica del GameServer
 struct GameServerConfig : public BaseServerConfig
@@ -32,6 +33,10 @@ struct GameServerConfig : public BaseServerConfig
 	char		szDataServerIP[MAX_SERVER_IP_LENGTH];
 	uint16_t	ui16DataServerPort;
 
+	// BattleServer connection
+	char		szBattleServerIP[MAX_SERVER_IP_LENGTH];
+	uint16_t	ui16BattleServerPort;
+
 	GameServerConfig()
 		: i32ServerId(1)
 		, ui16PublicPort(40000)
@@ -40,11 +45,13 @@ struct GameServerConfig : public BaseServerConfig
 		, ui16MaxRoomsPerChannel(200)
 		, ui16ConnectServerPort(40001)
 		, ui16DataServerPort(40100)
+		, ui16BattleServerPort(40200)
 	{
 		szServerName[0] = '\0';
 		szPublicIP[0] = '\0';
 		szConnectServerIP[0] = '\0';
 		szDataServerIP[0] = '\0';
+		szBattleServerIP[0] = '\0';
 	}
 };
 
@@ -95,6 +102,7 @@ public:
 	// Inter-server modules
 	ModuleConnectServer*	GetModuleConnectServer()		{ return m_pModuleConnect; }
 	ModuleDataServer*		GetModuleDataServer()			{ return m_pModuleData; }
+	ModuleBattleServer*		GetModuleBattleServer()			{ return m_pModuleBattle; }
 
 	// Initialize inter-server modules (called after Start)
 	bool					InitializeModules();
@@ -115,6 +123,7 @@ private:
 	// Inter-server modules
 	ModuleConnectServer*	m_pModuleConnect;
 	ModuleDataServer*		m_pModuleData;
+	ModuleBattleServer*		m_pModuleBattle;
 };
 
 #endif // __GAMESERVERCONTEXT_H__

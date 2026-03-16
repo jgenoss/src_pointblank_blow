@@ -5,6 +5,7 @@
 #include "RoomManager.h"
 #include "ModuleConnectServer.h"
 #include "ModuleDataServer.h"
+#include "ModuleBattleServer.h"
 #include "i3IniParser.h"
 
 // ============================================================================
@@ -83,6 +84,7 @@ GameServer::GameServer()
 	: m_pGameContext(nullptr)
 	, m_pModuleConnect(nullptr)
 	, m_pModuleData(nullptr)
+	, m_pModuleBattle(nullptr)
 {
 }
 
@@ -130,6 +132,11 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 	strncpy_s(m_GameConfig.szDataServerIP, pszDSIP, _TRUNCATE);
 	m_GameConfig.ui16DataServerPort = (uint16_t)ini.GetInt("DataServer", "Port", 40100);
 
+	// [BattleServer] section
+	const char* pszBSIP = ini.GetString("BattleServer", "IP", "127.0.0.1");
+	strncpy_s(m_GameConfig.szBattleServerIP, pszBSIP, _TRUNCATE);
+	m_GameConfig.ui16BattleServerPort = (uint16_t)ini.GetInt("BattleServer", "Port", 40200);
+
 	// Copy base config
 	m_Config = m_GameConfig;
 
@@ -145,6 +152,7 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 		m_GameConfig.ui16MaxRoomsPerChannel);
 	printf("  ConnectServer: %s:%d\n", m_GameConfig.szConnectServerIP, m_GameConfig.ui16ConnectServerPort);
 	printf("  DataServer: %s:%d\n", m_GameConfig.szDataServerIP, m_GameConfig.ui16DataServerPort);
+	printf("  BattleServer: %s:%d\n", m_GameConfig.szBattleServerIP, m_GameConfig.ui16BattleServerPort);
 
 	return true;
 }
@@ -205,6 +213,13 @@ void GameServer::OnShutdown()
 		m_pModuleData = nullptr;
 	}
 
+	if (m_pModuleBattle)
+	{
+		m_pModuleBattle->Destroy();
+		delete m_pModuleBattle;
+		m_pModuleBattle = nullptr;
+	}
+
 	// Cleanup global context
 	if (g_pContextMain)
 	{
@@ -242,6 +257,24 @@ bool GameServer::InitializeModules()
 		m_GameConfig.i32WorkerThreadCount))
 	{
 		printf("[GameServer] WARNING: ModuleDataServer initialization failed\n");
+	}
+
+	// Initialize ModuleBattleServer
+	m_pModuleBattle = new ModuleBattleServer();
+	if (!m_pModuleBattle->Initialize("ModuleBattleServer",
+		m_GameConfig.szBattleServerIP, m_GameConfig.ui16BattleServerPort,
+		m_GameConfig.i32WorkerThreadCount))
+	{
+		printf("[GameServer] WARNING: ModuleBattleServer initialization failed\n");
+	}
+	else
+	{
+		m_pModuleBattle->SetServerInfo(
+			m_GameConfig.i32ServerId,
+			m_GameConfig.szServerName,
+			m_GameConfig.szPublicIP,
+			m_GameConfig.ui16PublicPort,
+			m_GameConfig.i32MaxSessions);
 	}
 
 	return true;

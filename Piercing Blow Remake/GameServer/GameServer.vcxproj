@@ -140,6 +140,7 @@
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="ModuleConnectServer.cpp" />
     <ClCompile Include="ModuleDataServer.cpp" />
+    <ClCompile Include="ModuleBattleServer.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -152,6 +153,7 @@
     <ClInclude Include="RoomDef.h" />
     <ClInclude Include="ModuleConnectServer.h" />
     <ClInclude Include="ModuleDataServer.h" />
+    <ClInclude Include="ModuleBattleServer.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />
