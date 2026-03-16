@@ -20,7 +20,7 @@ DATE32&	DATE32::operator=(const SYSTEMTIME& pTime)
 {
 	INT32 i32Year = pTime.wYear;
 	
-	// ¿¬µµÀÇ ¹üÀ§ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ( DATE32_YEAR_MAX < i32Year || DATE32_YEAR_INIT > i32Year )
 		m_ui32Date = DATE32_INIT; // 2017591296 => 2000-01-01 00:00:00
 	else
@@ -40,7 +40,7 @@ DATE32&	DATE32::operator=(const tm& pTime)
 {
 	INT32 i32Year = pTime.tm_year + 1900;
 	
-	// ¿¬µµÀÇ ¹üÀ§ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ( DATE32_YEAR_MAX < i32Year|| DATE32_YEAR_INIT > i32Year )
 		m_ui32Date = DATE32_INIT; // 2017591296 => 2000-01-01 00:00:00
 	else
@@ -62,7 +62,7 @@ DATE32&	DATE32::operator=(const DATE& pTime)
 
 	INT32 i32Year = oleDate.GetYear();
 
-	// ¿¬µµÀÇ ¹üÀ§ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ( DATE32_YEAR_MAX < i32Year || DATE32_YEAR_INIT > i32Year )
 	{
 		m_ui32Date = DATE32_INIT; // 2017591296 => 2000-01-01 00:00:00
@@ -101,33 +101,18 @@ UINT32 DATE32::GetDateTimeBin(INT32 i32DateType)
 
 UINT32 DATE32::GetDateTimeYYYYMMDD()
 {
-	return 2015 * 10000 + 1 * 100 + 1;  // 20150101
+	return GetYear() * 10000 + GetMonth() * 100 + GetDay();
 }
 
 UINT32 DATE32::GetDateTimeYYMMDDHHMI()
 {
-	return (2015 % 100) * 100000000 + 1 * 1000000 + 1 * 10000 + 0 * 100 + 0;  // 1501010000
+	return (GetYear() % 100) * 100000000 + GetMonth() * 1000000 + GetDay() * 10000 + GetHour() * 100 + GetMinute();
 }
 
 UINT32 DATE32::GetDateTimeMMDDHHMISS()
 {
-	return 1 * 100000000 + 1 * 1000000 + 0 * 10000 + 0 * 100 + 0;  // 0101000000
+	return GetMonth() * 100000000 + GetDay() * 1000000 + GetHour() * 10000 + GetMinute() * 100 + GetSecond();
 }
-
-//UINT32 DATE32::GetDateTimeYYYYMMDD()
-//{
-//	return GetYear() * 10000 + GetMonth() * 100 + GetDay();
-//}
-//
-//UINT32 DATE32::GetDateTimeYYMMDDHHMI()
-//{
-//	return (GetYear() % 100) * 100000000 + GetMonth() * 1000000 + GetDay() * 10000 + GetHour() * 100 + GetMinute();
-//}
-//
-//UINT32 DATE32::GetDateTimeMMDDHHMISS()
-//{
-//	return GetMonth() * 100000000 + GetDay() * 1000000 + GetHour() * 10000 + GetMinute() * 100 + GetSecond();
-//}
 
 void DATE32::GetSmallDate(char* strDate, INT32 i32Length)
 {
@@ -138,10 +123,10 @@ void DATE32::GetSmallDate(char* strDate, INT32 i32Length)
 	UINT32 ui32Minute = GetMinute();
 	UINT32 ui32Second = GetSecond();
 
-	// ¿¬¿ùÀÏ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ((DATE32_YEAR_INIT > ui32Year || DATE32_YEAR_MAX < ui32Year) ||
 		(0 == ui32Month || 12 < ui32Month || 0 == ui32Day || 31 < ui32Day || 23 < ui32Hour || 59 < ui32Minute))
-	{// ±âº»¼³Á¤°ªÀ» °¡´ÉÇÏ¸é 2000-01-01 00:00 ·Î ¼³Á¤ÇÏ¿´À¸¸é ÇÔ
+	{// ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ 2000-01-01 00:00 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 		ui32Year = 2000;
 		ui32Month = 01;
 		ui32Day = 01;
@@ -163,10 +148,10 @@ void DATE32::GetSmallDate(wchar_t* wstrDate, INT32 i32Length)
 	UINT32 ui32Minute = GetMinute();
 	UINT32 ui32Second = GetSecond();
 
-	// ¿¬¿ùÀÏ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ((DATE32_YEAR_INIT > ui32Year || DATE32_YEAR_MAX < ui32Year) ||
 		(0 == ui32Month || 12 < ui32Month || 0 == ui32Day || 31 < ui32Day || 23 < ui32Hour || 59 < ui32Minute))
-	{// ±âº»¼³Á¤°ªÀ» °¡´ÉÇÏ¸é 2000-01-01 00:00 ·Î ¼³Á¤ÇÏ¿´À¸¸é ÇÔ
+	{// ï¿½âº»ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¸ï¿½ 2000-01-01 00:00 ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½Ï¿ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½
 		ui32Year = 2000;
 		ui32Month = 01;
 		ui32Day = 01;
@@ -188,7 +173,7 @@ void DATE32::CheckDATE32()
 	UINT32 ui32Minute	= GetMinute();
 	UINT32 ui32Second	= GetSecond();
 
-	// ¿¬¿ùÀÏ °ªÀ» È®ÀÎÇÏ¿© Àß¸øµÈ °ªÀÌ¸é ÃÊ±â°ªÀ¸·Î ¼³Á¤.
+	// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ È®ï¿½ï¿½ï¿½Ï¿ï¿½ ï¿½ß¸ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ì¸ï¿½ ï¿½Ê±â°ªï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½.
 	if ((DATE32_YEAR_INIT > ui32Year || DATE32_YEAR_MAX < ui32Year) ||
 		(0 == ui32Month || 12 < ui32Month || 0 == ui32Day || 31 < ui32Day || 23 < ui32Hour || 59 < ui32Minute || 59 < ui32Second))
 	{

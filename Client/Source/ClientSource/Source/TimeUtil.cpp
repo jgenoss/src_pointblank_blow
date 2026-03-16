@@ -127,12 +127,12 @@ void _RtlSecondsSince1980ToTime( DWORD Seconds, LARGE_INTEGER *Time )
     Time->u.HighPart = (DWORD)(secs >> 32);
 }
 
-UINT32 TimeUtil::CalcTimeDifference( INT32 tmAbs0,	INT32	tmAbs1)
+UINT32 TimeUtil::CalcTimeDifference( UINT32 tmAbs0,	UINT32	tmAbs1)
 {
 	SYSTEMTIME stm0, stm1;
 	UINT32 temp;
 
-	// System TimeÀ¸·Î º¯È¯
+	// System Timeï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 	temp = tmAbs0;
 	stm0.wYear		= (WORD)(2000 + (temp / 100000000));	temp = temp % 100000000;
 	stm0.wMonth		= (WORD)(temp / 1000000);				temp = temp % 1000000;
@@ -175,7 +175,7 @@ SYSTEMTIME TimeUtil::ToSystemTime( UINT32 tmAbs)
 	SYSTEMTIME stm;
 	UINT32 temp;
 
-	// System TimeÀ¸·Î º¯È¯
+	// System Timeï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½È¯
 	temp = tmAbs;
 	stm.wYear			= (WORD)(2000 + (temp / 100000000));	temp = temp % 100000000;
 	stm.wMonth			= (WORD)(temp / 1000000);				temp = temp % 1000000;

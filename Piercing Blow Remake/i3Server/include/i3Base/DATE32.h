@@ -5,9 +5,9 @@
 #include <ATLComTime.h>
 
 #define SMALLDATE_STRING_SIZE		20
-#define DATE32_INIT					2017591296	// 2017591296 => 2000-01-01 00:00:00
-#define DATE32_YEAR_INIT			1970
-#define DATE32_YEAR_MAX				(DATE32_YEAR_INIT + 63)
+#define DATE32_YEAR_INIT			2000
+#define DATE32_YEAR_MAX				(DATE32_YEAR_INIT + 63)		// 2063
+#define DATE32_INIT					((0 << 26) | (1 << 22) | (1 << 17))	// 2000-01-01 00:00:00
 #define SUMMER_TIME_FOLLOW_SYSTEM	-1			// A value less than zero to have the C run-time library code compute whether standard time or daylight saving time is in effect.
 
 enum I3DATETYPE
@@ -32,9 +32,9 @@ enum I3DATE_ADD_TYPE
 
 class I3_EXPORT_BASE DATE32
 {
-	// 32 ºñÆ®¸¦ »ç¿ëÇÕ´Ï´Ù.
+	// 32 ï¿½ï¿½Æ®ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Õ´Ï´ï¿½.
 	// 111111 1111 11111 11111 111111 111111
-	// (³âµµ) (¿ù)  (ÀÏ)  (½Ã)   (ºÐ)   (ÃÊ)
+	// (ï¿½âµµ) (ï¿½ï¿½)  (ï¿½ï¿½)  (ï¿½ï¿½)   (ï¿½ï¿½)   (ï¿½ï¿½)
 	UINT32					m_ui32Date;
 
 public:
@@ -58,7 +58,7 @@ public:
 	inline UINT32			GetDateTimeMMDDHHMISS();
 
 	void					Reset() { m_ui32Date = 0; }
-	void					CheckDATE32();						   // DATE32 ¹üÀ§ °è»êÇØ¼­ Æ²¸° °æ¿ì ÃÊ±âÈ­ 2017591296 => 2000-01-01 00:00:00 
+	void					CheckDATE32();						   // DATE32 ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½Ø¼ï¿½ Æ²ï¿½ï¿½ ï¿½ï¿½ï¿½ ï¿½Ê±ï¿½È­ 2017591296 => 2000-01-01 00:00:00 
 	void					AddTime(I3DATE_ADD_TYPE eAddType, INT32 i32Time);
 	INT32					DiffTime(DATE32 dt32Date);
 
