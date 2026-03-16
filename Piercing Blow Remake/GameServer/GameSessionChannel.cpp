@@ -132,7 +132,12 @@ void GameSession::OnChannelEnterReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 
 	if (result == 0)
+	{
 		printf("[GameSession] Channel enter - Index=%d, Channel=%d, Type=%d\n", GetIndex(), channel, g_pContextMain->GetChannelInfo((int)channel).eType);
+
+		// Send random map list for this channel (Phase 14D)
+		OnMapRandomListReq(nullptr, 0);
+	}
 }
 
 void GameSession::OnChannelLeaveReq(char* pData, INT32 i32Size)
@@ -752,4 +757,73 @@ void GameSession::OnMegaphoneReq(char* pData, INT32 i32Size)
 	// Broadcast to all sessions in same channel
 	if (g_pGameSessionManager)
 		g_pGameSessionManager->BroadcastToChannel(m_i32ChannelNum, &packet);
+}
+
+// ============================================================================
+// Random Map System (Phase 14D)
+// ============================================================================
+
+void GameSession::OnMapRandomListReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BASE_MAP_RANDOM_LIST_ACK - Send random map pool for current channel
+	// Server-push protocol (ACK only, sent on channel enter or on request)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_MAP_RANDOM_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	// Generate random map pool based on channel
+	// Each channel gets a shuffled selection of maps
+	// Default map pool (map UIDs that support random selection)
+	static const uint8_t s_MapPool[] = {
+		1, 2, 3, 4, 5, 6, 7, 8, 9, 10,	// Standard maps
+		11, 12, 13, 14, 15, 16, 17, 18		// Extended maps
+	};
+	static const int MAP_POOL_SIZE = sizeof(s_MapPool) / sizeof(s_MapPool[0]);
+
+	// Random map count for this channel (Phase 14D: config-driven)
+	int randomMapCount = 6;
+	if (g_pContextMain && g_pContextMain->m_i32RandomMapCount > 0)
+		randomMapCount = g_pContextMain->m_i32RandomMapCount;
+	if (randomMapCount > MAP_POOL_SIZE)
+		randomMapCount = MAP_POOL_SIZE;
+
+	uint8_t count8 = (uint8_t)randomMapCount;
+	memcpy(buffer + offset, &count8, 1);					offset += 1;
+
+	// Seed RNG with channel + date for daily rotation
+	time_t now = time(nullptr);
+	struct tm tmNow;
+	localtime_s(&tmNow, &now);
+	uint32_t seed = (uint32_t)(tmNow.tm_yday * 100 + m_i32ChannelNum);
+	srand(seed);
+
+	// Fisher-Yates shuffle of map pool and pick first N
+	uint8_t shuffled[32];
+	memcpy(shuffled, s_MapPool, MAP_POOL_SIZE);
+	for (int i = MAP_POOL_SIZE - 1; i > 0; i--)
+	{
+		int j = rand() % (i + 1);
+		uint8_t tmp = shuffled[i];
+		shuffled[i] = shuffled[j];
+		shuffled[j] = tmp;
+	}
+
+	for (int i = 0; i < randomMapCount; i++)
+	{
+		memcpy(buffer + offset, &shuffled[i], 1);			offset += 1;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
 }

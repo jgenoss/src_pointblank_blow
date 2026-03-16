@@ -40,7 +40,7 @@
 - [x] Enviar packet con estadísticas completas por jugador: kills, deaths, headshots, assists, exp ganada, puntos ganados
 - [x] Timer de 5 segundos en BATTLE_RESULT
 - [x] Al terminar timer, calcular recompensas, guardar stats en DataServer, y volver a READY
-- [ ] Implementar `SLOT_BONUS` tracking: EXP y POINT bonuses por performance
+- [x] Implementar `SLOT_BONUS` tracking: EXP y POINT bonuses por performance
 
 ### 1D. Death & Kill Processing Completo
 **Archivos**: `GameSessionBattle.cpp`
@@ -180,9 +180,9 @@
 ### 5B. Purchase & Gift
 - [x] `PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ/ACK` - Compra con validación GP/Cash
 - [x] `PROTOCOL_AUTH_SHOP_GOODS_GIFT_REQ/ACK` - Regalar items
-- [ ] `PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ/ACK` - Activar item
-- [ ] `PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ/ACK` - Agregar item al inventario
-- [ ] `PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ/ACK` - Eliminar item
+- [x] `PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ/ACK` - Activar item
+- [x] `PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ/ACK` - Agregar item al inventario
+- [x] `PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ/ACK` - Eliminar item
 - [x] Item expiration checking
 - [x] Durability system
 
@@ -264,7 +264,7 @@
 - [ ] Packet encryption validation con XOR key
 - [ ] Packet replay detection
 - [x] Protocol rate limiting (max packets per second)
-- [ ] State validation: rechazar packets que no corresponden al GAME_TASK actual
+- [x] State validation: rechazar packets que no corresponden al GAME_TASK actual
 - [x] Timeout por estado: 30s para NOT_LOGIN, 600s para LOGIN, 120s para NORMAL, 3600s para CHANNEL
 
 ### 9B. GameGuard Stub
@@ -352,7 +352,7 @@
 ## FASE 14: Miscellaneous
 
 ### 14A. Attendance/Daily Gift System
-- [ ] Daily login tracking
+- [x] Daily login tracking
 - [ ] Reward items por día consecutivo
 - [ ] Monthly reset
 
@@ -368,7 +368,7 @@
 - [x] Repair single/all items via shop
 
 ### 14D. Random Map System
-- [ ] Random map selection per channel
+- [x] Random map selection per channel
 - [ ] Map rotation config
 
 ---
@@ -390,9 +390,9 @@
 | Categoría | Protocolos Original | Implementados | % |
 |-----------|---------------------|---------------|---|
 | Login (0x0100) | 3 | 1 | 33% |
-| Base (0x0200) | ~80 | 25 | 31% |
+| Base (0x0200) | ~80 | 27 | 34% |
 | Auth (0x0300) | ~80 | 7 | 9% |
-| Shop (0x0400) | ~40 | 12 | 30% |
+| Shop (0x0400) | ~40 | 15 | 38% |
 | Admin (0x0500) | ~10 | 0 | 0% |
 | Clan (0x0700) | ~60 | 9 | 15% |
 | Clan Match (0x0800) | ~20 | 0 | 0% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 4 | 80% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~141** | **~31%** |
+| **TOTAL** | **~460** | **~146** | **~32%** |

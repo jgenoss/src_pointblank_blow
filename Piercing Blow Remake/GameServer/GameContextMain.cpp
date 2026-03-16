@@ -26,6 +26,7 @@ GameContextMain::GameContextMain()
 	, m_i32DefaultMaxRound(7)
 	, m_i32MinPlayersToStart(1)
 	, m_i32AFKTimeout(0)
+	, m_i32RandomMapCount(6)
 	, m_i32BoostEventCount(0)
 {
 	// Initialize boost events

@@ -776,6 +776,235 @@ void GameSession::OnShopMatchingListReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 }
 
+// ============================================================================
+// Item Auth / Insert / Delete (Phase 5B)
+// ============================================================================
+
+void GameSession::OnShopItemAuthReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ -> ACK
+	// Activate/authenticate a wrapped or inactive item in inventory
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_ITEM_AUTH_ACK, 1);
+		return;
+	}
+
+	uint32_t itemDBIdx = *(uint32_t*)pData;
+	int32_t result = 0;
+
+	GameInventoryItem* pItem = FindInventoryItemByDBIdx(itemDBIdx);
+	if (!pItem || !pItem->IsValid())
+	{
+		result = 1;		// Item not found
+	}
+	else
+	{
+		int itemType = GET_ITEM_TYPE(pItem->ui32ItemId);
+		// Activate wrapped period/count items
+		if (itemType == ITEM_TYPE_WRAP_PERIOD)
+		{
+			// Convert to active period item - set expiration from now
+			pItem->ui8ItemType = ITEM_ATTR_PERIOD;
+			if (pItem->ui32ItemArg == 0)
+				pItem->ui32ItemArg = (uint32_t)time(nullptr) + 86400 * 30;	// Default 30 days
+			else
+				pItem->ui32ItemArg = (uint32_t)time(nullptr) + pItem->ui32ItemArg;
+
+			printf("[GameSession] Item auth (period) - UID=%lld, DBIdx=%u, Expires=%u\n",
+				m_i64UID, itemDBIdx, pItem->ui32ItemArg);
+		}
+		else if (itemType == ITEM_TYPE_WRAP_COUNT)
+		{
+			// Convert to active count item
+			pItem->ui8ItemType = ITEM_ATTR_COUNT;
+			if (pItem->ui32ItemArg == 0)
+				pItem->ui32ItemArg = 10;	// Default 10 uses
+
+			printf("[GameSession] Item auth (count) - UID=%lld, DBIdx=%u, Uses=%u\n",
+				m_i64UID, itemDBIdx, pItem->ui32ItemArg);
+		}
+		else
+		{
+			result = 2;		// Item does not require authentication
+		}
+	}
+
+	// Send ACK
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_ITEM_AUTH_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &itemDBIdx, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopInsertItemReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ -> ACK
+	// Admin/system inserts an item directly into player inventory
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Parse: itemId(4) + itemType(1) + itemArg(4)
+	if (i32Size < 9)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_INSERT_ITEM_ACK, 1);
+		return;
+	}
+
+	uint32_t itemId = *(uint32_t*)pData;
+	uint8_t itemType = *(uint8_t*)(pData + 4);
+	uint32_t itemArg = *(uint32_t*)(pData + 5);
+
+	int32_t result = 0;
+	uint32_t newDBIdx = 0;
+
+	if (m_i32InventoryCount >= MAX_INVEN_COUNT)
+	{
+		result = 2;		// Inventory full
+	}
+	else if (HasInventoryItem(itemId))
+	{
+		result = 3;		// Already owned (non-stackable)
+	}
+	else
+	{
+		GameInventoryItem newItem;
+		newItem.ui32ItemDBIdx = (uint32_t)(GetTickCount() & 0xFFFFFF) | ((uint32_t)m_i32InventoryCount << 24);
+		newItem.ui32ItemId = itemId;
+		newItem.ui8ItemType = itemType;
+		newItem.ui32ItemArg = itemArg;
+		newItem.ui8Durability = DURABILITY_MAX;
+
+		if (AddInventoryItem(newItem) >= 0)
+		{
+			newDBIdx = newItem.ui32ItemDBIdx;
+			printf("[GameSession] Item inserted - UID=%lld, ItemId=%u, DBIdx=%u\n",
+				m_i64UID, itemId, newDBIdx);
+		}
+		else
+		{
+			result = 4;		// Insert failed
+		}
+	}
+
+	// Send ACK
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_INSERT_ITEM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &itemId, 4);					offset += 4;
+	memcpy(buffer + offset, &newDBIdx, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopDeleteItemReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ -> ACK
+	// Delete an item from inventory
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_SHOP_DELETE_ITEM_ACK, 1);
+		return;
+	}
+
+	uint32_t itemDBIdx = *(uint32_t*)pData;
+	int32_t result = 0;
+
+	GameInventoryItem* pItem = FindInventoryItemByDBIdx(itemDBIdx);
+	if (!pItem || !pItem->IsValid())
+	{
+		result = 1;		// Item not found
+	}
+	else
+	{
+		uint32_t itemId = pItem->ui32ItemId;
+
+		// Don't allow deletion of currently equipped items
+		if (m_ui8ActiveCharaSlot < MAX_CHARA_SLOT)
+		{
+			const GameCharaEquip& equip = m_CharaSlots[m_ui8ActiveCharaSlot].equip;
+			for (int w = 0; w < CHAR_EQUIP_WEAPON_COUNT; w++)
+			{
+				if (equip.ui32WeaponIds[w] == itemId)
+				{
+					result = 2;		// Item is equipped
+					break;
+				}
+			}
+			if (result == 0)
+			{
+				for (int p = 0; p < CHAR_EQUIP_PARTS_COUNT; p++)
+				{
+					if (equip.ui32PartsIds[p] == itemId)
+					{
+						result = 2;
+						break;
+					}
+				}
+			}
+		}
+
+		if (result == 0)
+		{
+			if (RemoveInventoryItem(itemDBIdx))
+			{
+				printf("[GameSession] Item deleted - UID=%lld, DBIdx=%u, ItemId=%u\n",
+					m_i64UID, itemDBIdx, itemId);
+			}
+			else
+			{
+				result = 3;		// Remove failed
+			}
+		}
+	}
+
+	// Send ACK
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_SHOP_DELETE_ITEM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &itemDBIdx, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 {
 	if (m_eMainTask < GAME_TASK_INFO)

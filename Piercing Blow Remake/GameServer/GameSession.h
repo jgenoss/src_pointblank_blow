@@ -173,6 +173,10 @@ public:
 	// Battle results from BattleServer (applied via ModuleBattleServer)
 	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin);
 
+	// SLOT_BONUS tracking (Phase 1C) - per-battle EXP/Point bonuses
+	int				GetLastBattleExpBonus() const	{ return m_i32LastBattleExpBonus; }
+	int				GetLastBattleGPBonus() const	{ return m_i32LastBattleGPBonus; }
+
 	// Item expiration (Phase 5B)
 	void			CheckExpiredItems();
 	int				RemoveExpiredItems();
@@ -225,6 +229,7 @@ private:
 	void			OnMapListReq(char* pData, INT32 i32Size);
 	void			OnMapRuleListReq(char* pData, INT32 i32Size);
 	void			OnMapMatchingListReq(char* pData, INT32 i32Size);
+	void			OnMapRandomListReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Channel (GameSessionChannel.cpp)
 	void			OnChannelListReq(char* pData, INT32 i32Size);
@@ -307,6 +312,9 @@ private:
 	void			OnShopGoodsListReq(char* pData, INT32 i32Size);
 	void			OnShopItemListReq(char* pData, INT32 i32Size);
 	void			OnShopMatchingListReq(char* pData, INT32 i32Size);
+	void			OnShopItemAuthReq(char* pData, INT32 i32Size);
+	void			OnShopInsertItemReq(char* pData, INT32 i32Size);
+	void			OnShopDeleteItemReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Social (GameSessionSocial.cpp)
 	void			OnFriendInfoReq(char* pData, INT32 i32Size);
@@ -395,6 +403,9 @@ private:
 	// Boost event info (Phase 14B)
 	void			SendBoostEventInfo();
 
+	// Attendance login check (Phase 14A)
+	void			CheckAttendanceOnLogin();
+
 	// Title info (Phase 4D)
 	void			SendTitleInfo();
 
@@ -447,6 +458,10 @@ private:
 
 	// Battle state
 	uint32_t		m_stUsedWeapon;		// Last used weapon ID in battle
+
+	// SLOT_BONUS tracking (Phase 1C)
+	int				m_i32LastBattleExpBonus;		// Last battle EXP bonus breakdown total
+	int				m_i32LastBattleGPBonus;		// Last battle GP bonus breakdown total
 
 	// Equipment (7E) - Character slots with weapon/parts loadouts
 	uint8_t			m_ui8ActiveCharaSlot;					// Current active character slot (0-4)

@@ -103,6 +103,9 @@ public:
 	int			m_i32MinPlayersToStart;
 	int			m_i32AFKTimeout;
 
+	// Random map config (Phase 14D)
+	int			m_i32RandomMapCount;		// Number of random maps per channel (default 6)
+
 	// Rank/EXP table (Phase 10)
 	// 52 military ranks: Trainee(0) through General(51)
 	static const int MAX_RANK_COUNT = 52;

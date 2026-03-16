@@ -149,7 +149,7 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 		if (m_eMainTask < GAME_TASK_LOGIN)
 			return packetSize;
 
-		// Battle packets require GAME_TASK_BATTLE
+		// Battle packets require GAME_TASK_BATTLE or GAME_TASK_READY_ROOM
 		if (protocolId >= PROTOCOL_BATTLE_READYBATTLE_REQ &&
 			protocolId <= PROTOCOL_BATTLE_SENDPING_ACK)
 		{
@@ -157,11 +157,35 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 				return packetSize;
 		}
 
-		// Room packets require GAME_TASK_READY_ROOM or GAME_TASK_BATTLE
+		// Room packets require at least GAME_TASK_LOBBY
 		if (protocolId >= PROTOCOL_ROOM_CREATE_REQ &&
 			protocolId <= PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK)
 		{
 			if (m_eMainTask < GAME_TASK_LOBBY)
+				return packetSize;
+		}
+
+		// Lobby packets require GAME_TASK_LOBBY or higher
+		if (protocolId >= PROTOCOL_LOBBY_ENTER_REQ &&
+			protocolId <= PROTOCOL_LOBBY_FIND_NICK_NAME_ACK)
+		{
+			if (m_eMainTask < GAME_TASK_CHANNEL)
+				return packetSize;
+		}
+
+		// Shop packets require at least GAME_TASK_CHANNEL
+		if (protocolId >= PROTOCOL_SHOP_ENTER_REQ &&
+			protocolId <= PROTOCOL_AUTH_GET_POINT_CASH_ACK)
+		{
+			if (m_eMainTask < GAME_TASK_CHANNEL)
+				return packetSize;
+		}
+
+		// Clan packets require at least GAME_TASK_CHANNEL
+		if (protocolId >= PROTOCOL_CS_CREATE_CLAN_REQ &&
+			protocolId <= PROTOCOL_CS_CLIENT_CLAN_LIST_ACK)
+		{
+			if (m_eMainTask < GAME_TASK_CHANNEL)
 				return packetSize;
 		}
 	}
@@ -204,6 +228,7 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_MAP_LIST_REQ:		OnMapListReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_MAP_RULELIST_REQ:	OnMapRuleListReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_MAP_MATCHINGLIST_REQ:OnMapMatchingListReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_MAP_RANDOM_LIST_ACK:	OnMapRandomListReq(pData, dataSize);	break;	// Client can request refresh
 
 	// ---- Channel (GameSessionChannel.cpp) ----
 	case PROTOCOL_BASE_GET_CHANNELLIST_REQ:	OnChannelListReq(pData, dataSize);	break;
@@ -290,6 +315,9 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_GOODSLIST_REQ:			OnShopGoodsListReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_ITEMLIST_REQ:			OnShopItemListReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_MATCHINGLIST_REQ:		OnShopMatchingListReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_ITEM_AUTH_REQ:			OnShopItemAuthReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SHOP_INSERT_ITEM_REQ:		OnShopInsertItemReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ:		OnShopDeleteItemReq(pData, dataSize);		break;
 
 	// ---- Quest (GameSessionQuest.cpp) ----
 	case PROTOCOL_BASE_QUEST_GET_REQ:				OnQuestGetReq(pData, dataSize);				break;
@@ -463,6 +491,9 @@ void GameSession::OnGetUserInfoReq(char* pData, INT32 i32Size)
 
 	// Send title info (Phase 4D)
 	SendTitleInfo();
+
+	// Check attendance on login (Phase 14A)
+	CheckAttendanceOnLogin();
 
 	m_eMainTask = GAME_TASK_CHANNEL;
 }
@@ -1218,6 +1249,7 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 	// Use config-driven rewards
 	int killGP = 50, winGP = 200, loseGP = 50;
 	int killExp = 100, winExp = 500, loseExp = 100;
+	int headshotGP = 20, headshotExp = 50;
 	if (g_pContextMain)
 	{
 		killGP = g_pContextMain->m_i32KillGPReward;
@@ -1228,31 +1260,64 @@ void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshot
 		loseExp = g_pContextMain->m_i32LoseExpReward;
 	}
 
-	int gpReward = i32Kills * killGP + (bWin ? winGP : loseGP);
-	int64_t expReward = (int64_t)(i32Kills * killExp + (bWin ? winExp : loseExp));
+	// Phase 1C: SLOT_BONUS breakdown tracking
+	int baseGP = bWin ? winGP : loseGP;
+	int killBonusGP = i32Kills * killGP;
+	int headshotBonusGP = i32Headshots * headshotGP;
+	int64_t baseExp = (int64_t)(bWin ? winExp : loseExp);
+	int64_t killBonusExp = (int64_t)(i32Kills * killExp);
+	int64_t headshotBonusExp = (int64_t)(i32Headshots * headshotExp);
+
+	int gpReward = baseGP + killBonusGP + headshotBonusGP;
+	int64_t expReward = baseExp + killBonusExp + headshotBonusExp;
 
 	// Apply boost event multipliers (Phase 14B)
+	int boostGP = 0, boostExp = 0;
 	if (g_pContextMain)
 	{
 		uint16_t expMult = g_pContextMain->GetCurrentExpMultiplier();
 		uint16_t pointMult = g_pContextMain->GetCurrentPointMultiplier();
 		if (expMult != 100)
-			expReward = expReward * expMult / 100;
+		{
+			int64_t boosted = expReward * expMult / 100;
+			boostExp = (int)(boosted - expReward);
+			expReward = boosted;
+		}
 		if (pointMult != 100)
-			gpReward = gpReward * pointMult / 100;
+		{
+			int boosted = gpReward * pointMult / 100;
+			boostGP = boosted - gpReward;
+			gpReward = boosted;
+		}
 	}
+
+	// Store SLOT_BONUS breakdown for client display (Phase 1C)
+	m_i32LastBattleExpBonus = (int)expReward;
+	m_i32LastBattleGPBonus = gpReward;
 
 	m_i32GP += gpReward;
 	m_i64Exp += expReward;
 
-	printf("[GameSession] Battle result applied - UID=%lld, K=%d D=%d H=%d Win=%d, GP+%d, EXP+%lld\n",
-		m_i64UID, i32Kills, i32Deaths, i32Headshots, bWin ? 1 : 0, gpReward, expReward);
+	// Update daily record
+	m_DailyRecord.i32Kills += i32Kills;
+	m_DailyRecord.i32Deaths += i32Deaths;
+	m_DailyRecord.i32GamesPlayed++;
+	if (bWin) m_DailyRecord.i32Wins++; else m_DailyRecord.i32Losses++;
+	m_DailyRecord.i64ExpGained += expReward;
+	m_DailyRecord.i32GPGained += gpReward;
+
+	printf("[GameSession] Battle result - UID=%lld, K=%d D=%d H=%d Win=%d, GP+%d(base=%d kill=%d hs=%d boost=%d), EXP+%lld\n",
+		m_i64UID, i32Kills, i32Deaths, i32Headshots, bWin ? 1 : 0,
+		gpReward, baseGP, killBonusGP, headshotBonusGP, boostGP, expReward);
 
 	// Check for rank up after EXP gain
 	CheckRankUp();
 
 	// Decrease durability of equipped items (Phase 14C)
 	DecreaseEquippedDurability();
+
+	// Update quest progress (Phase 7I)
+	UpdateQuestProgress(i32Kills, i32Deaths, i32Headshots, bWin);
 }
 
 // ============================================================================
@@ -1307,6 +1372,8 @@ void GameSession::ResetSessionData()
 	m_i32Wins = 0;
 	m_i32Losses = 0;
 	m_stUsedWeapon = 0;
+	m_i32LastBattleExpBonus = 0;
+	m_i32LastBattleGPBonus = 0;
 
 	m_dwRateLimitWindow = 0;
 	m_ui16PacketCount = 0;
