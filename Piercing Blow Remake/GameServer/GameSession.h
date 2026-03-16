@@ -252,6 +252,11 @@ private:
 	void			OnCreateNickReq(char* pData, INT32 i32Size);
 	void			OnRankUpReq(char* pData, INT32 i32Size);
 	void			OnGameGuardReq(char* pData, INT32 i32Size);
+	void			OnLogoutReq(char* pData, INT32 i32Size);
+	void			OnQuestBuyCardSetReq(char* pData, INT32 i32Size);
+	void			OnGuideCompleteReq(char* pData, INT32 i32Size);
+	void			OnGetUserInfoByUIDReq(char* pData, INT32 i32Size);
+	void			OnGetUserInfoByNickReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - User Info (Phase 4C - GameSession.cpp)
 	void			OnGetMyInfoRecordReq(char* pData, INT32 i32Size);
@@ -287,6 +292,12 @@ private:
 	void			OnLobbyViewUserItemReq(char* pData, INT32 i32Size);
 	void			OnLobbyFindNickNameReq(char* pData, INT32 i32Size);
 	void			OnMegaphoneReq(char* pData, INT32 i32Size);
+	void			OnLobbyGetRoomInfoReq(char* pData, INT32 i32Size);
+	void			OnLobbyGetRoomInfoAddReq(char* pData, INT32 i32Size);
+	void			OnLobbyCreateTrainingReq(char* pData, INT32 i32Size);
+	void			OnLobbyQuickJoinSettingReq(char* pData, INT32 i32Size);
+	void			OnLobbySetBirthdayReq(char* pData, INT32 i32Size);
+	void			OnLobbyGetUIDByNickNameReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Room (GameSessionRoom.cpp)
 	void			OnRoomCreateReq(char* pData, INT32 i32Size);
@@ -306,6 +317,13 @@ private:
 	void			OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size);
 	void			OnRoomLoadingStartReq(char* pData, INT32 i32Size);
+	void			OnRoomInfoEnterReq(char* pData, INT32 i32Size);
+	void			OnRoomInfoLeaveReq(char* pData, INT32 i32Size);
+	void			OnRoomGetLobbyUserListReq(char* pData, INT32 i32Size);
+	void			OnRoomCheckMainReq(char* pData, INT32 i32Size);
+	void			OnRoomMasterTeamChangeReq(char* pData, INT32 i32Size);
+	void			OnRoomGetNicknameReq(char* pData, INT32 i32Size);
+	void			OnRoomGetRankReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Battle flow (GameSessionBattle.cpp)
 	void			OnBattleReadyBattleReq(char* pData, INT32 i32Size);
@@ -337,6 +355,12 @@ private:
 	void			OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleVoteKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleSendPingReq(char* pData, INT32 i32Size);
+	void			OnBattleChangeDifficultyReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionTouchdownCountReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionDeathblowReq(char* pData, INT32 i32Size);
+	void			OnBattleSupplyBoxResultReq(char* pData, INT32 i32Size);
+	void			OnBattleUserSkillUpgradeReq(char* pData, INT32 i32Size);
+	void			OnBattleSlotEquipmentReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Equipment (GameSessionEquipment.cpp)
 	void			OnGetEquipmentInfoReq(char* pData, INT32 i32Size);

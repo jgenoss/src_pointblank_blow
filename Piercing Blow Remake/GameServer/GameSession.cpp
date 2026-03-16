@@ -282,6 +282,11 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_CREATE_NICK_REQ:		OnCreateNickReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_RANK_UP_REQ:			OnRankUpReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_GAMEGUARD_REQ:		OnGameGuardReq(pData, dataSize);		break;
+	case PROTOCOL_BASE_LOGOUT_REQ:			OnLogoutReq(pData, dataSize);			break;
+	case PROTOCOL_BASE_QUEST_BUY_CARD_SET_REQ:	OnQuestBuyCardSetReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GUIDE_COMPLETE_REQ:	OnGuideCompleteReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_USER_INFO_UID_REQ:	OnGetUserInfoByUIDReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_GET_USER_INFO_NICK_REQ:	OnGetUserInfoByNickReq(pData, dataSize);break;
 
 	// ---- User Detail Info (Phase 4B) ----
 	case PROTOCOL_BASE_GET_USER_INFO_LOBBY_REQ:	OnGetUserInfoLobbyReq(pData, dataSize);	break;
@@ -319,6 +324,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_LOBBY_VIEW_USER_ITEM_REQ:		OnLobbyViewUserItemReq(pData, dataSize);	break;
 	case PROTOCOL_LOBBY_FIND_NICK_NAME_REQ:		OnLobbyFindNickNameReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_MEGAPHONE_REQ:			OnMegaphoneReq(pData, dataSize);			break;
+	case PROTOCOL_LOBBY_GET_ROOMINFO_REQ:		OnLobbyGetRoomInfoReq(pData, dataSize);		break;
+	case PROTOCOL_LOBBY_GET_ROOMINFOADD_REQ:	OnLobbyGetRoomInfoAddReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_CREATE_TRAINING_REQ:	OnLobbyCreateTrainingReq(pData, dataSize);	break;
+	case PROTOCOL_LOBBY_QUICKJOIN_SETTING_REQ:	OnLobbyQuickJoinSettingReq(pData, dataSize);break;
+	case PROTOCOL_LOBBY_SET_BIRTHDAY_REQ:		OnLobbySetBirthdayReq(pData, dataSize);		break;
+	case PROTOCOL_LOBBY_GET_UID_BY_NICK_NAME_REQ:	OnLobbyGetUIDByNickNameReq(pData, dataSize);break;
 	case PROTOCOL_BASE_CHATTING_REQ:
 		if (m_eMainTask == GAME_TASK_READY_ROOM || m_eMainTask == GAME_TASK_BATTLE)
 			OnRoomChatReq(pData, dataSize);
@@ -343,6 +354,13 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_INVITE_LOBBY_USER_REQ:		OnRoomInviteLobbyUserReq(pData, dataSize);	break;
 	case PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_REQ:	OnRoomChangeObserverSlotReq(pData, dataSize);break;
 	case PROTOCOL_ROOM_LOADING_START_REQ:			OnRoomLoadingStartReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_INFO_ENTER_REQ:				OnRoomInfoEnterReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_INFO_LEAVE_REQ:				OnRoomInfoLeaveReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_GET_LOBBY_USER_LIST_REQ:		OnRoomGetLobbyUserListReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_CHECK_MAIN_REQ:				OnRoomCheckMainReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_MASTER_TEAM_CHANGE_REQ:		OnRoomMasterTeamChangeReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_GET_NICKNAME_REQ:			OnRoomGetNicknameReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_GET_RANK_REQ:				OnRoomGetRankReq(pData, dataSize);			break;
 
 	// ---- Equipment (GameSessionEquipment.cpp) ----
 	case PROTOCOL_BASE_GET_EQUIPMENT_INFO_REQ:		OnGetEquipmentInfoReq(pData, dataSize);		break;
@@ -391,6 +409,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ:			OnBattleSuggestKickVoteReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ:				OnBattleVoteKickVoteReq(pData, dataSize);			break;
 	case PROTOCOL_BATTLE_SENDPING_REQ:					OnBattleSendPingReq(pData, dataSize);				break;
+	case PROTOCOL_BATTLE_CHANGE_DIFFICULTY_LEVEL_REQ:	OnBattleChangeDifficultyReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_MISSION_TOUCHDOWN_COUNT_REQ:	OnBattleMissionTouchdownCountReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_MISSION_DEATHBLOW_REQ:			OnBattleMissionDeathblowReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_SUPPLY_BOX_RESULT_REQ:			OnBattleSupplyBoxResultReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_USER_SKILL_UPGRADE_REQ:		OnBattleUserSkillUpgradeReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_SLOT_EQUIPMENT_REQ:			OnBattleSlotEquipmentReq(pData, dataSize);			break;
 
 	// ---- Shop (GameSessionShop.cpp) ----
 	case PROTOCOL_SHOP_ENTER_REQ:					OnShopEnterReq(pData, dataSize);			break;
@@ -1450,6 +1474,236 @@ void GameSession::OnGameGuardReq(char* pData, INT32 i32Size)
 
 	size = (uint16_t)offset;
 	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Base Extended Handlers (Batch 15)
+// ============================================================================
+
+void GameSession::OnLogoutReq(char* pData, INT32 i32Size)
+{
+	// Client requests logout (back to server select or exit)
+	if (m_eMainTask < GAME_TASK_LOGIN)
+		return;
+
+	printf("[GameSession] Logout - Index=%d, User=%s, UID=%lld\n",
+		GetIndex(), m_szUsername, m_i64UID);
+
+	// Save player data before logout
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected() && m_i64UID > 0)
+	{
+		g_pModuleDataServer->RequestPlayerSave(m_i64UID,
+			m_i32Level, m_i64Exp, m_i32Cash, m_i32GP);
+	}
+
+	SendSimpleAck(PROTOCOL_BASE_LOGOUT_ACK, 0);
+
+	// Reset session state (will disconnect or go back to connect state)
+	// Don't force disconnect - let client decide
+}
+
+void GameSession::OnQuestBuyCardSetReq(char* pData, INT32 i32Size)
+{
+	// Buy a quest card set
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_BASE_QUEST_BUY_CARD_SET_ACK, -1);
+		return;
+	}
+
+	uint8_t setIndex = *(uint8_t*)pData;
+	uint8_t setType = *(uint8_t*)(pData + 1);
+
+	// Check if slot is available (max 4 active quest sets)
+	if (setIndex >= 4)
+	{
+		SendSimpleAck(PROTOCOL_BASE_QUEST_BUY_CARD_SET_ACK, -2);
+		return;
+	}
+
+	// Check cost (quest card sets cost GP)
+	const int QUEST_CARD_SET_COST = 1000;
+	if (m_i32GP < QUEST_CARD_SET_COST)
+	{
+		SendSimpleAck(PROTOCOL_BASE_QUEST_BUY_CARD_SET_ACK, -3);
+		return;
+	}
+
+	m_i32GP -= QUEST_CARD_SET_COST;
+
+	// Initialize the quest set
+	if (setIndex < 4)
+	{
+		m_QuestData.sets[setIndex].ui8SetType = setType;
+		m_QuestData.sets[setIndex].ui8ActiveCard = 0;
+		memset(m_QuestData.sets[setIndex].ui16Progress, 0, sizeof(m_QuestData.sets[setIndex].ui16Progress));
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_QUEST_BUY_CARD_SET_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &setIndex, 1);	offset += 1;
+	memcpy(buffer + offset, &setType, 1);	offset += 1;
+
+	int32_t remainGP = m_i32GP;
+	memcpy(buffer + offset, &remainGP, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGuideCompleteReq(char* pData, INT32 i32Size)
+{
+	// Tutorial/guide completion
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	// Just ACK - mark guide as completed
+	SendSimpleAck(PROTOCOL_BASE_GUIDE_COMPLETE_ACK, 0);
+}
+
+void GameSession::OnGetUserInfoByUIDReq(char* pData, INT32 i32Size)
+{
+	// Get brief user info by UID
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < (int)sizeof(int64_t))
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USER_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = -1;
+	GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+
+	if (pTarget)
+	{
+		result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int64_t uid = pTarget->GetUID();
+		memcpy(buffer + offset, &uid, 8);	offset += 8;
+
+		const char* nick = pTarget->GetNickname();
+		int nickLen = (int)strlen(nick);
+		if (nickLen > 32) nickLen = 32;
+		memcpy(buffer + offset, nick, nickLen);
+		memset(buffer + offset + nickLen, 0, 32 - nickLen);
+		offset += 32;
+
+		int32_t level = pTarget->GetLevel();
+		int32_t rank = pTarget->GetRankId();
+		int32_t kills = pTarget->GetKills();
+		int32_t deaths = pTarget->GetDeaths();
+		int32_t wins = pTarget->GetWins();
+		int32_t losses = pTarget->GetLosses();
+		memcpy(buffer + offset, &level, 4);		offset += 4;
+		memcpy(buffer + offset, &rank, 4);		offset += 4;
+		memcpy(buffer + offset, &kills, 4);		offset += 4;
+		memcpy(buffer + offset, &deaths, 4);	offset += 4;
+		memcpy(buffer + offset, &wins, 4);		offset += 4;
+		memcpy(buffer + offset, &losses, 4);	offset += 4;
+	}
+	else
+	{
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetUserInfoByNickReq(char* pData, INT32 i32Size)
+{
+	// Get brief user info by nickname
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	char nickname[33] = {};
+	int copyLen = (i32Size > 32) ? 32 : i32Size;
+	memcpy(nickname, pData, copyLen);
+	nickname[32] = '\0';
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_USER_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = -1;
+	GameSession* pTarget = g_pGameSessionManager->FindSessionByNickname(nickname);
+
+	if (pTarget)
+	{
+		result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int64_t uid = pTarget->GetUID();
+		memcpy(buffer + offset, &uid, 8);	offset += 8;
+
+		const char* nick = pTarget->GetNickname();
+		int nickLen = (int)strlen(nick);
+		if (nickLen > 32) nickLen = 32;
+		memcpy(buffer + offset, nick, nickLen);
+		memset(buffer + offset + nickLen, 0, 32 - nickLen);
+		offset += 32;
+
+		int32_t level = pTarget->GetLevel();
+		int32_t rank = pTarget->GetRankId();
+		int32_t kills = pTarget->GetKills();
+		int32_t deaths = pTarget->GetDeaths();
+		int32_t wins = pTarget->GetWins();
+		int32_t losses = pTarget->GetLosses();
+		memcpy(buffer + offset, &level, 4);		offset += 4;
+		memcpy(buffer + offset, &rank, 4);		offset += 4;
+		memcpy(buffer + offset, &kills, 4);		offset += 4;
+		memcpy(buffer + offset, &deaths, 4);	offset += 4;
+		memcpy(buffer + offset, &wins, 4);		offset += 4;
+		memcpy(buffer + offset, &losses, 4);	offset += 4;
+	}
+	else
+	{
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);

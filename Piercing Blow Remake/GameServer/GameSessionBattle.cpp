@@ -1244,3 +1244,221 @@ void GameSession::OnBattleSendPingReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	m_pRoom->SendToAll(&packet);
 }
+
+// ============================================================================
+// Battle Extended Handlers (Batch 15)
+// ============================================================================
+
+void GameSession::OnBattleChangeDifficultyReq(char* pData, INT32 i32Size)
+{
+	// Challenge mode difficulty change
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 1)
+		return;
+
+	uint8_t diffLevel = *(uint8_t*)pData;
+
+	// Broadcast difficulty change to all players
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_CHANGE_DIFFICULTY_LEVEL_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &diffLevel, 1);	offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleMissionTouchdownCountReq(char* pData, INT32 i32Size)
+{
+	// Touchdown count update (cross counter mode)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint16_t redCount = *(uint16_t*)pData;
+	uint16_t blueCount = *(uint16_t*)(pData + 2);
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_COUNT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &redCount, 2);	offset += 2;
+	memcpy(buffer + offset, &blueCount, 2);	offset += 2;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleMissionDeathblowReq(char* pData, INT32 i32Size)
+{
+	// Dino mission deathblow event
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 5)
+		return;
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	uint32_t targetId = *(uint32_t*)(pData + 1);
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_DEATHBLOW_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &slotIdx, 1);		offset += 1;
+	memcpy(buffer + offset, &targetId, 4);		offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleSupplyBoxResultReq(char* pData, INT32 i32Size)
+{
+	// Supply box result (random item drop during battle)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 5)
+		return;
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	uint32_t itemId = *(uint32_t*)(pData + 1);
+
+	// ACK with the item granted
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_SUPPLY_BOX_RESULT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	memcpy(buffer + offset, &slotIdx, 1);		offset += 1;
+	memcpy(buffer + offset, &itemId, 4);		offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleUserSkillUpgradeReq(char* pData, INT32 i32Size)
+{
+	// In-battle skill upgrade
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	uint8_t skillType = *(uint8_t*)pData;
+	uint8_t skillIdx = *(uint8_t*)(pData + 1);
+
+	// Broadcast skill upgrade to all (for visual effects)
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_USER_SKILL_UPGRADE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t mySlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &mySlot, 1);		offset += 1;
+	memcpy(buffer + offset, &skillType, 1);		offset += 1;
+	memcpy(buffer + offset, &skillIdx, 1);		offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleSlotEquipmentReq(char* pData, INT32 i32Size)
+{
+	// In-battle weapon swap request
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 5)
+		return;
+
+	uint8_t weaponSlot = *(uint8_t*)pData;
+	uint32_t newWeaponId = *(uint32_t*)(pData + 1);
+
+	// Validate weapon exists in inventory
+	bool found = false;
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (m_Inventory[i].ui32ItemId == newWeaponId)
+		{
+			found = true;
+			break;
+		}
+	}
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_SLOT_EQUIPMENT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = found ? 0 : -1;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	if (found)
+	{
+		uint8_t mySlot = (uint8_t)m_i32SlotIdx;
+		memcpy(buffer + offset, &mySlot, 1);			offset += 1;
+		memcpy(buffer + offset, &weaponSlot, 1);		offset += 1;
+		memcpy(buffer + offset, &newWeaponId, 4);		offset += 4;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	if (found)
+		m_pRoom->SendToAll(&packet);
+	else
+		SendMessage(&packet);
+}

@@ -834,3 +834,266 @@ void GameSession::OnMapRandomListReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Lobby Extended Handlers (Batch 15)
+// ============================================================================
+
+void GameSession::OnLobbyGetRoomInfoReq(char* pData, INT32 i32Size)
+{
+	// Get detailed info of a specific room (from lobby)
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GET_ROOMINFO_ACK, -1);
+		return;
+	}
+
+	int32_t roomIdx = *(int32_t*)pData;
+	Room* pRoom = g_pRoomManager->GetRoom(m_i32ChannelNum, roomIdx);
+	if (!pRoom || !pRoom->IsCreated())
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GET_ROOMINFO_ACK, -1);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_GET_ROOMINFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Room info
+	int32_t rIdx = roomIdx;
+	uint8_t mode = pRoom->GetGameMode();
+	uint8_t mapIdx = pRoom->GetMapIndex();
+	uint8_t state = pRoom->GetRoomState();
+	uint8_t maxPlayers = pRoom->GetMaxPlayers();
+	uint8_t playerCount = (uint8_t)pRoom->GetPlayerCount();
+	uint8_t hasPassword = pRoom->HasPassword() ? 1 : 0;
+
+	memcpy(buffer + offset, &rIdx, 4);				offset += 4;
+	memcpy(buffer + offset, &mode, 1);				offset += 1;
+	memcpy(buffer + offset, &mapIdx, 1);			offset += 1;
+	memcpy(buffer + offset, &state, 1);				offset += 1;
+	memcpy(buffer + offset, &maxPlayers, 1);		offset += 1;
+	memcpy(buffer + offset, &playerCount, 1);		offset += 1;
+	memcpy(buffer + offset, &hasPassword, 1);		offset += 1;
+
+	// Room title
+	const char* title = pRoom->GetTitle();
+	int titleLen = (int)strlen(title);
+	if (titleLen > 32) titleLen = 32;
+	memcpy(buffer + offset, title, titleLen);
+	memset(buffer + offset + titleLen, 0, 32 - titleLen);
+	offset += 32;
+
+	// Slot states
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		const GameSlotInfo& si = pRoom->GetSlotInfo(i);
+		memcpy(buffer + offset, &si.ui8State, 1);	offset += 1;
+		memcpy(buffer + offset, &si.ui8Team, 1);	offset += 1;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnLobbyGetRoomInfoAddReq(char* pData, INT32 i32Size)
+{
+	// Get additional room info (score, time, round)
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GET_ROOMINFOADD_ACK, -1);
+		return;
+	}
+
+	int32_t roomIdx = *(int32_t*)pData;
+	Room* pRoom = g_pRoomManager->GetRoom(m_i32ChannelNum, roomIdx);
+	if (!pRoom || !pRoom->IsCreated())
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GET_ROOMINFOADD_ACK, -1);
+		return;
+	}
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_GET_ROOMINFOADD_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t rIdx = roomIdx;
+	memcpy(buffer + offset, &rIdx, 4);	offset += 4;
+
+	// Battle info from score struct
+	const GameRoomScore& score = pRoom->GetScore();
+	uint8_t roundCount = (uint8_t)score.i32MaxRound;
+	uint8_t currentRound = (uint8_t)score.i32NowRound;
+	uint8_t timeLimit = (uint8_t)(score.ui16MaxTime / 60);	// Convert seconds to minutes
+	int32_t redScore = score.i32RedScore;
+	int32_t blueScore = score.i32BlueScore;
+	DWORD elapsed = pRoom->GetBattleElapsedTime();
+	uint32_t elapsedSec = (uint32_t)(elapsed / 1000);
+
+	memcpy(buffer + offset, &roundCount, 1);		offset += 1;
+	memcpy(buffer + offset, &currentRound, 1);		offset += 1;
+	memcpy(buffer + offset, &timeLimit, 1);			offset += 1;
+	memcpy(buffer + offset, &redScore, 4);			offset += 4;
+	memcpy(buffer + offset, &blueScore, 4);			offset += 4;
+	memcpy(buffer + offset, &elapsedSec, 4);		offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnLobbyCreateTrainingReq(char* pData, INT32 i32Size)
+{
+	// Create a training/shooting range room
+	if (m_eMainTask != GAME_TASK_LOBBY)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_CREATE_TRAINING_ACK, -1);
+		return;
+	}
+
+	// Create a room with training mode settings
+	GameRoomCreateInfo createInfo;
+	memset(&createInfo, 0, sizeof(createInfo));
+	strncpy_s(createInfo.szTitle, sizeof(createInfo.szTitle), "Training Room", _TRUNCATE);
+	createInfo.ui8GameMode = STAGE_MODE_TUTORIAL;
+	createInfo.ui8MapIndex = 0;		// Default training map
+	createInfo.ui8MaxPlayers = 1;
+	createInfo.ui8RoundCount = 1;
+	createInfo.ui8TimeLimit = 0;	// No time limit
+
+	int roomIdx = g_pRoomManager->OnCreateRoom(this, &createInfo);
+	if (roomIdx < 0)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_CREATE_TRAINING_ACK, -2);
+		return;
+	}
+
+	// Send ACK with room info
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_CREATE_TRAINING_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	int32_t rIdx = roomIdx;
+	memcpy(buffer + offset, &rIdx, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnLobbyQuickJoinSettingReq(char* pData, INT32 i32Size)
+{
+	// Save quick join filter settings (no ACK defined - fire and forget)
+	if (m_eMainTask < GAME_TASK_LOBBY)
+		return;
+
+	// Settings are stored client-side; server just acknowledges receipt
+	// No response needed as protocol has no ACK counterpart
+}
+
+void GameSession::OnLobbySetBirthdayReq(char* pData, INT32 i32Size)
+{
+	// Set birthday (one-time setting)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_SET_BIRTHDAY_ACK, -1);
+		return;
+	}
+
+	// Parse: year(2) + month(1) + day(1)
+	// Just acknowledge - birthday stored server-side for events
+	SendSimpleAck(PROTOCOL_LOBBY_SET_BIRTHDAY_ACK, 0);
+}
+
+void GameSession::OnLobbyGetUIDByNickNameReq(char* pData, INT32 i32Size)
+{
+	// Get UID by nickname
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 2)
+	{
+		SendSimpleAck(PROTOCOL_LOBBY_GET_UID_BY_NICK_NAME_ACK, -1);
+		return;
+	}
+
+	// Parse nickname (null-terminated, up to 32 bytes)
+	char nickname[33] = {};
+	int copyLen = (i32Size > 32) ? 32 : i32Size;
+	memcpy(nickname, pData, copyLen);
+	nickname[32] = '\0';
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_GET_UID_BY_NICK_NAME_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = -1;
+	int64_t foundUID = 0;
+
+	// Search online sessions
+	GameSession* pFound = g_pGameSessionManager->FindSessionByNickname(nickname);
+	if (pFound)
+	{
+		result = 0;
+		foundUID = pFound->GetUID();
+	}
+
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &foundUID, sizeof(int64_t));	offset += sizeof(int64_t);
+
+	// Echo nickname back
+	memcpy(buffer + offset, nickname, 32);
+	offset += 32;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
