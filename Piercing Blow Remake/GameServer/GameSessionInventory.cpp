@@ -159,6 +159,95 @@ void GameSession::OnInventoryLeaveReq(char* pData, INT32 i32Size)
 	SendSimpleAck(PROTOCOL_INVENTORY_LEAVE_ACK, 0);
 }
 
+void GameSession::OnInventoryGetInfoReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_INVENTORY_GET_INFO_REQ -> ACK
+	// Query inventory contents while in inventory screen (paginated)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	// Parse optional filter: category(1) + page(2)
+	uint8_t category = 0xFF;	// All categories
+	uint16_t page = 0;
+	if (i32Size >= 1)
+		category = *(uint8_t*)pData;
+	if (i32Size >= 3)
+		page = *(uint16_t*)(pData + 1);
+
+	const int ITEMS_PER_PAGE = 50;
+	const int ITEM_ENTRY_SIZE = 14;	// DBIdx(4) + ItemID(4) + Type(1) + Arg(4) + Durability(1)
+
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_INVENTORY_GET_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Count matching items
+	int matchCount = 0;
+	int startIdx = page * ITEMS_PER_PAGE;
+	int currentMatch = 0;
+
+	// First pass: count
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (category == 0xFF || GET_ITEM_TYPE(m_Inventory[i].ui32ItemId) == category)
+			matchCount++;
+	}
+
+	uint16_t totalCount = (uint16_t)matchCount;
+	uint16_t pageIdx = page;
+	memcpy(buffer + offset, &totalCount, 2);	offset += 2;
+	memcpy(buffer + offset, &pageIdx, 2);		offset += 2;
+
+	// Second pass: write items for this page
+	uint16_t sentCount = 0;
+	int sentCountOffset = offset;
+	offset += 2;	// Reserve space for sent count
+
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		if (category != 0xFF && GET_ITEM_TYPE(m_Inventory[i].ui32ItemId) != category)
+			continue;
+
+		if (currentMatch < startIdx)
+		{
+			currentMatch++;
+			continue;
+		}
+
+		if (sentCount >= ITEMS_PER_PAGE)
+			break;
+
+		if (offset + ITEM_ENTRY_SIZE > (int)sizeof(buffer))
+			break;
+
+		const GameInventoryItem& item = m_Inventory[i];
+		memcpy(buffer + offset, &item.ui32ItemDBIdx, 4);	offset += 4;
+		memcpy(buffer + offset, &item.ui32ItemId, 4);		offset += 4;
+		memcpy(buffer + offset, &item.ui8ItemType, 1);		offset += 1;
+		memcpy(buffer + offset, &item.ui32ItemArg, 4);		offset += 4;
+		memcpy(buffer + offset, &item.ui8Durability, 1);	offset += 1;
+
+		sentCount++;
+		currentMatch++;
+	}
+
+	memcpy(buffer + sentCountOffset, &sentCount, 2);
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 // ============================================================================
 // Item Durability System (Phase 14C)
 // ============================================================================

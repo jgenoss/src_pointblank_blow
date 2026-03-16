@@ -288,6 +288,7 @@ public:
 	bool		ToggleSoloPlay()				{ m_bSoloPlay = !m_bSoloPlay; return m_bSoloPlay; }
 	bool		IsSoloPlay() const				{ return m_bSoloPlay; }
 	void		ReduceBattleTime(int seconds)	{ m_dwBattleStartTime -= (DWORD)(seconds * 1000); }
+	DWORD		GetBattleElapsedTime() const	{ return (m_dwBattleStartTime > 0) ? (GetTickCount() - m_dwBattleStartTime) : 0; }
 
 	// Battle log
 	uint64_t	GetBattleUniqueNumber() const { return m_ui64BattleUniqueNum; }

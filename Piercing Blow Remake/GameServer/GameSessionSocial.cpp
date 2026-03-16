@@ -728,6 +728,325 @@ void GameSession::NotifyFriendLobbyLeave()
 }
 
 // ============================================================================
+// Friend Accept (accept/deny friend request)
+// ============================================================================
+
+void GameSession::OnFriendAcceptReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_FRIEND_ACCEPT_REQ -> ACK
+	// Accept or deny a pending friend request
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 9)	// uid(8) + accept(1)
+		return;
+
+	int64_t requesterUID = *(int64_t*)pData;
+	uint8_t accept = *(uint8_t*)(pData + 8);
+
+	int32_t result = 0;
+
+	if (accept == 1)
+	{
+		// Accept - already added mutually by OnFriendInsertReq, just confirm
+		// If not already in list, add now
+		if (!FindFriendByUID(requesterUID))
+		{
+			if (m_i32FriendCount >= MAX_FRIEND_COUNT)
+			{
+				result = 1;	// Friend list full
+			}
+			else
+			{
+				GameSession* pRequester = nullptr;
+				if (g_pGameSessionManager)
+					pRequester = g_pGameSessionManager->FindSessionByUID(requesterUID);
+
+				if (pRequester)
+				{
+					GameFriendInfo& newFriend = m_Friends[m_i32FriendCount];
+					newFriend.i64UID = pRequester->GetUID();
+					strncpy_s(newFriend.szNickname, pRequester->GetNickname(), 63);
+					newFriend.i32Level = pRequester->GetLevel();
+					newFriend.i32RankId = pRequester->GetRankId();
+					m_i32FriendCount++;
+				}
+				else
+				{
+					result = 2;	// Requester offline
+				}
+			}
+		}
+	}
+	// If deny, just acknowledge
+
+	SendSimpleAck(PROTOCOL_AUTH_FRIEND_ACCEPT_ACK, result);
+}
+
+// ============================================================================
+// Friend Invite to Room
+// ============================================================================
+
+void GameSession::OnFriendInviteReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_FRIEND_INVITED_REQ -> ACK (to sender) + REQUEST_ACK (to target)
+	// Invite a friend to current room
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_AUTH_FRIEND_INVITED_ACK, 1);	// Not in a room
+		return;
+	}
+
+	if (i32Size < 8)
+		return;
+
+	int64_t targetUID = *(int64_t*)pData;
+	int32_t result = 0;
+
+	GameSession* pTarget = nullptr;
+	if (g_pGameSessionManager)
+		pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+
+	if (!pTarget)
+	{
+		result = 1;	// Not online
+	}
+	else if (pTarget->GetTask() >= GAME_TASK_READY_ROOM)
+	{
+		result = 2;	// Already in a room
+	}
+	else if (pTarget->GetTask() < GAME_TASK_LOBBY)
+	{
+		result = 3;	// Not in lobby
+	}
+	else
+	{
+		// Send invite to target
+		i3NetworkPacket invitePacket;
+		char buf[256];
+		int off = 0;
+
+		uint16_t rSz = 0;
+		uint16_t rProto = PROTOCOL_AUTH_FRIEND_INVITED_REQUEST_ACK;
+		off += sizeof(uint16_t);
+		memcpy(buf + off, &rProto, sizeof(uint16_t));		off += sizeof(uint16_t);
+
+		int64_t inviterUID = m_i64UID;
+		memcpy(buf + off, &inviterUID, 8);					off += 8;
+		memcpy(buf + off, m_szNickname, 64);				off += 64;
+
+		int32_t channelNum = m_i32ChannelNum;
+		int32_t roomIdx = m_i32RoomIdx;
+		memcpy(buf + off, &channelNum, 4);					off += 4;
+		memcpy(buf + off, &roomIdx, 4);						off += 4;
+
+		rSz = (uint16_t)off;
+		memcpy(buf, &rSz, sizeof(uint16_t));
+
+		invitePacket.SetPacketData(buf, off);
+		pTarget->SendMessage(&invitePacket);
+	}
+
+	SendSimpleAck(PROTOCOL_AUTH_FRIEND_INVITED_ACK, result);
+}
+
+// ============================================================================
+// Community User Invite (from lobby user list)
+// ============================================================================
+
+void GameSession::OnCommunityUserInviteReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_COMMUNITY_USER_INVITED_REQ -> ACK/REQUEST_ACK
+	// Invite any user (from lobby search or user list) to room
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_COMMUNITY_USER_INVITED_ACK, 1);
+		return;
+	}
+
+	if (i32Size < 64)
+		return;
+
+	char targetNick[64];
+	memcpy(targetNick, pData, 64);
+	targetNick[63] = '\0';
+
+	int32_t result = 0;
+
+	GameSession* pTarget = nullptr;
+	if (g_pGameSessionManager)
+		pTarget = g_pGameSessionManager->FindSessionByNickname(targetNick);
+
+	if (!pTarget)
+	{
+		result = 1;
+	}
+	else if (pTarget == this)
+	{
+		result = 2;
+	}
+	else if (pTarget->GetTask() >= GAME_TASK_READY_ROOM)
+	{
+		result = 3;	// Already in room
+	}
+	else if (pTarget->GetTask() < GAME_TASK_LOBBY)
+	{
+		result = 4;	// Not in lobby
+	}
+	else
+	{
+		// Send invite notification to target
+		i3NetworkPacket invitePacket;
+		char buf[256];
+		int off = 0;
+
+		uint16_t rSz = 0;
+		uint16_t rProto = PROTOCOL_COMMUNITY_USER_INVITED_REQUEST_ACK;
+		off += sizeof(uint16_t);
+		memcpy(buf + off, &rProto, sizeof(uint16_t));		off += sizeof(uint16_t);
+
+		int64_t inviterUID = m_i64UID;
+		memcpy(buf + off, &inviterUID, 8);					off += 8;
+		memcpy(buf + off, m_szNickname, 64);				off += 64;
+
+		int32_t channelNum = m_i32ChannelNum;
+		int32_t roomIdx = m_i32RoomIdx;
+		memcpy(buf + off, &channelNum, 4);					off += 4;
+		memcpy(buf + off, &roomIdx, 4);						off += 4;
+
+		rSz = (uint16_t)off;
+		memcpy(buf, &rSz, sizeof(uint16_t));
+
+		invitePacket.SetPacketData(buf, off);
+		pTarget->SendMessage(&invitePacket);
+	}
+
+	SendSimpleAck(PROTOCOL_COMMUNITY_USER_INVITED_ACK, result);
+}
+
+// ============================================================================
+// Nickname/Color Nick Change
+// ============================================================================
+
+void GameSession::OnChangeNicknameReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_CHANGE_NICKNAME_REQ -> ACK
+	// Request nickname change (costs GP)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 64)
+		return;
+
+	char newNick[64];
+	memcpy(newNick, pData, 64);
+	newNick[63] = '\0';
+
+	int32_t result = 0;
+	int nickCost = 5000;	// Default cost
+
+	// Validate nickname length
+	int len = (int)strlen(newNick);
+	if (len < 2 || len > 16)
+	{
+		result = 1;	// Invalid length
+	}
+	else if (m_i32GP < nickCost)
+	{
+		result = 2;	// Not enough GP
+	}
+	else
+	{
+		// Check if nickname is taken
+		GameSession* pExisting = nullptr;
+		if (g_pGameSessionManager)
+			pExisting = g_pGameSessionManager->FindSessionByNickname(newNick);
+
+		if (pExisting && pExisting != this)
+		{
+			result = 3;	// Nickname taken
+		}
+		else
+		{
+			m_i32GP -= nickCost;
+			strncpy_s(m_szNickname, newNick, 63);
+			printf("[GameSession] Nickname changed - UID=%lld, NewNick=%s\n", m_i64UID, newNick);
+		}
+	}
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_AUTH_CHANGE_NICKNAME_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	if (result == 0)
+	{
+		memcpy(buffer + offset, m_szNickname, 64);			offset += 64;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnChangeColorNickReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_CHANGE_COLOR_NICK_REQ -> ACK
+	// Change color of nickname (requires color nick item)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t colorItemId = *(uint32_t*)pData;
+	int32_t result = 0;
+
+	// Check if player has color nick item in inventory
+	if (!HasInventoryItem(colorItemId))
+	{
+		result = 1;	// Item not found
+	}
+	else
+	{
+		// Consume the color nick item
+		GameInventoryItem* pItem = FindInventoryItem(colorItemId);
+		if (pItem)
+			RemoveInventoryItem(pItem->ui32ItemDBIdx);
+	}
+
+	SendSimpleAck(PROTOCOL_AUTH_CHANGE_COLOR_NICK_ACK, result);
+}
+
+// ============================================================================
+// Gift Shop Enter/Leave
+// ============================================================================
+
+void GameSession::OnGiftShopEnterReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_ENTER_GIFTSHOP_REQ -> ACK
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	SendSimpleAck(PROTOCOL_AUTH_ENTER_GIFTSHOP_ACK, 0);
+}
+
+void GameSession::OnGiftShopLeaveReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_AUTH_LEAVE_GIFTSHOP_REQ -> ACK
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	SendSimpleAck(PROTOCOL_AUTH_LEAVE_GIFTSHOP_ACK, 0);
+}
+
+// ============================================================================
 // Helper methods
 // ============================================================================
 

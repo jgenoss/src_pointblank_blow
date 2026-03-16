@@ -349,6 +349,9 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_EQUIPMENT_REQ:				OnEquipmentReq(pData, dataSize);			break;
 	case PROTOCOL_BASE_GET_CHARA_INFO_REQ:			OnGetCharaInfoReq(pData, dataSize);			break;
 	case PROTOCOL_CHAR_CREATE_CHARA_REQ:			OnCharaCreateReq(pData, dataSize);			break;
+	case PROTOCOL_CHAR_DELETE_CHARA_REQ:			OnCharaDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_CHAR_CHANGE_CHARA_NICK_REQ:		OnCharaChangeNickReq(pData, dataSize);		break;
+	case PROTOCOL_CHAR_CHANGE_EQUIP_REQ:			OnCharaChangeEquipReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_NEW_CHARA_SHIFT_POS_REQ:		OnCharaShiftPosReq(pData, dataSize);		break;
 	case PROTOCOL_ROOM_GET_USER_EQUIPMENT_REQ:		OnRoomGetUserEquipmentReq(pData, dataSize);	break;
 
@@ -356,6 +359,7 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_GET_INVEN_INFO_REQ:			OnGetInvenInfoReq(pData, dataSize);			break;
 	case PROTOCOL_INVENTORY_ENTER_REQ:				OnInventoryEnterReq(pData, dataSize);		break;
 	case PROTOCOL_INVENTORY_LEAVE_REQ:				OnInventoryLeaveReq(pData, dataSize);		break;
+	case PROTOCOL_INVENTORY_GET_INFO_REQ:			OnInventoryGetInfoReq(pData, dataSize);		break;
 
 	// ---- Battle (GameSessionBattle.cpp) ----
 	case PROTOCOL_BATTLE_READYBATTLE_REQ:				OnBattleReadyBattleReq(pData, dataSize);			break;
@@ -373,6 +377,17 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_REQ:	OnBattleMissionGeneratorInfoReq(pData, dataSize);	break;
 	case PROTOCOL_BATTLE_MISSION_TOUCHDOWN_REQ:			OnBattleMissionTouchdownReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_REQ:		OnBattleMissionDefenceInfoReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_EQUIPMENT_INFO_REQ:			OnBattleEquipmentInfoReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_PICKUP_WEAPON_REQ:				OnBattlePickupWeaponReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_TIMERSYNC_REQ:					OnBattleTimerSyncReq(pData, dataSize);				break;
+	case PROTOCOL_BATTLE_TIMEOUTCLIENT_REQ:				OnBattleTimeoutClientReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_LEAVEP2PSERVER_REQ:			OnBattleLeaveP2PServerReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_USE_ITEM_REQ:					OnBattleUseItemReq(pData, dataSize);				break;
+	case PROTOCOL_BATTLE_ENDBATTLE_REQ:					OnBattleEndBattleReq(pData, dataSize);				break;
+	case PROTOCOL_BATTLE_HOLE_CHECK_REQ:				OnBattleHoleCheckReq(pData, dataSize);				break;
+	case PROTOCOL_BATTLE_WAVE_READY_INFO_REQ:			OnBattleWaveReadyInfoReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_WAVE_READY_INFO_CANCEL_REQ:	OnBattleWaveReadyInfoCancelReq(pData, dataSize);	break;
+	case PROTOCOL_BATTLE_RECORD_REQ:					OnBattleRecordReq(pData, dataSize);					break;
 	case PROTOCOL_BATTLE_SUGGEST_KICKVOTE_REQ:			OnBattleSuggestKickVoteReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_VOTE_KICKVOTE_REQ:				OnBattleVoteKickVoteReq(pData, dataSize);			break;
 	case PROTOCOL_BATTLE_SENDPING_REQ:					OnBattleSendPingReq(pData, dataSize);				break;
@@ -408,10 +423,17 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_FRIEND_INFO_REQ:				OnFriendInfoReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FRIEND_INSERT_REQ:			OnFriendInsertReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FRIEND_DELETE_REQ:			OnFriendDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FRIEND_ACCEPT_REQ:			OnFriendAcceptReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FRIEND_INVITED_REQ:			OnFriendInviteReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SEND_WHISPER_REQ:			OnWhisperReq(pData, dataSize);				break;
 	case PROTOCOL_AUTH_BLOCK_INSERT_REQ:			OnBlockInsertReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_BLOCK_DELETE_REQ:			OnBlockDeleteReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FIND_USER_REQ:				OnFindUserReq(pData, dataSize);				break;
+	case PROTOCOL_AUTH_CHANGE_NICKNAME_REQ:			OnChangeNicknameReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_CHANGE_COLOR_NICK_REQ:		OnChangeColorNickReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_ENTER_GIFTSHOP_REQ:			OnGiftShopEnterReq(pData, dataSize);		break;
+	case PROTOCOL_AUTH_LEAVE_GIFTSHOP_REQ:			OnGiftShopLeaveReq(pData, dataSize);		break;
+	case PROTOCOL_COMMUNITY_USER_INVITED_REQ:		OnCommunityUserInviteReq(pData, dataSize);	break;
 
 	// ---- Notes/Mail (GameSessionSocial.cpp) ----
 	case PROTOCOL_MESSENGER_NOTE_SEND_REQ:			OnNoteSendReq(pData, dataSize);				break;

@@ -802,6 +802,418 @@ void GameSession::OnBattleVoteKickVoteReq(char* pData, INT32 i32Size)
 	m_pRoom->SendToAll(&packet);
 }
 
+// ============================================================================
+// Battle Equipment Info (view equipment during battle)
+// ============================================================================
+
+void GameSession::OnBattleEquipmentInfoReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_EQUIPMENT_INFO_REQ -> ACK
+	// Request equipment info for all players in battle
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[2048];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_EQUIPMENT_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Number of active slots
+	uint8_t slotCount = 0;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		if (m_pRoom->GetSlotSession(i))
+			slotCount++;
+	}
+	memcpy(buffer + offset, &slotCount, 1);		offset += 1;
+
+	// Per-slot equipment data
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		GameSession* pSlot = m_pRoom->GetSlotSession(i);
+		if (!pSlot)
+			continue;
+
+		if (offset + 65 > (int)sizeof(buffer))
+			break;
+
+		uint8_t slotIdx = (uint8_t)i;
+		memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
+
+		const GameCharaEquip& equip = pSlot->GetActiveEquipment();
+		for (int w = 0; w < CHAR_EQUIP_WEAPON_COUNT; w++)
+		{
+			memcpy(buffer + offset, &equip.ui32WeaponIds[w], 4);	offset += 4;
+		}
+		for (int p = 0; p < CHAR_EQUIP_PARTS_COUNT; p++)
+		{
+			memcpy(buffer + offset, &equip.ui32PartsIds[p], 4);	offset += 4;
+		}
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Weapon Pickup (pick up weapon from ground during battle)
+// ============================================================================
+
+void GameSession::OnBattlePickupWeaponReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_PICKUP_WEAPON_REQ -> ACK (broadcast)
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t weaponId = *(uint32_t*)pData;
+
+	// Broadcast pickup to all players in room
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_PICKUP_WEAPON_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+	memcpy(buffer + offset, &weaponId, 4);				offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+// ============================================================================
+// Timer Sync (client sends accumulated time every 5 seconds)
+// ============================================================================
+
+void GameSession::OnBattleTimerSyncReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_TIMERSYNC_REQ -> ACK (only on invalid sync)
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t clientTime = *(uint32_t*)pData;
+
+	// Validate timer - client sends cumulative battle time in ms
+	// Compare with server elapsed time
+	DWORD serverElapsed = m_pRoom->GetBattleElapsedTime();
+
+	// Allow 10 second tolerance
+	int diff = (int)clientTime - (int)serverElapsed;
+	if (diff < -10000 || diff > 10000)
+	{
+		// Invalid sync - notify client
+		i3NetworkPacket packet;
+		char buffer[16];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_TIMERSYNC_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint32_t correctedTime = serverElapsed;
+		memcpy(buffer + offset, &correctedTime, 4);			offset += 4;
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		SendMessage(&packet);
+	}
+}
+
+// ============================================================================
+// Timeout Client (host reports client unresponsive)
+// ============================================================================
+
+void GameSession::OnBattleTimeoutClientReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_TIMEOUTCLIENT_REQ -> ACK
+	// Room host reports that a client hasn't responded for 7 seconds
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	// Only room owner can report timeouts
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+		return;
+
+	if (i32Size < 1)
+		return;
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+	if (targetSlot >= SLOT_MAX_COUNT)
+		return;
+
+	GameSession* pTarget = m_pRoom->GetSlotSession(targetSlot);
+	if (!pTarget || pTarget == this)
+		return;
+
+	// Send timeout notification to target - they must return to lobby
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_TIMEOUTCLIENT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = targetSlot;
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	pTarget->SendMessage(&packet);
+}
+
+// ============================================================================
+// Leave P2P Server (host left, need new host)
+// ============================================================================
+
+void GameSession::OnBattleLeaveP2PServerReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_LEAVEP2PSERVER_REQ -> ACK
+	// Host has left the battle, reassign host
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	// Find next valid slot to be new host
+	int newHostSlot = -1;
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		GameSession* pSlot = m_pRoom->GetSlotSession(i);
+		if (pSlot && pSlot != this && i != m_i32SlotIdx)
+		{
+			newHostSlot = i;
+			break;
+		}
+	}
+
+	if (newHostSlot < 0)
+		return;
+
+	// Broadcast new host to all
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_LEAVEP2PSERVER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t oldHost = (uint8_t)m_i32SlotIdx;
+	uint8_t newHost = (uint8_t)newHostSlot;
+	memcpy(buffer + offset, &oldHost, 1);				offset += 1;
+	memcpy(buffer + offset, &newHost, 1);				offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+// ============================================================================
+// Use Item (consumable items during battle)
+// ============================================================================
+
+void GameSession::OnBattleUseItemReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_USE_ITEM_REQ -> ACK (broadcast)
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t itemId = *(uint32_t*)pData;
+
+	// Verify player has the item
+	if (!HasInventoryItem(itemId))
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_USE_ITEM_ACK, 1);
+		return;
+	}
+
+	// Broadcast item use to all players
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_USE_ITEM_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
+	memcpy(buffer + offset, &itemId, 4);				offset += 4;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+// ============================================================================
+// End Battle (server-decided, but client can request)
+// ============================================================================
+
+void GameSession::OnBattleEndBattleReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_ENDBATTLE_REQ
+	// Normally server decides, but GM/admin can force end
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	// Only allow from room owner or GM
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot() && !IsGMUser())
+		return;
+
+	const GameRoomScore& score = m_pRoom->GetScore();
+	int winnerTeam = (score.i32RedScore >= score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
+
+	SendBattleEndToAll(winnerTeam);
+}
+
+// ============================================================================
+// Hole Check (P2P hole punching verification)
+// ============================================================================
+
+void GameSession::OnBattleHoleCheckReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_HOLE_CHECK_REQ -> ACK
+	// Simple echo back for P2P connectivity check
+	if (!m_pRoom)
+		return;
+
+	SendSimpleAck(PROTOCOL_BATTLE_HOLE_CHECK_ACK, 0);
+}
+
+// ============================================================================
+// Wave Mode (Domination - wave pre-start, ready info)
+// ============================================================================
+
+void GameSession::OnBattleWaveReadyInfoReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_WAVE_READY_INFO_REQ -> ACK
+	// Request wave/domination mode ready info
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[64];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_WAVE_READY_INFO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Current wave info
+	int32_t currentWave = m_pRoom->GetDefenceWave();
+	int32_t maxWaves = DEFENCE_MAX_WAVES;
+	uint8_t playerCount = (uint8_t)m_pRoom->GetPlayerCount();
+	memcpy(buffer + offset, &currentWave, 4);		offset += 4;
+	memcpy(buffer + offset, &maxWaves, 4);			offset += 4;
+	memcpy(buffer + offset, &playerCount, 1);		offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBattleWaveReadyInfoCancelReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_WAVE_READY_INFO_CANCEL_REQ -> ACK (not used per protocol def)
+	// Cancel wave ready state
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	// Simply acknowledge
+	SendSimpleAck(PROTOCOL_BATTLE_WAVE_READY_INFO_ACK, 0);
+}
+
+// ============================================================================
+// Battle Record (send current score to late joiners)
+// ============================================================================
+
+void GameSession::OnBattleRecordReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_BATTLE_RECORD_REQ -> ACK
+	// Send current battle record to a player who joined mid-battle
+	if (!m_pRoom || m_eMainTask != GAME_TASK_BATTLE)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_RECORD_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	const GameRoomScore& score = m_pRoom->GetScore();
+	int32_t redScore = score.i32RedScore;
+	int32_t blueScore = score.i32BlueScore;
+	int32_t nowRound = score.i32NowRound;
+	memcpy(buffer + offset, &redScore, 4);		offset += 4;
+	memcpy(buffer + offset, &blueScore, 4);		offset += 4;
+	memcpy(buffer + offset, &nowRound, 4);		offset += 4;
+
+	// Per-slot kills/deaths
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		const Room::SlotBattleStats& stats = m_pRoom->GetSlotBattleStats(i);
+		int16_t kills = (int16_t)stats.i32Kills;
+		int16_t deaths = (int16_t)stats.i32Deaths;
+		memcpy(buffer + offset, &kills, 2);		offset += 2;
+		memcpy(buffer + offset, &deaths, 2);	offset += 2;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 void GameSession::OnBattleSendPingReq(char* pData, INT32 i32Size)
 {
 	if (!m_pRoom)

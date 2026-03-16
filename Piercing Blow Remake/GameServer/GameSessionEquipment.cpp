@@ -276,6 +276,156 @@ void GameSession::OnCharaShiftPosReq(char* pData, INT32 i32Size)
 	SendMessage(&packet);
 }
 
+void GameSession::OnCharaDeleteReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_CHAR_DELETE_CHARA_REQ -> ACK
+	// Delete a character from a slot
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	if (i32Size < 1)
+		return;
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+	int32_t result = 0;
+
+	if (slotIdx >= MAX_CHARA_SLOT)
+	{
+		result = 1;	// Invalid slot
+	}
+	else if (m_CharaSlots[slotIdx].ui8State != MULTI_SLOT_NORMAL)
+	{
+		result = 2;	// Slot not active
+	}
+	else if (slotIdx == m_ui8ActiveCharaSlot)
+	{
+		result = 3;	// Cannot delete active character
+	}
+	else
+	{
+		// Clear the slot
+		m_CharaSlots[slotIdx].Reset();
+		printf("[GameSession] Character deleted - UID=%lld, Slot=%d\n", m_i64UID, slotIdx);
+	}
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_CHAR_DELETE_CHARA_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &slotIdx, 1);					offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnCharaChangeNickReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_CHAR_CHANGE_CHARA_NICK_REQ -> ACK
+	// Change character nickname (batch rename of all characters)
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	// Parse: slotCount(1) + per slot: slotIdx(1) + name(64)
+	if (i32Size < 1)
+		return;
+
+	uint8_t slotCount = *(uint8_t*)pData;
+	if (slotCount > MAX_CHARA_SLOT)
+		slotCount = MAX_CHARA_SLOT;
+
+	// Acknowledge with success
+	SendSimpleAck(PROTOCOL_CHAR_CHANGE_CHARA_NICK_ACK, 0);
+}
+
+void GameSession::OnCharaChangeEquipReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_CHAR_CHANGE_EQUIP_REQ -> ACK
+	// Change equipment for a character slot (all slots at once, used from shop/quick equip)
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	// Parse: charaSlotIdx(1) + weaponIds[5](20) + partsIds[10](40) = minimum 61 bytes
+	if (i32Size < 1)
+		return;
+
+	int pos = 0;
+	uint8_t charaSlot = *(uint8_t*)(pData + pos);		pos += 1;
+	int32_t result = 0;
+
+	if (charaSlot >= MAX_CHARA_SLOT)
+	{
+		result = 1;
+	}
+	else if (m_CharaSlots[charaSlot].ui8State != MULTI_SLOT_NORMAL)
+	{
+		result = 2;	// Slot not active
+	}
+	else
+	{
+		// Parse weapon IDs if present
+		if (pos + (int)(CHAR_EQUIP_WEAPON_COUNT * 4) <= i32Size)
+		{
+			for (int w = 0; w < CHAR_EQUIP_WEAPON_COUNT; w++)
+			{
+				uint32_t weaponId = *(uint32_t*)(pData + pos);
+				m_CharaSlots[charaSlot].equip.ui32WeaponIds[w] = weaponId;
+				pos += 4;
+			}
+		}
+
+		// Parse parts IDs if present
+		if (pos + (int)(CHAR_EQUIP_PARTS_COUNT * 4) <= i32Size)
+		{
+			for (int p = 0; p < CHAR_EQUIP_PARTS_COUNT; p++)
+			{
+				uint32_t partsId = *(uint32_t*)(pData + pos);
+				m_CharaSlots[charaSlot].equip.ui32PartsIds[p] = partsId;
+				pos += 4;
+			}
+		}
+	}
+
+	// Send ACK
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_CHAR_CHANGE_EQUIP_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	memcpy(buffer + offset, &charaSlot, 1);					offset += 1;
+
+	// Echo back the equipment
+	if (result == 0)
+	{
+		const GameCharaEquip& equip = m_CharaSlots[charaSlot].equip;
+		for (int w = 0; w < CHAR_EQUIP_WEAPON_COUNT; w++)
+		{
+			memcpy(buffer + offset, &equip.ui32WeaponIds[w], 4);	offset += 4;
+		}
+		for (int p = 0; p < CHAR_EQUIP_PARTS_COUNT; p++)
+		{
+			memcpy(buffer + offset, &equip.ui32PartsIds[p], 4);	offset += 4;
+		}
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
 void GameSession::OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size)
 {
 	// PROTOCOL_ROOM_GET_USER_EQUIPMENT_REQ -> ACK

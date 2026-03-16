@@ -323,6 +323,17 @@ private:
 	void			OnBattleMissionGeneratorInfoReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionTouchdownReq(char* pData, INT32 i32Size);
 	void			OnBattleMissionDefenceInfoReq(char* pData, INT32 i32Size);
+	void			OnBattleEquipmentInfoReq(char* pData, INT32 i32Size);
+	void			OnBattlePickupWeaponReq(char* pData, INT32 i32Size);
+	void			OnBattleTimerSyncReq(char* pData, INT32 i32Size);
+	void			OnBattleTimeoutClientReq(char* pData, INT32 i32Size);
+	void			OnBattleLeaveP2PServerReq(char* pData, INT32 i32Size);
+	void			OnBattleUseItemReq(char* pData, INT32 i32Size);
+	void			OnBattleEndBattleReq(char* pData, INT32 i32Size);
+	void			OnBattleHoleCheckReq(char* pData, INT32 i32Size);
+	void			OnBattleWaveReadyInfoReq(char* pData, INT32 i32Size);
+	void			OnBattleWaveReadyInfoCancelReq(char* pData, INT32 i32Size);
+	void			OnBattleRecordReq(char* pData, INT32 i32Size);
 	void			OnBattleSuggestKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleVoteKickVoteReq(char* pData, INT32 i32Size);
 	void			OnBattleSendPingReq(char* pData, INT32 i32Size);
@@ -332,12 +343,16 @@ private:
 	void			OnEquipmentReq(char* pData, INT32 i32Size);
 	void			OnGetCharaInfoReq(char* pData, INT32 i32Size);
 	void			OnCharaCreateReq(char* pData, INT32 i32Size);
+	void			OnCharaDeleteReq(char* pData, INT32 i32Size);
+	void			OnCharaChangeNickReq(char* pData, INT32 i32Size);
+	void			OnCharaChangeEquipReq(char* pData, INT32 i32Size);
 	void			OnCharaShiftPosReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Inventory (GameSessionInventory.cpp)
 	void			OnGetInvenInfoReq(char* pData, INT32 i32Size);
 	void			OnInventoryEnterReq(char* pData, INT32 i32Size);
 	void			OnInventoryLeaveReq(char* pData, INT32 i32Size);
+	void			OnInventoryGetInfoReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Shop (GameSessionShop.cpp)
 	void			OnShopEnterReq(char* pData, INT32 i32Size);
@@ -373,6 +388,15 @@ private:
 	void			OnNoteListReq(char* pData, INT32 i32Size);
 	void			OnNoteDeleteReq(char* pData, INT32 i32Size);
 	void			OnNoteCheckReadedReq(char* pData, INT32 i32Size);
+
+	// Additional Auth handlers (GameSessionSocial.cpp)
+	void			OnFriendAcceptReq(char* pData, INT32 i32Size);
+	void			OnFriendInviteReq(char* pData, INT32 i32Size);
+	void			OnCommunityUserInviteReq(char* pData, INT32 i32Size);
+	void			OnChangeNicknameReq(char* pData, INT32 i32Size);
+	void			OnChangeColorNickReq(char* pData, INT32 i32Size);
+	void			OnGiftShopEnterReq(char* pData, INT32 i32Size);
+	void			OnGiftShopLeaveReq(char* pData, INT32 i32Size);
 
 	// Social helpers
 	GameFriendInfo*	FindFriend(const char* nickname) const;
