@@ -132,6 +132,27 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BattleServer.cpp" />
+    <ClCompile Include="BattleMember.cpp" />
+    <ClCompile Include="BattleRoom.cpp" />
+    <ClCompile Include="BattleRoomManager.cpp" />
+    <ClCompile Include="BattleSession.cpp" />
+    <ClCompile Include="BattleSessionManager.cpp" />
+    <ClCompile Include="BattleServerContext.cpp" />
+    <ClCompile Include="UdpRelay.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="BattleDef.h" />
+    <ClInclude Include="BattleMember.h" />
+    <ClInclude Include="BattleRoom.h" />
+    <ClInclude Include="BattleRoomManager.h" />
+    <ClInclude Include="BattleSession.h" />
+    <ClInclude Include="BattleSessionManager.h" />
+    <ClInclude Include="BattleServerContext.h" />
+    <ClInclude Include="UdpRelay.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
