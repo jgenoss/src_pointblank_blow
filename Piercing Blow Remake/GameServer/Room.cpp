@@ -45,11 +45,15 @@ Room::Room()
 	, m_i32KickVoteSuggestor(-1)
 	, m_dwKickVoteStartTime(0)
 	, m_dwLastKickVoteTime(0)
+	, m_i32MapRotationCount(0)
+	, m_i32MapRotationIdx(0)
+	, m_bMapRotationEnabled(false)
 {
 	m_szTitle[0] = '\0';
 	m_szPassword[0] = '\0';
 	m_szBattleUdpIP[0] = '\0';
 	memset(m_KickVotes, 0, sizeof(m_KickVotes));
+	memset(m_MapRotation, 0, sizeof(m_MapRotation));
 
 	for (int i = 0; i < GENERATOR_COUNT_MAX; i++)
 	{
@@ -335,6 +339,9 @@ void Room::OnEndBattle()
 		if (m_pSlotSession[i])
 			m_Slots[i].ui8State = SLOT_STATE_NORMAL;
 	}
+
+	// Advance map rotation if enabled
+	AdvanceMapRotation();
 
 	printf("[Room] Battle ended - Ch=%d, Room=%d, Score R%d-B%d\n",
 		m_i32ChannelNum, m_i32RoomIdx, m_Score.i32RedScore, m_Score.i32BlueScore);
@@ -2127,4 +2134,39 @@ void Room::ResolveKickVote()
 	m_i32KickVoteSuggestor = -1;
 	m_dwLastKickVoteTime = GetTickCount();
 	memset(m_KickVotes, 0, sizeof(m_KickVotes));
+}
+
+// ============================================================================
+// Map Rotation
+// ============================================================================
+
+void Room::SetMapRotation(const uint8_t* maps, int count)
+{
+	if (!maps || count <= 0)
+	{
+		m_bMapRotationEnabled = false;
+		m_i32MapRotationCount = 0;
+		return;
+	}
+
+	m_i32MapRotationCount = (count > MAX_MAP_ROTATION) ? MAX_MAP_ROTATION : count;
+	memcpy(m_MapRotation, maps, m_i32MapRotationCount);
+	m_i32MapRotationIdx = 0;
+	m_bMapRotationEnabled = true;
+
+	printf("[Room] Map rotation set - Ch=%d Idx=%d, %d maps\n",
+		m_i32ChannelNum, m_i32RoomIdx, m_i32MapRotationCount);
+}
+
+void Room::AdvanceMapRotation()
+{
+	if (!m_bMapRotationEnabled || m_i32MapRotationCount <= 0)
+		return;
+
+	m_i32MapRotationIdx = (m_i32MapRotationIdx + 1) % m_i32MapRotationCount;
+	m_ui8MapIndex = m_MapRotation[m_i32MapRotationIdx];
+
+	printf("[Room] Map rotated - Ch=%d Idx=%d, NewMap=%d (rotation %d/%d)\n",
+		m_i32ChannelNum, m_i32RoomIdx, m_ui8MapIndex,
+		m_i32MapRotationIdx + 1, m_i32MapRotationCount);
 }

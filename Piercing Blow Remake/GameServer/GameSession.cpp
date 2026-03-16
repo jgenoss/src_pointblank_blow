@@ -404,6 +404,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_BLOCK_DELETE_REQ:			OnBlockDeleteReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_FIND_USER_REQ:				OnFindUserReq(pData, dataSize);				break;
 
+	// ---- Notes/Mail (GameSessionSocial.cpp) ----
+	case PROTOCOL_MESSENGER_NOTE_SEND_REQ:			OnNoteSendReq(pData, dataSize);				break;
+	case PROTOCOL_MESSENGER_NOTE_LIST_REQ:			OnNoteListReq(pData, dataSize);				break;
+	case PROTOCOL_MESSENGER_NOTE_DELETE_REQ:		OnNoteDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_MESSENGER_NOTE_CHECK_READED_REQ:	OnNoteCheckReadedReq(pData, dataSize);		break;
+
 	// ---- Medal (GameSessionMedal.cpp) ----
 	case PROTOCOL_BASE_GET_MEDALSYSTEM_REQ:			OnGetMedalSystemReq(pData, dataSize);		break;
 	case PROTOCOL_BASE_REFRESH_MEDALSYSTEM_REQ:		OnRefreshMedalSystemReq(pData, dataSize);	break;
@@ -449,6 +455,10 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_GM_KICK_USER_REQ:			OnGMKickUserReq(pData, dataSize);			break;
 	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;
 	case PROTOCOL_LOBBY_GM_EXIT_USER_REQ:			OnLobbyGMExitUserReq(pData, dataSize);		break;
+
+	case PROTOCOL_ROOM_GM_BLOCK_USER_REQ:			OnGMBlockUserReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_GM_PAUSE_REQ:				OnGMPauseBattleReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_GM_RESUME_REQ:				OnGMResumeBattleReq(pData, dataSize);		break;
 
 	// ---- GM Chat (GameSessionGMChat.cpp - Phase 7C) ----
 	case PROTOCOL_GMCHAT_START_CHAT_REQ:			OnGMChatStartReq(pData, dataSize);			break;
@@ -1774,6 +1784,11 @@ void GameSession::ResetSessionData()
 	m_i32BlockCount = 0;
 	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
 		m_BlockList[i].Reset();
+
+	m_i32NoteCount = 0;
+	m_ui32NextNoteId = 1;
+	for (int i = 0; i < MAX_NOTE_COUNT; i++)
+		m_Notes[i].Reset();
 
 	m_MedalData.Reset();
 	m_AttendanceData.Reset();

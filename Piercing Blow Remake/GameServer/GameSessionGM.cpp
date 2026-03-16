@@ -304,6 +304,178 @@ void GameSession::OnGMDestroyRoomReq(char* pData, INT32 i32Size)
 	printf("[GM] Room destroyed - Ch=%d, Idx=%d\n", channelIdx, roomIdx);
 }
 
+// GM blocks (bans) a player with comment
+void GameSession::OnGMBlockUserReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+	{
+		printf("[GM] Unauthorized GM_BLOCK attempt - UID=%lld\n", m_i64UID);
+		return;
+	}
+
+	// Parse: targetSlot(4) + duration(4) + comment(128)
+	if (i32Size < 8)
+		return;
+
+	int targetSlot = *(int*)pData;
+	uint32_t duration = *(uint32_t*)(pData + 4);	// Duration in minutes (0=permanent)
+
+	char comment[128] = {0};
+	if (i32Size >= 136)
+	{
+		memcpy(comment, pData + 8, 128);
+		comment[127] = '\0';
+	}
+
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_BLOCK_USER_ACK, -1);
+		return;
+	}
+
+	GameSession* pTarget = m_pRoom->GetSlotSession(targetSlot);
+	if (!pTarget)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_BLOCK_USER_ACK, -2);
+		return;
+	}
+
+	// Don't allow blocking other GMs
+	if (pTarget->IsGMUser())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_GM_BLOCK_USER_ACK, -3);
+		return;
+	}
+
+	printf("[GM] Blocking player - GM_UID=%lld, Target_UID=%lld (%s), Duration=%u min, Comment=%s\n",
+		m_i64UID, pTarget->GetUID(), pTarget->GetNickname(), duration, comment);
+
+	// TODO: Persist ban to DataServer (IS_PLAYER_BAN_REQ)
+	// For now, just kick and log
+
+	// Send ban notification to target
+	{
+		i3NetworkPacket packet;
+		char buffer[64];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK_PLAYER;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		uint8_t reason = 2;		// 2 = banned by GM
+		memcpy(buffer + offset, &reason, 1);				offset += 1;
+
+		// Duration in minutes
+		memcpy(buffer + offset, &duration, sizeof(uint32_t)); offset += sizeof(uint32_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		pTarget->SendMessage(&packet);
+	}
+
+	// Force disconnect target
+	pTarget->OnDisconnect(TRUE);
+
+	// ACK to GM
+	SendSimpleAck(PROTOCOL_ROOM_GM_BLOCK_USER_ACK, 0);
+}
+
+// GM pauses battle in the current room
+void GameSession::OnGMPauseBattleReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_GM_PAUSE_ACK, -1);
+		return;
+	}
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_GM_PAUSE_ACK, -2);	// Not in battle
+		return;
+	}
+
+	printf("[GM] Pause battle - GM_UID=%lld, Room Ch=%d Idx=%d\n",
+		m_i64UID, m_i32ChannelNum, m_pRoom->GetRoomIdx());
+
+	// Notify all players in the room about pause
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_GM_PAUSE_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;		// 0 = success
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int32_t gmSlot = m_i32SlotIdx;
+		memcpy(buffer + offset, &gmSlot, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		m_pRoom->SendToAll(&packet);
+	}
+}
+
+// GM resumes battle in the current room
+void GameSession::OnGMResumeBattleReq(char* pData, INT32 i32Size)
+{
+	if (!IsGMUser())
+		return;
+
+	if (!m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_GM_RESUME_ACK, -1);
+		return;
+	}
+
+	if (m_pRoom->GetRoomState() != ROOM_STATE_BATTLE)
+	{
+		SendSimpleAck(PROTOCOL_BATTLE_GM_RESUME_ACK, -2);
+		return;
+	}
+
+	printf("[GM] Resume battle - GM_UID=%lld, Room Ch=%d Idx=%d\n",
+		m_i64UID, m_i32ChannelNum, m_pRoom->GetRoomIdx());
+
+	// Notify all players in the room about resume
+	{
+		i3NetworkPacket packet;
+		char buffer[32];
+		int offset = 0;
+
+		uint16_t size = 0;
+		uint16_t proto = PROTOCOL_BATTLE_GM_RESUME_ACK;
+		offset += sizeof(uint16_t);
+		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		int32_t gmSlot = m_i32SlotIdx;
+		memcpy(buffer + offset, &gmSlot, sizeof(int32_t));	offset += sizeof(int32_t);
+
+		size = (uint16_t)offset;
+		memcpy(buffer, &size, sizeof(uint16_t));
+
+		packet.SetPacketData(buffer, offset);
+		m_pRoom->SendToAll(&packet);
+	}
+}
+
 // Send server announcement to this session
 void GameSession::SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen)
 {

@@ -229,8 +229,8 @@
 ### 7A. Messenger Server Integration
 - [ ] Conexión al MessengerServer (o implementar directamente)
 - [x] Friend online/offline notifications
-- [ ] Whisper message routing entre servidores
-- [ ] Note system (send/receive/delete/read)
+- [x] Whisper message routing (same-server, FindSessionByNickname)
+- [x] Note system (send/receive/delete/read - in-memory per session)
 - [x] Lobby enter/leave notifications a amigos
 
 ### 7B. Lobby Chat Completo
@@ -305,9 +305,9 @@
 **Archivos**: `GameSessionGM.cpp`
 - [x] `GM_KickUser_U` - Kick player from room
 - [x] `GM_ExitUser_U` - Force disconnect
-- [ ] `GM_BlockUser_U` - Ban with comment
+- [x] `GM_BlockUser_U` - Ban with comment (OnGMBlockUserReq)
 - [x] `GM_DestroyRoom_U` - Force destroy room
-- [ ] `GMPause` / `GMResume` - Pause/resume battle
+- [x] `GMPause` / `GMResume` - Pause/resume battle (broadcast to room)
 - [ ] Damage console for debugging
 - [x] Server announce message (`SendServerAnnounce`)
 - [x] Lobby GM exit user
@@ -369,7 +369,7 @@
 
 ### 14D. Random Map System
 - [x] Random map selection per channel
-- [ ] Map rotation config
+- [x] Map rotation config (SetMapRotation + AdvanceMapRotation on battle end)
 
 ---
 
@@ -391,7 +391,7 @@
 |-----------|---------------------|---------------|---|
 | Login (0x0100) | 3 | 1 | 33% |
 | Base (0x0200) | ~80 | 30 | 38% |
-| Auth (0x0300) | ~80 | 7 | 9% |
+| Auth (0x0300) | ~80 | 11 | 14% |
 | Shop (0x0400) | ~40 | 16 | 40% |
 | Admin (0x0500) | ~10 | 0 | 0% |
 | Clan (0x0700) | ~60 | 9 | 15% |
@@ -400,8 +400,8 @@
 | Lobby (0x0C00) | ~10 | 7 | 70% |
 | Inventory (0x0D00) | ~10 | 3 | 30% |
 | RS/IGS (0x0E00) | ~10 | 5 | 50% |
-| Room (0x0F00) | ~30 | 19 | 63% |
-| Battle (0x1000) | ~40 | 18 | 45% |
+| Room (0x0F00) | ~30 | 20 | 67% |
+| Battle (0x1000) | ~40 | 20 | 50% |
 | Medal (0x1200) | ~10 | 7 | 70% |
 | Cheat (0x1300) | ~10 | 3 | 30% |
 | Gacha (0x1400) | ~10 | 5 | 50% |
@@ -411,4 +411,4 @@
 | MyInfo (0x1900) | ~5 | 3 | 60% |
 | GMChat (0x1A00) | ~5 | 5 | 100% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~153** | **~33%** |
+| **TOTAL** | **~460** | **~160** | **~35%** |

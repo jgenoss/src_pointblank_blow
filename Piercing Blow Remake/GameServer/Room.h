@@ -259,12 +259,24 @@ private:
 	DWORD				m_dwLastKickVoteTime;	// Cooldown tracking
 	uint8_t				m_KickVotes[SLOT_MAX_COUNT];	// 0=not voted, 1=agree, 2=disagree
 
+	// Map rotation
+	#define MAX_MAP_ROTATION	16
+	uint8_t				m_MapRotation[MAX_MAP_ROTATION];
+	int					m_i32MapRotationCount;
+	int					m_i32MapRotationIdx;
+	bool				m_bMapRotationEnabled;
+
 public:
 	// Kick vote helpers
 	bool		StartKickVote(int suggestSlot, int targetSlot);
 	bool		CastKickVote(int voterSlot, int targetSlot, uint8_t vote);
 	void		ResolveKickVote();
 	bool		IsKickVoteActive() const { return m_bKickVoteActive; }
+
+	// Map rotation
+	void		SetMapRotation(const uint8_t* maps, int count);
+	void		AdvanceMapRotation();
+	bool		IsMapRotationEnabled() const { return m_bMapRotationEnabled; }
 
 private:
 	// Slots

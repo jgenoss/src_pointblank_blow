@@ -412,6 +412,212 @@ void GameSession::OnFindUserReq(char* pData, INT32 i32Size)
 }
 
 // ============================================================================
+// Note/Mail System
+// ============================================================================
+
+void GameSession::OnNoteSendReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_MESSENGER_NOTE_SEND_REQ
+	// Parse: targetNick(64) + subject(64) + bodyLen(2) + body(variable)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 130)	// 64 + 64 + 2
+		return;
+
+	char targetNick[64];
+	memcpy(targetNick, pData, 64);
+	targetNick[63] = '\0';
+
+	char subject[NOTE_SUBJECT_LEN];
+	memcpy(subject, pData + 64, NOTE_SUBJECT_LEN);
+	subject[NOTE_SUBJECT_LEN - 1] = '\0';
+
+	uint16_t bodyLen = *(uint16_t*)(pData + 128);
+	if (bodyLen > NOTE_BODY_LEN) bodyLen = NOTE_BODY_LEN;
+
+	if (i32Size < (int)(130 + bodyLen))
+		return;
+
+	char body[NOTE_BODY_LEN] = {0};
+	if (bodyLen > 0)
+	{
+		memcpy(body, pData + 130, bodyLen);
+		body[bodyLen] = '\0';
+	}
+
+	int32_t result = 0;
+
+	// Find target player
+	GameSession* pTarget = nullptr;
+	if (g_pGameSessionManager)
+		pTarget = g_pGameSessionManager->FindSessionByNickname(targetNick);
+
+	if (!pTarget)
+	{
+		result = 1;	// Player not found/offline
+	}
+	else if (pTarget == this)
+	{
+		result = 2;	// Cannot send to self
+	}
+	else if (pTarget->IsBlocked(m_i64UID))
+	{
+		result = 3;	// Blocked by target
+	}
+	else
+	{
+		if (!pTarget->ReceiveNote(m_i64UID, m_szNickname, subject, body, 0))
+			result = 4;	// Target mailbox full
+	}
+
+	SendSimpleAck(PROTOCOL_MESSENGER_NOTE_SEND_ACK, result);
+}
+
+void GameSession::OnNoteListReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_MESSENGER_NOTE_LIST_ACK
+	// Send note list to client
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[4096];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_MESSENGER_NOTE_LIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+
+	// Note count
+	uint16_t noteCount = (uint16_t)m_i32NoteCount;
+	memcpy(buffer + offset, &noteCount, 2);					offset += 2;
+
+	// Per-note: noteId(4) + senderNick(64) + subject(64) + type(1) + read(1) + timestamp(4)
+	for (int i = 0; i < m_i32NoteCount; i++)
+	{
+		if (offset + 138 > (int)sizeof(buffer))
+			break;
+
+		const GameNoteData& note = m_Notes[i];
+		memcpy(buffer + offset, &note.ui32NoteId, 4);		offset += 4;
+		memcpy(buffer + offset, note.szSenderNick, 64);	offset += 64;
+		memcpy(buffer + offset, note.szSubject, 64);		offset += 64;
+		memcpy(buffer + offset, &note.ui8Type, 1);			offset += 1;
+		uint8_t read = note.bRead ? 1 : 0;
+		memcpy(buffer + offset, &read, 1);					offset += 1;
+		memcpy(buffer + offset, &note.dwTimestamp, 4);		offset += 4;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnNoteDeleteReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_MESSENGER_NOTE_DELETE_REQ
+	// Parse: noteId(4)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t noteId = *(uint32_t*)pData;
+	int32_t result = 1;	// Not found
+
+	for (int i = 0; i < m_i32NoteCount; i++)
+	{
+		if (m_Notes[i].ui32NoteId == noteId)
+		{
+			// Shift remaining notes down
+			for (int j = i; j < m_i32NoteCount - 1; j++)
+				m_Notes[j] = m_Notes[j + 1];
+			m_i32NoteCount--;
+			m_Notes[m_i32NoteCount].Reset();
+			result = 0;
+			break;
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_MESSENGER_NOTE_DELETE_ACK, result);
+}
+
+void GameSession::OnNoteCheckReadedReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_MESSENGER_NOTE_CHECK_READED_REQ
+	// Parse: noteId(4)
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 4)
+		return;
+
+	uint32_t noteId = *(uint32_t*)pData;
+	int32_t result = 1;	// Not found
+
+	for (int i = 0; i < m_i32NoteCount; i++)
+	{
+		if (m_Notes[i].ui32NoteId == noteId)
+		{
+			m_Notes[i].bRead = true;
+			result = 0;
+			break;
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_MESSENGER_NOTE_CHECK_READED_ACK, result);
+}
+
+bool GameSession::ReceiveNote(int64_t senderUID, const char* senderNick,
+							const char* subject, const char* body, uint8_t type)
+{
+	if (m_i32NoteCount >= MAX_NOTE_COUNT)
+		return false;
+
+	GameNoteData& note = m_Notes[m_i32NoteCount];
+	note.ui32NoteId = m_ui32NextNoteId++;
+	note.i64SenderUID = senderUID;
+	strncpy_s(note.szSenderNick, senderNick, 63);
+	strncpy_s(note.szSubject, subject, NOTE_SUBJECT_LEN - 1);
+	strncpy_s(note.szBody, body, NOTE_BODY_LEN - 1);
+	note.dwTimestamp = GetTickCount();
+	note.ui8Type = type;
+	note.bRead = false;
+	m_i32NoteCount++;
+
+	// Notify recipient that a new note arrived
+	{
+		i3NetworkPacket packet;
+		char buf[128];
+		int off = 0;
+
+		uint16_t sz = 0;
+		uint16_t proto = PROTOCOL_MESSENGER_NOTE_RECEIVE_ACK;
+		off += sizeof(uint16_t);
+		memcpy(buf + off, &proto, sizeof(uint16_t));	off += sizeof(uint16_t);
+
+		memcpy(buf + off, &note.ui32NoteId, 4);		off += 4;
+		memcpy(buf + off, note.szSenderNick, 64);		off += 64;
+
+		sz = (uint16_t)off;
+		memcpy(buf, &sz, sizeof(uint16_t));
+
+		packet.SetPacketData(buf, off);
+		SendMessage(&packet);
+	}
+
+	return true;
+}
+
+// ============================================================================
 // Friend Status Notifications (Phase 7A)
 // ============================================================================
 

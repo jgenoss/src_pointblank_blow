@@ -19,6 +19,35 @@ class Room;
 #define MAX_FRIEND_COUNT	50
 #define MAX_BLOCK_COUNT		50
 
+// Note/Mail system
+#define MAX_NOTE_COUNT		50
+#define NOTE_SUBJECT_LEN	64
+#define NOTE_BODY_LEN		256
+
+struct GameNoteData
+{
+	uint32_t	ui32NoteId;
+	int64_t		i64SenderUID;
+	char		szSenderNick[64];
+	char		szSubject[NOTE_SUBJECT_LEN];
+	char		szBody[NOTE_BODY_LEN];
+	DWORD		dwTimestamp;		// GetTickCount() when received
+	uint8_t		ui8Type;			// 0=normal, 1=system, 2=gift
+	bool		bRead;
+
+	void Reset()
+	{
+		ui32NoteId = 0;
+		i64SenderUID = 0;
+		szSenderNick[0] = '\0';
+		szSubject[0] = '\0';
+		szBody[0] = '\0';
+		dwTimestamp = 0;
+		ui8Type = 0;
+		bRead = false;
+	}
+};
+
 // Title system (Phase 4D)
 #define MAX_TITLE_COUNT		44
 #define MAX_EQUIPPED_TITLES	3
@@ -336,10 +365,20 @@ private:
 	void			OnBlockDeleteReq(char* pData, INT32 i32Size);
 	void			OnFindUserReq(char* pData, INT32 i32Size);
 
+	// Note/Mail system (GameSessionSocial.cpp)
+	void			OnNoteSendReq(char* pData, INT32 i32Size);
+	void			OnNoteListReq(char* pData, INT32 i32Size);
+	void			OnNoteDeleteReq(char* pData, INT32 i32Size);
+	void			OnNoteCheckReadedReq(char* pData, INT32 i32Size);
+
 	// Social helpers
 	GameFriendInfo*	FindFriend(const char* nickname) const;
 	GameFriendInfo*	FindFriendByUID(int64_t uid) const;
 	bool			IsBlocked(int64_t uid) const;
+
+	// Note receive (called from another session's OnNoteSendReq)
+	bool			ReceiveNote(int64_t senderUID, const char* senderNick,
+							const char* subject, const char* body, uint8_t type);
 
 	// Friend notifications (Phase 7A)
 	void			NotifyFriendsStatusChange(uint8_t ui8NewState);
@@ -405,6 +444,9 @@ private:
 	void			OnGMExitUserReq(char* pData, INT32 i32Size);
 	void			OnGMDestroyRoomReq(char* pData, INT32 i32Size);
 	void			OnLobbyGMExitUserReq(char* pData, INT32 i32Size);
+	void			OnGMBlockUserReq(char* pData, INT32 i32Size);
+	void			OnGMPauseBattleReq(char* pData, INT32 i32Size);
+	void			OnGMResumeBattleReq(char* pData, INT32 i32Size);
 
 	// GM helpers
 	bool			IsGMUser() const;
@@ -497,6 +539,11 @@ private:
 	int				m_i32FriendCount;
 	GameBlockInfo	m_BlockList[MAX_BLOCK_COUNT];
 	int				m_i32BlockCount;
+
+	// Notes/Mail
+	GameNoteData	m_Notes[MAX_NOTE_COUNT];
+	int				m_i32NoteCount;
+	uint32_t		m_ui32NextNoteId;
 
 	// Medal (7J) - Medal progress and sets
 	GameMedalData	m_MedalData;
