@@ -1099,3 +1099,239 @@ void GameSession::OnRoomGetRankReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Room Extended Operations (Batch 16)
+// ============================================================================
+
+void GameSession::OnRoomChangeRoomAllInfoReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_ROOM_ALLINFO_ACK, -1);
+		return;
+	}
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_ROOM_ALLINFO_ACK, -2);
+		return;
+	}
+	if (i32Size < 6)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHANGE_ROOM_ALLINFO_ACK, -3);
+		return;
+	}
+	SendSimpleAck(PROTOCOL_ROOM_CHANGE_ROOM_ALLINFO_ACK, 0);
+	SendSlotInfoToAll();
+}
+
+void GameSession::OnRoomGetColorNickReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+		return;
+	if (i32Size < 1)
+		return;
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_GET_COLOR_NICK_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
+
+	uint32_t colorNick = 0;
+	GameSession* pTarget = nullptr;
+	if (slotIdx < SLOT_MAX_COUNT)
+		pTarget = m_pRoom->GetSlotSession(slotIdx);
+	if (pTarget)
+		colorNick = pTarget->GetColorNick();
+	memcpy(buffer + offset, &colorNick, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnRoomGetColorMuzzleFlashReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+		return;
+	if (i32Size < 1)
+		return;
+
+	uint8_t slotIdx = *(uint8_t*)pData;
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_GET_COLOR_MUZZLE_FLASH_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
+	uint32_t muzzleColor = 0;
+	memcpy(buffer + offset, &muzzleColor, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnRoomCharaShiftPosReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK, -1);
+		return;
+	}
+	if (i32Size < 1)
+		return;
+
+	uint8_t newSlot = *(uint8_t*)pData;
+	if (newSlot >= MAX_CHARA_SLOT)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK, -2);
+		return;
+	}
+	m_ui8ActiveCharaSlot = newSlot;
+	SendSimpleAck(PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK, 0);
+
+	// Notify others
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_CHARA_SHIFT_POS_OTHER_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t mySlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &mySlot, 1);	offset += 1;
+	memcpy(buffer + offset, &newSlot, 1);	offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAllExcept(this, &packet);
+}
+
+void GameSession::OnRoomEquipmentTempWeaponReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_EQUIPMENT_TEMP_WEAPON_ACK, -1);
+		return;
+	}
+	if (i32Size < 5)
+		return;
+
+	uint8_t weaponSlot = *(uint8_t*)pData;
+	uint32_t weaponId = *(uint32_t*)(pData + 1);
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_EQUIPMENT_TEMP_WEAPON_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint8_t mySlot = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &mySlot, 1);		offset += 1;
+	memcpy(buffer + offset, &weaponSlot, 1);	offset += 1;
+	memcpy(buffer + offset, &weaponId, 4);		offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnRoomInviteLobbyUserListReq(char* pData, INT32 i32Size)
+{
+	// Reuse lobby user list logic with different proto
+	OnRoomGetLobbyUserListReq(pData, i32Size);
+}
+
+void GameSession::OnRoomTsEventReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_TS_EVENT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int copyLen = (i32Size > 240) ? 240 : i32Size;
+	if (copyLen > 0)
+		memcpy(buffer + offset, pData, copyLen);
+	offset += copyLen;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnRoomRequestMainChangeWhoReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
+	{
+		SendSimpleAck(PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK, -1);
+		return;
+	}
+	if (m_i32SlotIdx != m_pRoom->GetOwnerSlot())
+	{
+		SendSimpleAck(PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK, -2);
+		return;
+	}
+	if (i32Size < 1)
+		return;
+
+	uint8_t targetSlot = *(uint8_t*)pData;
+	if (targetSlot >= SLOT_MAX_COUNT || !m_pRoom->GetSlotSession(targetSlot))
+	{
+		SendSimpleAck(PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK, -3);
+		return;
+	}
+
+	m_pRoom->SetOwnerSlot(targetSlot);
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &targetSlot, 1);			offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}

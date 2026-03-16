@@ -287,6 +287,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BASE_GUIDE_COMPLETE_REQ:	OnGuideCompleteReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_GET_USER_INFO_UID_REQ:	OnGetUserInfoByUIDReq(pData, dataSize);	break;
 	case PROTOCOL_BASE_GET_USER_INFO_NICK_REQ:	OnGetUserInfoByNickReq(pData, dataSize);break;
+	case PROTOCOL_BASE_NEW_SPECIALITY_SET_REQ:	OnNewSpecialitySetReq(pData, dataSize);	break;
+	case PROTOCOL_BASE_NEW_SPECIALITY_INIT_REQ:	OnNewSpecialityInitReq(pData, dataSize);break;
+	case PROTOCOL_BASE_NEW_SPECIALITY_SET_CLASS_REQ:	OnNewSpecialitySetClassReq(pData, dataSize);break;
+	case PROTOCOL_BASE_QUEST_DELETE_CARD_SET_REQ:	OnQuestDeleteCardSetReq(pData, dataSize);break;
+	case PROTOCOL_BASE_GET_RECORD_INFO_SEASON_REQ:	OnGetRecordInfoSeasonReq(pData, dataSize);break;
+	case PROTOCOL_BASE_GET_RECORD_INFO_SESSION_REQ:	OnGetRecordInfoSessionReq(pData, dataSize);break;
 
 	// ---- User Detail Info (Phase 4B) ----
 	case PROTOCOL_BASE_GET_USER_INFO_LOBBY_REQ:	OnGetUserInfoLobbyReq(pData, dataSize);	break;
@@ -361,6 +367,14 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_MASTER_TEAM_CHANGE_REQ:		OnRoomMasterTeamChangeReq(pData, dataSize);	break;
 	case PROTOCOL_ROOM_GET_NICKNAME_REQ:			OnRoomGetNicknameReq(pData, dataSize);		break;
 	case PROTOCOL_ROOM_GET_RANK_REQ:				OnRoomGetRankReq(pData, dataSize);			break;
+	case PROTOCOL_ROOM_CHANGE_ROOM_ALLINFO_REQ:		OnRoomChangeRoomAllInfoReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_GET_COLOR_NICK_REQ:			OnRoomGetColorNickReq(pData, dataSize);		break;
+	case PROTOCOL_ROOM_GET_COLOR_MUZZLE_FLASH_REQ:	OnRoomGetColorMuzzleFlashReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_CHARA_SHIFT_POS_REQ:			OnRoomCharaShiftPosReq(pData, dataSize);	break;
+	case PROTOCOL_ROOM_EQUIPMENT_TEMP_WEAPON_REQ:	OnRoomEquipmentTempWeaponReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_INVITE_LOBBY_USER_LIST_REQ:	OnRoomInviteLobbyUserListReq(pData, dataSize);break;
+	case PROTOCOL_ROOM_TS_EVENT_REQ:				OnRoomTsEventReq(pData, dataSize);			break;
+	case PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_REQ:	OnRoomRequestMainChangeWhoReq(pData, dataSize);break;
 
 	// ---- Equipment (GameSessionEquipment.cpp) ----
 	case PROTOCOL_BASE_GET_EQUIPMENT_INFO_REQ:		OnGetEquipmentInfoReq(pData, dataSize);		break;
@@ -415,6 +429,11 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_BATTLE_SUPPLY_BOX_RESULT_REQ:			OnBattleSupplyBoxResultReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_USER_SKILL_UPGRADE_REQ:		OnBattleUserSkillUpgradeReq(pData, dataSize);		break;
 	case PROTOCOL_BATTLE_SLOT_EQUIPMENT_REQ:			OnBattleSlotEquipmentReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_MISSION_TUTORIAL_ROUND_END_REQ:	OnBattleMissionTutorialRoundEndReq(pData, dataSize);break;
+	case PROTOCOL_BATTLE_USER_SOPETYPE_REQ:			OnBattleUserScopeTypeReq(pData, dataSize);			break;
+	case PROTOCOL_BATTLE_TIMEOUTMAINCLIENT_REQ:		OnBattleTimeoutMainClientReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_NEW_JOIN_ROOM_SCORE_REQ:	OnBattleNewJoinRoomScoreReq(pData, dataSize);		break;
+	case PROTOCOL_BATTLE_REPORTSCREENSHOT_REQ:		OnBattleReportScreenshotReq(pData, dataSize);		break;
 
 	// ---- Shop (GameSessionShop.cpp) ----
 	case PROTOCOL_SHOP_ENTER_REQ:					OnShopEnterReq(pData, dataSize);			break;
@@ -435,6 +454,8 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_DELETE_ITEM_REQ:		OnShopDeleteItemReq(pData, dataSize);		break;
 	case PROTOCOL_AUTH_SHOP_CAPSULE_REQ:		OnShopCapsuleReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_SHOP_JACKPOT_REQ:		OnShopJackpotReq(pData, dataSize);			break;
+	case PROTOCOL_SHOP_GET_SAILLIST_REQ:		OnShopGetSaleListReq(pData, dataSize);		break;
+	case PROTOCOL_SHOP_PLUS_POINT_REQ:			OnShopPlusPointReq(pData, dataSize);		break;
 
 	// ---- Quest (GameSessionQuest.cpp) ----
 	case PROTOCOL_BASE_QUEST_GET_REQ:				OnQuestGetReq(pData, dataSize);				break;
@@ -503,6 +524,14 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CS_REPLACE_NOTICE_REQ:			OnClanReplaceNoticeReq(pData, dataSize);	break;
 	case PROTOCOL_CS_REPLACE_INTRO_REQ:				OnClanReplaceIntroReq(pData, dataSize);		break;
 	case PROTOCOL_CS_REPLACE_MARK_REQ:				OnClanReplaceMarkReq(pData, dataSize);		break;
+	case PROTOCOL_CS_ACCEPT_REQUEST_REQ:			OnClanAcceptRequestReq(pData, dataSize);		break;
+	case PROTOCOL_CS_DENIAL_REQUEST_REQ:			OnClanDenialRequestReq(pData, dataSize);	break;
+	case PROTOCOL_CS_INVITE_REQ:					OnClanInviteReq(pData, dataSize);			break;
+	case PROTOCOL_CS_REQUEST_LIST_REQ:				OnClanRequestListReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CHECK_DUPLICATE_REQ:			OnClanCheckDuplicateReq(pData, dataSize);	break;
+	case PROTOCOL_CS_MEMBER_DETAIL_INFO_REQ:		OnClanMemberDetailInfoReq(pData, dataSize);	break;
+	case PROTOCOL_CS_PAGE_CHATTING_REQ:				OnClanPageChattingReq(pData, dataSize);		break;
+	case PROTOCOL_CS_CLAN_LIST_DETAIL_INFO_REQ:		OnClanListDetailInfoReq(pData, dataSize);	break;
 
 	// ---- Roulette/Gacha (GameSessionRoulette.cpp) ----
 	case PROTOCOL_RS_ENTER_REQ:						OnRouletteEnterReq(pData, dataSize);		break;
@@ -539,6 +568,11 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_CLAN_WAR_CHANGE_MAX_PER_REQ:		OnClanWarChangeMaxPerReq(pData, dataSize);	break;
 	case PROTOCOL_CLAN_WAR_MERCENARY_LIST_REQ:		OnClanWarMercenaryListReq(pData, dataSize);	break;
 	case PROTOCOL_CLAN_WAR_RESULT_REQ:				OnClanWarResultReq(pData, dataSize);		break;
+	case PROTOCOL_CLAN_WAR_REGIST_MERCENARY_REQ:	OnClanWarRegistMercenaryReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_REMOVE_MERCENARY_REQ:	OnClanWarRemoveMercenaryReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_INVITE_MERCENARY_REQ:	OnClanWarInviteMercenaryReq(pData, dataSize);break;
+	case PROTOCOL_CLAN_WAR_INVITE_ACCEPT_REQ:		OnClanWarInviteAcceptReq(pData, dataSize);	break;
+	case PROTOCOL_CLAN_WAR_INVITE_DENIAL_REQ:		OnClanWarInviteDenialReq(pData, dataSize);	break;
 
 	// ---- Gacha (GameSessionRoulette.cpp - 0x1400) ----
 	case PROTOCOL_GACHA_ITEM_INFO_REQ:				OnGachaItemInfoReq(pData, dataSize);		break;
@@ -1707,6 +1741,160 @@ void GameSession::OnGetUserInfoByNickReq(char* pData, INT32 i32Size)
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
+}
+
+// ============================================================================
+// Quest Card Set Delete (Protocol_Base)
+// ============================================================================
+
+void GameSession::OnQuestDeleteCardSetReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	if (i32Size < 1)
+	{
+		SendSimpleAck(PROTOCOL_BASE_QUEST_DELETE_CARD_SET_ACK, -1);
+		return;
+	}
+
+	uint8_t setIndex = *(uint8_t*)pData;
+	int32_t result = 0;
+
+	if (setIndex >= 4)
+	{
+		result = -2;
+	}
+	else
+	{
+		// Clear the quest set
+		m_QuestData.sets[setIndex].ui8SetType = 0;
+		m_QuestData.sets[setIndex].ui8ActiveCard = 0;
+		memset(m_QuestData.sets[setIndex].ui16Progress, 0,
+			sizeof(m_QuestData.sets[setIndex].ui16Progress));
+	}
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_QUEST_DELETE_CARD_SET_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &setIndex, 1);				offset += 1;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Record Info (Protocol_Base - season/session/db stats)
+// ============================================================================
+
+void GameSession::OnGetRecordInfoSeasonReq(char* pData, INT32 i32Size)
+{
+	// Season record info - cumulative stats for current season
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	int64_t targetUID = m_i64UID;
+	if (i32Size >= 8)
+		memcpy(&targetUID, pData, 8);
+
+	// Find player (could be self or another player)
+	GameSession* pTarget = this;
+	if (targetUID != m_i64UID)
+		pTarget = g_pGameSessionManager->FindSessionByUID(targetUID);
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_RECORD_INFO_SEASON_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	if (!pTarget)
+	{
+		int32_t result = -1;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	}
+	else
+	{
+		int32_t result = 0;
+		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+		memcpy(buffer + offset, &targetUID, 8);				offset += 8;
+
+		int32_t kills = pTarget->GetKills();
+		int32_t deaths = pTarget->GetDeaths();
+		int32_t headshots = pTarget->GetHeadshots();
+		int32_t wins = pTarget->GetWins();
+		int32_t losses = pTarget->GetLosses();
+		int32_t level = pTarget->GetLevel();
+		int32_t rank = pTarget->GetRankId();
+		int64_t exp = pTarget->GetExp();
+
+		memcpy(buffer + offset, &kills, 4);		offset += 4;
+		memcpy(buffer + offset, &deaths, 4);	offset += 4;
+		memcpy(buffer + offset, &headshots, 4);	offset += 4;
+		memcpy(buffer + offset, &wins, 4);		offset += 4;
+		memcpy(buffer + offset, &losses, 4);	offset += 4;
+		memcpy(buffer + offset, &level, 4);		offset += 4;
+		memcpy(buffer + offset, &rank, 4);		offset += 4;
+		memcpy(buffer + offset, &exp, 8);		offset += 8;
+	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetRecordInfoSessionReq(char* pData, INT32 i32Size)
+{
+	// Session record info - stats for current play session (since login)
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[96];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_BASE_GET_RECORD_INFO_SESSION_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Daily record tracks session stats
+	memcpy(buffer + offset, &m_DailyRecord.i32Kills, 4);		offset += 4;
+	memcpy(buffer + offset, &m_DailyRecord.i32Deaths, 4);		offset += 4;
+	memcpy(buffer + offset, &m_DailyRecord.i32GamesPlayed, 4);	offset += 4;
+	memcpy(buffer + offset, &m_DailyRecord.i32Wins, 4);		offset += 4;
+	memcpy(buffer + offset, &m_DailyRecord.i32Losses, 4);		offset += 4;
+	memcpy(buffer + offset, &m_DailyRecord.i64ExpGained, 8);	offset += 8;
+	memcpy(buffer + offset, &m_DailyRecord.i32GPGained, 4);	offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnGetRecordInfoDBReq(char* pData, INT32 i32Size)
+{
+	// DB record info - all-time stats (same as season for now)
+	OnGetRecordInfoSeasonReq(pData, i32Size);
 }
 
 // ============================================================================

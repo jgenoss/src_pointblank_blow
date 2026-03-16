@@ -126,6 +126,7 @@ public:
 	bool		IsSlotEmpty(int i32Slot) const;
 	GameSession* GetSlotSession(int i32Slot) const;
 	int			GetOwnerSlot() const		{ return m_i32OwnerSlot; }
+	void		SetOwnerSlot(int slot)		{ m_i32OwnerSlot = slot; }
 	const GameSlotInfo& GetSlotInfo(int i32Slot) const { return m_Slots[i32Slot]; }
 	GameSlotInfo& GetSlotInfoMutable(int i32Slot) { return m_Slots[i32Slot]; }
 

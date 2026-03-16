@@ -167,6 +167,7 @@ public:
 	int				GetGP() const				{ return m_i32GP; }
 	int				GetRankId() const			{ return m_i32RankId; }
 	int				GetClanId() const			{ return m_i32ClanId; }
+	void			SetClanId(int id)			{ m_i32ClanId = id; }
 	const char*		GetClanName() const			{ return m_szClanName; }
 
 	// Stats
@@ -174,6 +175,7 @@ public:
 	int				GetDeaths() const			{ return m_i32Deaths; }
 	int				GetHeadshots() const		{ return m_i32Headshots; }
 	int				GetWins() const				{ return m_i32Wins; }
+	uint32_t		GetColorNick() const		{ return 0; }	// TODO: store color nick from inventory
 	int				GetLosses() const			{ return m_i32Losses; }
 	GameTask		GetMainTask() const			{ return m_eMainTask; }
 
@@ -257,6 +259,12 @@ private:
 	void			OnGuideCompleteReq(char* pData, INT32 i32Size);
 	void			OnGetUserInfoByUIDReq(char* pData, INT32 i32Size);
 	void			OnGetUserInfoByNickReq(char* pData, INT32 i32Size);
+	void			OnNewSpecialitySetReq(char* pData, INT32 i32Size);
+	void			OnNewSpecialityInitReq(char* pData, INT32 i32Size);
+	void			OnNewSpecialitySetClassReq(char* pData, INT32 i32Size);
+	void			OnQuestDeleteCardSetReq(char* pData, INT32 i32Size);
+	void			OnGetRecordInfoSeasonReq(char* pData, INT32 i32Size);
+	void			OnGetRecordInfoSessionReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - User Info (Phase 4C - GameSession.cpp)
 	void			OnGetMyInfoRecordReq(char* pData, INT32 i32Size);
@@ -324,6 +332,14 @@ private:
 	void			OnRoomMasterTeamChangeReq(char* pData, INT32 i32Size);
 	void			OnRoomGetNicknameReq(char* pData, INT32 i32Size);
 	void			OnRoomGetRankReq(char* pData, INT32 i32Size);
+	void			OnRoomChangeRoomAllInfoReq(char* pData, INT32 i32Size);
+	void			OnRoomGetColorNickReq(char* pData, INT32 i32Size);
+	void			OnRoomGetColorMuzzleFlashReq(char* pData, INT32 i32Size);
+	void			OnRoomCharaShiftPosReq(char* pData, INT32 i32Size);
+	void			OnRoomEquipmentTempWeaponReq(char* pData, INT32 i32Size);
+	void			OnRoomInviteLobbyUserListReq(char* pData, INT32 i32Size);
+	void			OnRoomTsEventReq(char* pData, INT32 i32Size);
+	void			OnRoomRequestMainChangeWhoReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Battle flow (GameSessionBattle.cpp)
 	void			OnBattleReadyBattleReq(char* pData, INT32 i32Size);
@@ -361,6 +377,11 @@ private:
 	void			OnBattleSupplyBoxResultReq(char* pData, INT32 i32Size);
 	void			OnBattleUserSkillUpgradeReq(char* pData, INT32 i32Size);
 	void			OnBattleSlotEquipmentReq(char* pData, INT32 i32Size);
+	void			OnBattleMissionTutorialRoundEndReq(char* pData, INT32 i32Size);
+	void			OnBattleUserScopeTypeReq(char* pData, INT32 i32Size);
+	void			OnBattleTimeoutMainClientReq(char* pData, INT32 i32Size);
+	void			OnBattleNewJoinRoomScoreReq(char* pData, INT32 i32Size);
+	void			OnBattleReportScreenshotReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Equipment (GameSessionEquipment.cpp)
 	void			OnGetEquipmentInfoReq(char* pData, INT32 i32Size);
@@ -397,6 +418,8 @@ private:
 	void			OnShopDeleteItemReq(char* pData, INT32 i32Size);
 	void			OnShopCapsuleReq(char* pData, INT32 i32Size);
 	void			OnShopJackpotReq(char* pData, INT32 i32Size);
+	void			OnShopGetSaleListReq(char* pData, INT32 i32Size);
+	void			OnShopPlusPointReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Social (GameSessionSocial.cpp)
 	void			OnFriendInfoReq(char* pData, INT32 i32Size);
@@ -483,6 +506,14 @@ private:
 	void			OnClanReplaceNoticeReq(char* pData, INT32 i32Size);
 	void			OnClanReplaceIntroReq(char* pData, INT32 i32Size);
 	void			OnClanReplaceMarkReq(char* pData, INT32 i32Size);
+	void			OnClanAcceptRequestReq(char* pData, INT32 i32Size);
+	void			OnClanDenialRequestReq(char* pData, INT32 i32Size);
+	void			OnClanInviteReq(char* pData, INT32 i32Size);
+	void			OnClanRequestListReq(char* pData, INT32 i32Size);
+	void			OnClanCheckDuplicateReq(char* pData, INT32 i32Size);
+	void			OnClanMemberDetailInfoReq(char* pData, INT32 i32Size);
+	void			OnClanPageChattingReq(char* pData, INT32 i32Size);
+	void			OnClanListDetailInfoReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Clan Match (GameSessionClanMatch.cpp)
 	void			OnClanMatchTeamContextReq(char* pData, INT32 i32Size);
@@ -508,6 +539,11 @@ private:
 	void			OnClanWarChangeMaxPerReq(char* pData, INT32 i32Size);
 	void			OnClanWarMercenaryListReq(char* pData, INT32 i32Size);
 	void			OnClanWarResultReq(char* pData, INT32 i32Size);
+	void			OnClanWarRegistMercenaryReq(char* pData, INT32 i32Size);
+	void			OnClanWarRemoveMercenaryReq(char* pData, INT32 i32Size);
+	void			OnClanWarInviteMercenaryReq(char* pData, INT32 i32Size);
+	void			OnClanWarInviteAcceptReq(char* pData, INT32 i32Size);
+	void			OnClanWarInviteDenialReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - Roulette/Gacha (GameSessionRoulette.cpp)
 	void			OnRouletteEnterReq(char* pData, INT32 i32Size);

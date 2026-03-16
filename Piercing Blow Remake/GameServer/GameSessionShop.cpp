@@ -1241,3 +1241,85 @@ void GameSession::OnShopJackpotReq(char* pData, INT32 i32Size)
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Sale List & Plus Point (Protocol_Shop 0x0400)
+// ============================================================================
+
+void GameSession::OnShopGetSaleListReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_SHOP_GET_SAILLIST_REQ -> ACK
+	// Get list of items currently on sale / discounted
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[256];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_SHOP_GET_SAILLIST_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	// Sale item count (empty for now - no active sales)
+	uint16_t saleCount = 0;
+	memcpy(buffer + offset, &saleCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	// Per-sale entry would be: goodsId(4) + discountPercent(1) + startTime(4) + endTime(4)
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnShopPlusPointReq(char* pData, INT32 i32Size)
+{
+	// PROTOCOL_SHOP_PLUS_POINT_REQ -> ACK
+	// Client notifies server of points earned (from purchase, capsule, etc.)
+	// Server validates and sends updated balance
+	if (m_eMainTask < GAME_TASK_INFO)
+		return;
+
+	// Parse: type(1) + amount(4)
+	uint8_t pointType = 0;		// 0=GP, 1=Cash
+	int32_t amount = 0;
+
+	if (i32Size >= 5)
+	{
+		pointType = *(uint8_t*)pData;
+		memcpy(&amount, pData + 1, sizeof(int32_t));
+	}
+
+	// Server-side validation: don't blindly trust client amounts
+	// In production this would be verified against the actual transaction
+	// For now, just send back current balance
+
+	i3NetworkPacket packet;
+	char buffer[32];
+	int offset = 0;
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_SHOP_PLUS_POINT_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+
+	uint32_t gp = (uint32_t)m_i32GP;
+	uint32_t cash = (uint32_t)m_i32Cash;
+	memcpy(buffer + offset, &gp, 4);					offset += 4;
+	memcpy(buffer + offset, &cash, 4);					offset += 4;
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}

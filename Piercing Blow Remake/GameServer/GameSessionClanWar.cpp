@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "ClanMatchManager.h"
+#include "ClanDef.h"
 #include "GameSessionManager.h"
 
 // ============================================================================
@@ -336,4 +337,159 @@ void GameSession::OnClanWarResultReq(char* pData, INT32 i32Size)
 
 	packet.SetPacketData(buffer, offset);
 	SendMessage(&packet);
+}
+
+// ============================================================================
+// Clan War Mercenary Handlers (Protocol_Clan_War 0x1B00)
+// ============================================================================
+
+void GameSession::OnClanWarRegistMercenaryReq(char* pData, INT32 i32Size)
+{
+	// Register as available mercenary for clan wars
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_REGIST_MERCENARY_ACK, -1);
+		return;
+	}
+
+	// Player registers availability as mercenary (non-clan member joining clan wars)
+	// For now, just acknowledge the registration
+	int32_t result = 0;
+
+	// Can't be mercenary if already in a clan war team
+	if (m_i32ClanId > 0)
+		result = -2;	// Clan members can't be mercenaries
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_REGIST_MERCENARY_ACK, result);
+}
+
+void GameSession::OnClanWarRemoveMercenaryReq(char* pData, INT32 i32Size)
+{
+	// Unregister from mercenary pool
+	if (m_eMainTask < GAME_TASK_CHANNEL)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_REMOVE_MERCENARY_ACK, -1);
+		return;
+	}
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_REMOVE_MERCENARY_ACK, 0);
+}
+
+void GameSession::OnClanWarInviteMercenaryReq(char* pData, INT32 i32Size)
+{
+	// Team leader invites a mercenary to join the team
+	if (m_eMainTask < GAME_TASK_CHANNEL || i32Size < 12)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_MERCENARY_SENDER_ACK, -1);
+		return;
+	}
+
+	int teamIdx = 0;
+	memcpy(&teamIdx, pData, sizeof(int));
+
+	int64_t mercUID = 0;
+	memcpy(&mercUID, pData + 4, sizeof(int64_t));
+
+	int32_t result = 0;
+
+	if (!g_pClanMatchManager)
+	{
+		result = -2;
+	}
+	else
+	{
+		ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIdx);
+		if (!pTeam || !pTeam->IsLeader(m_i64UID))
+			result = -3;
+		else if (pTeam->ui8MemberCount >= pTeam->ui8MaxMembers)
+			result = -4;
+		else
+		{
+			// Find mercenary online
+			GameSession* pMerc = g_pGameSessionManager->FindSessionByUID(mercUID);
+			if (!pMerc)
+				result = -5;	// Offline
+			else
+			{
+				// Send invite to the mercenary
+				i3NetworkPacket invPacket;
+				char invBuf[128];
+				int invOff = 0;
+
+				uint16_t invSz = 0;
+				uint16_t invProto = PROTOCOL_CLAN_WAR_INVITE_MERCENARY_RECEIVER_ACK;
+				invOff += sizeof(uint16_t);
+				memcpy(invBuf + invOff, &invProto, sizeof(uint16_t));	invOff += sizeof(uint16_t);
+				memcpy(invBuf + invOff, &teamIdx, sizeof(int32_t));		invOff += sizeof(int32_t);
+				memcpy(invBuf + invOff, &m_i32ClanId, sizeof(int32_t));	invOff += sizeof(int32_t);
+				memcpy(invBuf + invOff, m_szClanName, MAX_CLAN_NAME_LEN);	invOff += MAX_CLAN_NAME_LEN;
+				memcpy(invBuf + invOff, m_szNickname, 64);				invOff += 64;
+
+				invSz = (uint16_t)invOff;
+				memcpy(invBuf, &invSz, sizeof(uint16_t));
+
+				invPacket.SetPacketData(invBuf, invOff);
+				pMerc->SendMessage(&invPacket);
+			}
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_MERCENARY_SENDER_ACK, result);
+}
+
+void GameSession::OnClanWarInviteAcceptReq(char* pData, INT32 i32Size)
+{
+	// Mercenary accepts team invitation
+	if (m_eMainTask < GAME_TASK_CHANNEL || i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_ACCEPT_ACK, -1);
+		return;
+	}
+
+	int teamIdx = 0;
+	memcpy(&teamIdx, pData, sizeof(int));
+
+	int32_t result = 0;
+
+	if (!g_pClanMatchManager)
+	{
+		result = -2;
+	}
+	else
+	{
+		int slot = g_pClanMatchManager->JoinTeam(teamIdx, m_i64UID, m_szNickname,
+			GetIndex(), (uint8_t)m_i32Level, (uint8_t)m_i32RankId);
+
+		if (slot < 0)
+			result = slot;	// Error from JoinTeam
+	}
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_ACCEPT_ACK, result);
+}
+
+void GameSession::OnClanWarInviteDenialReq(char* pData, INT32 i32Size)
+{
+	// Mercenary denies team invitation
+	if (m_eMainTask < GAME_TASK_CHANNEL || i32Size < 4)
+	{
+		SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_DENIAL_ACK, -1);
+		return;
+	}
+
+	int teamIdx = 0;
+	memcpy(&teamIdx, pData, sizeof(int));
+
+	// Notify the team leader that mercenary declined
+	if (g_pClanMatchManager)
+	{
+		ClanMatchTeam* pTeam = g_pClanMatchManager->GetTeam(teamIdx);
+		if (pTeam)
+		{
+			GameSession* pLeader = g_pGameSessionManager->FindSessionByUID(pTeam->i64LeaderUID);
+			if (pLeader)
+				pLeader->SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_DENIAL_ACK, 0);
+		}
+	}
+
+	SendSimpleAck(PROTOCOL_CLAN_WAR_INVITE_DENIAL_ACK, 0);
 }

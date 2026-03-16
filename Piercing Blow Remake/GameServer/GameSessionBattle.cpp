@@ -1462,3 +1462,132 @@ void GameSession::OnBattleSlotEquipmentReq(char* pData, INT32 i32Size)
 	else
 		SendMessage(&packet);
 }
+
+// ============================================================================
+// Battle Extended Handlers (Batch 16)
+// ============================================================================
+
+void GameSession::OnBattleMissionTutorialRoundEndReq(char* pData, INT32 i32Size)
+{
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	// Tutorial round end - broadcast to all
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_MISSION_TUTORIAL_ROUND_END_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleUserScopeTypeReq(char* pData, INT32 i32Size)
+{
+	// Scope type change during battle (sniper scope style)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+	if (i32Size < 1)
+		return;
+
+	uint8_t scopeType = *(uint8_t*)pData;
+
+	i3NetworkPacket packet;
+	char buffer[16];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_USER_SOPETYPE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	memcpy(buffer + offset, &slotIdx, 1);		offset += 1;
+	memcpy(buffer + offset, &scopeType, 1);		offset += 1;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	m_pRoom->SendToAll(&packet);
+}
+
+void GameSession::OnBattleTimeoutMainClientReq(char* pData, INT32 i32Size)
+{
+	// Non-host player reports host is unresponsive
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	// Similar to OnBattleTimeoutClientReq but for main/host
+	// Log and potentially trigger host migration
+	printf("[GameSession] Battle host timeout reported by slot %d in room %d\n",
+		m_i32SlotIdx, m_pRoom->GetRoomIdx());
+
+	// No ACK defined - this is informational
+}
+
+void GameSession::OnBattleNewJoinRoomScoreReq(char* pData, INT32 i32Size)
+{
+	// Late-joining player requests current game score
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	const GameRoomScore& score = m_pRoom->GetScore();
+
+	i3NetworkPacket packet;
+	char buffer[128];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_BATTLE_NEW_JOIN_ROOM_SCORE_ACK;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	int32_t redScore = score.i32RedScore;
+	int32_t blueScore = score.i32BlueScore;
+	int32_t nowRound = score.i32NowRound;
+	int32_t maxRound = score.i32MaxRound;
+	memcpy(buffer + offset, &redScore, 4);		offset += 4;
+	memcpy(buffer + offset, &blueScore, 4);		offset += 4;
+	memcpy(buffer + offset, &nowRound, 4);		offset += 4;
+	memcpy(buffer + offset, &maxRound, 4);		offset += 4;
+
+	// Per-slot kills/deaths
+	for (int i = 0; i < SLOT_MAX_COUNT; i++)
+	{
+		const Room::SlotBattleStats& stats = m_pRoom->GetSlotBattleStats(i);
+		int16_t kills = (int16_t)stats.i32Kills;
+		int16_t deaths = (int16_t)stats.i32Deaths;
+		memcpy(buffer + offset, &kills, 2);		offset += 2;
+		memcpy(buffer + offset, &deaths, 2);	offset += 2;
+	}
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+	packet.SetPacketData(buffer, offset);
+	SendMessage(&packet);
+}
+
+void GameSession::OnBattleReportScreenshotReq(char* pData, INT32 i32Size)
+{
+	// Player reports another player (screenshot-based)
+	if (m_eMainTask != GAME_TASK_BATTLE || !m_pRoom)
+		return;
+
+	if (i32Size < 1)
+		return;
+
+	uint8_t reportedSlot = *(uint8_t*)pData;
+	printf("[GameSession] Screenshot report from slot %d against slot %d in room %d\n",
+		m_i32SlotIdx, reportedSlot, m_pRoom->GetRoomIdx());
+
+	SendSimpleAck(PROTOCOL_BATTLE_REPORTSCREENSHOT_ACK, 0);
+}
