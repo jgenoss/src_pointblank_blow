@@ -85,6 +85,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libpq.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -100,6 +101,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libpq.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -113,6 +115,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libpq.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -128,10 +131,34 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libpq.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="DataServer.cpp" />
+    <ClCompile Include="DataServerContext.cpp" />
+    <ClCompile Include="DataSession.cpp" />
+    <ClCompile Include="DataSessionManager.cpp" />
+    <ClCompile Include="DBConnectionPool.cpp" />
+    <ClCompile Include="TaskProcessor.cpp" />
+    <ClCompile Include="ModuleDBAuth.cpp" />
+    <ClCompile Include="ModuleDBUserLoad.cpp" />
+    <ClCompile Include="ModuleDBUserSave.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="DataServerContext.h" />
+    <ClInclude Include="DataSession.h" />
+    <ClInclude Include="DataSessionManager.h" />
+    <ClInclude Include="DBConnectionPool.h" />
+    <ClInclude Include="TaskProcessor.h" />
+    <ClInclude Include="ModuleDBAuth.h" />
+    <ClInclude Include="ModuleDBUserLoad.h" />
+    <ClInclude Include="ModuleDBUserSave.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="config.ini" />
+    <None Include="schema.sql" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
