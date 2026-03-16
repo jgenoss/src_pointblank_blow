@@ -260,6 +260,47 @@ void GameSessionManager::BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* 
 	OnSendChannelUser(i32ChannelNum, pPacket);
 }
 
+void GameSessionManager::BroadcastToAll(i3NetworkPacket* pPacket)
+{
+	if (!g_pContextMain || !pPacket)
+		return;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		GameSession* pSession = &m_pSessions[i];
+		if (pSession->GetTask() >= GAME_TASK_CHANNEL)
+			pSession->SendMessage(pPacket);
+	}
+}
+
+void GameSessionManager::BroadcastAnnounce(const char* pszMessage, uint16_t ui16MsgLen)
+{
+	if (!pszMessage || ui16MsgLen == 0)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_SERVER_MESSAGE_ANNOUNCE;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint16_t copyLen = (ui16MsgLen > 480) ? 480 : ui16MsgLen;
+	memcpy(buffer + offset, &copyLen, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, pszMessage, copyLen);			offset += copyLen;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	BroadcastToAll(&packet);
+
+	printf("[SessionManager] Server announce broadcast - Len=%d\n", ui16MsgLen);
+}
+
 void GameSessionManager::CheckTimeouts()
 {
 	if (!g_pContextMain)

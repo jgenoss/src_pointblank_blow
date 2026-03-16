@@ -450,6 +450,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_GM_EXIT_USER_REQ:			OnGMExitUserReq(pData, dataSize);			break;
 	case PROTOCOL_LOBBY_GM_EXIT_USER_REQ:			OnLobbyGMExitUserReq(pData, dataSize);		break;
 
+	// ---- GM Chat (GameSessionGMChat.cpp - Phase 7C) ----
+	case PROTOCOL_GMCHAT_START_CHAT_REQ:			OnGMChatStartReq(pData, dataSize);			break;
+	case PROTOCOL_GMCHAT_SEND_CHAT_REQ:				OnGMChatSendReq(pData, dataSize);			break;
+	case PROTOCOL_GMCHAT_END_CHAT_REQ:				OnGMChatEndReq(pData, dataSize);			break;
+	case PROTOCOL_GMCHAT_APPLY_PENALTY_REQ:			OnGMChatPenaltyReq(pData, dataSize);		break;
+
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
 		break;

@@ -395,6 +395,12 @@ private:
 	void			OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size);
 
 	// Packet handlers - GM Commands (GameSessionGM.cpp - Phase 11A)
+	// GM Chat handlers (GameSessionGMChat.cpp)
+	void			OnGMChatStartReq(char* pData, INT32 i32Size);
+	void			OnGMChatSendReq(char* pData, INT32 i32Size);
+	void			OnGMChatEndReq(char* pData, INT32 i32Size);
+	void			OnGMChatPenaltyReq(char* pData, INT32 i32Size);
+
 	void			OnGMKickUserReq(char* pData, INT32 i32Size);
 	void			OnGMExitUserReq(char* pData, INT32 i32Size);
 	void			OnGMDestroyRoomReq(char* pData, INT32 i32Size);

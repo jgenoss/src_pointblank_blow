@@ -242,7 +242,7 @@
 
 ### 7C. GM Chat
 **Archivos**: Crear `GameSessionGMChat.cpp`
-- [ ] `PROTOCOL_VALUE_GMCHAT (0x1A00)` - GM → User messaging
+- [x] `PROTOCOL_VALUE_GMCHAT (0x1A00)` - GM → User messaging (Start/Send/End/Penalty)
 - [ ] Admin commands via chat
 
 ---
@@ -313,7 +313,7 @@
 - [x] Lobby GM exit user
 
 ### 11B. Control Server Integration
-- [ ] Server announce (normal, emergency, sliding, chat notices)
+- [x] Server announce (BroadcastToAll, BroadcastAnnounce in GameSessionManager)
 - [ ] Server start/stop commands
 - [ ] Config reload
 - [ ] User kick via admin tool
@@ -409,6 +409,6 @@
 | Skill (0x1700) | ~5 | 4 | 80% |
 | Char (0x1800) | ~5 | 3 | 60% |
 | MyInfo (0x1900) | ~5 | 3 | 60% |
-| GMChat (0x1A00) | ~5 | 4 | 80% |
+| GMChat (0x1A00) | ~5 | 5 | 100% |
 | ClanWar (0x1B00) | ~20 | 0 | 0% |
-| **TOTAL** | **~460** | **~151** | **~33%** |
+| **TOTAL** | **~460** | **~153** | **~33%** |
