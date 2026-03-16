@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameSessionManager.h"
 #include "GameSession.h"
+#include "GameProtocol.h"
 #include "GameContextMain.h"
 
 #define SESSION_CHECK_COUNT		300		// Check N sessions per update
@@ -205,7 +206,7 @@ void GameSessionManager::OnSendLobbyChatting(GameSession* pSender, char* pMessag
 	int offset = 0;
 
 	uint16_t size = 0;
-	uint16_t proto = 0x0507;	// PROTOCOL_LOBBY_CHAT_ACK
+	uint16_t proto = PROTOCOL_LOBBY_CHATTING_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 

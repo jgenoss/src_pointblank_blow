@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "GameContextMain.h"
+#include "GameSessionManager.h"
 #include "Room.h"
 #include "RoomManager.h"
 
@@ -163,14 +164,18 @@ void GameSession::OnLobbyEnterReq(char* pData, INT32 i32Size)
 	if (m_i32ChannelNum < 0)
 		return;
 
-	// TODO: Notify GameSessionManager::OnEnterLobby
+	if (g_pGameSessionManager)
+		g_pGameSessionManager->OnEnterLobby(this, m_i32ChannelNum);
+
 	m_eMainTask = GAME_TASK_LOBBY;
 	SendSimpleAck(PROTOCOL_LOBBY_ENTER_ACK, 0);
 }
 
 void GameSession::OnLobbyLeaveReq(char* pData, INT32 i32Size)
 {
-	// TODO: Notify GameSessionManager::OnLeaveLobby
+	if (g_pGameSessionManager && m_i32ChannelNum >= 0)
+		g_pGameSessionManager->OnLeaveLobby(this, m_i32ChannelNum);
+
 	m_eMainTask = GAME_TASK_CHANNEL;
 	SendSimpleAck(PROTOCOL_LOBBY_LEAVE_ACK, 0);
 }
@@ -185,8 +190,15 @@ void GameSession::OnGetRoomListReq(char* pData, INT32 i32Size)
 
 void GameSession::OnLobbyChatReq(char* pData, INT32 i32Size)
 {
-	// TODO: Forward to GameSessionManager::OnSendLobbyChatting for broadcast
-	// For now, broadcast via PROTOCOL_LOBBY_CHATTING_ACK is not implemented
+	if (m_eMainTask < GAME_TASK_LOBBY || m_i32ChannelNum < 0)
+		return;
+
+	if (i32Size < 2)
+		return;
+
+	// Forward to session manager for lobby broadcast
+	if (g_pGameSessionManager)
+		g_pGameSessionManager->OnSendLobbyChatting(this, pData, (uint16_t)i32Size);
 }
 
 void GameSession::OnQuickJoinRoomReq(char* pData, INT32 i32Size)
