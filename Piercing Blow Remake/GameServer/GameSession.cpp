@@ -29,6 +29,8 @@ GameSession::GameSession()
 	, m_i32Losses(0)
 	, m_ui8ActiveCharaSlot(0)
 	, m_i32InventoryCount(0)
+	, m_i32FriendCount(0)
+	, m_i32BlockCount(0)
 	, m_dwConnectTime(0)
 	, m_dwLastPacketTime(0)
 {
@@ -37,6 +39,10 @@ GameSession::GameSession()
 	for (int i = 0; i < MAX_CHARA_SLOT; i++)
 		m_CharaSlots[i].Reset();
 	memset(m_Inventory, 0, sizeof(m_Inventory));
+	for (int i = 0; i < MAX_FRIEND_COUNT; i++)
+		m_Friends[i].Reset();
+	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
+		m_BlockList[i].Reset();
 }
 
 GameSession::~GameSession()
@@ -178,6 +184,15 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_AUTH_SHOP_GOODS_BUY_REQ:			OnShopBuyReq(pData, dataSize);				break;
 	case PROTOCOL_SHOP_REPAIR_REQ:					OnShopRepairReq(pData, dataSize);			break;
 	case PROTOCOL_AUTH_GET_POINT_CASH_REQ:			OnGetPointCashReq(pData, dataSize);			break;
+
+	// ---- Social (GameSessionSocial.cpp) ----
+	case PROTOCOL_AUTH_FRIEND_INFO_REQ:				OnFriendInfoReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FRIEND_INSERT_REQ:			OnFriendInsertReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FRIEND_DELETE_REQ:			OnFriendDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_SEND_WHISPER_REQ:			OnWhisperReq(pData, dataSize);				break;
+	case PROTOCOL_AUTH_BLOCK_INSERT_REQ:			OnBlockInsertReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_BLOCK_DELETE_REQ:			OnBlockDeleteReq(pData, dataSize);			break;
+	case PROTOCOL_AUTH_FIND_USER_REQ:				OnFindUserReq(pData, dataSize);				break;
 
 	default:
 		printf("[GameSession] Unknown protocol 0x%04X from Index=%d\n", protocolId, GetIndex());
@@ -383,6 +398,13 @@ void GameSession::ResetSessionData()
 
 	m_i32InventoryCount = 0;
 	memset(m_Inventory, 0, sizeof(m_Inventory));
+
+	m_i32FriendCount = 0;
+	for (int i = 0; i < MAX_FRIEND_COUNT; i++)
+		m_Friends[i].Reset();
+	m_i32BlockCount = 0;
+	for (int i = 0; i < MAX_BLOCK_COUNT; i++)
+		m_BlockList[i].Reset();
 
 	m_dwConnectTime = 0;
 	m_dwLastPacketTime = 0;

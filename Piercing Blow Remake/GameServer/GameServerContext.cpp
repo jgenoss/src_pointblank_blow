@@ -15,6 +15,7 @@
 I3_CLASS_INSTANCE(GameServerContext);
 
 GameServerContext* g_pGameServerContext = nullptr;
+GameSessionManager* g_pGameSessionManager = nullptr;
 
 GameServerContext::GameServerContext()
 	: m_pGameSessionManager(nullptr)
@@ -38,8 +39,9 @@ BOOL GameServerContext::OnCreate(UINT8 SocketCount, UINT32* pAddress, UINT16* pP
 	m_pRoomManager->OnCreate();
 	g_pRoomManager = m_pRoomManager;
 
-	// Set global
+	// Set globals
 	g_pGameServerContext = this;
+	g_pGameSessionManager = m_pGameSessionManager;
 
 	BOOL result = i3NetworkServerContext::OnCreate(SocketCount, pAddress, pPort,
 												   pTimeOut, WorkCount, pSessionManager);
@@ -72,6 +74,7 @@ BOOL GameServerContext::OnDestroy()
 	}
 
 	g_pGameServerContext = nullptr;
+	g_pGameSessionManager = nullptr;
 
 	return i3NetworkServerContext::OnDestroy();
 }

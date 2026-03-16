@@ -280,3 +280,32 @@ void GameSessionManager::CheckTimeouts()
 
 	m_i32SessionCheckIdx = (m_i32SessionCheckIdx + checkCount) % sessionCount;
 }
+
+GameSession* GameSessionManager::FindSessionByUID(int64_t i64UID)
+{
+	if (!g_pContextMain || i64UID == 0)
+		return nullptr;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		if (m_pSessions[i].GetTask() > GAME_TASK_NONE && m_pSessions[i].GetUID() == i64UID)
+			return &m_pSessions[i];
+	}
+	return nullptr;
+}
+
+GameSession* GameSessionManager::FindSessionByNickname(const char* szNickname)
+{
+	if (!g_pContextMain || !szNickname || szNickname[0] == '\0')
+		return nullptr;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		if (m_pSessions[i].GetTask() > GAME_TASK_NONE &&
+			_stricmp(m_pSessions[i].GetNickname(), szNickname) == 0)
+			return &m_pSessions[i];
+	}
+	return nullptr;
+}

@@ -10,6 +10,40 @@
 
 class Room;
 
+// Friend/Block limits
+#define MAX_FRIEND_COUNT	50
+#define MAX_BLOCK_COUNT		50
+
+// Friend info stored per session
+struct GameFriendInfo
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Level;
+	int			i32RankId;
+
+	void Reset()
+	{
+		i64UID = 0;
+		szNickname[0] = '\0';
+		i32Level = 0;
+		i32RankId = 0;
+	}
+};
+
+// Block info stored per session
+struct GameBlockInfo
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+
+	void Reset()
+	{
+		i64UID = 0;
+		szNickname[0] = '\0';
+	}
+};
+
 // GAME_TASK state machine (from Server/Source/Game/Game/ServerDef.h)
 // GAME_TASK_NONE -> CONNECT -> LEAVE -> LOGIN_ING -> LOGIN -> INFO -> CHANNEL -> LOBBY -> READY_ROOM -> BATTLE
 enum GameTask
@@ -176,6 +210,20 @@ private:
 	void			OnShopRepairReq(char* pData, INT32 i32Size);
 	void			OnGetPointCashReq(char* pData, INT32 i32Size);
 
+	// Packet handlers - Social (GameSessionSocial.cpp)
+	void			OnFriendInfoReq(char* pData, INT32 i32Size);
+	void			OnFriendInsertReq(char* pData, INT32 i32Size);
+	void			OnFriendDeleteReq(char* pData, INT32 i32Size);
+	void			OnWhisperReq(char* pData, INT32 i32Size);
+	void			OnBlockInsertReq(char* pData, INT32 i32Size);
+	void			OnBlockDeleteReq(char* pData, INT32 i32Size);
+	void			OnFindUserReq(char* pData, INT32 i32Size);
+
+	// Social helpers
+	GameFriendInfo*	FindFriend(const char* nickname) const;
+	GameFriendInfo*	FindFriendByUID(int64_t uid) const;
+	bool			IsBlocked(int64_t uid) const;
+
 	// Helpers
 	void			SendConnectAck();
 	void			SendHeartBitAck();
@@ -226,6 +274,12 @@ private:
 	// Inventory (7F) - Full inventory
 	GameInventoryItem	m_Inventory[MAX_INVEN_COUNT];
 	int				m_i32InventoryCount;
+
+	// Social (7K) - Friends and block list
+	GameFriendInfo	m_Friends[MAX_FRIEND_COUNT];
+	int				m_i32FriendCount;
+	GameBlockInfo	m_BlockList[MAX_BLOCK_COUNT];
+	int				m_i32BlockCount;
 
 	// Timing
 	DWORD			m_dwConnectTime;

@@ -29,6 +29,8 @@ public:
 	// Session lookup
 	GameSession*		GetSession(int i32Idx);
 	GameSession*		GetSession(int i32Idx, int64_t i64UID);
+	GameSession*		FindSessionByUID(int64_t i64UID);
+	GameSession*		FindSessionByNickname(const char* szNickname);
 
 	// Channel management
 	int					OnEnterChannel(GameSession* pSession, uint32_t ui32Channel);
@@ -70,5 +72,7 @@ private:
 	int					m_i32SessionCheckIdx;
 	DWORD				m_dwLastTimeoutCheck;
 };
+
+extern GameSessionManager* g_pGameSessionManager;
 
 #endif // __GAMESESSIONMANAGER_H__
