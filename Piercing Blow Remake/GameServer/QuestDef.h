@@ -37,6 +37,16 @@ enum GameQuestCondition
 	QUEST_COND_GAMES_PLAYED,
 	QUEST_COND_DEATHS,
 	QUEST_COND_ASSISTS,
+
+	// Extended condition types (1.5 quest system)
+	QUEST_COND_WEAPON_KILLS,		// Kills with specific weapon class (ui32Param = weapon class ID)
+	QUEST_COND_STAGE_WINS,			// Wins on specific stage (ui32Param = stage/map ID)
+	QUEST_COND_BOMB_PLANTS,			// Bomb plant count (sabotage/demolition modes)
+	QUEST_COND_BOMB_DEFUSES,		// Bomb defuse count
+	QUEST_COND_MULTI_KILLS,			// Double/triple/multi kills (ui32Param = min kill count per multi)
+	QUEST_COND_CONSECUTIVE_KILLS,	// Kill streak without dying (ui32Param = min streak length)
+	QUEST_COND_PLAY_TIME,			// Total minutes played
+	QUEST_COND_DAMAGE_DEALT,		// Total damage dealt
 	QUEST_COND_COUNT,
 };
 
@@ -48,6 +58,7 @@ struct GameQuestEntry
 	uint32_t	ui32Current;		// Current progress
 	uint32_t	ui32RewardGP;		// GP reward
 	uint32_t	ui32RewardExp;		// EXP reward
+	uint32_t	ui32Param;			// Condition parameter (weapon class, stage ID, etc.)
 
 	bool IsComplete() const { return ui32Current >= ui32Target; }
 
@@ -58,6 +69,7 @@ struct GameQuestEntry
 		ui32Current = 0;
 		ui32RewardGP = 0;
 		ui32RewardExp = 0;
+		ui32Param = 0;
 	}
 };
 

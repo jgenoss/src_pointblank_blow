@@ -1539,6 +1539,55 @@ struct IS_MERCENARY_RESULT_ACK
 };
 
 // ============================================================================
+// Control Server Protocol (ControlServer <-> GameServer)
+// ============================================================================
+
+enum Protocol_InterServer_Control
+{
+	PROTOCOL_IS_CONTROL = 0x7400,
+
+	//----------------------------------------------------------
+	// ControlServer -> GameServer: Server status query
+	PROTOCOL_IS_CONTROL_STATUS_REQ,
+	PROTOCOL_IS_CONTROL_STATUS_ACK,
+
+	// ControlServer -> GameServer: Kick player
+	PROTOCOL_IS_CONTROL_KICK_REQ,
+	PROTOCOL_IS_CONTROL_KICK_ACK,
+
+	// ControlServer -> GameServer: Ban player (also forwards to DataServer)
+	PROTOCOL_IS_CONTROL_BAN_REQ,
+	PROTOCOL_IS_CONTROL_BAN_ACK,
+
+	// ControlServer -> GameServer: Send announcement to all players
+	PROTOCOL_IS_CONTROL_ANNOUNCE_REQ,
+	PROTOCOL_IS_CONTROL_ANNOUNCE_ACK,
+
+	// ControlServer -> GameServer: Reload server config
+	PROTOCOL_IS_CONTROL_RELOAD_REQ,
+	PROTOCOL_IS_CONTROL_RELOAD_ACK,
+
+	// ControlServer -> GameServer: Query player info
+	PROTOCOL_IS_CONTROL_PLAYERINFO_REQ,
+	PROTOCOL_IS_CONTROL_PLAYERINFO_ACK,
+
+	// ControlServer -> GameServer: Set boost event
+	PROTOCOL_IS_CONTROL_BOOST_SET_REQ,
+	PROTOCOL_IS_CONTROL_BOOST_SET_ACK,
+
+	// ControlServer -> GameServer: Room list query
+	PROTOCOL_IS_CONTROL_ROOMLIST_REQ,
+	PROTOCOL_IS_CONTROL_ROOMLIST_ACK,
+
+	// ControlServer -> GameServer: Graceful shutdown
+	PROTOCOL_IS_CONTROL_SHUTDOWN_REQ,
+	PROTOCOL_IS_CONTROL_SHUTDOWN_ACK,
+
+	// GameServer -> ControlServer: Log event push
+	PROTOCOL_IS_CONTROL_LOG_NOTIFY,
+};
+
+// ============================================================================
 // Shop Coupon
 // ============================================================================
 
