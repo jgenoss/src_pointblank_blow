@@ -37,7 +37,14 @@ void BattleRoom::Reset()
 	m_i32OwnerSessionIdx	= -1;
 
 	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
+	{
 		m_Members[i].Init();
+		m_Characters[i].Reset();
+	}
+
+	// Reset weapon managers
+	m_ThrowWeaponMgr.Reset();
+	m_DroppedWeaponMgr.Reset();
 
 	// Cleanup physics/objects
 	if (m_pCollision)
@@ -243,6 +250,20 @@ bool BattleRoom::ShouldDestroy() const
 	return false;
 }
 
+GameCharacter* BattleRoom::GetCharacter(uint32_t ui32Slot)
+{
+	if (ui32Slot >= BATTLE_SLOT_MAX)
+		return nullptr;
+	return &m_Characters[ui32Slot];
+}
+
+const GameCharacter* BattleRoom::GetCharacter(uint32_t ui32Slot) const
+{
+	if (ui32Slot >= BATTLE_SLOT_MAX)
+		return nullptr;
+	return &m_Characters[ui32Slot];
+}
+
 void BattleRoom::StartBattle()
 {
 	if (m_eState != BATTLE_ROOM_READY)
@@ -252,13 +273,19 @@ void BattleRoom::StartBattle()
 	m_dwBattleStartTime = GetTickCount();
 	m_dwLastActivityTime = GetTickCount();
 
-	// Set all joined members to PLAYING
+	// Set all joined members to PLAYING and initialize characters
 	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
 	{
 		if (m_Members[i].IsMember() && m_Members[i].GetState() == BATTLE_MEMBER_JOINED)
 		{
 			m_Members[i].SetState(BATTLE_MEMBER_PLAYING);
 			m_Members[i].SetAlive(true);
+
+			// Initialize character state
+			m_Characters[i].ResetBattleInfo();
+			m_Characters[i].SetAlive(true);
+			m_Characters[i].SetMaxHP(100);
+			m_Characters[i].InitBullets();
 		}
 	}
 

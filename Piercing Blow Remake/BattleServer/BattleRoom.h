@@ -7,11 +7,16 @@
 #include "BattleMember.h"
 #include "InterServerProtocol.h"
 #include "MapData.h"
+#include "GameCharacter.h"
+#include "WeaponSystem.h"
 
 class CollisionSystem;
 class GameObjectManager;
 class HitValidator;
 class RespawnManager;
+class ModuleCast;
+class ServerStatistics;
+class TaskProcessor;
 
 // Battle Room (port simplificado de CDediRoom)
 // Gestiona una batalla: miembros por slot, state machine, timer, resultados
@@ -72,6 +77,14 @@ public:
 	HitValidator*		GetHitValidator()			{ return m_pHitValidator; }
 	CMapData*			GetMapData()				{ return m_pMapData; }
 
+	// ===== Character system (per-slot game state) =====
+	GameCharacter*		GetCharacter(uint32_t ui32Slot);
+	const GameCharacter* GetCharacter(uint32_t ui32Slot) const;
+
+	// ===== Weapon managers =====
+	ThrowWeaponMgr*		GetThrowWeaponMgr()			{ return &m_ThrowWeaponMgr; }
+	DroppedWeaponMgr*	GetDroppedWeaponMgr()		{ return &m_DroppedWeaponMgr; }
+
 private:
 	BattleRoomState		m_eState;
 	BattleMember		m_Members[BATTLE_SLOT_MAX];
@@ -99,6 +112,13 @@ private:
 	GameObjectManager*	m_pObjectManager;		// Game objects (weapon boxes, targets, etc.)
 	HitValidator*		m_pHitValidator;		// Hit/movement validation
 	RespawnManager*		m_pRespawnManager;		// Respawn position selection
+
+	// ===== Character system (per-slot, like original CCharacter in CDediRoom) =====
+	GameCharacter		m_Characters[BATTLE_SLOT_MAX];
+
+	// ===== Weapon managers =====
+	ThrowWeaponMgr		m_ThrowWeaponMgr;		// Active grenades/throwables
+	DroppedWeaponMgr	m_DroppedWeaponMgr;		// Dropped weapons on ground
 };
 
 #endif // __BATTLEROOM_H__
