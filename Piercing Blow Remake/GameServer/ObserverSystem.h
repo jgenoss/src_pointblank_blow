@@ -208,4 +208,64 @@ private:
 	DWORD				m_dwLastPositionBroadcast;
 };
 
+// ============================================================================
+// Cast Protocol Structures (for external streaming/spectator tools)
+// ============================================================================
+// These structures define the wire format for battle events that can be
+// relayed to external cast clients (web viewers, streaming overlays).
+// The ObserverSystem generates these events internally; when an external
+// cast relay is enabled, they are serialized using these structures.
+// ============================================================================
+
+#pragma pack(push, 1)
+
+struct CastKillEvent
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8RoundNum;
+	uint32_t	ui32KillerSlot;
+	uint32_t	ui32VictimSlot;
+	int64_t		i64KillerUID;
+	int64_t		i64VictimUID;
+	char		szKillerNick[64];
+	char		szVictimNick[64];
+	uint32_t	ui32WeaponID;
+	uint8_t		ui8Headshot;
+};
+
+struct CastRoundEvent
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8RoundNum;
+	uint8_t		ui8GameMode;
+	uint8_t		ui8EventType;		// 0 = start, 1 = end
+	uint8_t		ui8WinTeam;
+	int			i32RedScore;
+	int			i32BlueScore;
+};
+
+struct CastScoreEvent
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	int			i32RedScore;
+	int			i32BlueScore;
+	uint8_t		ui8NowRound;
+};
+
+struct CastSlotPosition
+{
+	uint8_t		ui8Slot;
+	float		fX;
+	float		fY;
+	float		fZ;
+	float		fYaw;
+	uint8_t		ui8Team;
+	uint8_t		ui8Alive;
+};
+
+#pragma pack(pop)
+
 #endif // __OBSERVER_SYSTEM_H__

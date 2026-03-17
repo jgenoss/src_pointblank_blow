@@ -10,6 +10,7 @@
 #include "ClanMatchManager.h"
 #include "RouletteDef.h"
 #include "ShopManager.h"
+#include "ModuleControlAdmin.h"
 #include "i3IniParser.h"
 #include "ServerLog.h"
 
@@ -102,6 +103,7 @@ GameServer::GameServer()
 	, m_pModuleConnect(nullptr)
 	, m_pModuleData(nullptr)
 	, m_pModuleBattle(nullptr)
+	, m_pModuleControl(nullptr)
 {
 }
 
@@ -153,6 +155,12 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 	const char* pszBSIP = ini.GetString("BattleServer", "IP", "127.0.0.1");
 	strncpy_s(m_GameConfig.szBattleServerIP, pszBSIP, _TRUNCATE);
 	m_GameConfig.ui16BattleServerPort = (uint16_t)ini.GetInt("BattleServer", "Port", 40200);
+
+	// [ControlAdmin] section - Integrated admin control module
+	m_GameConfig.bEnableControlAdmin = ini.GetInt("ControlAdmin", "Enable", 1) != 0;
+	const char* pszAdminIP = ini.GetString("ControlAdmin", "BindIP", "127.0.0.1");
+	strncpy_s(m_GameConfig.szControlAdminIP, pszAdminIP, _TRUNCATE);
+	m_GameConfig.ui16ControlAdminPort = (uint16_t)ini.GetInt("ControlAdmin", "BindPort", 40500);
 
 	// [Ports] section - Client P2P and public ports
 	m_GameConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("Ports", "UdpClientPort", 29890);
@@ -289,6 +297,13 @@ void GameServer::OnShutdown()
 		g_pModuleBattleServer = nullptr;
 	}
 
+	if (m_pModuleControl)
+	{
+		m_pModuleControl->Shutdown();
+		delete m_pModuleControl;
+		m_pModuleControl = nullptr;
+	}
+
 	// Cleanup shop manager
 	if (g_pShopManager)
 	{
@@ -378,6 +393,48 @@ bool GameServer::InitializeModules()
 			m_GameConfig.i32MaxSessions);
 	}
 	g_pModuleBattleServer = m_pModuleBattle;
+
+	// Initialize ModuleControlAdmin (integrated admin TCP interface)
+	if (m_GameConfig.bEnableControlAdmin)
+	{
+		m_pModuleControl = new ModuleControlAdmin();
+		if (!m_pModuleControl->Initialize(m_GameConfig.szControlAdminIP,
+			m_GameConfig.ui16ControlAdminPort))
+		{
+			printf("[GameServer] WARNING: ModuleControlAdmin initialization failed\n");
+			delete m_pModuleControl;
+			m_pModuleControl = nullptr;
+		}
+		else
+		{
+			// Load admin accounts from config
+			i3IniParser ini;
+			if (ini.Load(m_szConfigPath))
+			{
+				for (int i = 0; i < MAX_ADMIN_ACCOUNTS; ++i)
+				{
+					char szSection[32];
+					snprintf(szSection, sizeof(szSection), "Admin.%d", i);
+					const char* pszUser = ini.GetString(szSection, "Username", "");
+					const char* pszPass = ini.GetString(szSection, "Password", "");
+					int level = ini.GetInt(szSection, "Level", -1);
+					if (pszUser[0] && pszPass[0] && level >= 0)
+						m_pModuleControl->AddAdminAccount(pszUser, pszPass, (uint8_t)level);
+					else
+						break;
+				}
+			}
+			// Add default dev account if none configured
+			uint8_t dummyLevel = 0;
+			if (!m_pModuleControl->ValidateAdmin("admin", "admin", &dummyLevel))
+			{
+				printf("[GameServer] No admin accounts found, adding default admin/admin (level=3)\n");
+				m_pModuleControl->AddAdminAccount("admin", "admin", 3);
+			}
+			printf("[GameServer] ControlAdmin module ready on %s:%d\n",
+				m_GameConfig.szControlAdminIP, m_GameConfig.ui16ControlAdminPort);
+		}
+	}
 
 	return true;
 }
