@@ -13,19 +13,20 @@
 #include <cstdio>
 #include <cstring>
 
-// ============================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // TaskProcessor - Production-grade async DB worker thread pool
-// ============================================================================
+// Pattern: Request queue -> Worker threads (DB connections from pool) -> Response queue -> Main thread sends
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 TaskProcessor::TaskProcessor(DataServerContext* pContext)
 	: m_pContext(pContext)
-	, m_lHead(0)
-	, m_lTail(0)
-	, m_lCount(0)
+	, m_lTaskHead(0)
+	, m_lTaskTail(0)
 	, m_lRespHead(0)
 	, m_lRespTail(0)
 	, m_i32WorkerCount(0)
 	, m_lShutdown(0)
+	, m_hTaskSemaphore(NULL)
 	, m_lTasksQueued(0)
 	, m_lTasksProcessed(0)
 	, m_lTasksDropped(0)
@@ -33,7 +34,6 @@ TaskProcessor::TaskProcessor(DataServerContext* pContext)
 	, m_lActiveWorkers(0)
 	, m_lPeakQueueDepth(0)
 	, m_l64TotalProcessTimeUs(0)
-	, m_hTaskSemaphore(NULL)
 	, m_dwLastStatTime(0)
 {
 	InitializeCriticalSectionAndSpinCount(&m_csTaskQueue, 4000);
@@ -62,7 +62,7 @@ bool TaskProcessor::Initialize(int i32WorkerCount)
 	m_hTaskSemaphore = CreateSemaphore(NULL, 0, TASK_QUEUE_SIZE, NULL);
 	if (!m_hTaskSemaphore)
 	{
-		printf("[TaskProcessor] ERROR: Failed to create semaphore\n");
+		printf("[TaskProcessor] ERROR: Failed to create semaphore (err=%d)\n", GetLastError());
 		return false;
 	}
 
@@ -77,7 +77,8 @@ bool TaskProcessor::Initialize(int i32WorkerCount)
 		m_Workers[i].hThread = CreateThread(NULL, 0, WorkerThreadProc, &m_Workers[i], 0, NULL);
 		if (!m_Workers[i].hThread)
 		{
-			printf("[TaskProcessor] ERROR: Failed to create worker thread %d\n", i);
+			printf("[TaskProcessor] ERROR: Failed to create worker thread %d (err=%d)\n",
+				i, GetLastError());
 			m_i32WorkerCount = i;
 			break;
 		}
@@ -85,8 +86,9 @@ bool TaskProcessor::Initialize(int i32WorkerCount)
 
 	m_dwLastStatTime = GetTickCount();
 
-	printf("[TaskProcessor] Initialized with %d worker threads (queue capacity=%d)\n",
-		m_i32WorkerCount, TASK_QUEUE_SIZE);
+	printf("[TaskProcessor] Initialized with %d worker threads (queue=%d, response=%d)\n",
+		m_i32WorkerCount, TASK_QUEUE_SIZE, TASK_RESPONSE_SIZE);
+
 	return m_i32WorkerCount > 0;
 }
 
@@ -101,7 +103,7 @@ void TaskProcessor::Shutdown()
 	if (m_hTaskSemaphore)
 		ReleaseSemaphore(m_hTaskSemaphore, m_i32WorkerCount, NULL);
 
-	// Wait for all worker threads to finish (5 second timeout)
+	// Wait for all worker threads to finish
 	HANDLE handles[TASK_MAX_WORKERS];
 	int handleCount = 0;
 	for (int i = 0; i < m_i32WorkerCount; i++)
@@ -111,7 +113,11 @@ void TaskProcessor::Shutdown()
 	}
 
 	if (handleCount > 0)
-		WaitForMultipleObjects(handleCount, handles, TRUE, 5000);
+	{
+		DWORD dwWait = WaitForMultipleObjects(handleCount, handles, TRUE, 10000);
+		if (dwWait == WAIT_TIMEOUT)
+			printf("[TaskProcessor] WARNING: Worker threads did not exit within timeout\n");
+	}
 
 	// Cleanup thread handles
 	for (int i = 0; i < m_i32WorkerCount; i++)
@@ -129,14 +135,18 @@ void TaskProcessor::Shutdown()
 		m_hTaskSemaphore = NULL;
 	}
 
-	printf("[TaskProcessor] Shutdown - Processed=%ld, Dropped=%ld\n",
-		m_lTasksProcessed, m_lTasksDropped);
+	printf("[TaskProcessor] Shutdown complete. Stats: queued=%ld, processed=%ld, dropped=%ld, peakDepth=%ld\n",
+		m_lTasksQueued, m_lTasksProcessed, m_lTasksDropped, m_lPeakQueueDepth);
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// QueueTask - Called from IOCP network threads, must be thread-safe
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool TaskProcessor::QueueTask(TaskType eType, int i32SessionIdx, uint16_t ui16ProtocolId,
 							   const void* pData, int i32DataSize)
 {
-	if (m_lShutdown || !pData || i32DataSize <= 0)
+	if (m_lShutdown)
 		return false;
 
 	if (i32DataSize > (int)sizeof(TaskEntry::Data))
@@ -148,80 +158,55 @@ bool TaskProcessor::QueueTask(TaskType eType, int i32SessionIdx, uint16_t ui16Pr
 
 	EnterCriticalSection(&m_csTaskQueue);
 
-	LONG count = m_lCount;
-	if (count >= TASK_QUEUE_SIZE)
+	// Check if queue is full
+	LONG lNextHead = (m_lTaskHead + 1) % TASK_QUEUE_SIZE;
+	if (lNextHead == m_lTaskTail)
 	{
 		LeaveCriticalSection(&m_csTaskQueue);
 		InterlockedIncrement(&m_lTasksDropped);
-		printf("[TaskProcessor] WARNING: Queue full, dropping task (type=%d)\n", eType);
+		printf("[TaskProcessor] WARNING: Queue full, dropping task (type=%d, session=%d)\n",
+			eType, i32SessionIdx);
 		return false;
 	}
 
 	// Write to ring buffer
-	LONG head = m_lHead;
-	TaskEntry* pEntry = &m_Queue[head % TASK_QUEUE_SIZE];
+	TaskEntry* pEntry = &m_TaskQueue[m_lTaskHead];
 	pEntry->eType = eType;
-	pEntry->ui16ProtocolId = ui16ProtocolId;
 	pEntry->i32SessionIdx = i32SessionIdx;
+	pEntry->ui16ProtocolId = ui16ProtocolId;
 	pEntry->i32DataSize = i32DataSize;
 	pEntry->dwQueueTime = GetTickCount();
-	memcpy(pEntry->Data, pData, i32DataSize);
 
-	m_lHead = head + 1;
-	LONG newCount = InterlockedIncrement(&m_lCount);
+	if (pData && i32DataSize > 0)
+		memcpy(pEntry->Data, pData, i32DataSize);
+
+	// Advance head
+	InterlockedExchange(&m_lTaskHead, lNextHead);
+
+	// Track peak queue depth
+	LONG lDepth = (m_lTaskHead - m_lTaskTail + TASK_QUEUE_SIZE) % TASK_QUEUE_SIZE;
+	LONG lPeak = m_lPeakQueueDepth;
+	while (lDepth > lPeak)
+	{
+		LONG lOld = InterlockedCompareExchange(&m_lPeakQueueDepth, lDepth, lPeak);
+		if (lOld == lPeak)
+			break;
+		lPeak = lOld;
+	}
 
 	LeaveCriticalSection(&m_csTaskQueue);
 
-	// Track peak queue depth
-	LONG peak = m_lPeakQueueDepth;
-	while (newCount > peak)
-	{
-		if (InterlockedCompareExchange(&m_lPeakQueueDepth, newCount, peak) == peak)
-			break;
-		peak = m_lPeakQueueDepth;
-	}
-
 	InterlockedIncrement(&m_lTasksQueued);
 
-	// Signal a worker
+	// Signal a worker thread
 	ReleaseSemaphore(m_hTaskSemaphore, 1, NULL);
+
 	return true;
 }
 
-// Legacy synchronous methods - redirect to QueueTask for backward compatibility
-void TaskProcessor::ProcessAuthLogin(DataSession* pSession, IS_AUTH_LOGIN_REQ* pReq)
-{
-	QueueTask(TASK_AUTH_LOGIN, pSession->GetIndex(), PROTOCOL_IS_AUTH_LOGIN_REQ, pReq, sizeof(IS_AUTH_LOGIN_REQ));
-}
-
-void TaskProcessor::ProcessPlayerLoad(DataSession* pSession, IS_PLAYER_LOAD_REQ* pReq)
-{
-	QueueTask(TASK_PLAYER_LOAD, pSession->GetIndex(), PROTOCOL_IS_PLAYER_LOAD_REQ, pReq, sizeof(IS_PLAYER_LOAD_REQ));
-}
-
-void TaskProcessor::ProcessPlayerSave(DataSession* pSession, IS_PLAYER_SAVE_REQ* pReq)
-{
-	QueueTask(TASK_PLAYER_SAVE, pSession->GetIndex(), PROTOCOL_IS_PLAYER_SAVE_REQ, pReq, sizeof(IS_PLAYER_SAVE_REQ));
-}
-
-void TaskProcessor::ProcessPlayerCreateNick(DataSession* pSession, IS_PLAYER_CREATE_NICK_REQ* pReq)
-{
-	QueueTask(TASK_PLAYER_CREATE_NICK, pSession->GetIndex(), PROTOCOL_IS_PLAYER_CREATE_NICK_REQ, pReq, sizeof(IS_PLAYER_CREATE_NICK_REQ));
-}
-
-void TaskProcessor::ProcessPlayerCheckNick(DataSession* pSession, IS_PLAYER_CHECK_NICK_REQ* pReq)
-{
-	QueueTask(TASK_PLAYER_CHECK_NICK, pSession->GetIndex(), PROTOCOL_IS_PLAYER_CHECK_NICK_REQ, pReq, sizeof(IS_PLAYER_CHECK_NICK_REQ));
-}
-
-void TaskProcessor::ProcessStatsSave(DataSession* pSession, IS_STATS_SAVE_REQ* pReq)
-{
-	QueueTask(TASK_STATS_SAVE, pSession->GetIndex(), PROTOCOL_IS_STATS_SAVE_REQ, pReq, sizeof(IS_STATS_SAVE_REQ));
-}
-
-// ============================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // Worker Thread
-// ============================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 DWORD WINAPI TaskProcessor::WorkerThreadProc(LPVOID lpParam)
 {
@@ -253,12 +238,11 @@ DWORD WINAPI TaskProcessor::WorkerThreadProc(LPVOID lpParam)
 
 		EnterCriticalSection(&pThis->m_csTaskQueue);
 		{
-			if (pThis->m_lCount > 0)
+			if (pThis->m_lTaskTail != pThis->m_lTaskHead)
 			{
-				LONG tail = pThis->m_lTail;
-				memcpy(&task, &pThis->m_Queue[tail % TASK_QUEUE_SIZE], sizeof(TaskEntry));
-				pThis->m_lTail = tail + 1;
-				InterlockedDecrement(&pThis->m_lCount);
+				memcpy(&task, &pThis->m_TaskQueue[pThis->m_lTaskTail], sizeof(TaskEntry));
+				InterlockedExchange(&pThis->m_lTaskTail,
+					(pThis->m_lTaskTail + 1) % TASK_QUEUE_SIZE);
 				bGotTask = true;
 			}
 		}
@@ -278,8 +262,8 @@ DWORD WINAPI TaskProcessor::WorkerThreadProc(LPVOID lpParam)
 
 		InterlockedIncrement(&pParam->lTasksProcessed);
 		InterlockedIncrement(&pThis->m_lTasksProcessed);
-		InterlockedAdd64(&pParam->l64TotalProcessTimeUs, elapsedUs);
-		InterlockedAdd64(&pThis->m_l64TotalProcessTimeUs, elapsedUs);
+		InterlockedExchangeAdd64(&pParam->l64TotalProcessTimeUs, elapsedUs);
+		InterlockedExchangeAdd64(&pThis->m_l64TotalProcessTimeUs, elapsedUs);
 	}
 
 	InterlockedDecrement(&pThis->m_lActiveWorkers);
@@ -288,97 +272,134 @@ DWORD WINAPI TaskProcessor::WorkerThreadProc(LPVOID lpParam)
 	return 0;
 }
 
-// ============================================================================
-// ProcessTask - Execute DB operation and send response from worker thread
-// Since i3NetworkSession::SendMessage posts to IOCP, it's safe from any thread.
-// ============================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ProcessTask - Execute DB operation on worker thread, push response to queue
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TaskProcessor::ProcessTask(TaskEntry* pTask, int i32WorkerIdx)
 {
 	if (!m_pContext)
 		return;
 
-	// Get the DataSession by index
-	DataSessionManager* pSessMgr = (DataSessionManager*)m_pContext->GetSessionManager();
-	if (!pSessMgr)
+	// Acquire a DB connection from the pool (blocking wait)
+	DBConnectionPool* pPool = m_pContext->GetDBPool();
+	if (!pPool)
 		return;
 
-	DataSession* pSession = pSessMgr->GetSession(pTask->i32SessionIdx);
-	if (!pSession)
+	DBConnection* pConn = pPool->AcquireConnectionWait(5000);
+	if (!pConn)
+	{
+		printf("[TaskProcessor:W%d] Failed to acquire DB connection for task type=%d\n",
+			i32WorkerIdx, pTask->eType);
 		return;
+	}
+
+	// Prepare response
+	TaskResponse response;
+	memset(&response, 0, sizeof(response));
+	response.i32SessionIdx = pTask->i32SessionIdx;
 
 	switch (pTask->eType)
 	{
 	case TASK_AUTH_LOGIN:
 	{
-		if (!m_pContext->GetModuleDBAuth())
-			return;
-
 		IS_AUTH_LOGIN_REQ* pReq = (IS_AUTH_LOGIN_REQ*)pTask->Data;
+
 		IS_AUTH_LOGIN_ACK ack;
 		memset(&ack, 0, sizeof(ack));
 		ack.i32SessionIdx = pReq->i32SessionIdx;
 
-		m_pContext->GetModuleDBAuth()->AuthenticateUser(pReq->szUsername, pReq->szPassword, &ack);
+		if (m_pContext->GetModuleDBAuth())
+		{
+			m_pContext->GetModuleDBAuth()->AuthenticateUser(
+				pReq->szUsername, pReq->szPassword, &ack);
+		}
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_AUTH_LOGIN_ACK);
-		packet.WriteData(&ack, sizeof(ack));
-		pSession->SendMessage(&packet);
+		printf("[TaskProcessor:W%d] AUTH_LOGIN: user='%s' result=%d uid=%lld\n",
+			i32WorkerIdx, pReq->szUsername, ack.i32Result, ack.i64UID);
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_AUTH_LOGIN_ACK;
+		memcpy(response.Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(response.Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		response.i32DataSize = sizeof(ui16Proto) + sizeof(ack);
 		break;
 	}
 
 	case TASK_PLAYER_LOAD:
 	{
-		if (!m_pContext->GetModuleDBUserLoad())
-			return;
-
 		IS_PLAYER_LOAD_REQ* pReq = (IS_PLAYER_LOAD_REQ*)pTask->Data;
+
 		IS_PLAYER_LOAD_ACK ack;
 		memset(&ack, 0, sizeof(ack));
 		ack.i64UID = pReq->i64UID;
 		ack.i32SessionIdx = pReq->i32SessionIdx;
 
-		char szPayload[8192];
+		char szPayload[7168];	// Leave room for header in response buffer
 		int i32PayloadSize = 0;
 
-		m_pContext->GetModuleDBUserLoad()->LoadPlayerData(
-			pReq->i64UID, &ack, szPayload, &i32PayloadSize);
+		if (m_pContext->GetModuleDBUserLoad())
+		{
+			m_pContext->GetModuleDBUserLoad()->LoadPlayerData(
+				pReq->i64UID, &ack, szPayload, &i32PayloadSize);
+		}
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_PLAYER_LOAD_ACK);
-		packet.WriteData(&ack, sizeof(ack));
+		printf("[TaskProcessor:W%d] PLAYER_LOAD: uid=%lld result=%d payloadSize=%d\n",
+			i32WorkerIdx, pReq->i64UID, ack.i32Result, i32PayloadSize);
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_PLAYER_LOAD_ACK;
+		int i32Offset = 0;
+		memcpy(response.Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(response.Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
 		if (ack.i32Result == 0 && i32PayloadSize > 0)
-			packet.WriteData(szPayload, i32PayloadSize);
-		pSession->SendMessage(&packet);
+		{
+			memcpy(response.Data + i32Offset, szPayload, i32PayloadSize);
+			i32Offset += i32PayloadSize;
+		}
+		response.i32DataSize = i32Offset;
 		break;
 	}
 
 	case TASK_PLAYER_SAVE:
 	{
-		if (!m_pContext->GetModuleDBUserSave())
-			return;
-
 		IS_PLAYER_SAVE_REQ* pReq = (IS_PLAYER_SAVE_REQ*)pTask->Data;
-		bool bResult = m_pContext->GetModuleDBUserSave()->SavePlayerData(
-			pReq->i64UID, pReq->i32Level, pReq->i64Exp, pReq->i32Cash, pReq->i32GP);
+
+		bool bResult = false;
+		if (m_pContext->GetModuleDBUserSave())
+		{
+			bResult = m_pContext->GetModuleDBUserSave()->SavePlayerData(
+				pReq->i64UID, pReq->i32Level, pReq->i64Exp, pReq->i32Cash, pReq->i32GP);
+		}
+
+		printf("[TaskProcessor:W%d] PLAYER_SAVE: uid=%lld result=%d\n",
+			i32WorkerIdx, pReq->i64UID, bResult ? 0 : 1);
 
 		IS_PLAYER_SAVE_ACK ack;
 		memset(&ack, 0, sizeof(ack));
 		ack.i64UID = pReq->i64UID;
 		ack.i32Result = bResult ? 0 : 1;
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_PLAYER_SAVE_ACK);
-		packet.WriteData(&ack, sizeof(ack));
-		pSession->SendMessage(&packet);
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_PLAYER_SAVE_ACK;
+		memcpy(response.Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(response.Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		response.i32DataSize = sizeof(ui16Proto) + sizeof(ack);
 		break;
 	}
 
 	case TASK_PLAYER_CREATE_NICK:
 	{
-		if (!m_pContext->GetModuleDBAuth())
-			return;
-
 		IS_PLAYER_CREATE_NICK_REQ* pReq = (IS_PLAYER_CREATE_NICK_REQ*)pTask->Data;
-		int i32Result = m_pContext->GetModuleDBAuth()->CreateNickname(pReq->i64UID, pReq->szNickname);
+
+		int i32Result = 2;	// default error
+		if (m_pContext->GetModuleDBAuth())
+		{
+			i32Result = m_pContext->GetModuleDBAuth()->CreateNickname(
+				pReq->i64UID, pReq->szNickname);
+		}
+
+		printf("[TaskProcessor:W%d] CREATE_NICK: uid=%lld nick='%s' result=%d\n",
+			i32WorkerIdx, pReq->i64UID, pReq->szNickname, i32Result);
 
 		IS_PLAYER_CREATE_NICK_ACK ack;
 		memset(&ack, 0, sizeof(ack));
@@ -386,82 +407,151 @@ void TaskProcessor::ProcessTask(TaskEntry* pTask, int i32WorkerIdx)
 		ack.i32SessionIdx = pReq->i32SessionIdx;
 		ack.i32Result = i32Result;
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_PLAYER_CREATE_NICK_ACK);
-		packet.WriteData(&ack, sizeof(ack));
-		pSession->SendMessage(&packet);
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_PLAYER_CREATE_NICK_ACK;
+		memcpy(response.Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(response.Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		response.i32DataSize = sizeof(ui16Proto) + sizeof(ack);
 		break;
 	}
 
 	case TASK_PLAYER_CHECK_NICK:
 	{
-		if (!m_pContext->GetModuleDBAuth())
-			return;
-
 		IS_PLAYER_CHECK_NICK_REQ* pReq = (IS_PLAYER_CHECK_NICK_REQ*)pTask->Data;
-		bool bExists = m_pContext->GetModuleDBAuth()->CheckNicknameExists(pReq->szNickname);
+
+		bool bExists = false;
+		if (m_pContext->GetModuleDBAuth())
+		{
+			bExists = m_pContext->GetModuleDBAuth()->CheckNicknameExists(pReq->szNickname);
+		}
+
+		printf("[TaskProcessor:W%d] CHECK_NICK: nick='%s' exists=%d\n",
+			i32WorkerIdx, pReq->szNickname, bExists);
 
 		IS_PLAYER_CHECK_NICK_ACK ack;
 		memset(&ack, 0, sizeof(ack));
 		ack.i32SessionIdx = pReq->i32SessionIdx;
 		ack.i32Result = bExists ? 1 : 0;
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_PLAYER_CHECK_NICK_ACK);
-		packet.WriteData(&ack, sizeof(ack));
-		pSession->SendMessage(&packet);
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_PLAYER_CHECK_NICK_ACK;
+		memcpy(response.Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(response.Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		response.i32DataSize = sizeof(ui16Proto) + sizeof(ack);
 		break;
 	}
 
 	case TASK_STATS_SAVE:
 	{
-		if (!m_pContext->GetModuleDBUserSave())
-			return;
-
 		IS_STATS_SAVE_REQ* pReq = (IS_STATS_SAVE_REQ*)pTask->Data;
-		bool bResult = m_pContext->GetModuleDBUserSave()->SaveBattleStats(
-			pReq->i64UID, pReq->i32Kills, pReq->i32Deaths,
-			pReq->i32Headshots, pReq->i32Wins, pReq->i32Losses);
+
+		bool bResult = false;
+		if (m_pContext->GetModuleDBUserSave())
+		{
+			bResult = m_pContext->GetModuleDBUserSave()->SaveBattleStats(
+				pReq->i64UID, pReq->i32Kills, pReq->i32Deaths,
+				pReq->i32Headshots, pReq->i32Wins, pReq->i32Losses);
+		}
+
+		printf("[TaskProcessor:W%d] STATS_SAVE: uid=%lld result=%d\n",
+			i32WorkerIdx, pReq->i64UID, bResult ? 0 : 1);
 
 		IS_STATS_SAVE_ACK ack;
 		memset(&ack, 0, sizeof(ack));
 		ack.i64UID = pReq->i64UID;
 		ack.i32Result = bResult ? 0 : 1;
 
-		i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_STATS_SAVE_ACK);
-		packet.WriteData(&ack, sizeof(ack));
-		pSession->SendMessage(&packet);
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_STATS_SAVE_ACK;
+		memcpy(response.Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(response.Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		response.i32DataSize = sizeof(ui16Proto) + sizeof(ack);
 		break;
 	}
 
 	case TASK_GAME_DATA:
 	{
-		// Game data operations dispatched by protocol ID
-		// These are handled directly from DataSession for now since they
-		// need complex per-handler response building
+		ProcessGameDataTask(pTask, i32WorkerIdx, &response);
 		break;
 	}
 
 	case TASK_SOCIAL:
 	{
-		// Social operations dispatched by protocol ID
+		ProcessSocialTask(pTask, i32WorkerIdx, &response);
 		break;
 	}
 
 	default:
+		printf("[TaskProcessor:W%d] Unknown task type %d\n", i32WorkerIdx, pTask->eType);
 		break;
+	}
+
+	// Release DB connection
+	pPool->ReleaseConnection(pConn);
+
+	// Push response to response queue (main thread will send it)
+	if (response.i32DataSize > 0)
+	{
+		EnterCriticalSection(&m_csRespQueue);
+
+		LONG lNextHead = (m_lRespHead + 1) % TASK_RESPONSE_SIZE;
+		if (lNextHead != m_lRespTail)
+		{
+			memcpy(&m_ResponseQueue[m_lRespHead], &response, sizeof(TaskResponse));
+			InterlockedExchange(&m_lRespHead, lNextHead);
+			InterlockedIncrement(&m_lResponsesPending);
+		}
+		else
+		{
+			printf("[TaskProcessor:W%d] WARNING: Response queue full, dropping response for session %d\n",
+				i32WorkerIdx, response.i32SessionIdx);
+		}
+
+		LeaveCriticalSection(&m_csRespQueue);
 	}
 }
 
-// ============================================================================
-// Response processing (main thread) - currently unused since workers send directly
-// Kept for future use if response queueing is needed
-// ============================================================================
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ProcessResponses - Main thread drains the response queue and sends packets
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 void TaskProcessor::ProcessResponses()
 {
-	// Workers send responses directly via i3NetworkSession::SendMessage (IOCP-safe)
-	// This method is a placeholder for future response-queue pattern if needed
+	// Drain response queue
+	EnterCriticalSection(&m_csRespQueue);
 
-	// Log statistics periodically
+	while (m_lRespTail != m_lRespHead)
+	{
+		TaskResponse resp;
+		memcpy(&resp, &m_ResponseQueue[m_lRespTail], sizeof(TaskResponse));
+		InterlockedExchange(&m_lRespTail, (m_lRespTail + 1) % TASK_RESPONSE_SIZE);
+		InterlockedDecrement(&m_lResponsesPending);
+
+		// We release the lock while sending so other workers can push responses
+		LeaveCriticalSection(&m_csRespQueue);
+
+		// Find the DataSession by index and send the packet
+		DataSessionManager* pSessMgr = m_pContext->GetDataSessionManager();
+		if (pSessMgr && resp.i32DataSize > (int)sizeof(uint16_t))
+		{
+			DataSession* pSession = pSessMgr->GetSession(resp.i32SessionIdx);
+			if (pSession && pSession->GetIsActive())
+			{
+				// Extract protocol ID from serialized data
+				uint16_t ui16Proto;
+				memcpy(&ui16Proto, resp.Data, sizeof(ui16Proto));
+
+				i3NetworkPacket packet((PROTOCOL)ui16Proto);
+				packet.WriteData(resp.Data + sizeof(ui16Proto),
+					resp.i32DataSize - sizeof(ui16Proto));
+				pSession->SendMessage(&packet);
+			}
+		}
+
+		// Re-acquire lock for next iteration
+		EnterCriticalSection(&m_csRespQueue);
+	}
+
+	LeaveCriticalSection(&m_csRespQueue);
+
+	// Log statistics periodically (every 60 seconds)
 	DWORD dwNow = GetTickCount();
 	if (dwNow - m_dwLastStatTime >= 60000)
 	{
@@ -477,17 +567,536 @@ void TaskProcessor::LogStatistics()
 	double avgMs = (totalProcessed > 0) ? ((double)totalUs / (double)totalProcessed / 1000.0) : 0.0;
 
 	printf("[TaskProcessor] Stats: Queued=%ld Processed=%ld Dropped=%ld "
-		"Workers=%ld/%d QueuePeak=%ld AvgTime=%.2fms\n",
+		"Workers=%ld/%d QueuePeak=%ld RespPending=%ld AvgTime=%.2fms\n",
 		m_lTasksQueued, m_lTasksProcessed, m_lTasksDropped,
 		m_lActiveWorkers, m_i32WorkerCount,
-		m_lPeakQueueDepth, avgMs);
+		m_lPeakQueueDepth, m_lResponsesPending, avgMs);
 
-	// Per-worker stats
 	for (int i = 0; i < m_i32WorkerCount; i++)
 	{
 		LONG workerProcessed = m_Workers[i].lTasksProcessed;
 		LONG64 workerUs = m_Workers[i].l64TotalProcessTimeUs;
 		double workerAvg = (workerProcessed > 0) ? ((double)workerUs / (double)workerProcessed / 1000.0) : 0.0;
 		printf("  Worker[%d]: Processed=%ld AvgTime=%.2fms\n", i, workerProcessed, workerAvg);
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Game Data task processing (worker thread)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TaskProcessor::ProcessGameDataTask(TaskEntry* pTask, int i32WorkerIdx, TaskResponse* pResponse)
+{
+	ModuleDBGameData* pModule = m_pContext->GetModuleDBGameData();
+	if (!pModule)
+		return;
+
+	switch (pTask->ui16ProtocolId)
+	{
+	case PROTOCOL_IS_EQUIPMENT_SAVE_REQ:
+	{
+		IS_EQUIPMENT_SAVE_REQ* pReq = (IS_EQUIPMENT_SAVE_REQ*)pTask->Data;
+		bool bResult = pModule->SaveEquipment(pReq->i64UID, pReq);
+
+		IS_EQUIPMENT_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_EQUIPMENT_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_MEDAL_SAVE_REQ:
+	{
+		IS_MEDAL_SAVE_REQ* pReq = (IS_MEDAL_SAVE_REQ*)pTask->Data;
+		bool bResult = pModule->SaveMedal(pReq->i64UID, pReq);
+
+		IS_MEDAL_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_MEDAL_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_ATTENDANCE_SAVE_REQ:
+	{
+		IS_ATTENDANCE_SAVE_REQ* pReq = (IS_ATTENDANCE_SAVE_REQ*)pTask->Data;
+		bool bResult = pModule->SaveAttendance(pReq->i64UID, pReq);
+
+		IS_ATTENDANCE_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_ATTENDANCE_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_SKILL_SAVE_REQ:
+	{
+		IS_SKILL_SAVE_REQ* pReq = (IS_SKILL_SAVE_REQ*)pTask->Data;
+		bool bResult = pModule->SaveSkill(pReq->i64UID, pReq);
+
+		IS_SKILL_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_SKILL_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_QUEST_SAVE_REQ:
+	{
+		IS_QUEST_SAVE_REQ* pReq = (IS_QUEST_SAVE_REQ*)pTask->Data;
+		const char* pQuestData = pTask->Data + sizeof(IS_QUEST_SAVE_REQ);
+		int i32QuestDataSize = (int)pReq->ui16DataSize;
+
+		if (pTask->i32DataSize < (int)(sizeof(IS_QUEST_SAVE_REQ) + i32QuestDataSize))
+			break;
+
+		bool bResult = pModule->SaveQuest(pReq->i64UID, pReq, pQuestData, i32QuestDataSize);
+
+		IS_QUEST_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_QUEST_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_SHOP_LIST_REQ:
+	{
+		IS_SHOP_ITEM_ENTRY items[500];
+		memset(items, 0, sizeof(items));
+		int i32Count = pModule->LoadShopItems(items, 500);
+
+		IS_SHOP_LIST_ACK ack;
+		ack.i32Result = 0;
+		ack.i32ItemCount = i32Count;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_SHOP_LIST_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
+		if (i32Count > 0)
+		{
+			int i32ItemsSize = i32Count * (int)sizeof(IS_SHOP_ITEM_ENTRY);
+			if (i32Offset + i32ItemsSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, items, i32ItemsSize);
+				i32Offset += i32ItemsSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+
+		printf("[TaskProcessor:W%d] SHOP_LIST_ACK: sent %d items\n", i32WorkerIdx, i32Count);
+		break;
+	}
+
+	case PROTOCOL_IS_SHOP_BUY_REQ:
+	{
+		IS_SHOP_BUY_REQ* pReq = (IS_SHOP_BUY_REQ*)pTask->Data;
+
+		printf("[TaskProcessor:W%d] SHOP_BUY_REQ: UID=%lld, GoodsId=%u, PayType=%d, Price=%d\n",
+			i32WorkerIdx, pReq->i64UID, pReq->ui32GoodsId, pReq->ui8PayType, pReq->i32Price);
+
+		IS_SHOP_BUY_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64UID = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.ui32ItemId = pReq->ui32ItemId;
+
+		pModule->BuyShopItem(pReq, &ack);
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_SHOP_BUY_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_INVEN_UPDATE_REQ:
+	{
+		IS_INVEN_UPDATE_REQ* pReq = (IS_INVEN_UPDATE_REQ*)pTask->Data;
+		bool bResult = pModule->UpdateInventory(pReq);
+
+		IS_INVEN_UPDATE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 3;
+		ack.ui32ItemId = pReq->ui32ItemId;
+		ack.i32SlotIdx = pReq->i32SlotIdx;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_INVEN_UPDATE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	default:
+		printf("[TaskProcessor:W%d] Unknown game data protocol 0x%04X\n",
+			i32WorkerIdx, pTask->ui16ProtocolId);
+		break;
+	}
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// Social task processing (worker thread)
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void TaskProcessor::ProcessSocialTask(TaskEntry* pTask, int i32WorkerIdx, TaskResponse* pResponse)
+{
+	ModuleDBSocial* pModule = m_pContext->GetModuleDBSocial();
+	if (!pModule)
+		return;
+
+	switch (pTask->ui16ProtocolId)
+	{
+	case PROTOCOL_IS_CLAN_CREATE_REQ:
+	{
+		IS_CLAN_CREATE_REQ* pReq = (IS_CLAN_CREATE_REQ*)pTask->Data;
+		int i32ClanId = pModule->CreateClan(pReq);
+
+		IS_CLAN_CREATE_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64MasterUID = pReq->i64MasterUID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32ClanId = i32ClanId;
+		ack.i32Result = (i32ClanId > 0) ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_CLAN_CREATE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_CLAN_DISBAND_REQ:
+	{
+		IS_CLAN_DISBAND_REQ* pReq = (IS_CLAN_DISBAND_REQ*)pTask->Data;
+		bool bResult = pModule->DisbandClan(pReq->i32ClanId, pReq->i64MasterUID);
+
+		IS_CLAN_DISBAND_ACK ack;
+		ack.i32ClanId = pReq->i32ClanId;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_CLAN_DISBAND_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_CLAN_JOIN_REQ:
+	{
+		IS_CLAN_JOIN_REQ* pReq = (IS_CLAN_JOIN_REQ*)pTask->Data;
+		bool bResult = pModule->JoinClan(pReq);
+
+		IS_CLAN_JOIN_ACK ack;
+		ack.i32ClanId = pReq->i32ClanId;
+		ack.i64UID = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_CLAN_JOIN_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_CLAN_LEAVE_REQ:
+	{
+		IS_CLAN_LEAVE_REQ* pReq = (IS_CLAN_LEAVE_REQ*)pTask->Data;
+		bool bResult = pModule->LeaveClan(pReq->i32ClanId, pReq->i64UID);
+
+		IS_CLAN_LEAVE_ACK ack;
+		ack.i32ClanId = pReq->i32ClanId;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_CLAN_LEAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_CLAN_LOAD_REQ:
+	{
+		IS_CLAN_LOAD_REQ* pReq = (IS_CLAN_LOAD_REQ*)pTask->Data;
+
+		printf("[TaskProcessor:W%d] CLAN_LOAD_REQ: ClanId=%d\n", i32WorkerIdx, pReq->i32ClanId);
+
+		IS_CLAN_LOAD_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i32ClanId = pReq->i32ClanId;
+
+		IS_CLAN_MEMBER_INFO members[50];
+		memset(members, 0, sizeof(members));
+		int memberCount = 0;
+
+		bool bResult = pModule->LoadClan(
+			pReq->i32ClanId, &ack, members, 50, &memberCount);
+
+		ack.i32Result = bResult ? 0 : 1;
+		ack.i32MemberCount = memberCount;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_CLAN_LOAD_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
+		if (memberCount > 0)
+		{
+			int i32MembersSize = memberCount * (int)sizeof(IS_CLAN_MEMBER_INFO);
+			if (i32Offset + i32MembersSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, members, i32MembersSize);
+				i32Offset += i32MembersSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
+	case PROTOCOL_IS_FRIEND_ADD_REQ:
+	{
+		IS_FRIEND_ADD_REQ* pReq = (IS_FRIEND_ADD_REQ*)pTask->Data;
+		int i32Result = pModule->AddFriend(pReq->i64UID, pReq->i64FriendUID);
+
+		IS_FRIEND_ADD_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i64FriendUID = pReq->i64FriendUID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result = i32Result;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_FRIEND_ADD_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_FRIEND_REMOVE_REQ:
+	{
+		IS_FRIEND_REMOVE_REQ* pReq = (IS_FRIEND_REMOVE_REQ*)pTask->Data;
+		bool bResult = pModule->RemoveFriend(pReq->i64UID, pReq->i64FriendUID);
+
+		IS_FRIEND_REMOVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i64FriendUID = pReq->i64FriendUID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_FRIEND_REMOVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_FRIEND_LIST_REQ:
+	{
+		IS_FRIEND_LIST_REQ* pReq = (IS_FRIEND_LIST_REQ*)pTask->Data;
+
+		IS_FRIEND_ENTRY friends[100];
+		memset(friends, 0, sizeof(friends));
+		int i32Count = pModule->LoadFriendList(pReq->i64UID, friends, 100);
+
+		IS_FRIEND_LIST_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Count = i32Count;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_FRIEND_LIST_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
+		if (i32Count > 0)
+		{
+			int i32FriendsSize = i32Count * (int)sizeof(IS_FRIEND_ENTRY);
+			if (i32Offset + i32FriendsSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, friends, i32FriendsSize);
+				i32Offset += i32FriendsSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
+	case PROTOCOL_IS_BLOCK_ADD_REQ:
+	{
+		IS_BLOCK_ADD_REQ* pReq = (IS_BLOCK_ADD_REQ*)pTask->Data;
+		int i32Result = pModule->AddBlock(pReq->i64UID, pReq->i64BlockedUID);
+
+		IS_BLOCK_ADD_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i64BlockedUID = pReq->i64BlockedUID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result = i32Result;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_BLOCK_ADD_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_BLOCK_REMOVE_REQ:
+	{
+		IS_BLOCK_REMOVE_REQ* pReq = (IS_BLOCK_REMOVE_REQ*)pTask->Data;
+		bool bResult = pModule->RemoveBlock(pReq->i64UID, pReq->i64BlockedUID);
+
+		IS_BLOCK_REMOVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i64BlockedUID = pReq->i64BlockedUID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_BLOCK_REMOVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_BLOCK_LIST_REQ:
+	{
+		IS_BLOCK_LIST_REQ* pReq = (IS_BLOCK_LIST_REQ*)pTask->Data;
+
+		IS_BLOCK_ENTRY blocks[100];
+		memset(blocks, 0, sizeof(blocks));
+		int i32Count = pModule->LoadBlockList(pReq->i64UID, blocks, 100);
+
+		IS_BLOCK_LIST_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Count = i32Count;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_BLOCK_LIST_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
+		if (i32Count > 0)
+		{
+			int i32BlocksSize = i32Count * (int)sizeof(IS_BLOCK_ENTRY);
+			if (i32Offset + i32BlocksSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, blocks, i32BlocksSize);
+				i32Offset += i32BlocksSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
+	case PROTOCOL_IS_NOTE_SEND_REQ:
+	{
+		IS_NOTE_SEND_REQ* pReq = (IS_NOTE_SEND_REQ*)pTask->Data;
+
+		IS_NOTE_SEND_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result = pModule->SaveNote(pReq) ? 0 : 3;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_NOTE_SEND_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_NOTE_LIST_REQ:
+	{
+		IS_NOTE_LIST_REQ* pReq = (IS_NOTE_LIST_REQ*)pTask->Data;
+
+		IS_NOTE_LIST_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64UID = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+
+		IS_NOTE_ENTRY entries[50];
+		memset(entries, 0, sizeof(entries));
+		int noteCount = pModule->LoadNotes(pReq->i64UID, entries, 50);
+		ack.i32Count = noteCount;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_NOTE_LIST_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));
+		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));
+		i32Offset += sizeof(ack);
+		if (noteCount > 0)
+		{
+			int i32NotesSize = noteCount * (int)sizeof(IS_NOTE_ENTRY);
+			if (i32Offset + i32NotesSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, entries, i32NotesSize);
+				i32Offset += i32NotesSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
+	case PROTOCOL_IS_NOTE_DELETE_REQ:
+	{
+		IS_NOTE_DELETE_REQ* pReq = (IS_NOTE_DELETE_REQ*)pTask->Data;
+
+		IS_NOTE_DELETE_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64UID = pReq->i64UID;
+		ack.i64NoteId = pReq->i64NoteId;
+		ack.i32Result = pModule->DeleteNote(pReq->i64UID, pReq->i64NoteId) ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_NOTE_DELETE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_PLAYER_BAN_REQ:
+	{
+		IS_PLAYER_BAN_REQ* pReq = (IS_PLAYER_BAN_REQ*)pTask->Data;
+
+		IS_PLAYER_BAN_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = pModule->BanPlayer(pReq) ? 0 : 2;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_PLAYER_BAN_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	default:
+		printf("[TaskProcessor:W%d] Unknown social protocol 0x%04X\n",
+			i32WorkerIdx, pTask->ui16ProtocolId);
+		break;
 	}
 }

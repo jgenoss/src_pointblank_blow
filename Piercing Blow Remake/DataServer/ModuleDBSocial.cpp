@@ -663,6 +663,452 @@ bool ModuleDBSocial::BanPlayer(IS_PLAYER_BAN_REQ* pReq)
 	return result.IsSuccess();
 }
 
+// ============================================================================
+// Clan Join Requests
+// ============================================================================
+
+bool ModuleDBSocial::SendClanRequest(IS_CLAN_REQUEST_SEND_REQ* pReq, IS_CLAN_REQUEST_SEND_ACK* pAck)
+{
+	if (!m_pPool || !pReq || !pAck)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+	{
+		pAck->i32Result = 3;
+		return false;
+	}
+
+	char szClanId[16], szUID[32], szLevel[16], szRank[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", pReq->i32ClanId);
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+	snprintf(szLevel, sizeof(szLevel), "%d", pReq->i32Level);
+	snprintf(szRank, sizeof(szRank), "%d", pReq->i32RankId);
+
+	const char* params[6] = { szClanId, szUID, pReq->szNickname, szLevel, szRank, pReq->szMessage };
+	DBResult result = pConn->ExecuteParams(
+		"INSERT INTO pb_clan_requests (clan_id, uid, nickname, level, rank_id, message) "
+		"VALUES ($1, $2, $3, $4, $5, $6) "
+		"ON CONFLICT (clan_id, uid) DO NOTHING",
+		6, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+	{
+		pAck->i32Result = 3;
+		return false;
+	}
+
+	pAck->i32Result = 0;
+	pAck->i64UID = pReq->i64UID;
+	pAck->i32ClanId = pReq->i32ClanId;
+
+	printf("[ModuleDBSocial] Clan request sent: clan=%d uid=%lld\n", pReq->i32ClanId, pReq->i64UID);
+	return true;
+}
+
+int ModuleDBSocial::LoadClanRequests(int i32ClanId, IS_CLAN_REQUEST_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	char szClanId[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+
+	const char* params[1] = { szClanId };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT id, uid, nickname, level, rank_id, message, "
+		"EXTRACT(EPOCH FROM created_at)::INTEGER "
+		"FROM pb_clan_requests WHERE clan_id = $1 AND status = 0 "
+		"ORDER BY created_at DESC LIMIT 50",
+		1, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+		return 0;
+
+	int count = result.GetRowCount();
+	if (count > i32MaxCount)
+		count = i32MaxCount;
+
+	for (int i = 0; i < count; i++)
+	{
+		memset(&pOut[i], 0, sizeof(IS_CLAN_REQUEST_ENTRY));
+		pOut[i].i64RequestId = _atoi64(result.GetValue(i, 0));
+		pOut[i].i64UID = _atoi64(result.GetValue(i, 1));
+		const char* nick = result.GetValue(i, 2);
+		if (nick) strncpy(pOut[i].szNickname, nick, sizeof(pOut[i].szNickname) - 1);
+		pOut[i].i32Level = atoi(result.GetValue(i, 3));
+		pOut[i].i32RankId = atoi(result.GetValue(i, 4));
+		const char* msg = result.GetValue(i, 5);
+		if (msg) strncpy(pOut[i].szMessage, msg, sizeof(pOut[i].szMessage) - 1);
+		pOut[i].ui32Timestamp = (uint32_t)atoi(result.GetValue(i, 6));
+	}
+
+	return count;
+}
+
+bool ModuleDBSocial::RespondClanRequest(IS_CLAN_REQUEST_RESPOND_REQ* pReq, IS_CLAN_REQUEST_RESPOND_ACK* pAck)
+{
+	if (!m_pPool || !pReq || !pAck)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+	{
+		pAck->i32Result = 3;
+		return false;
+	}
+
+	if (!pConn->BeginTransaction())
+	{
+		m_pPool->ReleaseConnection(pConn);
+		pAck->i32Result = 3;
+		return false;
+	}
+
+	char szReqId[32], szClanId[16], szStatus[8];
+	snprintf(szReqId, sizeof(szReqId), "%lld", pReq->i64RequestId);
+	snprintf(szClanId, sizeof(szClanId), "%d", pReq->i32ClanId);
+	snprintf(szStatus, sizeof(szStatus), "%d", pReq->ui8Accept ? 1 : 2);
+
+	// Update request status
+	const char* updateParams[2] = { szStatus, szReqId };
+	pConn->ExecuteParams(
+		"UPDATE pb_clan_requests SET status = $1 WHERE id = $2",
+		2, updateParams);
+
+	if (pReq->ui8Accept)
+	{
+		// Accept: add member to clan
+		char szUID[32], szLevel[8];
+		snprintf(szUID, sizeof(szUID), "%lld", pReq->i64ApplicantUID);
+		snprintf(szLevel, sizeof(szLevel), "3");	// Regular member
+
+		const char* memberParams[3] = { szClanId, szUID, szLevel };
+		pConn->ExecuteParams(
+			"INSERT INTO pb_clan_members (clan_id, uid, member_level) VALUES ($1, $2, $3) "
+			"ON CONFLICT DO NOTHING",
+			3, memberParams);
+
+		const char* userParams[2] = { szClanId, szUID };
+		pConn->ExecuteParams(
+			"UPDATE pb_users SET clan_id = $1 WHERE uid = $2",
+			2, userParams);
+
+		pConn->ExecuteParams(
+			"UPDATE pb_clans SET member_count = member_count + 1 WHERE clan_id = $1",
+			1, &szClanId);
+	}
+
+	pConn->CommitTransaction();
+	m_pPool->ReleaseConnection(pConn);
+
+	pAck->i32Result = 0;
+	pAck->i32ClanId = pReq->i32ClanId;
+	pAck->i64ApplicantUID = pReq->i64ApplicantUID;
+
+	printf("[ModuleDBSocial] Clan request %s: clan=%d uid=%lld\n",
+		pReq->ui8Accept ? "accepted" : "rejected", pReq->i32ClanId, pReq->i64ApplicantUID);
+	return true;
+}
+
+// ============================================================================
+// Clan Items
+// ============================================================================
+
+int ModuleDBSocial::LoadClanItems(int i32ClanId, IS_CLAN_ITEM_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	char szClanId[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+
+	const char* params[1] = { szClanId };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT id, item_id, item_count, item_type "
+		"FROM pb_clan_items WHERE clan_id = $1 ORDER BY id",
+		1, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+		return 0;
+
+	int count = result.GetRowCount();
+	if (count > i32MaxCount)
+		count = i32MaxCount;
+
+	for (int i = 0; i < count; i++)
+	{
+		pOut[i].i32Id			= atoi(result.GetValue(i, 0));
+		pOut[i].i32ItemId		= atoi(result.GetValue(i, 1));
+		pOut[i].i32ItemCount	= atoi(result.GetValue(i, 2));
+		pOut[i].ui8ItemType		= (uint8_t)atoi(result.GetValue(i, 3));
+	}
+
+	return count;
+}
+
+// ============================================================================
+// Clan Match Result
+// ============================================================================
+
+bool ModuleDBSocial::UpdateClanMatchResult(IS_CLAN_MATCH_RESULT_REQ* pReq)
+{
+	if (!m_pPool || !pReq)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szClanId[16], szExp[16], szRating[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", pReq->i32ClanId);
+	snprintf(szExp, sizeof(szExp), "%d", pReq->i32ExpGained);
+	snprintf(szRating, sizeof(szRating), "%d", pReq->i32RatingDelta);
+
+	const char* params[3] = { szExp, szRating, szClanId };
+	DBResult result;
+
+	switch (pReq->ui8Result)
+	{
+	case 0:	// Win
+		result = pConn->ExecuteParams(
+			"UPDATE pb_clans SET wins = wins + 1, season_wins = season_wins + 1, "
+			"clan_exp = clan_exp + $1, season_rating = GREATEST(0, season_rating + $2) "
+			"WHERE clan_id = $3",
+			3, params);
+		break;
+	case 1:	// Loss
+		result = pConn->ExecuteParams(
+			"UPDATE pb_clans SET losses = losses + 1, season_losses = season_losses + 1, "
+			"clan_exp = clan_exp + $1, season_rating = GREATEST(0, season_rating + $2) "
+			"WHERE clan_id = $3",
+			3, params);
+		break;
+	case 2:	// Draw
+		result = pConn->ExecuteParams(
+			"UPDATE pb_clans SET draws = draws + 1, season_draws = season_draws + 1, "
+			"clan_exp = clan_exp + $1, season_rating = GREATEST(0, season_rating + $2) "
+			"WHERE clan_id = $3",
+			3, params);
+		break;
+	default:
+		m_pPool->ReleaseConnection(pConn);
+		return false;
+	}
+
+	m_pPool->ReleaseConnection(pConn);
+
+	printf("[ModuleDBSocial] Clan match result: clan=%d result=%d exp=%d rating=%d\n",
+		pReq->i32ClanId, pReq->ui8Result, pReq->i32ExpGained, pReq->i32RatingDelta);
+	return result.IsSuccess();
+}
+
+// ============================================================================
+// Clan Season
+// ============================================================================
+
+int ModuleDBSocial::LoadClanSeason(int i32ClanId, IS_CLAN_SEASON_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	char szClanId[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+
+	const char* params[1] = { szClanId };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT season_id, final_rank, final_rating, wins, losses, draws, season_exp "
+		"FROM pb_clan_season WHERE clan_id = $1 ORDER BY season_id DESC LIMIT 10",
+		1, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+		return 0;
+
+	int count = result.GetRowCount();
+	if (count > i32MaxCount)
+		count = i32MaxCount;
+
+	for (int i = 0; i < count; i++)
+	{
+		pOut[i].i32SeasonId		= atoi(result.GetValue(i, 0));
+		pOut[i].i32FinalRank	= atoi(result.GetValue(i, 1));
+		pOut[i].i32FinalRating	= atoi(result.GetValue(i, 2));
+		pOut[i].i32Wins			= atoi(result.GetValue(i, 3));
+		pOut[i].i32Losses		= atoi(result.GetValue(i, 4));
+		pOut[i].i32Draws		= atoi(result.GetValue(i, 5));
+		pOut[i].i32SeasonExp	= atoi(result.GetValue(i, 6));
+	}
+
+	return count;
+}
+
+// ============================================================================
+// Mercenary System
+// ============================================================================
+
+bool ModuleDBSocial::HireMercenary(IS_MERCENARY_HIRE_REQ* pReq, IS_MERCENARY_HIRE_ACK* pAck)
+{
+	if (!m_pPool || !pReq || !pAck)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+	{
+		pAck->i32Result = 3;
+		return false;
+	}
+
+	char szClanId[16], szUID[32], szDuration[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", pReq->i32ClanId);
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+	snprintf(szDuration, sizeof(szDuration), "%d", pReq->i32DurationSec);
+
+	const char* params[4] = { szClanId, szUID, pReq->szNickname, szDuration };
+	DBResult result = pConn->ExecuteParams(
+		"INSERT INTO pb_mercenary (clan_id, uid, nickname, expire_date) "
+		"VALUES ($1, $2, $3, NOW() + ($4 || ' seconds')::INTERVAL) "
+		"ON CONFLICT (clan_id, uid) DO NOTHING",
+		4, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+	{
+		pAck->i32Result = 1;	// Already hired or error
+		return false;
+	}
+
+	pAck->i32Result = 0;
+	pAck->i32ClanId = pReq->i32ClanId;
+	pAck->i64UID = pReq->i64UID;
+
+	printf("[ModuleDBSocial] Mercenary hired: clan=%d uid=%lld duration=%ds\n",
+		pReq->i32ClanId, pReq->i64UID, pReq->i32DurationSec);
+	return true;
+}
+
+int ModuleDBSocial::LoadMercenaries(int i32ClanId, IS_MERCENARY_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	char szClanId[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+
+	const char* params[1] = { szClanId };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT uid, nickname, merc_kills, merc_deaths, merc_wins, merc_losses, merc_disconnects, "
+		"EXTRACT(EPOCH FROM hire_date)::INTEGER, EXTRACT(EPOCH FROM expire_date)::INTEGER "
+		"FROM pb_mercenary WHERE clan_id = $1 AND is_active = TRUE AND expire_date > NOW() "
+		"ORDER BY hire_date",
+		1, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+		return 0;
+
+	int count = result.GetRowCount();
+	if (count > i32MaxCount)
+		count = i32MaxCount;
+
+	for (int i = 0; i < count; i++)
+	{
+		memset(&pOut[i], 0, sizeof(IS_MERCENARY_ENTRY));
+		pOut[i].i64UID			= _atoi64(result.GetValue(i, 0));
+		const char* nick = result.GetValue(i, 1);
+		if (nick) strncpy(pOut[i].szNickname, nick, sizeof(pOut[i].szNickname) - 1);
+		pOut[i].i32Kills		= atoi(result.GetValue(i, 2));
+		pOut[i].i32Deaths		= atoi(result.GetValue(i, 3));
+		pOut[i].i32Wins			= atoi(result.GetValue(i, 4));
+		pOut[i].i32Losses		= atoi(result.GetValue(i, 5));
+		pOut[i].i32Disconnects	= atoi(result.GetValue(i, 6));
+		pOut[i].ui32HireTime	= (uint32_t)atoi(result.GetValue(i, 7));
+		pOut[i].ui32ExpireTime	= (uint32_t)atoi(result.GetValue(i, 8));
+	}
+
+	return count;
+}
+
+bool ModuleDBSocial::DismissMercenary(int i32ClanId, int64_t i64UID)
+{
+	if (!m_pPool)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szClanId[16], szUID[32];
+	snprintf(szClanId, sizeof(szClanId), "%d", i32ClanId);
+	snprintf(szUID, sizeof(szUID), "%lld", i64UID);
+
+	const char* params[2] = { szClanId, szUID };
+	DBResult result = pConn->ExecuteParams(
+		"UPDATE pb_mercenary SET is_active = FALSE WHERE clan_id = $1 AND uid = $2",
+		2, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	printf("[ModuleDBSocial] Mercenary dismissed: clan=%d uid=%lld\n", i32ClanId, i64UID);
+	return result.IsSuccess();
+}
+
+bool ModuleDBSocial::UpdateMercenaryResult(IS_MERCENARY_RESULT_REQ* pReq)
+{
+	if (!m_pPool || !pReq)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szClanId[16], szUID[32], szK[16], szD[16], szW[16], szL[16], szDc[16];
+	snprintf(szClanId, sizeof(szClanId), "%d", pReq->i32ClanId);
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+	snprintf(szK, sizeof(szK), "%d", pReq->i32DeltaKills);
+	snprintf(szD, sizeof(szD), "%d", pReq->i32DeltaDeaths);
+	snprintf(szW, sizeof(szW), "%d", pReq->i32DeltaWins);
+	snprintf(szL, sizeof(szL), "%d", pReq->i32DeltaLosses);
+	snprintf(szDc, sizeof(szDc), "%d", pReq->i32DeltaDisconnects);
+
+	const char* params[7] = { szK, szD, szW, szL, szDc, szClanId, szUID };
+	DBResult result = pConn->ExecuteParams(
+		"UPDATE pb_mercenary SET "
+		"merc_kills = merc_kills + $1, merc_deaths = merc_deaths + $2, "
+		"merc_wins = merc_wins + $3, merc_losses = merc_losses + $4, "
+		"merc_disconnects = merc_disconnects + $5 "
+		"WHERE clan_id = $6 AND uid = $7 AND is_active = TRUE",
+		7, params);
+
+	m_pPool->ReleaseConnection(pConn);
+	return result.IsSuccess();
+}
+
 void ModuleDBSocial::ProcessResponses(DataServerContext* pContext)
 {
 	// Placeholder para futuro async con ring buffers

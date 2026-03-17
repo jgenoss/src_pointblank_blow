@@ -8,9 +8,7 @@ class DBConnectionPool;
 class DataServerContext;
 
 // Modulo de carga de datos de jugador
-// Carga perfil, inventario y estadisticas desde PostgreSQL
-// Patron portado de CModuleDBUserLoad (Server/Source/Trans/Trans/ModuleDBUserLoad.h)
-// Version simplificada: sincronico, single-thread
+// Carga perfil, inventario, estadisticas, cosmetics, mode records, daily records
 class ModuleDBUserLoad
 {
 public:
@@ -18,8 +16,6 @@ public:
 	~ModuleDBUserLoad();
 
 	// Carga completa de datos del jugador
-	// pPayload: buffer de salida con IS_PLAYER_LOAD_DATA + N * IS_PLAYER_INVENTORY_ITEM
-	// pPayloadSize: tamanio del payload escrito
 	bool LoadPlayerData(int64_t i64UID, IS_PLAYER_LOAD_ACK* pOut,
 						char* pPayload, int* pPayloadSize);
 
@@ -31,6 +27,8 @@ private:
 	bool LoadStats(DBConnection* pConn, int64_t i64UID, IS_PLAYER_LOAD_DATA* pData);
 	int  LoadInventory(DBConnection* pConn, int64_t i64UID,
 					   IS_PLAYER_INVENTORY_ITEM* pItems, int i32MaxItems);
+	bool LoadCosmetics(DBConnection* pConn, int64_t i64UID, IS_PLAYER_LOAD_DATA* pData);
+	bool LoadDailyRecord(DBConnection* pConn, int64_t i64UID, IS_PLAYER_LOAD_DATA* pData);
 
 private:
 	DBConnectionPool*	m_pPool;
