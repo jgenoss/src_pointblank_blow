@@ -2587,6 +2587,42 @@ uint16_t GameSession::GetInventoryPointMultiplier() const
 	return maxMult;
 }
 
+uint32_t GameSession::GetColorNick() const
+{
+	// Check override first (set by OnChangeColorNickReq)
+	if (m_ui32ColorNick > 0)
+		return m_ui32ColorNick;
+
+	// Scan inventory for active color nick maintenance item
+	DWORD dwNow = (DWORD)time(nullptr);
+	for (int i = 0; i < m_i32InventoryCount; i++)
+	{
+		const GameInventoryItem& item = m_Inventory[i];
+		if (!item.IsValid())
+			continue;
+
+		int itemType = GET_ITEM_TYPE(item.ui32ItemId);
+		if (itemType != ITEM_TYPE_MAINTENANCE)
+			continue;
+
+		int groupType = GET_ITEM_NUMBER(item.ui32ItemId);
+		if (groupType != CASHITEM_GROUP_COLOR_NICK)
+			continue;
+
+		// Period-based: check expiration
+		if (item.ui8ItemType == ITEM_ATTR_PERIOD && item.ui32ItemArg > 0)
+		{
+			if (dwNow > item.ui32ItemArg)
+				continue;
+		}
+
+		// Color value encoded in subtype
+		return (uint32_t)GET_ITEM_SUBTYPE(item.ui32ItemId);
+	}
+
+	return 0;
+}
+
 // ============================================================================
 // Timeout & Reset
 // ============================================================================
@@ -2640,6 +2676,7 @@ void GameSession::ResetSessionData()
 	m_i32Headshots = 0;
 	m_i32Wins = 0;
 	m_i32Losses = 0;
+	m_ui32ColorNick = 0;
 	m_stUsedWeapon = 0;
 	m_i32LastBattleExpBonus = 0;
 	m_i32LastBattleGPBonus = 0;

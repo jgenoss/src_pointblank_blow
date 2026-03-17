@@ -33,6 +33,10 @@ public:
 	const ServerInfo*	GetFirstAvailableServer() const;
 	const ServerInfo*	GetLeastLoadedServer() const;
 
+	// Session mapping (ConnectSession index that owns this GameServer connection)
+	void				SetServerSessionIdx(int serverId, int sessionIdx);
+	int					GetServerSessionIdx(int serverId) const;
+
 	// Mantenimiento (llamar desde OnUpdate)
 	void				Update();
 
@@ -42,6 +46,7 @@ private:
 private:
 	ServerList			m_ServerList;
 	DWORD				m_dwLastHeartbeat[MAX_REGISTERED_SERVERS];		// Ultimo heartbeat por server ID slot
+	int					m_i32SessionIdx[MAX_REGISTERED_SERVERS];		// ConnectSession index per server
 };
 
 #endif // __GAMESERVERREGISTRY_H__

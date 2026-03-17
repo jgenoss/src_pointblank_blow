@@ -1050,6 +1050,10 @@ void GameSession::OnChangeColorNickReq(char* pData, INT32 i32Size)
 	}
 	else
 	{
+		// Store the color value from the item's subtype field
+		int itemSubtype = GET_ITEM_SUBTYPE(colorItemId);
+		m_ui32ColorNick = (uint32_t)itemSubtype;
+
 		// Consume the color nick item
 		GameInventoryItem* pItem = FindInventoryItem(colorItemId);
 		if (pItem)

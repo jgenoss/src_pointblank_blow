@@ -7,6 +7,7 @@
 #include "ModuleDBUserSave.h"
 #include "ModuleDBGameData.h"
 #include "ModuleDBSocial.h"
+#include "i3IniParser.h"
 #include <cstdio>
 #include <cstring>
 
@@ -127,14 +128,13 @@ DataServer::~DataServer()
 
 bool DataServer::OnLoadConfig(const char* pszConfigPath)
 {
-	// TODO: Cargar desde archivo INI real
+	// Defaults
 	strcpy(m_DataConfig.szBindIP, "0.0.0.0");
 	m_DataConfig.ui16BindPort			= 40100;
-	m_DataConfig.i32MaxSessions			= 32;		// Solo servidores se conectan, no clientes
+	m_DataConfig.i32MaxSessions			= 32;
 	m_DataConfig.i32WorkerThreadCount	= 4;
 	m_DataConfig.ui8SocketTimeout		= 60;
 
-	// PostgreSQL config
 	strcpy(m_DataConfig.dbConfig.szHost, "127.0.0.1");
 	m_DataConfig.dbConfig.ui16Port		= 5432;
 	strcpy(m_DataConfig.dbConfig.szDatabase, "piercing_blow");
@@ -142,10 +142,42 @@ bool DataServer::OnLoadConfig(const char* pszConfigPath)
 	strcpy(m_DataConfig.dbConfig.szPassword, "pb_password");
 	m_DataConfig.i32DBPoolSize			= 8;
 
+	// Load from INI file (override defaults)
+	i3IniParser ini;
+	if (ini.Load(pszConfigPath))
+	{
+		const char* pszBindIP = ini.GetString("DataServer", "BindIP", "0.0.0.0");
+		strncpy_s(m_DataConfig.szBindIP, pszBindIP, _TRUNCATE);
+		m_DataConfig.ui16BindPort		= (uint16_t)ini.GetInt("DataServer", "BindPort", 40100);
+		m_DataConfig.i32MaxSessions		= ini.GetInt("DataServer", "MaxSessions", 32);
+		m_DataConfig.i32WorkerThreadCount = ini.GetInt("DataServer", "WorkerThreads", 4);
+		m_DataConfig.ui8SocketTimeout	= (uint8_t)ini.GetInt("DataServer", "SocketTimeout", 60);
+
+		const char* pszDBHost = ini.GetString("Database", "Host", "127.0.0.1");
+		strncpy_s(m_DataConfig.dbConfig.szHost, pszDBHost, _TRUNCATE);
+		m_DataConfig.dbConfig.ui16Port	= (uint16_t)ini.GetInt("Database", "Port", 5432);
+
+		const char* pszDBName = ini.GetString("Database", "Database", "piercing_blow");
+		strncpy_s(m_DataConfig.dbConfig.szDatabase, pszDBName, _TRUNCATE);
+
+		const char* pszDBUser = ini.GetString("Database", "User", "pb_server");
+		strncpy_s(m_DataConfig.dbConfig.szUser, pszDBUser, _TRUNCATE);
+
+		const char* pszDBPass = ini.GetString("Database", "Password", "pb_password");
+		strncpy_s(m_DataConfig.dbConfig.szPassword, pszDBPass, _TRUNCATE);
+
+		m_DataConfig.i32DBPoolSize		= ini.GetInt("Database", "PoolSize", 8);
+	}
+	else
+	{
+		printf("[DataServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
+	}
+
 	m_Config = m_DataConfig;
 
-	printf("[DataServer] Config loaded: Port=%d, DB=%s@%s:%d/%s, Pool=%d\n",
-		m_DataConfig.ui16BindPort,
+	printf("[DataServer] Config loaded: Bind=%s:%d, MaxSessions=%d\n",
+		m_DataConfig.szBindIP, m_DataConfig.ui16BindPort, m_DataConfig.i32MaxSessions);
+	printf("  DB: %s@%s:%d/%s, Pool=%d\n",
 		m_DataConfig.dbConfig.szUser,
 		m_DataConfig.dbConfig.szHost,
 		m_DataConfig.dbConfig.ui16Port,

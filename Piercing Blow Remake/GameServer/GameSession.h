@@ -175,7 +175,8 @@ public:
 	int				GetDeaths() const			{ return m_i32Deaths; }
 	int				GetHeadshots() const		{ return m_i32Headshots; }
 	int				GetWins() const				{ return m_i32Wins; }
-	uint32_t		GetColorNick() const		{ return 0; }	// TODO: store color nick from inventory
+	uint32_t		GetColorNick() const;
+	void			SetColorNick(uint32_t ui32Color)	{ m_ui32ColorNick = ui32Color; }
 	int				GetLosses() const			{ return m_i32Losses; }
 	GameTask		GetMainTask() const			{ return m_eMainTask; }
 
@@ -861,6 +862,7 @@ private:
 	int				m_i32Headshots;
 	int				m_i32Wins;
 	int				m_i32Losses;
+	uint32_t		m_ui32ColorNick;
 
 	// Battle state
 	uint32_t		m_stUsedWeapon;		// Last used weapon ID in battle

@@ -4,6 +4,7 @@
 #pragma once
 #include "i3NetworkSession.h"
 #include "i3NetworkPacket.h"
+#include "InterServerProtocol.h"
 
 // Estados de la sesion del ConnectServer
 // Sesion de vida corta: el cliente conecta, se autentica, selecciona servidor y se desconecta
@@ -52,6 +53,9 @@ public:
 	// Timeout
 	bool				IsTimedOut() const;
 
+	// Callback from ModuleDataClient
+	void				OnLoginResult(int i32Result, int64_t i64UID, uint8_t ui8AuthLevel);
+
 private:
 	// Packet handlers
 	void				OnPacketConnectReq(char* pData, INT32 i32Size);
@@ -59,6 +63,16 @@ private:
 	void				OnPacketServerListReq(char* pData, INT32 i32Size);
 	void				OnPacketServerSelectReq(char* pData, INT32 i32Size);
 	void				OnPacketHeartBitReq(char* pData, INT32 i32Size);
+
+	// Inter-server packet handlers (from GameServer connections)
+	void				OnISServerRegisterReq(char* pData, INT32 i32Size);
+	void				OnISHeartbeatReq(char* pData, INT32 i32Size);
+	void				OnISServerStatusUpdateReq(char* pData, INT32 i32Size);
+
+	// Send auth token to GameServer session
+	bool				SendAuthTransferToGameServer(int i32ServerId,
+								int64_t i64UID, uint32_t ui32AuthToken,
+								const char* pszUsername, uint32_t ui32ClientIP);
 
 	// Helpers
 	void				SendConnectAck();

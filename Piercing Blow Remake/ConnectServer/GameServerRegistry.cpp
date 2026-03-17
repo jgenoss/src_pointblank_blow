@@ -5,6 +5,7 @@
 GameServerRegistry::GameServerRegistry()
 {
 	memset(m_dwLastHeartbeat, 0, sizeof(m_dwLastHeartbeat));
+	memset(m_i32SessionIdx, -1, sizeof(m_i32SessionIdx));
 }
 
 GameServerRegistry::~GameServerRegistry()
@@ -34,7 +35,10 @@ bool GameServerRegistry::UnregisterServer(int serverId)
 	if (m_ServerList.RemoveServer(serverId))
 	{
 		if (serverId >= 0 && serverId < MAX_REGISTERED_SERVERS)
+		{
 			m_dwLastHeartbeat[serverId] = 0;
+			m_i32SessionIdx[serverId] = -1;
+		}
 
 		printf("[GameServerRegistry] Unregistered server ID=%d\n", serverId);
 		return true;
@@ -108,6 +112,19 @@ const ServerInfo* GameServerRegistry::GetLeastLoadedServer() const
 	}
 
 	return pBest;
+}
+
+void GameServerRegistry::SetServerSessionIdx(int serverId, int sessionIdx)
+{
+	if (serverId >= 0 && serverId < MAX_REGISTERED_SERVERS)
+		m_i32SessionIdx[serverId] = sessionIdx;
+}
+
+int GameServerRegistry::GetServerSessionIdx(int serverId) const
+{
+	if (serverId >= 0 && serverId < MAX_REGISTERED_SERVERS)
+		return m_i32SessionIdx[serverId];
+	return -1;
 }
 
 void GameServerRegistry::Update()

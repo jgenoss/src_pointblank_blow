@@ -7,6 +7,7 @@
 
 class ConnectSessionManager;
 class GameServerRegistry;
+class ModuleDataClient;
 
 // Configuracion especifica del ConnectServer
 struct ConnectServerConfig : public BaseServerConfig
@@ -50,11 +51,16 @@ public:
 	ConnectSessionManager*	GetSessionManager()			{ return m_pConnectSessionManager; }
 	GameServerRegistry*		GetRegistry()				{ return m_pRegistry; }
 	ServerList*				GetServerList()				{ return &m_ServerList; }
+	ModuleDataClient*		GetModuleDataClient()		{ return m_pModuleDataClient; }
+
+	// Initialize inter-server modules
+	bool					InitializeModules(const char* pszDataServerIP, uint16_t ui16DataServerPort);
 
 private:
 	ConnectSessionManager*	m_pConnectSessionManager;
 	GameServerRegistry*		m_pRegistry;
 	ServerList				m_ServerList;
+	ModuleDataClient*		m_pModuleDataClient;
 };
 
 extern ConnectServerContext* g_pConnectServerContext;

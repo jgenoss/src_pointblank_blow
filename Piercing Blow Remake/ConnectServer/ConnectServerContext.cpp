@@ -1,6 +1,8 @@
 #include "ConnectServerContext.h"
 #include "ConnectSessionManager.h"
 #include "GameServerRegistry.h"
+#include "ModuleDataClient.h"
+#include "i3IniParser.h"
 #include <cstdio>
 #include <cstring>
 
@@ -16,6 +18,7 @@ I3_CLASS_INSTANCE(ConnectServerContext, i3NetworkServerContext);
 ConnectServerContext::ConnectServerContext()
 	: m_pConnectSessionManager(nullptr)
 	, m_pRegistry(nullptr)
+	, m_pModuleDataClient(nullptr)
 {
 }
 
@@ -45,6 +48,28 @@ BOOL ConnectServerContext::OnCreate(UINT8 SocketCount, UINT32* pAddress, UINT16*
 	return TRUE;
 }
 
+bool ConnectServerContext::InitializeModules(const char* pszDataServerIP, uint16_t ui16DataServerPort)
+{
+	// Create and initialize DataServer client module
+	m_pModuleDataClient = new ModuleDataClient();
+	m_pModuleDataClient->SetSessionManager(m_pConnectSessionManager);
+
+	if (!m_pModuleDataClient->Initialize("DataClient", pszDataServerIP, ui16DataServerPort, 1))
+	{
+		printf("[ConnectServerContext] ERROR: Failed to initialize ModuleDataClient\n");
+		delete m_pModuleDataClient;
+		m_pModuleDataClient = nullptr;
+		return false;
+	}
+
+	// Start the module thread
+	m_pModuleDataClient->StartThread(nullptr);
+
+	printf("[ConnectServerContext] ModuleDataClient initialized -> %s:%d\n",
+		pszDataServerIP, ui16DataServerPort);
+	return true;
+}
+
 void ConnectServerContext::OnUpdate(INT32 Command)
 {
 	// Actualizar registry de GameServers (verificar heartbeats, remover muertos)
@@ -54,6 +79,13 @@ void ConnectServerContext::OnUpdate(INT32 Command)
 
 BOOL ConnectServerContext::OnDestroy()
 {
+	if (m_pModuleDataClient)
+	{
+		m_pModuleDataClient->Destroy();
+		delete m_pModuleDataClient;
+		m_pModuleDataClient = nullptr;
+	}
+
 	if (m_pRegistry)
 	{
 		delete m_pRegistry;
@@ -80,8 +112,7 @@ ConnectServer::~ConnectServer()
 
 bool ConnectServer::OnLoadConfig(const char* pszConfigPath)
 {
-	// TODO: Cargar desde archivo INI real
-	// Por ahora usar valores por defecto para desarrollo
+	// Defaults
 	strcpy(m_ConnectConfig.szBindIP, "0.0.0.0");
 	m_ConnectConfig.ui16BindPort			= 40000;
 	m_ConnectConfig.i32MaxSessions			= 500;
@@ -92,19 +123,48 @@ bool ConnectServer::OnLoadConfig(const char* pszConfigPath)
 	strcpy(m_ConnectConfig.szDataServerIP, "127.0.0.1");
 	m_ConnectConfig.ui16DataServerPort		= 40100;
 
-	// Copiar al config base
+	// Load from INI file (override defaults)
+	i3IniParser ini;
+	if (ini.Load(pszConfigPath))
+	{
+		const char* pszBindIP = ini.GetString("ConnectServer", "BindIP", "0.0.0.0");
+		strncpy_s(m_ConnectConfig.szBindIP, pszBindIP, _TRUNCATE);
+		m_ConnectConfig.ui16BindPort		= (uint16_t)ini.GetInt("ConnectServer", "BindPort", 40000);
+		m_ConnectConfig.i32MaxSessions		= ini.GetInt("ConnectServer", "MaxSessions", 500);
+		m_ConnectConfig.i32WorkerThreadCount = ini.GetInt("ConnectServer", "WorkerThreads", 4);
+		m_ConnectConfig.ui8SocketTimeout	= (uint8_t)ini.GetInt("ConnectServer", "SocketTimeout", 30);
+		m_ConnectConfig.ui16GameServerPort	= (uint16_t)ini.GetInt("ConnectServer", "GameServerPort", 40001);
+		m_ConnectConfig.i32MaxClientSessions = ini.GetInt("ConnectServer", "MaxClientSessions", 500);
+
+		const char* pszDSIP = ini.GetString("DataServer", "IP", "127.0.0.1");
+		strncpy_s(m_ConnectConfig.szDataServerIP, pszDSIP, _TRUNCATE);
+		m_ConnectConfig.ui16DataServerPort	= (uint16_t)ini.GetInt("DataServer", "Port", 40100);
+	}
+	else
+	{
+		printf("[ConnectServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
+	}
+
+	// Copy to base config
 	m_Config = m_ConnectConfig;
 
-	printf("[ConnectServer] Config loaded: ClientPort=%d, GameServerPort=%d\n",
-		m_ConnectConfig.ui16BindPort, m_ConnectConfig.ui16GameServerPort);
+	printf("[ConnectServer] Config loaded: Bind=%s:%d, GameServerPort=%d\n",
+		m_ConnectConfig.szBindIP, m_ConnectConfig.ui16BindPort, m_ConnectConfig.ui16GameServerPort);
+	printf("  DataServer: %s:%d\n",
+		m_ConnectConfig.szDataServerIP, m_ConnectConfig.ui16DataServerPort);
 
 	return true;
 }
 
 bool ConnectServer::OnInitialize()
 {
-	// Inicializaciones adicionales del ConnectServer
-	// (Conexion a DataServer se hara via ModuleBase en fase posterior)
+	// Initialize DataServer connection module
+	if (m_pConnectContext)
+	{
+		m_pConnectContext->InitializeModules(
+			m_ConnectConfig.szDataServerIP,
+			m_ConnectConfig.ui16DataServerPort);
+	}
 	return true;
 }
 
