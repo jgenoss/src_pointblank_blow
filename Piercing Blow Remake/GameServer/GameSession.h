@@ -330,6 +330,12 @@ private:
 	void			OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size);
 	void			OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size);
+
+	// Observer spectator handlers (GameSessionObserver.cpp)
+	void			OnObserverViewModeReq(char* pData, INT32 i32Size);
+	void			OnObserverFollowPlayerReq(char* pData, INT32 i32Size);
+	void			OnObserverScoreboardReq(char* pData, INT32 i32Size);
+
 	void			OnRoomLoadingStartReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoEnterReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoLeaveReq(char* pData, INT32 i32Size);
@@ -474,6 +480,12 @@ private:
 
 	// Quest helpers
 	void			UpdateQuestProgress(int kills, int deaths, int headshots, bool won);
+
+	// Quest Event handlers (GameSessionQuestEvent.cpp)
+	void			UpdateEventQuestProgress(int kills, int deaths, int headshots, bool won,
+								uint32_t weaponClass, uint32_t stageId,
+								int bombPlants, int bombDefuses, int multiKills,
+								int consecutiveKills, int playTimeMinutes, int damageDealt);
 
 	// Packet handlers - Medal (GameSessionMedal.cpp)
 	void			OnGetMedalSystemReq(char* pData, INT32 i32Size);
@@ -881,6 +893,9 @@ private:
 
 	// Quest (7I) - Quest card sets and progress
 	GameQuestData	m_QuestData;
+
+	// Event/Honor/Period quests (1.5 quest system)
+	GameEventQuestData	m_EventQuestData;
 
 	// Social (7K) - Friends and block list
 	GameFriendInfo	m_Friends[MAX_FRIEND_COUNT];

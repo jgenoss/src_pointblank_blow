@@ -1,12 +1,14 @@
 #include "pch.h"
 #include "HitValidator.h"
 #include "CollisionSystem.h"
+#include "PhysicsEngine.h"
 #include "BattleMember.h"
 #include "ConfigXML.h"
 #include <cmath>
 
 HitValidator::HitValidator()
 	: m_pCollision(nullptr)
+	, m_pPhysicsEngine(nullptr)
 	, m_pConfig(nullptr)
 {
 }
@@ -52,21 +54,30 @@ bool HitValidator::ValidateHit(BattleMember* pShooter, BattleMember* pTarget,
 	}
 
 	// 2. Line-of-sight check (wall hack detection)
-	if (m_pCollision && m_pCollision->IsInitialized())
+	// Adjust positions to center-mass height (about 85cm from feet)
+	float shooterCenter[3] = { shooterPos[0], shooterPos[1] + PHYSICS_CHARACTER_MASS_CENTER, shooterPos[2] };
+	float targetCenter[3] = { targetPos[0], targetPos[1] + PHYSICS_CHARACTER_MASS_CENTER, targetPos[2] };
+
+	if (bHeadshot)
 	{
-		// Adjust positions to center-mass height (about 85cm from feet)
-		float shooterCenter[3] = { shooterPos[0], shooterPos[1] + 85.0f, shooterPos[2] };
-		float targetCenter[3] = { targetPos[0], targetPos[1] + 85.0f, targetPos[2] };
+		// For headshots, check line to head position (about 160cm)
+		targetCenter[1] = targetPos[1] + PHYSICS_HEAD_HEIGHT;
+	}
 
-		if (bHeadshot)
-		{
-			// For headshots, check line to head position (about 160cm)
-			targetCenter[1] = targetPos[1] + 160.0f;
-		}
-
-		if (!m_pCollision->CheckLineOfSight(shooterCenter, targetCenter))
+	// Prefer PhysicsEngine (PhysX or unified CPU) over legacy CollisionSystem
+	if (m_pPhysicsEngine && m_pPhysicsEngine->IsInitialized())
+	{
+		if (!m_pPhysicsEngine->CheckLineOfSight(shooterCenter, targetCenter))
 		{
 			// Wall between shooter and target
+			return false;
+		}
+	}
+	else if (m_pCollision && m_pCollision->IsInitialized())
+	{
+		// Legacy fallback
+		if (!m_pCollision->CheckLineOfSight(shooterCenter, targetCenter))
+		{
 			return false;
 		}
 	}
@@ -123,11 +134,16 @@ bool HitValidator::ValidateMovement(BattleMember* pMember, const float* newPos, 
 	}
 
 	// Position validity check (optional - only if collision data loaded)
-	if (m_pCollision && m_pCollision->IsInitialized())
+	// Don't validate every update - too expensive
+	// Only check every ~1 second
+	if (dwElapsedMs > 1000)
 	{
-		// Don't validate every update - too expensive
-		// Only check every ~1 second
-		if (dwElapsedMs > 1000)
+		if (m_pPhysicsEngine && m_pPhysicsEngine->IsInitialized())
+		{
+			if (!m_pPhysicsEngine->IsPositionValid(newPos))
+				return false;
+		}
+		else if (m_pCollision && m_pCollision->IsInitialized())
 		{
 			if (!m_pCollision->IsPositionValid(newPos))
 				return false;
@@ -141,6 +157,10 @@ bool HitValidator::ValidatePosition(const float* pos) const
 {
 	if (!pos)
 		return false;
+
+	// Prefer PhysicsEngine over legacy CollisionSystem
+	if (m_pPhysicsEngine && m_pPhysicsEngine->IsInitialized())
+		return m_pPhysicsEngine->IsPositionValid(pos);
 
 	if (m_pCollision && m_pCollision->IsInitialized())
 		return m_pCollision->IsPositionValid(pos);

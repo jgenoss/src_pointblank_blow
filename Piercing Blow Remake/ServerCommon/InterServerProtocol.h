@@ -1539,6 +1539,55 @@ struct IS_MERCENARY_RESULT_ACK
 };
 
 // ============================================================================
+// Control Server Protocol (ControlServer <-> GameServer)
+// ============================================================================
+
+enum Protocol_InterServer_Control
+{
+	PROTOCOL_IS_CONTROL = 0x7400,
+
+	//----------------------------------------------------------
+	// ControlServer -> GameServer: Server status query
+	PROTOCOL_IS_CONTROL_STATUS_REQ,
+	PROTOCOL_IS_CONTROL_STATUS_ACK,
+
+	// ControlServer -> GameServer: Kick player
+	PROTOCOL_IS_CONTROL_KICK_REQ,
+	PROTOCOL_IS_CONTROL_KICK_ACK,
+
+	// ControlServer -> GameServer: Ban player (also forwards to DataServer)
+	PROTOCOL_IS_CONTROL_BAN_REQ,
+	PROTOCOL_IS_CONTROL_BAN_ACK,
+
+	// ControlServer -> GameServer: Send announcement to all players
+	PROTOCOL_IS_CONTROL_ANNOUNCE_REQ,
+	PROTOCOL_IS_CONTROL_ANNOUNCE_ACK,
+
+	// ControlServer -> GameServer: Reload server config
+	PROTOCOL_IS_CONTROL_RELOAD_REQ,
+	PROTOCOL_IS_CONTROL_RELOAD_ACK,
+
+	// ControlServer -> GameServer: Query player info
+	PROTOCOL_IS_CONTROL_PLAYERINFO_REQ,
+	PROTOCOL_IS_CONTROL_PLAYERINFO_ACK,
+
+	// ControlServer -> GameServer: Set boost event
+	PROTOCOL_IS_CONTROL_BOOST_SET_REQ,
+	PROTOCOL_IS_CONTROL_BOOST_SET_ACK,
+
+	// ControlServer -> GameServer: Room list query
+	PROTOCOL_IS_CONTROL_ROOMLIST_REQ,
+	PROTOCOL_IS_CONTROL_ROOMLIST_ACK,
+
+	// ControlServer -> GameServer: Graceful shutdown
+	PROTOCOL_IS_CONTROL_SHUTDOWN_REQ,
+	PROTOCOL_IS_CONTROL_SHUTDOWN_ACK,
+
+	// GameServer -> ControlServer: Log event push
+	PROTOCOL_IS_CONTROL_LOG_NOTIFY,
+};
+
+// ============================================================================
 // Shop Coupon
 // ============================================================================
 
@@ -1556,6 +1605,170 @@ struct IS_SHOP_COUPON_ACK
 	int			i32Result;			// 0=OK, 1=invalid, 2=expired, 3=already_used, 4=limit_reached
 	int			i32DiscountValue;
 	uint8_t		ui8DiscountType;	// 0=fixed, 1=percent
+};
+
+// ============================================================================
+// Control Server Packet Structures
+// ============================================================================
+
+// Status request (ControlServer -> GameServer)
+struct IS_CONTROL_STATUS_REQ
+{
+	int			i32RequestId;		// Echo back in ACK
+};
+
+struct IS_CONTROL_STATUS_ACK
+{
+	int			i32RequestId;
+	int			i32Result;			// 0=OK
+	int			i32CCU;				// Current concurrent users
+	int			i32MaxPlayers;
+	int			i32RoomCount;
+	int			i32BattleCount;
+	int			i32ChannelCount;
+	DWORD		dwUptime;			// Seconds since start
+};
+
+// Kick request (ControlServer -> GameServer)
+struct IS_CONTROL_KICK_REQ
+{
+	int64_t		i64UID;
+	char		szReason[128];
+};
+
+struct IS_CONTROL_KICK_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;			// 0=OK, 1=not_found
+};
+
+// Ban request (ControlServer -> GameServer, GameServer forwards to DataServer)
+struct IS_CONTROL_BAN_REQ
+{
+	int64_t		i64UID;
+	int			i32Duration;		// Seconds, 0 = permanent
+	char		szReason[128];
+	int64_t		i64BannedByUID;		// Admin UID (0 for system)
+};
+
+struct IS_CONTROL_BAN_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;			// 0=OK, 1=not_found, 2=error
+};
+
+// Announce request (ControlServer -> GameServer)
+struct IS_CONTROL_ANNOUNCE_REQ
+{
+	char		szMessage[512];
+	uint8_t		ui8RepeatCount;		// 0 = once, N = repeat N times
+	uint16_t	ui16IntervalSec;	// Interval between repeats
+};
+
+struct IS_CONTROL_ANNOUNCE_ACK
+{
+	int			i32Result;			// 0=OK
+};
+
+// Reload config request (ControlServer -> GameServer)
+struct IS_CONTROL_RELOAD_REQ
+{
+	uint8_t		ui8ReloadFlags;		// Bitmask: 1=config, 2=shop, 4=maps, 8=notices, 16=boosts
+};
+
+struct IS_CONTROL_RELOAD_ACK
+{
+	int			i32Result;			// 0=OK
+	uint8_t		ui8ReloadedFlags;	// Flags that were actually reloaded
+};
+
+// Player info query (ControlServer -> GameServer)
+struct IS_CONTROL_PLAYERINFO_REQ
+{
+	int64_t		i64UID;
+};
+
+struct IS_CONTROL_PLAYERINFO_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;			// 0=OK, 1=not_found (offline)
+	char		szNickname[64];
+	int			i32Level;
+	int64_t		i64Exp;
+	int			i32Cash;
+	int			i32GP;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32RankId;
+	int			i32ClanId;
+	int			i32RoomIdx;			// -1 if not in room
+	int			i32ChannelIdx;		// -1 if not in channel
+	uint32_t	ui32ClientIP;		// Connected IP
+	DWORD		dwSessionTime;		// Seconds since login
+};
+
+// Boost event set (ControlServer -> GameServer)
+struct IS_CONTROL_BOOST_SET_REQ
+{
+	int			i32EventType;		// Boost type (0=EXP, 1=GP, 2=both)
+	int			i32ExpMultiplier;	// Percentage (100=normal, 200=double)
+	int			i32GPMultiplier;
+	uint32_t	ui32StartTime;		// Unix timestamp
+	uint32_t	ui32EndTime;
+};
+
+struct IS_CONTROL_BOOST_SET_ACK
+{
+	int			i32Result;			// 0=OK
+};
+
+// Room list query (ControlServer -> GameServer)
+struct IS_CONTROL_ROOMLIST_REQ
+{
+	int			i32ChannelNum;		// -1 for all channels
+	int			i32Offset;			// Pagination
+	int			i32Limit;			// Max entries (max 50)
+};
+
+struct IS_CONTROL_ROOM_ENTRY
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8GameMode;
+	uint8_t		ui8MapIndex;
+	uint8_t		ui8PlayerCount;
+	uint8_t		ui8MaxPlayers;
+	uint8_t		ui8State;			// 0=waiting, 1=playing
+	char		szRoomName[64];
+};
+
+struct IS_CONTROL_ROOMLIST_ACK
+{
+	int			i32Result;
+	int			i32TotalRooms;
+	int			i32Count;			// Number of IS_CONTROL_ROOM_ENTRY following
+	// Followed by IS_CONTROL_ROOM_ENTRY[i32Count]
+};
+
+// Shutdown request (ControlServer -> GameServer)
+struct IS_CONTROL_SHUTDOWN_REQ
+{
+	int			i32DelaySec;		// Seconds until shutdown (0 = immediate)
+	char		szReason[128];
+};
+
+struct IS_CONTROL_SHUTDOWN_ACK
+{
+	int			i32Result;			// 0=OK
+};
+
+// Log notification (GameServer -> ControlServer)
+struct IS_CONTROL_LOG_NOTIFY
+{
+	uint8_t		ui8LogLevel;		// 0=info, 1=warning, 2=error, 3=critical
+	uint32_t	ui32Timestamp;		// Unix timestamp
+	char		szSource[32];		// e.g. "GameServer", "BattleServer"
+	char		szMessage[256];
 };
 
 #pragma pack(pop)

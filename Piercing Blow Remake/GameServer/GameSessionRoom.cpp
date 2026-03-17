@@ -5,6 +5,7 @@
 #include "GameSessionManager.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "ObserverHelper.h"
 
 // ============================================================================
 // Room Creation & Join (7B)
@@ -666,11 +667,13 @@ void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
 			// Move to observer
 			slot.bIsObserver = true;
 			slot.ui8State = SLOT_STATE_NORMAL;	// Reset ready state
+			ObserverHelper::OnObserverJoined(m_pRoom, this, m_i32SlotIdx);
 			printf("[GameSession] Observer: slot %d -> observer, UID=%lld\n", m_i32SlotIdx, m_i64UID);
 		}
 		else if (direction == 0 && slot.bIsObserver)
 		{
 			// Move back to normal
+			ObserverHelper::OnObserverLeft(m_pRoom, this);
 			slot.bIsObserver = false;
 			slot.ui8State = SLOT_STATE_NORMAL;
 			printf("[GameSession] Observer: slot %d -> normal, UID=%lld\n", m_i32SlotIdx, m_i64UID);

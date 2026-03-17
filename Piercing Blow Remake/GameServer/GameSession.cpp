@@ -360,6 +360,12 @@ INT32 GameSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_ROOM_CHANGE_ROOM_OPTIONINFO_REQ:	OnRoomChangeOptionInfoReq(pData, dataSize);break;
 	case PROTOCOL_ROOM_INVITE_LOBBY_USER_REQ:		OnRoomInviteLobbyUserReq(pData, dataSize);	break;
 	case PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_REQ:	OnRoomChangeObserverSlotReq(pData, dataSize);break;
+
+	// ---- Observer spectator (GameSessionObserver.cpp) ----
+	case (PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK + 9):		OnObserverViewModeReq(pData, dataSize);		break;
+	case (PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK + 11):	OnObserverFollowPlayerReq(pData, dataSize);	break;
+	case (PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK + 13):	OnObserverScoreboardReq(pData, dataSize);	break;
+
 	case PROTOCOL_ROOM_LOADING_START_REQ:			OnRoomLoadingStartReq(pData, dataSize);		break;
 	case PROTOCOL_ROOM_INFO_ENTER_REQ:				OnRoomInfoEnterReq(pData, dataSize);		break;
 	case PROTOCOL_ROOM_INFO_LEAVE_REQ:				OnRoomInfoLeaveReq(pData, dataSize);		break;

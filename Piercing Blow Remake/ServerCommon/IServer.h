@@ -9,6 +9,7 @@ enum class ServerType
 	Game,
 	Battle,
 	Data,
+	Control,
 
 	Count
 };
