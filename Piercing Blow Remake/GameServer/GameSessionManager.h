@@ -47,6 +47,8 @@ public:
 	void				BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* pPacket);
 	void				BroadcastToAll(i3NetworkPacket* pPacket);
 	void				BroadcastAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
+	void				BroadcastKnockWarning(const char* pszMessage, uint16_t ui16MsgLen);
+	void				BroadcastKnockShutdown();
 
 	// Stats
 	int					GetActiveCount() const		{ return (int)m_lActiveCount; }

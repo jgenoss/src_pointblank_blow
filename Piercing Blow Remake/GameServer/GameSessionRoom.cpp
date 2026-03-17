@@ -5,6 +5,7 @@
 #include "GameSessionManager.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "ObserverHelper.h"
 
 // ============================================================================
 // Room Creation & Join (7B)
@@ -68,24 +69,11 @@ void GameSession::OnRoomCreateReq(char* pData, INT32 i32Size)
 	int roomIdx = g_pRoomManager->OnCreateRoom(this, &info);
 
 	// Send ACK
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_CREATE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = (roomIdx >= 0) ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	uint8_t slotIdx = 0;
 
 	if (roomIdx >= 0)
 	{
-		memcpy(buffer + offset, &roomIdx, sizeof(int));		offset += sizeof(int);
-		uint8_t slotIdx = 0;
-		memcpy(buffer + offset, &slotIdx, sizeof(uint8_t));	offset += sizeof(uint8_t);
-
 		Room* pRoom = g_pRoomManager->GetRoom(m_i32ChannelNum, roomIdx);
 		m_i32RoomIdx = roomIdx;
 		m_i32SlotIdx = 0;
@@ -95,12 +83,11 @@ void GameSession::OnRoomCreateReq(char* pData, INT32 i32Size)
 		printf("[GameSession] Room created - Index=%d, Room=%d, Ch=%d, Mode=%d, Map=%d\n",
 			GetIndex(), roomIdx, m_i32ChannelNum, info.ui8GameMode, info.ui8MapIndex);
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CREATE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&roomIdx, sizeof(int));
+	packet.WriteData(&slotIdx, sizeof(uint8_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomJoinReq(char* pData, INT32 i32Size)
@@ -159,34 +146,21 @@ void GameSession::OnRoomJoinReq(char* pData, INT32 i32Size)
 
 	int slot = g_pRoomManager->OnJoinRoom(this, m_i32ChannelNum, roomIdx, autoTeam);
 
-	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_JOIN_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = (slot >= 0) ? 0 : 4;	// 4 = full
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	uint8_t slotByte = 0;
 
 	if (slot >= 0)
 	{
-		uint8_t slotByte = (uint8_t)slot;
-		memcpy(buffer + offset, &slotByte, sizeof(uint8_t));	offset += sizeof(uint8_t);
-
+		slotByte = (uint8_t)slot;
 		m_i32RoomIdx = roomIdx;
 		m_i32SlotIdx = slot;
 		m_pRoom = pRoom;
 		m_eMainTask = GAME_TASK_READY_ROOM;
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_JOIN_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotByte, sizeof(uint8_t));
+	SendPacketMessage(&packet);
 
 	// Notify others
 	if (slot >= 0)
@@ -217,15 +191,6 @@ void GameSession::OnRoomGetSlotInfoReq(char* pData, INT32 i32Size)
 	if (!m_pRoom)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[2048];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_SLOTINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	// Room info header
 	int roomIdx = m_pRoom->GetRoomIdx();
 	uint8_t gameMode = m_pRoom->GetGameMode();
@@ -234,37 +199,33 @@ void GameSession::OnRoomGetSlotInfoReq(char* pData, INT32 i32Size)
 	uint8_t roomState = m_pRoom->GetRoomState();
 	uint8_t ownerSlot = (uint8_t)m_pRoom->GetOwnerSlot();
 
-	memcpy(buffer + offset, &roomIdx, sizeof(int));	offset += sizeof(int);
-	memcpy(buffer + offset, &gameMode, 1);			offset += 1;
-	memcpy(buffer + offset, &mapIndex, 1);			offset += 1;
-	memcpy(buffer + offset, &maxPlayers, 1);		offset += 1;
-	memcpy(buffer + offset, &roomState, 1);			offset += 1;
-	memcpy(buffer + offset, &ownerSlot, 1);			offset += 1;
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_SLOTINFO_ACK);
+	packet.WriteData(&roomIdx, sizeof(int));
+	packet.WriteData(&gameMode, 1);
+	packet.WriteData(&mapIndex, 1);
+	packet.WriteData(&maxPlayers, 1);
+	packet.WriteData(&roomState, 1);
+	packet.WriteData(&ownerSlot, 1);
 
 	// Per-slot info (16 slots)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		const GameSlotInfo& si = m_pRoom->GetSlotInfo(i);
-		memcpy(buffer + offset, &si.ui8State, 1);			offset += 1;
-		memcpy(buffer + offset, &si.ui8Team, 1);			offset += 1;
-		memcpy(buffer + offset, &si.i32SessionIdx, 4);		offset += 4;
-		memcpy(buffer + offset, &si.ui8Rank, 1);			offset += 1;
-		memcpy(buffer + offset, &si.ui32ClanIdx, 4);		offset += 4;
-		memcpy(buffer + offset, &si.ui32ClanMark, 4);		offset += 4;
+		packet.WriteData(&si.ui8State, 1);
+		packet.WriteData(&si.ui8Team, 1);
+		packet.WriteData(&si.i32SessionIdx, 4);
+		packet.WriteData(&si.ui8Rank, 1);
+		packet.WriteData(&si.ui32ClanIdx, 4);
+		packet.WriteData(&si.ui32ClanMark, 4);
 
 		// Nickname for occupied slots
 		char nick[64] = {0};
 		GameSession* pSlotSession = m_pRoom->GetSlotSession(i);
 		if (pSlotSession)
 			strncpy_s(nick, pSlotSession->GetNickname(), _TRUNCATE);
-		memcpy(buffer + offset, nick, 64);					offset += 64;
+		packet.WriteData(nick, 64);
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomGetPlayerInfoReq(char* pData, INT32 i32Size)
@@ -280,35 +241,21 @@ void GameSession::OnRoomGetPlayerInfoReq(char* pData, INT32 i32Size)
 	if (!pTarget)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_PLAYERINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &targetSlot, 1);				offset += 1;
-
 	char nick[64] = {0};
 	strncpy_s(nick, pTarget->GetNickname(), _TRUNCATE);
-	memcpy(buffer + offset, nick, 64);						offset += 64;
 
 	int level = pTarget->GetLevel();
 	int rankId = pTarget->GetRankId();
 	int kills = pTarget->GetKills();
 	int deaths = pTarget->GetDeaths();
-	memcpy(buffer + offset, &level, sizeof(int));			offset += sizeof(int);
-	memcpy(buffer + offset, &rankId, sizeof(int));			offset += sizeof(int);
-	memcpy(buffer + offset, &kills, sizeof(int));			offset += sizeof(int);
-	memcpy(buffer + offset, &deaths, sizeof(int));			offset += sizeof(int);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_PLAYERINFO_ACK);
+	packet.WriteData(&targetSlot, 1);
+	packet.WriteData(nick, 64);
+	packet.WriteData(&level, sizeof(int));
+	packet.WriteData(&rankId, sizeof(int));
+	packet.WriteData(&kills, sizeof(int));
+	packet.WriteData(&deaths, sizeof(int));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomChangeRoomInfoReq(char* pData, INT32 i32Size)
@@ -339,47 +286,36 @@ void GameSession::OnRoomChangeRoomInfoReq(char* pData, INT32 i32Size)
 
 	bool ok = m_pRoom->OnChangeRoomInfo(this, &newInfo);
 
-	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHANGE_ROOMINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = ok ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	uint8_t gm = 0, mi = 0, rt = 0, st = 0, wf = 0, ifl = 0;
+	uint32_t stageId = 0;
+	int mp = 0;
 
 	if (ok)
 	{
-		uint8_t gm = m_pRoom->GetGameMode();
-		uint8_t mi = m_pRoom->GetMapIndex();
-		uint8_t rt = m_pRoom->GetRoundType();
-		uint8_t st = m_pRoom->GetSubType();
-		uint8_t wf = m_pRoom->GetWeaponFlag();
-		uint8_t ifl = m_pRoom->GetInfoFlag();
-		uint32_t stageId = m_pRoom->GetStageId();
-		int mp = m_pRoom->GetMaxPlayers();
-
-		memcpy(buffer + offset, &stageId, 4);	offset += 4;
-		memcpy(buffer + offset, &gm, 1);		offset += 1;
-		memcpy(buffer + offset, &mi, 1);		offset += 1;
-		memcpy(buffer + offset, &mp, 4);		offset += 4;
-		memcpy(buffer + offset, &rt, 1);		offset += 1;
-		memcpy(buffer + offset, &st, 1);		offset += 1;
-		memcpy(buffer + offset, &wf, 1);		offset += 1;
-		memcpy(buffer + offset, &ifl, 1);		offset += 1;
+		gm = m_pRoom->GetGameMode();
+		mi = m_pRoom->GetMapIndex();
+		rt = m_pRoom->GetRoundType();
+		st = m_pRoom->GetSubType();
+		wf = m_pRoom->GetWeaponFlag();
+		ifl = m_pRoom->GetInfoFlag();
+		stageId = m_pRoom->GetStageId();
+		mp = m_pRoom->GetMaxPlayers();
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHANGE_ROOMINFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&stageId, 4);
+	packet.WriteData(&gm, 1);
+	packet.WriteData(&mi, 1);
+	packet.WriteData(&mp, 4);
+	packet.WriteData(&rt, 1);
+	packet.WriteData(&st, 1);
+	packet.WriteData(&wf, 1);
+	packet.WriteData(&ifl, 1);
 	if (ok)
 		m_pRoom->SendToAll(&packet);
 	else
-		SendMessage(&packet);
+		SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomChangePasswdReq(char* pData, INT32 i32Size)
@@ -438,32 +374,16 @@ void GameSession::OnRoomTeamChangeReq(char* pData, INT32 i32Size)
 	int newTeam = *(uint8_t*)pData;
 	bool ok = m_pRoom->OnChangeTeam(this, newTeam);
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_PERSONAL_TEAM_CHANGE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = ok ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
+	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
+	uint8_t team = (uint8_t)newTeam;
 
-	if (ok)
-	{
-		uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
-		uint8_t team = (uint8_t)newTeam;
-		memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
-		memcpy(buffer + offset, &team, 1);		offset += 1;
-	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_PERSONAL_TEAM_CHANGE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&team, 1);
 	if (ok) m_pRoom->SendToAll(&packet);
-	else SendMessage(&packet);
+	else SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomRequestMainReq(char* pData, INT32 i32Size)
@@ -489,30 +409,14 @@ void GameSession::OnRoomRequestMainChangeReq(char* pData, INT32 i32Size)
 	int targetSlot = *(uint8_t*)pData;
 	bool ok = m_pRoom->OnTransferOwner(this, targetSlot);
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = ok ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint8_t newOwner = ok ? (uint8_t)m_pRoom->GetOwnerSlot() : 0;
 
-	if (ok)
-	{
-		uint8_t newOwner = (uint8_t)m_pRoom->GetOwnerSlot();
-		memcpy(buffer + offset, &newOwner, 1);	offset += 1;
-	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&newOwner, 1);
 	if (ok) m_pRoom->SendToAll(&packet);
-	else SendMessage(&packet);
+	else SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomChangeOptionInfoReq(char* pData, INT32 i32Size)
@@ -531,6 +435,9 @@ void GameSession::OnRoomChatReq(char* pData, INT32 i32Size)
 	if (!m_pRoom || i32Size <= 0)
 		return;
 
+	if (IsMuted())
+		return;
+
 	// Check for GM admin commands (starts with '/')
 	if (i32Size >= 1 && pData[0] == '/')
 	{
@@ -538,26 +445,13 @@ void GameSession::OnRoomChatReq(char* pData, INT32 i32Size)
 			return;	// Command consumed, don't broadcast
 	}
 
-	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHATTING_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &slotIdx, sizeof(uint8_t));		offset += sizeof(uint8_t);
-
 	uint16_t msgSize = (uint16_t)min(i32Size, 256);
-	memcpy(buffer + offset, &msgSize, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, pData, msgSize);				offset += msgSize;
 
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHATTING_ACK);
+	packet.WriteData(&slotIdx, sizeof(uint8_t));
+	packet.WriteData(&msgSize, sizeof(uint16_t));
+	packet.WriteData(pData, msgSize);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -601,31 +495,16 @@ void GameSession::OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size)
 			continue;
 
 		// Build invite notification for target
-		i3NetworkPacket invitePacket;
-		char invBuf[256];
-		int invOff = 0;
-
-		uint16_t invSize = 0;
-		uint16_t invProto = PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK;
-		invOff += sizeof(uint16_t);
-		memcpy(invBuf + invOff, &invProto, sizeof(uint16_t));	invOff += sizeof(uint16_t);
-
 		int32_t invResult = 0;
-		memcpy(invBuf + invOff, &invResult, sizeof(int32_t));	invOff += sizeof(int32_t);
-
-		// Inviter info
 		int32_t roomIdx = m_i32RoomIdx;
-		memcpy(invBuf + invOff, &roomIdx, sizeof(int32_t));	invOff += sizeof(int32_t);
-
 		char nick[64] = {0};
 		strncpy_s(nick, m_szNickname, _TRUNCATE);
-		memcpy(invBuf + invOff, nick, 64);						invOff += 64;
 
-		invSize = (uint16_t)invOff;
-		memcpy(invBuf, &invSize, sizeof(uint16_t));
-
-		invitePacket.SetPacketData(invBuf, invOff);
-		pTarget->SendMessage(&invitePacket);
+		i3NetworkPacket invitePacket(PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK);
+		invitePacket.WriteData(&invResult, sizeof(int32_t));
+		invitePacket.WriteData(&roomIdx, sizeof(int32_t));
+		invitePacket.WriteData(nick, 64);
+		pTarget->SendPacketMessage(&invitePacket);
 	}
 
 	SendSimpleAck(PROTOCOL_ROOM_INVITE_LOBBY_USER_ACK, 0);
@@ -666,11 +545,13 @@ void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
 			// Move to observer
 			slot.bIsObserver = true;
 			slot.ui8State = SLOT_STATE_NORMAL;	// Reset ready state
+			ObserverHelper::OnObserverJoined(m_pRoom, this, m_i32SlotIdx);
 			printf("[GameSession] Observer: slot %d -> observer, UID=%lld\n", m_i32SlotIdx, m_i64UID);
 		}
 		else if (direction == 0 && slot.bIsObserver)
 		{
 			// Move back to normal
+			ObserverHelper::OnObserverLeft(m_pRoom, this);
 			slot.bIsObserver = false;
 			slot.ui8State = SLOT_STATE_NORMAL;
 			printf("[GameSession] Observer: slot %d -> normal, UID=%lld\n", m_i32SlotIdx, m_i64UID);
@@ -682,24 +563,11 @@ void GameSession::OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size)
 	}
 
 	// Broadcast to all in room
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-
 	uint8_t slotIdx = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &slotIdx, 1);					offset += 1;
-	memcpy(buffer + offset, &direction, 1);					offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHANGE_OBSERVER_SLOT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&direction, 1);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -716,22 +584,9 @@ void GameSession::OnRoomLoadingStartReq(char* pData, INT32 i32Size)
 	}
 
 	// Broadcast loading start to all players in room
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_ROOM_LOADING_START_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_LOADING_START_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -744,26 +599,13 @@ void GameSession::SendSlotInfoToAll()
 	if (!m_pRoom)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_SLOT_STATE_CHANGE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
+	i3NetworkPacket packet(PROTOCOL_BATTLE_SLOT_STATE_CHANGE_ACK);
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		const GameSlotInfo& si = m_pRoom->GetSlotInfo(i);
-		memcpy(buffer + offset, &si.ui8State, 1);	offset += 1;
-		memcpy(buffer + offset, &si.ui8Team, 1);	offset += 1;
+		packet.WriteData(&si.ui8State, 1);
+		packet.WriteData(&si.ui8Team, 1);
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -793,17 +635,7 @@ void GameSession::OnRoomInfoEnterReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	i3NetworkPacket packet;
-	char buffer[1024];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_INFO_ENTER_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Room basic info
 	uint8_t mode = pRoom->GetGameMode();
@@ -812,47 +644,38 @@ void GameSession::OnRoomInfoEnterReq(char* pData, INT32 i32Size)
 	uint8_t maxPlayers = pRoom->GetMaxPlayers();
 	uint8_t playerCount = (uint8_t)pRoom->GetPlayerCount();
 
-	memcpy(buffer + offset, &mode, 1);			offset += 1;
-	memcpy(buffer + offset, &mapIdx, 1);		offset += 1;
-	memcpy(buffer + offset, &state, 1);			offset += 1;
-	memcpy(buffer + offset, &maxPlayers, 1);	offset += 1;
-	memcpy(buffer + offset, &playerCount, 1);	offset += 1;
+	i3NetworkPacket packet(PROTOCOL_ROOM_INFO_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&mode, 1);
+	packet.WriteData(&mapIdx, 1);
+	packet.WriteData(&state, 1);
+	packet.WriteData(&maxPlayers, 1);
+	packet.WriteData(&playerCount, 1);
 
 	// Slot info with nicknames
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
-		if (offset + 80 > (int)sizeof(buffer))
-			break;
-
 		const GameSlotInfo& si = pRoom->GetSlotInfo(i);
-		memcpy(buffer + offset, &si.ui8State, 1);	offset += 1;
-		memcpy(buffer + offset, &si.ui8Team, 1);	offset += 1;
+		packet.WriteData(&si.ui8State, 1);
+		packet.WriteData(&si.ui8Team, 1);
 
 		GameSession* pSlotSession = pRoom->GetSlotSession(i);
+		uint8_t level = 0;
+		uint8_t rank = 0;
+		char nick[16] = {0};
 		if (pSlotSession)
 		{
-			uint8_t level = (uint8_t)pSlotSession->GetLevel();
-			uint8_t rank = (uint8_t)pSlotSession->GetRankId();
-			memcpy(buffer + offset, &level, 1);	offset += 1;
-			memcpy(buffer + offset, &rank, 1);		offset += 1;
+			level = (uint8_t)pSlotSession->GetLevel();
+			rank = (uint8_t)pSlotSession->GetRankId();
 			int nickLen = (int)strlen(pSlotSession->GetNickname());
 			if (nickLen > 16) nickLen = 16;
-			memcpy(buffer + offset, pSlotSession->GetNickname(), nickLen);
-			memset(buffer + offset + nickLen, 0, 16 - nickLen);
-			offset += 16;
+			memcpy(nick, pSlotSession->GetNickname(), nickLen);
 		}
-		else
-		{
-			memset(buffer + offset, 0, 18);
-			offset += 18;
-		}
+		packet.WriteData(&level, 1);
+		packet.WriteData(&rank, 1);
+		packet.WriteData(nick, 16);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomInfoLeaveReq(char* pData, INT32 i32Size)
@@ -866,25 +689,14 @@ void GameSession::OnRoomGetLobbyUserListReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_READY_ROOM)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_LOBBY_USER_LIST_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	// Reserve space for user count
-	int countOffset = offset;
 	uint16_t userCount = 0;
-	offset += sizeof(uint16_t);
 
-	// Iterate all sessions and find those in lobby of same channel
+	// Collect lobby users first to get count
 	const int MAX_LOBBY_USERS = 50;
+	struct LobbyUserEntry { int32_t sessionIdx; uint8_t level; uint8_t rank; char nick[16]; };
+	LobbyUserEntry lobbyUsers[MAX_LOBBY_USERS];
+
 	for (int i = 0; i < MAX_GAME_SESSIONS && userCount < MAX_LOBBY_USERS; i++)
 	{
 		GameSession* pOther = g_pGameSessionManager->GetSession(i);
@@ -895,33 +707,29 @@ void GameSession::OnRoomGetLobbyUserListReq(char* pData, INT32 i32Size)
 		if (pOther->GetChannelNum() != m_i32ChannelNum)
 			continue;
 
-		if (offset + 28 > (int)sizeof(buffer))
-			break;
-
-		int32_t sessionIdx = pOther->GetIndex();
-		uint8_t level = (uint8_t)pOther->GetLevel();
-		uint8_t rank = (uint8_t)pOther->GetRankId();
-		memcpy(buffer + offset, &sessionIdx, 4);	offset += 4;
-		memcpy(buffer + offset, &level, 1);			offset += 1;
-		memcpy(buffer + offset, &rank, 1);			offset += 1;
-
+		LobbyUserEntry& e = lobbyUsers[userCount];
+		e.sessionIdx = pOther->GetIndex();
+		e.level = (uint8_t)pOther->GetLevel();
+		e.rank = (uint8_t)pOther->GetRankId();
+		memset(e.nick, 0, 16);
 		const char* nick = pOther->GetNickname();
 		int nickLen = (int)strlen(nick);
 		if (nickLen > 16) nickLen = 16;
-		memcpy(buffer + offset, nick, nickLen);
-		memset(buffer + offset + nickLen, 0, 16 - nickLen);
-		offset += 16;
-
+		memcpy(e.nick, nick, nickLen);
 		userCount++;
 	}
 
-	memcpy(buffer + countOffset, &userCount, sizeof(uint16_t));
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_LOBBY_USER_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&userCount, sizeof(uint16_t));
+	for (int i = 0; i < userCount; i++)
+	{
+		packet.WriteData(&lobbyUsers[i].sessionIdx, 4);
+		packet.WriteData(&lobbyUsers[i].level, 1);
+		packet.WriteData(&lobbyUsers[i].rank, 1);
+		packet.WriteData(lobbyUsers[i].nick, 16);
+	}
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomCheckMainReq(char* pData, INT32 i32Size)
@@ -933,26 +741,13 @@ void GameSession::OnRoomCheckMainReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHECK_MAIN_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint8_t ownerSlot = (uint8_t)m_pRoom->GetOwnerSlot();
-	memcpy(buffer + offset, &ownerSlot, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHECK_MAIN_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&ownerSlot, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomMasterTeamChangeReq(char* pData, INT32 i32Size)
@@ -1010,15 +805,6 @@ void GameSession::OnRoomGetNicknameReq(char* pData, INT32 i32Size)
 
 	uint8_t slotIdx = *(uint8_t*)pData;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_NICKNAME_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
 	GameSession* pTarget = nullptr;
 	if (slotIdx < SLOT_MAX_COUNT)
@@ -1027,24 +813,18 @@ void GameSession::OnRoomGetNicknameReq(char* pData, INT32 i32Size)
 	if (!pTarget)
 		result = -1;
 
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
-
+	char nick[32] = {0};
 	if (pTarget)
 	{
-		const char* nick = pTarget->GetNickname();
-		int nickLen = (int)strlen(nick);
+		int nickLen = (int)strlen(pTarget->GetNickname());
 		if (nickLen > 32) nickLen = 32;
-		memcpy(buffer + offset, nick, nickLen);
-		memset(buffer + offset + nickLen, 0, 32 - nickLen);
-		offset += 32;
+		memcpy(nick, pTarget->GetNickname(), nickLen);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_NICKNAME_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(nick, 32);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomGetRankReq(char* pData, INT32 i32Size)
@@ -1061,15 +841,6 @@ void GameSession::OnRoomGetRankReq(char* pData, INT32 i32Size)
 
 	uint8_t slotIdx = *(uint8_t*)pData;
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_RANK_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
 	GameSession* pTarget = nullptr;
 	if (slotIdx < SLOT_MAX_COUNT)
@@ -1078,26 +849,22 @@ void GameSession::OnRoomGetRankReq(char* pData, INT32 i32Size)
 	if (!pTarget)
 		result = -1;
 
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
-
+	int32_t rank = 0, level = 0, kills = 0, deaths = 0;
 	if (pTarget)
 	{
-		int32_t rank = pTarget->GetRankId();
-		int32_t level = pTarget->GetLevel();
-		int32_t kills = pTarget->GetKills();
-		int32_t deaths = pTarget->GetDeaths();
-		memcpy(buffer + offset, &rank, 4);		offset += 4;
-		memcpy(buffer + offset, &level, 4);		offset += 4;
-		memcpy(buffer + offset, &kills, 4);		offset += 4;
-		memcpy(buffer + offset, &deaths, 4);	offset += 4;
+		rank = pTarget->GetRankId();
+		level = pTarget->GetLevel();
+		kills = pTarget->GetKills();
+		deaths = pTarget->GetDeaths();
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_RANK_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&rank, 4);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&kills, 4);
+	packet.WriteData(&deaths, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1134,29 +901,16 @@ void GameSession::OnRoomGetColorNickReq(char* pData, INT32 i32Size)
 
 	uint8_t slotIdx = *(uint8_t*)pData;
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_COLOR_NICK_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
-
 	uint32_t colorNick = 0;
 	GameSession* pTarget = nullptr;
 	if (slotIdx < SLOT_MAX_COUNT)
 		pTarget = m_pRoom->GetSlotSession(slotIdx);
 	if (pTarget)
 		colorNick = pTarget->GetColorNick();
-	memcpy(buffer + offset, &colorNick, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_COLOR_NICK_ACK);
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&colorNick, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomGetColorMuzzleFlashReq(char* pData, INT32 i32Size)
@@ -1168,23 +922,11 @@ void GameSession::OnRoomGetColorMuzzleFlashReq(char* pData, INT32 i32Size)
 
 	uint8_t slotIdx = *(uint8_t*)pData;
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_GET_COLOR_MUZZLE_FLASH_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
 	uint32_t muzzleColor = 0;
-	memcpy(buffer + offset, &muzzleColor, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GET_COLOR_MUZZLE_FLASH_ACK);
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&muzzleColor, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomCharaShiftPosReq(char* pData, INT32 i32Size)
@@ -1207,22 +949,10 @@ void GameSession::OnRoomCharaShiftPosReq(char* pData, INT32 i32Size)
 	SendSimpleAck(PROTOCOL_ROOM_CHARA_SHIFT_POS_ACK, 0);
 
 	// Notify others
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHARA_SHIFT_POS_OTHER_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	uint8_t mySlot = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &mySlot, 1);	offset += 1;
-	memcpy(buffer + offset, &newSlot, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHARA_SHIFT_POS_OTHER_ACK);
+	packet.WriteData(&mySlot, 1);
+	packet.WriteData(&newSlot, 1);
 	m_pRoom->SendToAllExcept(this, &packet);
 }
 
@@ -1239,26 +969,14 @@ void GameSession::OnRoomEquipmentTempWeaponReq(char* pData, INT32 i32Size)
 	uint8_t weaponSlot = *(uint8_t*)pData;
 	uint32_t weaponId = *(uint32_t*)(pData + 1);
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_EQUIPMENT_TEMP_WEAPON_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint8_t mySlot = (uint8_t)m_i32SlotIdx;
-	memcpy(buffer + offset, &mySlot, 1);		offset += 1;
-	memcpy(buffer + offset, &weaponSlot, 1);	offset += 1;
-	memcpy(buffer + offset, &weaponId, 4);		offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_EQUIPMENT_TEMP_WEAPON_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&mySlot, 1);
+	packet.WriteData(&weaponSlot, 1);
+	packet.WriteData(&weaponId, 4);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -1273,23 +991,10 @@ void GameSession::OnRoomTsEventReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_READY_ROOM || !m_pRoom)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_TS_EVENT_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int copyLen = (i32Size > 240) ? 240 : i32Size;
+	i3NetworkPacket packet(PROTOCOL_ROOM_TS_EVENT_ACK);
 	if (copyLen > 0)
-		memcpy(buffer + offset, pData, copyLen);
-	offset += copyLen;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+		packet.WriteData(pData, copyLen);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -1317,72 +1022,16 @@ void GameSession::OnRoomRequestMainChangeWhoReq(char* pData, INT32 i32Size)
 
 	m_pRoom->SetOwnerSlot(targetSlot);
 
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &targetSlot, 1);			offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_REQUEST_MAIN_CHANGE_WHO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&targetSlot, 1);
 	m_pRoom->SendToAll(&packet);
 }
 
 // ============================================================================
 // Batch 18 - Room extras
 // ============================================================================
-
-void GameSession::OnRoomNewGetSlotInfoReq(char* pData, INT32 i32Size)
-{
-	if (!m_pRoom)
-	{
-		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_SLOTINFO_ACK, -1);
-		return;
-	}
-
-	i3NetworkPacket packet;
-	char buffer[1024];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_NEW_GET_SLOTINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	for (int i = 0; i < SLOT_MAX_COUNT && offset < 900; i++)
-	{
-		const GameSlotInfo& slot = m_pRoom->GetSlotInfo(i);
-		memcpy(buffer + offset, &slot.ui8State, 1);		offset += 1;
-		memcpy(buffer + offset, &slot.ui8Team, 1);			offset += 1;
-		memcpy(buffer + offset, &slot.i32SessionIdx, 4);	offset += 4;
-		memcpy(buffer + offset, &slot.ui8Rank, 1);			offset += 1;
-		memcpy(buffer + offset, &slot.ui32ClanIdx, 4);		offset += 4;
-		memcpy(buffer + offset, &slot.ui32ClanMark, 4);	offset += 4;
-		memcpy(buffer + offset, &slot.bIsObserver, 1);		offset += 1;
-
-		char nick[32] = {};
-		GameSession* pSlotSess = m_pRoom->GetSlotSession(i);
-		if (pSlotSess)
-			strncpy(nick, pSlotSess->GetNickname(), 31);
-		memcpy(buffer + offset, nick, 32);					offset += 32;
-	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
-}
 
 void GameSession::OnRoomNewGetSlotOneInfoReq(char* pData, INT32 i32Size)
 {
@@ -1401,102 +1050,24 @@ void GameSession::OnRoomNewGetSlotOneInfoReq(char* pData, INT32 i32Size)
 
 	const GameSlotInfo& slot = m_pRoom->GetSlotInfo(slotIdx);
 
-	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
-	memcpy(buffer + offset, &slot.ui8State, 1);			offset += 1;
-	memcpy(buffer + offset, &slot.ui8Team, 1);			offset += 1;
-	memcpy(buffer + offset, &slot.i32SessionIdx, 4);	offset += 4;
-	memcpy(buffer + offset, &slot.ui8Rank, 1);			offset += 1;
-	memcpy(buffer + offset, &slot.ui32ClanIdx, 4);		offset += 4;
-	memcpy(buffer + offset, &slot.ui32ClanMark, 4);	offset += 4;
-	memcpy(buffer + offset, &slot.bIsObserver, 1);		offset += 1;
 
 	char nick[32] = {};
 	GameSession* pSlotSess = m_pRoom->GetSlotSession(slotIdx);
 	if (pSlotSess)
 		strncpy(nick, pSlotSess->GetNickname(), 31);
-	memcpy(buffer + offset, nick, 32);					offset += 32;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
-}
-
-void GameSession::OnRoomNewGetPlayerInfoReq(char* pData, INT32 i32Size)
-{
-	if (!m_pRoom || i32Size < (int)sizeof(uint8_t))
-	{
-		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -1);
-		return;
-	}
-
-	uint8_t slotIdx = *(uint8_t*)pData;
-	if (slotIdx >= SLOT_MAX_COUNT)
-	{
-		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -2);
-		return;
-	}
-
-	GameSession* pTarget = m_pRoom->GetSlotSession(slotIdx);
-	if (!pTarget)
-	{
-		SendSimpleAck(PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK, -3);
-		return;
-	}
-
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_NEW_GET_PLAYERINFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &slotIdx, 1);				offset += 1;
-
-	int64_t uid = pTarget->GetUID();
-	memcpy(buffer + offset, &uid, sizeof(int64_t));		offset += sizeof(int64_t);
-
-	char nick[64] = {};
-	strncpy(nick, pTarget->GetNickname(), 63);
-	memcpy(buffer + offset, nick, 64);					offset += 64;
-
-	int32_t level = pTarget->GetLevel();
-	int32_t rankId = pTarget->GetRankId();
-	int32_t kills = pTarget->GetKills();
-	int32_t deaths = pTarget->GetDeaths();
-	int32_t headshots = pTarget->GetHeadshots();
-	int32_t wins = pTarget->GetWins();
-	int32_t losses = pTarget->GetLosses();
-	int32_t clanId = pTarget->GetClanId();
-
-	memcpy(buffer + offset, &level, 4);		offset += 4;
-	memcpy(buffer + offset, &rankId, 4);	offset += 4;
-	memcpy(buffer + offset, &kills, 4);		offset += 4;
-	memcpy(buffer + offset, &deaths, 4);	offset += 4;
-	memcpy(buffer + offset, &headshots, 4);	offset += 4;
-	memcpy(buffer + offset, &wins, 4);		offset += 4;
-	memcpy(buffer + offset, &losses, 4);	offset += 4;
-	memcpy(buffer + offset, &clanId, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_NEW_GET_SLOTONEINFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&slot.ui8State, 1);
+	packet.WriteData(&slot.ui8Team, 1);
+	packet.WriteData(&slot.i32SessionIdx, 4);
+	packet.WriteData(&slot.ui8Rank, 1);
+	packet.WriteData(&slot.ui32ClanIdx, 4);
+	packet.WriteData(&slot.ui32ClanMark, 4);
+	packet.WriteData(&slot.bIsObserver, 1);
+	packet.WriteData(nick, 32);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRoomChangeHiddenSlotReq(char* pData, INT32 i32Size)
@@ -1528,23 +1099,11 @@ void GameSession::OnRoomChangeHiddenSlotReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t resultVal = 0;
-	memcpy(buffer + offset, &resultVal, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &slotIdx, 1);					offset += 1;
-	memcpy(buffer + offset, &hidden, 1);					offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_ROOM_CHANGE_HIDDEN_SLOT_ACK);
+	packet.WriteData(&resultVal, sizeof(int32_t));
+	packet.WriteData(&slotIdx, 1);
+	packet.WriteData(&hidden, 1);
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -1567,26 +1126,14 @@ void GameSession::OnRoomTeamBalanceReq(char* pData, INT32 i32Size)
 		}
 	}
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_ROOM_TEAM_BALANCE_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
+	i3NetworkPacket packet(PROTOCOL_ROOM_TEAM_BALANCE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		uint8_t team = m_pRoom->GetSlotInfo(i).ui8Team;
-		memcpy(buffer + offset, &team, 1);	offset += 1;
+		packet.WriteData(&team, 1);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
 	m_pRoom->SendToAll(&packet);
 }

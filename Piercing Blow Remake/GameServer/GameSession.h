@@ -142,6 +142,7 @@ public:
 	void			SetTask(GameTask eTask)		{ m_eMainTask = eTask; }
 
 	// Identity
+	INT32			GetIndex() const			{ return m_SessionIdx; }
 	int64_t			GetUID() const				{ return m_i64UID; }
 	void			SetUID(int64_t uid)			{ m_i64UID = uid; }
 	const char*		GetUsername() const			{ return m_szUsername; }
@@ -169,6 +170,15 @@ public:
 	int				GetClanId() const			{ return m_i32ClanId; }
 	void			SetClanId(int id)			{ m_i32ClanId = id; }
 	const char*		GetClanName() const			{ return m_szClanName; }
+
+	// Abusing-penalty held rewards
+	bool			IsAbusing() const			{ return m_bAbusing; }
+	void			SetHeldRewards(int64_t exp, int gp)
+	{
+		m_i64HeldExp = exp;
+		m_i32HeldGP  = gp;
+		m_bAbusing   = true;
+	}
 
 	// Stats
 	int				GetKills() const			{ return m_i32Kills; }
@@ -213,7 +223,7 @@ public:
 	void			OnShopBuyResult(uint32_t ui32ItemId, int i32Result, int i32RemainingGP, int i32RemainingCash);
 
 	// Battle results from BattleServer (applied via ModuleBattleServer)
-	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin);
+	void			ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, int i32Assists, bool bWin);
 
 	// SLOT_BONUS tracking (Phase 1C) - per-battle EXP/Point bonuses
 	int				GetLastBattleExpBonus() const	{ return m_i32LastBattleExpBonus; }
@@ -243,6 +253,8 @@ private:
 	// Packet handlers - Connect phase
 	void			OnBaseConnectReq(char* pData, INT32 i32Size);
 	void			OnBaseHeartBitReq(char* pData, INT32 i32Size);
+	void			OnKnockReq(char* pData, INT32 i32Size);
+	void			OnKnockConfirmation(char* pData, INT32 i32Size);
 
 	// Packet handlers - Login phase (auth token validation)
 	void			OnLoginReq(char* pData, INT32 i32Size);
@@ -330,6 +342,12 @@ private:
 	void			OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size);
 	void			OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size);
+
+	// Observer spectator handlers (GameSessionObserver.cpp)
+	void			OnObserverViewModeReq(char* pData, INT32 i32Size);
+	void			OnObserverFollowPlayerReq(char* pData, INT32 i32Size);
+	void			OnObserverScoreboardReq(char* pData, INT32 i32Size);
+
 	void			OnRoomLoadingStartReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoEnterReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoLeaveReq(char* pData, INT32 i32Size);
@@ -474,6 +492,12 @@ private:
 
 	// Quest helpers
 	void			UpdateQuestProgress(int kills, int deaths, int headshots, bool won);
+
+	// Quest Event handlers (GameSessionQuestEvent.cpp)
+	void			UpdateEventQuestProgress(int kills, int deaths, int headshots, int assists, bool won,
+								uint32_t weaponClass, uint32_t stageId,
+								int bombPlants, int bombDefuses, int multiKills,
+								int consecutiveKills, int playTimeMinutes, int damageDealt);
 
 	// Packet handlers - Medal (GameSessionMedal.cpp)
 	void			OnGetMedalSystemReq(char* pData, INT32 i32Size);
@@ -639,27 +663,18 @@ private:
 	void			OnCheatTeleportReq(char* pData, INT32 i32Size);
 
 	// Batch 18 - Battle extras (GameSessionBattle.cpp)
-	void			OnBattleStartCountdownReq(char* pData, INT32 i32Size);
-	void			OnBattleStartLoadingReq(char* pData, INT32 i32Size);
 	void			OnBattlePrestartBattleDServerReq(char* pData, INT32 i32Size);
 	void			OnBattlePrestartBattleRelayReq(char* pData, INT32 i32Size);
-	void			OnBattleResultReq(char* pData, INT32 i32Size);
 	void			OnBattleRespawnForAIReq(char* pData, INT32 i32Size);
 	void			OnBattleNotifyKickVoteResultReq(char* pData, INT32 i32Size);
 	void			OnBattleNotifyKickVoteCancelReq(char* pData, INT32 i32Size);
 
 	// Batch 18 - Room extras (GameSessionRoom.cpp)
-	void			OnRoomNewGetSlotInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomNewGetSlotOneInfoReq(char* pData, INT32 i32Size);
-	void			OnRoomNewGetPlayerInfoReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeHiddenSlotReq(char* pData, INT32 i32Size);
 	void			OnRoomTeamBalanceReq(char* pData, INT32 i32Size);
 
 	// Batch 18 - Lobby extras (GameSessionLobby.cpp)
-	void			OnLobbyCheckNickNameReq(char* pData, INT32 i32Size);
-	void			OnLobbyCreateNickNameReq(char* pData, INT32 i32Size);
-	void			OnLobbyNewCreateRoomReq(char* pData, INT32 i32Size);
-	void			OnLobbyNewJoinRoomReq(char* pData, INT32 i32Size);
 	void			OnLobbyNewViewUserItemReq(char* pData, INT32 i32Size);
 
 	// Batch 18 - Base extras (GameSession.cpp)
@@ -667,7 +682,6 @@ private:
 	void			OnBaseUserLeaveReq(char* pData, INT32 i32Size);
 	void			OnBaseGameServerStateReq(char* pData, INT32 i32Size);
 	void			OnBaseReadyHeartBitReq(char* pData, INT32 i32Size);
-	void			OnBaseGetMyClanReq(char* pData, INT32 i32Size);
 	void			OnBaseGetUserInfoAllReq(char* pData, INT32 i32Size);
 	void			OnBaseGetUserInfoAllDBReq(char* pData, INT32 i32Size);
 	void			OnBaseEnterPassReq(char* pData, INT32 i32Size);
@@ -795,6 +809,8 @@ private:
 	bool			IsGMUser() const;
 	void			SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
 	bool			ProcessAdminCommand(const char* pszMessage, int i32MsgLen);
+	bool			IsMuted() const;
+	void			SetMuteExpireTime(DWORD dwExpireTime);
 
 	// Cheat detection (Phase 9C - GameSessionCheat.cpp)
 	bool			ValidateDamage(int i32KillerSlot, int i32VictimSlot, uint32_t ui32WeaponId,
@@ -855,11 +871,13 @@ private:
 	char			m_szClanName[64];
 	uint8_t			m_ui8AuthLevel;			// 0=normal, 1+=GM
 	bool			m_bDamageConsole;		// GM debug: show damage events
+	DWORD			m_dwMuteExpireTime;		// GetTickCount() when mute expires; 0 = not muted
 
 	// Stats
 	int				m_i32Kills;
 	int				m_i32Deaths;
 	int				m_i32Headshots;
+	int				m_i32BattleAssists;
 	int				m_i32Wins;
 	int				m_i32Losses;
 	uint32_t		m_ui32ColorNick;
@@ -871,6 +889,12 @@ private:
 	int				m_i32LastBattleExpBonus;		// Last battle EXP bonus breakdown total
 	int				m_i32LastBattleGPBonus;		// Last battle GP bonus breakdown total
 
+	// Abusing-penalty held rewards
+	// When a player is flagged for abusing, rewards are held until they confirm the popup
+	bool			m_bAbusing;				// Currently in abusing-penalty state
+	int64_t			m_i64HeldExp;			// EXP withheld pending popup confirmation
+	int				m_i32HeldGP;			// GP withheld pending popup confirmation
+
 	// Equipment (7E) - Character slots with weapon/parts loadouts
 	uint8_t			m_ui8ActiveCharaSlot;					// Current active character slot (0-4)
 	GameCharaSlot	m_CharaSlots[MAX_CHARA_SLOT];			// Up to 5 character loadouts
@@ -881,6 +905,9 @@ private:
 
 	// Quest (7I) - Quest card sets and progress
 	GameQuestData	m_QuestData;
+
+	// Event/Honor/Period quests (1.5 quest system)
+	GameEventQuestData	m_EventQuestData;
 
 	// Social (7K) - Friends and block list
 	GameFriendInfo	m_Friends[MAX_FRIEND_COUNT];

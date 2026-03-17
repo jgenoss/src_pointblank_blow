@@ -27,7 +27,7 @@ public:
 	virtual BOOL		OnCreate(i3List* pSessionList) override;
 	virtual void		OnUpdate() override;
 	virtual BOOL		OnDestroy() override;
-	virtual ULONG_PTR	ConnectSession_v(SOCKET Socket, struct sockaddr_in* pAddr);
+	virtual ULONG_PTR	ConnectSession(SOCKET Socket, struct sockaddr_in* pAddr) override;
 
 	// Accessors
 	int					GetActiveCount() const			{ return (int)m_lActiveCount; }
@@ -37,14 +37,14 @@ public:
 	int					GetPeakActive() const			{ return (int)m_lPeakActive; }
 
 	// Session lookup
-	ConnectSession*		GetSession(int i32Idx);
+	class ConnectSession*	GetSession(int i32Idx);
 
 private:
 	void				CheckTimeouts();
 
 private:
 	i3List				m_SessionList;
-	ConnectSession*		m_pSessions;		// Pool pre-allocado
+	class ConnectSession*	m_pSessions;		// Pool pre-allocado
 	DWORD				m_dwLastTimeoutCheck;
 
 	// Thread-safe counters

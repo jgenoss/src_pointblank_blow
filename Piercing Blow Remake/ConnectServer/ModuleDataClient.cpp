@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ModuleDataClient.h"
 #include "ConnectSessionManager.h"
 #include "ConnectSession.h"
@@ -31,10 +32,10 @@ void ModuleDataClient::OnProcessPacket(char* pData, int i32Size)
 	if (i32Size < 4)
 		return;
 
-	uint16_t packetSize = *(uint16_t*)pData;
+	uint16_t packetSize = *(uint16_t*)pData & 0x7FFF;	// data field size only
 	uint16_t protocolId = *(uint16_t*)(pData + 2);
 	char* pPayload = pData + 4;
-	int payloadSize = packetSize - 4;
+	int payloadSize = (int)packetSize;
 
 	switch (protocolId)
 	{
@@ -51,16 +52,13 @@ void ModuleDataClient::OnProcessPacket(char* pData, int i32Size)
 void ModuleDataClient::OnHeartbeat()
 {
 	// Simple heartbeat - send a small packet to keep connection alive
-	uint16_t heartbeat[2] = { 4, 0 }; // size=4, proto=0
-	i3NetworkPacket packet;
-	packet.SetPacketData((char*)heartbeat, 4);
+	i3NetworkPacket packet(0);
 	SendPacket(&packet);
 }
 
 // -- Request methods --
 
-void ModuleDataClient::RequestLogin(int i32SessionIdx, const char* pszUsername,
-									const char* pszPassword, uint32_t ui32ClientIP)
+void ModuleDataClient::RequestLogin(int i32SessionIdx, const char* pszUsername, const char* pszPassword, uint32_t ui32ClientIP)
 {
 	IS_AUTH_LOGIN_REQ req;
 	memset(&req, 0, sizeof(req));
@@ -103,27 +101,7 @@ void ModuleDataClient::SendRequest(uint16_t ui16Protocol, const void* pStruct, i
 	if (!IsConnected())
 		return;
 
-	char buffer[8192];
-	int offset = 0;
-
-	// Size placeholder
-	uint16_t size = 0;
-	memcpy(buffer + offset, &size, sizeof(uint16_t));
-	offset += sizeof(uint16_t);
-
-	// Protocol ID
-	memcpy(buffer + offset, &ui16Protocol, sizeof(uint16_t));
-	offset += sizeof(uint16_t);
-
-	// Struct body
-	memcpy(buffer + offset, pStruct, i32StructSize);
-	offset += i32StructSize;
-
-	// Update size
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(ui16Protocol);
+	packet.WriteData(pStruct, i32StructSize);
 	SendPacket(&packet);
 }

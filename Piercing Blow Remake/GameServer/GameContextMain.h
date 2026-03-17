@@ -98,6 +98,8 @@ public:
 	int			m_i32LoseExpReward;
 	int			m_i32StartingGP;
 	int			m_i32StartingCash;
+	int			m_i32ClanCreateCostGP;		// GP required to create a clan
+	int			m_i32ClanCreateMinLevel;	// Min level required to create a clan
 
 	// Battle config (from [Battle] section)
 	int			m_i32DefaultTimeLimit;

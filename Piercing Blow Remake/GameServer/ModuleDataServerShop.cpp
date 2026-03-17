@@ -83,6 +83,54 @@ void ModuleDataServer::OnShopBuyAck(char* pData, int i32Size)
 }
 
 // ============================================================================
+// Coupon Redeem
+// ============================================================================
+
+void ModuleDataServer::RequestCouponRedeem(int64_t i64UID, int i32SessionIdx, const char* pszCouponCode)
+{
+	if (!IsConnected() || !pszCouponCode)
+		return;
+
+	IS_SHOP_COUPON_REQ req;
+	memset(&req, 0, sizeof(req));
+	req.i64UID       = i64UID;
+	req.i32SessionIdx = i32SessionIdx;
+	strncpy_s(req.szCouponCode, sizeof(req.szCouponCode), pszCouponCode, _TRUNCATE);
+
+	SendRequest(PROTOCOL_IS_SHOP_COUPON_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::OnShopCouponAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_SHOP_COUPON_ACK))
+		return;
+
+	IS_SHOP_COUPON_ACK* pAck = (IS_SHOP_COUPON_ACK*)pData;
+
+	GameSessionManager* pMgr = g_pGameServerContext
+		? g_pGameServerContext->GetSessionManager() : nullptr;
+	if (!pMgr)
+		return;
+
+	GameSession* pSession = pMgr->GetSession(pAck->i32SessionIdx);
+	if (!pSession || pSession->GetUID() != pAck->i64UID)
+		return;
+
+	// Forward result to client as PROTOCOL_AUTH_USE_GIFTCOUPON_ACK
+	i3NetworkPacket packet;
+	offset += sizeof(uint16_t);
+
+	int32_t result = pAck->i32Result;
+
+	// Discount value and type (used if result == 0)
+	memcpy(buffer + offset, &pAck->i32DiscountValue, sizeof(int32_t));	offset += sizeof(int32_t);
+	memcpy(buffer + offset, &pAck->ui8DiscountType, sizeof(uint8_t));	offset += sizeof(uint8_t);
+	i3NetworkPacket packet(PROTOCOL_AUTH_USE_GIFTCOUPON_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	pSession->SendPacketMessage(&packet);
+}
+
+// ============================================================================
 // Request operations - Inventory Update
 // ============================================================================
 

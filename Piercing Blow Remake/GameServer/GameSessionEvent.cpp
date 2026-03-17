@@ -72,38 +72,28 @@ void GameSession::OnAttendanceReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[80];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_ATTENDANCE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Total days attended
 	int32_t totalDays = m_AttendanceData.i32TotalDays;
-	memcpy(buffer + offset, &totalDays, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Current streak
 	int32_t streak = m_AttendanceData.i32CurrentStreak;
-	memcpy(buffer + offset, &streak, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Reward info
-	memcpy(buffer + offset, &rewardGP, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &rewardExp, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &rewardItemId, sizeof(uint32_t)); offset += sizeof(uint32_t);
 
 	// Updated balance
 	uint32_t gp = (uint32_t)m_i32GP;
-	memcpy(buffer + offset, &gp, sizeof(uint32_t));			offset += sizeof(uint32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_ATTENDANCE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalDays, sizeof(int32_t));
+	packet.WriteData(&streak, sizeof(int32_t));
+	packet.WriteData(&rewardGP, sizeof(uint32_t));
+	packet.WriteData(&rewardExp, sizeof(uint32_t));
+	packet.WriteData(&rewardItemId, sizeof(uint32_t));
+	packet.WriteData(&gp, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAttendanceClearItemReq(char* pData, INT32 i32Size)
@@ -136,24 +126,14 @@ void GameSession::OnAttendanceClearItemReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_ATTENDANCE_CLEAR_ITEM_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &bonusGP, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	uint32_t gp = (uint32_t)m_i32GP;
-	memcpy(buffer + offset, &gp, sizeof(uint32_t));			offset += sizeof(uint32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_ATTENDANCE_CLEAR_ITEM_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&bonusGP, sizeof(uint32_t));
+	packet.WriteData(&gp, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -215,36 +195,26 @@ void GameSession::CheckAttendanceOnLogin()
 
 	// Send attendance status to client
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_ATTENDANCE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = m_AttendanceData.bAttendedToday ? 1 : 0;	// 0 = not attended yet, 1 = already attended
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	int32_t totalDays = m_AttendanceData.i32TotalDays;
-	memcpy(buffer + offset, &totalDays, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	int32_t streak = m_AttendanceData.i32CurrentStreak;
-	memcpy(buffer + offset, &streak, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Days array for UI display
 	uint8_t dayCount = (uint8_t)(totalDays < MAX_ATTENDANCE_DAYS ? totalDays : MAX_ATTENDANCE_DAYS);
-	memcpy(buffer + offset, &dayCount, 1);					offset += 1;
 	for (int i = 0; i < dayCount && offset < 120; i++)
 	{
 		memcpy(buffer + offset, &m_AttendanceData.ui8Days[i], 1);	offset += 1;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_ATTENDANCE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalDays, sizeof(int32_t));
+	packet.WriteData(&streak, sizeof(int32_t));
+	packet.WriteData(&dayCount, 1);
+	SendPacketMessage(&packet);
 
 	printf("[GameSession] Attendance status sent - UID=%lld, TotalDays=%d, Streak=%d, AttendedToday=%d\n",
 		m_i64UID, totalDays, streak, m_AttendanceData.bAttendedToday ? 1 : 0);
@@ -258,16 +228,9 @@ void GameSession::OnDailyRecordReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_DAILY_RECORD_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Daily stats
 	memcpy(buffer + offset, &m_DailyRecord.i32Kills, sizeof(int));		offset += sizeof(int);
@@ -275,10 +238,7 @@ void GameSession::OnDailyRecordReq(char* pData, INT32 i32Size)
 	memcpy(buffer + offset, &m_DailyRecord.i32Wins, sizeof(int));		offset += sizeof(int);
 	memcpy(buffer + offset, &m_DailyRecord.i32Losses, sizeof(int));		offset += sizeof(int);
 	memcpy(buffer + offset, &m_DailyRecord.i32GamesPlayed, sizeof(int));offset += sizeof(int);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_DAILY_RECORD_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }

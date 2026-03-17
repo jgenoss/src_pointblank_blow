@@ -12,6 +12,7 @@
 #define MAX_CLAN_INTRO_LEN		128
 #define MAX_CLANS				100		// Max clans in-memory
 #define CLAN_CREATE_COST_GP		10000	// GP cost to create clan
+#define MAX_CLAN_JOIN_REQUESTS	20		// Pending join request queue size
 
 // Clan member roles
 enum GameClanMemberLevel
@@ -38,6 +39,27 @@ enum GameClanUnit
 };
 
 #pragma pack(push, 1)
+
+// Pending join request (queued until master accepts or denies)
+struct ClanJoinRequest
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Level;
+	int			i32RankId;
+	DWORD		dwRequestTime;	// GetTickCount() when submitted
+	bool		bActive;
+
+	void Reset()
+	{
+		i64UID       = 0;
+		szNickname[0] = '\0';
+		i32Level     = 0;
+		i32RankId    = 0;
+		dwRequestTime = 0;
+		bActive      = false;
+	}
+};
 
 // Clan member info
 struct GameClanMember
@@ -82,7 +104,9 @@ struct GameClanInfo
 	uint8_t		ui8MarkColor;
 	bool		bActive;
 
-	GameClanMember	members[MAX_CLAN_MEMBERS];
+	GameClanMember		members[MAX_CLAN_MEMBERS];
+	ClanJoinRequest		joinRequests[MAX_CLAN_JOIN_REQUESTS];
+	int					i32JoinRequestCount;
 
 	void Reset()
 	{
@@ -104,6 +128,71 @@ struct GameClanInfo
 		bActive = false;
 		for (int i = 0; i < MAX_CLAN_MEMBERS; i++)
 			members[i].Reset();
+		i32JoinRequestCount = 0;
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+			joinRequests[i].Reset();
+	}
+
+	// Join request helpers
+	bool AddJoinRequest(int64_t uid, const char* nick, int level, int rankId)
+	{
+		// Reject duplicates
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+		{
+			if (joinRequests[i].bActive && joinRequests[i].i64UID == uid)
+				return false;
+		}
+		// Find empty slot
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+		{
+			if (!joinRequests[i].bActive)
+			{
+				joinRequests[i].i64UID        = uid;
+				strncpy_s(joinRequests[i].szNickname, nick, _TRUNCATE);
+				joinRequests[i].i32Level      = level;
+				joinRequests[i].i32RankId     = rankId;
+				joinRequests[i].dwRequestTime = GetTickCount();
+				joinRequests[i].bActive       = true;
+				i32JoinRequestCount++;
+				return true;
+			}
+		}
+		return false;	// Queue full
+	}
+
+	bool RemoveJoinRequest(int64_t uid)
+	{
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+		{
+			if (joinRequests[i].bActive && joinRequests[i].i64UID == uid)
+			{
+				joinRequests[i].Reset();
+				i32JoinRequestCount--;
+				if (i32JoinRequestCount < 0) i32JoinRequestCount = 0;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	ClanJoinRequest* FindJoinRequest(int64_t uid)
+	{
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+		{
+			if (joinRequests[i].bActive && joinRequests[i].i64UID == uid)
+				return &joinRequests[i];
+		}
+		return nullptr;
+	}
+
+	bool HasJoinRequest(int64_t uid) const
+	{
+		for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+		{
+			if (joinRequests[i].bActive && joinRequests[i].i64UID == uid)
+				return true;
+		}
+		return false;
 	}
 
 	GameClanMember* FindMember(int64_t uid)

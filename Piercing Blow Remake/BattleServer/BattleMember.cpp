@@ -22,6 +22,7 @@ void BattleMember::Init()
 	m_i32Kills			= 0;
 	m_i32Deaths			= 0;
 	m_i32Headshots		= 0;
+	m_i32Assists		= 0;
 	m_bAlive			= false;
 	m_dwLastPacketTime	= 0;
 
@@ -77,6 +78,7 @@ void BattleMember::FillPlayerResult(BattlePlayerResult* pResult) const
 	pResult->i32Kills		= m_i32Kills;
 	pResult->i32Deaths		= m_i32Deaths;
 	pResult->i32Headshots	= m_i32Headshots;
+	pResult->i32Assists		= m_i32Assists;
 	pResult->i32Team		= m_i32Team;
 }
 

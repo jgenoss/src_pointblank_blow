@@ -52,6 +52,9 @@ private:
 	void				OnAttendanceSaveReq(char* pData, INT32 i32Size);
 	void				OnSkillSaveReq(char* pData, INT32 i32Size);
 	void				OnQuestSaveReq(char* pData, INT32 i32Size);
+	void				OnOptionSaveReq(char* pData, INT32 i32Size);
+	void				OnOptionLoadReq(char* pData, INT32 i32Size);
+	void				OnMedalSetLoadReq(char* pData, INT32 i32Size);
 
 	// Social handlers
 	void				OnClanCreateReq(char* pData, INT32 i32Size);
@@ -68,6 +71,7 @@ private:
 	// Shop
 	void				OnShopListReq(char* pData, INT32 i32Size);
 	void				OnShopBuyReq(char* pData, INT32 i32Size);
+	void				OnShopCouponReq(char* pData, INT32 i32Size);
 
 	// Inventory
 	void				OnInvenUpdateReq(char* pData, INT32 i32Size);

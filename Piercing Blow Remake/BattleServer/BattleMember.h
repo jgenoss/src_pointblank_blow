@@ -35,6 +35,7 @@ public:
 	int				GetKills() const		{ return m_i32Kills; }
 	int				GetDeaths() const		{ return m_i32Deaths; }
 	int				GetHeadshots() const	{ return m_i32Headshots; }
+	int				GetAssists() const		{ return m_i32Assists; }
 
 	// Setters
 	void			SetState(BattleMemberState eState)	{ m_eState = eState; }
@@ -43,6 +44,7 @@ public:
 	void			AddKill()							{ m_i32Kills++; }
 	void			AddDeath()							{ m_i32Deaths++; }
 	void			AddHeadshot()						{ m_i32Headshots++; }
+	void			AddAssist()							{ m_i32Assists++; }
 
 	// Fill result
 	void			FillPlayerResult(BattlePlayerResult* pResult) const;
@@ -85,6 +87,7 @@ private:
 	int					m_i32Kills;
 	int					m_i32Deaths;
 	int					m_i32Headshots;
+	int					m_i32Assists;
 
 	// State
 	bool				m_bAlive;

@@ -1,0 +1,150 @@
+﻿  i3CommonType.cpp
+  i3PDH.cpp
+  i3Warning.cpp
+  DATE32.cpp
+  i3DateTime.cpp
+  i3LinearRand.cpp
+  i3LogFileA.cpp
+  i3LogFileBase.cpp
+  i3LogFileW.cpp
+  i3NetworkAcceptor.cpp
+  i3NetworkClientSocket.cpp
+  i3NetworkClientSocket2.cpp
+  i3NetworkCompletionHandler.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(131,9): warning C4477: 'printf' : la cadena de formato '%ls' requiere un argumento de tipo '__wchar_t *', pero el argumento variádico 1 tiene el tipo 'char *'
+  (compilando archivo de origen "/src/i3Base/i3LogFileA.cpp")
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(131,9):
+      considere el uso de ' %hs' en la cadena de formato
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(131,9):
+      considere el uso de ' %s' en la cadena de formato
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(131,9):
+      considere el uso de ' %Ts' en la cadena de formato
+  
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(145,9): warning C4477: 'printf' : la cadena de formato '%ls' requiere un argumento de tipo '__wchar_t *', pero el argumento variádico 1 tiene el tipo 'char *'
+  (compilando archivo de origen "/src/i3Base/i3LogFileA.cpp")
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(145,9):
+      considere el uso de ' %hs' en la cadena de formato
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(145,9):
+      considere el uso de ' %s' en la cadena de formato
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3LogFileA.cpp(145,9):
+      considere el uso de ' %Ts' en la cadena de formato
+  
+  i3NetworkDB.cpp
+  i3NetworkFTP.cpp
+  i3NetworkHTTP.cpp
+  i3NetworkIocpWorker.cpp
+  i3NetworkPacket.cpp
+  i3NetworkServerContext.cpp
+  i3NetworkServerSocket.cpp
+  i3NetworkSession.cpp
+  i3NetworkSessionManager.cpp
+  i3NetworkTCPSocket.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3NetworkPacket.cpp(63,38): warning C4244: '=': conversión de 'UINT32' a 'UINT16'; posible pérdida de datos
+  (compilando archivo de origen "/src/i3Base/i3NetworkPacket.cpp")
+  
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3NetworkPacket.cpp(79,13): warning C4018: '<': no coinciden signed/unsigned
+  (compilando archivo de origen "/src/i3Base/i3NetworkPacket.cpp")
+  
+  i3NetworkUDPSocket.cpp
+  i3PackFile.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\include\i3Base\i3PDH.cpp(118,12): warning C4101: 'i64Value': variable local sin referencia
+  (compilando archivo de origen "/include/i3Base/i3PDH.cpp")
+  
+  i3PackFileSystem.cpp
+  i3PackNode.cpp
+  i3PackVolume.cpp
+  i3XMLElement.cpp
+  i3XMLFile.cpp
+  tinystr.cpp
+  tinyxml.cpp
+  tinyxmlerror.cpp
+  tinyxmlparser.cpp
+  i3CPUID.cpp
+  i3Memory.cpp
+  i3Mutex.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\tinyxml.cpp(747,67): warning C4458: la declaración de 'value' oculta el miembro de clase
+  (compilando archivo de origen "/src/i3Base/tinyxml.cpp")
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\include\i3Base\tinyxml.h(765,15):
+      vea la declaración de 'TiXmlNode::value'
+  
+  i3Signal.cpp
+  i3System.cpp
+  i3Thread.cpp
+  i3Timer.cpp
+  Linpack.cpp
+  i3Stream.cpp
+  i3StreamFile.cpp
+  i3StreamFileAsync.cpp
+  i3StreamMem.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3PackNode.cpp(167,9): warning C4456: la declaración de 'i' oculta la declaración local anterior
+  (compilando archivo de origen "/src/i3Base/i3PackNode.cpp")
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3PackNode.cpp(129,8):
+      vea la declaración de 'i'
+  
+  i3StreamNull.cpp
+  inst_memory_mgr.cpp
+  init_custom_memory.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3XMLFile.cpp(331,19): warning C4456: la declaración de 'pXML' oculta la declaración local anterior
+  (compilando archivo de origen "/src/i3Base/i3XMLFile.cpp")
+      E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3XMLFile.cpp(256,17):
+      vea la declaración de 'pXML'
+  
+  large_object_cache.cpp
+  pool_base.cpp
+  pool_by_thread.cpp
+  pool_dbg.cpp
+  tls_mgr.cpp
+  i3Action.cpp
+  i3BaseMeta.cpp
+  i3BaseUtil.cpp
+  i3BinList.cpp
+  i3ClassMeta.cpp
+  i3CompressHuffman.cpp
+  i3CRC32.cpp
+  i3Debug.cpp
+  i3DefExternRefResolveWin32.cpp
+  i3ElementBase.cpp
+  i3ErrorHandler.cpp
+  i3ErrorHandlerWindows.cpp
+  i3ErrorUnExpectionWindows.cpp
+  i3EventReceiver.cpp
+  i3FixedMemoryPool.cpp
+  i3Hash.cpp
+  i3Inet.cpp
+  i3IniParser.cpp
+  i3InstanceProxy.cpp
+  i3Language.cpp
+  i3Lexer.cpp
+  i3List.cpp
+  i3LRUQueue.cpp
+  i3MapFileParser.cpp
+E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\src\i3Base\i3MapFileParser.cpp(39,21): warning C4477: 'sprintf' : la cadena de formato '%X' requiere un argumento de tipo 'unsigned int', pero el argumento variádico 1 tiene el tipo 'PVOID'
+  (compilando archivo de origen "/src/i3Base/i3MapFileParser.cpp")
+  
+  i3MD5.cpp
+  i3MemoryBuffer.cpp
+  i3MemoryPool.cpp
+  i3MetaTemplate.cpp
+  i3NamedElement.cpp
+  i3NamedResourceManager.cpp
+  i3ObjectPool.cpp
+  i3Performance.cpp
+  i3PersistantElement.cpp
+  i3PointerStack.cpp
+  i3PropertyGridDefines.cpp
+  i3RealTimeProfile.cpp
+  i3RefStack.cpp
+  i3ResourceFile.cpp
+  i3ResourceObject.cpp
+  i3RingBuffer.cpp
+  i3SHA1.cpp
+  i3SMTPMail.cpp
+  i3StackMemoryPool.cpp
+  i3String.cpp
+  i3StringTable.cpp
+  i3TimeEventGen.cpp
+  i3TimeEventInfo.cpp
+  i3TreeNode.cpp
+  REAL16.cpp
+     Creando biblioteca x86\Release\i3Server_32bit.lib y objeto x86\Release\i3Server_32bit.exp
+  i3Server.vcxproj -> E:\Proyectos\JuegosOnlineproyectos\PB\pbblow\Piercing Blow Remake\i3Server\Project\I3_DX\i3Server\x86\Release\i3Server_32bit.dll

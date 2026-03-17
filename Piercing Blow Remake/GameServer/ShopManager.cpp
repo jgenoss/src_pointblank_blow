@@ -7,6 +7,7 @@ ShopManager::ShopManager()
 	: m_i32Side(0)
 	, m_bLoaded(false)
 	, m_ui32Version(1)
+	, m_i32SaleCount(0)
 {
 	m_i32ItemCount[0] = 0;
 	m_i32ItemCount[1] = 0;
@@ -14,6 +15,9 @@ ShopManager::ShopManager()
 	for (int s = 0; s < 2; s++)
 		for (int i = 0; i < MAX_SHOP_ITEMS; i++)
 			m_Items[s][i].Reset();
+
+	for (int i = 0; i < MAX_SHOP_SALE_ITEMS; i++)
+		m_Sales[i].Reset();
 }
 
 ShopManager::~ShopManager()
@@ -78,4 +82,37 @@ const ShopItem* ShopManager::FindByGoodsId(uint32_t ui32GoodsId) const
 			return &m_Items[side][i];
 	}
 	return nullptr;
+}
+
+void ShopManager::SetSaleList(const ShopSaleEntry* pEntries, int i32Count)
+{
+	if (!pEntries || i32Count <= 0)
+	{
+		m_i32SaleCount = 0;
+		return;
+	}
+
+	if (i32Count > MAX_SHOP_SALE_ITEMS)
+		i32Count = MAX_SHOP_SALE_ITEMS;
+
+	for (int i = 0; i < i32Count; i++)
+		m_Sales[i] = pEntries[i];
+
+	for (int i = i32Count; i < MAX_SHOP_SALE_ITEMS; i++)
+		m_Sales[i].Reset();
+
+	m_i32SaleCount = i32Count;
+
+	printf("[ShopManager] Sale list updated: %d entries\n", i32Count);
+}
+
+int ShopManager::GetActiveSales(ShopSaleEntry* pOut, int i32MaxCount) const
+{
+	int count = 0;
+	for (int i = 0; i < m_i32SaleCount && count < i32MaxCount; i++)
+	{
+		if (m_Sales[i].IsActive())
+			pOut[count++] = m_Sales[i];
+	}
+	return count;
 }

@@ -1,3 +1,4 @@
+#include "i3CommonType.h"
 #include "BaseServer.h"
 #include <cstdio>
 #include <cstdarg>

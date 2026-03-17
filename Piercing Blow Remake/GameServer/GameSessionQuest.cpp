@@ -14,16 +14,9 @@ void GameSession::OnQuestGetReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[1024];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_QUEST_GET_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Active cardset index
 	memcpy(buffer + offset, &m_QuestData.ui8ActiveSetIndex, 1);	offset += 1;
@@ -35,12 +28,9 @@ void GameSession::OnQuestGetReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, &cs.ui8Type, 1);			offset += 1;
 		memcpy(buffer + offset, &cs.ui8ActiveCard, 1);		offset += 1;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_QUEST_GET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnQuestGetInfoReq(char* pData, INT32 i32Size)
@@ -60,19 +50,11 @@ void GameSession::OnQuestGetInfoReq(char* pData, INT32 i32Size)
 	const GameQuestCardSet& cs = m_QuestData.cardSets[setIdx];
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_QUEST_GET_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Cardset index and type
-	memcpy(buffer + offset, &setIdx, 1);					offset += 1;
 	memcpy(buffer + offset, &cs.ui8Type, 1);				offset += 1;
 	memcpy(buffer + offset, &cs.ui8ActiveCard, 1);			offset += 1;
 
@@ -81,7 +63,6 @@ void GameSession::OnQuestGetInfoReq(char* pData, INT32 i32Size)
 	{
 		const GameQuestCard& card = cs.cards[c];
 		uint8_t complete = card.bComplete ? 1 : 0;
-		memcpy(buffer + offset, &complete, 1);				offset += 1;
 
 		for (int q = 0; q < MAX_QUEST_PER_CARD; q++)
 		{
@@ -96,12 +77,11 @@ void GameSession::OnQuestGetInfoReq(char* pData, INT32 i32Size)
 			memcpy(buffer + offset, &quest.ui32RewardExp, 4);	offset += 4;
 		}
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_QUEST_GET_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&setIdx, 1);
+	packet.WriteData(&complete, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnQuestGetItemReq(char* pData, INT32 i32Size)
@@ -160,23 +140,13 @@ void GameSession::OnQuestGetItemReq(char* pData, INT32 i32Size)
 
 	// Send ACK with updated balance
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_QUEST_GET_ITEM_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint32_t gp = (uint32_t)m_i32GP;
-	memcpy(buffer + offset, &gp, 4);						offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_QUEST_GET_ITEM_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&gp, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnQuestChangeReq(char* pData, INT32 i32Size)

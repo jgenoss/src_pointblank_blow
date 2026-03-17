@@ -10,6 +10,7 @@ class RoomManager;
 class ModuleConnectServer;
 class ModuleDataServer;
 class ModuleBattleServer;
+class ModuleControlAdmin;
 
 // Configuracion especifica del GameServer
 struct GameServerConfig : public BaseServerConfig
@@ -37,6 +38,11 @@ struct GameServerConfig : public BaseServerConfig
 	char		szBattleServerIP[MAX_SERVER_IP_LENGTH];
 	uint16_t	ui16BattleServerPort;
 
+	// Admin control module
+	bool		bEnableControlAdmin;
+	char		szControlAdminIP[MAX_SERVER_IP_LENGTH];
+	uint16_t	ui16ControlAdminPort;
+
 	// Port configuration
 	uint16_t	ui16UdpClientPort;		// Client P2P UDP port (29890)
 	uint16_t	ui16Port0;				// Primary public port (39190)
@@ -50,6 +56,8 @@ struct GameServerConfig : public BaseServerConfig
 		, ui16ConnectServerPort(40001)
 		, ui16DataServerPort(40100)
 		, ui16BattleServerPort(40200)
+		, bEnableControlAdmin(true)
+		, ui16ControlAdminPort(40500)
 		, ui16UdpClientPort(29890)
 		, ui16Port0(39190)
 	{
@@ -58,6 +66,7 @@ struct GameServerConfig : public BaseServerConfig
 		szConnectServerIP[0] = '\0';
 		szDataServerIP[0] = '\0';
 		szBattleServerIP[0] = '\0';
+		strcpy(szControlAdminIP, "127.0.0.1");
 	}
 };
 
@@ -110,6 +119,7 @@ public:
 	ModuleConnectServer*	GetModuleConnectServer()		{ return m_pModuleConnect; }
 	ModuleDataServer*		GetModuleDataServer()			{ return m_pModuleData; }
 	ModuleBattleServer*		GetModuleBattleServer()			{ return m_pModuleBattle; }
+	ModuleControlAdmin*		GetModuleControlAdmin()			{ return m_pModuleControl; }
 
 	// Hot reload economy/battle config without restart
 	bool					ReloadEconomyConfig();
@@ -134,6 +144,7 @@ private:
 	ModuleConnectServer*	m_pModuleConnect;
 	ModuleDataServer*		m_pModuleData;
 	ModuleBattleServer*		m_pModuleBattle;
+	ModuleControlAdmin*		m_pModuleControl;
 };
 
 #endif // __GAMESERVERCONTEXT_H__

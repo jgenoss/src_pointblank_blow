@@ -364,7 +364,10 @@ public:
 	void		OnDefenceWaveStart(int i32Wave);
 	void		OnDefenceNPCKilled(int i32KillerSlot);
 	void		UpdateDefenceWaves(DWORD dwNow);
-	int			GetDefenceWave() const		{ return m_i32DefenceWave; }
+	int			GetDefenceWave() const			{ return m_i32DefenceWave; }
+	int			GetDefenceMaxWaves() const		{ return m_i32DefenceMaxWaves; }
+	int			GetDefenceNPCsAlive() const		{ return m_i32DefenceNPCsAlive; }
+	int			GetDefenceNPCsTotal() const		{ return m_i32DefenceNPCsTotal; }
 
 	// Clan match team links
 	void		SetClanMatchTeams(int team1Idx, int team2Idx);

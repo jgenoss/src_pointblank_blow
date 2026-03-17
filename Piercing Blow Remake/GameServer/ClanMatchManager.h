@@ -41,6 +41,19 @@ public:
 	int						GetMatchResults(const ClanMatchResultEntry** ppOut) const;
 	int						GetMatchResultsForClan(int clanId, ClanMatchResultEntry* pOut, int maxCount) const;
 
+	// Mercenary pool (in-memory, session-based)
+	bool					RegisterMercenary(int64_t uid, const char* nick, int sessionIdx, uint8_t level, uint8_t rank);
+	bool					UnregisterMercenary(int64_t uid);
+	int						GetMercenaryList(MercenaryEntry* pOut, int maxCount) const;
+	bool					IsMercenary(int64_t uid) const;
+
+	// Preseason snapshot — populated at season end, queried by clanId
+	void					SaveSeasonSnapshot(int clanId, const char* clanName,
+								int seasonRank, int wins, int losses, int points);
+	const ClanSeasonSnapshot* FindSeasonSnapshot(int clanId) const;
+	int						GetSeasonSnapshotCount() const { return m_i32SnapshotCount; }
+	void					ClearSeasonSnapshot();
+
 private:
 	ClanMatchTeam			m_Teams[MAX_CLAN_MATCH_TEAMS];
 	int						m_i32ActiveCount;
@@ -48,6 +61,12 @@ private:
 	ClanMatchResultEntry	m_Results[MAX_CLAN_MATCH_RESULTS];
 	int						m_i32ResultCount;
 	int						m_i32ResultWriteIdx;	// Circular buffer index
+
+	MercenaryEntry			m_Mercenaries[MAX_MERCENARIES];
+
+	// Previous season snapshot (circular, max MAX_SEASON_SNAPSHOT_CLANS entries)
+	ClanSeasonSnapshot		m_SeasonSnapshot[MAX_SEASON_SNAPSHOT_CLANS];
+	int						m_i32SnapshotCount;
 };
 
 extern ClanMatchManager* g_pClanMatchManager;

@@ -2,6 +2,7 @@
 #define __CONNECTSERVERCONTEXT_H__
 
 #pragma once
+#include "i3Base.h"
 #include "BaseServer.h"
 #include "ServerList.h"
 

@@ -22,19 +22,8 @@ void ModuleDataServer::SendRequest(uint16_t ui16Protocol, const void* pStruct, i
 	if (!IsConnected())
 		return;
 
-	char buffer[8192];
-	int offset = 0;
-
-	uint16_t size = 0;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &ui16Protocol, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, pStruct, i32StructSize);			offset += i32StructSize;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(ui16Protocol);
+	packet.WriteData(pStruct, i32StructSize);
 	SendPacket(&packet);
 }
 
@@ -123,10 +112,10 @@ void ModuleDataServer::OnProcessPacket(char* pData, int i32Size)
 	if (i32Size < (int)sizeof(uint16_t) * 2)
 		return;
 
-	uint16_t packetSize = *(uint16_t*)pData;
+	uint16_t packetSize = *(uint16_t*)pData & 0x7FFF;	// data field size only
 	uint16_t protocolId = *(uint16_t*)(pData + 2);
 	char* pPayload = pData + 4;
-	int payloadSize = packetSize - 4;
+	int payloadSize = (int)packetSize;
 
 	switch (protocolId)
 	{
@@ -146,6 +135,9 @@ void ModuleDataServer::OnProcessPacket(char* pData, int i32Size)
 	case PROTOCOL_IS_ATTENDANCE_SAVE_ACK:	OnAttendanceSaveAck(pPayload, payloadSize);	break;
 	case PROTOCOL_IS_SKILL_SAVE_ACK:		OnSkillSaveAck(pPayload, payloadSize);		break;
 	case PROTOCOL_IS_QUEST_SAVE_ACK:		OnQuestSaveAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_OPTION_SAVE_ACK:		OnOptionSaveAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_OPTION_LOAD_ACK:		OnOptionLoadAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_MEDAL_SET_LOAD_ACK:	OnMedalSetLoadAck(pPayload, payloadSize);	break;
 
 	// Clan
 	case PROTOCOL_IS_CLAN_CREATE_ACK:		OnClanCreateAck(pPayload, payloadSize);		break;
@@ -164,6 +156,7 @@ void ModuleDataServer::OnProcessPacket(char* pData, int i32Size)
 	// Shop
 	case PROTOCOL_IS_SHOP_LIST_ACK:			OnShopListAck(pPayload, payloadSize);		break;
 	case PROTOCOL_IS_SHOP_BUY_ACK:			OnShopBuyAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_SHOP_COUPON_ACK:		OnShopCouponAck(pPayload, payloadSize);		break;
 
 	// Inventory
 	case PROTOCOL_IS_INVEN_UPDATE_ACK:		OnInvenUpdateAck(pPayload, payloadSize);	break;

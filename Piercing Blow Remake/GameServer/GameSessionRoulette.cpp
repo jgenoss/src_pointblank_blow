@@ -19,30 +19,20 @@ void GameSession::OnRouletteEnterReq(char* pData, INT32 i32Size)
 		result = 1;
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_RS_ENTER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Tab count
 	uint8_t tabCount = g_pRouletteData ? (uint8_t)g_pRouletteData->i32TabCount : 0;
-	memcpy(buffer + offset, &tabCount, 1);					offset += 1;
 
 	// GP and Cash balance
 	uint32_t gp = (uint32_t)m_i32GP;
 	uint32_t cash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &gp, 4);						offset += 4;
-	memcpy(buffer + offset, &cash, 4);						offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_RS_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&tabCount, 1);
+	packet.WriteData(&gp, 4);
+	packet.WriteData(&cash, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRouletteLeaveReq(char* pData, INT32 i32Size)
@@ -73,19 +63,11 @@ void GameSession::OnRouletteItemInfoReq(char* pData, INT32 i32Size)
 	const RouletteTab& tab = g_pRouletteData->tabs[tabIdx];
 
 	i3NetworkPacket packet;
-	char buffer[2048];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_RS_ITEM_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Tab info
-	memcpy(buffer + offset, &tabIdx, 1);					offset += 1;
 	memcpy(buffer + offset, &tab.i32CostGP, 4);			offset += 4;
 	memcpy(buffer + offset, &tab.i32CostCash, 4);			offset += 4;
 
@@ -111,12 +93,10 @@ void GameSession::OnRouletteItemInfoReq(char* pData, INT32 i32Size)
 	}
 
 	memcpy(buffer + countPos, &itemCount, sizeof(uint16_t));
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_RS_ITEM_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&tabIdx, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRouletteStartReq(char* pData, INT32 i32Size)
@@ -217,26 +197,16 @@ void GameSession::OnRouletteStartReq(char* pData, INT32 i32Size)
 
 	// Send result ACK
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_RS_ROULETTE_RESULT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Updated balance
 	uint32_t gp = (uint32_t)m_i32GP;
 	uint32_t cash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &gp, 4);						offset += 4;
-	memcpy(buffer + offset, &cash, 4);						offset += 4;
 
 	// Spin results
 	uint8_t resultCount = (uint8_t)actualSpins;
-	memcpy(buffer + offset, &resultCount, 1);				offset += 1;
 
 	for (int i = 0; i < actualSpins; i++)
 	{
@@ -248,23 +218,34 @@ void GameSession::OnRouletteStartReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, &results[i].duration, 4);	offset += 4;
 		memcpy(buffer + offset, &results[i].count, 4);		offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_RS_ROULETTE_RESULT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&gp, 4);
+	packet.WriteData(&cash, 4);
+	packet.WriteData(&resultCount, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRouletteJackpotNotifyReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_RS_JACKPOT_NOTIFY_REQ -> ACK
-	// Client reports jackpot win - broadcast to all players
+	// Client won a jackpot — broadcast winner's nickname to all players
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
-	// For now, just send ACK back
-	SendSimpleAck(PROTOCOL_RS_JACKPOT_NOTIFY_ACK, 0);
+	// Optional payload: jackpot item id (4 bytes)
+	int32_t itemId = 0;
+	if (i32Size >= 4)
+		memcpy(&itemId, pData, 4);
+
+	// Build broadcast packet: nick(64) + itemId(4)
+	i3NetworkPacket packet;
+	offset += sizeof(uint16_t);
+	i3NetworkPacket packet(PROTOCOL_RS_JACKPOT_NOTIFY_ACK);
+	packet.WriteData(m_szNickname, 64);
+	packet.WriteData(&itemId, sizeof(int32_t));
+	g_pGameSessionManager->BroadcastToAll(&packet);
+
+	printf("[Roulette] Jackpot broadcast - Winner=%s, ItemId=%d\n", m_szNickname, itemId);
 }
 
 // ============================================================================
@@ -280,30 +261,20 @@ void GameSession::OnFieldShopOpenReq(char* pData, INT32 i32Size)
 
 	// Send ACK with current version (0 = no field shop data available)
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_FIELDSHOP_OPEN_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Field shop version (client compares to decide if it needs to re-download)
 	uint32_t version = 1;
-	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Item count in field shop
 	uint16_t itemCount = 0;
-	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_FIELDSHOP_OPEN_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&version, sizeof(uint32_t));
+	packet.WriteData(&itemCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnFieldShopGoodsListReq(char* pData, INT32 i32Size)
@@ -315,25 +286,15 @@ void GameSession::OnFieldShopGoodsListReq(char* pData, INT32 i32Size)
 
 	// Send empty goods list (field shop not populated yet)
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_FIELDSHOP_GOODSLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint16_t goodsCount = 0;
-	memcpy(buffer + offset, &goodsCount, sizeof(uint16_t)); offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_FIELDSHOP_GOODSLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&goodsCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -345,50 +306,30 @@ void GameSession::OnGachaItemInfoReq(char* pData, INT32 i32Size)
 {
 	// Return gacha item info - empty item list for now
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GACHA_ITEM_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint16_t itemCount = 0;
-	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_GACHA_ITEM_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGachaShopStateReq(char* pData, INT32 i32Size)
 {
 	// Return gacha shop state: open=1, closed=0
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GACHA_SHOP_STATE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint8_t isOpen = 1;	// Shop is open
-	memcpy(buffer + offset, &isOpen, 1);					offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_GACHA_SHOP_STATE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&isOpen, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGachaEnterReq(char* pData, INT32 i32Size)
@@ -438,30 +379,20 @@ void GameSession::OnGachaPurchaseReq(char* pData, INT32 i32Size)
 
 	// Generate random reward item
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GACHA_PURCHASE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;	// Success
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Reward item info
 	int32_t rewardItemId = 1001 + (rand() % 100);	// Random item ID
 	int32_t rewardCount = 1;
 	int32_t remainGP = m_i32GP;
-	memcpy(buffer + offset, &rewardItemId, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &rewardCount, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &remainGP, sizeof(int32_t));		offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_GACHA_PURCHASE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&rewardItemId, sizeof(int32_t));
+	packet.WriteData(&rewardCount, sizeof(int32_t));
+	packet.WriteData(&remainGP, sizeof(int32_t));
+	SendPacketMessage(&packet);
 
 	printf("[Gacha] Purchase - UID=%lld, GachaId=%d, Reward=%d, RemainGP=%d\n",
 		m_i64UID, gachaId, rewardItemId, m_i32GP);
@@ -471,25 +402,15 @@ void GameSession::OnGachaGetPurchaseCountReq(char* pData, INT32 i32Size)
 {
 	// Return purchase count for this session
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GACHA_GET_PURCHASE_COUNT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	int32_t purchaseCount = 0;	// No purchases tracked yet
-	memcpy(buffer + offset, &purchaseCount, sizeof(int32_t)); offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_GACHA_GET_PURCHASE_COUNT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&purchaseCount, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================

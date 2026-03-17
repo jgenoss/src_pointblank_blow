@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameSession.h"
 #include "GameProtocol.h"
+#include "ModuleDataServer.h"
 
 // ============================================================================
 // Medal Handlers (Protocol_Base 0x0200 medal section + Protocol_Medal 0x1200)
@@ -13,30 +14,17 @@ void GameSession::OnGetMedalSystemReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_GET_MEDALSYSTEM_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Medal count
 	uint16_t medalCount = (uint16_t)m_MedalData.i32MedalCount;
-	memcpy(buffer + offset, &medalCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
+	i3NetworkPacket packet(PROTOCOL_BASE_GET_MEDALSYSTEM_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&medalCount, sizeof(uint16_t));
 	// NEW flags (32 bytes = 256 bits)
-	memcpy(buffer + offset, m_MedalData.ui8NewFlags, 32);	offset += 32;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	packet.WriteData(m_MedalData.ui8NewFlags, 32);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnRefreshMedalSystemReq(char* pData, INT32 i32Size)
@@ -59,43 +47,27 @@ void GameSession::OnMedalGetInfoReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[2048];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GET_MEDAL_INFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	// Header: result, totalCount, count in this packet, startIdx
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint16_t totalCount = (uint16_t)m_MedalData.i32MedalCount;
 	uint16_t count = totalCount;
 	uint16_t startIdx = 0;
-	memcpy(buffer + offset, &totalCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &count, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &startIdx, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
+	i3NetworkPacket packet(PROTOCOL_GET_MEDAL_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalCount, sizeof(uint16_t));
+	packet.WriteData(&count, sizeof(uint16_t));
+	packet.WriteData(&startIdx, sizeof(uint16_t));
 	// Per-medal: idx(2) + count(2) + getReward(1) = 5 bytes each (MEDAL struct)
 	for (int i = 0; i < m_MedalData.i32MedalCount; i++)
 	{
-		if (offset + 5 > (int)sizeof(buffer))
-			break;
-
 		const GameMedalEntry& m = m_MedalData.medals[i];
-		memcpy(buffer + offset, &m.ui16Idx, 2);		offset += 2;
-		memcpy(buffer + offset, &m.ui16Count, 2);		offset += 2;
-		memcpy(buffer + offset, &m.ui8GetReward, 1);	offset += 1;
+		packet.WriteData(&m.ui16Idx, 2);
+		packet.WriteData(&m.ui16Count, 2);
+		packet.WriteData(&m.ui8GetReward, 1);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGetCurMedalSetInfoReq(char* pData, INT32 i32Size)
@@ -105,17 +77,7 @@ void GameSession::OnGetCurMedalSetInfoReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GET_CUR_MEDAL_SET_INFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Count active sets
 	uint16_t totalCount = 0;
@@ -127,10 +89,12 @@ void GameSession::OnGetCurMedalSetInfoReq(char* pData, INT32 i32Size)
 
 	uint16_t count = totalCount;
 	uint16_t startIdx = 0;
-	memcpy(buffer + offset, &totalCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &count, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &startIdx, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
+	i3NetworkPacket packet(PROTOCOL_GET_CUR_MEDAL_SET_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalCount, sizeof(uint16_t));
+	packet.WriteData(&count, sizeof(uint16_t));
+	packet.WriteData(&startIdx, sizeof(uint16_t));
 	// Per active set: CUR_MEDAL_SET = type(1) + idx(2) + recvDate(4) + count[6](12) + getReward(1) = 20 bytes
 	for (int i = 0; i < GAME_MEDAL_SET_MAX; i++)
 	{
@@ -138,55 +102,37 @@ void GameSession::OnGetCurMedalSetInfoReq(char* pData, INT32 i32Size)
 		if (!s.bActive)
 			continue;
 
-		if (offset + 20 > (int)sizeof(buffer))
-			break;
-
-		memcpy(buffer + offset, &s.ui8Type, 1);			offset += 1;
-		memcpy(buffer + offset, &s.ui16Idx, 2);			offset += 2;
 		uint32_t recvDate = 0;
-		memcpy(buffer + offset, &recvDate, 4);				offset += 4;
-		memcpy(buffer + offset, s.ui16Count, 12);			offset += 12;	// 6 x uint16_t
-		memcpy(buffer + offset, &s.ui8GetReward, 1);		offset += 1;
+		packet.WriteData(&s.ui8Type, 1);
+		packet.WriteData(&s.ui16Idx, 2);
+		packet.WriteData(&recvDate, 4);
+		packet.WriteData(s.ui16Count, 12);	// 6 x uint16_t
+		packet.WriteData(&s.ui8GetReward, 1);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGetComMedalSetInfoReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_GET_COM_MEDAL_SET_INFO_REQ -> ACK
-	// Send completed medal sets (empty for now - no completed sets)
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
+	if (m_i64UID > 0 && g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestMedalSetLoad(m_i64UID, GetIndex());
+		return;
+	}
 
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GET_COM_MEDAL_SET_INFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
+	// DataServer unavailable — send empty response
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
-	uint16_t totalCount = 0;
-	uint16_t count = 0;
-	uint16_t startIdx = 0;
-	memcpy(buffer + offset, &totalCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &count, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &startIdx, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	uint16_t zero = 0;
+	i3NetworkPacket packet(PROTOCOL_GET_COM_MEDAL_SET_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&zero, sizeof(uint16_t));
+	packet.WriteData(&zero, sizeof(uint16_t));
+	packet.WriteData(&zero, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGetMedalRewardReq(char* pData, INT32 i32Size)
@@ -248,32 +194,19 @@ void GameSession::OnGetMedalRewardReq(char* pData, INT32 i32Size)
 	}
 
 	// Send ACK
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_GET_MEDAL_REWARD_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	// PACKET_H_GET_MEDAL_REWARD_ACK
 	bool bLastPacket = true;
-	memcpy(buffer + offset, &bLastPacket, 1);				offset += 1;
 	uint8_t count = (uint8_t)processedCount;
-	memcpy(buffer + offset, &count, 1);						offset += 1;
 	uint32_t updatedExp = (uint32_t)m_i64Exp;
 	uint32_t updatedPoint = (uint32_t)m_i32GP;
 	uint16_t masterMedal = 0;
-	memcpy(buffer + offset, &updatedExp, 4);				offset += 4;
-	memcpy(buffer + offset, &updatedPoint, 4);				offset += 4;
-	memcpy(buffer + offset, &masterMedal, 2);				offset += 2;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_GET_MEDAL_REWARD_ACK);
+	packet.WriteData(&bLastPacket, 1);
+	packet.WriteData(&count, 1);
+	packet.WriteData(&updatedExp, 4);
+	packet.WriteData(&updatedPoint, 4);
+	packet.WriteData(&masterMedal, 2);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnSetNotifyMedalReq(char* pData, INT32 i32Size)
@@ -296,28 +229,15 @@ void GameSession::OnSetNotifyMedalReq(char* pData, INT32 i32Size)
 	}
 
 	// Send ACK with current notify medals
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SET_NOTIFY_MEDAL_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
+	i3NetworkPacket packet(PROTOCOL_SET_NOTIFY_MEDAL_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
 	for (int i = 0; i < MAX_NOTIFY_MEDAL_COUNT; i++)
 	{
-		memcpy(buffer + offset, &m_MedalData.notifyMedals[i].ui8MedalType, 1);	offset += 1;
-		memcpy(buffer + offset, &m_MedalData.notifyMedals[i].ui16Idx, 2);		offset += 2;
-		memcpy(buffer + offset, &m_MedalData.notifyMedals[i].ui16Count, 2);	offset += 2;
+		packet.WriteData(&m_MedalData.notifyMedals[i].ui8MedalType, 1);
+		packet.WriteData(&m_MedalData.notifyMedals[i].ui16Idx, 2);
+		packet.WriteData(&m_MedalData.notifyMedals[i].ui16Count, 2);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }

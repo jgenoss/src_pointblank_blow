@@ -14,7 +14,17 @@
 #include <cstring>
 #include <cstdint>
 
-// i3 Engine
+// i3 Engine platform defines (required before i3Base.h)
+#ifndef _WINDOWS
+#define _WINDOWS
+#endif
+#ifndef I3_COMPILER_VC
+#define I3_COMPILER_VC
+#endif
+#ifndef I3_DLL
+#define I3_DLL
+#endif
+
 #include "i3Base.h"
 
 // ServerCommon

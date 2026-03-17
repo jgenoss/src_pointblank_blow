@@ -7,6 +7,7 @@
 #include "GameContextMain.h"
 #include "Room.h"
 #include "RoomManager.h"
+#include "ObserverHelper.h"
 
 ModuleBattleServer::ModuleBattleServer()
 	: m_i32ServerId(0)
@@ -47,15 +48,6 @@ void ModuleBattleServer::RequestBattleCreate(int i32RoomIdx, int i32ChannelNum,
 	if (!IsConnected())
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_BATTLE_CREATE_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_BATTLE_CREATE_REQ req;
 	req.i32RoomIdx = i32RoomIdx;
 	req.i32ChannelNum = i32ChannelNum;
@@ -63,13 +55,8 @@ void ModuleBattleServer::RequestBattleCreate(int i32RoomIdx, int i32ChannelNum,
 	req.ui8MapIndex = ui8MapIndex;
 	req.ui8MaxPlayers = ui8MaxPlayers;
 	req.i32PlayerCount = i32PlayerCount;
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_BATTLE_CREATE_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 
 	printf("[ModuleBattleServer] Sent BATTLE_CREATE_REQ - Room=%d, Channel=%d, Mode=%d\n",
@@ -83,15 +70,6 @@ void ModuleBattleServer::RequestPlayerMigrate(int64_t i64UID, int i32BattleRoomI
 	if (!IsConnected())
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_PLAYER_MIGRATE_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_PLAYER_MIGRATE_REQ req;
 	req.i64UID = i64UID;
 	req.i32BattleRoomIdx = i32BattleRoomIdx;
@@ -99,13 +77,8 @@ void ModuleBattleServer::RequestPlayerMigrate(int64_t i64UID, int i32BattleRoomI
 	req.i32Team = i32Team;
 	req.ui32ClientIP = ui32ClientIP;
 	req.ui16ClientPort = ui16ClientPort;
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_PLAYER_MIGRATE_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 }
 
@@ -119,15 +92,6 @@ bool ModuleBattleServer::OnConnect()
 		GetRemoteIP(), GetRemotePort());
 
 	// Send registration request (reuse IS_SERVER_REGISTER_REQ)
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_BATTLE_REGISTER_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_SERVER_REGISTER_REQ req;
 	req.i32ServerId = m_i32ServerId;
 	req.i32ServerType = (int)ServerType::Game;
@@ -136,13 +100,8 @@ bool ModuleBattleServer::OnConnect()
 	req.ui16PublicPort = m_ui16PublicPort;
 	req.i32MaxPlayers = m_i32MaxPlayers;
 	memset(req.szRegion, 0, sizeof(req.szRegion));
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_BATTLE_REGISTER_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 
 	m_bRegistered = false;
@@ -161,10 +120,10 @@ void ModuleBattleServer::OnProcessPacket(char* pData, int i32Size)
 	if (i32Size < (int)sizeof(uint16_t) * 2)
 		return;
 
-	uint16_t packetSize = *(uint16_t*)pData;
+	uint16_t packetSize = *(uint16_t*)pData & 0x7FFF;	// data field size only
 	uint16_t protocolId = *(uint16_t*)(pData + 2);
 	char* pPayload = pData + 4;
-	int payloadSize = packetSize - 4;
+	int payloadSize = (int)packetSize;
 
 	switch (protocolId)
 	{
@@ -219,26 +178,12 @@ void ModuleBattleServer::OnHeartbeat()
 	if (!IsConnected())
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_HEARTBEAT_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_HEARTBEAT_REQ req;
 	req.i32ServerId = g_pContextMain ? g_pContextMain->m_i32ServerId : 0;
 	req.i32ServerType = (int)ServerType::Game;
 	req.i32CurrentPlayers = 0;
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_HEARTBEAT_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 }
 
@@ -337,7 +282,7 @@ void ModuleBattleServer::OnBattleEndNotify(char* pData, int i32Size)
 			{
 				bool bWin = (pResult->i32Team == pNotify->i32WinnerTeam);
 				pSession->ApplyBattleResult(pResult->i32Kills, pResult->i32Deaths,
-					pResult->i32Headshots, bWin);
+					pResult->i32Headshots, pResult->i32Assists, bWin);
 
 				// Save stats to DataServer
 				if (g_pModuleDataServer)
@@ -404,6 +349,8 @@ void ModuleBattleServer::OnBattleKillNotify(char* pData, int i32Size)
 	char* pKillData = pData + sizeof(IS_BATTLE_KILL_NOTIFY);
 	int remainingSize = i32Size - sizeof(IS_BATTLE_KILL_NOTIFY);
 
+	Room* pRoom = g_pRoomManager ? g_pRoomManager->GetRoom(pNotify->i32ChannelNum, pNotify->i32RoomIdx) : nullptr;
+
 	for (int i = 0; i < pNotify->ui8KillCount && remainingSize >= (int)sizeof(IS_BATTLE_KILL_INFO); i++)
 	{
 		IS_BATTLE_KILL_INFO* pKill = (IS_BATTLE_KILL_INFO*)pKillData;
@@ -413,8 +360,13 @@ void ModuleBattleServer::OnBattleKillNotify(char* pData, int i32Size)
 			pKill->i64KillerUID, pKill->i64VictimUID,
 			pKill->ui32WeaponID, pKill->ui8Headshot);
 
-		// TODO: Forward kill event to room spectators, update real-time leaderboard,
-		// trigger quest/medal progress for killer
+		// Forward kill event to room spectators
+		if (pRoom)
+		{
+			ObserverHelper::NotifyKillFeed(pRoom,
+				(int)pKill->ui32KillerSlot, (int)pKill->ui32VictimSlot,
+				pKill->ui32WeaponID, pKill->ui8HitPart, 0);
+		}
 
 		pKillData += sizeof(IS_BATTLE_KILL_INFO);
 		remainingSize -= sizeof(IS_BATTLE_KILL_INFO);
@@ -445,8 +397,14 @@ void ModuleBattleServer::OnBattleRoundEndNotify(char* pData, int i32Size)
 		pNotify->ui8RoundEndType, pNotify->ui8WinTeam,
 		pNotify->i32RedScore, pNotify->i32BlueScore);
 
-	// TODO: Update room score display for spectators/lobby,
-	// check if match should end (best-of-N rounds)
+	// Notify spectators of score update and round end
+	Room* pRoom = g_pRoomManager ? g_pRoomManager->GetRoom(pNotify->i32ChannelNum, pNotify->i32RoomIdx) : nullptr;
+	if (pRoom)
+	{
+		ObserverHelper::NotifyScoreUpdate(pRoom,
+			pNotify->i32RedScore, pNotify->i32BlueScore, pNotify->ui8RoundNum);
+		ObserverHelper::NotifyRoundEnd(pRoom, (int)pNotify->ui8WinTeam);
+	}
 }
 
 void ModuleBattleServer::OnBattleHackNotify(char* pData, int i32Size)
@@ -480,7 +438,7 @@ void ModuleBattleServer::OnBattleHackNotify(char* pData, int i32Size)
 			if (pSession)
 			{
 				printf("[ModuleBattleServer] Kicking hacker UID=%lld\n", pNotify->i64UID);
-				// pSession->DisconnectUser(); // Will be wired when disconnect system is ready
+				pSession->OnDisconnect(TRUE);
 			}
 		}
 	}
@@ -498,6 +456,27 @@ void ModuleBattleServer::OnBattleMissionNotify(char* pData, int i32Size)
 		pNotify->ui32SlotIdx, pNotify->i64UID,
 		pNotify->i32Param1, pNotify->i32Param2);
 
-	// TODO: Update quest/medal progress for mission events
-	// e.g., bomb install count, touchdown count
+	// Notify spectators of mission-specific events
+	Room* pRoom = g_pRoomManager ? g_pRoomManager->GetRoom(pNotify->i32ChannelNum, pNotify->i32RoomIdx) : nullptr;
+	if (pRoom)
+	{
+		switch (pNotify->ui8EventType)
+		{
+		case MISSION_EVENT_BOMB_INSTALL:
+			ObserverHelper::NotifyBombPlant(pRoom, (int)pNotify->ui32SlotIdx,
+				(uint8_t)pNotify->i32Param1);
+			break;
+		case MISSION_EVENT_BOMB_EXPLODE:
+			ObserverHelper::NotifyBombExplode(pRoom);
+			break;
+		case MISSION_EVENT_BOMB_UNINSTALL:
+			ObserverHelper::NotifyBombDefuse(pRoom, (int)pNotify->ui32SlotIdx);
+			break;
+		case MISSION_EVENT_TOUCHDOWN:
+			ObserverHelper::NotifyVIPTouchdown(pRoom, (int)pNotify->ui32SlotIdx);
+			break;
+		default:
+			break;
+		}
+	}
 }

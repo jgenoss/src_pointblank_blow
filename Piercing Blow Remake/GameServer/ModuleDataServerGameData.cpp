@@ -85,13 +85,7 @@ void ModuleDataServer::RequestQuestSave(int64_t i64UID, uint8_t ui8SetIndex, uin
 		return;
 
 	// Quest has variable-length payload after the struct
-	char buffer[8192];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_QUEST_SAVE_REQ;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	IS_QUEST_SAVE_REQ req;
 	req.i64UID = i64UID;
@@ -100,19 +94,14 @@ void ModuleDataServer::RequestQuestSave(int64_t i64UID, uint8_t ui8SetIndex, uin
 	req.ui8ActiveCard = ui8ActiveCard;
 	req.ui16DataSize = ui16DataSize;
 
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
 
 	if (pQuestData && ui16DataSize > 0 && offset + ui16DataSize < (int)sizeof(buffer))
 	{
 		memcpy(buffer + offset, pQuestData, ui16DataSize);
 		offset += ui16DataSize;
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_QUEST_SAVE_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 }
 
@@ -163,4 +152,153 @@ void ModuleDataServer::OnQuestSaveAck(char* pData, int i32Size)
 	IS_QUEST_SAVE_ACK* pAck = (IS_QUEST_SAVE_ACK*)pData;
 	if (pAck->i32Result != 0)
 		printf("[ModuleDataServer] Quest save failed - UID=%lld\n", pAck->i64UID);
+}
+
+// ============================================================================
+// Request operations - Options
+// ============================================================================
+
+void ModuleDataServer::RequestOptionSave(int64_t i64UID, const char* pOptionsData, uint16_t ui16DataSize)
+{
+	if (!IsConnected() || !pOptionsData || ui16DataSize == 0)
+		return;
+
+	offset += sizeof(uint16_t);
+
+	IS_OPTION_SAVE_REQ req;
+	req.i64UID = i64UID;
+	req.ui16DataSize = ui16DataSize;
+
+
+	if (offset + ui16DataSize < (int)sizeof(buffer))
+	{
+		memcpy(buffer + offset, pOptionsData, ui16DataSize);
+		offset += ui16DataSize;
+	}
+	i3NetworkPacket packet(PROTOCOL_IS_OPTION_SAVE_REQ);
+	packet.WriteData(&req, sizeof(req));
+	SendPacket(&packet);
+}
+
+void ModuleDataServer::OnOptionSaveAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_OPTION_SAVE_ACK))
+		return;
+	IS_OPTION_SAVE_ACK* pAck = (IS_OPTION_SAVE_ACK*)pData;
+	if (pAck->i32Result != 0)
+		printf("[ModuleDataServer] Option save failed - UID=%lld\n", pAck->i64UID);
+}
+
+void ModuleDataServer::RequestOptionLoad(int64_t i64UID, int i32SessionIdx)
+{
+	if (!IsConnected())
+		return;
+
+	IS_OPTION_LOAD_REQ req;
+	req.i64UID       = i64UID;
+	req.i32SessionIdx = i32SessionIdx;
+
+	SendRequest(PROTOCOL_IS_OPTION_LOAD_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::OnOptionLoadAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_OPTION_LOAD_ACK))
+		return;
+
+	IS_OPTION_LOAD_ACK* pAck = (IS_OPTION_LOAD_ACK*)pData;
+
+	GameSession* pSession = g_pGameSessionManager
+		? g_pGameSessionManager->GetSessionByIndex(pAck->i32SessionIdx)
+		: nullptr;
+	if (!pSession)
+		return;
+
+	// Send PROTOCOL_BASE_GET_OPTION_ACK to client
+	i3NetworkPacket packet;
+	offset += sizeof(uint16_t);
+
+	int32_t result = 0;
+
+	if (pAck->i32Result == 0 && pAck->ui16DataSize > 0)
+	{
+		// Send saved options blob
+		const char* pBlob = pData + sizeof(IS_OPTION_LOAD_ACK);
+		uint16_t blobSize  = pAck->ui16DataSize;
+		if (offset + blobSize <= (int)sizeof(buffer))
+		{
+			memcpy(buffer + offset, pBlob, blobSize);
+			offset += blobSize;
+		}
+	}
+	else
+	{
+		// No saved options — send 128 bytes of zeroed defaults
+		memset(buffer + offset, 0, 128);
+		offset += 128;
+	}
+	i3NetworkPacket packet(PROTOCOL_BASE_GET_OPTION_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	pSession->SendPacketMessage(&packet);
+}
+
+void ModuleDataServer::RequestMedalSetLoad(int64_t i64UID, int i32SessionIdx)
+{
+	if (!IsConnected())
+		return;
+
+	IS_MEDAL_SET_LOAD_REQ req;
+	req.i64UID        = i64UID;
+	req.i32SessionIdx = i32SessionIdx;
+
+	SendRequest(PROTOCOL_IS_MEDAL_SET_LOAD_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::OnMedalSetLoadAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_MEDAL_SET_LOAD_ACK))
+		return;
+
+	IS_MEDAL_SET_LOAD_ACK* pAck = (IS_MEDAL_SET_LOAD_ACK*)pData;
+
+	GameSession* pSession = g_pGameSessionManager
+		? g_pGameSessionManager->GetSessionByIndex(pAck->i32SessionIdx)
+		: nullptr;
+	if (!pSession)
+		return;
+
+	int i32Count = (int)pAck->ui16Count;
+	const IS_MEDAL_SET_CURRENT_ENTRY* pSets = (i32Count > 0)
+		? (const IS_MEDAL_SET_CURRENT_ENTRY*)(pData + sizeof(IS_MEDAL_SET_LOAD_ACK))
+		: nullptr;
+
+	// Send PROTOCOL_GET_COM_MEDAL_SET_INFO_ACK to client
+	int32_t result = 0;
+	uint16_t totalCount = (uint16_t)i32Count;
+	uint16_t count      = (uint16_t)i32Count;
+	uint16_t startIdx   = 0;
+
+	i3NetworkPacket packet(PROTOCOL_GET_COM_MEDAL_SET_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalCount, sizeof(uint16_t));
+	packet.WriteData(&count, sizeof(uint16_t));
+	packet.WriteData(&startIdx, sizeof(uint16_t));
+
+	for (int i = 0; i < i32Count && pSets; i++)
+	{
+		const IS_MEDAL_SET_CURRENT_ENTRY& s = pSets[i];
+		uint32_t recvDate = 0;
+		packet.WriteData(&s.ui8SetType, sizeof(uint8_t));
+		packet.WriteData(&s.i16MedalSetIdx, sizeof(int16_t));
+		packet.WriteData(&recvDate, sizeof(uint32_t));
+		packet.WriteData(&s.i16Medal1Count, sizeof(int16_t));
+		packet.WriteData(&s.i16Medal2Count, sizeof(int16_t));
+		packet.WriteData(&s.i16Medal3Count, sizeof(int16_t));
+		packet.WriteData(&s.i16Medal4Count, sizeof(int16_t));
+		packet.WriteData(&s.i16Medal5Count, sizeof(int16_t));
+		packet.WriteData(&s.i16Medal6Count, sizeof(int16_t));
+		packet.WriteData(&s.ui8GetReward, sizeof(uint8_t));
+	}
+
+	pSession->SendPacketMessage(&packet);
 }

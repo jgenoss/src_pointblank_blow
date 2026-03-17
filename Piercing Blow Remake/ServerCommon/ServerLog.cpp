@@ -1,5 +1,4 @@
-#include <winsock2.h>
-#include <windows.h>
+#include "i3CommonType.h"
 #include "ServerLog.h"
 #include <cstring>
 #include <direct.h>

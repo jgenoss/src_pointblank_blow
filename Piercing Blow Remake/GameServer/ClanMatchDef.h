@@ -144,4 +144,53 @@ struct ClanMatchResultEntry
 	}
 };
 
+// Preseason snapshot — stored at end of each clan war season
+// Looked up by clanId to populate the "previous season" ranking response
+#define MAX_SEASON_SNAPSHOT_CLANS	256
+
+struct ClanSeasonSnapshot
+{
+	int		i32ClanId;
+	char	szClanName[64];
+	int		i32SeasonRank;		// Final rank in leaderboard (1 = first)
+	int		i32Wins;
+	int		i32Losses;
+	int		i32Points;
+
+	void Reset()
+	{
+		i32ClanId   = 0;
+		szClanName[0] = '\0';
+		i32SeasonRank = 0;
+		i32Wins     = 0;
+		i32Losses   = 0;
+		i32Points   = 0;
+	}
+
+	bool IsValid() const { return i32ClanId > 0; }
+};
+
+// Mercenary pool entry (in-memory, session-based)
+#define MAX_MERCENARIES		200
+
+struct MercenaryEntry
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32SessionIdx;
+	uint8_t		ui8Level;
+	uint8_t		ui8Rank;
+	bool		bActive;
+
+	void Reset()
+	{
+		i64UID = 0;
+		szNickname[0] = '\0';
+		i32SessionIdx = -1;
+		ui8Level = 0;
+		ui8Rank = 0;
+		bActive = false;
+	}
+};
+
 #endif // __CLANMATCHDEF_H__

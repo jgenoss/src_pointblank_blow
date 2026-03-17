@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "DataServerContext.h"
 #include "DataSession.h"
 #include "DataSessionManager.h"
@@ -18,7 +19,7 @@ DataServerContext* g_pDataServerContext = nullptr;
 // DataServerContext
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-I3_CLASS_INSTANCE(DataServerContext, i3NetworkServerContext);
+I3_CLASS_INSTANCE(DataServerContext, i3NetworkServerContext);//ninguna instancia del constructor "i3MetaTemplate<T>::i3MetaTemplate [con T=DataServerContext]" coincide con la lista de argumentos
 
 DataServerContext::DataServerContext()
 	: m_pDataSessionManager(nullptr)
@@ -147,33 +148,55 @@ bool DataServer::OnLoadConfig(const char* pszConfigPath)
 
 	// Load from INI file (override defaults)
 	i3IniParser ini;
-	if (ini.Load(pszConfigPath))
+	if (!ini.OpenFromFile(pszConfigPath))
 	{
-		const char* pszBindIP = ini.GetString("DataServer", "BindIP", "0.0.0.0");
-		strncpy_s(m_DataConfig.szBindIP, pszBindIP, _TRUNCATE);
-		m_DataConfig.ui16BindPort		= (uint16_t)ini.GetInt("DataServer", "BindPort", 40100);
-		m_DataConfig.i32MaxSessions		= ini.GetInt("DataServer", "MaxSessions", 32);
-		m_DataConfig.i32WorkerThreadCount = ini.GetInt("DataServer", "WorkerThreads", 4);
-		m_DataConfig.ui8SocketTimeout	= (uint8_t)ini.GetInt("DataServer", "SocketTimeout", 60);
-
-		const char* pszDBHost = ini.GetString("Database", "Host", "127.0.0.1");
-		strncpy_s(m_DataConfig.dbConfig.szHost, pszDBHost, _TRUNCATE);
-		m_DataConfig.dbConfig.ui16Port	= (uint16_t)ini.GetInt("Database", "Port", 5432);
-
-		const char* pszDBName = ini.GetString("Database", "Database", "piercing_blow");
-		strncpy_s(m_DataConfig.dbConfig.szDatabase, pszDBName, _TRUNCATE);
-
-		const char* pszDBUser = ini.GetString("Database", "User", "pb_server");
-		strncpy_s(m_DataConfig.dbConfig.szUser, pszDBUser, _TRUNCATE);
-
-		const char* pszDBPass = ini.GetString("Database", "Password", "pb_password");
-		strncpy_s(m_DataConfig.dbConfig.szPassword, pszDBPass, _TRUNCATE);
-
-		m_DataConfig.i32DBPoolSize		= ini.GetInt("Database", "PoolSize", 8);
+		printf("[DataServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
 	}
 	else
 	{
-		printf("[DataServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
+		INT32 nVal = 0;
+		char  szVal[256];
+
+		// [DataServer] section
+		if (ini.ReadSection("DataServer"))
+		{
+			ini.GetValue("BindIP", "0.0.0.0", szVal, sizeof(szVal));
+			strncpy_s(m_DataConfig.szBindIP, szVal, _TRUNCATE);
+
+			ini.GetValue("BindPort", (INT32)40100, &nVal);
+			m_DataConfig.ui16BindPort = (uint16_t)nVal;
+
+			ini.GetValue("MaxSessions", (INT32)32, &nVal);
+			m_DataConfig.i32MaxSessions = nVal;
+
+			ini.GetValue("WorkerThreads", (INT32)4, &nVal);
+			m_DataConfig.i32WorkerThreadCount = nVal;
+
+			ini.GetValue("SocketTimeout", (INT32)60, &nVal);
+			m_DataConfig.ui8SocketTimeout = (uint8_t)nVal;
+		}
+
+		// [Database] section
+		if (ini.ReadSection("Database"))
+		{
+			ini.GetValue("Host", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_DataConfig.dbConfig.szHost, szVal, _TRUNCATE);
+
+			ini.GetValue("Port", (INT32)5432, &nVal);
+			m_DataConfig.dbConfig.ui16Port = (uint16_t)nVal;
+
+			ini.GetValue("Database", "piercing_blow", szVal, sizeof(szVal));
+			strncpy_s(m_DataConfig.dbConfig.szDatabase, szVal, _TRUNCATE);
+
+			ini.GetValue("User", "pb_server", szVal, sizeof(szVal));
+			strncpy_s(m_DataConfig.dbConfig.szUser, szVal, _TRUNCATE);
+
+			ini.GetValue("Password", "pb_password", szVal, sizeof(szVal));
+			strncpy_s(m_DataConfig.dbConfig.szPassword, szVal, _TRUNCATE);
+
+			ini.GetValue("PoolSize", (INT32)8, &nVal);
+			m_DataConfig.i32DBPoolSize = nVal;
+		}
 	}
 
 	m_Config = m_DataConfig;

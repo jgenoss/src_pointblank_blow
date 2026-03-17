@@ -4,6 +4,7 @@
 #pragma once
 
 class CollisionSystem;
+class PhysicsEngine;
 class BattleMember;
 class ConfigXML;
 
@@ -22,6 +23,7 @@ public:
 
 	// Set collision system reference (per-room, from MapData)
 	void	SetCollisionSystem(CollisionSystem* pCollision)		{ m_pCollision = pCollision; }
+	void	SetPhysicsEngine(PhysicsEngine* pPhysics)			{ m_pPhysicsEngine = pPhysics; }
 	void	SetConfigXML(ConfigXML* pConfig)						{ m_pConfig = pConfig; }
 
 	// ===== Hit Validation =====
@@ -50,6 +52,7 @@ public:
 
 private:
 	CollisionSystem*	m_pCollision;
+	PhysicsEngine*		m_pPhysicsEngine;
 	ConfigXML*			m_pConfig;
 };
 

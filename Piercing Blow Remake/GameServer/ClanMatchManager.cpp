@@ -7,11 +7,16 @@ ClanMatchManager::ClanMatchManager()
 	: m_i32ActiveCount(0)
 	, m_i32ResultCount(0)
 	, m_i32ResultWriteIdx(0)
+	, m_i32SnapshotCount(0)
 {
 	for (int i = 0; i < MAX_CLAN_MATCH_TEAMS; i++)
 		m_Teams[i].Reset();
 	for (int i = 0; i < MAX_CLAN_MATCH_RESULTS; i++)
 		m_Results[i].Reset();
+	for (int i = 0; i < MAX_MERCENARIES; i++)
+		m_Mercenaries[i].Reset();
+	for (int i = 0; i < MAX_SEASON_SNAPSHOT_CLANS; i++)
+		m_SeasonSnapshot[i].Reset();
 }
 
 ClanMatchManager::~ClanMatchManager()
@@ -381,4 +386,137 @@ int ClanMatchManager::GetMatchResultsForClan(int clanId, ClanMatchResultEntry* p
 		}
 	}
 	return count;
+}
+
+// ============================================================================
+// Mercenary Pool
+// ============================================================================
+
+bool ClanMatchManager::RegisterMercenary(int64_t uid, const char* nick, int sessionIdx,
+	uint8_t level, uint8_t rank)
+{
+	if (uid <= 0 || !nick)
+		return false;
+
+	// Already registered?
+	if (IsMercenary(uid))
+		return false;
+
+	for (int i = 0; i < MAX_MERCENARIES; i++)
+	{
+		if (!m_Mercenaries[i].bActive)
+		{
+			m_Mercenaries[i].i64UID       = uid;
+			strncpy_s(m_Mercenaries[i].szNickname, nick, _TRUNCATE);
+			m_Mercenaries[i].i32SessionIdx = sessionIdx;
+			m_Mercenaries[i].ui8Level     = level;
+			m_Mercenaries[i].ui8Rank      = rank;
+			m_Mercenaries[i].bActive      = true;
+
+			printf("[ClanMatch] Mercenary registered - UID=%lld (%s)\n", uid, nick);
+			return true;
+		}
+	}
+
+	printf("[ClanMatch] Mercenary pool full - UID=%lld\n", uid);
+	return false;
+}
+
+bool ClanMatchManager::UnregisterMercenary(int64_t uid)
+{
+	for (int i = 0; i < MAX_MERCENARIES; i++)
+	{
+		if (m_Mercenaries[i].bActive && m_Mercenaries[i].i64UID == uid)
+		{
+			printf("[ClanMatch] Mercenary unregistered - UID=%lld (%s)\n",
+				uid, m_Mercenaries[i].szNickname);
+			m_Mercenaries[i].Reset();
+			return true;
+		}
+	}
+	return false;
+}
+
+int ClanMatchManager::GetMercenaryList(MercenaryEntry* pOut, int maxCount) const
+{
+	int count = 0;
+	for (int i = 0; i < MAX_MERCENARIES && count < maxCount; i++)
+	{
+		if (m_Mercenaries[i].bActive)
+			pOut[count++] = m_Mercenaries[i];
+	}
+	return count;
+}
+
+bool ClanMatchManager::IsMercenary(int64_t uid) const
+{
+	for (int i = 0; i < MAX_MERCENARIES; i++)
+	{
+		if (m_Mercenaries[i].bActive && m_Mercenaries[i].i64UID == uid)
+			return true;
+	}
+	return false;
+}
+
+// ============================================================================
+// Preseason Snapshot
+// ============================================================================
+
+void ClanMatchManager::SaveSeasonSnapshot(int clanId, const char* clanName,
+	int seasonRank, int wins, int losses, int points)
+{
+	if (clanId <= 0)
+		return;
+
+	// Update existing entry if the clan is already present
+	for (int i = 0; i < m_i32SnapshotCount; i++)
+	{
+		if (m_SeasonSnapshot[i].i32ClanId == clanId)
+		{
+			m_SeasonSnapshot[i].i32SeasonRank = seasonRank;
+			m_SeasonSnapshot[i].i32Wins       = wins;
+			m_SeasonSnapshot[i].i32Losses     = losses;
+			m_SeasonSnapshot[i].i32Points     = points;
+			if (clanName)
+				strncpy_s(m_SeasonSnapshot[i].szClanName, clanName, _TRUNCATE);
+			return;
+		}
+	}
+
+	// Append new entry (circular — overwrite oldest when full)
+	int slot = m_i32SnapshotCount < MAX_SEASON_SNAPSHOT_CLANS
+		? m_i32SnapshotCount++
+		: (m_i32SnapshotCount % MAX_SEASON_SNAPSHOT_CLANS);
+
+	m_SeasonSnapshot[slot].i32ClanId     = clanId;
+	m_SeasonSnapshot[slot].i32SeasonRank = seasonRank;
+	m_SeasonSnapshot[slot].i32Wins       = wins;
+	m_SeasonSnapshot[slot].i32Losses     = losses;
+	m_SeasonSnapshot[slot].i32Points     = points;
+	if (clanName)
+		strncpy_s(m_SeasonSnapshot[slot].szClanName, clanName, _TRUNCATE);
+	else
+		m_SeasonSnapshot[slot].szClanName[0] = '\0';
+
+	printf("[ClanMatch] Season snapshot saved - ClanId=%d, Rank=%d W=%d L=%d Pts=%d\n",
+		clanId, seasonRank, wins, losses, points);
+}
+
+const ClanSeasonSnapshot* ClanMatchManager::FindSeasonSnapshot(int clanId) const
+{
+	for (int i = 0; i < m_i32SnapshotCount && i < MAX_SEASON_SNAPSHOT_CLANS; i++)
+	{
+		if (m_SeasonSnapshot[i].i32ClanId == clanId)
+			return &m_SeasonSnapshot[i];
+	}
+	return nullptr;
+}
+
+void ClanMatchManager::ClearSeasonSnapshot()
+{
+	for (int i = 0; i < MAX_SEASON_SNAPSHOT_CLANS; i++)
+		m_SeasonSnapshot[i].Reset();
+	m_i32SnapshotCount = 0;
+
+	printf("[ClanMatch] Season snapshot cleared\n");
 }

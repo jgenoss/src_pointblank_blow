@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "GameServerRegistry.h"
 #include <cstdio>
 #include <cstring>

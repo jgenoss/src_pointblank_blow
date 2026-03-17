@@ -10,6 +10,7 @@
 #include "ClanMatchManager.h"
 #include "RouletteDef.h"
 #include "ShopManager.h"
+#include "ModuleControlAdmin.h"
 #include "i3IniParser.h"
 #include "ServerLog.h"
 
@@ -102,6 +103,7 @@ GameServer::GameServer()
 	, m_pModuleConnect(nullptr)
 	, m_pModuleData(nullptr)
 	, m_pModuleBattle(nullptr)
+	, m_pModuleControl(nullptr)
 {
 }
 
@@ -111,52 +113,138 @@ GameServer::~GameServer()
 
 bool GameServer::OnLoadConfig(const char* pszConfigPath)
 {
+	// Defaults
+	strcpy(m_GameConfig.szBindIP, "0.0.0.0");
+	m_GameConfig.ui16BindPort			= 40000;
+	m_GameConfig.i32MaxSessions			= 1000;
+	m_GameConfig.i32WorkerThreadCount	= 8;
+	m_GameConfig.ui8SocketTimeout		= 30;
+	m_GameConfig.i32ServerId			= 1;
+	strcpy(m_GameConfig.szServerName, "GameServer-1");
+	strcpy(m_GameConfig.szPublicIP, "127.0.0.1");
+	m_GameConfig.ui16PublicPort			= 40000;
+	m_GameConfig.ui8ChannelCount		= 4;
+	m_GameConfig.ui16MaxUsersPerChannel	= 200;
+	m_GameConfig.ui16MaxRoomsPerChannel	= 200;
+	strcpy(m_GameConfig.szConnectServerIP, "127.0.0.1");
+	m_GameConfig.ui16ConnectServerPort	= 40001;
+	strcpy(m_GameConfig.szDataServerIP, "127.0.0.1");
+	m_GameConfig.ui16DataServerPort		= 40100;
+	strcpy(m_GameConfig.szBattleServerIP, "127.0.0.1");
+	m_GameConfig.ui16BattleServerPort	= 40200;
+	m_GameConfig.bEnableControlAdmin	= true;
+	strcpy(m_GameConfig.szControlAdminIP, "127.0.0.1");
+	m_GameConfig.ui16ControlAdminPort	= 40500;
+	m_GameConfig.ui16UdpClientPort		= 29890;
+	m_GameConfig.ui16Port0				= 39190;
+
 	i3IniParser ini;
-	if (!ini.Load(pszConfigPath))
+	if (!ini.OpenFromFile(pszConfigPath))
 	{
-		printf("[GameServer] ERROR: Cannot load config: %s\n", pszConfigPath);
-		return false;
+		printf("[GameServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
 	}
+	else
+	{
+		INT32 nVal = 0;
+		char  szVal[256];
 
-	// [GameServer] section
-	const char* pszBindIP = ini.GetString("GameServer", "BindIP", "0.0.0.0");
-	strncpy_s(m_GameConfig.szBindIP, pszBindIP, _TRUNCATE);
-	m_GameConfig.ui16BindPort = (uint16_t)ini.GetInt("GameServer", "BindPort", 40000);
-	m_GameConfig.i32MaxSessions = ini.GetInt("GameServer", "MaxSessions", 1000);
-	m_GameConfig.i32WorkerThreadCount = ini.GetInt("GameServer", "WorkerThreads", 8);
-	m_GameConfig.ui8SocketTimeout = (uint8_t)ini.GetInt("GameServer", "SocketTimeout", 30);
-	m_GameConfig.i32ServerId = ini.GetInt("GameServer", "ServerId", 1);
+		// [GameServer] section
+		if (ini.ReadSection("GameServer"))
+		{
+			ini.GetValue("BindIP", "0.0.0.0", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szBindIP, szVal, _TRUNCATE);
 
-	const char* pszName = ini.GetString("GameServer", "ServerName", "GameServer-1");
-	strncpy_s(m_GameConfig.szServerName, pszName, _TRUNCATE);
+			ini.GetValue("BindPort", (INT32)40000, &nVal);
+			m_GameConfig.ui16BindPort = (uint16_t)nVal;
 
-	const char* pszPublicIP = ini.GetString("GameServer", "PublicIP", "127.0.0.1");
-	strncpy_s(m_GameConfig.szPublicIP, pszPublicIP, _TRUNCATE);
-	m_GameConfig.ui16PublicPort = (uint16_t)ini.GetInt("GameServer", "PublicPort", 40000);
+			ini.GetValue("MaxSessions", (INT32)1000, &nVal);
+			m_GameConfig.i32MaxSessions = nVal;
 
-	// [Channels] section
-	m_GameConfig.ui8ChannelCount = (uint8_t)ini.GetInt("Channels", "ChannelCount", 4);
-	m_GameConfig.ui16MaxUsersPerChannel = (uint16_t)ini.GetInt("Channels", "MaxUsersPerChannel", 200);
-	m_GameConfig.ui16MaxRoomsPerChannel = (uint16_t)ini.GetInt("Channels", "MaxRoomsPerChannel", 200);
+			ini.GetValue("WorkerThreads", (INT32)8, &nVal);
+			m_GameConfig.i32WorkerThreadCount = nVal;
 
-	// [ConnectServer] section
-	const char* pszCSIP = ini.GetString("ConnectServer", "IP", "127.0.0.1");
-	strncpy_s(m_GameConfig.szConnectServerIP, pszCSIP, _TRUNCATE);
-	m_GameConfig.ui16ConnectServerPort = (uint16_t)ini.GetInt("ConnectServer", "Port", 40001);
+			ini.GetValue("SocketTimeout", (INT32)30, &nVal);
+			m_GameConfig.ui8SocketTimeout = (uint8_t)nVal;
 
-	// [DataServer] section
-	const char* pszDSIP = ini.GetString("DataServer", "IP", "127.0.0.1");
-	strncpy_s(m_GameConfig.szDataServerIP, pszDSIP, _TRUNCATE);
-	m_GameConfig.ui16DataServerPort = (uint16_t)ini.GetInt("DataServer", "Port", 40100);
+			ini.GetValue("ServerId", (INT32)1, &nVal);
+			m_GameConfig.i32ServerId = nVal;
 
-	// [BattleServer] section
-	const char* pszBSIP = ini.GetString("BattleServer", "IP", "127.0.0.1");
-	strncpy_s(m_GameConfig.szBattleServerIP, pszBSIP, _TRUNCATE);
-	m_GameConfig.ui16BattleServerPort = (uint16_t)ini.GetInt("BattleServer", "Port", 40200);
+			ini.GetValue("ServerName", "GameServer-1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szServerName, szVal, _TRUNCATE);
 
-	// [Ports] section - Client P2P and public ports
-	m_GameConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("Ports", "UdpClientPort", 29890);
-	m_GameConfig.ui16Port0 = (uint16_t)ini.GetInt("Ports", "Port0", 39190);
+			ini.GetValue("PublicIP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szPublicIP, szVal, _TRUNCATE);
+
+			ini.GetValue("PublicPort", (INT32)40000, &nVal);
+			m_GameConfig.ui16PublicPort = (uint16_t)nVal;
+		}
+
+		// [Channels] section
+		if (ini.ReadSection("Channels"))
+		{
+			ini.GetValue("ChannelCount", (INT32)4, &nVal);
+			m_GameConfig.ui8ChannelCount = (uint8_t)nVal;
+
+			ini.GetValue("MaxUsersPerChannel", (INT32)200, &nVal);
+			m_GameConfig.ui16MaxUsersPerChannel = (uint16_t)nVal;
+
+			ini.GetValue("MaxRoomsPerChannel", (INT32)200, &nVal);
+			m_GameConfig.ui16MaxRoomsPerChannel = (uint16_t)nVal;
+		}
+
+		// [ConnectServer] section
+		if (ini.ReadSection("ConnectServer"))
+		{
+			ini.GetValue("IP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szConnectServerIP, szVal, _TRUNCATE);
+
+			ini.GetValue("Port", (INT32)40001, &nVal);
+			m_GameConfig.ui16ConnectServerPort = (uint16_t)nVal;
+		}
+
+		// [DataServer] section
+		if (ini.ReadSection("DataServer"))
+		{
+			ini.GetValue("IP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szDataServerIP, szVal, _TRUNCATE);
+
+			ini.GetValue("Port", (INT32)40100, &nVal);
+			m_GameConfig.ui16DataServerPort = (uint16_t)nVal;
+		}
+
+		// [BattleServer] section
+		if (ini.ReadSection("BattleServer"))
+		{
+			ini.GetValue("IP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szBattleServerIP, szVal, _TRUNCATE);
+
+			ini.GetValue("Port", (INT32)40200, &nVal);
+			m_GameConfig.ui16BattleServerPort = (uint16_t)nVal;
+		}
+
+		// [ControlAdmin] section
+		if (ini.ReadSection("ControlAdmin"))
+		{
+			ini.GetValue("Enable", (INT32)1, &nVal);
+			m_GameConfig.bEnableControlAdmin = (nVal != 0);
+
+			ini.GetValue("BindIP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_GameConfig.szControlAdminIP, szVal, _TRUNCATE);
+
+			ini.GetValue("BindPort", (INT32)40500, &nVal);
+			m_GameConfig.ui16ControlAdminPort = (uint16_t)nVal;
+		}
+
+		// [Ports] section
+		if (ini.ReadSection("Ports"))
+		{
+			ini.GetValue("UdpClientPort", (INT32)29890, &nVal);
+			m_GameConfig.ui16UdpClientPort = (uint16_t)nVal;
+
+			ini.GetValue("Port0", (INT32)39190, &nVal);
+			m_GameConfig.ui16Port0 = (uint16_t)nVal;
+		}
+	}
 
 	// Copy base config
 	m_Config = m_GameConfig;
@@ -192,21 +280,31 @@ bool GameServer::OnInitialize()
 	// Load Economy config
 	{
 		i3IniParser ini;
-		if (ini.Load("config.ini"))
+		if (ini.OpenFromFile("config.ini"))
 		{
-			pCtxMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
-			pCtxMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
-			pCtxMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
-			pCtxMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
-			pCtxMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
-			pCtxMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
-			pCtxMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
-			pCtxMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+			INT32 nVal = 0;
 
-			pCtxMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
-			pCtxMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
-			pCtxMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
-			pCtxMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+			if (ini.ReadSection("Economy"))
+			{
+				ini.GetValue("KillGPReward",      (INT32)50,    &nVal); pCtxMain->m_i32KillGPReward      = nVal;
+				ini.GetValue("WinGPReward",       (INT32)200,   &nVal); pCtxMain->m_i32WinGPReward       = nVal;
+				ini.GetValue("LoseGPReward",      (INT32)50,    &nVal); pCtxMain->m_i32LoseGPReward      = nVal;
+				ini.GetValue("KillExpReward",     (INT32)100,   &nVal); pCtxMain->m_i32KillExpReward     = nVal;
+				ini.GetValue("WinExpReward",      (INT32)500,   &nVal); pCtxMain->m_i32WinExpReward      = nVal;
+				ini.GetValue("LoseExpReward",     (INT32)100,   &nVal); pCtxMain->m_i32LoseExpReward     = nVal;
+				ini.GetValue("StartingGP",        (INT32)10000, &nVal); pCtxMain->m_i32StartingGP        = nVal;
+				ini.GetValue("StartingCash",      (INT32)0,     &nVal); pCtxMain->m_i32StartingCash      = nVal;
+				ini.GetValue("ClanCreateCostGP",  (INT32)50000, &nVal); pCtxMain->m_i32ClanCreateCostGP  = nVal;
+				ini.GetValue("ClanCreateMinLevel",(INT32)5,     &nVal); pCtxMain->m_i32ClanCreateMinLevel = nVal;
+			}
+
+			if (ini.ReadSection("Battle"))
+			{
+				ini.GetValue("DefaultTimeLimit",  (INT32)300, &nVal); pCtxMain->m_i32DefaultTimeLimit  = nVal;
+				ini.GetValue("DefaultMaxRound",   (INT32)7,   &nVal); pCtxMain->m_i32DefaultMaxRound   = nVal;
+				ini.GetValue("MinPlayersToStart", (INT32)1,   &nVal); pCtxMain->m_i32MinPlayersToStart = nVal;
+				ini.GetValue("AFKTimeout",        (INT32)0,   &nVal); pCtxMain->m_i32AFKTimeout        = nVal;
+			}
 
 			printf("[GameServer] Economy config: KillGP=%d, WinGP=%d, LoseGP=%d, StartGP=%d\n",
 				pCtxMain->m_i32KillGPReward, pCtxMain->m_i32WinGPReward,
@@ -287,6 +385,13 @@ void GameServer::OnShutdown()
 		delete m_pModuleBattle;
 		m_pModuleBattle = nullptr;
 		g_pModuleBattleServer = nullptr;
+	}
+
+	if (m_pModuleControl)
+	{
+		m_pModuleControl->Shutdown();
+		delete m_pModuleControl;
+		m_pModuleControl = nullptr;
 	}
 
 	// Cleanup shop manager
@@ -379,6 +484,53 @@ bool GameServer::InitializeModules()
 	}
 	g_pModuleBattleServer = m_pModuleBattle;
 
+	// Initialize ModuleControlAdmin (integrated admin TCP interface)
+	if (m_GameConfig.bEnableControlAdmin)
+	{
+		m_pModuleControl = new ModuleControlAdmin();
+		if (!m_pModuleControl->Initialize(m_GameConfig.szControlAdminIP,
+			m_GameConfig.ui16ControlAdminPort))
+		{
+			printf("[GameServer] WARNING: ModuleControlAdmin initialization failed\n");
+			delete m_pModuleControl;
+			m_pModuleControl = nullptr;
+		}
+		else
+		{
+			// Load admin accounts from config
+			i3IniParser ini;
+			if (ini.OpenFromFile(m_szConfigPath))
+			{
+				for (int i = 0; i < MAX_ADMIN_ACCOUNTS; ++i)
+				{
+					char szSection[32];
+					snprintf(szSection, sizeof(szSection), "Admin.%d", i);
+					if (!ini.ReadSection(szSection))
+						break;
+					char  szUser[64] = {0};
+					char  szPass[64] = {0};
+					INT32 nLevel     = -1;
+					ini.GetValue("Username", "", szUser, sizeof(szUser));
+					ini.GetValue("Password", "", szPass, sizeof(szPass));
+					ini.GetValue("Level", (INT32)-1, &nLevel);
+					if (szUser[0] && szPass[0] && nLevel >= 0)
+						m_pModuleControl->AddAdminAccount(szUser, szPass, (uint8_t)nLevel);
+					else
+						break;
+				}
+			}
+			// Add default dev account if none configured
+			uint8_t dummyLevel = 0;
+			if (!m_pModuleControl->ValidateAdmin("admin", "admin", &dummyLevel))
+			{
+				printf("[GameServer] No admin accounts found, adding default admin/admin (level=3)\n");
+				m_pModuleControl->AddAdminAccount("admin", "admin", 3);
+			}
+			printf("[GameServer] ControlAdmin module ready on %s:%d\n",
+				m_GameConfig.szControlAdminIP, m_GameConfig.ui16ControlAdminPort);
+		}
+	}
+
 	return true;
 }
 
@@ -388,27 +540,37 @@ bool GameServer::ReloadEconomyConfig()
 		return false;
 
 	i3IniParser ini;
-	if (!ini.Load("config.ini"))
+	if (!ini.OpenFromFile("config.ini"))
 	{
 		printf("[GameServer] ReloadConfig: Cannot load config.ini\n");
 		return false;
 	}
 
+	INT32 nVal = 0;
+
 	// Reload economy
-	g_pContextMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
-	g_pContextMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
-	g_pContextMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
-	g_pContextMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
-	g_pContextMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
-	g_pContextMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
-	g_pContextMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
-	g_pContextMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+	if (ini.ReadSection("Economy"))
+	{
+		ini.GetValue("KillGPReward",      (INT32)50,    &nVal); g_pContextMain->m_i32KillGPReward      = nVal;
+		ini.GetValue("WinGPReward",       (INT32)200,   &nVal); g_pContextMain->m_i32WinGPReward       = nVal;
+		ini.GetValue("LoseGPReward",      (INT32)50,    &nVal); g_pContextMain->m_i32LoseGPReward      = nVal;
+		ini.GetValue("KillExpReward",     (INT32)100,   &nVal); g_pContextMain->m_i32KillExpReward     = nVal;
+		ini.GetValue("WinExpReward",      (INT32)500,   &nVal); g_pContextMain->m_i32WinExpReward      = nVal;
+		ini.GetValue("LoseExpReward",     (INT32)100,   &nVal); g_pContextMain->m_i32LoseExpReward     = nVal;
+		ini.GetValue("StartingGP",        (INT32)10000, &nVal); g_pContextMain->m_i32StartingGP        = nVal;
+		ini.GetValue("StartingCash",      (INT32)0,     &nVal); g_pContextMain->m_i32StartingCash      = nVal;
+		ini.GetValue("ClanCreateCostGP",  (INT32)50000, &nVal); g_pContextMain->m_i32ClanCreateCostGP  = nVal;
+		ini.GetValue("ClanCreateMinLevel",(INT32)5,     &nVal); g_pContextMain->m_i32ClanCreateMinLevel = nVal;
+	}
 
 	// Reload battle config
-	g_pContextMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
-	g_pContextMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
-	g_pContextMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
-	g_pContextMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+	if (ini.ReadSection("Battle"))
+	{
+		ini.GetValue("DefaultTimeLimit",  (INT32)300, &nVal); g_pContextMain->m_i32DefaultTimeLimit  = nVal;
+		ini.GetValue("DefaultMaxRound",   (INT32)7,   &nVal); g_pContextMain->m_i32DefaultMaxRound   = nVal;
+		ini.GetValue("MinPlayersToStart", (INT32)1,   &nVal); g_pContextMain->m_i32MinPlayersToStart = nVal;
+		ini.GetValue("AFKTimeout",        (INT32)0,   &nVal); g_pContextMain->m_i32AFKTimeout        = nVal;
+	}
 
 	printf("[GameServer] Config reloaded: KillGP=%d WinGP=%d LoseGP=%d TimeLimit=%d MaxRound=%d\n",
 		g_pContextMain->m_i32KillGPReward, g_pContextMain->m_i32WinGPReward,

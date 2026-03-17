@@ -17,20 +17,12 @@ void GameSession::OnFriendInfoReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[2048];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FRIEND_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Friend count
 	uint16_t friendCount = (uint16_t)m_i32FriendCount;
-	memcpy(buffer + offset, &friendCount, 2);				offset += 2;
 
 	// Per-friend: uid(8) + nickname(64) + state(1) + level(4) + rankId(4)
 	for (int i = 0; i < m_i32FriendCount; i++)
@@ -57,19 +49,17 @@ void GameSession::OnFriendInfoReq(char* pData, INT32 i32Size)
 					state = 1;	// online
 			}
 		}
-		memcpy(buffer + offset, &state, 1);					offset += 1;
 
 		int32_t level = f.i32Level;
 		int32_t rankId = f.i32RankId;
-		memcpy(buffer + offset, &level, 4);					offset += 4;
-		memcpy(buffer + offset, &rankId, 4);				offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_FRIEND_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&friendCount, 2);
+	packet.WriteData(&state, 1);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rankId, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnFriendInsertReq(char* pData, INT32 i32Size)
@@ -259,25 +249,15 @@ void GameSession::OnWhisperReq(char* pData, INT32 i32Size)
 	{
 		// Send whisper to target
 		i3NetworkPacket recvPacket;
-		char recvBuf[512];
-		int rOffset = 0;
-
-		uint16_t rSz = 0;
-		uint16_t rProto = PROTOCOL_AUTH_RECV_WHISPER_ACK;
 		rOffset += sizeof(uint16_t);
-		memcpy(recvBuf + rOffset, &rProto, sizeof(uint16_t));		rOffset += sizeof(uint16_t);
 
 		// Sender nickname
-		memcpy(recvBuf + rOffset, m_szNickname, 64);				rOffset += 64;
 		// Message
-		memcpy(recvBuf + rOffset, &msgLen, 2);						rOffset += 2;
 		memcpy(recvBuf + rOffset, pMsg, msgLen);					rOffset += msgLen;
-
-		rSz = (uint16_t)rOffset;
-		memcpy(recvBuf, &rSz, sizeof(uint16_t));
-
-		recvPacket.SetPacketData(recvBuf, rOffset);
-		pTarget->SendMessage(&recvPacket);
+		i3NetworkPacket recvPacket(PROTOCOL_AUTH_RECV_WHISPER_ACK);
+		recvPacket.WriteData(m_szNickname, 64);
+		recvPacket.WriteData(&msgLen, 2);
+		pTarget->SendPacketMessage(&recvPacket);
 	}
 
 	// ACK to sender
@@ -385,13 +365,7 @@ void GameSession::OnFindUserReq(char* pData, INT32 i32Size)
 	searchNick[63] = '\0';
 
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FIND_USER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
 	GameSession* pTarget = nullptr;
@@ -401,22 +375,16 @@ void GameSession::OnFindUserReq(char* pData, INT32 i32Size)
 	if (!pTarget)
 	{
 		result = 1;	// Not found
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	}
 	else
 	{
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int64_t uid = pTarget->GetUID();
-		memcpy(buffer + offset, &uid, 8);					offset += 8;
 		memcpy(buffer + offset, pTarget->GetNickname(), 64);offset += 64;
 
 		int32_t level = pTarget->GetLevel();
 		int32_t rankId = pTarget->GetRankId();
 		int32_t clanId = pTarget->GetClanId();
-		memcpy(buffer + offset, &level, 4);					offset += 4;
-		memcpy(buffer + offset, &rankId, 4);				offset += 4;
-		memcpy(buffer + offset, &clanId, 4);				offset += 4;
 
 		// State
 		uint8_t state = 1;	// online
@@ -424,14 +392,16 @@ void GameSession::OnFindUserReq(char* pData, INT32 i32Size)
 			state = 3;
 		else if (pTarget->GetTask() >= GAME_TASK_READY_ROOM)
 			state = 2;
-		memcpy(buffer + offset, &state, 1);					offset += 1;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_FIND_USER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&uid, 8);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rankId, 4);
+	packet.WriteData(&clanId, 4);
+	packet.WriteData(&state, 1);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -512,20 +482,12 @@ void GameSession::OnNoteListReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_MESSENGER_NOTE_LIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Note count
 	uint16_t noteCount = (uint16_t)m_i32NoteCount;
-	memcpy(buffer + offset, &noteCount, 2);					offset += 2;
 
 	// Per-note: noteId(4) + senderNick(64) + subject(64) + type(1) + read(1) + timestamp(4)
 	for (int i = 0; i < m_i32NoteCount; i++)
@@ -539,15 +501,13 @@ void GameSession::OnNoteListReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, note.szSubject, 64);		offset += 64;
 		memcpy(buffer + offset, &note.ui8Type, 1);			offset += 1;
 		uint8_t read = note.bRead ? 1 : 0;
-		memcpy(buffer + offset, &read, 1);					offset += 1;
 		memcpy(buffer + offset, &note.dwTimestamp, 4);		offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_MESSENGER_NOTE_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&noteCount, 2);
+	packet.WriteData(&read, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnNoteDeleteReq(char* pData, INT32 i32Size)
@@ -630,23 +590,10 @@ bool GameSession::ReceiveNote(int64_t senderUID, const char* senderNick,
 
 	// Notify recipient that a new note arrived
 	{
-		i3NetworkPacket packet;
-		char buf[128];
-		int off = 0;
-
-		uint16_t sz = 0;
-		uint16_t proto = PROTOCOL_MESSENGER_NOTE_RECEIVE_ACK;
-		off += sizeof(uint16_t);
-		memcpy(buf + off, &proto, sizeof(uint16_t));	off += sizeof(uint16_t);
-
-		memcpy(buf + off, &note.ui32NoteId, 4);		off += 4;
-		memcpy(buf + off, note.szSenderNick, 64);		off += 64;
-
-		sz = (uint16_t)off;
-		memcpy(buf, &sz, sizeof(uint16_t));
-
-		packet.SetPacketData(buf, off);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_MESSENGER_NOTE_RECEIVE_ACK);
+		packet.WriteData(&note.ui32NoteId, sizeof(uint32_t));
+		packet.WriteData(note.szSenderNick, 64);
+		SendPacketMessage(&packet);
 	}
 
 	return true;
@@ -663,39 +610,29 @@ void GameSession::NotifyFriendsStatusChange(uint8_t ui8NewState)
 
 	// Build status change notification packet
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FRIEND_INFO_CHANGE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Our info
 	int64_t uid = m_i64UID;
-	memcpy(buffer + offset, &uid, 8);						offset += 8;
-	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
-	memcpy(buffer + offset, &ui8NewState, 1);				offset += 1;
 
 	int32_t level = m_i32Level;
 	int32_t rankId = m_i32RankId;
-	memcpy(buffer + offset, &level, 4);						offset += 4;
-	memcpy(buffer + offset, &rankId, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_AUTH_FRIEND_INFO_CHANGE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&uid, 8);
+	packet.WriteData(m_szNickname, 64);
+	packet.WriteData(&ui8NewState, 1);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rankId, 4);
 	// Send to each online friend
 	for (int i = 0; i < m_i32FriendCount; i++)
 	{
 		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
 		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
 		{
-			pFriend->SendMessage(&packet);
+			pFriend->SendPacketMessage(&packet);
 		}
 	}
 }
@@ -706,30 +643,20 @@ void GameSession::NotifyFriendLobbyEnter()
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int64_t uid = m_i64UID;
-	memcpy(buffer + offset, &uid, 8);						offset += 8;
-	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
 
 	int32_t channelNum = m_i32ChannelNum;
-	memcpy(buffer + offset, &channelNum, 4);				offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK);
+	packet.WriteData(&uid, 8);
+	packet.WriteData(m_szNickname, 64);
+	packet.WriteData(&channelNum, 4);
 	for (int i = 0; i < m_i32FriendCount; i++)
 	{
 		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
 		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
-			pFriend->SendMessage(&packet);
+			pFriend->SendPacketMessage(&packet);
 	}
 }
 
@@ -739,26 +666,16 @@ void GameSession::NotifyFriendLobbyLeave()
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_LEAVE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int64_t uid = m_i64UID;
-	memcpy(buffer + offset, &uid, 8);						offset += 8;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_AUTH_FRIEND_ROOM_LEAVE_ACK);
+	packet.WriteData(&uid, 8);
 	for (int i = 0; i < m_i32FriendCount; i++)
 	{
 		GameSession* pFriend = g_pGameSessionManager->FindSessionByUID(m_Friends[i].i64UID);
 		if (pFriend && pFriend->GetTask() >= GAME_TASK_CHANNEL)
-			pFriend->SendMessage(&packet);
+			pFriend->SendPacketMessage(&packet);
 	}
 }
 
@@ -857,29 +774,15 @@ void GameSession::OnFriendInviteReq(char* pData, INT32 i32Size)
 	else
 	{
 		// Send invite to target
-		i3NetworkPacket invitePacket;
-		char buf[256];
-		int off = 0;
-
-		uint16_t rSz = 0;
-		uint16_t rProto = PROTOCOL_AUTH_FRIEND_INVITED_REQUEST_ACK;
-		off += sizeof(uint16_t);
-		memcpy(buf + off, &rProto, sizeof(uint16_t));		off += sizeof(uint16_t);
-
 		int64_t inviterUID = m_i64UID;
-		memcpy(buf + off, &inviterUID, 8);					off += 8;
-		memcpy(buf + off, m_szNickname, 64);				off += 64;
-
 		int32_t channelNum = m_i32ChannelNum;
 		int32_t roomIdx = m_i32RoomIdx;
-		memcpy(buf + off, &channelNum, 4);					off += 4;
-		memcpy(buf + off, &roomIdx, 4);						off += 4;
-
-		rSz = (uint16_t)off;
-		memcpy(buf, &rSz, sizeof(uint16_t));
-
-		invitePacket.SetPacketData(buf, off);
-		pTarget->SendMessage(&invitePacket);
+		i3NetworkPacket invitePacket(PROTOCOL_AUTH_FRIEND_INVITED_REQUEST_ACK);
+		invitePacket.WriteData(&inviterUID, sizeof(int64_t));
+		invitePacket.WriteData(m_szNickname, 64);
+		invitePacket.WriteData(&channelNum, sizeof(int32_t));
+		invitePacket.WriteData(&roomIdx, sizeof(int32_t));
+		pTarget->SendPacketMessage(&invitePacket);
 	}
 
 	SendSimpleAck(PROTOCOL_AUTH_FRIEND_INVITED_ACK, result);
@@ -931,29 +834,15 @@ void GameSession::OnCommunityUserInviteReq(char* pData, INT32 i32Size)
 	else
 	{
 		// Send invite notification to target
-		i3NetworkPacket invitePacket;
-		char buf[256];
-		int off = 0;
-
-		uint16_t rSz = 0;
-		uint16_t rProto = PROTOCOL_COMMUNITY_USER_INVITED_REQUEST_ACK;
-		off += sizeof(uint16_t);
-		memcpy(buf + off, &rProto, sizeof(uint16_t));		off += sizeof(uint16_t);
-
 		int64_t inviterUID = m_i64UID;
-		memcpy(buf + off, &inviterUID, 8);					off += 8;
-		memcpy(buf + off, m_szNickname, 64);				off += 64;
-
 		int32_t channelNum = m_i32ChannelNum;
 		int32_t roomIdx = m_i32RoomIdx;
-		memcpy(buf + off, &channelNum, 4);					off += 4;
-		memcpy(buf + off, &roomIdx, 4);						off += 4;
-
-		rSz = (uint16_t)off;
-		memcpy(buf, &rSz, sizeof(uint16_t));
-
-		invitePacket.SetPacketData(buf, off);
-		pTarget->SendMessage(&invitePacket);
+		i3NetworkPacket invitePacket(PROTOCOL_COMMUNITY_USER_INVITED_REQUEST_ACK);
+		invitePacket.WriteData(&inviterUID, sizeof(int64_t));
+		invitePacket.WriteData(m_szNickname, 64);
+		invitePacket.WriteData(&channelNum, sizeof(int32_t));
+		invitePacket.WriteData(&roomIdx, sizeof(int32_t));
+		pTarget->SendPacketMessage(&invitePacket);
 	}
 
 	SendSimpleAck(PROTOCOL_COMMUNITY_USER_INVITED_ACK, result);
@@ -1010,24 +899,14 @@ void GameSession::OnChangeNicknameReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_CHANGE_NICKNAME_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 	if (result == 0)
 	{
-		memcpy(buffer + offset, m_szNickname, 64);			offset += 64;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_CHANGE_NICKNAME_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(m_szNickname, 64);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnChangeColorNickReq(char* pData, INT32 i32Size)
@@ -1127,24 +1006,15 @@ void GameSession::OnAuthGetMyInfoReq(char* pData, INT32 i32Size)
 {
 	// Return player's own info summary
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_GET_MYINFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// UID
-	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
 
 	// Nickname
 	char nick[64] = {};
 	strncpy(nick, m_szNickname, 63);
-	memcpy(buffer + offset, nick, 64);						offset += 64;
 
 	// Basic stats
 	int32_t level = m_i32Level;
@@ -1158,24 +1028,22 @@ void GameSession::OnAuthGetMyInfoReq(char* pData, INT32 i32Size)
 	int32_t wins = m_i32Wins;
 	int32_t losses = m_i32Losses;
 	int32_t clanId = m_i32ClanId;
-
-	memcpy(buffer + offset, &level, 4);		offset += 4;
-	memcpy(buffer + offset, &rank, 4);		offset += 4;
-	memcpy(buffer + offset, &exp, 8);		offset += 8;
-	memcpy(buffer + offset, &gp, 4);		offset += 4;
-	memcpy(buffer + offset, &cash, 4);		offset += 4;
-	memcpy(buffer + offset, &kills, 4);		offset += 4;
-	memcpy(buffer + offset, &deaths, 4);	offset += 4;
-	memcpy(buffer + offset, &headshots, 4);	offset += 4;
-	memcpy(buffer + offset, &wins, 4);		offset += 4;
-	memcpy(buffer + offset, &losses, 4);	offset += 4;
-	memcpy(buffer + offset, &clanId, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_GET_MYINFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&m_i64UID, sizeof(int64_t));
+	packet.WriteData(nick, 64);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rank, 4);
+	packet.WriteData(&exp, 8);
+	packet.WriteData(&gp, 4);
+	packet.WriteData(&cash, 4);
+	packet.WriteData(&kills, 4);
+	packet.WriteData(&deaths, 4);
+	packet.WriteData(&headshots, 4);
+	packet.WriteData(&wins, 4);
+	packet.WriteData(&losses, 4);
+	packet.WriteData(&clanId, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthFriendRoomEnterReq(char* pData, INT32 i32Size)
@@ -1211,27 +1079,17 @@ void GameSession::OnAuthFriendRoomEnterReq(char* pData, INT32 i32Size)
 
 	// Send friend's room info so client can join
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	int32_t channel = pFriend->GetChannelNum();
 	int32_t roomIdx = pFriend->GetRoomIdx();
-	memcpy(buffer + offset, &channel, 4);	offset += 4;
-	memcpy(buffer + offset, &roomIdx, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_FRIEND_ROOM_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&channel, 4);
+	packet.WriteData(&roomIdx, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthFriendRoomLeaveReq(char* pData, INT32 i32Size)
@@ -1279,29 +1137,15 @@ void GameSession::OnWhisperFindUIDReq(char* pData, INT32 i32Size)
 	}
 
 	// Send whisper to target
-	i3NetworkPacket recvPacket;
-	char recvBuf[400];
-	int recvOff = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_RECV_WHISPER_ACK;
-	recvOff += sizeof(uint16_t);
-	memcpy(recvBuf + recvOff, &proto, sizeof(uint16_t));	recvOff += sizeof(uint16_t);
-
-	memcpy(recvBuf + recvOff, &m_i64UID, sizeof(int64_t));	recvOff += sizeof(int64_t);
-
 	char senderNick[64] = {};
 	strncpy(senderNick, m_szNickname, 63);
-	memcpy(recvBuf + recvOff, senderNick, 64);				recvOff += 64;
 
-	memcpy(recvBuf + recvOff, &msgLen, sizeof(uint16_t));	recvOff += sizeof(uint16_t);
-	memcpy(recvBuf + recvOff, msg, msgLen);					recvOff += msgLen;
-
-	sz = (uint16_t)recvOff;
-	memcpy(recvBuf, &sz, sizeof(uint16_t));
-
-	recvPacket.SetPacketData(recvBuf, recvOff);
-	pTarget->SendMessage(&recvPacket);
+	i3NetworkPacket recvPacket(PROTOCOL_AUTH_RECV_WHISPER_ACK);
+	recvPacket.WriteData(&m_i64UID, sizeof(int64_t));
+	recvPacket.WriteData(senderNick, 64);
+	recvPacket.WriteData(&msgLen, sizeof(uint16_t));
+	recvPacket.WriteData(msg, msgLen);
+	pTarget->SendPacketMessage(&recvPacket);
 
 	// Confirm to sender
 	SendSimpleAck(PROTOCOL_AUTH_SEND_WHISPER_ACK, 0);
@@ -1327,27 +1171,17 @@ void GameSession::OnAuthUsedWeaponReq(char* pData, INT32 i32Size)
 
 	// Return empty weapon usage list for now
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_USED_WEAPON_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
-	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
 
 	uint16_t weaponCount = 0;
-	memcpy(buffer + offset, &weaponCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_USED_WEAPON_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&targetUID, sizeof(int64_t));
+	packet.WriteData(&weaponCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthFCMInfoReq(char* pData, INT32 i32Size)
@@ -1355,28 +1189,18 @@ void GameSession::OnAuthFCMInfoReq(char* pData, INT32 i32Size)
 	// FCM (Fatigue Control Mechanism) - anti-addiction system
 	// Return that player is not subject to FCM restrictions
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_FCM_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;  // 0 = not restricted
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint32_t playTimeSec = 0;
-	memcpy(buffer + offset, &playTimeSec, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	uint8_t fcmState = 0;  // 0 = normal, 1 = warning, 2 = restricted
-	memcpy(buffer + offset, &fcmState, sizeof(uint8_t));		offset += sizeof(uint8_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_FCM_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&playTimeSec, sizeof(uint32_t));
+	packet.WriteData(&fcmState, sizeof(uint8_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1409,28 +1233,16 @@ void GameSession::OnMessengerWhisperByUidReq(char* pData, INT32 i32Size)
 
 	// Send whisper to target
 	i3NetworkPacket packet;
-	char buffer[384];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_RECV_WHISPER_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
 	char senderNick[64] = {};
 	strncpy(senderNick, m_szNickname, 63);
-	memcpy(buffer + offset, senderNick, 64);	offset += 64;
 
 	uint16_t msgSize = (uint16_t)msgLen;
-	memcpy(buffer + offset, &msgSize, sizeof(uint16_t));	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, msg, msgLen);	offset += msgLen;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	pTarget->SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_RECV_WHISPER_ACK);
+	packet.WriteData(&m_i64UID, sizeof(int64_t));
+	packet.WriteData(senderNick, 64);
+	packet.WriteData(&msgSize, sizeof(uint16_t));
+	pTarget->SendPacketMessage(&packet);
 }
 
 void GameSession::OnMessengerFuserInfoReq(char* pData, INT32 i32Size)
@@ -1452,21 +1264,10 @@ void GameSession::OnMessengerFuserInfoReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_MESSENGER_FUSER_INFO_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
 
 	char nick[64] = {};
 	strncpy(nick, pTarget->GetNickname(), 63);
-	memcpy(buffer + offset, nick, 64);	offset += 64;
 
 	int32_t level = pTarget->GetLevel();
 	int32_t rankId = pTarget->GetRankId();
@@ -1475,19 +1276,18 @@ void GameSession::OnMessengerFuserInfoReq(char* pData, INT32 i32Size)
 	int32_t wins = pTarget->GetWins();
 	int32_t losses = pTarget->GetLosses();
 	int32_t clanId = pTarget->GetClanId();
-	memcpy(buffer + offset, &level, 4);		offset += 4;
-	memcpy(buffer + offset, &rankId, 4);	offset += 4;
-	memcpy(buffer + offset, &kills, 4);		offset += 4;
-	memcpy(buffer + offset, &deaths, 4);	offset += 4;
-	memcpy(buffer + offset, &wins, 4);		offset += 4;
-	memcpy(buffer + offset, &losses, 4);	offset += 4;
-	memcpy(buffer + offset, &clanId, 4);	offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_MESSENGER_FUSER_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&targetUID, sizeof(int64_t));
+	packet.WriteData(nick, 64);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rankId, 4);
+	packet.WriteData(&kills, 4);
+	packet.WriteData(&deaths, 4);
+	packet.WriteData(&wins, 4);
+	packet.WriteData(&losses, 4);
+	packet.WriteData(&clanId, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnMessengerKickUserReq(char* pData, INT32 i32Size)
@@ -1526,26 +1326,13 @@ void GameSession::OnMessengerNoteSendFindUidReq(char* pData, INT32 i32Size)
 
 	GameSession* pTarget = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByNickname(nickname) : nullptr;
 
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_MESSENGER_NOTE_SEND_FIND_UID_REQ + 1;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = pTarget ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
 	int64_t foundUID = pTarget ? pTarget->GetUID() : 0;
-	memcpy(buffer + offset, &foundUID, sizeof(int64_t));	offset += sizeof(int64_t);
 
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_MESSENGER_NOTE_SEND_FIND_UID_REQ + 1);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&foundUID, sizeof(int64_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnMessengerNoteGiftNoticeReq(char* pData, INT32 i32Size)

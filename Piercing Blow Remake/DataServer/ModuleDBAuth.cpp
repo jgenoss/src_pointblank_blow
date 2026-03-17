@@ -2,6 +2,49 @@
 #include "DBConnectionPool.h"
 #include <cstdio>
 #include <cstring>
+#include <windows.h>
+#include <bcrypt.h>
+#pragma comment(lib, "Bcrypt.lib")
+
+// SHA-256 digest size
+#define SHA256_DIGEST_SIZE	32
+#define SHA256_HEX_SIZE		(SHA256_DIGEST_SIZE * 2 + 1)
+
+// Compute lowercase hex SHA-256 of pszInput into pszOut (must be SHA256_HEX_SIZE bytes).
+// Returns true on success.
+static bool ComputeSHA256Hex(const char* pszInput, char* pszOut)
+{
+	BCRYPT_ALG_HANDLE hAlg = nullptr;
+	BCRYPT_HASH_HANDLE hHash = nullptr;
+	bool bOk = false;
+
+	if (BCryptOpenAlgorithmProvider(&hAlg, BCRYPT_SHA256_ALGORITHM, nullptr, 0) != 0)
+		return false;
+
+	DWORD cbHash = 0, cbResult = 0;
+	BCryptGetProperty(hAlg, BCRYPT_HASH_LENGTH, (PUCHAR)&cbHash, sizeof(cbHash), &cbResult, 0);
+
+	if (BCryptCreateHash(hAlg, &hHash, nullptr, 0, nullptr, 0, 0) == 0)
+	{
+		PUCHAR pInput = (PUCHAR)pszInput;
+		ULONG  cbInput = (ULONG)strlen(pszInput);
+		if (BCryptHashData(hHash, pInput, cbInput, 0) == 0)
+		{
+			UCHAR digest[SHA256_DIGEST_SIZE];
+			if (BCryptFinishHash(hHash, digest, SHA256_DIGEST_SIZE, 0) == 0)
+			{
+				for (int i = 0; i < SHA256_DIGEST_SIZE; ++i)
+					snprintf(pszOut + i * 2, 3, "%02x", digest[i]);
+				pszOut[SHA256_HEX_SIZE - 1] = '\0';
+				bOk = true;
+			}
+		}
+		BCryptDestroyHash(hHash);
+	}
+
+	BCryptCloseAlgorithmProvider(hAlg, 0);
+	return bOk;
+}
 
 ModuleDBAuth::ModuleDBAuth(DBConnectionPool* pPool)
 	: m_pPool(pPool)
@@ -48,9 +91,16 @@ bool ModuleDBAuth::AuthenticateUser(const char* pszUsername, const char* pszPass
 		return false;
 	}
 
-	// Verificar password (plaintext en v1, TODO: bcrypt)
+	// Verificar password con SHA-256
 	const char* pszStoredHash = result.GetString(0, "password_hash");
-	if (strcmp(pszPassword, pszStoredHash) != 0)
+	char szComputedHash[SHA256_HEX_SIZE];
+	if (!ComputeSHA256Hex(pszPassword, szComputedHash))
+	{
+		pOut->i32Result = -1;
+		m_pPool->ReleaseConnection(pConn);
+		return false;
+	}
+	if (strcmp(szComputedHash, pszStoredHash) != 0)
 	{
 		pOut->i32Result = 2;	// AUTH_RESULT_INVALID_PASSWORD
 		m_pPool->ReleaseConnection(pConn);

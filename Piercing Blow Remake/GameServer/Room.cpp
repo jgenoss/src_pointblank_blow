@@ -4,6 +4,7 @@
 #include "GameProtocol.h"
 #include "GameContextMain.h"
 #include "ClanMatchManager.h"
+#include "ObserverHelper.h"
 
 I3_CLASS_INSTANCE(Room);
 
@@ -231,6 +232,9 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 	m_i32ClanMatchTeam1Idx = -1;
 	m_i32ClanMatchTeam2Idx = -1;
 
+	// Initialize observer system for this room
+	ObserverHelper::OnRoomCreated(this);
+
 	printf("[Room] Created - Ch=%d, Mode=%d, Map=%d, MaxP=%d, Round=%d, Title=%s\n",
 		m_i32ChannelNum, m_ui8GameMode, m_ui8MapIndex,
 		m_i32MaxPlayers, m_Score.i32MaxRound, m_szTitle);
@@ -240,6 +244,9 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 
 void Room::OnDestroy()
 {
+	// Cleanup observer system for this room
+	ObserverHelper::OnRoomDestroyed(this);
+
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		m_Slots[i].Reset();
@@ -627,6 +634,10 @@ void Room::OnRoundEnd(int i32WinnerTeam)
 		m_Score.i32BlueScore++;
 
 	m_Score.i32NowRound++;
+
+	// Notify observers of round end and updated score
+	ObserverHelper::NotifyRoundEnd(this, i32WinnerTeam);
+	ObserverHelper::NotifyScoreUpdate(this, m_Score.i32RedScore, m_Score.i32BlueScore, m_Score.i32NowRound);
 }
 
 void Room::OnAddKill(int i32Team)
@@ -635,6 +646,9 @@ void Room::OnAddKill(int i32Team)
 		m_Score.i32RedScore++;
 	else if (i32Team == TEAM_BLUE)
 		m_Score.i32BlueScore++;
+
+	// Notify observers of score change
+	ObserverHelper::NotifyScoreUpdate(this, m_Score.i32RedScore, m_Score.i32BlueScore, m_Score.i32NowRound);
 }
 
 bool Room::CheckMatchEnd() const
@@ -693,7 +707,7 @@ void Room::SendToAll(i3NetworkPacket* pPacket)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		if (m_pSlotSession[i])
-			m_pSlotSession[i]->SendMessage(pPacket);
+			m_pSlotSession[i]->SendPacketMessage(pPacket);
 	}
 }
 
@@ -705,7 +719,7 @@ void Room::SendToTeam(int i32Team, i3NetworkPacket* pPacket)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		if (m_pSlotSession[i] && m_Slots[i].ui8Team == (uint8_t)i32Team)
-			m_pSlotSession[i]->SendMessage(pPacket);
+			m_pSlotSession[i]->SendPacketMessage(pPacket);
 	}
 }
 
@@ -717,7 +731,7 @@ void Room::SendToAllExcept(GameSession* pExcept, i3NetworkPacket* pPacket)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		if (m_pSlotSession[i] && m_pSlotSession[i] != pExcept)
-			m_pSlotSession[i]->SendMessage(pPacket);
+			m_pSlotSession[i]->SendPacketMessage(pPacket);
 	}
 }
 
@@ -1049,6 +1063,9 @@ void Room::OnUpdateRoom_CountdownB(DWORD dwNow)
 			}
 		}
 
+		// Notify observers of round start
+		ObserverHelper::NotifyRoundStart(this, m_Score.i32NowRound);
+
 		printf("[Room] COUNTDOWN_B -> BATTLE - Room=%d, Round=%d\n",
 			m_i32RoomIdx, m_Score.i32NowRound);
 	}
@@ -1188,23 +1205,17 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 			m_i32AIBotCount++;
 			m_dwAILastSpawnTime = dwNow;
 
-			i3NetworkPacket spawnPkt;
-			char spBuf[16];
-			int spOff = 0;
-			uint16_t spSz = 0;
-			uint16_t spProto = PROTOCOL_BATTLE_AI_COLLISION_ACK;
-			spOff += sizeof(uint16_t);
-			memcpy(spBuf + spOff, &spProto, sizeof(uint16_t));		spOff += sizeof(uint16_t);
 			uint8_t botDiff = m_ui8AIDifficulty;
 			int32_t botStage = m_i32AIStage;
-			memcpy(spBuf + spOff, &botDiff, 1);					spOff += 1;
-			memcpy(spBuf + spOff, &botStage, sizeof(int32_t));		spOff += sizeof(int32_t);
-			spSz = (uint16_t)spOff;
-			memcpy(spBuf, &spSz, sizeof(uint16_t));
-			spawnPkt.SetPacketData(spBuf, spOff);
+			i3NetworkPacket spawnPkt(PROTOCOL_BATTLE_AI_COLLISION_ACK);
+			spawnPkt.WriteData(&botDiff, sizeof(uint8_t));
+			spawnPkt.WriteData(&botStage, sizeof(int32_t));
 			SendToAll(&spawnPkt);
 		}
 	}
+
+	// Update observer system (position broadcasts, delayed events)
+	ObserverHelper::Update(this, dwNow);
 
 	// For mission mode: check if all players on one team are dead
 	if (IsMissionMode(m_ui8GameMode))
@@ -1401,36 +1412,29 @@ void Room::OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32Weapon
 
 	// Broadcast death packet to all players
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_DEATH_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint8_t deadSlot = (uint8_t)i32DeadSlot;
 	uint8_t killerSlot = (uint8_t)(i32KillerSlot >= 0 ? i32KillerSlot : 0xFF);
 	uint8_t assistSlot = (uint8_t)(i32AssistSlot >= 0 ? i32AssistSlot : 0xFF);
 	uint8_t hitPart = ui8HitPart;
 
-	memcpy(buffer + offset, &deadSlot, 1);		offset += 1;
-	memcpy(buffer + offset, &killerSlot, 1);	offset += 1;
-	memcpy(buffer + offset, &ui32WeaponId, 4);	offset += 4;
-	memcpy(buffer + offset, &hitPart, 1);		offset += 1;
-	memcpy(buffer + offset, &assistSlot, 1);	offset += 1;
-	memcpy(buffer + offset, &ui8MultiKill, 1);	offset += 1;
 
 	// Position
-	memcpy(buffer + offset, &fX, 4);	offset += 4;
-	memcpy(buffer + offset, &fY, 4);	offset += 4;
-	memcpy(buffer + offset, &fZ, 4);	offset += 4;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_DEATH_ACK);
+	packet.WriteData(&deadSlot, 1);
+	packet.WriteData(&killerSlot, 1);
+	packet.WriteData(&ui32WeaponId, 4);
+	packet.WriteData(&hitPart, 1);
+	packet.WriteData(&assistSlot, 1);
+	packet.WriteData(&ui8MultiKill, 1);
+	packet.WriteData(&fX, 4);
+	packet.WriteData(&fY, 4);
+	packet.WriteData(&fZ, 4);
 	SendToAll(&packet);
+
+	// Notify observers of kill event
+	ObserverHelper::NotifyKillFeed(this, i32KillerSlot, i32DeadSlot, ui32WeaponId, ui8HitPart, ui8MultiKill);
 
 	// Send damage console info to GMs in room
 	{
@@ -1489,21 +1493,11 @@ void Room::OnPlayerRespawn(int i32Slot)
 
 	// Broadcast respawn to all
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_RESPAWN_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint8_t slotIdx = (uint8_t)i32Slot;
-	memcpy(buffer + offset, &slotIdx, 1);	offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_RESPAWN_ACK);
+	packet.WriteData(&slotIdx, 1);
 	SendToAll(&packet);
 }
 
@@ -1650,7 +1644,7 @@ void Room::CalculateBattleRewards(int i32WinnerTeam)
 
 		// Apply to session
 		m_pSlotSession[i]->ApplyBattleResult(
-			stats.i32Kills, stats.i32Deaths, stats.i32Headshots, bWin);
+			stats.i32Kills, stats.i32Deaths, stats.i32Headshots, 0, bWin);
 	}
 }
 
@@ -1658,17 +1652,10 @@ void Room::SendBattleResultToAll(int i32WinnerTeam)
 {
 	// Build BATTLE_ENDBATTLE_ACK packet with full per-player stats
 	i3NetworkPacket packet;
-	char buffer[2048];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_ENDBATTLE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	// Winner
 	uint8_t winner = (uint8_t)(i32WinnerTeam < 0 ? 0xFF : i32WinnerTeam);
-	memcpy(buffer + offset, &winner, 1);	offset += 1;
 
 	// Battle end user flag (bitmask of occupied slots)
 	uint16_t battleEndUserFlag = 0;
@@ -1677,26 +1664,21 @@ void Room::SendBattleResultToAll(int i32WinnerTeam)
 		if (m_pSlotSession[i])
 			battleEndUserFlag |= (1 << i);
 	}
-	memcpy(buffer + offset, &battleEndUserFlag, 2);	offset += 2;
 
 	// Total round count per team
 	uint16_t redRounds = (uint16_t)m_Score.i32RedScore;
 	uint16_t blueRounds = (uint16_t)m_Score.i32BlueScore;
-	memcpy(buffer + offset, &redRounds, 2);		offset += 2;
-	memcpy(buffer + offset, &blueRounds, 2);	offset += 2;
 
 	// Per-slot accumulated EXP
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		uint16_t exp = m_pSlotSession[i] ? m_SlotStats[i].ui16AccExp : 0;
-		memcpy(buffer + offset, &exp, 2);	offset += 2;
 	}
 
 	// Per-slot accumulated Points
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		uint16_t pt = m_pSlotSession[i] ? m_SlotStats[i].ui16AccPoint : 0;
-		memcpy(buffer + offset, &pt, 2);	offset += 2;
 	}
 
 	// Per-slot result icon (0=loss, 1=win, 2=draw, 3=MVP)
@@ -1710,47 +1692,49 @@ void Room::SendBattleResultToAll(int i32WinnerTeam)
 			else if (m_Slots[i].ui8Team == (uint8_t)i32WinnerTeam)
 				icon = 1;	// Win
 		}
-		memcpy(buffer + offset, &icon, 1);	offset += 1;
 	}
 
 	// Per-slot mission count (kills for DM, round kills for mission)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		uint8_t missionCount = m_pSlotSession[i] ? (uint8_t)m_SlotStats[i].i32Kills : 0;
-		memcpy(buffer + offset, &missionCount, 1);	offset += 1;
 	}
 
 	// Per-slot challenge score (headshots as a simple metric)
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		uint16_t challengeScore = m_pSlotSession[i] ? (uint16_t)m_SlotStats[i].i32Headshots : 0;
-		memcpy(buffer + offset, &challengeScore, 2);	offset += 2;
 	}
 
 	// Bonus EXP array [SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT]
 	for (int i = 0; i < SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT; i++)
 	{
 		uint16_t bonus = 0;
-		memcpy(buffer + offset, &bonus, 2);	offset += 2;
 	}
 
 	// Bonus Point array [SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT]
 	for (int i = 0; i < SLOT_MAX_COUNT * TYPE_BATTLE_RESULT_EVENT_COUNT; i++)
 	{
 		uint16_t bonus = 0;
-		memcpy(buffer + offset, &bonus, 2);	offset += 2;
 	}
 
 	// Battle time in seconds
 	uint32_t battleTime = 0;
 	if (m_dwBattleStartTime > 0)
 		battleTime = (GetTickCount() - m_dwBattleStartTime) / 1000;
-	memcpy(buffer + offset, &battleTime, 4);	offset += 4;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_ENDBATTLE_ACK);
+	packet.WriteData(&winner, 1);
+	packet.WriteData(&battleEndUserFlag, 2);
+	packet.WriteData(&redRounds, 2);
+	packet.WriteData(&blueRounds, 2);
+	packet.WriteData(&exp, 2);
+	packet.WriteData(&pt, 2);
+	packet.WriteData(&icon, 1);
+	packet.WriteData(&missionCount, 1);
+	packet.WriteData(&challengeScore, 2);
+	packet.WriteData(&bonus, 2);
+	packet.WriteData(&bonus, 2);
+	packet.WriteData(&battleTime, 4);
 	SendToAll(&packet);
 
 	printf("[Room] Battle result sent - Room=%d, Winner=%s, Score R%d-B%d, Time=%ds\n",
@@ -1779,24 +1763,17 @@ void Room::OnBombInstall(int i32InstallerSlot, uint8_t ui8BombArea)
 	printf("[Room] Bomb installed - Room=%d, Slot=%d, Area=%c\n",
 		m_i32RoomIdx, i32InstallerSlot, (ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
 
+	// Notify observers of bomb plant
+	ObserverHelper::NotifyBombPlant(this, i32InstallerSlot, ui8BombArea);
+
 	// Broadcast BOMB_INSTALL_ACK to all
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint8_t installerSlot = (uint8_t)i32InstallerSlot;
-	memcpy(buffer + offset, &installerSlot, 1);		offset += 1;
-	memcpy(buffer + offset, &ui8BombArea, 1);		offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_BOMB_INSTALL_ACK);
+	packet.WriteData(&installerSlot, 1);
+	packet.WriteData(&ui8BombArea, 1);
 	SendToAll(&packet);
 }
 
@@ -1813,23 +1790,16 @@ void Room::OnBombUninstall(int i32DefuserSlot)
 
 	printf("[Room] Bomb defused - Room=%d, Defuser=%d\n", m_i32RoomIdx, i32DefuserSlot);
 
+	// Notify observers of bomb defuse
+	ObserverHelper::NotifyBombDefuse(this, i32DefuserSlot);
+
 	// Broadcast BOMB_UNINSTALL_ACK to all
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint8_t defuserSlot = (uint8_t)i32DefuserSlot;
-	memcpy(buffer + offset, &defuserSlot, 1);		offset += 1;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_BOMB_UNINSTALL_ACK);
+	packet.WriteData(&defuserSlot, 1);
 	SendToAll(&packet);
 
 	// Bomb defused = DEF (BLUE) wins the round
@@ -1870,6 +1840,9 @@ void Room::OnBombExplode()
 
 	printf("[Room] Bomb exploded - Room=%d, Area=%c\n",
 		m_i32RoomIdx, (m_ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
+
+	// Notify observers of bomb explosion
+	ObserverHelper::NotifyBombExplode(this);
 
 	// Bomb explosion = ATK (RED) wins the round
 	OnRoundEnd(TEAM_RED);
@@ -1937,26 +1910,15 @@ void Room::OnGeneratorDamage(int i32GeneratorIdx, int i32Damage, int i32Attacker
 	// Broadcast generator HP update to all players
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t genIdx = (uint8_t)i32GeneratorIdx;
 		int32_t hp = m_i32GeneratorHP[i32GeneratorIdx];
 		int32_t maxHp = m_i32GeneratorMaxHP;
-
-		memcpy(buffer + offset, &genIdx, 1);		offset += 1;
-		memcpy(buffer + offset, &hp, 4);			offset += 4;
-		memcpy(buffer + offset, &maxHp, 4);			offset += 4;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK);
+		packet.WriteData(&genIdx, 1);
+		packet.WriteData(&hp, 4);
+		packet.WriteData(&maxHp, 4);
 		SendToAll(&packet);
 	}
 
@@ -1980,21 +1942,11 @@ void Room::OnGeneratorDestroy(int i32GeneratorIdx)
 	// Broadcast generator destroy
 	{
 		i3NetworkPacket packet;
-		char buffer[16];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_DESTROY_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t genIdx = (uint8_t)i32GeneratorIdx;
-		memcpy(buffer + offset, &genIdx, 1);		offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_GENERATOR_DESTROY_ACK);
+		packet.WriteData(&genIdx, 1);
 		SendToAll(&packet);
 	}
 
@@ -2084,23 +2036,13 @@ void Room::SelectVIP()
 	// Broadcast VIP selection to all players
 	{
 		i3NetworkPacket packet;
-		char buffer[16];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t vipSlot = (uint8_t)m_i32VIPSlot;
 		uint8_t action = 0;	// 0 = VIP selected
-		memcpy(buffer + offset, &action, 1);		offset += 1;
-		memcpy(buffer + offset, &vipSlot, 1);		offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK);
+		packet.WriteData(&action, 1);
+		packet.WriteData(&vipSlot, 1);
 		SendToAll(&packet);
 	}
 }
@@ -2118,26 +2060,19 @@ void Room::OnTouchdown(int i32Slot)
 
 	printf("[Room] VIP touchdown! - Room=%d, VIPSlot=%d\n", m_i32RoomIdx, i32Slot);
 
+	// Notify observers of VIP touchdown
+	ObserverHelper::NotifyVIPTouchdown(this, i32Slot);
+
 	// Broadcast touchdown
 	{
 		i3NetworkPacket packet;
-		char buffer[16];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t vipSlot = (uint8_t)m_i32VIPSlot;
 		uint8_t action = 1;	// 1 = touchdown success
-		memcpy(buffer + offset, &action, 1);		offset += 1;
-		memcpy(buffer + offset, &vipSlot, 1);		offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK);
+		packet.WriteData(&action, 1);
+		packet.WriteData(&vipSlot, 1);
 		SendToAll(&packet);
 	}
 
@@ -2172,28 +2107,17 @@ void Room::OnTouchdown(int i32Slot)
 void Room::BroadcastRoomStateChange()
 {
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_ROUND_END_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint8_t winner = (m_Score.i32RedScore > m_Score.i32BlueScore) ? TEAM_RED : TEAM_BLUE;
 	int32_t redScore = m_Score.i32RedScore;
 	int32_t blueScore = m_Score.i32BlueScore;
 	int32_t nowRound = m_Score.i32NowRound;
-
-	memcpy(buffer + offset, &winner, 1);		offset += 1;
-	memcpy(buffer + offset, &redScore, 4);		offset += 4;
-	memcpy(buffer + offset, &blueScore, 4);		offset += 4;
-	memcpy(buffer + offset, &nowRound, 4);		offset += 4;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_ROUND_END_ACK);
+	packet.WriteData(&winner, 1);
+	packet.WriteData(&redScore, 4);
+	packet.WriteData(&blueScore, 4);
+	packet.WriteData(&nowRound, 4);
 	SendToAll(&packet);
 }
 
@@ -2391,24 +2315,15 @@ void Room::OnConvoyDamage(int i32Damage, int i32AttackerSlot)
 
 	// Broadcast convoy HP update
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK;	// Reuse generator protocol
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t hp = m_i32ConvoyHP;
 	int32_t maxHp = m_i32ConvoyMaxHP;
 	int32_t checkpoint = m_i32ConvoyCheckpoint;
-	memcpy(buffer + offset, &hp, sizeof(int32_t));			offset += sizeof(int32_t);
-	memcpy(buffer + offset, &maxHp, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &checkpoint, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_GENERATOR_INFO_ACK);
+	packet.WriteData(&hp, sizeof(int32_t));
+	packet.WriteData(&maxHp, sizeof(int32_t));
+	packet.WriteData(&checkpoint, sizeof(int32_t));
 	SendToAll(&packet);
 
 	// Convoy destroyed = DEF wins
@@ -2459,20 +2374,11 @@ void Room::OnConvoyCheckpoint(int i32CheckpointIdx)
 
 	// Broadcast checkpoint to all
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK;	// Reuse touchdown for checkpoint notify
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t cp = m_i32ConvoyCheckpoint;
-	memcpy(buffer + offset, &cp, sizeof(int32_t));			offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_TOUCHDOWN_ACK);
+	packet.WriteData(&cp, sizeof(int32_t));
 	SendToAll(&packet);
 }
 
@@ -2529,22 +2435,13 @@ void Room::CheckAIStageAdvance()
 
 	// Broadcast stage advance
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_ROUND_START_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t stage = m_i32AIStage;
 	int32_t maxStage = m_i32AIMaxStage;
-	memcpy(buffer + offset, &stage, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &maxStage, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_ROUND_START_ACK);
+	packet.WriteData(&stage, sizeof(int32_t));
+	packet.WriteData(&maxStage, sizeof(int32_t));
 	SendToAll(&packet);
 }
 
@@ -2569,24 +2466,15 @@ void Room::OnDefenceWaveStart(int i32Wave)
 
 	// Broadcast wave start
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t wave = m_i32DefenceWave;
 	int32_t maxWaves = m_i32DefenceMaxWaves;
 	int32_t npcTotal = m_i32DefenceNPCsTotal;
-	memcpy(buffer + offset, &wave, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &maxWaves, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &npcTotal, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_BATTLE_MISSION_DEFENCE_INFO_ACK);
+	packet.WriteData(&wave, sizeof(int32_t));
+	packet.WriteData(&maxWaves, sizeof(int32_t));
+	packet.WriteData(&npcTotal, sizeof(int32_t));
 	SendToAll(&packet);
 }
 
@@ -2653,24 +2541,15 @@ void Room::UpdateDefenceWaves(DWORD dwNow)
 
 			// Broadcast NPC spawn to clients
 			i3NetworkPacket packet;
-			char buffer[16];
-			int offset = 0;
-
-			uint16_t sz = 0;
-			uint16_t proto = PROTOCOL_BATTLE_AI_COLLISION_ACK;
 			offset += sizeof(uint16_t);
-			memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 			int32_t wave = m_i32DefenceWave;
 			int32_t spawned = m_i32DefenceNPCsSpawned;
 			int32_t total = m_i32DefenceNPCsTotal;
-			memcpy(buffer + offset, &wave, sizeof(int32_t));		offset += sizeof(int32_t);
-			memcpy(buffer + offset, &spawned, sizeof(int32_t));		offset += sizeof(int32_t);
-			memcpy(buffer + offset, &total, sizeof(int32_t));		offset += sizeof(int32_t);
-
-			sz = (uint16_t)offset;
-			memcpy(buffer, &sz, sizeof(uint16_t));
-			packet.SetPacketData(buffer, offset);
+			i3NetworkPacket packet(PROTOCOL_BATTLE_AI_COLLISION_ACK);
+			packet.WriteData(&wave, sizeof(int32_t));
+			packet.WriteData(&spawned, sizeof(int32_t));
+			packet.WriteData(&total, sizeof(int32_t));
 			SendToAll(&packet);
 		}
 	}

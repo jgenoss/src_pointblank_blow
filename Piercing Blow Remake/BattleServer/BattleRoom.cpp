@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "BattleRoom.h"
 #include "CollisionSystem.h"
+#include "PhysicsEngine.h"
 #include "GameObjectManager.h"
 #include "HitValidator.h"
 #include "RespawnManager.h"
@@ -47,6 +48,12 @@ void BattleRoom::Reset()
 	m_DroppedWeaponMgr.Reset(0.0f);
 
 	// Cleanup physics/objects
+	if (m_pPhysicsEngine)
+	{
+		m_pPhysicsEngine->Shutdown();
+		delete m_pPhysicsEngine;
+		m_pPhysicsEngine = nullptr;
+	}
 	if (m_pCollision)
 	{
 		m_pCollision->Shutdown();
@@ -100,7 +107,16 @@ bool BattleRoom::Create(IS_BATTLE_CREATE_REQ* pReq, int i32RoomIdx, uint16_t ui1
 		m_pMapData = g_pMapManager->GetMapData(m_ui8MapIndex);
 		if (m_pMapData && m_pMapData->IsLoaded())
 		{
-			// Initialize collision system
+			// Initialize unified physics engine (PhysX when available, CPU fallback)
+			m_pPhysicsEngine = new PhysicsEngine();
+			if (!m_pPhysicsEngine->Initialize(m_pMapData))
+			{
+				printf("[BattleRoom] Warning: PhysicsEngine init failed for room %d\n", i32RoomIdx);
+				delete m_pPhysicsEngine;
+				m_pPhysicsEngine = nullptr;
+			}
+
+			// Also keep legacy CollisionSystem for backward compatibility
 			if (m_pMapData->GetCollisionTriangleCount() > 0)
 			{
 				m_pCollision = new CollisionSystem();
@@ -115,17 +131,19 @@ bool BattleRoom::Create(IS_BATTLE_CREATE_REQ* pReq, int i32RoomIdx, uint16_t ui1
 				m_pObjectManager->Initialize(m_pMapData);
 			}
 
-			// Initialize hit validator
+			// Initialize hit validator - use PhysicsEngine when available
 			m_pHitValidator = new HitValidator();
 			m_pHitValidator->SetCollisionSystem(m_pCollision);
+			m_pHitValidator->SetPhysicsEngine(m_pPhysicsEngine);
 			if (g_pConfigXML)
 				m_pHitValidator->SetConfigXML(g_pConfigXML);
 
 			// Initialize respawn manager
 			m_pRespawnManager = new RespawnManager();
 
-			printf("[BattleRoom] Room %d physics: Collision=%s, Objects=%d, Respawns=%d\n",
+			printf("[BattleRoom] Room %d physics: Engine=%s, Collision=%s, Objects=%d, Respawns=%d\n",
 				i32RoomIdx,
+				m_pPhysicsEngine ? "PhysicsEngine" : "NONE",
 				m_pCollision ? "YES" : "NO",
 				m_pMapData->GetGameObjectCount(),
 				m_pMapData->GetRespawnObjectCount());
@@ -167,6 +185,10 @@ void BattleRoom::RemoveMember(int i32Slot)
 
 	printf("[BattleRoom] Member removed from room %d - UID=%lld, Slot=%d\n",
 		m_i32RoomIdx, m_Members[i32Slot].GetUID(), i32Slot);
+
+	// Destroy physics capsule for this slot
+	if (m_pPhysicsEngine)
+		m_pPhysicsEngine->DestroyCharacterCapsule(i32Slot);
 
 	m_Members[i32Slot].Leave();
 	m_dwLastActivityTime = GetTickCount();
@@ -286,6 +308,13 @@ void BattleRoom::StartBattle()
 			m_Characters[i].SetAlive(true);
 			m_Characters[i].SetMaxHP(100);
 			m_Characters[i].InitBullets();
+
+			// Create physics capsule for hit detection
+			if (m_pPhysicsEngine)
+			{
+				const float* pos = m_Members[i].GetPosition();
+				m_pPhysicsEngine->CreateCharacterCapsule(i, pos);
+			}
 		}
 	}
 
@@ -343,6 +372,10 @@ void BattleRoom::Update()
 			RemoveMember(i);
 		}
 	}
+
+	// Step physics simulation (PhysX scene or no-op for CPU)
+	if (m_pPhysicsEngine)
+		m_pPhysicsEngine->StepSimulation(1.0f / 60.0f);
 
 	// Update game objects (weapon box respawns, etc.)
 	if (m_pObjectManager)

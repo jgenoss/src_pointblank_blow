@@ -13,49 +13,24 @@ void GameSession::OnGetInvenInfoReq(char* pData, INT32 i32Size)
 	if (m_eMainTask < GAME_TASK_INFO)
 		return;
 
-	// Calculate needed buffer: header + per-item data
-	// Each item: DBIdx(4) + ItemID(4) + ItemType(1) + ItemArg(4) = 13 bytes
 	const int ITEM_ENTRY_SIZE = 13;
-	int payloadSize = 4 + 2 + 2 + 4 + 2 + (m_i32InventoryCount * ITEM_ENTRY_SIZE);
-
-	// Use stack buffer for reasonable inventory sizes, or cap
-	char buffer[8192];
-	if (payloadSize > (int)sizeof(buffer))
-		payloadSize = (int)sizeof(buffer);
-
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_GET_INVEN_INFO_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-
-	// Item count
 	uint16_t itemCount = (uint16_t)m_i32InventoryCount;
-	memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
-	// Item entries
+	i3NetworkPacket packet(PROTOCOL_BASE_GET_INVEN_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemCount, sizeof(uint16_t));
+
 	for (int i = 0; i < m_i32InventoryCount; i++)
 	{
-		if (offset + ITEM_ENTRY_SIZE > (int)sizeof(buffer))
-			break;
-
 		const GameInventoryItem& item = m_Inventory[i];
-		memcpy(buffer + offset, &item.ui32ItemDBIdx, 4);	offset += 4;
-		memcpy(buffer + offset, &item.ui32ItemId, 4);		offset += 4;
-		memcpy(buffer + offset, &item.ui8ItemType, 1);		offset += 1;
-		memcpy(buffer + offset, &item.ui32ItemArg, 4);		offset += 4;
+		packet.WriteData(&item.ui32ItemDBIdx, sizeof(uint32_t));
+		packet.WriteData(&item.ui32ItemId, sizeof(uint32_t));
+		packet.WriteData(&item.ui8ItemType, sizeof(uint8_t));
+		packet.WriteData(&item.ui32ItemArg, sizeof(uint32_t));
 	}
 
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnInventoryEnterReq(char* pData, INT32 i32Size)
@@ -66,16 +41,9 @@ void GameSession::OnInventoryEnterReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[8192];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_INVENTORY_ENTER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Count items by category
 	uint16_t charaCount = 0, weaponCount = 0, itemCount = 0;
@@ -90,9 +58,6 @@ void GameSession::OnInventoryEnterReq(char* pData, INT32 i32Size)
 			itemCount++;
 	}
 
-	memcpy(buffer + offset, &charaCount, 2);	offset += 2;
-	memcpy(buffer + offset, &weaponCount, 2);	offset += 2;
-	memcpy(buffer + offset, &itemCount, 2);		offset += 2;
 
 	// Send all items (simplified - original sends by category)
 	const int ITEM_ENTRY_SIZE = 13;
@@ -107,12 +72,12 @@ void GameSession::OnInventoryEnterReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, &item.ui8ItemType, 1);		offset += 1;
 		memcpy(buffer + offset, &item.ui32ItemArg, 4);		offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_INVENTORY_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&charaCount, 2);
+	packet.WriteData(&weaponCount, 2);
+	packet.WriteData(&itemCount, 2);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnInventoryLeaveReq(char* pData, INT32 i32Size)
@@ -178,16 +143,9 @@ void GameSession::OnInventoryGetInfoReq(char* pData, INT32 i32Size)
 	const int ITEM_ENTRY_SIZE = 14;	// DBIdx(4) + ItemID(4) + Type(1) + Arg(4) + Durability(1)
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_INVENTORY_GET_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Count matching items
 	int matchCount = 0;
@@ -203,8 +161,6 @@ void GameSession::OnInventoryGetInfoReq(char* pData, INT32 i32Size)
 
 	uint16_t totalCount = (uint16_t)matchCount;
 	uint16_t pageIdx = page;
-	memcpy(buffer + offset, &totalCount, 2);	offset += 2;
-	memcpy(buffer + offset, &pageIdx, 2);		offset += 2;
 
 	// Second pass: write items for this page
 	uint16_t sentCount = 0;
@@ -240,12 +196,11 @@ void GameSession::OnInventoryGetInfoReq(char* pData, INT32 i32Size)
 	}
 
 	memcpy(buffer + sentCountOffset, &sentCount, 2);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_INVENTORY_GET_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&totalCount, 2);
+	packet.WriteData(&pageIdx, 2);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -304,22 +259,12 @@ void GameSession::DecreaseEquippedDurability()
 	if (bNotify)
 	{
 		i3NetworkPacket packet;
-		char buffer[16];
-		int offset = 0;
-
-		uint16_t sz = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_CHANGE_INVENTORY;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t reason = 2;	// 2 = item broken
-		memcpy(buffer + offset, &reason, 1);				offset += 1;
-
-		sz = (uint16_t)offset;
-		memcpy(buffer, &sz, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_CHANGE_INVENTORY);
+		packet.WriteData(&reason, 1);
+		SendPacketMessage(&packet);
 
 		printf("[GameSession] Item broke! UID=%lld\n", m_i64UID);
 	}

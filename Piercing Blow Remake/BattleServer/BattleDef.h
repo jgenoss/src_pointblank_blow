@@ -60,6 +60,7 @@ struct BattlePlayerResult
 	int			i32Kills;
 	int			i32Deaths;
 	int			i32Headshots;
+	int			i32Assists;
 	int			i32Team;
 
 	void Reset()
@@ -68,6 +69,7 @@ struct BattlePlayerResult
 		i32Kills = 0;
 		i32Deaths = 0;
 		i32Headshots = 0;
+		i32Assists = 0;
 		i32Team = 0;
 	}
 };

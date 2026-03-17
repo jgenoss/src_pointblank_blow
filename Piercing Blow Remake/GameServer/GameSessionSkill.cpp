@@ -85,31 +85,21 @@ void GameSession::OnSkillSetReq(char* pData, INT32 i32Size)
 
 	// Send ACK with updated skill data
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SKILL_SET_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	if (result == 0 && classIdx < CHARA_CLASS_MAX)
 	{
 		const GameClassSkills& cs = m_SkillData.classSkills[classIdx];
-		memcpy(buffer + offset, &classIdx, 1);					offset += 1;
 		memcpy(buffer + offset, &cs.ui16SkillPoints, 2);		offset += 2;
 		memcpy(buffer + offset, cs.ui8MainLevels, MAX_MAIN_SKILLS);		offset += MAX_MAIN_SKILLS;
 		memcpy(buffer + offset, cs.ui8AssistLevels, MAX_ASSIST_SKILLS);	offset += MAX_ASSIST_SKILLS;
 		memcpy(buffer + offset, cs.ui8CommonLevels, MAX_COMMON_SKILLS);	offset += MAX_COMMON_SKILLS;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SKILL_SET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classIdx, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnSkillResetReq(char* pData, INT32 i32Size)
@@ -156,34 +146,24 @@ void GameSession::OnSkillResetReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SKILL_RESET_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	if (result == 0 && classIdx < CHARA_CLASS_MAX)
 	{
 		const GameClassSkills& cs = m_SkillData.classSkills[classIdx];
-		memcpy(buffer + offset, &classIdx, 1);					offset += 1;
 		memcpy(buffer + offset, &cs.ui16SkillPoints, 2);		offset += 2;
 		memcpy(buffer + offset, cs.ui8MainLevels, MAX_MAIN_SKILLS);		offset += MAX_MAIN_SKILLS;
 		memcpy(buffer + offset, cs.ui8AssistLevels, MAX_ASSIST_SKILLS);	offset += MAX_ASSIST_SKILLS;
 		memcpy(buffer + offset, cs.ui8CommonLevels, MAX_COMMON_SKILLS);	offset += MAX_COMMON_SKILLS;
 
 		uint32_t gp = (uint32_t)m_i32GP;
-		memcpy(buffer + offset, &gp, sizeof(uint32_t));		offset += sizeof(uint32_t);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SKILL_RESET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classIdx, 1);
+	packet.WriteData(&gp, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnSkillClassSetReq(char* pData, INT32 i32Size)
@@ -211,22 +191,11 @@ void GameSession::OnSkillClassSetReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SKILL_CLASS_SET_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &classIdx, 1);					offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SKILL_CLASS_SET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classIdx, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnSkillGetInfoReq(char* pData, INT32 i32Size)
@@ -236,23 +205,15 @@ void GameSession::OnSkillGetInfoReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SKILL_SET_ACK;	// Reuse SET_ACK for info response
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Active class
 	memcpy(buffer + offset, &m_SkillData.ui8ActiveClass, 1);	offset += 1;
 
 	// All classes
 	uint8_t classCount = CHARA_CLASS_MAX;
-	memcpy(buffer + offset, &classCount, 1);				offset += 1;
 
 	for (int i = 0; i < CHARA_CLASS_MAX; i++)
 	{
@@ -263,12 +224,10 @@ void GameSession::OnSkillGetInfoReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, cs.ui8AssistLevels, MAX_ASSIST_SKILLS);	offset += MAX_ASSIST_SKILLS;
 		memcpy(buffer + offset, cs.ui8CommonLevels, MAX_COMMON_SKILLS);	offset += MAX_COMMON_SKILLS;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SKILL_SET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classCount, 1);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -349,30 +308,20 @@ void GameSession::OnNewSpecialitySetReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_NEW_SPECIALITY_SET_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &classId, 1);				offset += 1;
-	memcpy(buffer + offset, &skillType, 1);				offset += 1;
-	memcpy(buffer + offset, &skillIdx, 1);				offset += 1;
-	memcpy(buffer + offset, &newLevel, 1);				offset += 1;
 
 	if (result == 0)
 	{
 		uint16_t remainPts = m_SkillData.classSkills[classId].ui16SkillPoints;
-		memcpy(buffer + offset, &remainPts, 2);			offset += 2;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_NEW_SPECIALITY_SET_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classId, 1);
+	packet.WriteData(&skillType, 1);
+	packet.WriteData(&skillIdx, 1);
+	packet.WriteData(&newLevel, 1);
+	packet.WriteData(&remainPts, 2);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnNewSpecialityInitReq(char* pData, INT32 i32Size)
@@ -414,29 +363,19 @@ void GameSession::OnNewSpecialityInitReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_NEW_SPECIALITY_INIT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &classId, 1);				offset += 1;
 
 	if (result == 0)
 	{
 		uint16_t remainPts = m_SkillData.classSkills[classId].ui16SkillPoints;
 		int32_t remainGP = m_i32GP;
-		memcpy(buffer + offset, &remainPts, 2);			offset += 2;
-		memcpy(buffer + offset, &remainGP, 4);			offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_NEW_SPECIALITY_INIT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classId, 1);
+	packet.WriteData(&remainPts, 2);
+	packet.WriteData(&remainGP, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnNewSpecialitySetClassReq(char* pData, INT32 i32Size)
@@ -460,19 +399,9 @@ void GameSession::OnNewSpecialitySetClassReq(char* pData, INT32 i32Size)
 		m_SkillData.ui8ActiveClass = classId;
 
 	i3NetworkPacket packet;
-	char buffer[16];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_BASE_NEW_SPECIALITY_SET_CLASS_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &classId, 1);				offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_BASE_NEW_SPECIALITY_SET_CLASS_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&classId, 1);
+	SendPacketMessage(&packet);
 }

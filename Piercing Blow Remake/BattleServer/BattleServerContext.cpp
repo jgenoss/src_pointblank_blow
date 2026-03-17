@@ -88,37 +88,82 @@ BattleServer::~BattleServer()
 
 bool BattleServer::OnLoadConfig(const char* pszConfigPath)
 {
+	// Defaults
+	strcpy(m_BattleConfig.szBindIP, "0.0.0.0");
+	m_BattleConfig.ui16BindPort			= 40200;
+	m_BattleConfig.i32MaxSessions		= MAX_BATTLE_SESSIONS;
+	m_BattleConfig.i32WorkerThreadCount	= 4;
+	m_BattleConfig.ui8SocketTimeout		= 60;
+	m_BattleConfig.i32ServerId			= 1;
+	strcpy(m_BattleConfig.szServerName, "BattleServer-1");
+	strcpy(m_BattleConfig.szPublicIP, "127.0.0.1");
+	m_BattleConfig.ui16PublicPort		= 40200;
+	m_BattleConfig.ui16UdpBasePort		= BATTLE_UDP_BASE_PORT;
+	m_BattleConfig.ui16UdpClientPort	= 29890;
+	m_BattleConfig.i32MaxBattleRooms	= MAX_BATTLE_ROOMS;
+	strcpy(m_BattleConfig.szMediaPath, "Media");
+
 	i3IniParser ini;
-	if (!ini.Load(pszConfigPath))
+	if (!ini.OpenFromFile(pszConfigPath))
 	{
-		printf("[BattleServer] ERROR: Cannot load config: %s\n", pszConfigPath);
-		return false;
+		printf("[BattleServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
 	}
+	else
+	{
+		INT32 nVal = 0;
+		char  szVal[256];
 
-	// [BattleServer] section
-	const char* pszBindIP = ini.GetString("BattleServer", "BindIP", "0.0.0.0");
-	strncpy_s(m_BattleConfig.szBindIP, pszBindIP, _TRUNCATE);
-	m_BattleConfig.ui16BindPort = (uint16_t)ini.GetInt("BattleServer", "BindPort", 40200);
-	m_BattleConfig.i32MaxSessions = ini.GetInt("BattleServer", "MaxSessions", MAX_BATTLE_SESSIONS);
-	m_BattleConfig.i32WorkerThreadCount = ini.GetInt("BattleServer", "WorkerThreads", 4);
-	m_BattleConfig.ui8SocketTimeout = (uint8_t)ini.GetInt("BattleServer", "SocketTimeout", 60);
-	m_BattleConfig.i32ServerId = ini.GetInt("BattleServer", "ServerId", 1);
+		// [BattleServer] section
+		if (ini.ReadSection("BattleServer"))
+		{
+			ini.GetValue("BindIP", "0.0.0.0", szVal, sizeof(szVal));
+			strncpy_s(m_BattleConfig.szBindIP, szVal, _TRUNCATE);
 
-	const char* pszName = ini.GetString("BattleServer", "ServerName", "BattleServer-1");
-	strncpy_s(m_BattleConfig.szServerName, pszName, _TRUNCATE);
+			ini.GetValue("BindPort", (INT32)40200, &nVal);
+			m_BattleConfig.ui16BindPort = (uint16_t)nVal;
 
-	const char* pszPublicIP = ini.GetString("BattleServer", "PublicIP", "127.0.0.1");
-	strncpy_s(m_BattleConfig.szPublicIP, pszPublicIP, _TRUNCATE);
-	m_BattleConfig.ui16PublicPort = (uint16_t)ini.GetInt("BattleServer", "PublicPort", 40200);
+			ini.GetValue("MaxSessions", (INT32)MAX_BATTLE_SESSIONS, &nVal);
+			m_BattleConfig.i32MaxSessions = nVal;
 
-	// [UDP] section
-	m_BattleConfig.ui16UdpBasePort = (uint16_t)ini.GetInt("UDP", "BasePort", BATTLE_UDP_BASE_PORT);
-	m_BattleConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("UDP", "UdpClientPort", 29890);
-	m_BattleConfig.i32MaxBattleRooms = ini.GetInt("UDP", "MaxBattleRooms", MAX_BATTLE_ROOMS);
+			ini.GetValue("WorkerThreads", (INT32)4, &nVal);
+			m_BattleConfig.i32WorkerThreadCount = nVal;
 
-	// [Media] section
-	const char* pszMediaPath = ini.GetString("Media", "Path", "Media");
-	strncpy_s(m_BattleConfig.szMediaPath, pszMediaPath, _TRUNCATE);
+			ini.GetValue("SocketTimeout", (INT32)60, &nVal);
+			m_BattleConfig.ui8SocketTimeout = (uint8_t)nVal;
+
+			ini.GetValue("ServerId", (INT32)1, &nVal);
+			m_BattleConfig.i32ServerId = nVal;
+
+			ini.GetValue("ServerName", "BattleServer-1", szVal, sizeof(szVal));
+			strncpy_s(m_BattleConfig.szServerName, szVal, _TRUNCATE);
+
+			ini.GetValue("PublicIP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_BattleConfig.szPublicIP, szVal, _TRUNCATE);
+
+			ini.GetValue("PublicPort", (INT32)40200, &nVal);
+			m_BattleConfig.ui16PublicPort = (uint16_t)nVal;
+		}
+
+		// [UDP] section
+		if (ini.ReadSection("UDP"))
+		{
+			ini.GetValue("BasePort", (INT32)BATTLE_UDP_BASE_PORT, &nVal);
+			m_BattleConfig.ui16UdpBasePort = (uint16_t)nVal;
+
+			ini.GetValue("UdpClientPort", (INT32)29890, &nVal);
+			m_BattleConfig.ui16UdpClientPort = (uint16_t)nVal;
+
+			ini.GetValue("MaxBattleRooms", (INT32)MAX_BATTLE_ROOMS, &nVal);
+			m_BattleConfig.i32MaxBattleRooms = nVal;
+		}
+
+		// [Media] section
+		if (ini.ReadSection("Media"))
+		{
+			ini.GetValue("Path", "Media", szVal, sizeof(szVal));
+			strncpy_s(m_BattleConfig.szMediaPath, szVal, _TRUNCATE);
+		}
+	}
 
 	// Copy base config
 	m_Config = m_BattleConfig;

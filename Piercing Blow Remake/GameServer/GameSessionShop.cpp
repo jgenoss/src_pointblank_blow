@@ -56,27 +56,17 @@ void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SHOP_ENTER_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Send current GP and Cash balance
-	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32Cash, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Use dynamic catalog from ShopManager if available, otherwise fallback to hardcoded
 	if (g_pShopManager && g_pShopManager->IsLoaded())
 	{
 		int itemCount = g_pShopManager->GetItemCount();
 		uint16_t count16 = (uint16_t)itemCount;
-		memcpy(buffer + offset, &count16, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		const ShopItem* pItems = g_pShopManager->GetItems();
 		for (int i = 0; i < itemCount; i++)
@@ -95,7 +85,6 @@ void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 	{
 		// Fallback to hardcoded catalog
 		uint16_t itemCount = (uint16_t)SHOP_CATALOG_SIZE;
-		memcpy(buffer + offset, &itemCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		for (int i = 0; i < SHOP_CATALOG_SIZE; i++)
 		{
@@ -110,12 +99,13 @@ void GameSession::OnShopEnterReq(char* pData, INT32 i32Size)
 			memcpy(buffer + offset, &goods.ui32Duration, 4);	offset += 4;
 		}
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SHOP_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&m_i32GP, sizeof(int32_t));
+	packet.WriteData(&m_i32Cash, sizeof(int32_t));
+	packet.WriteData(&count16, sizeof(uint16_t));
+	packet.WriteData(&itemCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopLeaveReq(char* pData, INT32 i32Size)
@@ -234,23 +224,13 @@ void GameSession::OnShopBuyReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &goodsId, 4);					offset += 4;
-	memcpy(buffer + offset, &newGP, 4);						offset += 4;
-	memcpy(buffer + offset, &newCash, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&goodsId, 4);
+	packet.WriteData(&newGP, 4);
+	packet.WriteData(&newCash, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
@@ -286,21 +266,11 @@ void GameSession::OnShopRepairReq(char* pData, INT32 i32Size)
 
 	// Send ACK with updated GP
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SHOP_REPAIR_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &newGP, 4);						offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SHOP_REPAIR_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&newGP, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -430,26 +400,16 @@ void GameSession::OnShopGiftReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &goodsId, 4);					offset += 4;
 
 	uint32_t newGP = (uint32_t)m_i32GP;
 	uint32_t newCash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &newGP, 4);					offset += 4;
-	memcpy(buffer + offset, &newCash, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_GOODS_GIFT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&goodsId, 4);
+	packet.WriteData(&newGP, 4);
+	packet.WriteData(&newCash, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -557,26 +517,16 @@ void GameSession::OnShopItemExtendReq(char* pData, INT32 i32Size)
 
 	// Reuse BUY_ACK format for response
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &goodsId, 4);					offset += 4;
 
 	uint32_t newGP = (uint32_t)m_i32GP;
 	uint32_t newCash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &newGP, 4);					offset += 4;
-	memcpy(buffer + offset, &newCash, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_GOODS_BUY_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&goodsId, 4);
+	packet.WriteData(&newGP, 4);
+	packet.WriteData(&newCash, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -627,64 +577,44 @@ int GameSession::RemoveExpiredItems()
 void GameSession::OnShopVersionReq(char* pData, INT32 i32Size)
 {
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_VERSION_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Shop version (incremented when catalog changes)
 	uint32_t shopVersion = 1;
 	if (g_pShopManager && g_pShopManager->IsLoaded())
 		shopVersion = g_pShopManager->GetVersion();
-	memcpy(buffer + offset, &shopVersion, sizeof(uint32_t));	offset += sizeof(uint32_t);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_VERSION_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&shopVersion, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopListReq(char* pData, INT32 i32Size)
 {
 	// Shop categories list
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_LIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Categories: Primary, Secondary, Melee, Grenade, Character, Parts
 	uint8_t categoryCount = 6;
-	memcpy(buffer + offset, &categoryCount, 1);			offset += 1;
 
 	const char* categories[] = { "Primary", "Secondary", "Melee", "Grenade", "Character", "Parts" };
 	for (int i = 0; i < categoryCount; i++)
 	{
 		uint8_t catId = (uint8_t)i;
-		memcpy(buffer + offset, &catId, 1);					offset += 1;
 		char catName[32] = {0};
 		strncpy_s(catName, categories[i], _TRUNCATE);
-		memcpy(buffer + offset, catName, 32);				offset += 32;
 	}
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&categoryCount, 1);
+	packet.WriteData(&catId, 1);
+	packet.WriteData(catName, 32);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopGoodsListReq(char* pData, INT32 i32Size)
@@ -695,17 +625,9 @@ void GameSession::OnShopGoodsListReq(char* pData, INT32 i32Size)
 		categoryId = *(uint8_t*)pData;
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_GOODSLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &categoryId, 1);				offset += 1;
 
 	// Count items matching category
 	int countPos = offset;
@@ -757,12 +679,10 @@ void GameSession::OnShopGoodsListReq(char* pData, INT32 i32Size)
 	}
 
 	memcpy(buffer + countPos, &itemCount, sizeof(uint16_t));
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_GOODSLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&categoryId, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopItemListReq(char* pData, INT32 i32Size)
@@ -776,26 +696,16 @@ void GameSession::OnShopMatchingListReq(char* pData, INT32 i32Size)
 {
 	// Shop matching list - maps goods to categories
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_MATCHINGLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Empty matching list (client uses default)
 	uint16_t matchCount = 0;
-	memcpy(buffer + offset, &matchCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_MATCHINGLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&matchCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -857,21 +767,11 @@ void GameSession::OnShopItemAuthReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_ITEM_AUTH_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &itemDBIdx, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_ITEM_AUTH_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemDBIdx, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopInsertItemReq(char* pData, INT32 i32Size)
@@ -926,22 +826,12 @@ void GameSession::OnShopInsertItemReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_INSERT_ITEM_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &itemId, 4);					offset += 4;
-	memcpy(buffer + offset, &newDBIdx, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_INSERT_ITEM_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemId, 4);
+	packet.WriteData(&newDBIdx, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopDeleteItemReq(char* pData, INT32 i32Size)
@@ -1010,21 +900,11 @@ void GameSession::OnShopDeleteItemReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_DELETE_ITEM_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &itemDBIdx, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_DELETE_ITEM_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemDBIdx, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopRepairListReq(char* pData, INT32 i32Size)
@@ -1069,20 +949,11 @@ void GameSession::OnShopRepairListReq(char* pData, INT32 i32Size)
 	}
 
 	// Send all in one packet (simplified - original splits into multiple packets for large lists)
-	char buffer[8192];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_REPAIRLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	uint32_t totalCount = (uint32_t)entryCount;
 	uint32_t curCount = (uint32_t)entryCount;
 	uint32_t startIdx = 0;
-	memcpy(buffer + offset, &totalCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &curCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &startIdx, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Copy repair data entries
 	for (int i = 0; i < entryCount; i++)
@@ -1097,14 +968,12 @@ void GameSession::OnShopRepairListReq(char* pData, INT32 i32Size)
 	uint32_t version = 1;
 	if (g_pShopManager && g_pShopManager->IsLoaded())
 		version = g_pShopManager->GetVersion();
-	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_REPAIRLIST_ACK);
+	packet.WriteData(&totalCount, sizeof(uint32_t));
+	packet.WriteData(&curCount, sizeof(uint32_t));
+	packet.WriteData(&startIdx, sizeof(uint32_t));
+	packet.WriteData(&version, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
@@ -1113,27 +982,17 @@ void GameSession::OnGetPointCashReq(char* pData, INT32 i32Size)
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_GET_POINT_CASH_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint32_t gp = (uint32_t)m_i32GP;
 	uint32_t cash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &gp, 4);						offset += 4;
-	memcpy(buffer + offset, &cash, 4);						offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_GET_POINT_CASH_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&gp, 4);
+	packet.WriteData(&cash, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1199,28 +1058,18 @@ void GameSession::OnShopCapsuleReq(char* pData, INT32 i32Size)
 
 	// Send capsule result
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_CAPSULE_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;	// 0 = success
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
-	memcpy(buffer + offset, &resultItemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &resultCount, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	uint8_t jackpotFlag = isJackpot ? 1 : 0;
-	memcpy(buffer + offset, &jackpotFlag, sizeof(uint8_t));		offset += sizeof(uint8_t);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_CAPSULE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&resultItemId, sizeof(uint32_t));
+	packet.WriteData(&resultCount, sizeof(int32_t));
+	packet.WriteData(&jackpotFlag, sizeof(uint8_t));
+	SendPacketMessage(&packet);
 
 	printf("[Shop] Capsule opened - UID=%lld, CapsuleId=%u, Result=%u, Jackpot=%d\n",
 		m_i64UID, capsuleItemId, resultItemId, isJackpot ? 1 : 0);
@@ -1243,25 +1092,15 @@ void GameSession::OnShopJackpotReq(char* pData, INT32 i32Size)
 
 	// Send empty jackpot list for now
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_JACKPOT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	int32_t jackpotCount = 0;	// No recent jackpots
-	memcpy(buffer + offset, &jackpotCount, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_JACKPOT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&jackpotCount, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1270,34 +1109,31 @@ void GameSession::OnShopJackpotReq(char* pData, INT32 i32Size)
 
 void GameSession::OnShopGetSaleListReq(char* pData, INT32 i32Size)
 {
-	// PROTOCOL_SHOP_GET_SAILLIST_REQ -> ACK
-	// Get list of items currently on sale / discounted
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
+	ShopSaleEntry sales[MAX_SHOP_SALE_ITEMS];
+	int saleCount = 0;
 
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SHOP_GET_SAILLIST_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	if (g_pShopManager)
+		saleCount = g_pShopManager->GetActiveSales(sales, MAX_SHOP_SALE_ITEMS);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint16_t ui16Count = (uint16_t)saleCount;
 
-	// Sale item count (empty for now - no active sales)
-	uint16_t saleCount = 0;
-	memcpy(buffer + offset, &saleCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	i3NetworkPacket packet(PROTOCOL_SHOP_GET_SAILLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&ui16Count, sizeof(uint16_t));
 
-	// Per-sale entry would be: goodsId(4) + discountPercent(1) + startTime(4) + endTime(4)
+	for (int i = 0; i < saleCount; i++)
+	{
+		packet.WriteData(&sales[i].ui32GoodsId, sizeof(uint32_t));
+		packet.WriteData(&sales[i].ui8DiscountPercent, sizeof(uint8_t));
+		packet.WriteData(&sales[i].ui32StartTime, sizeof(uint32_t));
+		packet.WriteData(&sales[i].ui32EndTime, sizeof(uint32_t));
+	}
 
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopPlusPointReq(char* pData, INT32 i32Size)
@@ -1323,27 +1159,17 @@ void GameSession::OnShopPlusPointReq(char* pData, INT32 i32Size)
 	// For now, just send back current balance
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_SHOP_PLUS_POINT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint32_t gp = (uint32_t)m_i32GP;
 	uint32_t cash = (uint32_t)m_i32Cash;
-	memcpy(buffer + offset, &gp, 4);					offset += 4;
-	memcpy(buffer + offset, &cash, 4);					offset += 4;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SHOP_PLUS_POINT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&gp, 4);
+	packet.WriteData(&cash, 4);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1353,25 +1179,15 @@ void GameSession::OnShopPlusPointReq(char* pData, INT32 i32Size)
 void GameSession::OnShopGetGiftListReq(char* pData, INT32 i32Size)
 {
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_GET_GIFTLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint16_t giftCount = 0;
-	memcpy(buffer + offset, &giftCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_GET_GIFTLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&giftCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopExpireDeleteItemReq(char* pData, INT32 i32Size)
@@ -1425,25 +1241,15 @@ void GameSession::OnShopRewardItemReq(char* pData, INT32 i32Size)
 void GameSession::OnShopSaleCouponListReq(char* pData, INT32 i32Size)
 {
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_AUTH_SHOP_SALECOUPONLIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	uint16_t couponCount = 0;
-	memcpy(buffer + offset, &couponCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_SALECOUPONLIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&couponCount, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnShopAuthGiftReq(char* pData, INT32 i32Size)
@@ -1543,52 +1349,30 @@ void GameSession::OnAuthRsEnterReq(char* pData, INT32 i32Size)
 	// Enter roulette shop
 	// Send roulette shop enter response with available tabs
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_RS_ENTER_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;	// success
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Tab count (simplified: 1 tab)
 	uint8_t tabCount = 1;
-	memcpy(buffer + offset, &tabCount, 1);	offset += 1;
 
 	// Tab info: id, cost type, cost amount
 	uint8_t tabId = 0;
-	memcpy(buffer + offset, &tabId, 1);	offset += 1;
 	int32_t costGP = 1000;		// 1000 GP per spin
-	memcpy(buffer + offset, &costGP, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_RS_ENTER_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&tabCount, 1);
+	packet.WriteData(&tabId, 1);
+	packet.WriteData(&costGP, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthRsItemInfoReq(char* pData, INT32 i32Size)
 {
 	// Request roulette item pool info for a tab
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_RS_ITEM_INFO_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Item count in the pool (simplified: 5 sample items)
 	uint8_t itemCount = 5;
-	memcpy(buffer + offset, &itemCount, 1);	offset += 1;
 
 	// Sample roulette items: itemId, grade(0=lose,1-3=prize), probability weight
 	struct RsItem { uint32_t itemId; uint8_t grade; uint16_t weight; };
@@ -1606,38 +1390,24 @@ void GameSession::OnAuthRsItemInfoReq(char* pData, INT32 i32Size)
 		memcpy(buffer + offset, &items[i].grade, 1);	offset += 1;
 		memcpy(buffer + offset, &items[i].weight, 2);	offset += 2;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_RS_ITEM_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemCount, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthRsJackpotReq(char* pData, INT32 i32Size)
 {
 	// Request jackpot winner info
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_RS_JACKPOT_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Jackpot winner count (0 = no recent winners)
 	uint8_t winnerCount = 0;
-	memcpy(buffer + offset, &winnerCount, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_RS_JACKPOT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&winnerCount, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthRsStartReq(char* pData, INT32 i32Size)
@@ -1711,27 +1481,15 @@ void GameSession::OnAuthRsStartReq(char* pData, INT32 i32Size)
 
 	// Send result
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_RS_RESULT_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &resultItemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
-	memcpy(buffer + offset, &resultGrade, 1);	offset += 1;
 
 	// Remaining GP
-	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_RS_RESULT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&resultItemId, sizeof(uint32_t));
+	packet.WriteData(&resultGrade, 1);
+	packet.WriteData(&m_i32GP, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthFcmLogoutReq(char* pData, INT32 i32Size)
@@ -1819,23 +1577,11 @@ void GameSession::OnAuthShopItemAuthDataReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = found ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &itemId, sizeof(uint32_t));	offset += sizeof(uint32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_SHOP_ITEM_AUTH_DATA_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&itemId, sizeof(uint32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnAuthShopItemChangeDataReq(char* pData, INT32 i32Size)
@@ -1869,19 +1615,8 @@ void GameSession::OnAuthShopItemChangeDataReq(char* pData, INT32 i32Size)
 
 void GameSession::OnAuthShopUseGiftcouponReq(char* pData, INT32 i32Size)
 {
-	// Use a gift coupon (shop-side coupon redemption)
-	if (i32Size < 16)
-	{
-		SendSimpleAck(PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_ACK, 1);
-		return;
-	}
-
-	char couponCode[17] = {};
-	memcpy(couponCode, pData, 16);
-
-	// Coupon validation would go to DataServer
-	// For now, always fail (no coupon system implemented)
-	SendSimpleAck(PROTOCOL_AUTH_SHOP_USE_GIFTCOUPON_ACK, 2);	// Invalid coupon
+	// Shop-side coupon redemption — same pipeline as OnAuthUseGiftcouponReq
+	OnAuthUseGiftcouponReq(pData, i32Size);
 }
 
 void GameSession::OnAuthUseGiftcouponReq(char* pData, INT32 i32Size)
@@ -1895,9 +1630,16 @@ void GameSession::OnAuthUseGiftcouponReq(char* pData, INT32 i32Size)
 
 	char couponCode[17] = {};
 	memcpy(couponCode, pData, 16);
+	couponCode[16] = '\0';
 
-	// Coupon validation not implemented yet
-	SendSimpleAck(PROTOCOL_AUTH_USE_GIFTCOUPON_ACK, 2);	// Invalid coupon
+	if (m_i64UID <= 0 || !g_pModuleDataServer || !g_pModuleDataServer->IsConnected())
+	{
+		SendSimpleAck(PROTOCOL_AUTH_USE_GIFTCOUPON_ACK, 1);
+		return;
+	}
+
+	g_pModuleDataServer->RequestCouponRedeem(m_i64UID, GetIndex(), couponCode);
+	// Response arrives async via OnShopCouponAck -> PROTOCOL_AUTH_USE_GIFTCOUPON_ACK
 }
 
 void GameSession::OnAuthUseItemCheckNickReq(char* pData, INT32 i32Size)
@@ -1929,32 +1671,20 @@ void GameSession::OnAuthUserNowInfoReq(char* pData, INT32 i32Size)
 {
 	// Request current user state/info update
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_AUTH_USER_NOW_INFO_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
 
 	// Current state
 	int32_t mainTask = (int32_t)m_eMainTask;
-	memcpy(buffer + offset, &mainTask, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32ChannelNum, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32RoomIdx, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32Level, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32GP, sizeof(int32_t));			offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32Cash, sizeof(int32_t));		offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_AUTH_USER_NOW_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&m_i64UID, sizeof(int64_t));
+	packet.WriteData(&mainTask, sizeof(int32_t));
+	packet.WriteData(&m_i32ChannelNum, sizeof(int32_t));
+	packet.WriteData(&m_i32RoomIdx, sizeof(int32_t));
+	packet.WriteData(&m_i32Level, sizeof(int32_t));
+	packet.WriteData(&m_i32GP, sizeof(int32_t));
+	packet.WriteData(&m_i32Cash, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnFieldshopSendNewversionReq(char* pData, INT32 i32Size)
@@ -1962,30 +1692,18 @@ void GameSession::OnFieldshopSendNewversionReq(char* pData, INT32 i32Size)
 	// Field shop version request - send current field shop item list
 	// Field shop is the in-battle shop for temporary items
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_FIELDSHOP_SEND_NEWVERSION_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Version number
 	uint32_t version = 1;
-	memcpy(buffer + offset, &version, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Item count (0 = no field shop items configured)
 	uint8_t itemCount = 0;
-	memcpy(buffer + offset, &itemCount, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_FIELDSHOP_SEND_NEWVERSION_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&version, sizeof(uint32_t));
+	packet.WriteData(&itemCount, 1);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================

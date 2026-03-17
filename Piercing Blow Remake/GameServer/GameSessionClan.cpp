@@ -30,11 +30,11 @@ void GameSession::OnClanCreateReq(char* pData, INT32 i32Size)
 	{
 		result = 1;		// Already in a clan
 	}
-	else if (m_i32GP < CLAN_CREATE_COST_GP)
+	else if (m_i32GP < (g_pContextMain ? g_pContextMain->m_i32ClanCreateCostGP : CLAN_CREATE_COST_GP))
 	{
 		result = 2;		// Not enough GP
 	}
-	else if (m_i32Level < 5)
+	else if (m_i32Level < (g_pContextMain ? g_pContextMain->m_i32ClanCreateMinLevel : 5))
 	{
 		result = 3;		// Level too low
 	}
@@ -57,7 +57,7 @@ void GameSession::OnClanCreateReq(char* pData, INT32 i32Size)
 		}
 		else
 		{
-			m_i32GP -= CLAN_CREATE_COST_GP;
+			m_i32GP -= (g_pContextMain ? g_pContextMain->m_i32ClanCreateCostGP : CLAN_CREATE_COST_GP);
 			m_i32ClanId = clanId;
 
 			// Set mark
@@ -72,21 +72,11 @@ void GameSession::OnClanCreateReq(char* pData, INT32 i32Size)
 
 	// Send ACK
 	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_CREATE_CLAN_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &clanId, sizeof(int32_t));		offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CREATE_CLAN_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&clanId, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanCloseReq(char* pData, INT32 i32Size)
@@ -153,18 +143,11 @@ void GameSession::OnClanDetailInfoReq(char* pData, INT32 i32Size)
 	int32_t result = 0;
 
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_DETAIL_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	if (reqClanId <= 0 || !g_pClanManager)
 	{
 		result = 1;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	}
 	else
 	{
@@ -172,11 +155,9 @@ void GameSession::OnClanDetailInfoReq(char* pData, INT32 i32Size)
 		if (!pClan)
 		{
 			result = 2;
-			memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 		}
 		else
 		{
-			memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 			// Clan detail info
 			memcpy(buffer + offset, &pClan->i32ClanId, 4);			offset += 4;
@@ -196,7 +177,6 @@ void GameSession::OnClanDetailInfoReq(char* pData, INT32 i32Size)
 
 			// Notice
 			uint16_t noticeLen = (uint16_t)strlen(pClan->szNotice);
-			memcpy(buffer + offset, &noticeLen, 2);				offset += 2;
 			if (noticeLen > 0)
 			{
 				memcpy(buffer + offset, pClan->szNotice, noticeLen);
@@ -204,12 +184,12 @@ void GameSession::OnClanDetailInfoReq(char* pData, INT32 i32Size)
 			}
 		}
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_DETAIL_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&noticeLen, 2);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanMemberListReq(char* pData, INT32 i32Size)
@@ -221,18 +201,11 @@ void GameSession::OnClanMemberListReq(char* pData, INT32 i32Size)
 	int32_t result = 0;
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_MEMBER_LIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	if (m_i32ClanId <= 0 || !g_pClanManager)
 	{
 		result = 1;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	}
 	else
 	{
@@ -240,14 +213,11 @@ void GameSession::OnClanMemberListReq(char* pData, INT32 i32Size)
 		if (!pClan)
 		{
 			result = 2;
-			memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 		}
 		else
 		{
-			memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 			uint16_t memberCount = (uint16_t)pClan->i32MemberCount;
-			memcpy(buffer + offset, &memberCount, 2);				offset += 2;
 
 			// Per-member: uid(8) + nickname(64) + level(1) + playerLevel(4) + rankId(4) + online(1) = 82 bytes
 			for (int i = 0; i < MAX_CLAN_MEMBERS; i++)
@@ -273,21 +243,21 @@ void GameSession::OnClanMemberListReq(char* pData, INT32 i32Size)
 				memcpy(buffer + offset, &m.i32PlayerLevel, 4);		offset += 4;
 				memcpy(buffer + offset, &m.i32RankId, 4);			offset += 4;
 				uint8_t online = isOnline ? 1 : 0;
-				memcpy(buffer + offset, &online, 1);				offset += 1;
 			}
 		}
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_MEMBER_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&memberCount, 2);
+	packet.WriteData(&online, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanJoinReq(char* pData, INT32 i32Size)
 {
-	// Join request to a clan (simplified - auto-accept)
+	// Submit a join request — queued until master/staff accepts or denies
 	if (m_eMainTask < GAME_TASK_CHANNEL)
 		return;
 
@@ -316,39 +286,31 @@ void GameSession::OnClanJoinReq(char* pData, INT32 i32Size)
 		{
 			result = 3;	// Clan full
 		}
+		else if (pClan->HasJoinRequest(m_i64UID))
+		{
+			result = 5;	// Already has a pending request
+		}
 		else
 		{
-			if (pClan->AddMember(m_i64UID, m_szNickname, CLAN_MEMBER_REGULAR,
-				m_i32Level, m_i32RankId))
+			if (pClan->AddJoinRequest(m_i64UID, m_szNickname, m_i32Level, m_i32RankId))
 			{
-				m_i32ClanId = targetClanId;
-				printf("[GameSession] Joined clan - UID=%lld, ClanId=%d, Name=%s\n",
+				printf("[GameSession] Clan join request queued - UID=%lld, ClanId=%d, Name=%s\n",
 					m_i64UID, targetClanId, pClan->szName);
 			}
 			else
 			{
-				result = 3;
+				result = 6;	// Request queue full
 			}
 		}
 	}
 
 	// Send join ACK
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_JOIN_REQUEST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &targetClanId, sizeof(int32_t));offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_JOIN_REQUEST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&targetClanId, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanLeaveReq(char* pData, INT32 i32Size)
@@ -422,29 +384,18 @@ void GameSession::OnClanChatReq(char* pData, INT32 i32Size)
 
 	// Build chat packet
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_CHATTING_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Sender nickname
-	memcpy(buffer + offset, m_szNickname, 64);				offset += 64;
 
 	// Message
-	memcpy(buffer + offset, &msgLen, sizeof(uint16_t));		offset += sizeof(uint16_t);
 	memcpy(buffer + offset, szMsg, msgLen);					offset += msgLen;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_CS_CHATTING_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(m_szNickname, 64);
+	packet.WriteData(&msgLen, sizeof(uint16_t));
 	// Broadcast to all online members
 	for (int i = 0; i < MAX_CLAN_MEMBERS; i++)
 	{
@@ -453,7 +404,7 @@ void GameSession::OnClanChatReq(char* pData, INT32 i32Size)
 
 		GameSession* pMember = g_pGameSessionManager->FindSessionByUID(pClan->members[i].i64UID);
 		if (pMember && pMember->GetTask() >= GAME_TASK_CHANNEL)
-			pMember->SendMessage(&packet);
+			pMember->SendPacketMessage(&packet);
 	}
 }
 
@@ -814,16 +765,9 @@ void GameSession::OnClanListReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_CLIENT_CLAN_LIST_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 
 	// Count active clans
 	const GameClanInfo* pClans = g_pClanManager->GetClans();
@@ -850,12 +794,9 @@ void GameSession::OnClanListReq(char* pData, INT32 i32Size)
 	}
 
 	memcpy(buffer + countPos, &clanCount, sizeof(uint16_t));
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CLIENT_CLAN_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanAcceptRequestReq(char* pData, INT32 i32Size)
@@ -890,25 +831,38 @@ void GameSession::OnClanAcceptRequestReq(char* pData, INT32 i32Size)
 			result = -5;	// Clan full
 		else
 		{
-			// Find the requester online to get their info
-			GameSession* pRequester = g_pGameSessionManager->FindSessionByUID(requesterUID);
-			if (pRequester)
+			// Verify a pending request exists
+			ClanJoinRequest* pReq = pClan->FindJoinRequest(requesterUID);
+			if (!pReq)
 			{
-				if (pRequester->GetClanId() > 0)
-					result = -6;	// Already in a clan
-				else
-				{
-					pClan->AddMember(requesterUID, pRequester->GetNickname(),
-						CLAN_MEMBER_REGULAR, pRequester->GetLevel(), pRequester->GetRankId());
-					pRequester->SetClanId(m_i32ClanId);
-
-					// Notify the requester
-					pRequester->SendSimpleAck(PROTOCOL_CS_ACCEPT_REQUEST_RESULT_ACK, 0);
-				}
+				result = -8;	// No pending request from this player
 			}
 			else
 			{
-				result = -7;	// Requester offline
+				// Find the requester online to get their current info
+				GameSession* pRequester = g_pGameSessionManager->FindSessionByUID(requesterUID);
+				if (pRequester)
+				{
+					if (pRequester->GetClanId() > 0)
+						result = -6;	// Already joined another clan
+					else
+					{
+						pClan->AddMember(requesterUID, pRequester->GetNickname(),
+							CLAN_MEMBER_REGULAR, pRequester->GetLevel(), pRequester->GetRankId());
+						pRequester->SetClanId(m_i32ClanId);
+						pClan->RemoveJoinRequest(requesterUID);
+
+						// Notify the requester
+						pRequester->SendSimpleAck(PROTOCOL_CS_ACCEPT_REQUEST_RESULT_ACK, 0);
+					}
+				}
+				else
+				{
+					// Requester offline — accept using queued info, they'll see the clan on next login
+					pClan->AddMember(requesterUID, pReq->szNickname,
+						CLAN_MEMBER_REGULAR, pReq->i32Level, pReq->i32RankId);
+					pClan->RemoveJoinRequest(requesterUID);
+				}
 			}
 		}
 	}
@@ -946,6 +900,9 @@ void GameSession::OnClanDenialRequestReq(char* pData, INT32 i32Size)
 			result = -4;
 		else
 		{
+			// Remove from queue regardless of whether requester is online
+			pClan->RemoveJoinRequest(requesterUID);
+
 			// Notify the requester if online
 			GameSession* pRequester = g_pGameSessionManager->FindSessionByUID(requesterUID);
 			if (pRequester)
@@ -996,23 +953,11 @@ void GameSession::OnClanInviteReq(char* pData, INT32 i32Size)
 			else
 			{
 				// Send invite notification to target
-				i3NetworkPacket invitePacket;
-				char invBuf[128];
-				int invOff = 0;
-
-				uint16_t invSz = 0;
-				uint16_t invProto = PROTOCOL_CS_INVITE_ACCEPT_REQ;	// Client shows invite dialog
-				invOff += sizeof(uint16_t);
-				memcpy(invBuf + invOff, &invProto, sizeof(uint16_t));	invOff += sizeof(uint16_t);
-				memcpy(invBuf + invOff, &m_i32ClanId, 4);				invOff += 4;
-				memcpy(invBuf + invOff, m_szClanName, MAX_CLAN_NAME_LEN);	invOff += MAX_CLAN_NAME_LEN;
-				memcpy(invBuf + invOff, m_szNickname, 64);				invOff += 64;
-
-				invSz = (uint16_t)invOff;
-				memcpy(invBuf, &invSz, sizeof(uint16_t));
-
-				invitePacket.SetPacketData(invBuf, invOff);
-				pTarget->SendMessage(&invitePacket);
+				i3NetworkPacket invitePacket(PROTOCOL_CS_INVITE_ACCEPT_REQ);
+				invitePacket.WriteData(&m_i32ClanId, sizeof(int32_t));
+				invitePacket.WriteData(m_szClanName, MAX_CLAN_NAME_LEN);
+				invitePacket.WriteData(m_szNickname, 64);
+				pTarget->SendPacketMessage(&invitePacket);
 			}
 		}
 	}
@@ -1039,28 +984,25 @@ void GameSession::OnClanRequestListReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// In this simplified version, there's no pending request queue
-	// Send empty list
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_REQUEST_LIST_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint16_t requestCount = (uint16_t)pClan->i32JoinRequestCount;
 
-	uint16_t requestCount = 0;
-	memcpy(buffer + offset, &requestCount, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	i3NetworkPacket packet(PROTOCOL_CS_REQUEST_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&requestCount, sizeof(uint16_t));
 
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
+	for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+	{
+		if (!pClan->joinRequests[i].bActive)
+			continue;
+		const ClanJoinRequest& req = pClan->joinRequests[i];
+		packet.WriteData(&req.i64UID, sizeof(int64_t));
+		packet.WriteData(req.szNickname, 64);
+		packet.WriteData(&req.i32Level, sizeof(int32_t));
+		packet.WriteData(&req.i32RankId, sizeof(int32_t));
+	}
 
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanCheckDuplicateReq(char* pData, INT32 i32Size)
@@ -1107,13 +1049,7 @@ void GameSession::OnClanMemberDetailInfoReq(char* pData, INT32 i32Size)
 	memcpy(&memberUID, pData, 8);
 
 	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_MEMBER_DETAIL_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = -1;
 
@@ -1126,7 +1062,6 @@ void GameSession::OnClanMemberDetailInfoReq(char* pData, INT32 i32Size)
 			if (pMember)
 			{
 				result = 0;
-				memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 				memcpy(buffer + offset, &pMember->i64UID, 8);		offset += 8;
 				memcpy(buffer + offset, pMember->szNickname, 64);	offset += 64;
 				memcpy(buffer + offset, &pMember->ui8Level, 1);	offset += 1;
@@ -1134,7 +1069,6 @@ void GameSession::OnClanMemberDetailInfoReq(char* pData, INT32 i32Size)
 				memcpy(buffer + offset, &pMember->i32RankId, 4);	offset += 4;
 
 				uint8_t online = pMember->bOnline ? 1 : 0;
-				memcpy(buffer + offset, &online, 1);				offset += 1;
 
 				// Stats from online session if available
 				GameSession* pOnline = g_pGameSessionManager->FindSessionByUID(memberUID);
@@ -1146,24 +1080,22 @@ void GameSession::OnClanMemberDetailInfoReq(char* pData, INT32 i32Size)
 					wins = pOnline->GetWins();
 					losses = pOnline->GetLosses();
 				}
-				memcpy(buffer + offset, &kills, 4);		offset += 4;
-				memcpy(buffer + offset, &deaths, 4);	offset += 4;
-				memcpy(buffer + offset, &wins, 4);		offset += 4;
-				memcpy(buffer + offset, &losses, 4);	offset += 4;
 			}
 		}
 	}
 
 	if (result != 0)
 	{
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_MEMBER_DETAIL_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&online, 1);
+	packet.WriteData(&kills, 4);
+	packet.WriteData(&deaths, 4);
+	packet.WriteData(&wins, 4);
+	packet.WriteData(&losses, 4);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanPageChattingReq(char* pData, INT32 i32Size)
@@ -1185,30 +1117,19 @@ void GameSession::OnClanPageChattingReq(char* pData, INT32 i32Size)
 
 	// Build chat broadcast packet
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_PAGE_CHATTING_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Sender info
-	memcpy(buffer + offset, &m_i64UID, 8);				offset += 8;
-	memcpy(buffer + offset, m_szNickname, 64);			offset += 64;
 
 	// Message
-	memcpy(buffer + offset, &msgLen, sizeof(uint16_t));	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, pData + 2, msgLen);			offset += msgLen;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_CS_PAGE_CHATTING_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&m_i64UID, 8);
+	packet.WriteData(m_szNickname, 64);
+	packet.WriteData(&msgLen, sizeof(uint16_t));
 	// Send to all online clan members
 	GameClanInfo* pClan = g_pClanManager->FindClan(m_i32ClanId);
 	if (pClan)
@@ -1220,7 +1141,7 @@ void GameSession::OnClanPageChattingReq(char* pData, INT32 i32Size)
 
 			GameSession* pMember = g_pGameSessionManager->FindSessionByUID(pClan->members[i].i64UID);
 			if (pMember)
-				pMember->SendMessage(&packet);
+				pMember->SendPacketMessage(&packet);
 		}
 	}
 }
@@ -1241,13 +1162,7 @@ void GameSession::OnClanListDetailInfoReq(char* pData, INT32 i32Size)
 	memcpy(&clanId, pData, 4);
 
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_CLAN_LIST_DETAIL_INFO_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	int32_t result = -1;
 
@@ -1257,7 +1172,6 @@ void GameSession::OnClanListDetailInfoReq(char* pData, INT32 i32Size)
 		if (pClan)
 		{
 			result = 0;
-			memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
 			memcpy(buffer + offset, &pClan->i32ClanId, 4);			offset += 4;
 			memcpy(buffer + offset, pClan->szName, MAX_CLAN_NAME_LEN);	offset += MAX_CLAN_NAME_LEN;
 			memcpy(buffer + offset, pClan->szMasterNickname, 64);	offset += 64;
@@ -1272,7 +1186,6 @@ void GameSession::OnClanListDetailInfoReq(char* pData, INT32 i32Size)
 
 			// Notice
 			uint16_t noticeLen = (uint16_t)strlen(pClan->szNotice);
-			memcpy(buffer + offset, &noticeLen, 2);				offset += 2;
 			if (noticeLen > 0)
 			{
 				memcpy(buffer + offset, pClan->szNotice, noticeLen);	offset += noticeLen;
@@ -1280,7 +1193,6 @@ void GameSession::OnClanListDetailInfoReq(char* pData, INT32 i32Size)
 
 			// Intro
 			uint16_t introLen = (uint16_t)strlen(pClan->szIntro);
-			memcpy(buffer + offset, &introLen, 2);				offset += 2;
 			if (introLen > 0)
 			{
 				memcpy(buffer + offset, pClan->szIntro, introLen);	offset += introLen;
@@ -1290,14 +1202,13 @@ void GameSession::OnClanListDetailInfoReq(char* pData, INT32 i32Size)
 
 	if (result != 0)
 	{
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CLAN_LIST_DETAIL_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&noticeLen, 2);
+	packet.WriteData(&introLen, 2);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1458,29 +1369,16 @@ void GameSession::OnClanNoteReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	i3NetworkPacket notePacket;
-	char noteBuf[600];
-	int noteOff = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CS_NOTE_ACK;
-	noteOff += sizeof(uint16_t);
-	memcpy(noteBuf + noteOff, &proto, sizeof(uint16_t));	noteOff += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(noteBuf + noteOff, &result, sizeof(int32_t));	noteOff += sizeof(int32_t);
-
 	char senderNick[64] = {};
 	strncpy(senderNick, m_szNickname, 63);
-	memcpy(noteBuf + noteOff, senderNick, 64);				noteOff += 64;
-
 	uint16_t contentLen = (uint16_t)(i32Size > 480 ? 480 : i32Size);
-	memcpy(noteBuf + noteOff, &contentLen, 2);				noteOff += 2;
-	memcpy(noteBuf + noteOff, pData, contentLen);			noteOff += contentLen;
 
-	sz = (uint16_t)noteOff;
-	memcpy(noteBuf, &sz, sizeof(uint16_t));
-	notePacket.SetPacketData(noteBuf, noteOff);
+	i3NetworkPacket notePacket(PROTOCOL_CS_NOTE_ACK);
+	notePacket.WriteData(&result, sizeof(int32_t));
+	notePacket.WriteData(senderNick, 64);
+	notePacket.WriteData(&contentLen, sizeof(uint16_t));
+	notePacket.WriteData(pData, contentLen);
 
 	if (g_pGameSessionManager)
 	{
@@ -1490,7 +1388,7 @@ void GameSession::OnClanNoteReq(char* pData, INT32 i32Size)
 			{
 				GameSession* pTarget = g_pGameSessionManager->FindSessionByUID(pClan->members[i].i64UID);
 				if (pTarget && pTarget != this)
-					pTarget->SendMessage(&notePacket);
+					pTarget->SendPacketMessage(&notePacket);
 			}
 		}
 	}
@@ -1579,27 +1477,16 @@ void GameSession::OnClanNewDetailInfoReq(char* pData, INT32 i32Size)
 
 	// Send detailed clan info
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_NEW_DETAIL_INFO_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	memcpy(buffer + offset, &pClan->i32ClanId, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	// Clan name
 	char name[32] = {};
 	strncpy(name, pClan->szName, 31);
-	memcpy(buffer + offset, name, 32);	offset += 32;
 
 	// Master nickname
 	char masterNick[64] = {};
 	strncpy(masterNick, pClan->szMasterNickname, 63);
-	memcpy(buffer + offset, masterNick, 64);	offset += 64;
 
 	// Clan stats
 	memcpy(buffer + offset, &pClan->i32MemberCount, 4);	offset += 4;
@@ -1614,17 +1501,16 @@ void GameSession::OnClanNewDetailInfoReq(char* pData, INT32 i32Size)
 	// Notice and intro
 	char notice[256] = {};
 	strncpy(notice, pClan->szNotice, 255);
-	memcpy(buffer + offset, notice, 128);	offset += 128;	// Truncated to 128 for packet
 
 	char intro[128] = {};
 	strncpy(intro, pClan->szIntro, 127);
-	memcpy(buffer + offset, intro, 64);		offset += 64;	// Truncated to 64
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_NEW_DETAIL_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(name, 32);
+	packet.WriteData(masterNick, 64);
+	packet.WriteData(notice, 128);
+	packet.WriteData(intro, 64);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanNewCreateClanReq(char* pData, INT32 i32Size)
@@ -1656,17 +1542,14 @@ void GameSession::OnClanNewCreateClanReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// Check GP cost (TODO: move to config in Phase 8.8)
-	int32_t createCost = 50000;
+	int32_t createCost  = g_pContextMain ? g_pContextMain->m_i32ClanCreateCostGP   : 50000;
+	int32_t minLevel    = g_pContextMain ? g_pContextMain->m_i32ClanCreateMinLevel : 5;
 
 	if (m_i32GP < createCost)
 	{
 		SendSimpleAck(PROTOCOL_CS_NEW_CREATE_CLAN_ACK, 4);	// Not enough GP
 		return;
 	}
-
-	// Check level requirement (TODO: move to config in Phase 8.8)
-	int32_t minLevel = 5;
 
 	if (m_i32Level < minLevel)
 	{
@@ -1729,27 +1612,25 @@ void GameSession::OnClanNewRequestListReq(char* pData, INT32 i32Size)
 		return;
 	}
 
-	// Send empty request list (request system not fully implemented)
-	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_NEW_REQUEST_LIST_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
+	uint8_t requestCount = (uint8_t)pClan->i32JoinRequestCount;
 
-	uint8_t requestCount = 0;
-	memcpy(buffer + offset, &requestCount, 1);	offset += 1;
+	i3NetworkPacket packet(PROTOCOL_CS_NEW_REQUEST_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&requestCount, sizeof(uint8_t));
 
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
+	for (int i = 0; i < MAX_CLAN_JOIN_REQUESTS; i++)
+	{
+		if (!pClan->joinRequests[i].bActive)
+			continue;
+		const ClanJoinRequest& req = pClan->joinRequests[i];
+		packet.WriteData(&req.i64UID, sizeof(int64_t));
+		packet.WriteData(req.szNickname, 64);
+		packet.WriteData(&req.i32Level, sizeof(int32_t));
+		packet.WriteData(&req.i32RankId, sizeof(int32_t));
+	}
 
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1779,30 +1660,17 @@ void GameSession::OnClanCreateConditionReq(char* pData, INT32 i32Size)
 {
 	// Check clan creation conditions
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_CREATE_CLAN_CONDITION_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
 	// Check conditions
 	if (m_i32ClanId > 0)
 		result = 1;		// Already in clan
-	else if (m_i32Level < 5)
+	else if (m_i32Level < (g_pContextMain ? g_pContextMain->m_i32ClanCreateMinLevel : 5))
 		result = 2;		// Level too low
-	else if (m_i32GP < 50000)
+	else if (m_i32GP < (g_pContextMain ? g_pContextMain->m_i32ClanCreateCostGP : 50000))
 		result = 3;		// Not enough GP
-
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CREATE_CLAN_CONDITION_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanRequestContextReq(char* pData, INT32 i32Size)
@@ -1827,34 +1695,22 @@ void GameSession::OnClanRequestInfoReq(char* pData, INT32 i32Size)
 	GameSession* pRequester = g_pGameSessionManager ? g_pGameSessionManager->FindSessionByUID(requestUID) : nullptr;
 
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_REQUEST_INFO_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = pRequester ? 0 : 1;
-	memcpy(buffer + offset, &result, sizeof(int32_t));		offset += sizeof(int32_t);
-	memcpy(buffer + offset, &requestUID, sizeof(int64_t));	offset += sizeof(int64_t);
 
 	if (pRequester)
 	{
 		char nick[64] = {};
 		strncpy(nick, pRequester->GetNickname(), 63);
-		memcpy(buffer + offset, nick, 64);	offset += 64;
 		int32_t level = pRequester->GetLevel();
 		int32_t rankId = pRequester->GetRankId();
-		memcpy(buffer + offset, &level, 4);		offset += 4;
-		memcpy(buffer + offset, &rankId, 4);	offset += 4;
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_REQUEST_INFO_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&requestUID, sizeof(int64_t));
+	packet.WriteData(nick, 64);
+	packet.WriteData(&level, 4);
+	packet.WriteData(&rankId, 4);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanMemberContextReq(char* pData, INT32 i32Size)
@@ -1936,26 +1792,14 @@ void GameSession::OnClanRoomInvitedReq(char* pData, INT32 i32Size)
 
 	// Send invite notification to target
 	i3NetworkPacket packet;
-	char buffer[128];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_ROOM_INVITED_RESULT_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-	memcpy(buffer + offset, &m_i64UID, sizeof(int64_t));	offset += sizeof(int64_t);
 	char nick[64] = {};
 	strncpy(nick, m_szNickname, 63);
-	memcpy(buffer + offset, nick, 64);	offset += 64;
-	memcpy(buffer + offset, &m_i32ChannelNum, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &m_i32RoomIdx, sizeof(int32_t));	offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	pTarget->SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_ROOM_INVITED_RESULT_ACK);
+	packet.WriteData(&m_i64UID, sizeof(int64_t));
+	packet.WriteData(nick, 64);
+	packet.WriteData(&m_i32ChannelNum, sizeof(int32_t));
+	packet.WriteData(&m_i32RoomIdx, sizeof(int32_t));
+	pTarget->SendPacketMessage(&packet);
 
 	SendSimpleAck(PROTOCOL_CS_ROOM_INVITED_ACK, 0);
 }
@@ -2055,48 +1899,24 @@ void GameSession::OnClanMatchResultContextReq(char* pData, INT32 i32Size)
 {
 	// Clan match result history context
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_CLAN_MATCH_RESULT_CONTEXT_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	uint8_t matchCount = 0;	// No match history yet
-	memcpy(buffer + offset, &matchCount, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CLAN_MATCH_RESULT_CONTEXT_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&matchCount, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanMatchResultListReq(char* pData, INT32 i32Size)
 {
 	// Clan match result detailed list
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_CS_CLAN_MATCH_RESULT_LIST_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 	uint8_t count = 0;
-	memcpy(buffer + offset, &count, 1);	offset += 1;
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_CS_CLAN_MATCH_RESULT_LIST_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&count, 1);
+	SendPacketMessage(&packet);
 }
 
 void GameSession::OnClanMatchResultEmotionSaveReq(char* pData, INT32 i32Size)

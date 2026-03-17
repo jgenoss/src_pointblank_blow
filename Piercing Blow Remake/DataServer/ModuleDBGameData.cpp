@@ -371,6 +371,106 @@ bool ModuleDBGameData::SaveQuest(int64_t i64UID, IS_QUEST_SAVE_REQ* pReq,
 }
 
 // ============================================================================
+// Player Options/Keybindings
+// ============================================================================
+
+bool ModuleDBGameData::SaveOptions(int64_t i64UID, const char* pOptionsData, int i32DataSize)
+{
+	if (!m_pPool || !pOptionsData || i32DataSize <= 0)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szUID[32];
+	snprintf(szUID, sizeof(szUID), "%lld", i64UID);
+
+	// Encode option blob as hex bytea
+	const int maxHex = i32DataSize * 2 + 3;
+	char* szDataHex = new char[maxHex];
+	szDataHex[0] = '\\'; szDataHex[1] = 'x';
+	int hexOff = 2;
+	for (int i = 0; i < i32DataSize; i++)
+	{
+		snprintf(szDataHex + hexOff, 3, "%02x", (uint8_t)pOptionsData[i]);
+		hexOff += 2;
+	}
+	szDataHex[hexOff] = '\0';
+
+	const char* paramValues[2] = { szUID, szDataHex };
+	DBResult result = pConn->ExecuteParams(
+		"INSERT INTO pb_user_options (uid, options_blob, updated_at) "
+		"VALUES ($1, $2::bytea, NOW()) "
+		"ON CONFLICT (uid) DO UPDATE SET options_blob = $2::bytea, updated_at = NOW()",
+		2, paramValues);
+
+	delete[] szDataHex;
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+	{
+		printf("[ModuleDBGameData] ERROR: SaveOptions failed for UID=%lld\n", i64UID);
+		return false;
+	}
+
+	return true;
+}
+
+int ModuleDBGameData::LoadOptions(int64_t i64UID, char* pOut, int i32MaxSize)
+{
+	if (!m_pPool || !pOut || i32MaxSize <= 0)
+		return -1;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return -1;
+
+	char szUID[32];
+	snprintf(szUID, sizeof(szUID), "%lld", i64UID);
+
+	const char* paramValues[1] = { szUID };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT options_blob FROM pb_user_options WHERE uid = $1",
+		1, paramValues);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess() || result.GetRowCount() == 0)
+		return 0;	// Not found — use defaults
+
+	// options_blob is returned as hex bytea: \xAABBCC...
+	const char* pHex = result.GetString(0, "options_blob");
+	if (!pHex || pHex[0] == '\0')
+		return 0;
+
+	// Skip leading \x prefix if present
+	if (pHex[0] == '\\' && pHex[1] == 'x')
+		pHex += 2;
+
+	int hexLen = (int)strlen(pHex);
+	int binLen = hexLen / 2;
+	if (binLen > i32MaxSize)
+		binLen = i32MaxSize;
+
+	for (int i = 0; i < binLen; ++i)
+	{
+		int val = 0;
+		for (int j = 0; j < 2; ++j)
+		{
+			val <<= 4;
+			char c = pHex[i * 2 + j];
+			if (c >= '0' && c <= '9')      val |= c - '0';
+			else if (c >= 'a' && c <= 'f') val |= c - 'a' + 10;
+			else if (c >= 'A' && c <= 'F') val |= c - 'A' + 10;
+		}
+		pOut[i] = (char)val;
+	}
+
+	return binLen;
+}
+
+// ============================================================================
 // Account Cosmetics
 // ============================================================================
 

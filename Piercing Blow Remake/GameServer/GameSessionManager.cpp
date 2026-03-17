@@ -214,26 +214,15 @@ void GameSessionManager::OnSendLobbyChatting(GameSession* pSender, char* pMessag
 
 	// Build chat packet
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_LOBBY_CHATTING_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	int senderIdx = pSender->GetIndex();
-	memcpy(buffer + offset, &senderIdx, sizeof(int));		offset += sizeof(int);
 
 	uint16_t msgSize = (uint16_t)min((int)ui16Size, 256);
-	memcpy(buffer + offset, &msgSize, sizeof(uint16_t));	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, pMessage, msgSize);				offset += msgSize;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-
+	i3NetworkPacket packet(PROTOCOL_LOBBY_CHATTING_ACK);
+	packet.WriteData(&senderIdx, sizeof(int));
+	packet.WriteData(&msgSize, sizeof(uint16_t));
 	// Broadcast to all lobby users in this channel
 	m_pcsLobbyUser[channel]->Lock();
 
@@ -243,7 +232,7 @@ void GameSessionManager::OnSendLobbyChatting(GameSession* pSender, char* pMessag
 	{
 		GameSession* pSession = (GameSession*)m_pLobbyUserList[channel]->GetItem(i);
 		if (pSession)
-			pSession->SendMessage(&packet);
+			pSession->SendPacketMessage(&packet);
 	}
 
 	m_pcsLobbyUser[channel]->Unlock();
@@ -261,7 +250,7 @@ void GameSessionManager::OnSendChannelUser(int i32ChannelNum, i3NetworkPacket* p
 	{
 		GameSession* pSession = (GameSession*)m_pChannelUserList[i32ChannelNum]->GetItem(i);
 		if (pSession)
-			pSession->SendMessage(pPacket);
+			pSession->SendPacketMessage(pPacket);
 	}
 
 	m_pcsChannelUser[i32ChannelNum]->Unlock();
@@ -282,7 +271,7 @@ void GameSessionManager::BroadcastToAll(i3NetworkPacket* pPacket)
 	{
 		GameSession* pSession = &m_pSessions[i];
 		if (pSession->GetTask() >= GAME_TASK_CHANNEL)
-			pSession->SendMessage(pPacket);
+			pSession->SendPacketMessage(pPacket);
 	}
 }
 
@@ -292,25 +281,42 @@ void GameSessionManager::BroadcastAnnounce(const char* pszMessage, uint16_t ui16
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_SERVER_MESSAGE_ANNOUNCE;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	uint16_t copyLen = (ui16MsgLen > 480) ? 480 : ui16MsgLen;
-	memcpy(buffer + offset, &copyLen, sizeof(uint16_t));	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, pszMessage, copyLen);			offset += copyLen;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_ANNOUNCE);
+	packet.WriteData(&copyLen, sizeof(uint16_t));
 	BroadcastToAll(&packet);
 
 	printf("[SessionManager] Server announce broadcast - Len=%d\n", ui16MsgLen);
+}
+
+void GameSessionManager::BroadcastKnockWarning(const char* pszMessage, uint16_t ui16MsgLen)
+{
+	if (!pszMessage || ui16MsgLen == 0)
+		return;
+
+	i3NetworkPacket packet;
+	offset += sizeof(uint16_t);
+
+	uint16_t copyLen = (ui16MsgLen > 480) ? 480 : ui16MsgLen;
+	memcpy(buffer + offset, pszMessage, copyLen);			offset += copyLen;
+	i3NetworkPacket packet(PROTOCOL_KNOCK_SEND_WARNING_MESSAGE);
+	packet.WriteData(&copyLen, sizeof(uint16_t));
+	BroadcastToAll(&packet);
+
+	printf("[SessionManager] KNOCK warning broadcast - Len=%d\n", ui16MsgLen);
+}
+
+void GameSessionManager::BroadcastKnockShutdown()
+{
+	i3NetworkPacket packet;
+	offset += sizeof(uint16_t);
+	i3NetworkPacket packet(PROTOCOL_KNOCK_NORMALITY_SHUTDOWN);
+	BroadcastToAll(&packet);
+
+	printf("[SessionManager] KNOCK shutdown broadcast sent to all clients\n");
 }
 
 void GameSessionManager::CheckTimeouts()

@@ -1,5 +1,7 @@
+#include "pch.h"
 #include "ConnectSession.h"
 #include "ConnectServerContext.h"
+#include "ConnectSessionManager.h"
 #include "GameServerRegistry.h"
 #include "ModuleDataClient.h"
 #include "ServerList.h"
@@ -55,7 +57,37 @@ BOOL ConnectSession::OnConnect(SOCKET Socket, struct sockaddr_in* pAddr)
 
 BOOL ConnectSession::OnConnectInit()
 {
-	return i3NetworkSession::OnConnectInit();
+	if (FALSE == i3NetworkSession::OnConnectInit())
+		return FALSE;
+
+	// PACKET_BASE_CONNECT_ACK fields (same layout as S2MO serialization):
+	// m_i32SessionIdx(4) + m_i16PacketRandSeed(2) + SC_VERSION(3) + RSA_KEY(1024) + ChannelTypes(10)
+	INT32 i32SessionIdx = m_SessionIdx;
+	INT16 i16PacketRandSeed = (INT16)(GetTickCount() & 0x7FFF);
+
+	// SC_VERSION: ui8VerGame(1) + ui16VerSC(2)
+	UINT8 ui8VerGame = 3;		// VER_GAME
+	UINT16 ui16VerSC = 9;		// VER_SC_PROTOCOL
+
+	i3NetworkPacket packet(PROTOCOL_BASE_CONNECT_ACK);
+	packet.WriteData(&i32SessionIdx, sizeof(INT32));
+	packet.WriteData(&i16PacketRandSeed, sizeof(INT16));
+	packet.WriteData(&ui8VerGame, sizeof(UINT8));
+	packet.WriteData(&ui16VerSC, sizeof(UINT16));
+
+	// RSA key (1024 bytes, zeroed = no encryption for now)
+	char rsaKey[1024] = {0};
+	packet.WriteData(rsaKey, 1024);
+
+	// Channel types (10 channels, all type 1 = normal)
+	UINT8 channelTypes[10];
+	memset(channelTypes, 0x01, 10);
+	packet.WriteData(channelTypes, 10);
+
+	SendPacketMessage(&packet);
+
+	printf("[ConnectSession:%d] CONNECT_ACK sent (sid=%d)\n", m_SessionIdx, i32SessionIdx);
+	return TRUE;
 }
 
 BOOL ConnectSession::OnDisconnect(BOOL bForceMainThread)
@@ -313,7 +345,7 @@ void ConnectSession::OnPacketHeartBitReq(char* pData, INT32 i32Size)
 {
 	// Responder heartbeat
 	i3NetworkPacket packet(PROTOCOL_BASE_HEART_BIT_ACK);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 // -- Send Helpers --
@@ -325,7 +357,7 @@ void ConnectSession::SendConnectAck()
 	// Escribir XOR key en el ACK
 	packet.WriteData(&m_ui32XorKey, sizeof(m_ui32XorKey));
 
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void ConnectSession::SendLoginAck(int i32Result)
@@ -338,7 +370,7 @@ void ConnectSession::SendLoginAck(int i32Result)
 		packet.WriteData(&m_i64UID, sizeof(m_i64UID));
 	}
 
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void ConnectSession::SendServerList()
@@ -372,7 +404,7 @@ void ConnectSession::SendServerList()
 		}
 	}
 
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void ConnectSession::SendServerSelectAck(int i32Result, const char* pszIP, uint16_t ui16Port)
@@ -391,7 +423,7 @@ void ConnectSession::SendServerSelectAck(int i32Result, const char* pszIP, uint1
 		packet.WriteData(&ui16Port, sizeof(ui16Port));
 	}
 
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 uint32_t ConnectSession::GenerateAuthToken()
@@ -443,25 +475,12 @@ void ConnectSession::OnISServerRegisterReq(char* pData, INT32 i32Size)
 	}
 
 	// Send ACK
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_SERVER_REGISTER_ACK;
-	memcpy(buffer + offset, &size, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	IS_SERVER_REGISTER_ACK ack;
 	ack.i32Result = i32Result;
 	ack.i32AssignedId = i32AssignedId;
-	memcpy(buffer + offset, &ack, sizeof(ack));				offset += sizeof(ack);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_IS_SERVER_REGISTER_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendPacketMessage(&packet);
 }
 
 void ConnectSession::OnISHeartbeatReq(char* pData, INT32 i32Size)
@@ -479,24 +498,11 @@ void ConnectSession::OnISHeartbeatReq(char* pData, INT32 i32Size)
 	}
 
 	// Send ACK
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_HEARTBEAT_ACK;
-	memcpy(buffer + offset, &size, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	IS_HEARTBEAT_ACK ack;
 	ack.i32Result = 0;
-	memcpy(buffer + offset, &ack, sizeof(ack));				offset += sizeof(ack);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_IS_HEARTBEAT_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendPacketMessage(&packet);//#define SendMessage  SendMessageW
 }
 
 void ConnectSession::OnISServerStatusUpdateReq(char* pData, INT32 i32Size)
@@ -512,6 +518,12 @@ void ConnectSession::OnISServerStatusUpdateReq(char* pData, INT32 i32Size)
 		pRegistry->UpdateServerStatus(pReq->i32ServerId,
 			(ServerOnlineState)pReq->i32State, pReq->i32CurrentPlayers);
 	}
+
+	// Send ACK
+	int32_t result = 0;
+	i3NetworkPacket packet(PROTOCOL_IS_SERVER_STATUS_UPDATE_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	SendPacketMessage(&packet);
 }
 
 bool ConnectSession::SendAuthTransferToGameServer(int i32ServerId,
@@ -538,14 +550,6 @@ bool ConnectSession::SendAuthTransferToGameServer(int i32ServerId,
 		return false;
 
 	// Build IS_PLAYER_AUTH_TRANSFER_REQ packet
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_PLAYER_AUTH_TRANSFER_REQ;
-	memcpy(buffer + offset, &size, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
-
 	IS_PLAYER_AUTH_TRANSFER_REQ req;
 	memset(&req, 0, sizeof(req));
 	req.i64UID = i64UID;
@@ -553,15 +557,9 @@ bool ConnectSession::SendAuthTransferToGameServer(int i32ServerId,
 	if (pszUsername)
 		strncpy(req.szUsername, pszUsername, sizeof(req.szUsername) - 1);
 	req.ui32ClientIP = ui32ClientIP;
-
-	memcpy(buffer + offset, &req, sizeof(req));				offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	i3NetworkPacket packet;
-	packet.SetPacketData(buffer, offset);
-	pGSSession->SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_IS_PLAYER_AUTH_TRANSFER_REQ);
+	packet.WriteData(&req, sizeof(req));
+	pGSSession->SendPacketMessage(&packet);
 
 	printf("[ConnectSession] Auth transfer sent to GameServer ID=%d for UID=%lld Token=0x%08X\n",
 		i32ServerId, (long long)i64UID, ui32AuthToken);

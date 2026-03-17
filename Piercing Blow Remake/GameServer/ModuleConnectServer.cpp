@@ -66,26 +66,12 @@ void ModuleConnectServer::SendStatusUpdate(int i32CurrentPlayers)
 	if (!IsConnected() || !m_bRegistered)
 		return;
 
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_SERVER_STATUS_UPDATE_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_SERVER_STATUS_UPDATE_REQ req;
 	req.i32ServerId = m_i32ServerId;
 	req.i32State = 1;	// Online
 	req.i32CurrentPlayers = i32CurrentPlayers;
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_SERVER_STATUS_UPDATE_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 }
 
@@ -99,15 +85,6 @@ bool ModuleConnectServer::OnConnect()
 		GetRemoteIP(), GetRemotePort());
 
 	// Send registration request
-	i3NetworkPacket packet;
-	char buffer[256];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_SERVER_REGISTER_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_SERVER_REGISTER_REQ req;
 	req.i32ServerId = m_i32ServerId;
 	req.i32ServerType = (int)ServerType::Game;
@@ -116,13 +93,8 @@ bool ModuleConnectServer::OnConnect()
 	req.ui16PublicPort = m_ui16PublicPort;
 	req.i32MaxPlayers = m_i32MaxPlayers;
 	req.szRegion[0] = '\0';
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_SERVER_REGISTER_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 
 	return true;
@@ -139,10 +111,10 @@ void ModuleConnectServer::OnProcessPacket(char* pData, int i32Size)
 	if (i32Size < (int)sizeof(uint16_t) * 2)
 		return;
 
-	uint16_t packetSize = *(uint16_t*)pData;
+	uint16_t packetSize = *(uint16_t*)pData & 0x7FFF;	// data field size only
 	uint16_t protocolId = *(uint16_t*)(pData + 2);
 	char* pPayload = pData + 4;
-	int payloadSize = packetSize - 4;
+	int payloadSize = (int)packetSize;
 
 	switch (protocolId)
 	{
@@ -170,26 +142,12 @@ void ModuleConnectServer::OnHeartbeat()
 		return;
 
 	// Send heartbeat
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_HEARTBEAT_REQ;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_HEARTBEAT_REQ req;
 	req.i32ServerId = m_i32ServerId;
 	req.i32ServerType = (int)ServerType::Game;
 	req.i32CurrentPlayers = g_pGameSessionManager ? g_pGameSessionManager->GetActiveCount() : 0;
-
-	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_HEARTBEAT_REQ);
+	packet.WriteData(&req, sizeof(req));
 	SendPacket(&packet);
 
 	// Clean expired tokens
@@ -242,25 +200,11 @@ void ModuleConnectServer::OnPlayerAuthTransferReq(char* pData, int i32Size)
 		pReq->i64UID, pReq->ui32AuthToken);
 
 	// Send ACK back to ConnectServer
-	i3NetworkPacket packet;
-	char buffer[64];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_IS_PLAYER_AUTH_TRANSFER_ACK;
-	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	IS_PLAYER_AUTH_TRANSFER_ACK ack;
 	ack.i64UID = pReq->i64UID;
 	ack.i32Result = 0;	// Accepted
-
-	memcpy(buffer + offset, &ack, sizeof(ack));			offset += sizeof(ack);
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_IS_PLAYER_AUTH_TRANSFER_ACK);
+	packet.WriteData(&ack, sizeof(ack));
 	SendPacket(&packet);
 }
 

@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ConnectSessionManager.h"
 #include "ConnectSession.h"
 #include <cstdio>
@@ -23,7 +24,7 @@ ConnectSessionManager::~ConnectSessionManager()
 BOOL ConnectSessionManager::OnCreate(i3List* pSessionList)
 {
 	// Crear pool de sesiones
-	m_pSessions = new ConnectSession[MAX_CONNECT_SESSIONS];
+	m_pSessions = new class ConnectSession[MAX_CONNECT_SESSIONS];
 	if (!m_pSessions)
 		return FALSE;
 
@@ -70,7 +71,7 @@ BOOL ConnectSessionManager::OnDestroy()
 	return bResult;
 }
 
-ULONG_PTR ConnectSessionManager::ConnectSession_v(SOCKET Socket, struct sockaddr_in* pAddr)
+ULONG_PTR ConnectSessionManager::ConnectSession(SOCKET Socket, struct sockaddr_in* pAddr)
 {
 	ULONG_PTR result = i3NetworkSessionManager::ConnectSession(Socket, pAddr);
 
@@ -89,7 +90,7 @@ ULONG_PTR ConnectSessionManager::ConnectSession_v(SOCKET Socket, struct sockaddr
 	return result;
 }
 
-ConnectSession* ConnectSessionManager::GetSession(int i32Idx)
+class ConnectSession* ConnectSessionManager::GetSession(int i32Idx)
 {
 	if (i32Idx < 0 || i32Idx >= MAX_CONNECT_SESSIONS)
 		return nullptr;
@@ -100,7 +101,7 @@ void ConnectSessionManager::CheckTimeouts()
 {
 	for (int i = 0; i < MAX_CONNECT_SESSIONS; ++i)
 	{
-		ConnectSession* pSession = &m_pSessions[i];
+		class ConnectSession* pSession = &m_pSessions[i];
 		if (pSession->GetIsActive() && pSession->IsTimedOut())
 		{
 			printf("[ConnectSessionManager] Session %d timed out\n", i);

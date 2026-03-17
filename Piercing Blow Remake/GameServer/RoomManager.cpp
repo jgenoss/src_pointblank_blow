@@ -447,16 +447,9 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 
 	// Build room list packet
 	i3NetworkPacket packet;
-	char buffer[4096];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_LOBBY_GET_ROOMLIST_ACK;
 	offset += sizeof(uint16_t);	// Reserve space for size
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
 	uint32_t roomCount = count;
-	memcpy(buffer + offset, &roomCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Serialize each room's basic info
 	for (uint32_t i = 0; i < count && i < 10; i++)	// Max 10 rooms per page (SEND_MAX_ROOM_COUNT)
@@ -470,12 +463,9 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 			offset += roomInfoSize;
 		}
 	}
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	pSession->SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_LOBBY_GET_ROOMLIST_ACK);
+	packet.WriteData(&roomCount, sizeof(uint32_t));
+	pSession->SendPacketMessage(&packet);
 }
 
 void RoomManager::UpdateRoomInfo(int i32ChannelNum)

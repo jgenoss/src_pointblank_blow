@@ -134,7 +134,7 @@ void BattleSession::OnBattleRegisterReq(char* pData, INT32 i32Size)
 	ack.i32Result = 0;			// OK
 	ack.i32AssignedId = m_i32GameServerId;
 	packet.WriteData(&ack, sizeof(ack));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::OnBattleCreateReq(char* pData, INT32 i32Size)
@@ -147,6 +147,29 @@ void BattleSession::OnBattleCreateReq(char* pData, INT32 i32Size)
 	printf("[BattleSession:%d] BATTLE_CREATE_REQ: Room=%d, Channel=%d, Mode=%d, Map=%d, Players=%d\n",
 		m_SessionIdx, pReq->i32RoomIdx, pReq->i32ChannelNum,
 		pReq->ui8GameMode, pReq->ui8MapIndex, pReq->i32PlayerCount);
+
+	// Validate parameters before using them
+	if (pReq->ui8GameMode == 0 || pReq->ui8GameMode >= 18)		// 0=STAGE_MODE_NA, 18=STAGE_MODE_MAX
+	{
+		printf("[BattleSession:%d] BATTLE_CREATE_REQ rejected: invalid GameMode=%d\n",
+			m_SessionIdx, pReq->ui8GameMode);
+		SendBattleCreateAck(pReq->i32RoomIdx, 2, -1, "", 0);
+		return;
+	}
+	if (pReq->ui8MapIndex >= 64)	// DS_MAX_MAP = 64
+	{
+		printf("[BattleSession:%d] BATTLE_CREATE_REQ rejected: invalid MapIndex=%d\n",
+			m_SessionIdx, pReq->ui8MapIndex);
+		SendBattleCreateAck(pReq->i32RoomIdx, 3, -1, "", 0);
+		return;
+	}
+	if (pReq->i32PlayerCount <= 0 || pReq->i32PlayerCount > 16)
+	{
+		printf("[BattleSession:%d] BATTLE_CREATE_REQ rejected: invalid PlayerCount=%d\n",
+			m_SessionIdx, pReq->i32PlayerCount);
+		SendBattleCreateAck(pReq->i32RoomIdx, 4, -1, "", 0);
+		return;
+	}
 
 	if (!g_pBattleRoomManager)
 	{
@@ -234,7 +257,7 @@ void BattleSession::SendHeartbeatAck()
 	IS_HEARTBEAT_ACK ack;
 	ack.i32Result = 0;
 	packet.WriteData(&ack, sizeof(ack));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -254,7 +277,7 @@ void BattleSession::SendBattleCreateAck(int i32RoomIdx, int i32Result,
 		strncpy_s(ack.szUdpIP, pszUdpIP, _TRUNCATE);
 	ack.ui16UdpPort = ui16UdpPort;
 	packet.WriteData(&ack, sizeof(ack));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendBattleEndNotify(BattleResult* pResult)
@@ -264,7 +287,7 @@ void BattleSession::SendBattleEndNotify(BattleResult* pResult)
 
 	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_END_NOTIFY);
 	packet.WriteData(pResult, sizeof(BattleResult));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendPlayerMigrateAck(int64_t i64UID, int i32Result)
@@ -281,7 +304,7 @@ void BattleSession::SendPlayerMigrateAck(int64_t i64UID, int i32Result)
 	ack.i64UID = i64UID;
 	ack.i32Result = i32Result;
 	packet.WriteData(&ack, sizeof(ack));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -307,7 +330,7 @@ void BattleSession::SendKillNotify(int i32RoomIdx, int i32ChannelNum,
 
 	packet.WriteData(&notify, sizeof(notify));
 	packet.WriteData(pKills, sizeof(IS_BATTLE_KILL_INFO) * ui8KillCount);
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendRoundStartNotify(int i32RoomIdx, int i32ChannelNum,
@@ -324,7 +347,7 @@ void BattleSession::SendRoundStartNotify(int i32RoomIdx, int i32ChannelNum,
 	notify.ui8Pad[1] = 0;
 
 	packet.WriteData(&notify, sizeof(notify));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendRoundEndNotify(int i32RoomIdx, int i32ChannelNum,
@@ -345,7 +368,7 @@ void BattleSession::SendRoundEndNotify(int i32RoomIdx, int i32ChannelNum,
 	notify.i32BlueScore = i32BlueScore;
 
 	packet.WriteData(&notify, sizeof(notify));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendHackNotify(int i32RoomIdx, int i32ChannelNum,
@@ -369,7 +392,7 @@ void BattleSession::SendHackNotify(int i32RoomIdx, int i32ChannelNum,
 		strncpy_s(notify.szDescription, pszDescription, _TRUNCATE);
 
 	packet.WriteData(&notify, sizeof(notify));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }
 
 void BattleSession::SendMissionNotify(int i32RoomIdx, int i32ChannelNum,
@@ -391,5 +414,5 @@ void BattleSession::SendMissionNotify(int i32RoomIdx, int i32ChannelNum,
 	notify.i32Param2 = i32Param2;
 
 	packet.WriteData(&notify, sizeof(notify));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }

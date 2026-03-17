@@ -541,7 +541,7 @@ void TaskProcessor::ProcessResponses()
 				i3NetworkPacket packet((PROTOCOL)ui16Proto);
 				packet.WriteData(resp.Data + sizeof(ui16Proto),
 					resp.i32DataSize - sizeof(ui16Proto));
-				pSession->SendMessage(&packet);
+				pSession->SendPacketMessage(&packet);
 			}
 		}
 
@@ -679,6 +679,86 @@ void TaskProcessor::ProcessGameDataTask(TaskEntry* pTask, int i32WorkerIdx, Task
 		break;
 	}
 
+	case PROTOCOL_IS_OPTION_SAVE_REQ:
+	{
+		IS_OPTION_SAVE_REQ* pReq = (IS_OPTION_SAVE_REQ*)pTask->Data;
+		const char* pOptionsData = pTask->Data + sizeof(IS_OPTION_SAVE_REQ);
+		int i32OptionsDataSize = (int)pReq->ui16DataSize;
+
+		if (pTask->i32DataSize < (int)(sizeof(IS_OPTION_SAVE_REQ) + i32OptionsDataSize))
+			break;
+
+		bool bResult = pModule->SaveOptions(pReq->i64UID, pOptionsData, i32OptionsDataSize);
+
+		IS_OPTION_SAVE_ACK ack;
+		ack.i64UID = pReq->i64UID;
+		ack.i32Result = bResult ? 0 : 1;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_OPTION_SAVE_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_OPTION_LOAD_REQ:
+	{
+		IS_OPTION_LOAD_REQ* pReq = (IS_OPTION_LOAD_REQ*)pTask->Data;
+
+		const int MAX_OPTIONS_SIZE = 2048;
+		char optBuf[MAX_OPTIONS_SIZE];
+		int i32Read = pModule->LoadOptions(pReq->i64UID, optBuf, MAX_OPTIONS_SIZE);
+
+		IS_OPTION_LOAD_ACK ack;
+		ack.i64UID       = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result    = (i32Read > 0) ? 0 : 1;
+		ack.ui16DataSize = (i32Read > 0) ? (uint16_t)i32Read : 0;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_OPTION_LOAD_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));				i32Offset += sizeof(ack);
+		if (ack.ui16DataSize > 0 && i32Offset + ack.ui16DataSize <= (int)sizeof(pResponse->Data))
+		{
+			memcpy(pResponse->Data + i32Offset, optBuf, ack.ui16DataSize);
+			i32Offset += ack.ui16DataSize;
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
+	case PROTOCOL_IS_MEDAL_SET_LOAD_REQ:
+	{
+		IS_MEDAL_SET_LOAD_REQ* pReq = (IS_MEDAL_SET_LOAD_REQ*)pTask->Data;
+
+		const int MAX_SETS = 20;
+		IS_MEDAL_SET_CURRENT_ENTRY sets[MAX_SETS];
+		int i32Count = pModule->LoadMedalSets(pReq->i64UID, sets, MAX_SETS);
+
+		IS_MEDAL_SET_LOAD_ACK ack;
+		ack.i64UID        = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+		ack.i32Result     = 0;
+		ack.ui16Count     = (uint16_t)i32Count;
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_MEDAL_SET_LOAD_ACK;
+		int i32Offset = 0;
+		memcpy(pResponse->Data + i32Offset, &ui16Proto, sizeof(ui16Proto));		i32Offset += sizeof(ui16Proto);
+		memcpy(pResponse->Data + i32Offset, &ack, sizeof(ack));				i32Offset += sizeof(ack);
+		if (i32Count > 0)
+		{
+			int i32SetSize = i32Count * (int)sizeof(IS_MEDAL_SET_CURRENT_ENTRY);
+			if (i32Offset + i32SetSize <= (int)sizeof(pResponse->Data))
+			{
+				memcpy(pResponse->Data + i32Offset, sets, i32SetSize);
+				i32Offset += i32SetSize;
+			}
+		}
+		pResponse->i32DataSize = i32Offset;
+		break;
+	}
+
 	case PROTOCOL_IS_SHOP_LIST_REQ:
 	{
 		IS_SHOP_ITEM_ENTRY items[500];
@@ -726,6 +806,24 @@ void TaskProcessor::ProcessGameDataTask(TaskEntry* pTask, int i32WorkerIdx, Task
 		pModule->BuyShopItem(pReq, &ack);
 
 		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_SHOP_BUY_ACK;
+		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
+		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
+		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);
+		break;
+	}
+
+	case PROTOCOL_IS_SHOP_COUPON_REQ:
+	{
+		IS_SHOP_COUPON_REQ* pReq = (IS_SHOP_COUPON_REQ*)pTask->Data;
+
+		IS_SHOP_COUPON_ACK ack;
+		memset(&ack, 0, sizeof(ack));
+		ack.i64UID       = pReq->i64UID;
+		ack.i32SessionIdx = pReq->i32SessionIdx;
+
+		pModule->RedeemCoupon(pReq, &ack);
+
+		uint16_t ui16Proto = (uint16_t)PROTOCOL_IS_SHOP_COUPON_ACK;
 		memcpy(pResponse->Data, &ui16Proto, sizeof(ui16Proto));
 		memcpy(pResponse->Data + sizeof(ui16Proto), &ack, sizeof(ack));
 		pResponse->i32DataSize = sizeof(ui16Proto) + sizeof(ack);

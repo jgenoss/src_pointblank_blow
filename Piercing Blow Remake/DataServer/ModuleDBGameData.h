@@ -37,6 +37,10 @@ public:
 	// Quests
 	bool SaveQuest(int64_t i64UID, IS_QUEST_SAVE_REQ* pReq, const char* pQuestData, int i32DataSize);
 
+	// Player Options/Keybindings
+	bool SaveOptions(int64_t i64UID, const char* pOptionsData, int i32DataSize);
+	int  LoadOptions(int64_t i64UID, char* pOut, int i32MaxSize);	// returns bytes written, -1 on error, 0 if not found
+
 	// Account Cosmetics
 	bool LoadCosmetics(int64_t i64UID, IS_COSMETICS_LOAD_ACK* pOut);
 	bool SaveCosmetics(int64_t i64UID, IS_COSMETICS_SAVE_REQ* pReq);

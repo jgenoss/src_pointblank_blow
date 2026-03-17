@@ -1,3 +1,4 @@
+#include "i3CommonType.h"
 #include "ModuleBase.h"
 #include <cstdio>
 #include <cstring>
@@ -196,7 +197,7 @@ bool ModuleBase::ConnectToRemote()
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
 	addr.sin_port = htons(m_ui16RemotePort);
-	inet_pton(AF_INET, m_szRemoteIP, &addr.sin_addr);
+	addr.sin_addr.s_addr = inet_addr(m_szRemoteIP);
 
 	if (connect(m_Socket, (struct sockaddr*)&addr, sizeof(addr)) == SOCKET_ERROR)
 	{

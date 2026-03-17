@@ -5,6 +5,7 @@
 #include "GameCharacter.h"
 #include "HMSParser.h"
 #include "GameObjectManager.h"
+#include "PhysicsEngine.h"
 
 // Static rate limiters
 SlotRateLimit UDPChecker::s_RateLimits[BATTLE_SLOT_MAX];
@@ -257,6 +258,11 @@ PacketCheckResult UDPChecker::_ParseCharaPosRotPacket(BattleRoom* pRoom, uint32_
 	BattleMember* pMember = pRoom->GetMember(ui32SlotIdx);
 	if (pMember)
 		pMember->SetPosition(pPosRot->fPos[0], pPosRot->fPos[1], pPosRot->fPos[2]);
+
+	// Update physics capsule position for accurate hit detection
+	PhysicsEngine* pPhysics = pRoom->GetPhysicsEngine();
+	if (pPhysics)
+		pPhysics->UpdateCharacterPosition(ui32SlotIdx, pPosRot->fPos);
 
 	return PACKET_CHECK_OK;
 }

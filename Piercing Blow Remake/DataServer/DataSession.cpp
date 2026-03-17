@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "DataSession.h"
 #include "DataServerContext.h"
 #include "TaskProcessor.h"
@@ -116,6 +117,15 @@ INT32 DataSession::PacketParsing(char* pPacket, INT32 iSize)
 	case PROTOCOL_IS_QUEST_SAVE_REQ:
 		OnQuestSaveReq(pData, ui16DataSize);
 		break;
+	case PROTOCOL_IS_OPTION_SAVE_REQ:
+		OnOptionSaveReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_OPTION_LOAD_REQ:
+		OnOptionLoadReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_MEDAL_SET_LOAD_REQ:
+		OnMedalSetLoadReq(pData, ui16DataSize);
+		break;
 
 	// Social
 	case PROTOCOL_IS_CLAN_CREATE_REQ:
@@ -155,6 +165,9 @@ INT32 DataSession::PacketParsing(char* pPacket, INT32 iSize)
 		break;
 	case PROTOCOL_IS_SHOP_BUY_REQ:
 		OnShopBuyReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_SHOP_COUPON_REQ:
+		OnShopCouponReq(pData, ui16DataSize);
 		break;
 
 	// Inventory
@@ -387,6 +400,47 @@ void DataSession::OnQuestSaveReq(char* pData, INT32 i32Size)
 		pData, i32TotalSize);
 }
 
+void DataSession::OnOptionSaveReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetTaskProcessor())
+		return;
+	if (i32Size < (INT32)sizeof(IS_OPTION_SAVE_REQ))
+		return;
+
+	IS_OPTION_SAVE_REQ* pReq = (IS_OPTION_SAVE_REQ*)pData;
+	int i32TotalSize = (int)sizeof(IS_OPTION_SAVE_REQ) + (int)pReq->ui16DataSize;
+	if (i32Size < i32TotalSize)
+		return;
+
+	g_pDataServerContext->GetTaskProcessor()->QueueTask(
+		TASK_GAME_DATA, m_SessionIdx, PROTOCOL_IS_OPTION_SAVE_REQ,
+		pData, i32TotalSize);
+}
+
+void DataSession::OnOptionLoadReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetTaskProcessor())
+		return;
+	if (i32Size < (INT32)sizeof(IS_OPTION_LOAD_REQ))
+		return;
+
+	g_pDataServerContext->GetTaskProcessor()->QueueTask(
+		TASK_GAME_DATA, m_SessionIdx, PROTOCOL_IS_OPTION_LOAD_REQ,
+		pData, (int)sizeof(IS_OPTION_LOAD_REQ));
+}
+
+void DataSession::OnMedalSetLoadReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetTaskProcessor())
+		return;
+	if (i32Size < (INT32)sizeof(IS_MEDAL_SET_LOAD_REQ))
+		return;
+
+	g_pDataServerContext->GetTaskProcessor()->QueueTask(
+		TASK_GAME_DATA, m_SessionIdx, PROTOCOL_IS_MEDAL_SET_LOAD_REQ,
+		pData, (int)sizeof(IS_MEDAL_SET_LOAD_REQ));
+}
+
 // -- Social Handlers (all async via TaskProcessor) --
 
 void DataSession::OnClanCreateReq(char* pData, INT32 i32Size)
@@ -537,6 +591,18 @@ void DataSession::OnShopBuyReq(char* pData, INT32 i32Size)
 		pData, sizeof(IS_SHOP_BUY_REQ));
 }
 
+void DataSession::OnShopCouponReq(char* pData, INT32 i32Size)
+{
+	if (!g_pDataServerContext || !g_pDataServerContext->GetTaskProcessor())
+		return;
+	if (i32Size < (INT32)sizeof(IS_SHOP_COUPON_REQ))
+		return;
+
+	g_pDataServerContext->GetTaskProcessor()->QueueTask(
+		TASK_GAME_DATA, m_SessionIdx, PROTOCOL_IS_SHOP_COUPON_REQ,
+		pData, sizeof(IS_SHOP_COUPON_REQ));
+}
+
 // -- Inventory Update Handler (async via TaskProcessor) --
 
 void DataSession::OnInvenUpdateReq(char* pData, INT32 i32Size)
@@ -634,5 +700,5 @@ void DataSession::SendHeartbeatAck()
 	IS_HEARTBEAT_ACK ack;
 	ack.i32Result = 0;
 	packet.WriteData(&ack, sizeof(ack));
-	SendMessage(&packet);
+	SendPacketMessage(&packet);
 }

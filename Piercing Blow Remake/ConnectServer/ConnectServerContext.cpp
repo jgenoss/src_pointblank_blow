@@ -1,3 +1,4 @@
+#include "pch.h"
 #include "ConnectServerContext.h"
 #include "ConnectSessionManager.h"
 #include "GameServerRegistry.h"
@@ -67,11 +68,7 @@ bool ConnectServerContext::InitializeModules(const char* pszDataServerIP, uint16
 		return false;
 	}
 
-	// Start the module thread
-	m_pModuleDataClient->StartThread(nullptr);
-
-	printf("[ConnectServerContext] ModuleDataClient initialized -> %s:%d\n",
-		pszDataServerIP, ui16DataServerPort);
+	printf("[ConnectServerContext] ModuleDataClient initialized -> %s:%d\n", pszDataServerIP, ui16DataServerPort);
 	return true;
 }
 
@@ -192,26 +189,50 @@ bool ConnectServer::OnLoadConfig(const char* pszConfigPath)
 	strcpy(m_ConnectConfig.szDataServerIP, "127.0.0.1");
 	m_ConnectConfig.ui16DataServerPort		= 40100;
 
-	// Load from INI file (override defaults)
 	i3IniParser ini;
-	if (ini.Load(pszConfigPath))
+	if (!ini.OpenFromFile(pszConfigPath))
 	{
-		const char* pszBindIP = ini.GetString("ConnectServer", "BindIP", "0.0.0.0");
-		strncpy_s(m_ConnectConfig.szBindIP, pszBindIP, _TRUNCATE);
-		m_ConnectConfig.ui16BindPort		= (uint16_t)ini.GetInt("ConnectServer", "BindPort", 40000);
-		m_ConnectConfig.i32MaxSessions		= ini.GetInt("ConnectServer", "MaxSessions", 500);
-		m_ConnectConfig.i32WorkerThreadCount = ini.GetInt("ConnectServer", "WorkerThreads", 4);
-		m_ConnectConfig.ui8SocketTimeout	= (uint8_t)ini.GetInt("ConnectServer", "SocketTimeout", 30);
-		m_ConnectConfig.ui16GameServerPort	= (uint16_t)ini.GetInt("ConnectServer", "GameServerPort", 40001);
-		m_ConnectConfig.i32MaxClientSessions = ini.GetInt("ConnectServer", "MaxClientSessions", 500);
-
-		const char* pszDSIP = ini.GetString("DataServer", "IP", "127.0.0.1");
-		strncpy_s(m_ConnectConfig.szDataServerIP, pszDSIP, _TRUNCATE);
-		m_ConnectConfig.ui16DataServerPort	= (uint16_t)ini.GetInt("DataServer", "Port", 40100);
+		printf("[ConnectServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
 	}
 	else
 	{
-		printf("[ConnectServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
+		INT32 nVal = 0;
+		char  szVal[256];
+
+		// --- [ConnectServer] section ---
+		if (ini.ReadSection("ConnectServer"))
+		{
+			ini.GetValue("BindIP", "0.0.0.0", szVal, sizeof(szVal));
+			strncpy_s(m_ConnectConfig.szBindIP, szVal, _TRUNCATE);
+
+			ini.GetValue("BindPort", (INT32)40000, &nVal);
+			m_ConnectConfig.ui16BindPort = (uint16_t)nVal;
+
+			ini.GetValue("MaxSessions", (INT32)500, &nVal);
+			m_ConnectConfig.i32MaxSessions = nVal;
+
+			ini.GetValue("WorkerThreads", (INT32)4, &nVal);
+			m_ConnectConfig.i32WorkerThreadCount = nVal;
+
+			ini.GetValue("SocketTimeout", (INT32)30, &nVal);
+			m_ConnectConfig.ui8SocketTimeout = (uint8_t)nVal;
+
+			ini.GetValue("GameServerPort", (INT32)40001, &nVal);
+			m_ConnectConfig.ui16GameServerPort = (uint16_t)nVal;
+
+			ini.GetValue("MaxClientSessions", (INT32)500, &nVal);
+			m_ConnectConfig.i32MaxClientSessions = nVal;
+		}
+
+		// --- [DataServer] section ---
+		if (ini.ReadSection("DataServer"))
+		{
+			ini.GetValue("IP", "127.0.0.1", szVal, sizeof(szVal));
+			strncpy_s(m_ConnectConfig.szDataServerIP, szVal, _TRUNCATE);
+
+			ini.GetValue("Port", (INT32)40100, &nVal);
+			m_ConnectConfig.ui16DataServerPort = (uint16_t)nVal;
+		}
 	}
 
 	// Copy to base config

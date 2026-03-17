@@ -44,6 +44,11 @@ public:
 	void		RequestQuestSave(int64_t i64UID, uint8_t ui8SetIndex, uint8_t ui8SetType,
 								 uint8_t ui8ActiveCard, const char* pQuestData, uint16_t ui16DataSize);
 
+	// Request operations - Options
+	void		RequestOptionSave(int64_t i64UID, const char* pOptionsData, uint16_t ui16DataSize);
+	void		RequestOptionLoad(int64_t i64UID, int i32SessionIdx);
+	void		RequestMedalSetLoad(int64_t i64UID, int i32SessionIdx);
+
 	// Request operations - Clan
 	void		RequestClanCreate(int64_t i64MasterUID, int i32SessionIdx,
 								  const char* pszClanName, const char* pszMasterNick);
@@ -66,6 +71,7 @@ public:
 	void		RequestShopList();
 	void		RequestShopBuy(int64_t i64UID, int i32SessionIdx, uint32_t ui32GoodsId,
 							   uint32_t ui32ItemId, uint8_t ui8PayType, int i32Price);
+	void		RequestCouponRedeem(int64_t i64UID, int i32SessionIdx, const char* pszCouponCode);
 
 	// Request operations - Inventory
 	void		RequestInventoryUpdate(int64_t i64UID, uint8_t ui8Operation, uint32_t ui32ItemId,
@@ -104,6 +110,9 @@ private:
 	void		OnAttendanceSaveAck(char* pData, int i32Size);
 	void		OnSkillSaveAck(char* pData, int i32Size);
 	void		OnQuestSaveAck(char* pData, int i32Size);
+	void		OnOptionSaveAck(char* pData, int i32Size);
+	void		OnOptionLoadAck(char* pData, int i32Size);
+	void		OnMedalSetLoadAck(char* pData, int i32Size);
 
 	// Response handlers - Clan
 	void		OnClanCreateAck(char* pData, int i32Size);
@@ -122,6 +131,7 @@ private:
 	// Response handlers - Shop
 	void		OnShopListAck(char* pData, int i32Size);
 	void		OnShopBuyAck(char* pData, int i32Size);
+	void		OnShopCouponAck(char* pData, int i32Size);
 
 	// Response handlers - Inventory
 	void		OnInvenUpdateAck(char* pData, int i32Size);

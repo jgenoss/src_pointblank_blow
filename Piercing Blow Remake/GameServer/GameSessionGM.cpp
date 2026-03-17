@@ -54,23 +54,13 @@ void GameSession::OnGMKickUserReq(char* pData, INT32 i32Size)
 	// Send kick notification to target
 	{
 		i3NetworkPacket packet;
-		char buffer[64];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK_PLAYER;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		// Kick reason: 0 = GM kick
 		uint8_t reason = 0;
-		memcpy(buffer + offset, &reason, 1);				offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		pTarget->SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_KICK_PLAYER);
+		packet.WriteData(&reason, 1);
+		pTarget->SendPacketMessage(&packet);
 	}
 
 	// Remove target from room
@@ -86,22 +76,12 @@ void GameSession::OnGMKickUserReq(char* pData, INT32 i32Size)
 	// Send ACK to GM
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_ROOM_GM_KICK_USER_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_ROOM_GM_KICK_USER_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		SendPacketMessage(&packet);
 	}
 }
 
@@ -133,22 +113,12 @@ void GameSession::OnGMExitUserReq(char* pData, INT32 i32Size)
 	// Send disconnect notification
 	{
 		i3NetworkPacket packet;
-		char buffer[64];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK_PLAYER;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t reason = 1;		// 1 = forced by GM
-		memcpy(buffer + offset, &reason, 1);				offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		pTarget->SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_KICK_PLAYER);
+		packet.WriteData(&reason, 1);
+		pTarget->SendPacketMessage(&packet);
 	}
 
 	// Force disconnect target
@@ -157,22 +127,12 @@ void GameSession::OnGMExitUserReq(char* pData, INT32 i32Size)
 	// ACK to GM
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_ROOM_GM_EXIT_USER_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_ROOM_GM_EXIT_USER_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		SendPacketMessage(&packet);
 	}
 }
 
@@ -221,22 +181,12 @@ void GameSession::OnLobbyGMExitUserReq(char* pData, INT32 i32Size)
 	// Send kick notification
 	{
 		i3NetworkPacket packet;
-		char buffer[64];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK_PLAYER;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t reason = 1;
-		memcpy(buffer + offset, &reason, 1);				offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		pTarget->SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_KICK_PLAYER);
+		packet.WriteData(&reason, 1);
+		pTarget->SendPacketMessage(&packet);
 	}
 
 	pTarget->OnDisconnect(TRUE);
@@ -277,18 +227,8 @@ void GameSession::OnGMDestroyRoomReq(char* pData, INT32 i32Size)
 	// Send destroy notification to all players in the room
 	{
 		i3NetworkPacket packet;
-		char buffer[16];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_ROOM_DESTROY;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_ROOM_DESTROY);
 		pRoom->SendToAll(&packet);
 	}
 
@@ -359,25 +299,15 @@ void GameSession::OnGMBlockUserReq(char* pData, INT32 i32Size)
 	// Send ban notification to target
 	{
 		i3NetworkPacket packet;
-		char buffer[64];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK_PLAYER;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		uint8_t reason = 2;		// 2 = banned by GM
-		memcpy(buffer + offset, &reason, 1);				offset += 1;
 
 		// Duration in minutes
-		memcpy(buffer + offset, &duration, sizeof(uint32_t)); offset += sizeof(uint32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		pTarget->SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_KICK_PLAYER);
+		packet.WriteData(&reason, 1);
+		packet.WriteData(&duration, sizeof(uint32_t));
+		pTarget->SendPacketMessage(&packet);
 	}
 
 	// Force disconnect target
@@ -411,24 +341,14 @@ void GameSession::OnGMPauseBattleReq(char* pData, INT32 i32Size)
 	// Notify all players in the room about pause
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_GM_PAUSE_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;		// 0 = success
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int32_t gmSlot = m_i32SlotIdx;
-		memcpy(buffer + offset, &gmSlot, sizeof(int32_t));	offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_GM_PAUSE_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&gmSlot, sizeof(int32_t));
 		m_pRoom->SendToAll(&packet);
 	}
 }
@@ -457,24 +377,14 @@ void GameSession::OnGMResumeBattleReq(char* pData, INT32 i32Size)
 	// Notify all players in the room about resume
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_BATTLE_GM_RESUME_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int32_t gmSlot = m_i32SlotIdx;
-		memcpy(buffer + offset, &gmSlot, sizeof(int32_t));	offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_BATTLE_GM_RESUME_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&gmSlot, sizeof(int32_t));
 		m_pRoom->SendToAll(&packet);
 	}
 }
@@ -575,21 +485,12 @@ bool GameSession::ProcessAdminCommand(const char* pszMessage, int i32MsgLen)
 			printf("[AdminCmd] BAN %s by GM %s\n", arg1, m_szNickname);
 			// Send kick notification with reason=banned before disconnect
 			i3NetworkPacket packet;
-			char buffer[64];
-			int offset = 0;
-
-			uint16_t size = 0;
-			uint16_t proto = PROTOCOL_SERVER_MESSAGE_KICK;
 			offset += sizeof(uint16_t);
-			memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 			int32_t reason = 2;	// 2 = banned
-			memcpy(buffer + offset, &reason, sizeof(int32_t));	offset += sizeof(int32_t);
-
-			size = (uint16_t)offset;
-			memcpy(buffer, &size, sizeof(uint16_t));
-			packet.SetPacketData(buffer, offset);
-			pTarget->SendMessage(&packet);
+			i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_KICK);
+			packet.WriteData(&reason, sizeof(int32_t));
+			pTarget->SendPacketMessage(&packet);
 
 			pTarget->OnDisconnect(TRUE);
 		}
@@ -773,25 +674,15 @@ void GameSession::OnCheatIncreaseKillReq(char* pData, INT32 i32Size)
 	// ACK with new kill count
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_CHEAT_INCREASE_KILL_COUNT_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int32_t totalKills = m_i32Kills;
-		memcpy(buffer + offset, &totalKills, sizeof(int32_t)); offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_CHEAT_INCREASE_KILL_COUNT_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&totalKills, sizeof(int32_t));
+		SendPacketMessage(&packet);
 	}
 }
 
@@ -816,25 +707,15 @@ void GameSession::OnCheatPlaySoloReq(char* pData, INT32 i32Size)
 	// ACK
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_CHEAT_PLAY_SOLO_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		uint8_t soloFlag = bSolo ? 1 : 0;
-		memcpy(buffer + offset, &soloFlag, 1);				offset += 1;
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
-		SendMessage(&packet);
+		i3NetworkPacket packet(PROTOCOL_CHEAT_PLAY_SOLO_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&soloFlag, 1);
+		SendPacketMessage(&packet);
 	}
 }
 
@@ -867,24 +748,14 @@ void GameSession::OnCheatReduceRoundTimeReq(char* pData, INT32 i32Size)
 	// ACK - broadcast to all in room so clients sync
 	{
 		i3NetworkPacket packet;
-		char buffer[32];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_CHEAT_REDUCE_ROUND_TIME_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int32_t reduced = reduceSec;
-		memcpy(buffer + offset, &reduced, sizeof(int32_t)); offset += sizeof(int32_t);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_CHEAT_REDUCE_ROUND_TIME_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&reduced, sizeof(int32_t));
 		m_pRoom->SendToAll(&packet);
 	}
 }
@@ -919,28 +790,17 @@ void GameSession::OnCheatTeleportReq(char* pData, INT32 i32Size)
 	// ACK - broadcast to all in room so clients update the GM's position
 	{
 		i3NetworkPacket packet;
-		char buffer[48];
-		int offset = 0;
-
-		uint16_t size = 0;
-		uint16_t proto = PROTOCOL_CHEAT_CHARACTER_TELEPORT_ACK;
 		offset += sizeof(uint16_t);
-		memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 		int32_t result = 0;
-		memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 		int32_t slot = m_i32SlotIdx;
-		memcpy(buffer + offset, &slot, sizeof(int32_t));	offset += sizeof(int32_t);
-
-		memcpy(buffer + offset, &posX, sizeof(float));		offset += sizeof(float);
-		memcpy(buffer + offset, &posY, sizeof(float));		offset += sizeof(float);
-		memcpy(buffer + offset, &posZ, sizeof(float));		offset += sizeof(float);
-
-		size = (uint16_t)offset;
-		memcpy(buffer, &size, sizeof(uint16_t));
-
-		packet.SetPacketData(buffer, offset);
+		i3NetworkPacket packet(PROTOCOL_CHEAT_CHARACTER_TELEPORT_ACK);
+		packet.WriteData(&result, sizeof(int32_t));
+		packet.WriteData(&slot, sizeof(int32_t));
+		packet.WriteData(&posX, sizeof(float));
+		packet.WriteData(&posY, sizeof(float));
+		packet.WriteData(&posZ, sizeof(float));
 		m_pRoom->SendToAll(&packet);
 	}
 }
@@ -952,26 +812,16 @@ void GameSession::SendServerAnnounce(const char* pszMessage, uint16_t ui16MsgLen
 		return;
 
 	i3NetworkPacket packet;
-	char buffer[512];
-	int offset = 0;
-
-	uint16_t size = 0;
-	uint16_t proto = PROTOCOL_SERVER_MESSAGE_ANNOUNCE;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	// Message length
-	memcpy(buffer + offset, &ui16MsgLen, sizeof(uint16_t));	offset += sizeof(uint16_t);
 
 	// Message content
 	uint16_t copyLen = (ui16MsgLen > 480) ? 480 : ui16MsgLen;
 	memcpy(buffer + offset, pszMessage, copyLen);			offset += copyLen;
-
-	size = (uint16_t)offset;
-	memcpy(buffer, &size, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_SERVER_MESSAGE_ANNOUNCE);
+	packet.WriteData(&ui16MsgLen, sizeof(uint16_t));
+	SendPacketMessage(&packet);
 }
 
 // ============================================================================
@@ -1044,20 +894,10 @@ void GameSession::OnCheatDamageGameObjectReq(char* pData, INT32 i32Size)
 
 	// Broadcast to room
 	i3NetworkPacket packet;
-	char buffer[24];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	uint16_t proto = PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_ACK;
 	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &objectId, sizeof(int32_t));	offset += sizeof(int32_t);
-	memcpy(buffer + offset, &damage, sizeof(int32_t));		offset += sizeof(int32_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
+	i3NetworkPacket packet(PROTOCOL_CHEAT_DAMAGE_GAME_OBJECT_ACK);
+	packet.WriteData(&objectId, sizeof(int32_t));
+	packet.WriteData(&damage, sizeof(int32_t));
 	m_pRoom->SendToAll(&packet);
 }
 
@@ -1225,23 +1065,11 @@ void GameSession::OnRoomGmGetUidReq(char* pData, INT32 i32Size)
 	}
 
 	i3NetworkPacket packet;
-	char buffer[32];
-	int offset = 0;
-
-	uint16_t sz = 0;
-	offset += sizeof(uint16_t);
-	uint16_t proto = PROTOCOL_ROOM_GM_GET_UID_ACK;
-	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
-
 	int32_t result = 0;
-	memcpy(buffer + offset, &result, sizeof(int32_t));	offset += sizeof(int32_t);
 
 	int64_t targetUID = pTarget->GetUID();
-	memcpy(buffer + offset, &targetUID, sizeof(int64_t));	offset += sizeof(int64_t);
-
-	sz = (uint16_t)offset;
-	memcpy(buffer, &sz, sizeof(uint16_t));
-
-	packet.SetPacketData(buffer, offset);
-	SendMessage(&packet);
+	i3NetworkPacket packet(PROTOCOL_ROOM_GM_GET_UID_ACK);
+	packet.WriteData(&result, sizeof(int32_t));
+	packet.WriteData(&targetUID, sizeof(int64_t));
+	SendPacketMessage(&packet);
 }

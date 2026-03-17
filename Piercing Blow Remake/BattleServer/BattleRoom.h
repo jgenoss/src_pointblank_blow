@@ -17,6 +17,7 @@ class RespawnManager;
 class ModuleCast;
 class ServerStatistics;
 class TaskProcessor;
+class PhysicsEngine;
 
 // Battle Room (port simplificado de CDediRoom)
 // Gestiona una batalla: miembros por slot, state machine, timer, resultados
@@ -76,6 +77,7 @@ public:
 	GameObjectManager*	GetObjectManager()			{ return m_pObjectManager; }
 	HitValidator*		GetHitValidator()			{ return m_pHitValidator; }
 	CMapData*			GetMapData()				{ return m_pMapData; }
+	PhysicsEngine*		GetPhysicsEngine()			{ return m_pPhysicsEngine; }
 
 	// ===== Character system (per-slot game state) =====
 	GameCharacter*		GetCharacter(uint32_t ui32Slot);
@@ -108,7 +110,8 @@ private:
 
 	// ===== Phase 11-12: Physics & Game Objects =====
 	CMapData*			m_pMapData;				// Loaded map data (from MapManager, not owned)
-	CollisionSystem*	m_pCollision;			// Collision system for this map
+	CollisionSystem*	m_pCollision;			// Collision system for this map (legacy, kept for compat)
+	PhysicsEngine*		m_pPhysicsEngine;		// Unified physics: PhysX when available, CPU fallback
 	GameObjectManager*	m_pObjectManager;		// Game objects (weapon boxes, targets, etc.)
 	HitValidator*		m_pHitValidator;		// Hit/movement validation
 	RespawnManager*		m_pRespawnManager;		// Respawn position selection

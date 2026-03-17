@@ -2,5 +2,27 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="ConnectServer.cpp" />
+    <ClCompile Include="ConnectServerContext.cpp" />
+    <ClCompile Include="ConnectSession.cpp" />
+    <ClCompile Include="ConnectSessionManager.cpp" />
+    <ClCompile Include="GameServerRegistry.cpp" />
+    <ClCompile Include="..\ServerCommon\BaseServer.cpp" />
+    <ClCompile Include="..\ServerCommon\ServerList.cpp" />
+    <ClCompile Include="..\ServerCommon\ModuleBase.cpp" />
+    <ClCompile Include="ModuleDataClient.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="pch.h" />
+    <ClInclude Include="ConnectServerContext.h" />
+    <ClInclude Include="ConnectSession.h" />
+    <ClInclude Include="ConnectSessionManager.h" />
+    <ClInclude Include="GameServerRegistry.h" />
+    <ClInclude Include="..\ServerCommon\IServer.h" />
+    <ClInclude Include="..\ServerCommon\BaseServer.h" />
+    <ClInclude Include="..\ServerCommon\ServerInfo.h" />
+    <ClInclude Include="..\ServerCommon\ServerList.h" />
+    <ClInclude Include="..\ServerCommon\InterServerProtocol.h" />
+    <ClInclude Include="..\ServerCommon\ModuleBase.h" />
+    <ClInclude Include="ModuleDataClient.h" />
   </ItemGroup>
 </Project>
