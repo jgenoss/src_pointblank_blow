@@ -3,6 +3,9 @@
 #include "BattleRoom.h"
 #include "BattleRoomManager.h"
 #include "BattleMember.h"
+#include "HitValidator.h"
+#include "RespawnManager.h"
+#include "MapData.h"
 
 UdpRelay::UdpRelay()
 	: m_bInitialized(false)
@@ -150,8 +153,117 @@ void UdpRelay::ProcessReceivedPacket(const char* pData, int i32Size,
 		pRoom->StartBattle();
 	}
 
-	// Relay to other members
+	// Parse game packet for state tracking (position, death, respawn, etc.)
+	// Game data starts after the UdpRelayHeader
+	if (pSender && i32Size > (int)sizeof(UdpRelayHeader) + 2)
+	{
+		const char* pGameData = pData + sizeof(UdpRelayHeader);
+		int i32GameDataSize = i32Size - sizeof(UdpRelayHeader);
+		ParseGamePacket(pRoom, pSender, pGameData, i32GameDataSize);
+	}
+
+	// Relay to other members (always relay, even if validation fails)
 	RelayPacket(pRoom, pData, i32Size, ui32SenderIP, ui16SenderPort);
+}
+
+void UdpRelay::ParseGamePacket(BattleRoom* pRoom, BattleMember* pSender,
+							   const char* pGameData, int i32GameDataSize)
+{
+	if (!pRoom || !pSender || i32GameDataSize < 2)
+		return;
+
+	// First 2 bytes = packet type ID
+	uint16_t ui16PacketType = *(const uint16_t*)pGameData;
+
+	switch (ui16PacketType)
+	{
+	case UDP_PKT_CYCLEINFO:
+		{
+			// Position update: [type(2)] [x(4)] [y(4)] [z(4)] [rx(4)] [ry(4)] [rz(4)]
+			if (i32GameDataSize >= 2 + 12)	// At least type + 3 floats for position
+			{
+				const float* pPos = (const float*)(pGameData + 2);
+				pSender->SetPosition(pPos[0], pPos[1], pPos[2]);
+
+				if (i32GameDataSize >= 2 + 24)	// Also has rotation
+				{
+					pSender->SetRotation(pPos[3], pPos[4], pPos[5]);
+				}
+
+				// Validate movement if hit validator available
+				HitValidator* pValidator = pRoom->GetHitValidator();
+				if (pValidator)
+				{
+					float newPos[3] = { pPos[0], pPos[1], pPos[2] };
+					pValidator->ValidateMovement(pSender, newPos, GetTickCount());
+				}
+			}
+		}
+		break;
+
+	case UDP_PKT_DEATH:
+		{
+			// Death event: [type(2)] [killerSlot(1)] [headshot(1)]
+			pSender->OnDeath();
+
+			if (i32GameDataSize >= 4)
+			{
+				uint8_t killerSlot = (uint8_t)pGameData[2];
+				uint8_t bHeadshot = (uint8_t)pGameData[3];
+
+				BattleMember* pKiller = pRoom->GetMember(killerSlot);
+				if (pKiller && pKiller->IsMember())
+				{
+					pKiller->AddKill();
+					if (bHeadshot)
+						pKiller->AddHeadshot();
+
+					// Update team scores
+					if (pKiller->GetTeam() == BATTLE_TEAM_RED)
+						pRoom->AddRedScore();
+					else
+						pRoom->AddBlueScore();
+				}
+			}
+		}
+		break;
+
+	case UDP_PKT_RESPAWN:
+		{
+			// Respawn event: [type(2)]
+			// Get spawn point from map data
+			float spawnPos[3] = { 0.0f, 0.0f, 0.0f };
+			CMapData* pMapData = pRoom->GetMapData();
+			if (pMapData)
+			{
+				RespawnManager respawnMgr;
+				respawnMgr.GetSpawnPoint(pMapData, pSender->GetTeam(), spawnPos);
+			}
+			pSender->OnRespawn(spawnPos);
+		}
+		break;
+
+	case UDP_PKT_WEAPON_CHANGE:
+		{
+			// Weapon change: [type(2)] [weaponID(4)]
+			if (i32GameDataSize >= 6)
+			{
+				uint32_t weaponID = *(const uint32_t*)(pGameData + 2);
+				pSender->SetWeaponID(weaponID);
+			}
+		}
+		break;
+
+	case UDP_PKT_FIRE:
+	case UDP_PKT_HIT:
+	case UDP_PKT_ACTIONKEY:
+		// These are tracked but not validated in this version
+		break;
+
+	default:
+		// Unknown packet type - just relay
+		break;
+	}
 }
 
 void UdpRelay::RelayPacket(BattleRoom* pRoom, const char* pData, int i32Size,

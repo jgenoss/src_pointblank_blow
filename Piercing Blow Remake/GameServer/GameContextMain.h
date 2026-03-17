@@ -5,6 +5,8 @@
 #include "i3ElementBase.h"
 #include "EventDef.h"
 
+class MedalLoader;
+
 // Channel type enum (from CommonDef_System.h ChannelType)
 enum GameChannelType
 {
@@ -196,6 +198,10 @@ public:
 	void			IncrementPacketsOut()	{ m_Metrics.i64TotalPacketsOut++; }
 	void			IncrementLogins()		{ m_Metrics.i64TotalLogins++; }
 	void			IncrementBattles()		{ m_Metrics.i64TotalBattlesPlayed++; }
+
+	// Medal/Quest system
+	MedalLoader*	m_pMedalLoader;
+	MedalLoader*	GetMedalLoader()		{ return m_pMedalLoader; }
 };
 
 extern GameContextMain* g_pContextMain;

@@ -1,6 +1,6 @@
 # Plan de Implementación - Piercing Blow Server Remake
 
-> **Última actualización**: 2026-03-16 (post Batch 20 + análisis completo + bug fechas)
+> **Última actualización**: 2026-03-17 (Phase 10-12: Media loading, physics, game objects)
 
 ---
 
@@ -115,14 +115,14 @@ También en InvenList.cpp:850:
 
 | Servidor | Archivos | Líneas | Estado |
 |----------|----------|--------|--------|
-| **GameServer** | 56 | 31,686 | Activo - 443 dispatch cases |
+| **GameServer** | 58 | ~31,900 | Activo - 443 dispatch + MedalLoader |
 | **DataServer** | 22 | 3,372 | Funcional - PostgreSQL sync |
-| **BattleServer** | 17 | 1,846 | Funcional - UDP relay simple |
+| **BattleServer** | 33 | ~3,800 | **Physics + Collision + GameObjects** |
 | **ConnectServer** | 10 | 1,068 | Funcional - Auth + registry |
 | **ServerCommon** | 12 | 2,054 | Completo - InterServerProtocol |
 | **S2MO** | - | - | Completo - RSA/AES/XOR |
 | **i3Server** | - | - | Completo - IOCP framework |
-| **TOTAL** | **117+** | **~40,026** | |
+| **TOTAL** | **135+** | **~42,200** | |
 
 ---
 
@@ -132,10 +132,10 @@ También en InvenList.cpp:850:
 
 | Componente | Original | Remake | % Cubierto |
 |------------|----------|--------|------------|
-| GameServer (UserSession + Room + Context + Modules) | ~30,000 líneas | 31,686 líneas | ~105%* |
-| BattleServer (DediServer) | ~40,139 líneas, 82 archivos | 1,846 líneas, 17 archivos | **4.6%** |
+| GameServer (UserSession + Room + Context + Modules) | ~30,000 líneas | ~31,900 líneas | ~106%* |
+| BattleServer (DediServer) | ~40,139 líneas, 82 archivos | ~3,800 líneas, 33 archivos | **9.5%** |
 | DataServer (TransServer) | ~29,931 líneas, 90+ archivos | 3,372 líneas, 22 archivos | **11.3%** |
-| **Total servidor** | **~100,070 líneas** | **~36,904 líneas** | **~37%** |
+| **Total servidor** | **~100,070 líneas** | **~39,072 líneas** | **~39%** |
 
 \* El GameServer del remake tiene más líneas que el original porque incluye lógica que en el original se distribuía entre Auth/Clan/Messenger servers.
 
@@ -283,13 +283,23 @@ El original DediServer es **22x más grande** que el remake. Es el gap más sign
 | **Thread-safe containers** | InterlockedList, PacketLocker, UdpBufferPool | NINGUNO | ~650 |
 | **NxuLib (PhysX support)** | 60+ archivos | NINGUNO | ~3,000 |
 
-**Impacto**: El BattleServer remake es un "UDP relay tonto" - reenvía paquetes sin validar nada. El original es un servidor autoritativo con física, detección de hacks, y tracking completo de estado de juego.
+**Impacto (actualizado Phase 10-12)**: El BattleServer remake ahora incluye:
+- ✅ **MapData**: Carga .i3sobj, .i3srpn, .i3scol binarios del Media/ folder
+- ✅ **MapManager**: Pre-carga todos los mapas al startup
+- ✅ **CollisionSystem**: Ray-triangle (Möller-Trumbore) con spatial grid, reemplaza PhysX
+- ✅ **ConfigXML**: Carga .i3RegXML (weapon/character/stage data)
+- ✅ **HitValidator**: Line-of-sight, range check, speed hack detection
+- ✅ **RespawnManager**: Spawn points desde .i3srpn data
+- ✅ **GameObject + GameObjectManager**: Weapon boxes, targets con HP y respawn timers
+- ✅ **BattleMember**: Position, HP, weapon, respawn state tracking
+- ✅ **UdpRelay**: Parsea packets (position/death/respawn/weapon) antes de relay
 
-**¿Se necesita todo esto?** No necesariamente:
-- **PhysX/NxuLib**: Solo si quieres server-side hit detection (anti-cheat serio)
-- **HMSParser**: Solo si quieres detección de hacks (recomendado para producción)
-- **Weapon/Character/Object systems**: Solo si el server valida daño/posición
-- **Para un server de pruebas/desarrollo**: El relay actual es suficiente
+**Aún faltante**:
+- **HMSParser (Anti-Cheat)**: Detección avanzada de hacks (speed, damage, position rollback)
+- **Weapon System completo**: WeaponSlot, bullet tracking, grenade state
+- **TaskProcessor completo**: 2,800+ líneas de game logic por room
+- **IOCP Workers**: Multi-thread processing
+- **NxuLib**: No necesario (reemplazado por CollisionSystem CPU)
 
 ---
 
@@ -394,7 +404,7 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
 | Task | Descripción | Estado |
 |------|-------------|--------|
 | BattleServer anti-cheat | HMSParser básico (speed, damage, position) | NO SE IMPLEMENTARÁ |
-| BattleServer character state | CCharacter con HP y position tracking | PENDIENTE |
+| BattleServer character state | CCharacter con HP y position tracking | ✅ COMPLETADO (Phase 11) |
 | Async DB operations | Ring buffers para DataServer non-blocking | PENDIENTE |
 | Admin panel | ASC_* protocol handlers (o web panel) | PENDIENTE |
 | IP filtering | IPChecker, GeoIP | PENDIENTE |
@@ -403,9 +413,9 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
 
 | Task | Descripción | Estado |
 |------|-------------|--------|
-| PhysX integration | Server-side hit detection | PENDIENTE |
+| PhysX integration | Server-side hit detection | ✅ COMPLETADO (CollisionSystem CPU, Phase 11) |
 | Weapon/bullet tracking | WeaponSlot, bullet state en BattleServer | PENDIENTE |
-| Game objects | DSObject, DSObjectManager en BattleServer | PENDIENTE |
+| Game objects | DSObject, DSObjectManager en BattleServer | ✅ COMPLETADO (Phase 12) |
 | Payment system | SIA module (solo para producción comercial) | N/A |
 | PC Cafe features | PCCafeInfo, Thai PC module | N/A |
 
@@ -452,20 +462,20 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
 |------|----------|--------|----------|
 | Core (DediRoom, DediMember) | 4 | 7,075 | ⚠️ Simplificado (BattleRoom/Member) |
 | Anti-Cheat (HMSParser) | 3 | 2,652 | ❌ |
-| Physics (NxGlobal, NxShape) | 5 | 1,024 | ❌ |
-| Game Objects (DSObject) | 4 | 1,218 | ❌ |
-| Characters (Character, Skill) | 6 | 1,390 | ❌ |
+| Physics (NxGlobal, NxShape) | 5 | 1,024 | ✅ CollisionSystem (Möller-Trumbore CPU) |
+| Game Objects (DSObject) | 4 | 1,218 | ✅ GameObject + GameObjectManager |
+| Characters (Character, Skill) | 6 | 1,390 | ⚠️ BattleMember (position/HP/weapon) |
 | Weapons (Weapon, WeaponSlot) | 7 | 1,573 | ❌ |
 | Grenades/Thrown | 2 | 329 | ❌ |
-| Respawn | 2 | 269 | ❌ |
-| Speed State | 1 | 185 | ❌ |
-| TaskProcessor | 3 | 6,840 | ❌ (relay simple) |
-| UDP Parser/Builder | 4 | 1,347 | ⚠️ UdpRelay simple |
+| Respawn | 2 | 269 | ✅ RespawnManager |
+| Speed State | 1 | 185 | ✅ HitValidator (speed hack detection) |
+| TaskProcessor | 3 | 6,840 | ⚠️ UdpRelay con packet parsing |
+| UDP Parser/Builder | 4 | 1,347 | ✅ UdpRelay (parse + relay) |
 | Networking (Modules) | 11 | 2,846 | ⚠️ Básico |
 | IOCP Framework | 4 | 800 | ❌ (usa i3Server) |
-| Maps/Config | 5 | 1,325 | ❌ |
+| Maps/Config | 5 | 1,325 | ✅ MapData + MapManager + ConfigXML |
 | Utilities | 8 | 1,510 | ❌ |
-| NxuLib (PhysX) | 60+ | 3,000+ | ❌ |
+| NxuLib (PhysX) | 60+ | 3,000+ | ✅ Reemplazado por CollisionSystem |
 
 ### TransServer Original (`Server/Source/Trans/Trans/`) - 90+ archivos, 29,931 líneas
 
@@ -516,7 +526,9 @@ En el original, estos protocolos van ENTRE servidores (Game↔Auth, Game↔Clan,
      │ BattleServer #1 │         │ BattleServer #N │
      │ :40200 (TCP)    │         │ :402XX (TCP)    │
      │ :41000+ (UDP)   │         │ :410XX+ (UDP)   │
-     │ Relay simple    │         │                 │
+     │ Physics+Objects │         │                 │
+     │ CollisionSystem │         │                 │
+     │ HitValidator    │         │                 │
      └─────────────────┘         └─────────────────┘
 ```
 
@@ -535,7 +547,7 @@ ORIGINAL (Monolítico):
 REMAKE (Distribuido simplificado):
   ConnectServer → GameServer → DataServer (PostgreSQL)
                       ↕
-                  BattleServer (UDP relay)
+                  BattleServer (Physics + Collision + GameObjects)
 
   Clan/Messenger/Control → In-memory en GameServer
   Auth → Manejado por ConnectServer + DataServer
@@ -553,3 +565,14 @@ REMAKE (Distribuido simplificado):
 | 18 | 5e18339c | +36 | +1,143 | ~385 |
 | 19 | 03164304 | +37 | +1,539 | 385 |
 | 20 | 7d187083 | +56 | +1,594 | 443 |
+
+### Phase Commits
+
+| Phase | Commit | Description |
+|-------|--------|-------------|
+| 8 | da73adaf | DataServer sync, nick callbacks, BattleServer migration |
+| 8.2 | bd6f5b36 | Complete DataServer protocol gaps |
+| 8.9-8.11 | 95cd1588 | Fix DATE32 year overflow and client INT32 overflow |
+| 9.1-9.7 | 8d786138 | Persistence gaps, gift delivery, ban wiring, clan slots |
+| 9.3-9.9 | 54f720dd | ConnectServer auth, token transfer, config loading, color nick |
+| 10-12 | (pending) | Media loading, physics, collision, game objects, quest loading |

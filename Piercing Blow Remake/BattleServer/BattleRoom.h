@@ -6,6 +6,12 @@
 #include "BattleDef.h"
 #include "BattleMember.h"
 #include "InterServerProtocol.h"
+#include "MapData.h"
+
+class CollisionSystem;
+class GameObjectManager;
+class HitValidator;
+class RespawnManager;
 
 // Battle Room (port simplificado de CDediRoom)
 // Gestiona una batalla: miembros por slot, state machine, timer, resultados
@@ -60,6 +66,12 @@ public:
 	void			AddRedScore()					{ m_i32RedScore++; }
 	void			AddBlueScore()					{ m_i32BlueScore++; }
 
+	// ===== Phase 11-12: Physics & Game Objects =====
+	CollisionSystem*	GetCollisionSystem()		{ return m_pCollision; }
+	GameObjectManager*	GetObjectManager()			{ return m_pObjectManager; }
+	HitValidator*		GetHitValidator()			{ return m_pHitValidator; }
+	CMapData*			GetMapData()				{ return m_pMapData; }
+
 private:
 	BattleRoomState		m_eState;
 	BattleMember		m_Members[BATTLE_SLOT_MAX];
@@ -80,6 +92,13 @@ private:
 	int					m_i32RedScore;
 	int					m_i32BlueScore;
 	int					m_i32OwnerSessionIdx;		// Session index del GameServer dueno
+
+	// ===== Phase 11-12: Physics & Game Objects =====
+	CMapData*			m_pMapData;				// Loaded map data (from MapManager, not owned)
+	CollisionSystem*	m_pCollision;			// Collision system for this map
+	GameObjectManager*	m_pObjectManager;		// Game objects (weapon boxes, targets, etc.)
+	HitValidator*		m_pHitValidator;		// Hit/movement validation
+	RespawnManager*		m_pRespawnManager;		// Respawn position selection
 };
 
 #endif // __BATTLEROOM_H__

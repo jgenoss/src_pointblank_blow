@@ -139,6 +139,14 @@
     <ClCompile Include="BattleSessionManager.cpp" />
     <ClCompile Include="BattleServerContext.cpp" />
     <ClCompile Include="UdpRelay.cpp" />
+    <ClCompile Include="MapData.cpp" />
+    <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="ConfigXML.cpp" />
+    <ClCompile Include="RespawnManager.cpp" />
+    <ClCompile Include="HitValidator.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -150,6 +158,14 @@
     <ClInclude Include="BattleSessionManager.h" />
     <ClInclude Include="BattleServerContext.h" />
     <ClInclude Include="UdpRelay.h" />
+    <ClInclude Include="MapData.h" />
+    <ClInclude Include="MapManager.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="ConfigXML.h" />
+    <ClInclude Include="RespawnManager.h" />
+    <ClInclude Include="HitValidator.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

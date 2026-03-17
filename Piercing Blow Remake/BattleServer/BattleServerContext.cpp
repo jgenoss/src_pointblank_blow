@@ -3,6 +3,8 @@
 #include "BattleSessionManager.h"
 #include "BattleRoomManager.h"
 #include "UdpRelay.h"
+#include "MapManager.h"
+#include "ConfigXML.h"
 #include "i3IniParser.h"
 
 // ============================================================================
@@ -75,6 +77,8 @@ BOOL BattleServerContext::OnDestroy()
 BattleServer::BattleServer()
 	: m_pBattleContext(nullptr)
 	, m_pUdpRelay(nullptr)
+	, m_pMapManager(nullptr)
+	, m_pConfigXML(nullptr)
 {
 }
 
@@ -109,7 +113,12 @@ bool BattleServer::OnLoadConfig(const char* pszConfigPath)
 
 	// [UDP] section
 	m_BattleConfig.ui16UdpBasePort = (uint16_t)ini.GetInt("UDP", "BasePort", BATTLE_UDP_BASE_PORT);
+	m_BattleConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("UDP", "UdpClientPort", 29890);
 	m_BattleConfig.i32MaxBattleRooms = ini.GetInt("UDP", "MaxBattleRooms", MAX_BATTLE_ROOMS);
+
+	// [Media] section
+	const char* pszMediaPath = ini.GetString("Media", "Path", "Media");
+	strncpy_s(m_BattleConfig.szMediaPath, pszMediaPath, _TRUNCATE);
 
 	// Copy base config
 	m_Config = m_BattleConfig;
@@ -121,15 +130,30 @@ bool BattleServer::OnLoadConfig(const char* pszConfigPath)
 	printf("  Server: Id=%d, Name=%s, Public=%s:%d\n",
 		m_BattleConfig.i32ServerId, m_BattleConfig.szServerName,
 		m_BattleConfig.szPublicIP, m_BattleConfig.ui16PublicPort);
-	printf("  UDP: BasePort=%d, MaxRooms=%d\n",
-		m_BattleConfig.ui16UdpBasePort, m_BattleConfig.i32MaxBattleRooms);
+	printf("  UDP: BasePort=%d, UdpClientPort=%d, MaxRooms=%d\n",
+		m_BattleConfig.ui16UdpBasePort, m_BattleConfig.ui16UdpClientPort,
+		m_BattleConfig.i32MaxBattleRooms);
+	printf("  Media: %s\n", m_BattleConfig.szMediaPath);
 
 	return true;
 }
 
 bool BattleServer::OnInitialize()
 {
-	printf("[BattleServer] Initialized successfully\n");
+	// Initialize ConfigXML (weapon, character, stage data from .i3RegXML)
+	m_pConfigXML = new ConfigXML();
+	m_pConfigXML->Initialize(m_BattleConfig.szMediaPath);
+	g_pConfigXML = m_pConfigXML;
+
+	// Initialize MapManager (load all maps from Media/)
+	m_pMapManager = new MapManager();
+	m_pMapManager->Initialize(m_BattleConfig.szMediaPath);
+	g_pMapManager = m_pMapManager;
+
+	printf("[BattleServer] Initialized successfully (Maps=%d, Weapons=%d, Characters=%d)\n",
+		m_pMapManager->GetLoadedMapCount(),
+		m_pConfigXML->GetWeaponCount(),
+		m_pConfigXML->GetCharacterCount());
 	return true;
 }
 
@@ -159,6 +183,24 @@ void BattleServer::OnShutdown()
 		m_pUdpRelay->Shutdown();
 		delete m_pUdpRelay;
 		m_pUdpRelay = nullptr;
+	}
+
+	// Shutdown MapManager
+	if (m_pMapManager)
+	{
+		m_pMapManager->Shutdown();
+		delete m_pMapManager;
+		m_pMapManager = nullptr;
+		g_pMapManager = nullptr;
+	}
+
+	// Shutdown ConfigXML
+	if (m_pConfigXML)
+	{
+		m_pConfigXML->Shutdown();
+		delete m_pConfigXML;
+		m_pConfigXML = nullptr;
+		g_pConfigXML = nullptr;
 	}
 
 	printf("[BattleServer] Shutdown complete\n");

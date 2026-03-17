@@ -164,6 +164,7 @@
     <ClCompile Include="ModuleDataServerShop.cpp" />
     <ClCompile Include="ShopManager.cpp" />
     <ClCompile Include="ModuleBattleServer.cpp" />
+    <ClCompile Include="MedalLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -191,6 +192,7 @@
     <ClInclude Include="ModuleDataServer.h" />
     <ClInclude Include="ShopManager.h" />
     <ClInclude Include="ModuleBattleServer.h" />
+    <ClInclude Include="MedalLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

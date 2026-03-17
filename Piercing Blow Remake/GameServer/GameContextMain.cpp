@@ -3,6 +3,7 @@
 #include "GameSessionManager.h"
 #include "RoomManager.h"
 #include "ClanDef.h"
+#include "MedalLoader.h"
 
 I3_CLASS_INSTANCE(GameContextMain);
 
@@ -31,6 +32,7 @@ GameContextMain::GameContextMain()
 	, m_i32AFKTimeout(0)
 	, m_i32RandomMapCount(6)
 	, m_i32BoostEventCount(0)
+	, m_pMedalLoader(nullptr)
 {
 	// Initialize boost events
 	for (int i = 0; i < MAX_BOOST_EVENTS; i++)
@@ -139,12 +141,23 @@ GameContextMain::GameContextMain()
 
 GameContextMain::~GameContextMain()
 {
+	if (m_pMedalLoader)
+	{
+		m_pMedalLoader->Shutdown();
+		delete m_pMedalLoader;
+		m_pMedalLoader = nullptr;
+	}
 }
 
 BOOL GameContextMain::Create()
 {
 	printf("[GameContextMain] Create - ServerId=%d, Name=%s, Channels=%d, MaxUsers/Ch=%d\n",
 		m_i32ServerId, m_szServerName, m_ui8ChannelCount, m_ui16MaxUsersPerChannel);
+
+	// Initialize Medal/Quest loader
+	m_pMedalLoader = new MedalLoader();
+	m_pMedalLoader->Initialize("Quest");
+
 	return TRUE;
 }
 

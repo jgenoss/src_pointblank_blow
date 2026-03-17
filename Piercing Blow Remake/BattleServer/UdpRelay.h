@@ -28,9 +28,24 @@ public:
 	bool			IsInitialized() const		{ return m_bInitialized; }
 	uint16_t		GetPort() const				{ return m_ui16BasePort; }
 
+	// UDP packet type IDs (from CommonDediCli.h)
+	// These are the first 2 bytes after UdpRelayHeader in game packets
+	enum UdpGamePacketType
+	{
+		UDP_PKT_CYCLEINFO		= 0x0001,	// Position/rotation update
+		UDP_PKT_FIRE			= 0x0002,	// Weapon fire event
+		UDP_PKT_HIT				= 0x0003,	// Hit notification
+		UDP_PKT_DEATH			= 0x0004,	// Death event
+		UDP_PKT_RESPAWN			= 0x0005,	// Respawn event
+		UDP_PKT_ACTIONKEY		= 0x0006,	// Action key (C4, use object, etc.)
+		UDP_PKT_WEAPON_CHANGE	= 0x0007,	// Weapon change
+	};
+
 private:
 	void			ProcessReceivedPacket(const char* pData, int i32Size,
 										 uint32_t ui32SenderIP, uint16_t ui16SenderPort);
+	void			ParseGamePacket(BattleRoom* pRoom, BattleMember* pSender,
+								   const char* pGameData, int i32GameDataSize);
 	void			RelayPacket(BattleRoom* pRoom, const char* pData, int i32Size,
 							   uint32_t ui32SenderIP, uint16_t ui16SenderPort);
 

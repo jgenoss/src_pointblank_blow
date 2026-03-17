@@ -8,6 +8,8 @@
 class BattleSessionManager;
 class BattleRoomManager;
 class UdpRelay;
+class MapManager;
+class ConfigXML;
 
 // Configuracion especifica del BattleServer
 struct BattleServerConfig : public BaseServerConfig
@@ -20,16 +22,22 @@ struct BattleServerConfig : public BaseServerConfig
 
 	// UDP
 	uint16_t	ui16UdpBasePort;
+	uint16_t	ui16UdpClientPort;		// Client P2P UDP port (sent to clients)
 	int			i32MaxBattleRooms;
+
+	// Media path
+	char		szMediaPath[MAX_PATH];
 
 	BattleServerConfig()
 		: i32ServerId(1)
 		, ui16PublicPort(40200)
 		, ui16UdpBasePort(BATTLE_UDP_BASE_PORT)
+		, ui16UdpClientPort(29890)
 		, i32MaxBattleRooms(MAX_BATTLE_ROOMS)
 	{
 		szServerName[0] = '\0';
 		szPublicIP[0] = '\0';
+		strcpy_s(szMediaPath, "Media");
 	}
 };
 
@@ -90,6 +98,8 @@ private:
 	BattleServerContext*	m_pBattleContext;
 	BattleServerConfig		m_BattleConfig;
 	UdpRelay*				m_pUdpRelay;
+	MapManager*				m_pMapManager;
+	ConfigXML*				m_pConfigXML;
 };
 
 #endif // __BATTLESERVERCONTEXT_H__

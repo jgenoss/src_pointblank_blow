@@ -154,6 +154,10 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 	strncpy_s(m_GameConfig.szBattleServerIP, pszBSIP, _TRUNCATE);
 	m_GameConfig.ui16BattleServerPort = (uint16_t)ini.GetInt("BattleServer", "Port", 40200);
 
+	// [Ports] section - Client P2P and public ports
+	m_GameConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("Ports", "UdpClientPort", 29890);
+	m_GameConfig.ui16Port0 = (uint16_t)ini.GetInt("Ports", "Port0", 39190);
+
 	// Copy base config
 	m_Config = m_GameConfig;
 
