@@ -4,6 +4,7 @@
 #include "GameProtocol.h"
 #include "GameContextMain.h"
 #include "ClanMatchManager.h"
+#include "ObserverHelper.h"
 
 I3_CLASS_INSTANCE(Room);
 
@@ -231,6 +232,9 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 	m_i32ClanMatchTeam1Idx = -1;
 	m_i32ClanMatchTeam2Idx = -1;
 
+	// Initialize observer system for this room
+	ObserverHelper::OnRoomCreated(this);
+
 	printf("[Room] Created - Ch=%d, Mode=%d, Map=%d, MaxP=%d, Round=%d, Title=%s\n",
 		m_i32ChannelNum, m_ui8GameMode, m_ui8MapIndex,
 		m_i32MaxPlayers, m_Score.i32MaxRound, m_szTitle);
@@ -240,6 +244,9 @@ bool Room::OnCreate(GameSession* pOwner, GameRoomCreateInfo* pInfo, int i32Chann
 
 void Room::OnDestroy()
 {
+	// Cleanup observer system for this room
+	ObserverHelper::OnRoomDestroyed(this);
+
 	for (int i = 0; i < SLOT_MAX_COUNT; i++)
 	{
 		m_Slots[i].Reset();
@@ -627,6 +634,10 @@ void Room::OnRoundEnd(int i32WinnerTeam)
 		m_Score.i32BlueScore++;
 
 	m_Score.i32NowRound++;
+
+	// Notify observers of round end and updated score
+	ObserverHelper::NotifyRoundEnd(this, i32WinnerTeam);
+	ObserverHelper::NotifyScoreUpdate(this, m_Score.i32RedScore, m_Score.i32BlueScore, m_Score.i32NowRound);
 }
 
 void Room::OnAddKill(int i32Team)
@@ -635,6 +646,9 @@ void Room::OnAddKill(int i32Team)
 		m_Score.i32RedScore++;
 	else if (i32Team == TEAM_BLUE)
 		m_Score.i32BlueScore++;
+
+	// Notify observers of score change
+	ObserverHelper::NotifyScoreUpdate(this, m_Score.i32RedScore, m_Score.i32BlueScore, m_Score.i32NowRound);
 }
 
 bool Room::CheckMatchEnd() const
@@ -1049,6 +1063,9 @@ void Room::OnUpdateRoom_CountdownB(DWORD dwNow)
 			}
 		}
 
+		// Notify observers of round start
+		ObserverHelper::NotifyRoundStart(this, m_Score.i32NowRound);
+
 		printf("[Room] COUNTDOWN_B -> BATTLE - Room=%d, Round=%d\n",
 			m_i32RoomIdx, m_Score.i32NowRound);
 	}
@@ -1205,6 +1222,9 @@ void Room::OnUpdateRoom_Battle(DWORD dwNow)
 			SendToAll(&spawnPkt);
 		}
 	}
+
+	// Update observer system (position broadcasts, delayed events)
+	ObserverHelper::Update(this, dwNow);
 
 	// For mission mode: check if all players on one team are dead
 	if (IsMissionMode(m_ui8GameMode))
@@ -1431,6 +1451,9 @@ void Room::OnPlayerDeath(int i32DeadSlot, int i32KillerSlot, uint32_t ui32Weapon
 
 	packet.SetPacketData(buffer, offset);
 	SendToAll(&packet);
+
+	// Notify observers of kill event
+	ObserverHelper::NotifyKillFeed(this, i32KillerSlot, i32DeadSlot, ui32WeaponId, ui8HitPart, ui8MultiKill);
 
 	// Send damage console info to GMs in room
 	{
@@ -1779,6 +1802,9 @@ void Room::OnBombInstall(int i32InstallerSlot, uint8_t ui8BombArea)
 	printf("[Room] Bomb installed - Room=%d, Slot=%d, Area=%c\n",
 		m_i32RoomIdx, i32InstallerSlot, (ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
 
+	// Notify observers of bomb plant
+	ObserverHelper::NotifyBombPlant(this, i32InstallerSlot, ui8BombArea);
+
 	// Broadcast BOMB_INSTALL_ACK to all
 	i3NetworkPacket packet;
 	char buffer[32];
@@ -1812,6 +1838,9 @@ void Room::OnBombUninstall(int i32DefuserSlot)
 	m_dwBombInstallTime = 0;
 
 	printf("[Room] Bomb defused - Room=%d, Defuser=%d\n", m_i32RoomIdx, i32DefuserSlot);
+
+	// Notify observers of bomb defuse
+	ObserverHelper::NotifyBombDefuse(this, i32DefuserSlot);
 
 	// Broadcast BOMB_UNINSTALL_ACK to all
 	i3NetworkPacket packet;
@@ -1870,6 +1899,9 @@ void Room::OnBombExplode()
 
 	printf("[Room] Bomb exploded - Room=%d, Area=%c\n",
 		m_i32RoomIdx, (m_ui8BombArea == BOMB_AREA_A) ? 'A' : 'B');
+
+	// Notify observers of bomb explosion
+	ObserverHelper::NotifyBombExplode(this);
 
 	// Bomb explosion = ATK (RED) wins the round
 	OnRoundEnd(TEAM_RED);
@@ -2117,6 +2149,9 @@ void Room::OnTouchdown(int i32Slot)
 		return;
 
 	printf("[Room] VIP touchdown! - Room=%d, VIPSlot=%d\n", m_i32RoomIdx, i32Slot);
+
+	// Notify observers of VIP touchdown
+	ObserverHelper::NotifyVIPTouchdown(this, i32Slot);
 
 	// Broadcast touchdown
 	{

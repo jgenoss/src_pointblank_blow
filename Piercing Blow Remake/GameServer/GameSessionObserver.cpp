@@ -57,19 +57,12 @@ void GameSession::OnObserverViewModeReq(char* pData, INT32 i32Size)
 
 	ObserverViewMode eMode = (ObserverViewMode)ui8ViewMode;
 
-	// Get the room's observer system
-	// For this implementation, ObserverSystem is accessed via a per-room instance.
-	// We create a static map keyed by room index for simplicity, or the Room
-	// should own the ObserverSystem. Since we cannot modify Room.h per the task,
-	// we use a static registry approach.
-	static ObserverSystem s_ObserverSystems[GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL];
-
-	int obsIdx = m_pRoom->GetChannelNum() * MAX_ROOM_COUNT_PER_CHANNEL + m_pRoom->GetRoomIdx();
-	if (obsIdx < 0 || obsIdx >= GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL)
+	// Use the global ObserverRegistry to access the room's observer system
+	ObserverSystem* pObsSys = ObserverRegistry::GetObserverSystemForRoom(m_pRoom);
+	if (!pObsSys)
 		return;
 
-	ObserverSystem& obsSys = s_ObserverSystems[obsIdx];
-	obsSys.OnViewModeChange(m_i32SlotIdx, eMode);
+	pObsSys->OnViewModeChange(m_i32SlotIdx, eMode);
 
 	printf("[GameSession] ObserverViewMode: slot=%d mode=%d, UID=%lld\n",
 		m_i32SlotIdx, (int)eMode, m_i64UID);
@@ -103,14 +96,11 @@ void GameSession::OnObserverFollowPlayerReq(char* pData, INT32 i32Size)
 
 	int8_t i8TargetSlot = *(int8_t*)pData;
 
-	static ObserverSystem s_ObserverSystems[GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL];
-
-	int obsIdx = m_pRoom->GetChannelNum() * MAX_ROOM_COUNT_PER_CHANNEL + m_pRoom->GetRoomIdx();
-	if (obsIdx < 0 || obsIdx >= GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL)
+	ObserverSystem* pObsSys = ObserverRegistry::GetObserverSystemForRoom(m_pRoom);
+	if (!pObsSys)
 		return;
 
-	ObserverSystem& obsSys = s_ObserverSystems[obsIdx];
-	obsSys.OnFollowPlayer(m_i32SlotIdx, (int)i8TargetSlot);
+	pObsSys->OnFollowPlayer(m_i32SlotIdx, (int)i8TargetSlot);
 
 	printf("[GameSession] ObserverFollow: slot=%d follow=%d, UID=%lld\n",
 		m_i32SlotIdx, (int)i8TargetSlot, m_i64UID);
@@ -138,14 +128,11 @@ void GameSession::OnObserverScoreboardReq(char* pData, INT32 i32Size)
 	uint8_t ui8Show = *(uint8_t*)pData;
 	bool bShow = (ui8Show != 0);
 
-	static ObserverSystem s_ObserverSystems[GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL];
-
-	int obsIdx = m_pRoom->GetChannelNum() * MAX_ROOM_COUNT_PER_CHANNEL + m_pRoom->GetRoomIdx();
-	if (obsIdx < 0 || obsIdx >= GAME_CHANNEL_COUNT * MAX_ROOM_COUNT_PER_CHANNEL)
+	ObserverSystem* pObsSys = ObserverRegistry::GetObserverSystemForRoom(m_pRoom);
+	if (!pObsSys)
 		return;
 
-	ObserverSystem& obsSys = s_ObserverSystems[obsIdx];
-	obsSys.OnToggleScoreboard(m_i32SlotIdx, bShow);
+	pObsSys->OnToggleScoreboard(m_i32SlotIdx, bShow);
 }
 
 // ============================================================================
