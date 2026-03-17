@@ -187,6 +187,27 @@ void ModuleBattleServer::OnProcessPacket(char* pData, int i32Size)
 		OnPlayerMigrateAck(pPayload, payloadSize);
 		break;
 
+	// Battle live events
+	case PROTOCOL_IS_BATTLE_KILL_NOTIFY:
+		OnBattleKillNotify(pPayload, payloadSize);
+		break;
+
+	case PROTOCOL_IS_BATTLE_ROUND_START_NOTIFY:
+		OnBattleRoundStartNotify(pPayload, payloadSize);
+		break;
+
+	case PROTOCOL_IS_BATTLE_ROUND_END_NOTIFY:
+		OnBattleRoundEndNotify(pPayload, payloadSize);
+		break;
+
+	case PROTOCOL_IS_BATTLE_HACK_NOTIFY:
+		OnBattleHackNotify(pPayload, payloadSize);
+		break;
+
+	case PROTOCOL_IS_BATTLE_MISSION_NOTIFY:
+		OnBattleMissionNotify(pPayload, payloadSize);
+		break;
+
 	default:
 		printf("[ModuleBattleServer] Unknown protocol 0x%04X\n", protocolId);
 		break;
@@ -367,4 +388,116 @@ void ModuleBattleServer::OnPlayerMigrateAck(char* pData, int i32Size)
 		printf("[ModuleBattleServer] Player migrate failed - UID=%lld, Result=%d\n",
 			pAck->i64UID, pAck->i32Result);
 	}
+}
+
+// ============================================================================
+// Battle Live Event Handlers
+// ============================================================================
+
+void ModuleBattleServer::OnBattleKillNotify(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_BATTLE_KILL_NOTIFY))
+		return;
+
+	IS_BATTLE_KILL_NOTIFY* pNotify = (IS_BATTLE_KILL_NOTIFY*)pData;
+
+	char* pKillData = pData + sizeof(IS_BATTLE_KILL_NOTIFY);
+	int remainingSize = i32Size - sizeof(IS_BATTLE_KILL_NOTIFY);
+
+	for (int i = 0; i < pNotify->ui8KillCount && remainingSize >= (int)sizeof(IS_BATTLE_KILL_INFO); i++)
+	{
+		IS_BATTLE_KILL_INFO* pKill = (IS_BATTLE_KILL_INFO*)pKillData;
+
+		printf("[ModuleBattleServer] KILL: Room=%d Round=%d - Killer UID=%lld -> Victim UID=%lld (Weapon=%u, Head=%d)\n",
+			pNotify->i32RoomIdx, pNotify->ui8RoundNum,
+			pKill->i64KillerUID, pKill->i64VictimUID,
+			pKill->ui32WeaponID, pKill->ui8Headshot);
+
+		// TODO: Forward kill event to room spectators, update real-time leaderboard,
+		// trigger quest/medal progress for killer
+
+		pKillData += sizeof(IS_BATTLE_KILL_INFO);
+		remainingSize -= sizeof(IS_BATTLE_KILL_INFO);
+	}
+}
+
+void ModuleBattleServer::OnBattleRoundStartNotify(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_BATTLE_ROUND_START_NOTIFY))
+		return;
+
+	IS_BATTLE_ROUND_START_NOTIFY* pNotify = (IS_BATTLE_ROUND_START_NOTIFY*)pData;
+
+	printf("[ModuleBattleServer] ROUND_START: Room=%d, Channel=%d, Round=%d, Mode=%d\n",
+		pNotify->i32RoomIdx, pNotify->i32ChannelNum,
+		pNotify->ui8RoundNum, pNotify->ui8GameMode);
+}
+
+void ModuleBattleServer::OnBattleRoundEndNotify(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_BATTLE_ROUND_END_NOTIFY))
+		return;
+
+	IS_BATTLE_ROUND_END_NOTIFY* pNotify = (IS_BATTLE_ROUND_END_NOTIFY*)pData;
+
+	printf("[ModuleBattleServer] ROUND_END: Room=%d, Round=%d, EndType=%d, WinTeam=%d, Score: R%d-B%d\n",
+		pNotify->i32RoomIdx, pNotify->ui8RoundNum,
+		pNotify->ui8RoundEndType, pNotify->ui8WinTeam,
+		pNotify->i32RedScore, pNotify->i32BlueScore);
+
+	// TODO: Update room score display for spectators/lobby,
+	// check if match should end (best-of-N rounds)
+}
+
+void ModuleBattleServer::OnBattleHackNotify(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_BATTLE_HACK_NOTIFY))
+		return;
+
+	IS_BATTLE_HACK_NOTIFY* pNotify = (IS_BATTLE_HACK_NOTIFY*)pData;
+
+	printf("[ModuleBattleServer] HACK DETECTED: Room=%d, Slot=%u, UID=%lld, Type=%d, Severity=%d - %s\n",
+		pNotify->i32RoomIdx, pNotify->ui32SlotIdx, pNotify->i64UID,
+		pNotify->ui8HackType, pNotify->ui8Severity, pNotify->szDescription);
+
+	// Action based on severity
+	if (pNotify->ui8Severity >= 3)	// HACK_SEVERITY_CRITICAL
+	{
+		// Auto-ban via DataServer
+		if (g_pModuleDataServer)
+		{
+			g_pModuleDataServer->RequestPlayerBan(
+				pNotify->i64UID, 0,	// System ban
+				3600,					// 1 hour ban
+				pNotify->szDescription);
+		}
+
+		// Disconnect player
+		GameSessionManager* pMgr = g_pGameServerContext ? g_pGameServerContext->GetSessionManager() : nullptr;
+		if (pMgr)
+		{
+			GameSession* pSession = pMgr->FindSessionByUID(pNotify->i64UID);
+			if (pSession)
+			{
+				printf("[ModuleBattleServer] Kicking hacker UID=%lld\n", pNotify->i64UID);
+				// pSession->DisconnectUser(); // Will be wired when disconnect system is ready
+			}
+		}
+	}
+}
+
+void ModuleBattleServer::OnBattleMissionNotify(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_BATTLE_MISSION_NOTIFY))
+		return;
+
+	IS_BATTLE_MISSION_NOTIFY* pNotify = (IS_BATTLE_MISSION_NOTIFY*)pData;
+
+	printf("[ModuleBattleServer] MISSION: Room=%d, Event=%d, Slot=%u, UID=%lld, P1=%d, P2=%d\n",
+		pNotify->i32RoomIdx, pNotify->ui8EventType,
+		pNotify->ui32SlotIdx, pNotify->i64UID,
+		pNotify->i32Param1, pNotify->i32Param2);
+
+	// TODO: Update quest/medal progress for mission events
+	// e.g., bomb install count, touchdown count
 }

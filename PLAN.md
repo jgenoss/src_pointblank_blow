@@ -275,9 +275,9 @@ El original DediServer es **22x más grande** que el remake. Es el gap más sign
 | **Speed Validation** | SpeedState (anti-speed-hack) | SpeedState.h/.cpp (~90 líneas) | ✅ Implementado |
 | **TaskProcessor** | 2,800 líneas de game logic por room | TaskProcessor.h/.cpp (~130 líneas, framework) | ⚠️ Framework (logic pendiente) |
 | **Map System** | MapManager, MapData (stage geometry) | MapData + MapManager + ConfigXML | ✅ Implementado |
-| **Module Cast** | TCP to GameServer (kills, rounds, hacks) | ModuleCast.h/.cpp (stub, ~200 líneas) | ⚠️ Stub |
-| **Module Log** | Logging to log server | ModuleLog.h/.cpp (stub, ~80 líneas) | ⚠️ Stub |
-| **Module Control** | Admin/control server communication | ModuleControl.h/.cpp (stub, ~80 líneas) | ⚠️ Stub |
+| **Battle Events (ex-ModuleCast)** | TCP to GameServer (kills, rounds, hacks) | BattleSession live event senders (direct, ~120 líneas) | ✅ Integrado en InterServerProtocol |
+| **Event Receivers (GameServer)** | Recibe kills, hacks, rounds desde BattleServer | ModuleBattleServer handlers (~120 líneas) | ✅ Implementado |
+| **Logging** | Logging to log server | printf-based (enterprise: integrate with syslog/ELK) | ⚠️ Simplificado |
 | **Packet Validation** | DediUdpChecker (~20 parse methods) | UDPChecker.h/.cpp (~550 líneas) | ✅ Implementado |
 | **Statistics** | ServerStatistics profiling | ServerStatistics.h/.cpp (~230 líneas) | ✅ Implementado |
 | **HitValidator** | Line-of-sight, range check | HitValidator.h/.cpp | ✅ Implementado |
@@ -287,9 +287,9 @@ El original DediServer es **22x más grande** que el remake. Es el gap más sign
 
 **Resumen**: 15/20 sistemas ✅ implementados, 5/20 ⚠️ stubs/framework (se completarán con integración de protocolo).
 
-**Sistemas con stubs** (se completarán cuando los protocolos inter-server estén listos):
-- **ModuleCast**: Las funciones Send_* están definidas con TODO - se implementan al hacer protocolo GameServer↔BattleServer
-- **ModuleLog/Control**: Conectan a servidores auxiliares que no son críticos para gameplay
+**Arquitectura mejorada vs original** (sin servidores intermediarios):
+- **Sin CastServer**: Los battle events (kills, rounds, hacks, missions) se envían directamente BattleServer→GameServer via InterServerProtocol TCP
+- **Sin LogServer/ControlServer**: Logging via printf (producción: syslog/ELK). Control via admin commands en GameServer
 - **TaskProcessor**: El framework de procesamiento está listo; la lógica por modo de juego se añade incrementalmente
 
 ---

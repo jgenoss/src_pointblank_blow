@@ -283,3 +283,113 @@ void BattleSession::SendPlayerMigrateAck(int64_t i64UID, int i32Result)
 	packet.WriteData(&ack, sizeof(ack));
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Battle Live Event Senders (direct to GameServer, replaces CastServer)
+// ============================================================================
+
+void BattleSession::SendKillNotify(int i32RoomIdx, int i32ChannelNum,
+									uint8_t ui8RoundNum,
+									const IS_BATTLE_KILL_INFO* pKills, uint8_t ui8KillCount)
+{
+	if (!pKills || ui8KillCount == 0)
+		return;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_KILL_NOTIFY);
+
+	IS_BATTLE_KILL_NOTIFY notify;
+	notify.i32RoomIdx = i32RoomIdx;
+	notify.i32ChannelNum = i32ChannelNum;
+	notify.ui8RoundNum = ui8RoundNum;
+	notify.ui8KillCount = ui8KillCount;
+	notify.ui8Pad[0] = 0;
+	notify.ui8Pad[1] = 0;
+
+	packet.WriteData(&notify, sizeof(notify));
+	packet.WriteData(pKills, sizeof(IS_BATTLE_KILL_INFO) * ui8KillCount);
+	SendMessage(&packet);
+}
+
+void BattleSession::SendRoundStartNotify(int i32RoomIdx, int i32ChannelNum,
+										   uint8_t ui8RoundNum, uint8_t ui8GameMode)
+{
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_ROUND_START_NOTIFY);
+
+	IS_BATTLE_ROUND_START_NOTIFY notify;
+	notify.i32RoomIdx = i32RoomIdx;
+	notify.i32ChannelNum = i32ChannelNum;
+	notify.ui8RoundNum = ui8RoundNum;
+	notify.ui8GameMode = ui8GameMode;
+	notify.ui8Pad[0] = 0;
+	notify.ui8Pad[1] = 0;
+
+	packet.WriteData(&notify, sizeof(notify));
+	SendMessage(&packet);
+}
+
+void BattleSession::SendRoundEndNotify(int i32RoomIdx, int i32ChannelNum,
+										uint8_t ui8RoundNum, uint8_t ui8EndType,
+										uint8_t ui8WinTeam,
+										int i32RedScore, int i32BlueScore)
+{
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_ROUND_END_NOTIFY);
+
+	IS_BATTLE_ROUND_END_NOTIFY notify;
+	notify.i32RoomIdx = i32RoomIdx;
+	notify.i32ChannelNum = i32ChannelNum;
+	notify.ui8RoundNum = ui8RoundNum;
+	notify.ui8RoundEndType = ui8EndType;
+	notify.ui8WinTeam = ui8WinTeam;
+	notify.ui8Pad = 0;
+	notify.i32RedScore = i32RedScore;
+	notify.i32BlueScore = i32BlueScore;
+
+	packet.WriteData(&notify, sizeof(notify));
+	SendMessage(&packet);
+}
+
+void BattleSession::SendHackNotify(int i32RoomIdx, int i32ChannelNum,
+									uint32_t ui32SlotIdx, int64_t i64UID,
+									uint8_t ui8HackType, uint8_t ui8Severity,
+									const char* pszDescription)
+{
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_HACK_NOTIFY);
+
+	IS_BATTLE_HACK_NOTIFY notify;
+	notify.i32RoomIdx = i32RoomIdx;
+	notify.i32ChannelNum = i32ChannelNum;
+	notify.ui32SlotIdx = ui32SlotIdx;
+	notify.i64UID = i64UID;
+	notify.ui8HackType = ui8HackType;
+	notify.ui8Severity = ui8Severity;
+	notify.ui8Pad[0] = 0;
+	notify.ui8Pad[1] = 0;
+	memset(notify.szDescription, 0, sizeof(notify.szDescription));
+	if (pszDescription)
+		strncpy_s(notify.szDescription, pszDescription, _TRUNCATE);
+
+	packet.WriteData(&notify, sizeof(notify));
+	SendMessage(&packet);
+}
+
+void BattleSession::SendMissionNotify(int i32RoomIdx, int i32ChannelNum,
+										uint8_t ui8EventType, uint32_t ui32SlotIdx,
+										int64_t i64UID, int32_t i32Param1, int32_t i32Param2)
+{
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_BATTLE_MISSION_NOTIFY);
+
+	IS_BATTLE_MISSION_NOTIFY notify;
+	notify.i32RoomIdx = i32RoomIdx;
+	notify.i32ChannelNum = i32ChannelNum;
+	notify.ui8EventType = ui8EventType;
+	notify.ui8Pad[0] = 0;
+	notify.ui8Pad[1] = 0;
+	notify.ui8Pad[2] = 0;
+	notify.ui32SlotIdx = ui32SlotIdx;
+	notify.i64UID = i64UID;
+	notify.i32Param1 = i32Param1;
+	notify.i32Param2 = i32Param2;
+
+	packet.WriteData(&notify, sizeof(notify));
+	SendMessage(&packet);
+}

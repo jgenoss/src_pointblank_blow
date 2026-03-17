@@ -46,6 +46,13 @@ private:
 	void			OnBattleEndNotify(char* pData, int i32Size);
 	void			OnPlayerMigrateAck(char* pData, int i32Size);
 
+	// Battle live event handlers (from BattleServer, replaces CastServer)
+	void			OnBattleKillNotify(char* pData, int i32Size);
+	void			OnBattleRoundStartNotify(char* pData, int i32Size);
+	void			OnBattleRoundEndNotify(char* pData, int i32Size);
+	void			OnBattleHackNotify(char* pData, int i32Size);
+	void			OnBattleMissionNotify(char* pData, int i32Size);
+
 private:
 	// Server identity
 	int				m_i32ServerId;

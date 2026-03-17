@@ -156,6 +156,15 @@ enum Protocol_InterServer_Battle
 	PROTOCOL_IS_PLAYER_MIGRATE_ACK,
 
 	PROTOCOL_IS_BATTLE_STATUS_UPDATE,			// Estado de batalla en progreso
+
+	//----------------------------------------------------------
+	// Battle live events (BattleServer -> GameServer)
+	// Reemplaza ModuleCast del original - comunicacion directa sin CastServer
+	PROTOCOL_IS_BATTLE_KILL_NOTIFY,				// Kill event durante la batalla
+	PROTOCOL_IS_BATTLE_ROUND_START_NOTIFY,		// Inicio de ronda
+	PROTOCOL_IS_BATTLE_ROUND_END_NOTIFY,		// Fin de ronda (con equipo ganador)
+	PROTOCOL_IS_BATTLE_HACK_NOTIFY,				// Hack detectado
+	PROTOCOL_IS_BATTLE_MISSION_NOTIFY,			// Evento de mision (bomba, destruccion, defensa)
 };
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -802,6 +811,92 @@ struct IS_NOTE_DELETE_ACK
 	int64_t		i64UID;
 	int64_t		i64NoteId;
 	int			i32Result;
+};
+
+// ============================================================================
+// Battle Live Events (BattleServer -> GameServer, direct - no CastServer)
+// ============================================================================
+
+// Kill notification (replaces CModuleCast::Send_PROTOCOL_BATTLE_KILL_ACK)
+struct IS_BATTLE_KILL_NOTIFY
+{
+	int			i32RoomIdx;				// Room index en GameServer
+	int			i32ChannelNum;
+	uint8_t		ui8RoundNum;
+	uint8_t		ui8KillCount;			// Number of IS_BATTLE_KILL_INFO following
+	uint8_t		ui8Pad[2];
+	// Followed by IS_BATTLE_KILL_INFO[ui8KillCount]
+};
+
+struct IS_BATTLE_KILL_INFO
+{
+	uint32_t	ui32KillerSlot;
+	uint32_t	ui32VictimSlot;
+	int64_t		i64KillerUID;
+	int64_t		i64VictimUID;
+	uint32_t	ui32WeaponID;
+	uint8_t		ui8HitPart;				// CharaHitPart
+	uint8_t		ui8Headshot;
+	uint8_t		ui8Pad[2];
+};
+
+// Round start notification
+struct IS_BATTLE_ROUND_START_NOTIFY
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8RoundNum;
+	uint8_t		ui8GameMode;
+	uint8_t		ui8Pad[2];
+};
+
+// Round end notification (replaces CModuleCast::Send_PROTOCOL_BATTLE_RoundEnd)
+struct IS_BATTLE_ROUND_END_NOTIFY
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8RoundNum;
+	uint8_t		ui8RoundEndType;		// 0=time, 1=elimination, 2=objective
+	uint8_t		ui8WinTeam;				// 0=RED, 1=BLUE, 0xFF=draw
+	uint8_t		ui8Pad;
+	int			i32RedScore;
+	int			i32BlueScore;
+};
+
+// Hack detection notification (replaces CModuleCast::Send_PROTOCOL_BATTLE_HACK_USER_ACK)
+struct IS_BATTLE_HACK_NOTIFY
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint32_t	ui32SlotIdx;
+	int64_t		i64UID;
+	uint8_t		ui8HackType;			// HackType enum
+	uint8_t		ui8Severity;			// HackSeverity enum
+	uint8_t		ui8Pad[2];
+	char		szDescription[128];
+};
+
+// Mission event notification (bomb, destruction, defence, touchdown)
+enum BattleMissionEventType
+{
+	MISSION_EVENT_BOMB_INSTALL = 0,
+	MISSION_EVENT_BOMB_UNINSTALL,
+	MISSION_EVENT_BOMB_EXPLODE,
+	MISSION_EVENT_DESTRUCTION_HP,
+	MISSION_EVENT_DEFENCE,
+	MISSION_EVENT_TOUCHDOWN,
+};
+
+struct IS_BATTLE_MISSION_NOTIFY
+{
+	int			i32RoomIdx;
+	int			i32ChannelNum;
+	uint8_t		ui8EventType;			// BattleMissionEventType
+	uint8_t		ui8Pad[3];
+	uint32_t	ui32SlotIdx;			// Player who triggered
+	int64_t		i64UID;
+	int32_t		i32Param1;				// Object index or HP value
+	int32_t		i32Param2;				// Extra param
 };
 
 // Player Ban (GameServer -> DataServer)
