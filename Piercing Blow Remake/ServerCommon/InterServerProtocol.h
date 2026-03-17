@@ -136,6 +136,88 @@ enum Protocol_InterServer_Data
 	// Ban operations (GameServer -> DataServer)
 	PROTOCOL_IS_PLAYER_BAN_REQ,
 	PROTOCOL_IS_PLAYER_BAN_ACK,
+
+	// Account Cosmetics (GameServer <-> DataServer)
+	PROTOCOL_IS_COSMETICS_LOAD_REQ,
+	PROTOCOL_IS_COSMETICS_LOAD_ACK,
+	PROTOCOL_IS_COSMETICS_SAVE_REQ,
+	PROTOCOL_IS_COSMETICS_SAVE_ACK,
+
+	// Mode Records (GameServer <-> DataServer)
+	PROTOCOL_IS_MODE_RECORDS_LOAD_REQ,
+	PROTOCOL_IS_MODE_RECORDS_LOAD_ACK,
+	PROTOCOL_IS_MODE_RECORDS_SAVE_REQ,
+	PROTOCOL_IS_MODE_RECORDS_SAVE_ACK,
+
+	// Daily Records (GameServer <-> DataServer)
+	PROTOCOL_IS_DAILY_RECORD_LOAD_REQ,
+	PROTOCOL_IS_DAILY_RECORD_LOAD_ACK,
+	PROTOCOL_IS_DAILY_RECORD_SAVE_REQ,
+	PROTOCOL_IS_DAILY_RECORD_SAVE_ACK,
+
+	// Map System (GameServer <-> DataServer)
+	PROTOCOL_IS_MAP_LIST_REQ,
+	PROTOCOL_IS_MAP_LIST_ACK,
+	PROTOCOL_IS_MAP_STATS_SAVE_REQ,
+	PROTOCOL_IS_MAP_STATS_SAVE_ACK,
+
+	// Rankings (GameServer <-> DataServer)
+	PROTOCOL_IS_RANKING_INDIVIDUAL_REQ,
+	PROTOCOL_IS_RANKING_INDIVIDUAL_ACK,
+	PROTOCOL_IS_RANKING_CLAN_REQ,
+	PROTOCOL_IS_RANKING_CLAN_ACK,
+	PROTOCOL_IS_RANKING_CALCULATE_REQ,
+	PROTOCOL_IS_RANKING_CALCULATE_ACK,
+
+	// Medal Sets (GameServer <-> DataServer)
+	PROTOCOL_IS_MEDAL_SET_LOAD_REQ,
+	PROTOCOL_IS_MEDAL_SET_LOAD_ACK,
+	PROTOCOL_IS_MEDAL_SET_SAVE_REQ,
+	PROTOCOL_IS_MEDAL_SET_SAVE_ACK,
+
+	// Server Config (GameServer <-> DataServer)
+	PROTOCOL_IS_SERVER_CONFIG_REQ,
+	PROTOCOL_IS_SERVER_CONFIG_ACK,
+	PROTOCOL_IS_NOTICES_REQ,
+	PROTOCOL_IS_NOTICES_ACK,
+	PROTOCOL_IS_BOOST_EVENTS_REQ,
+	PROTOCOL_IS_BOOST_EVENTS_ACK,
+
+	// Gift Delivery (GameServer <-> DataServer)
+	PROTOCOL_IS_GIFT_SEND_REQ,
+	PROTOCOL_IS_GIFT_SEND_ACK,
+	PROTOCOL_IS_GIFT_LIST_REQ,
+	PROTOCOL_IS_GIFT_LIST_ACK,
+	PROTOCOL_IS_GIFT_RECEIVE_REQ,
+	PROTOCOL_IS_GIFT_RECEIVE_ACK,
+
+	// Clan Extended (GameServer <-> DataServer)
+	PROTOCOL_IS_CLAN_REQUEST_SEND_REQ,
+	PROTOCOL_IS_CLAN_REQUEST_SEND_ACK,
+	PROTOCOL_IS_CLAN_REQUEST_LIST_REQ,
+	PROTOCOL_IS_CLAN_REQUEST_LIST_ACK,
+	PROTOCOL_IS_CLAN_REQUEST_RESPOND_REQ,
+	PROTOCOL_IS_CLAN_REQUEST_RESPOND_ACK,
+	PROTOCOL_IS_CLAN_ITEMS_REQ,
+	PROTOCOL_IS_CLAN_ITEMS_ACK,
+	PROTOCOL_IS_CLAN_SEASON_REQ,
+	PROTOCOL_IS_CLAN_SEASON_ACK,
+	PROTOCOL_IS_CLAN_MATCH_RESULT_REQ,
+	PROTOCOL_IS_CLAN_MATCH_RESULT_ACK,
+
+	// Mercenary (GameServer <-> DataServer)
+	PROTOCOL_IS_MERCENARY_HIRE_REQ,
+	PROTOCOL_IS_MERCENARY_HIRE_ACK,
+	PROTOCOL_IS_MERCENARY_LIST_REQ,
+	PROTOCOL_IS_MERCENARY_LIST_ACK,
+	PROTOCOL_IS_MERCENARY_DISMISS_REQ,
+	PROTOCOL_IS_MERCENARY_DISMISS_ACK,
+	PROTOCOL_IS_MERCENARY_RESULT_REQ,
+	PROTOCOL_IS_MERCENARY_RESULT_ACK,
+
+	// Shop Extended (GameServer <-> DataServer)
+	PROTOCOL_IS_SHOP_COUPON_REQ,
+	PROTOCOL_IS_SHOP_COUPON_ACK,
 };
 
 enum Protocol_InterServer_Battle
@@ -331,14 +413,30 @@ struct IS_PLAYER_LOAD_DATA
 	int64_t		i64Exp;
 	int			i32Cash;
 	int			i32GP;
+	int			i32Coin;
 	int			i32RankId;
+	int			i32KeepRank;
 	int			i32ClanId;
+	uint8_t		ui8AuthLevel;
 	// Stats
 	int			i32Kills;
 	int			i32Deaths;
 	int			i32Headshots;
 	int			i32Wins;
 	int			i32Losses;
+	int			i32Draws;
+	int			i32Disconnects;
+	// Extended user info
+	int			i32ConnectCount;
+	int			i32ConnectTime;
+	int			i32TotalBattleTime;
+	uint8_t		ui8TutorialDone;
+	uint64_t	ui64GuideComplete;
+	// Cosmetics
+	uint8_t		ui8NicknameColor;
+	uint8_t		ui8CrosshairColor;
+	uint8_t		ui8ChattingColor;
+	int			i32DisguiseRank;
 	// Inventory count (IS_PLAYER_INVENTORY_ITEM items follow after this struct)
 	int			i32InventoryCount;
 };
@@ -912,6 +1010,552 @@ struct IS_PLAYER_BAN_ACK
 {
 	int64_t		i64UID;
 	int			i32Result;			// 0=OK, 1=not_found, 2=error
+};
+
+// ============================================================================
+// Account Cosmetics
+// ============================================================================
+
+struct IS_COSMETICS_LOAD_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+};
+
+struct IS_COSMETICS_LOAD_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;
+	uint8_t		ui8NicknameColor;
+	uint8_t		ui8CrosshairColor;
+	uint8_t		ui8ChattingColor;
+	int			i32DisguiseRank;
+	char		szFakeNick[50];
+};
+
+struct IS_COSMETICS_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8NicknameColor;
+	uint8_t		ui8CrosshairColor;
+	uint8_t		ui8ChattingColor;
+	int			i32DisguiseRank;
+	char		szFakeNick[50];
+};
+
+struct IS_COSMETICS_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// ============================================================================
+// Mode Records (per game mode stats)
+// ============================================================================
+
+struct IS_MODE_RECORD_ENTRY
+{
+	uint8_t		ui8RecordType;		// Game mode (0-9)
+	int			i32Matches;
+	int			i32Wins;
+	int			i32Losses;
+	int			i32Draws;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+	int			i32Disconnects;
+	int			i32DailyMatches;
+	int			i32DailyKills;
+};
+
+struct IS_MODE_RECORDS_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8RecordType;		// Which mode to update
+	int			i32DeltaMatches;	// Additive delta
+	int			i32DeltaWins;
+	int			i32DeltaLosses;
+	int			i32DeltaDraws;
+	int			i32DeltaKills;
+	int			i32DeltaDeaths;
+	int			i32DeltaHeadshots;
+	int			i32DeltaDisconnects;
+};
+
+struct IS_MODE_RECORDS_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// ============================================================================
+// Daily Records
+// ============================================================================
+
+struct IS_DAILY_RECORD_ENTRY
+{
+	int			i32RecordDate;		// YYYYMMDD
+	int			i32Wins;
+	int			i32Losses;
+	int			i32Draws;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+	int			i32ExpEarned;
+	int			i32GPEarned;
+	int			i32PlayTime;
+	int			i32GiftPlayTime;
+	uint8_t		ui8GotDailyItem;
+};
+
+struct IS_DAILY_RECORD_SAVE_REQ
+{
+	int64_t		i64UID;
+	int			i32DeltaWins;
+	int			i32DeltaLosses;
+	int			i32DeltaDraws;
+	int			i32DeltaKills;
+	int			i32DeltaDeaths;
+	int			i32DeltaHeadshots;
+	int			i32DeltaExp;
+	int			i32DeltaGP;
+	int			i32DeltaPlayTime;
+	uint8_t		ui8GotDailyItem;	// Set to 1 when claimed
+};
+
+struct IS_DAILY_RECORD_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// ============================================================================
+// Map System
+// ============================================================================
+
+struct IS_MAP_MODE_ENTRY
+{
+	uint16_t	ui16StageKey;
+	uint16_t	ui16StageUID;
+	uint8_t		ui8Mode;
+	uint8_t		ui8MaxPlayers;
+	uint8_t		ui8Mark;
+	uint8_t		ui8SpecialMode;
+};
+
+struct IS_MAP_LIST_ACK
+{
+	int			i32Result;
+	int			i32MapCount;
+	// Followed by IS_MAP_MODE_ENTRY[i32MapCount]
+};
+
+struct IS_MAP_STATS_SAVE_REQ
+{
+	int			i32MapId;
+	int			i32StageType;		// Game mode
+	int			i32PlayTime;		// Seconds
+};
+
+struct IS_MAP_STATS_SAVE_ACK
+{
+	int			i32Result;
+};
+
+// ============================================================================
+// Rankings
+// ============================================================================
+
+struct IS_RANKING_INDIVIDUAL_ENTRY
+{
+	int			i32RankPosition;
+	int64_t		i64UID;
+	char		szNickname[50];
+	int			i32Level;
+	int64_t		i64Exp;
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Headshots;
+};
+
+struct IS_RANKING_INDIVIDUAL_ACK
+{
+	int			i32Result;
+	int			i32Count;
+	uint8_t		ui8TermType;		// 0=daily, 1=weekly, 2=monthly
+	// Followed by IS_RANKING_INDIVIDUAL_ENTRY[i32Count]
+};
+
+struct IS_RANKING_CLAN_ENTRY
+{
+	int			i32RankPosition;
+	int			i32ClanId;
+	char		szClanName[50];
+	int64_t		i64ClanExp;
+	int			i32Wins;
+	int			i32Losses;
+	int			i32MemberCount;
+};
+
+struct IS_RANKING_CLAN_ACK
+{
+	int			i32Result;
+	int			i32Count;
+	uint8_t		ui8TermType;
+	// Followed by IS_RANKING_CLAN_ENTRY[i32Count]
+};
+
+// ============================================================================
+// Medal Sets
+// ============================================================================
+
+struct IS_MEDAL_SET_CURRENT_ENTRY
+{
+	uint8_t		ui8SetType;
+	int16_t		i16MedalSetIdx;
+	int16_t		i16Medal1Count;
+	int16_t		i16Medal2Count;
+	int16_t		i16Medal3Count;
+	int16_t		i16Medal4Count;
+	int16_t		i16Medal5Count;
+	int16_t		i16Medal6Count;
+	uint8_t		ui8GetReward;
+};
+
+struct IS_MEDAL_SET_SAVE_REQ
+{
+	int64_t		i64UID;
+	uint8_t		ui8SetType;
+	int16_t		i16MedalSetIdx;
+	int16_t		i16Medal1Count;
+	int16_t		i16Medal2Count;
+	int16_t		i16Medal3Count;
+	int16_t		i16Medal4Count;
+	int16_t		i16Medal5Count;
+	int16_t		i16Medal6Count;
+	uint8_t		ui8GetReward;
+	uint8_t		ui8IsComplete;		// 1 = move to complete table
+};
+
+struct IS_MEDAL_SET_SAVE_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+// ============================================================================
+// Server Config / Notices / Boost Events
+// ============================================================================
+
+struct IS_SERVER_CONFIG_ENTRY
+{
+	char		szKey[64];
+	char		szValue[255];
+};
+
+struct IS_SERVER_CONFIG_ACK
+{
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_SERVER_CONFIG_ENTRY[i32Count]
+};
+
+struct IS_NOTICE_ENTRY
+{
+	int			i32Id;
+	int			i32RepeatInterval;	// Seconds
+	char		szText[255];
+};
+
+struct IS_NOTICES_ACK
+{
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_NOTICE_ENTRY[i32Count]
+};
+
+struct IS_BOOST_EVENT_ENTRY
+{
+	int			i32EventType;
+	int			i32ExpMultiplier;	// Percentage (100=normal)
+	int			i32GPMultiplier;
+	uint32_t	ui32StartTime;		// Unix timestamp
+	uint32_t	ui32EndTime;
+};
+
+struct IS_BOOST_EVENTS_ACK
+{
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_BOOST_EVENT_ENTRY[i32Count]
+};
+
+// ============================================================================
+// Gift Delivery System
+// ============================================================================
+
+struct IS_GIFT_SEND_REQ
+{
+	int64_t		i64SenderUID;
+	int64_t		i64ReceiverUID;
+	char		szSenderNick[50];
+	int			i32GoodsId;
+	int			i32ItemId;
+	uint8_t		ui8GiftType;		// 0=player, 1=system, 2=web, 3=event
+	char		szMessage[125];
+};
+
+struct IS_GIFT_SEND_ACK
+{
+	int64_t		i64SenderUID;
+	int			i32SessionIdx;
+	int			i32Result;			// 0=OK, 1=target_not_found, 2=error
+};
+
+struct IS_GIFT_ENTRY
+{
+	int64_t		i64GiftId;
+	int64_t		i64SenderUID;
+	char		szSenderNick[50];
+	int			i32GoodsId;
+	int			i32ItemId;
+	uint8_t		ui8GiftType;
+	char		szMessage[125];
+	uint32_t	ui32Timestamp;
+};
+
+struct IS_GIFT_LIST_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_GIFT_ENTRY[i32Count]
+};
+
+struct IS_GIFT_RECEIVE_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64GiftId;
+	int			i32SessionIdx;
+};
+
+struct IS_GIFT_RECEIVE_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64GiftId;
+	int			i32SessionIdx;
+	int			i32Result;			// 0=OK, 1=not_found, 2=already_received, 3=error
+	int			i32ItemId;			// Item received
+	int			i32GoodsId;
+};
+
+// ============================================================================
+// Clan Extended: Join Requests
+// ============================================================================
+
+struct IS_CLAN_REQUEST_SEND_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Level;
+	int			i32RankId;
+	char		szMessage[128];
+};
+
+struct IS_CLAN_REQUEST_SEND_ACK
+{
+	int64_t		i64UID;
+	int			i32ClanId;
+	int			i32Result;			// 0=OK, 1=already_requested, 2=clan_full, 3=error
+};
+
+struct IS_CLAN_REQUEST_ENTRY
+{
+	int64_t		i64RequestId;
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Level;
+	int			i32RankId;
+	char		szMessage[128];
+	uint32_t	ui32Timestamp;
+};
+
+struct IS_CLAN_REQUEST_LIST_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_CLAN_REQUEST_ENTRY[i32Count]
+};
+
+struct IS_CLAN_REQUEST_RESPOND_REQ
+{
+	int			i32ClanId;
+	int64_t		i64MasterUID;		// Who is responding
+	int64_t		i64RequestId;
+	int64_t		i64ApplicantUID;
+	uint8_t		ui8Accept;			// 0=reject, 1=accept
+};
+
+struct IS_CLAN_REQUEST_RESPOND_ACK
+{
+	int			i32ClanId;
+	int64_t		i64ApplicantUID;
+	int			i32Result;
+};
+
+// ============================================================================
+// Clan Items
+// ============================================================================
+
+struct IS_CLAN_ITEM_ENTRY
+{
+	int			i32Id;
+	int			i32ItemId;
+	int			i32ItemCount;
+	uint8_t		ui8ItemType;
+};
+
+struct IS_CLAN_ITEMS_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_CLAN_ITEM_ENTRY[i32Count]
+};
+
+// ============================================================================
+// Clan Match Result (update clan stats after clan war)
+// ============================================================================
+
+struct IS_CLAN_MATCH_RESULT_REQ
+{
+	int			i32ClanId;
+	int			i32OpponentClanId;
+	uint8_t		ui8Result;			// 0=win, 1=loss, 2=draw
+	int			i32ExpGained;
+	int			i32RatingDelta;		// +/- rating change
+};
+
+struct IS_CLAN_MATCH_RESULT_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+};
+
+// ============================================================================
+// Clan Season
+// ============================================================================
+
+struct IS_CLAN_SEASON_ENTRY
+{
+	int			i32SeasonId;
+	int			i32FinalRank;
+	int			i32FinalRating;
+	int			i32Wins;
+	int			i32Losses;
+	int			i32Draws;
+	int			i32SeasonExp;
+};
+
+struct IS_CLAN_SEASON_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_CLAN_SEASON_ENTRY[i32Count]
+};
+
+// ============================================================================
+// Mercenary System
+// ============================================================================
+
+struct IS_MERCENARY_HIRE_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32DurationSec;		// Contract duration in seconds
+};
+
+struct IS_MERCENARY_HIRE_ACK
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32Result;			// 0=OK, 1=already_hired, 2=clan_full, 3=error
+};
+
+struct IS_MERCENARY_ENTRY
+{
+	int64_t		i64UID;
+	char		szNickname[64];
+	int			i32Kills;
+	int			i32Deaths;
+	int			i32Wins;
+	int			i32Losses;
+	int			i32Disconnects;
+	uint32_t	ui32HireTime;		// Unix timestamp
+	uint32_t	ui32ExpireTime;
+};
+
+struct IS_MERCENARY_LIST_ACK
+{
+	int			i32ClanId;
+	int			i32Result;
+	int			i32Count;
+	// Followed by IS_MERCENARY_ENTRY[i32Count]
+};
+
+struct IS_MERCENARY_DISMISS_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+};
+
+struct IS_MERCENARY_DISMISS_ACK
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32Result;
+};
+
+struct IS_MERCENARY_RESULT_REQ
+{
+	int			i32ClanId;
+	int64_t		i64UID;
+	int			i32DeltaKills;
+	int			i32DeltaDeaths;
+	int			i32DeltaWins;
+	int			i32DeltaLosses;
+	int			i32DeltaDisconnects;
+};
+
+struct IS_MERCENARY_RESULT_ACK
+{
+	int			i32Result;
+};
+
+// ============================================================================
+// Shop Coupon
+// ============================================================================
+
+struct IS_SHOP_COUPON_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	char		szCouponCode[32];
+};
+
+struct IS_SHOP_COUPON_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Result;			// 0=OK, 1=invalid, 2=expired, 3=already_used, 4=limit_reached
+	int			i32DiscountValue;
+	uint8_t		ui8DiscountType;	// 0=fixed, 1=percent
 };
 
 #pragma pack(pop)
