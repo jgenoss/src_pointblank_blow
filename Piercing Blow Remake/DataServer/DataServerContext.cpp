@@ -81,28 +81,27 @@ bool DataServerContext::InitializeDBModules(const DBConfig& config, int i32PoolS
 
 void DataServerContext::OnUpdate(INT32 Command)
 {
-	// Procesar respuestas de los modulos de DB
-	if (m_pModuleAuth)
-		m_pModuleAuth->ProcessResponses(this);
-	if (m_pModuleUserLoad)
-		m_pModuleUserLoad->ProcessResponses(this);
-	if (m_pModuleUserSave)
-		m_pModuleUserSave->ProcessResponses(this);
-	if (m_pModuleGameData)
-		m_pModuleGameData->ProcessResponses(this);
-	if (m_pModuleSocial)
-		m_pModuleSocial->ProcessResponses(this);
+	// Process async worker responses (drains response queue and sends packets)
+	if (m_pTaskProcessor)
+		m_pTaskProcessor->ProcessResponses();
 }
 
 BOOL DataServerContext::OnDestroy()
 {
-	// Destruir modulos
+	// Shutdown TaskProcessor FIRST - workers reference modules and DB pool
+	if (m_pTaskProcessor)
+	{
+		m_pTaskProcessor->Shutdown();
+		delete m_pTaskProcessor;
+		m_pTaskProcessor = nullptr;
+	}
+
+	// Destruir modulos (safe now that no workers are running)
 	if (m_pModuleSocial)	{ delete m_pModuleSocial; m_pModuleSocial = nullptr; }
 	if (m_pModuleGameData)	{ delete m_pModuleGameData; m_pModuleGameData = nullptr; }
 	if (m_pModuleUserSave)	{ delete m_pModuleUserSave; m_pModuleUserSave = nullptr; }
 	if (m_pModuleUserLoad)	{ delete m_pModuleUserLoad; m_pModuleUserLoad = nullptr; }
 	if (m_pModuleAuth)		{ delete m_pModuleAuth; m_pModuleAuth = nullptr; }
-	if (m_pTaskProcessor)	{ delete m_pTaskProcessor; m_pTaskProcessor = nullptr; }
 
 	// Destruir pool de conexiones
 	if (m_pDBPool)
