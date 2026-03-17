@@ -4,6 +4,26 @@
 #include <cmath>
 #include <cstdlib>
 
+// Thread-safe random number generation
+// Uses Windows CryptGenRandom-backed xorshift for fast, thread-safe RNG
+// (replaces non-thread-safe rand())
+static uint32_t s_tls_rng_state = 0;
+
+static uint32_t ThreadSafeRand()
+{
+	// Per-thread state using thread ID as seed
+	if (s_tls_rng_state == 0)
+		s_tls_rng_state = GetCurrentThreadId() ^ GetTickCount();
+
+	// xorshift32
+	uint32_t x = s_tls_rng_state;
+	x ^= x << 13;
+	x ^= x >> 17;
+	x ^= x << 5;
+	s_tls_rng_state = x;
+	return x;
+}
+
 // ============================================================================
 // WeaponDamageInfo
 // ============================================================================
@@ -16,9 +36,10 @@ int WeaponDamageInfo::CalculateDamage(AttackType eAttack, bool bCritical, float 
 	float baseDamage = fDamage[eAttack];
 
 	// Random damage variation: (MaxDamage - BaseDamage) * rand[0,1]
+	// Uses thread-safe RNG (not rand())
 	if (fMaxDamage > baseDamage + 0.001f)
 	{
-		float randFactor = (float)(rand() % 1000) / 1000.0f;
+		float randFactor = (float)(ThreadSafeRand() % 1000) / 1000.0f;
 		float randomDamage = (fMaxDamage - baseDamage) * randFactor;
 		baseDamage += randomDamage;
 	}

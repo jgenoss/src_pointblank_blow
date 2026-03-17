@@ -5,14 +5,23 @@
 #include "WeaponSystem.h"
 
 // ============================================================================
-// HMSParser - Anti-cheat packet validation
-// Port of original HMSParser from Dedication/Dedi/HMSParser.h
+// HMSParser - Anti-cheat packet validation with enforcement
+// Production port of original HMSParser from Dedication/Dedi/HMSParser.h
+//
 // Validates game packets for hacking: weapon range, fire speed, weapon sync,
 // ghost detection, recall hack, RPG exploit, etc.
+//
+// ENFORCEMENT: Unlike the basic version that only logs, this version:
+// - Sends HACK_NOTIFY to GameServer via BattleSession (for all severities)
+// - Removes HIGH/CRITICAL hack offenders from BattleRoom
+// - Tracks violation counts per-character with escalating severity
+// - Saves character state before processing, rolls back on hack detection
+//   (matches original: m_i16StoreHP pattern)
 // ============================================================================
 
 class BattleRoom;
 class GameCharacter;
+class BattleSession;
 
 // Hack detection types (from DS_HACK_TYPE)
 enum HackType
@@ -36,10 +45,10 @@ enum HackType
 // Hack severity
 enum HackSeverity
 {
-	HACK_SEVERITY_LOW = 0,		// Log only
-	HACK_SEVERITY_MEDIUM,		// Log + flag user
-	HACK_SEVERITY_HIGH,			// Log + kick from battle
-	HACK_SEVERITY_CRITICAL,		// Log + kick + ban
+	HACK_SEVERITY_LOW = 0,		// Log + track count
+	HACK_SEVERITY_MEDIUM,		// Log + notify GameServer
+	HACK_SEVERITY_HIGH,			// Log + notify + remove from room
+	HACK_SEVERITY_CRITICAL,		// Log + notify + remove + request ban
 };
 
 // Hack detection result
@@ -56,6 +65,34 @@ struct HackCheckResult
 		, ui32SlotIdx(0)
 	{
 		szDescription[0] = '\0';
+	}
+};
+
+// Per-character violation tracking
+struct ViolationRecord
+{
+	int32_t		ai32Counts[HACK_TYPE_COUNT];	// Count per hack type
+	int32_t		i32TotalViolations;				// Total across all types
+	DWORD		dwFirstViolationTime;			// When first violation detected
+	DWORD		dwLastViolationTime;			// When last violation detected
+
+	void Reset()
+	{
+		memset(ai32Counts, 0, sizeof(ai32Counts));
+		i32TotalViolations = 0;
+		dwFirstViolationTime = 0;
+		dwLastViolationTime = 0;
+	}
+
+	void AddViolation(HackType eType)
+	{
+		if (eType > HACK_TYPE_NONE && eType < HACK_TYPE_COUNT)
+			ai32Counts[eType]++;
+		i32TotalViolations++;
+		DWORD dwNow = GetTickCount();
+		if (dwFirstViolationTime == 0)
+			dwFirstViolationTime = dwNow;
+		dwLastViolationTime = dwNow;
 	}
 };
 
@@ -82,6 +119,12 @@ struct FireInfo
 	uint8_t		ui8AttackType;
 	float		fPacketTime;		// Client-side timestamp
 };
+
+// Violation thresholds for escalation
+#define HMS_VIOLATION_THRESHOLD_MEDIUM		3	// Violations before MEDIUM severity
+#define HMS_VIOLATION_THRESHOLD_HIGH		8	// Violations before HIGH severity
+#define HMS_VIOLATION_THRESHOLD_CRITICAL		15	// Violations before CRITICAL severity
+#define HMS_VIOLATION_WINDOW_MS				60000	// Violations within this window are escalated
 
 class HMSParser
 {
@@ -156,6 +199,18 @@ public:
 	static HackCheckResult ValidatePosition(BattleRoom* pRoom, uint32_t ui32SlotIdx,
 											const float* fNewPos, float fPacketTime);
 
+	// ============================================================
+	// ENFORCEMENT - report and act on hack detection
+	// ============================================================
+
+	// Report hack detection: logs, notifies GameServer, optionally removes player
+	static void EnforceHack(BattleRoom* pRoom, const HackCheckResult* pResult,
+							int64_t i64UID);
+
+	// Get/reset violation record for a slot
+	static ViolationRecord* GetViolationRecord(uint32_t ui32SlotIdx);
+	static void ResetViolationRecords();
+
 private:
 	// Distance calculation
 	static float Distance3D(const float* a, const float* b);
@@ -164,6 +219,14 @@ private:
 	static constexpr float FIRE_SPEED_TOLERANCE = 0.8f;	// 80% of fire delay minimum
 	static constexpr float GHOST_MAX_DISTANCE = 2000.0f;	// Max teleport before flagged
 	static constexpr float RECALL_MAX_DISTANCE = 500.0f;	// Max death pos difference
+
+	// Per-slot violation tracking (thread-safe: each slot only accessed by its track's worker)
+	static ViolationRecord	s_Violations[BATTLE_SLOT_MAX];
+	static CRITICAL_SECTION	s_csViolations;
+	static bool				s_bInitialized;
+
+	// Initialize violation tracking (called once)
+	static void InitializeIfNeeded();
 };
 
 #endif // __HMSPARSER_H__

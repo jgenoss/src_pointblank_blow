@@ -44,7 +44,7 @@ void BattleRoom::Reset()
 
 	// Reset weapon managers
 	m_ThrowWeaponMgr.Reset();
-	m_DroppedWeaponMgr.Reset();
+	m_DroppedWeaponMgr.Reset(0.0f);
 
 	// Cleanup physics/objects
 	if (m_pCollision)

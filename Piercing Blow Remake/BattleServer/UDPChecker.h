@@ -4,9 +4,15 @@
 #pragma once
 
 // ============================================================================
-// UDPChecker - UDP game packet validation
-// Port of original DediUdpChecker from Dedication/Dedi/DediUdpChecker.h
-// Parses and validates all incoming UDP game packets before processing
+// UDPChecker - UDP game packet validation with rate limiting
+// Production port of original DediUdpChecker from Dedication/Dedi/DediUdpChecker.h
+//
+// Parses and validates all incoming UDP game packets before processing.
+// Now includes:
+// - Per-slot packet rate limiting (prevents flood attacks)
+// - Enforcement integration (calls HMSParser::EnforceHack on violations)
+// - Actual game state updates on valid packets (not just validation)
+// - Damage calculation and application for hit packets
 // ============================================================================
 
 class BattleRoom;
@@ -19,6 +25,7 @@ enum PacketCheckResult
 	PACKET_CHECK_INVALID,		// Malformed packet
 	PACKET_CHECK_HACK,			// Hack detected
 	PACKET_CHECK_IGNORE,		// Packet should be ignored (e.g., dead player firing)
+	PACKET_CHECK_RATE_LIMITED,	// Rate limited - drop silently
 };
 
 // UDP game packet types (from CommonDediCli.h)
@@ -159,6 +166,72 @@ struct UDPRadioChatPacket
 
 #pragma pack(pop)
 
+// ============================================================================
+// Rate limiter per-slot
+// ============================================================================
+
+#define RATE_LIMIT_WINDOW_MS		1000	// 1 second window
+#define RATE_LIMIT_MAX_PACKETS		200		// Max packets per slot per second
+#define RATE_LIMIT_MAX_POSITION		64		// Max position updates per second
+#define RATE_LIMIT_MAX_FIRE			30		// Max fire packets per second
+#define RATE_LIMIT_MAX_HIT			20		// Max hit packets per second
+
+struct SlotRateLimit
+{
+	DWORD		dwWindowStart;
+	int32_t		i32TotalPackets;
+	int32_t		i32PositionPackets;
+	int32_t		i32FirePackets;
+	int32_t		i32HitPackets;
+
+	void Reset()
+	{
+		dwWindowStart = 0;
+		i32TotalPackets = 0;
+		i32PositionPackets = 0;
+		i32FirePackets = 0;
+		i32HitPackets = 0;
+	}
+
+	// Check and update rate limit. Returns true if within limits.
+	bool CheckAndUpdate(UDPPacketType eType, DWORD dwNow)
+	{
+		// Reset window if expired
+		if (dwNow - dwWindowStart > RATE_LIMIT_WINDOW_MS)
+		{
+			dwWindowStart = dwNow;
+			i32TotalPackets = 0;
+			i32PositionPackets = 0;
+			i32FirePackets = 0;
+			i32HitPackets = 0;
+		}
+
+		i32TotalPackets++;
+		if (i32TotalPackets > RATE_LIMIT_MAX_PACKETS)
+			return false;
+
+		switch (eType)
+		{
+		case UDP_CYCLEINFO_POSITION:
+			i32PositionPackets++;
+			return (i32PositionPackets <= RATE_LIMIT_MAX_POSITION);
+
+		case UDP_CYCLEINFO_FIRE:
+			i32FirePackets++;
+			return (i32FirePackets <= RATE_LIMIT_MAX_FIRE);
+
+		case UDP_CYCLEINFO_HIT_CHARA:
+		case UDP_CYCLEINFO_HIT_EXPLOSION:
+		case UDP_CYCLEINFO_HIT_OBJECT:
+			i32HitPackets++;
+			return (i32HitPackets <= RATE_LIMIT_MAX_HIT);
+
+		default:
+			return true;	// No specific limit for other types
+		}
+	}
+};
+
 class UDPChecker
 {
 public:
@@ -166,6 +239,12 @@ public:
 	// Returns bytes consumed, or -1 on error
 	static int32_t GamePacketParsing(BattleRoom* pRoom, const char* pPacket,
 									  int32_t nSize, uint32_t ui32SlotIdx);
+
+	// Initialize rate limiters (call once at startup)
+	static void Initialize();
+
+	// Reset rate limiters for a slot (call when player leaves)
+	static void ResetSlot(uint32_t ui32SlotIdx);
 
 private:
 	// Individual packet parsers
@@ -219,6 +298,9 @@ private:
 
 	static PacketCheckResult _ParseCharaSuicideDmg(BattleRoom* pRoom, uint32_t ui32SlotIdx,
 													const UDPSuicideDamagePacket* pSuicide);
+
+	// Rate limiters per slot
+	static SlotRateLimit s_RateLimits[BATTLE_SLOT_MAX];
 };
 
 #endif // __UDPCHECKER_H__
