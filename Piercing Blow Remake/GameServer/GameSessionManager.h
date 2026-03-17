@@ -29,6 +29,8 @@ public:
 	// Session lookup
 	GameSession*		GetSession(int i32Idx);
 	GameSession*		GetSession(int i32Idx, int64_t i64UID);
+	GameSession*		FindSessionByUID(int64_t i64UID);
+	GameSession*		FindSessionByNickname(const char* szNickname);
 
 	// Channel management
 	int					OnEnterChannel(GameSession* pSession, uint32_t ui32Channel);
@@ -42,9 +44,14 @@ public:
 	// Broadcast
 	void				OnSendLobbyChatting(GameSession* pSender, char* pMessage, uint16_t ui16Size);
 	void				OnSendChannelUser(int i32ChannelNum, i3NetworkPacket* pPacket);
+	void				BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* pPacket);
+	void				BroadcastToAll(i3NetworkPacket* pPacket);
+	void				BroadcastAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
 
 	// Stats
-	int					GetActiveCount() const		{ return m_i32ActiveCount; }
+	int					GetActiveCount() const		{ return (int)m_lActiveCount; }
+	int					GetPeakActive() const		{ return (int)m_lPeakActive; }
+	int					GetTotalConnections() const	{ return (int)m_lTotalConnections; }
 
 private:
 	void				CheckTimeouts();
@@ -66,9 +73,13 @@ private:
 	uint32_t			m_ui32ChannelCount;
 
 	// Stats
-	int					m_i32ActiveCount;
-	int					m_i32SessionCheckIdx;
+	volatile LONG		m_lActiveCount;
+	volatile LONG		m_lPeakActive;
+	volatile LONG		m_lTotalConnections;
+	volatile LONG		m_lSessionCheckIdx;
 	DWORD				m_dwLastTimeoutCheck;
 };
+
+extern GameSessionManager* g_pGameSessionManager;
 
 #endif // __GAMESESSIONMANAGER_H__

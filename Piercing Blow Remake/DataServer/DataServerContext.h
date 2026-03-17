@@ -10,6 +10,8 @@ class TaskProcessor;
 class ModuleDBAuth;
 class ModuleDBUserLoad;
 class ModuleDBUserSave;
+class ModuleDBGameData;
+class ModuleDBSocial;
 
 // Configuracion especifica del DataServer
 struct DataServerConfig : public BaseServerConfig
@@ -50,6 +52,9 @@ public:
 	ModuleDBAuth*		GetModuleDBAuth()				{ return m_pModuleAuth; }
 	ModuleDBUserLoad*	GetModuleDBUserLoad()			{ return m_pModuleUserLoad; }
 	ModuleDBUserSave*	GetModuleDBUserSave()			{ return m_pModuleUserSave; }
+	ModuleDBGameData*	GetModuleDBGameData()			{ return m_pModuleGameData; }
+	ModuleDBSocial*		GetModuleDBSocial()				{ return m_pModuleSocial; }
+	DataSessionManager*	GetDataSessionManager()			{ return m_pDataSessionManager; }
 
 	// Inicializar modulos de DB (llamado despues de OnCreate)
 	bool				InitializeDBModules(const DBConfig& config, int i32PoolSize);
@@ -63,6 +68,8 @@ private:
 	ModuleDBAuth*			m_pModuleAuth;
 	ModuleDBUserLoad*		m_pModuleUserLoad;
 	ModuleDBUserSave*		m_pModuleUserSave;
+	ModuleDBGameData*		m_pModuleGameData;
+	ModuleDBSocial*			m_pModuleSocial;
 };
 
 extern DataServerContext* g_pDataServerContext;

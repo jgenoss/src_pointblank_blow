@@ -36,6 +36,24 @@ public:
 	void				SendBattleEndNotify(BattleResult* pResult);
 	void				SendPlayerMigrateAck(int64_t i64UID, int i32Result);
 
+	// Battle live event senders (direct to GameServer, replaces CastServer)
+	void				SendKillNotify(int i32RoomIdx, int i32ChannelNum,
+									   uint8_t ui8RoundNum,
+									   const IS_BATTLE_KILL_INFO* pKills, uint8_t ui8KillCount);
+	void				SendRoundStartNotify(int i32RoomIdx, int i32ChannelNum,
+											  uint8_t ui8RoundNum, uint8_t ui8GameMode);
+	void				SendRoundEndNotify(int i32RoomIdx, int i32ChannelNum,
+											uint8_t ui8RoundNum, uint8_t ui8EndType,
+											uint8_t ui8WinTeam,
+											int i32RedScore, int i32BlueScore);
+	void				SendHackNotify(int i32RoomIdx, int i32ChannelNum,
+										uint32_t ui32SlotIdx, int64_t i64UID,
+										uint8_t ui8HackType, uint8_t ui8Severity,
+										const char* pszDescription);
+	void				SendMissionNotify(int i32RoomIdx, int i32ChannelNum,
+										   uint8_t ui8EventType, uint32_t ui32SlotIdx,
+										   int64_t i64UID, int32_t i32Param1, int32_t i32Param2);
+
 private:
 	// Packet handlers
 	void				OnHeartbeatReq(char* pData, INT32 i32Size);

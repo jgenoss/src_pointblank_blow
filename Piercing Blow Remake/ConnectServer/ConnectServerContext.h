@@ -7,6 +7,56 @@
 
 class ConnectSessionManager;
 class GameServerRegistry;
+class ModuleDataClient;
+
+// Server-wide packet/byte statistics with thread-safe counters
+struct ConnectServerStatistics
+{
+	volatile LONG64		l64TotalPacketsIn;
+	volatile LONG64		l64TotalPacketsOut;
+	volatile LONG64		l64TotalBytesIn;
+	volatile LONG64		l64TotalBytesOut;
+	volatile LONG		lActiveAuths;
+	volatile LONG		lPeakActiveAuths;
+	DWORD				dwStartTime;
+	DWORD				dwLastLogTime;
+
+	void Reset()
+	{
+		l64TotalPacketsIn = 0;
+		l64TotalPacketsOut = 0;
+		l64TotalBytesIn = 0;
+		l64TotalBytesOut = 0;
+		lActiveAuths = 0;
+		lPeakActiveAuths = 0;
+		dwStartTime = GetTickCount();
+		dwLastLogTime = dwStartTime;
+	}
+
+	void IncrementPacketsIn()					{ InterlockedIncrement64(&l64TotalPacketsIn); }
+	void IncrementPacketsOut()					{ InterlockedIncrement64(&l64TotalPacketsOut); }
+	void AddBytesIn(LONG64 bytes)				{ InterlockedExchangeAdd64(&l64TotalBytesIn, bytes); }
+	void AddBytesOut(LONG64 bytes)				{ InterlockedExchangeAdd64(&l64TotalBytesOut, bytes); }
+
+	LONG BeginAuth()
+	{
+		LONG val = InterlockedIncrement(&lActiveAuths);
+		// Update peak via CAS loop
+		LONG peak = lPeakActiveAuths;
+		while (val > peak) {
+			LONG old = InterlockedCompareExchange(&lPeakActiveAuths, val, peak);
+			if (old == peak) break;
+			peak = old;
+		}
+		return val;
+	}
+
+	void EndAuth()								{ InterlockedDecrement(&lActiveAuths); }
+
+	void LogStatistics();
+};
+
+extern ConnectServerStatistics* g_pConnectStats;
 
 // Configuracion especifica del ConnectServer
 struct ConnectServerConfig : public BaseServerConfig
@@ -50,11 +100,43 @@ public:
 	ConnectSessionManager*	GetSessionManager()			{ return m_pConnectSessionManager; }
 	GameServerRegistry*		GetRegistry()				{ return m_pRegistry; }
 	ServerList*				GetServerList()				{ return &m_ServerList; }
+	ModuleDataClient*		GetModuleDataClient()		{ return m_pModuleDataClient; }
+
+	// Initialize inter-server modules
+	bool					InitializeModules(const char* pszDataServerIP, uint16_t ui16DataServerPort);
+
+	// Statistics
+	struct ServerStats {
+		volatile LONG lTotalAuths;
+		volatile LONG lSuccessfulAuths;
+		volatile LONG lFailedAuths;
+		volatile LONG lServerSelections;
+		DWORD dwStartTime;
+		DWORD dwLastStatsLog;
+
+		void Reset() {
+			lTotalAuths = lSuccessfulAuths = lFailedAuths = lServerSelections = 0;
+			dwStartTime = GetTickCount();
+			dwLastStatsLog = dwStartTime;
+		}
+	};
+	ServerStats m_Stats;
+
+	void IncrementAuthTotal()		{ InterlockedIncrement(&m_Stats.lTotalAuths); }
+	void IncrementAuthSuccess()		{ InterlockedIncrement(&m_Stats.lSuccessfulAuths); }
+	void IncrementAuthFailed()		{ InterlockedIncrement(&m_Stats.lFailedAuths); }
+	void IncrementServerSelections(){ InterlockedIncrement(&m_Stats.lServerSelections); }
+	void LogStatsPeriodic();
+
+	// Server-wide I/O statistics
+	ConnectServerStatistics			m_Statistics;
+	ConnectServerStatistics*		GetStatistics()		{ return &m_Statistics; }
 
 private:
 	ConnectSessionManager*	m_pConnectSessionManager;
 	GameServerRegistry*		m_pRegistry;
 	ServerList				m_ServerList;
+	ModuleDataClient*		m_pModuleDataClient;
 };
 
 extern ConnectServerContext* g_pConnectServerContext;

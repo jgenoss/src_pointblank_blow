@@ -24,6 +24,16 @@ void BattleMember::Init()
 	m_i32Headshots		= 0;
 	m_bAlive			= false;
 	m_dwLastPacketTime	= 0;
+
+	// Character state
+	m_fPos[0] = m_fPos[1] = m_fPos[2] = 0.0f;
+	m_fRot[0] = m_fRot[1] = m_fRot[2] = 0.0f;
+	m_i32HP				= 100;
+	m_i32MaxHP			= 100;
+	m_dwLastPosUpdate	= 0;
+	m_dwDeathTime		= 0;
+	m_i32RespawnCount	= 0;
+	m_ui32WeaponID		= 0;
 }
 
 bool BattleMember::Join(int64_t i64UID, uint32_t ui32IP, uint16_t ui16Port, int i32Team, int i32Slot)
@@ -68,4 +78,62 @@ void BattleMember::FillPlayerResult(BattlePlayerResult* pResult) const
 	pResult->i32Deaths		= m_i32Deaths;
 	pResult->i32Headshots	= m_i32Headshots;
 	pResult->i32Team		= m_i32Team;
+}
+
+// ============================================================================
+// Character State (Phase 11)
+// ============================================================================
+
+void BattleMember::SetPosition(float x, float y, float z)
+{
+	m_fPos[0] = x;
+	m_fPos[1] = y;
+	m_fPos[2] = z;
+	m_dwLastPosUpdate = GetTickCount();
+}
+
+void BattleMember::SetRotation(float rx, float ry, float rz)
+{
+	m_fRot[0] = rx;
+	m_fRot[1] = ry;
+	m_fRot[2] = rz;
+}
+
+void BattleMember::ApplyDamage(int dmg)
+{
+	if (!m_bAlive || dmg <= 0)
+		return;
+
+	m_i32HP -= dmg;
+	if (m_i32HP <= 0)
+	{
+		m_i32HP = 0;
+		OnDeath();
+	}
+}
+
+void BattleMember::OnDeath()
+{
+	m_bAlive = false;
+	m_eState = BATTLE_MEMBER_DEAD;
+	m_dwDeathTime = GetTickCount();
+	m_i32Deaths++;
+}
+
+void BattleMember::OnRespawn(const float* spawnPos)
+{
+	m_bAlive = true;
+	m_eState = BATTLE_MEMBER_PLAYING;
+	m_i32HP = m_i32MaxHP;
+	m_i32RespawnCount++;
+	m_dwDeathTime = 0;
+
+	if (spawnPos)
+	{
+		m_fPos[0] = spawnPos[0];
+		m_fPos[1] = spawnPos[1];
+		m_fPos[2] = spawnPos[2];
+	}
+
+	m_dwLastPosUpdate = GetTickCount();
 }

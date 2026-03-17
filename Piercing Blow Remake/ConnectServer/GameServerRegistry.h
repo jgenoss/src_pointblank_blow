@@ -2,6 +2,7 @@
 #define __GAMESERVERREGISTRY_H__
 
 #pragma once
+#include <windows.h>
 #include "ServerInfo.h"
 #include "ServerList.h"
 
@@ -33,8 +34,15 @@ public:
 	const ServerInfo*	GetFirstAvailableServer() const;
 	const ServerInfo*	GetLeastLoadedServer() const;
 
+	// Session mapping (ConnectSession index that owns this GameServer connection)
+	void				SetServerSessionIdx(int serverId, int sessionIdx);
+	int					GetServerSessionIdx(int serverId) const;
+
 	// Mantenimiento (llamar desde OnUpdate)
 	void				Update();
+
+	// Statistics
+	void				GetStats(LONG* pRegs, LONG* pUnregs, LONG* pHeartbeats, LONG* pDeadRemoved) const;
 
 private:
 	void				RemoveDeadServers();
@@ -42,6 +50,41 @@ private:
 private:
 	ServerList			m_ServerList;
 	DWORD				m_dwLastHeartbeat[MAX_REGISTERED_SERVERS];		// Ultimo heartbeat por server ID slot
+	int					m_i32SessionIdx[MAX_REGISTERED_SERVERS];		// ConnectSession index per server
+
+	// Thread safety
+	mutable CRITICAL_SECTION	m_csRegistry;
+
+	// Statistics counters
+	volatile LONG		m_lTotalRegistrations;
+	volatile LONG		m_lTotalUnregistrations;
+	volatile LONG		m_lTotalHeartbeats;
+	volatile LONG		m_lTotalDeadRemoved;
+	volatile LONG		m_lTotalConnections;
+	volatile LONG		m_lTotalAuths;
+	volatile LONG		m_lAuthFailures;
+	volatile LONG		m_lPeakServers;
+
+public:
+	// Extended statistics
+	struct RegistryStatistics
+	{
+		LONG lRegistrations;
+		LONG lUnregistrations;
+		LONG lHeartbeats;
+		LONG lDeadRemoved;
+		LONG lTotalConnections;
+		LONG lTotalAuths;
+		LONG lAuthFailures;
+		LONG lPeakServers;
+		int  iCurrentServers;
+		int  iOnlineServers;
+	};
+
+	void				GetStatistics(RegistryStatistics* pOut) const;
+	void				IncrementConnections()		{ InterlockedIncrement(&m_lTotalConnections); }
+	void				IncrementAuths()			{ InterlockedIncrement(&m_lTotalAuths); }
+	void				IncrementAuthFailures()		{ InterlockedIncrement(&m_lAuthFailures); }
 };
 
 #endif // __GAMESERVERREGISTRY_H__

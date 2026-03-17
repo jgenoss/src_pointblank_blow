@@ -33,4 +33,6 @@ private:
 	BattleSession*		m_pSessions;
 };
 
+extern BattleSessionManager* g_pBattleSessionManager;
+
 #endif // __BATTLESESSIONMANAGER_H__

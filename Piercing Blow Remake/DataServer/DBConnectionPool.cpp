@@ -324,9 +324,13 @@ DBConnectionPool::DBConnectionPool()
 	: m_i32PoolSize(0)
 	, m_i32ActiveCount(0)
 	, m_bInitialized(false)
+	, m_hAvailableSemaphore(NULL)
+	, m_lTotalAcquires(0)
+	, m_lTotalWaits(0)
+	, m_lPeakActive(0)
 {
 	memset(m_bAvailable, 0, sizeof(m_bAvailable));
-	InitializeCriticalSection(&m_CritSection);
+	InitializeCriticalSectionAndSpinCount(&m_CritSection, 4000);
 }
 
 DBConnectionPool::~DBConnectionPool()
@@ -370,6 +374,13 @@ bool DBConnectionPool::Initialize(const DBConfig& config, int i32PoolSize)
 		return false;
 	}
 
+	// Create semaphore for blocking waits (initial count = connected, max = pool size)
+	m_hAvailableSemaphore = CreateSemaphore(NULL, i32Connected, i32PoolSize, NULL);
+	if (!m_hAvailableSemaphore)
+	{
+		printf("[DBConnectionPool] WARNING: Failed to create availability semaphore\n");
+	}
+
 	printf("[DBConnectionPool] Pool ready: %d/%d connections established\n",
 		i32Connected, i32PoolSize);
 
@@ -395,7 +406,14 @@ void DBConnectionPool::Shutdown()
 
 	LeaveCriticalSection(&m_CritSection);
 
-	printf("[DBConnectionPool] Shutdown complete\n");
+	if (m_hAvailableSemaphore)
+	{
+		CloseHandle(m_hAvailableSemaphore);
+		m_hAvailableSemaphore = NULL;
+	}
+
+	printf("[DBConnectionPool] Shutdown complete (total acquires=%ld, waits=%ld, peak=%ld)\n",
+		m_lTotalAcquires, m_lTotalWaits, m_lPeakActive);
 }
 
 DBConnection* DBConnectionPool::AcquireConnection()
@@ -415,6 +433,15 @@ DBConnection* DBConnectionPool::AcquireConnection()
 
 			m_bAvailable[i] = false;
 			++m_i32ActiveCount;
+			InterlockedIncrement(&m_lTotalAcquires);
+			// Track peak active
+			LONG peak = m_lPeakActive;
+			while (m_i32ActiveCount > peak)
+			{
+				if (InterlockedCompareExchange(&m_lPeakActive, m_i32ActiveCount, peak) == peak)
+					break;
+				peak = m_lPeakActive;
+			}
 			LeaveCriticalSection(&m_CritSection);
 			return &m_Connections[i];
 		}
@@ -441,4 +468,32 @@ void DBConnectionPool::ReleaseConnection(DBConnection* pConn)
 	}
 
 	LeaveCriticalSection(&m_CritSection);
+
+	// Signal waiting threads that a connection is available
+	if (m_hAvailableSemaphore)
+		ReleaseSemaphore(m_hAvailableSemaphore, 1, NULL);
+}
+
+DBConnection* DBConnectionPool::AcquireConnectionWait(DWORD dwTimeoutMs)
+{
+	// First try non-blocking acquire
+	DBConnection* pConn = AcquireConnection();
+	if (pConn)
+		return pConn;
+
+	// Wait for a connection to become available
+	InterlockedIncrement(&m_lTotalWaits);
+
+	if (!m_hAvailableSemaphore)
+		return nullptr;
+
+	DWORD dwResult = WaitForSingleObject(m_hAvailableSemaphore, dwTimeoutMs);
+	if (dwResult != WAIT_OBJECT_0)
+	{
+		printf("[DBConnectionPool] WARNING: AcquireConnectionWait timed out after %ldms\n", dwTimeoutMs);
+		return nullptr;
+	}
+
+	// Try again after semaphore signaled
+	return AcquireConnection();
 }

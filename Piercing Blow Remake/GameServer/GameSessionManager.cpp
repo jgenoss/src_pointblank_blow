@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "GameSessionManager.h"
 #include "GameSession.h"
+#include "GameProtocol.h"
 #include "GameContextMain.h"
 
 #define SESSION_CHECK_COUNT		300		// Check N sessions per update
@@ -14,8 +15,10 @@ GameSessionManager::GameSessionManager()
 	, m_pLobbyUserList(nullptr)
 	, m_pcsLobbyUser(nullptr)
 	, m_ui32ChannelCount(0)
-	, m_i32ActiveCount(0)
-	, m_i32SessionCheckIdx(0)
+	, m_lActiveCount(0)
+	, m_lPeakActive(0)
+	, m_lTotalConnections(0)
+	, m_lSessionCheckIdx(0)
 	, m_dwLastTimeoutCheck(0)
 {
 }
@@ -104,7 +107,17 @@ BOOL GameSessionManager::OnDestroy()
 
 ULONG_PTR GameSessionManager::ConnectSession_v(SOCKET Socket, struct sockaddr_in* pAddr)
 {
-	m_i32ActiveCount++;
+	LONG newVal = InterlockedIncrement(&m_lActiveCount);
+	InterlockedIncrement(&m_lTotalConnections);
+
+	// Peak tracking (lock-free compare-and-swap)
+	LONG peak = m_lPeakActive;
+	while (newVal > peak) {
+		LONG old = InterlockedCompareExchange(&m_lPeakActive, newVal, peak);
+		if (old == peak) break;
+		peak = old;
+	}
+
 	return i3NetworkSessionManager::ConnectSession_v(Socket, pAddr);
 }
 
@@ -205,7 +218,7 @@ void GameSessionManager::OnSendLobbyChatting(GameSession* pSender, char* pMessag
 	int offset = 0;
 
 	uint16_t size = 0;
-	uint16_t proto = 0x0507;	// PROTOCOL_LOBBY_CHAT_ACK
+	uint16_t proto = PROTOCOL_LOBBY_CHATTING_ACK;
 	offset += sizeof(uint16_t);
 	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
 
@@ -254,6 +267,52 @@ void GameSessionManager::OnSendChannelUser(int i32ChannelNum, i3NetworkPacket* p
 	m_pcsChannelUser[i32ChannelNum]->Unlock();
 }
 
+void GameSessionManager::BroadcastToChannel(int i32ChannelNum, i3NetworkPacket* pPacket)
+{
+	OnSendChannelUser(i32ChannelNum, pPacket);
+}
+
+void GameSessionManager::BroadcastToAll(i3NetworkPacket* pPacket)
+{
+	if (!g_pContextMain || !pPacket)
+		return;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		GameSession* pSession = &m_pSessions[i];
+		if (pSession->GetTask() >= GAME_TASK_CHANNEL)
+			pSession->SendMessage(pPacket);
+	}
+}
+
+void GameSessionManager::BroadcastAnnounce(const char* pszMessage, uint16_t ui16MsgLen)
+{
+	if (!pszMessage || ui16MsgLen == 0)
+		return;
+
+	i3NetworkPacket packet;
+	char buffer[512];
+	int offset = 0;
+
+	uint16_t size = 0;
+	uint16_t proto = PROTOCOL_SERVER_MESSAGE_ANNOUNCE;
+	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));	offset += sizeof(uint16_t);
+
+	uint16_t copyLen = (ui16MsgLen > 480) ? 480 : ui16MsgLen;
+	memcpy(buffer + offset, &copyLen, sizeof(uint16_t));	offset += sizeof(uint16_t);
+	memcpy(buffer + offset, pszMessage, copyLen);			offset += copyLen;
+
+	size = (uint16_t)offset;
+	memcpy(buffer, &size, sizeof(uint16_t));
+
+	packet.SetPacketData(buffer, offset);
+	BroadcastToAll(&packet);
+
+	printf("[SessionManager] Server announce broadcast - Len=%d\n", ui16MsgLen);
+}
+
 void GameSessionManager::CheckTimeouts()
 {
 	if (!g_pContextMain)
@@ -262,9 +321,10 @@ void GameSessionManager::CheckTimeouts()
 	int sessionCount = g_pContextMain->m_i32SessionCount;
 	int checkCount = min(SESSION_CHECK_COUNT, sessionCount);
 
+	LONG baseIdx = m_lSessionCheckIdx;
 	for (int i = 0; i < checkCount; i++)
 	{
-		int idx = (m_i32SessionCheckIdx + i) % sessionCount;
+		int idx = (baseIdx + i) % sessionCount;
 		GameSession* pSession = &m_pSessions[idx];
 
 		if (pSession->GetTask() != GAME_TASK_NONE && pSession->IsTimedOut())
@@ -274,9 +334,38 @@ void GameSessionManager::CheckTimeouts()
 
 			// Disconnect timed out session
 			pSession->OnDisconnect(TRUE);
-			m_i32ActiveCount--;
+			InterlockedDecrement(&m_lActiveCount);
 		}
 	}
 
-	m_i32SessionCheckIdx = (m_i32SessionCheckIdx + checkCount) % sessionCount;
+	InterlockedExchange(&m_lSessionCheckIdx, (baseIdx + checkCount) % sessionCount);
+}
+
+GameSession* GameSessionManager::FindSessionByUID(int64_t i64UID)
+{
+	if (!g_pContextMain || i64UID == 0)
+		return nullptr;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		if (m_pSessions[i].GetTask() > GAME_TASK_NONE && m_pSessions[i].GetUID() == i64UID)
+			return &m_pSessions[i];
+	}
+	return nullptr;
+}
+
+GameSession* GameSessionManager::FindSessionByNickname(const char* szNickname)
+{
+	if (!g_pContextMain || !szNickname || szNickname[0] == '\0')
+		return nullptr;
+
+	int sessionCount = g_pContextMain->m_i32SessionCount;
+	for (int i = 0; i < sessionCount; i++)
+	{
+		if (m_pSessions[i].GetTask() > GAME_TASK_NONE &&
+			_stricmp(m_pSessions[i].GetNickname(), szNickname) == 0)
+			return &m_pSessions[i];
+	}
+	return nullptr;
 }

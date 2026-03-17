@@ -126,10 +126,18 @@ public:
 	DBConnection*	AcquireConnection();
 	void			ReleaseConnection(DBConnection* pConn);
 
+	// Blocking acquire (waits for available connection with timeout)
+	DBConnection*	AcquireConnectionWait(DWORD dwTimeoutMs = 5000);
+
 	// Estado
 	int				GetPoolSize() const				{ return m_i32PoolSize; }
 	int				GetActiveCount() const			{ return m_i32ActiveCount; }
 	bool			IsInitialized() const			{ return m_bInitialized; }
+
+	// Thread-safe statistics
+	volatile LONG	m_lTotalAcquires;
+	volatile LONG	m_lTotalWaits;
+	volatile LONG	m_lPeakActive;
 
 private:
 	DBConnection	m_Connections[MAX_DB_CONNECTIONS];
@@ -139,8 +147,11 @@ private:
 	bool			m_bInitialized;
 	DBConfig		m_Config;
 
-	// Mutex para thread-safety
+	// Mutex para thread-safety (with spin count for high-contention scenarios)
 	CRITICAL_SECTION	m_CritSection;
+
+	// Semaphore for blocking wait when pool exhausted
+	HANDLE				m_hAvailableSemaphore;
 };
 
 #endif // __DBCONNECTIONPOOL_H__

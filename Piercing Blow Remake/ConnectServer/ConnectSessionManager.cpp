@@ -9,6 +9,10 @@ I3_CLASS_INSTANCE(ConnectSessionManager, i3NetworkSessionManager);
 ConnectSessionManager::ConnectSessionManager()
 	: m_pSessions(nullptr)
 	, m_dwLastTimeoutCheck(0)
+	, m_lActiveCount(0)
+	, m_lTotalConnections(0)
+	, m_lTotalTimeouts(0)
+	, m_lPeakActive(0)
 {
 }
 
@@ -68,7 +72,21 @@ BOOL ConnectSessionManager::OnDestroy()
 
 ULONG_PTR ConnectSessionManager::ConnectSession_v(SOCKET Socket, struct sockaddr_in* pAddr)
 {
-	return i3NetworkSessionManager::ConnectSession(Socket, pAddr);
+	ULONG_PTR result = i3NetworkSessionManager::ConnectSession(Socket, pAddr);
+
+	LONG newVal = InterlockedIncrement(&m_lActiveCount);
+
+	// Update peak via CAS loop
+	LONG peak = m_lPeakActive;
+	while (newVal > peak) {
+		LONG old = InterlockedCompareExchange(&m_lPeakActive, newVal, peak);
+		if (old == peak) break;
+		peak = old;
+	}
+
+	InterlockedIncrement(&m_lTotalConnections);
+
+	return result;
 }
 
 ConnectSession* ConnectSessionManager::GetSession(int i32Idx)
@@ -87,6 +105,8 @@ void ConnectSessionManager::CheckTimeouts()
 		{
 			printf("[ConnectSessionManager] Session %d timed out\n", i);
 			DisConnectSession(pSession, FALSE);
+			InterlockedDecrement(&m_lActiveCount);
+			InterlockedIncrement(&m_lTotalTimeouts);
 		}
 	}
 }

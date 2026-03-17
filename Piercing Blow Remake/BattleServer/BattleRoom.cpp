@@ -1,5 +1,11 @@
 #include "pch.h"
 #include "BattleRoom.h"
+#include "CollisionSystem.h"
+#include "GameObjectManager.h"
+#include "HitValidator.h"
+#include "RespawnManager.h"
+#include "MapManager.h"
+#include "ConfigXML.h"
 
 I3_CLASS_INSTANCE(BattleRoom);
 
@@ -31,7 +37,39 @@ void BattleRoom::Reset()
 	m_i32OwnerSessionIdx	= -1;
 
 	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
+	{
 		m_Members[i].Init();
+		m_Characters[i].Reset();
+	}
+
+	// Reset weapon managers
+	m_ThrowWeaponMgr.Reset();
+	m_DroppedWeaponMgr.Reset(0.0f);
+
+	// Cleanup physics/objects
+	if (m_pCollision)
+	{
+		m_pCollision->Shutdown();
+		delete m_pCollision;
+		m_pCollision = nullptr;
+	}
+	if (m_pObjectManager)
+	{
+		m_pObjectManager->Shutdown();
+		delete m_pObjectManager;
+		m_pObjectManager = nullptr;
+	}
+	if (m_pHitValidator)
+	{
+		delete m_pHitValidator;
+		m_pHitValidator = nullptr;
+	}
+	if (m_pRespawnManager)
+	{
+		delete m_pRespawnManager;
+		m_pRespawnManager = nullptr;
+	}
+	m_pMapData = nullptr;	// Not owned
 }
 
 bool BattleRoom::Create(IS_BATTLE_CREATE_REQ* pReq, int i32RoomIdx, uint16_t ui16UdpPort, int i32SessionIdx)
@@ -55,6 +93,44 @@ bool BattleRoom::Create(IS_BATTLE_CREATE_REQ* pReq, int i32RoomIdx, uint16_t ui1
 	DWORD dwNow = GetTickCount();
 	m_dwCreateTime			= dwNow;
 	m_dwLastActivityTime	= dwNow;
+
+	// Initialize physics and game objects from map data
+	if (g_pMapManager)
+	{
+		m_pMapData = g_pMapManager->GetMapData(m_ui8MapIndex);
+		if (m_pMapData && m_pMapData->IsLoaded())
+		{
+			// Initialize collision system
+			if (m_pMapData->GetCollisionTriangleCount() > 0)
+			{
+				m_pCollision = new CollisionSystem();
+				m_pCollision->Initialize(m_pMapData->GetCollisionTriangles(),
+										 m_pMapData->GetCollisionTriangleCount());
+			}
+
+			// Initialize game objects
+			if (m_pMapData->GetGameObjectCount() > 0)
+			{
+				m_pObjectManager = new GameObjectManager();
+				m_pObjectManager->Initialize(m_pMapData);
+			}
+
+			// Initialize hit validator
+			m_pHitValidator = new HitValidator();
+			m_pHitValidator->SetCollisionSystem(m_pCollision);
+			if (g_pConfigXML)
+				m_pHitValidator->SetConfigXML(g_pConfigXML);
+
+			// Initialize respawn manager
+			m_pRespawnManager = new RespawnManager();
+
+			printf("[BattleRoom] Room %d physics: Collision=%s, Objects=%d, Respawns=%d\n",
+				i32RoomIdx,
+				m_pCollision ? "YES" : "NO",
+				m_pMapData->GetGameObjectCount(),
+				m_pMapData->GetRespawnObjectCount());
+		}
+	}
 
 	printf("[BattleRoom] Created room %d - GameMode=%d, Map=%d, MaxPlayers=%d, UdpPort=%d\n",
 		i32RoomIdx, m_ui8GameMode, m_ui8MapIndex, m_ui8MaxPlayers, m_ui16UdpPort);
@@ -100,6 +176,16 @@ void BattleRoom::RemoveMember(int i32Slot)
 	{
 		EndBattle(-1);	// Draw
 	}
+}
+
+int BattleRoom::FindFreeSlot() const
+{
+	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
+	{
+		if (!m_Members[i].IsMember())
+			return i;
+	}
+	return -1;
 }
 
 int BattleRoom::GetActiveMemberCount() const
@@ -164,6 +250,20 @@ bool BattleRoom::ShouldDestroy() const
 	return false;
 }
 
+GameCharacter* BattleRoom::GetCharacter(uint32_t ui32Slot)
+{
+	if (ui32Slot >= BATTLE_SLOT_MAX)
+		return nullptr;
+	return &m_Characters[ui32Slot];
+}
+
+const GameCharacter* BattleRoom::GetCharacter(uint32_t ui32Slot) const
+{
+	if (ui32Slot >= BATTLE_SLOT_MAX)
+		return nullptr;
+	return &m_Characters[ui32Slot];
+}
+
 void BattleRoom::StartBattle()
 {
 	if (m_eState != BATTLE_ROOM_READY)
@@ -173,13 +273,19 @@ void BattleRoom::StartBattle()
 	m_dwBattleStartTime = GetTickCount();
 	m_dwLastActivityTime = GetTickCount();
 
-	// Set all joined members to PLAYING
+	// Set all joined members to PLAYING and initialize characters
 	for (int i = 0; i < BATTLE_SLOT_MAX; i++)
 	{
 		if (m_Members[i].IsMember() && m_Members[i].GetState() == BATTLE_MEMBER_JOINED)
 		{
 			m_Members[i].SetState(BATTLE_MEMBER_PLAYING);
 			m_Members[i].SetAlive(true);
+
+			// Initialize character state
+			m_Characters[i].ResetBattleInfo();
+			m_Characters[i].SetAlive(true);
+			m_Characters[i].SetMaxHP(100);
+			m_Characters[i].InitBullets();
 		}
 	}
 
@@ -237,6 +343,10 @@ void BattleRoom::Update()
 			RemoveMember(i);
 		}
 	}
+
+	// Update game objects (weapon box respawns, etc.)
+	if (m_pObjectManager)
+		m_pObjectManager->Update(dwNow);
 }
 
 void BattleRoom::FillBattleResult(BattleResult* pResult) const

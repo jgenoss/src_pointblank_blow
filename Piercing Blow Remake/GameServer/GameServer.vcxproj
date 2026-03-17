@@ -135,14 +135,52 @@
     <ClCompile Include="GameContextMain.cpp" />
     <ClCompile Include="GameServerContext.cpp" />
     <ClCompile Include="GameSession.cpp" />
+    <ClCompile Include="GameSessionChannel.cpp" />
+    <ClCompile Include="GameSessionRoom.cpp" />
+    <ClCompile Include="GameSessionBattle.cpp" />
+    <ClCompile Include="GameSessionEquipment.cpp" />
+    <ClCompile Include="GameSessionInventory.cpp" />
+    <ClCompile Include="GameSessionShop.cpp" />
+    <ClCompile Include="GameSessionSocial.cpp" />
+    <ClCompile Include="GameSessionQuest.cpp" />
+    <ClCompile Include="GameSessionMedal.cpp" />
+    <ClCompile Include="GameSessionEvent.cpp" />
+    <ClCompile Include="GameSessionSkill.cpp" />
+    <ClCompile Include="GameSessionClan.cpp" />
+    <ClCompile Include="GameSessionClanMatch.cpp" />
+    <ClCompile Include="GameSessionClanWar.cpp" />
+    <ClCompile Include="ClanMatchManager.cpp" />
+    <ClCompile Include="..\ServerCommon\ServerLog.cpp" />
+    <ClCompile Include="GameSessionRoulette.cpp" />
+    <ClCompile Include="GameSessionCheat.cpp" />
+    <ClCompile Include="GameSessionGM.cpp" />
     <ClCompile Include="GameSessionManager.cpp" />
     <ClCompile Include="Room.cpp" />
     <ClCompile Include="RoomManager.cpp" />
     <ClCompile Include="ModuleConnectServer.cpp" />
     <ClCompile Include="ModuleDataServer.cpp" />
+    <ClCompile Include="ModuleDataServerGameData.cpp" />
+    <ClCompile Include="ModuleDataServerSocial.cpp" />
+    <ClCompile Include="ModuleDataServerShop.cpp" />
+    <ClCompile Include="ShopManager.cpp" />
+    <ClCompile Include="ModuleBattleServer.cpp" />
+    <ClCompile Include="MedalLoader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
+    <ClInclude Include="GameProtocol.h" />
+    <ClInclude Include="CharacterDef.h" />
+    <ClInclude Include="InventoryDef.h" />
+    <ClInclude Include="QuestDef.h" />
+    <ClInclude Include="MedalDef.h" />
+    <ClInclude Include="EventDef.h" />
+    <ClInclude Include="SkillDef.h" />
+    <ClInclude Include="ClanDef.h" />
+    <ClInclude Include="ClanMatchDef.h" />
+    <ClInclude Include="ClanMatchManager.h" />
+    <ClInclude Include="..\ServerCommon\ServerLog.h" />
+    <ClInclude Include="..\ServerCommon\RingBuffer.h" />
+    <ClInclude Include="RouletteDef.h" />
     <ClInclude Include="GameContextMain.h" />
     <ClInclude Include="GameServerContext.h" />
     <ClInclude Include="GameSession.h" />
@@ -152,6 +190,9 @@
     <ClInclude Include="RoomDef.h" />
     <ClInclude Include="ModuleConnectServer.h" />
     <ClInclude Include="ModuleDataServer.h" />
+    <ClInclude Include="ShopManager.h" />
+    <ClInclude Include="ModuleBattleServer.h" />
+    <ClInclude Include="MedalLoader.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

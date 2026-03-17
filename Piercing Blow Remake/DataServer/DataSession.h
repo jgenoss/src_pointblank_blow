@@ -46,6 +46,43 @@ private:
 	void				OnPlayerCheckNickReq(char* pData, INT32 i32Size);
 	void				OnStatsSaveReq(char* pData, INT32 i32Size);
 
+	// Game data handlers
+	void				OnEquipmentSaveReq(char* pData, INT32 i32Size);
+	void				OnMedalSaveReq(char* pData, INT32 i32Size);
+	void				OnAttendanceSaveReq(char* pData, INT32 i32Size);
+	void				OnSkillSaveReq(char* pData, INT32 i32Size);
+	void				OnQuestSaveReq(char* pData, INT32 i32Size);
+
+	// Social handlers
+	void				OnClanCreateReq(char* pData, INT32 i32Size);
+	void				OnClanDisbandReq(char* pData, INT32 i32Size);
+	void				OnClanJoinReq(char* pData, INT32 i32Size);
+	void				OnClanLeaveReq(char* pData, INT32 i32Size);
+	void				OnFriendAddReq(char* pData, INT32 i32Size);
+	void				OnFriendRemoveReq(char* pData, INT32 i32Size);
+	void				OnFriendListReq(char* pData, INT32 i32Size);
+	void				OnBlockAddReq(char* pData, INT32 i32Size);
+	void				OnBlockRemoveReq(char* pData, INT32 i32Size);
+	void				OnBlockListReq(char* pData, INT32 i32Size);
+
+	// Shop
+	void				OnShopListReq(char* pData, INT32 i32Size);
+	void				OnShopBuyReq(char* pData, INT32 i32Size);
+
+	// Inventory
+	void				OnInvenUpdateReq(char* pData, INT32 i32Size);
+
+	// Clan load
+	void				OnClanLoadReq(char* pData, INT32 i32Size);
+
+	// Notes/Mail
+	void				OnNoteSendReq(char* pData, INT32 i32Size);
+	void				OnNoteListReq(char* pData, INT32 i32Size);
+	void				OnNoteDeleteReq(char* pData, INT32 i32Size);
+
+	// Ban
+	void				OnPlayerBanReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void				SendHeartbeatAck();
 

@@ -47,6 +47,31 @@ public:
 	// Fill result
 	void			FillPlayerResult(BattlePlayerResult* pResult) const;
 
+	// ===== Character State (Phase 11: Physics/Collision) =====
+
+	// Position tracking
+	const float*	GetPosition() const					{ return m_fPos; }
+	void			SetPosition(float x, float y, float z);
+	void			SetRotation(float rx, float ry, float rz);
+	DWORD			GetLastPosUpdateTime() const		{ return m_dwLastPosUpdate; }
+
+	// HP tracking
+	int				GetHP() const						{ return m_i32HP; }
+	int				GetMaxHP() const					{ return m_i32MaxHP; }
+	void			SetHP(int hp)						{ m_i32HP = hp; }
+	void			SetMaxHP(int maxHP)					{ m_i32MaxHP = maxHP; m_i32HP = maxHP; }
+	void			ApplyDamage(int dmg);
+
+	// Death/Respawn
+	void			OnDeath();
+	void			OnRespawn(const float* spawnPos);
+	DWORD			GetDeathTime() const				{ return m_dwDeathTime; }
+	int				GetRespawnCount() const				{ return m_i32RespawnCount; }
+
+	// Weapon tracking
+	uint32_t		GetWeaponID() const					{ return m_ui32WeaponID; }
+	void			SetWeaponID(uint32_t id)			{ m_ui32WeaponID = id; }
+
 private:
 	bool				m_bActive;
 	BattleMemberState	m_eState;
@@ -64,6 +89,16 @@ private:
 	// State
 	bool				m_bAlive;
 	DWORD				m_dwLastPacketTime;
+
+	// ===== Character State (Phase 11) =====
+	float				m_fPos[3];				// Last known position (x,y,z)
+	float				m_fRot[3];				// Rotation (rx,ry,rz)
+	int					m_i32HP;				// Current HP
+	int					m_i32MaxHP;				// Max HP
+	DWORD				m_dwLastPosUpdate;		// Tick of last position update
+	DWORD				m_dwDeathTime;			// When died (for respawn timer)
+	int					m_i32RespawnCount;		// Times respawned this round
+	uint32_t			m_ui32WeaponID;			// Current weapon ItemID
 };
 
 #endif // __BATTLEMEMBER_H__

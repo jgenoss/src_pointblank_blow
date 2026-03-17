@@ -25,6 +25,9 @@
 // Flag global para control del loop principal
 static volatile bool g_bRunning = true;
 
+// Public IP for UDP relay (read from config, used by BattleSession)
+char g_szBattlePublicIP[MAX_SERVER_IP_LENGTH] = {};
+
 // Handler de Ctrl+C para shutdown limpio
 void SignalHandler(int signal)
 {
@@ -75,6 +78,9 @@ int main(int argc, char* argv[])
 		WSACleanup();
 		return 1;
 	}
+
+	// Copy public IP to global for BattleSession to use
+	strncpy_s(g_szBattlePublicIP, server.GetBattleConfig().szPublicIP, _TRUNCATE);
 
 	// Inicializar UDP relay
 	UdpRelay* pUdpRelay = new UdpRelay();

@@ -2,6 +2,7 @@
 #include "RoomManager.h"
 #include "Room.h"
 #include "GameSession.h"
+#include "GameProtocol.h"
 #include "GameContextMain.h"
 
 I3_CLASS_INSTANCE(RoomManager);
@@ -20,7 +21,7 @@ RoomManager::RoomManager()
 	, m_pRoomInfoIdx1(nullptr)
 	, m_pRoomCount1(nullptr)
 	, m_pChangeRoomListTime(nullptr)
-	, m_i32UseRoomCount(0)
+	, m_lUseRoomCount(0)
 {
 }
 
@@ -81,21 +82,36 @@ void RoomManager::OnCreate()
 
 void RoomManager::OnUpdate()
 {
-	// Update room count stats
+	DWORD dwNow = GetTickCount();
+
+	// Update room count stats and battle timers
 	int totalRooms = 0;
 	for (uint32_t ch = 0; ch < m_ui32ChannelCount; ch++)
 	{
-		totalRooms += m_pChannelRoomList[ch]->GetCount();
+		int roomCount = m_pChannelRoomList[ch]->GetCount();
+		totalRooms += roomCount;
+
+		// Update room state machines for active rooms
+		m_pcsChannelRoom[ch]->Lock();
+		i3ListNode* pNode = m_pChannelRoomList[ch]->Begin();
+		while (pNode)
+		{
+			Room* pRoom = (Room*)pNode->pData;
+			i3ListNode* pNext = pNode->pNext;	// Cache next before potential removal
+			if (pRoom && pRoom->IsCreated())
+				pRoom->OnUpdateRoom(dwNow);
+			pNode = pNext;
+		}
+		m_pcsChannelRoom[ch]->Unlock();
 
 		// Periodic double-buffer update
-		DWORD dwNow = GetTickCount();
 		if (dwNow - m_pChangeRoomListTime[ch] > 1000)	// Update every 1 second
 		{
 			UpdateRoomInfo(ch);
 			m_pChangeRoomListTime[ch] = dwNow;
 		}
 	}
-	m_i32UseRoomCount = totalRooms;
+	InterlockedExchange(&m_lUseRoomCount, totalRooms);
 }
 
 void RoomManager::OnDestroy()
@@ -267,6 +283,133 @@ int RoomManager::OnQuickJoinRoom(GameSession* pSession, int i32ChannelNum)
 	return -1;
 }
 
+RoomManager::QuickJoinResult RoomManager::SearchQuickJoinRoom(uint32_t ui32StageId, int i32CurrentChannel)
+{
+	QuickJoinResult result;
+
+	// Extract game mode from stage ID (if encoded)
+	// Stage ID format can vary - try matching both exact stage ID and game mode
+	uint8_t targetMode = 0;
+	if (ui32StageId > 0 && ui32StageId < STAGE_MODE_MAX)
+		targetMode = (uint8_t)ui32StageId;
+
+	// Search current channel first, then other channels
+	int searchOrder[GAME_CHANNEL_COUNT];
+	int searchCount = 0;
+
+	// Current channel first
+	if (i32CurrentChannel >= 0 && i32CurrentChannel < (int)m_ui32ChannelCount)
+		searchOrder[searchCount++] = i32CurrentChannel;
+
+	// Then other channels
+	for (int i = 0; i < (int)m_ui32ChannelCount && searchCount < GAME_CHANNEL_COUNT; i++)
+	{
+		if (i != i32CurrentChannel)
+			searchOrder[searchCount++] = i;
+	}
+
+	Room* pBestRoom = nullptr;
+	int bestChannel = -1;
+	int bestRoomIdx = -1;
+	int bestScore = -1;		// Higher is better
+
+	Room* pFallbackRoom = nullptr;
+	int fallbackChannel = -1;
+	int fallbackRoomIdx = -1;
+	int fallbackScore = -1;
+
+	for (int s = 0; s < searchCount; s++)
+	{
+		int ch = searchOrder[s];
+		m_pcsChannelRoom[ch]->Lock();
+
+		for (int i = 0; i < (int)m_ui32EachChannelMaxCount; i++)
+		{
+			Room* pRoom = (Room*)m_pChannelResRoomList[ch]->GetItem(i);
+			if (!pRoom || !pRoom->IsCreated())
+				continue;
+
+			// Skip full rooms
+			if (pRoom->GetPlayerCount() >= pRoom->GetMaxPlayers())
+				continue;
+
+			// Skip password-protected rooms
+			if (pRoom->HasPassword())
+				continue;
+
+			// Skip rooms in battle (unless inter-enter allowed)
+			if (pRoom->GetRoomState() != ROOM_STATE_READY)
+			{
+				if (!(pRoom->GetInfoFlag() & ROOM_INFO_FLAG_INTER_ENTER))
+					continue;
+			}
+
+			// Calculate match score
+			int score = 0;
+
+			// Perfect game mode match
+			bool modeMatch = false;
+			if (targetMode > 0 && pRoom->GetGameMode() == targetMode)
+			{
+				modeMatch = true;
+				score += 100;
+			}
+
+			// Prefer rooms with more players (more fun)
+			score += pRoom->GetPlayerCount() * 5;
+
+			// Prefer same channel (no channel switch needed)
+			if (ch == i32CurrentChannel)
+				score += 20;
+
+			// Prefer rooms in READY state
+			if (pRoom->GetRoomState() == ROOM_STATE_READY)
+				score += 10;
+
+			if (modeMatch || targetMode == 0)
+			{
+				// Perfect or no-filter match
+				if (score > bestScore)
+				{
+					pBestRoom = pRoom;
+					bestChannel = ch;
+					bestRoomIdx = i;
+					bestScore = score;
+				}
+			}
+			else
+			{
+				// Fallback: any joinable room
+				if (score > fallbackScore)
+				{
+					pFallbackRoom = pRoom;
+					fallbackChannel = ch;
+					fallbackRoomIdx = i;
+					fallbackScore = score;
+				}
+			}
+		}
+
+		m_pcsChannelRoom[ch]->Unlock();
+	}
+
+	if (pBestRoom)
+	{
+		result.bFound = true;
+		result.i32ChannelIdx = bestChannel;
+		result.i32RoomIdx = bestRoomIdx;
+	}
+
+	if (pFallbackRoom)
+	{
+		result.bHasFallback = true;
+		result.i32FallbackChannelIdx = fallbackChannel;
+		result.i32FallbackRoomIdx = fallbackRoomIdx;
+	}
+
+	return result;
+}
+
 Room* RoomManager::GetRoom(int i32ChannelNum, int i32Idx)
 {
 	if (i32ChannelNum < 0 || i32ChannelNum >= (int)m_ui32ChannelCount)
@@ -303,17 +446,17 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 	uint32_t count = (side == 0) ? m_pRoomCount0[i32Channel] : m_pRoomCount1[i32Channel];
 
 	// Build room list packet
-	// For now just send room count - full packet building requires S2MO structures
 	i3NetworkPacket packet;
-
-	// Header: protocol + room count
-	uint16_t protocolId = 0x0800;	// PROTOCOL_LOBBY_GET_ROOMLIST_ACK placeholder
-	uint32_t roomCount = count;
-
 	char buffer[4096];
 	int offset = 0;
-	memcpy(buffer + offset, &protocolId, sizeof(uint16_t));		offset += sizeof(uint16_t);
-	memcpy(buffer + offset, &roomCount, sizeof(uint32_t));		offset += sizeof(uint32_t);
+
+	uint16_t sz = 0;
+	uint16_t proto = PROTOCOL_LOBBY_GET_ROOMLIST_ACK;
+	offset += sizeof(uint16_t);	// Reserve space for size
+	memcpy(buffer + offset, &proto, sizeof(uint16_t));		offset += sizeof(uint16_t);
+
+	uint32_t roomCount = count;
+	memcpy(buffer + offset, &roomCount, sizeof(uint32_t));	offset += sizeof(uint32_t);
 
 	// Serialize each room's basic info
 	for (uint32_t i = 0; i < count && i < 10; i++)	// Max 10 rooms per page (SEND_MAX_ROOM_COUNT)
@@ -327,6 +470,9 @@ void RoomManager::OnSendRoomList(GameSession* pSession, int i32Channel)
 			offset += roomInfoSize;
 		}
 	}
+
+	sz = (uint16_t)offset;
+	memcpy(buffer, &sz, sizeof(uint16_t));
 
 	packet.SetPacketData(buffer, offset);
 	pSession->SendMessage(&packet);
@@ -354,5 +500,5 @@ void RoomManager::UpdateRoomInfo(int i32ChannelNum)
 	*pWriteCount = count;
 
 	// Atomic swap
-	m_InfoSide[i32ChannelNum] = writeSide;
+	InterlockedExchange((volatile LONG*)&m_InfoSide[i32ChannelNum], writeSide);
 }

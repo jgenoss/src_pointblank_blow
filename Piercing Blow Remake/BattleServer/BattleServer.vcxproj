@@ -139,6 +139,23 @@
     <ClCompile Include="BattleSessionManager.cpp" />
     <ClCompile Include="BattleServerContext.cpp" />
     <ClCompile Include="UdpRelay.cpp" />
+    <ClCompile Include="MapData.cpp" />
+    <ClCompile Include="MapManager.cpp" />
+    <ClCompile Include="CollisionSystem.cpp" />
+    <ClCompile Include="ConfigXML.cpp" />
+    <ClCompile Include="RespawnManager.cpp" />
+    <ClCompile Include="HitValidator.cpp" />
+    <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameObjectManager.cpp" />
+    <ClCompile Include="WeaponSystem.cpp" />
+    <ClCompile Include="SpeedState.cpp" />
+    <ClCompile Include="GameCharacter.cpp" />
+    <ClCompile Include="HMSParser.cpp" />
+    <ClCompile Include="UDPChecker.cpp" />
+    <ClCompile Include="ServerStatistics.cpp" />
+    <ClCompile Include="TaskProcessor.cpp" />
+    <ClCompile Include="PacketQueue.cpp" />
+    <ClCompile Include="UdpBufferPool.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="pch.h" />
@@ -150,6 +167,23 @@
     <ClInclude Include="BattleSessionManager.h" />
     <ClInclude Include="BattleServerContext.h" />
     <ClInclude Include="UdpRelay.h" />
+    <ClInclude Include="MapData.h" />
+    <ClInclude Include="MapManager.h" />
+    <ClInclude Include="CollisionSystem.h" />
+    <ClInclude Include="ConfigXML.h" />
+    <ClInclude Include="RespawnManager.h" />
+    <ClInclude Include="HitValidator.h" />
+    <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameObjectManager.h" />
+    <ClInclude Include="WeaponSystem.h" />
+    <ClInclude Include="SpeedState.h" />
+    <ClInclude Include="GameCharacter.h" />
+    <ClInclude Include="HMSParser.h" />
+    <ClInclude Include="UDPChecker.h" />
+    <ClInclude Include="ServerStatistics.h" />
+    <ClInclude Include="TaskProcessor.h" />
+    <ClInclude Include="PacketQueue.h" />
+    <ClInclude Include="UdpBufferPool.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config.ini" />

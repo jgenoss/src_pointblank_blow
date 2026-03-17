@@ -5,7 +5,13 @@
 #include "RoomManager.h"
 #include "ModuleConnectServer.h"
 #include "ModuleDataServer.h"
+#include "ModuleBattleServer.h"
+#include "ClanDef.h"
+#include "ClanMatchManager.h"
+#include "RouletteDef.h"
+#include "ShopManager.h"
 #include "i3IniParser.h"
+#include "ServerLog.h"
 
 // ============================================================================
 // GameServerContext
@@ -14,6 +20,12 @@
 I3_CLASS_INSTANCE(GameServerContext);
 
 GameServerContext* g_pGameServerContext = nullptr;
+GameServer* g_pGameServer = nullptr;
+GameSessionManager* g_pGameSessionManager = nullptr;
+GameClanManager* g_pClanManager = nullptr;
+GameRouletteData* g_pRouletteData = nullptr;
+ModuleDataServer* g_pModuleDataServer = nullptr;
+ModuleBattleServer* g_pModuleBattleServer = nullptr;
 
 GameServerContext::GameServerContext()
 	: m_pGameSessionManager(nullptr)
@@ -37,8 +49,9 @@ BOOL GameServerContext::OnCreate(UINT8 SocketCount, UINT32* pAddress, UINT16* pP
 	m_pRoomManager->OnCreate();
 	g_pRoomManager = m_pRoomManager;
 
-	// Set global
+	// Set globals
 	g_pGameServerContext = this;
+	g_pGameSessionManager = m_pGameSessionManager;
 
 	BOOL result = i3NetworkServerContext::OnCreate(SocketCount, pAddress, pPort,
 												   pTimeOut, WorkCount, pSessionManager);
@@ -58,6 +71,10 @@ void GameServerContext::OnUpdate(INT32 Command)
 	// Update context main
 	if (g_pContextMain)
 		g_pContextMain->OnUpdate();
+
+	// Update clan match manager (cleanup stale teams)
+	if (g_pClanMatchManager)
+		g_pClanMatchManager->Update();
 }
 
 BOOL GameServerContext::OnDestroy()
@@ -71,6 +88,7 @@ BOOL GameServerContext::OnDestroy()
 	}
 
 	g_pGameServerContext = nullptr;
+	g_pGameSessionManager = nullptr;
 
 	return i3NetworkServerContext::OnDestroy();
 }
@@ -83,6 +101,7 @@ GameServer::GameServer()
 	: m_pGameContext(nullptr)
 	, m_pModuleConnect(nullptr)
 	, m_pModuleData(nullptr)
+	, m_pModuleBattle(nullptr)
 {
 }
 
@@ -130,6 +149,15 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 	strncpy_s(m_GameConfig.szDataServerIP, pszDSIP, _TRUNCATE);
 	m_GameConfig.ui16DataServerPort = (uint16_t)ini.GetInt("DataServer", "Port", 40100);
 
+	// [BattleServer] section
+	const char* pszBSIP = ini.GetString("BattleServer", "IP", "127.0.0.1");
+	strncpy_s(m_GameConfig.szBattleServerIP, pszBSIP, _TRUNCATE);
+	m_GameConfig.ui16BattleServerPort = (uint16_t)ini.GetInt("BattleServer", "Port", 40200);
+
+	// [Ports] section - Client P2P and public ports
+	m_GameConfig.ui16UdpClientPort = (uint16_t)ini.GetInt("Ports", "UdpClientPort", 29890);
+	m_GameConfig.ui16Port0 = (uint16_t)ini.GetInt("Ports", "Port0", 39190);
+
 	// Copy base config
 	m_Config = m_GameConfig;
 
@@ -145,6 +173,7 @@ bool GameServer::OnLoadConfig(const char* pszConfigPath)
 		m_GameConfig.ui16MaxRoomsPerChannel);
 	printf("  ConnectServer: %s:%d\n", m_GameConfig.szConnectServerIP, m_GameConfig.ui16ConnectServerPort);
 	printf("  DataServer: %s:%d\n", m_GameConfig.szDataServerIP, m_GameConfig.ui16DataServerPort);
+	printf("  BattleServer: %s:%d\n", m_GameConfig.szBattleServerIP, m_GameConfig.ui16BattleServerPort);
 
 	return true;
 }
@@ -160,6 +189,34 @@ bool GameServer::OnInitialize()
 	pCtxMain->m_ui16MaxUsersPerChannel = m_GameConfig.ui16MaxUsersPerChannel;
 	pCtxMain->m_ui16MaxRoomsPerChannel = m_GameConfig.ui16MaxRoomsPerChannel;
 
+	// Load Economy config
+	{
+		i3IniParser ini;
+		if (ini.Load("config.ini"))
+		{
+			pCtxMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
+			pCtxMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
+			pCtxMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
+			pCtxMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
+			pCtxMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
+			pCtxMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
+			pCtxMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
+			pCtxMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+
+			pCtxMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
+			pCtxMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
+			pCtxMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
+			pCtxMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+
+			printf("[GameServer] Economy config: KillGP=%d, WinGP=%d, LoseGP=%d, StartGP=%d\n",
+				pCtxMain->m_i32KillGPReward, pCtxMain->m_i32WinGPReward,
+				pCtxMain->m_i32LoseGPReward, pCtxMain->m_i32StartingGP);
+			printf("[GameServer] Battle config: TimeLimit=%d, MaxRound=%d, MinPlayers=%d\n",
+				pCtxMain->m_i32DefaultTimeLimit, pCtxMain->m_i32DefaultMaxRound,
+				pCtxMain->m_i32MinPlayersToStart);
+		}
+	}
+
 	if (!pCtxMain->Create())
 	{
 		delete pCtxMain;
@@ -167,6 +224,24 @@ bool GameServer::OnInitialize()
 	}
 
 	g_pContextMain = pCtxMain;
+
+	// Initialize persistent logging
+	ServerLog::GetInstance()->Initialize(m_GameConfig.szServerName, "logs");
+	SLOG_INFO("GameServer initializing - Id=%d, Name=%s",
+		m_GameConfig.i32ServerId, m_GameConfig.szServerName);
+
+	// Create shop manager
+	g_pShopManager = new ShopManager();
+
+	// Create clan manager
+	g_pClanManager = new GameClanManager();
+
+	// Create clan match manager
+	g_pClanMatchManager = new ClanMatchManager();
+
+	// Create roulette data with defaults
+	g_pRouletteData = new GameRouletteData();
+	g_pRouletteData->InitDefaults();
 
 	printf("[GameServer] Initialized successfully\n");
 	return true;
@@ -203,6 +278,43 @@ void GameServer::OnShutdown()
 		m_pModuleData->Destroy();
 		delete m_pModuleData;
 		m_pModuleData = nullptr;
+		g_pModuleDataServer = nullptr;
+	}
+
+	if (m_pModuleBattle)
+	{
+		m_pModuleBattle->Destroy();
+		delete m_pModuleBattle;
+		m_pModuleBattle = nullptr;
+		g_pModuleBattleServer = nullptr;
+	}
+
+	// Cleanup shop manager
+	if (g_pShopManager)
+	{
+		delete g_pShopManager;
+		g_pShopManager = nullptr;
+	}
+
+	// Cleanup roulette data
+	if (g_pRouletteData)
+	{
+		delete g_pRouletteData;
+		g_pRouletteData = nullptr;
+	}
+
+	// Cleanup clan match manager
+	if (g_pClanMatchManager)
+	{
+		delete g_pClanMatchManager;
+		g_pClanMatchManager = nullptr;
+	}
+
+	// Cleanup clan manager
+	if (g_pClanManager)
+	{
+		delete g_pClanManager;
+		g_pClanManager = nullptr;
 	}
 
 	// Cleanup global context
@@ -211,6 +323,9 @@ void GameServer::OnShutdown()
 		delete g_pContextMain;
 		g_pContextMain = nullptr;
 	}
+
+	SLOG_INFO("GameServer shutdown complete");
+	ServerLog::GetInstance()->Shutdown();
 
 	printf("[GameServer] Shutdown complete\n");
 }
@@ -243,6 +358,62 @@ bool GameServer::InitializeModules()
 	{
 		printf("[GameServer] WARNING: ModuleDataServer initialization failed\n");
 	}
+	g_pModuleDataServer = m_pModuleData;
+
+	// Initialize ModuleBattleServer
+	m_pModuleBattle = new ModuleBattleServer();
+	if (!m_pModuleBattle->Initialize("ModuleBattleServer",
+		m_GameConfig.szBattleServerIP, m_GameConfig.ui16BattleServerPort,
+		m_GameConfig.i32WorkerThreadCount))
+	{
+		printf("[GameServer] WARNING: ModuleBattleServer initialization failed\n");
+	}
+	else
+	{
+		m_pModuleBattle->SetServerInfo(
+			m_GameConfig.i32ServerId,
+			m_GameConfig.szServerName,
+			m_GameConfig.szPublicIP,
+			m_GameConfig.ui16PublicPort,
+			m_GameConfig.i32MaxSessions);
+	}
+	g_pModuleBattleServer = m_pModuleBattle;
+
+	return true;
+}
+
+bool GameServer::ReloadEconomyConfig()
+{
+	if (!g_pContextMain)
+		return false;
+
+	i3IniParser ini;
+	if (!ini.Load("config.ini"))
+	{
+		printf("[GameServer] ReloadConfig: Cannot load config.ini\n");
+		return false;
+	}
+
+	// Reload economy
+	g_pContextMain->m_i32KillGPReward = ini.GetInt("Economy", "KillGPReward", 50);
+	g_pContextMain->m_i32WinGPReward = ini.GetInt("Economy", "WinGPReward", 200);
+	g_pContextMain->m_i32LoseGPReward = ini.GetInt("Economy", "LoseGPReward", 50);
+	g_pContextMain->m_i32KillExpReward = ini.GetInt("Economy", "KillExpReward", 100);
+	g_pContextMain->m_i32WinExpReward = ini.GetInt("Economy", "WinExpReward", 500);
+	g_pContextMain->m_i32LoseExpReward = ini.GetInt("Economy", "LoseExpReward", 100);
+	g_pContextMain->m_i32StartingGP = ini.GetInt("Economy", "StartingGP", 10000);
+	g_pContextMain->m_i32StartingCash = ini.GetInt("Economy", "StartingCash", 0);
+
+	// Reload battle config
+	g_pContextMain->m_i32DefaultTimeLimit = ini.GetInt("Battle", "DefaultTimeLimit", 300);
+	g_pContextMain->m_i32DefaultMaxRound = ini.GetInt("Battle", "DefaultMaxRound", 7);
+	g_pContextMain->m_i32MinPlayersToStart = ini.GetInt("Battle", "MinPlayersToStart", 1);
+	g_pContextMain->m_i32AFKTimeout = ini.GetInt("Battle", "AFKTimeout", 0);
+
+	printf("[GameServer] Config reloaded: KillGP=%d WinGP=%d LoseGP=%d TimeLimit=%d MaxRound=%d\n",
+		g_pContextMain->m_i32KillGPReward, g_pContextMain->m_i32WinGPReward,
+		g_pContextMain->m_i32LoseGPReward, g_pContextMain->m_i32DefaultTimeLimit,
+		g_pContextMain->m_i32DefaultMaxRound);
 
 	return true;
 }

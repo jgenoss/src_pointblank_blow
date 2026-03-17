@@ -182,7 +182,7 @@ void ModuleConnectServer::OnHeartbeat()
 	IS_HEARTBEAT_REQ req;
 	req.i32ServerId = m_i32ServerId;
 	req.i32ServerType = (int)ServerType::Game;
-	req.i32CurrentPlayers = 0;	// TODO: Get from session manager
+	req.i32CurrentPlayers = g_pGameSessionManager ? g_pGameSessionManager->GetActiveCount() : 0;
 
 	memcpy(buffer + offset, &req, sizeof(req));			offset += sizeof(req);
 

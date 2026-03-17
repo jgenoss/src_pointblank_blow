@@ -5,6 +5,9 @@
 #include "ModuleDBAuth.h"
 #include "ModuleDBUserLoad.h"
 #include "ModuleDBUserSave.h"
+#include "ModuleDBGameData.h"
+#include "ModuleDBSocial.h"
+#include "i3IniParser.h"
 #include <cstdio>
 #include <cstring>
 
@@ -24,6 +27,8 @@ DataServerContext::DataServerContext()
 	, m_pModuleAuth(nullptr)
 	, m_pModuleUserLoad(nullptr)
 	, m_pModuleUserSave(nullptr)
+	, m_pModuleGameData(nullptr)
+	, m_pModuleSocial(nullptr)
 {
 }
 
@@ -56,15 +61,21 @@ bool DataServerContext::InitializeDBModules(const DBConfig& config, int i32PoolS
 		return false;
 	}
 
-	// Crear TaskProcessor
-	m_pTaskProcessor = new TaskProcessor(this);
-
-	// Crear modulos de DB
+	// Crear modulos de DB (must be created before TaskProcessor since workers use them)
 	m_pModuleAuth = new ModuleDBAuth(m_pDBPool);
 	m_pModuleUserLoad = new ModuleDBUserLoad(m_pDBPool);
 	m_pModuleUserSave = new ModuleDBUserSave(m_pDBPool);
+	m_pModuleGameData = new ModuleDBGameData(m_pDBPool);
+	m_pModuleSocial = new ModuleDBSocial(m_pDBPool);
 
-	printf("[DataServerContext] DB modules initialized\n");
+	// Crear TaskProcessor with async worker threads (one worker per DB connection)
+	m_pTaskProcessor = new TaskProcessor(this);
+	if (!m_pTaskProcessor->Initialize(i32PoolSize))
+	{
+		printf("[DataServerContext] WARNING: TaskProcessor async workers failed, falling back to sync\n");
+	}
+
+	printf("[DataServerContext] DB modules initialized (5 modules, %d async workers)\n", i32PoolSize);
 	return true;
 }
 
@@ -77,11 +88,17 @@ void DataServerContext::OnUpdate(INT32 Command)
 		m_pModuleUserLoad->ProcessResponses(this);
 	if (m_pModuleUserSave)
 		m_pModuleUserSave->ProcessResponses(this);
+	if (m_pModuleGameData)
+		m_pModuleGameData->ProcessResponses(this);
+	if (m_pModuleSocial)
+		m_pModuleSocial->ProcessResponses(this);
 }
 
 BOOL DataServerContext::OnDestroy()
 {
 	// Destruir modulos
+	if (m_pModuleSocial)	{ delete m_pModuleSocial; m_pModuleSocial = nullptr; }
+	if (m_pModuleGameData)	{ delete m_pModuleGameData; m_pModuleGameData = nullptr; }
 	if (m_pModuleUserSave)	{ delete m_pModuleUserSave; m_pModuleUserSave = nullptr; }
 	if (m_pModuleUserLoad)	{ delete m_pModuleUserLoad; m_pModuleUserLoad = nullptr; }
 	if (m_pModuleAuth)		{ delete m_pModuleAuth; m_pModuleAuth = nullptr; }
@@ -115,14 +132,13 @@ DataServer::~DataServer()
 
 bool DataServer::OnLoadConfig(const char* pszConfigPath)
 {
-	// TODO: Cargar desde archivo INI real
+	// Defaults
 	strcpy(m_DataConfig.szBindIP, "0.0.0.0");
 	m_DataConfig.ui16BindPort			= 40100;
-	m_DataConfig.i32MaxSessions			= 32;		// Solo servidores se conectan, no clientes
+	m_DataConfig.i32MaxSessions			= 32;
 	m_DataConfig.i32WorkerThreadCount	= 4;
 	m_DataConfig.ui8SocketTimeout		= 60;
 
-	// PostgreSQL config
 	strcpy(m_DataConfig.dbConfig.szHost, "127.0.0.1");
 	m_DataConfig.dbConfig.ui16Port		= 5432;
 	strcpy(m_DataConfig.dbConfig.szDatabase, "piercing_blow");
@@ -130,10 +146,42 @@ bool DataServer::OnLoadConfig(const char* pszConfigPath)
 	strcpy(m_DataConfig.dbConfig.szPassword, "pb_password");
 	m_DataConfig.i32DBPoolSize			= 8;
 
+	// Load from INI file (override defaults)
+	i3IniParser ini;
+	if (ini.Load(pszConfigPath))
+	{
+		const char* pszBindIP = ini.GetString("DataServer", "BindIP", "0.0.0.0");
+		strncpy_s(m_DataConfig.szBindIP, pszBindIP, _TRUNCATE);
+		m_DataConfig.ui16BindPort		= (uint16_t)ini.GetInt("DataServer", "BindPort", 40100);
+		m_DataConfig.i32MaxSessions		= ini.GetInt("DataServer", "MaxSessions", 32);
+		m_DataConfig.i32WorkerThreadCount = ini.GetInt("DataServer", "WorkerThreads", 4);
+		m_DataConfig.ui8SocketTimeout	= (uint8_t)ini.GetInt("DataServer", "SocketTimeout", 60);
+
+		const char* pszDBHost = ini.GetString("Database", "Host", "127.0.0.1");
+		strncpy_s(m_DataConfig.dbConfig.szHost, pszDBHost, _TRUNCATE);
+		m_DataConfig.dbConfig.ui16Port	= (uint16_t)ini.GetInt("Database", "Port", 5432);
+
+		const char* pszDBName = ini.GetString("Database", "Database", "piercing_blow");
+		strncpy_s(m_DataConfig.dbConfig.szDatabase, pszDBName, _TRUNCATE);
+
+		const char* pszDBUser = ini.GetString("Database", "User", "pb_server");
+		strncpy_s(m_DataConfig.dbConfig.szUser, pszDBUser, _TRUNCATE);
+
+		const char* pszDBPass = ini.GetString("Database", "Password", "pb_password");
+		strncpy_s(m_DataConfig.dbConfig.szPassword, pszDBPass, _TRUNCATE);
+
+		m_DataConfig.i32DBPoolSize		= ini.GetInt("Database", "PoolSize", 8);
+	}
+	else
+	{
+		printf("[DataServer] WARNING: Cannot load config '%s', using defaults\n", pszConfigPath);
+	}
+
 	m_Config = m_DataConfig;
 
-	printf("[DataServer] Config loaded: Port=%d, DB=%s@%s:%d/%s, Pool=%d\n",
-		m_DataConfig.ui16BindPort,
+	printf("[DataServer] Config loaded: Bind=%s:%d, MaxSessions=%d\n",
+		m_DataConfig.szBindIP, m_DataConfig.ui16BindPort, m_DataConfig.i32MaxSessions);
+	printf("  DB: %s@%s:%d/%s, Pool=%d\n",
 		m_DataConfig.dbConfig.szUser,
 		m_DataConfig.dbConfig.szHost,
 		m_DataConfig.dbConfig.ui16Port,
