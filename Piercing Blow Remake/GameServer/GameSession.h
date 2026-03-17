@@ -330,6 +330,12 @@ private:
 	void			OnRoomGetUserEquipmentReq(char* pData, INT32 i32Size);
 	void			OnRoomInviteLobbyUserReq(char* pData, INT32 i32Size);
 	void			OnRoomChangeObserverSlotReq(char* pData, INT32 i32Size);
+
+	// Observer spectator handlers (GameSessionObserver.cpp)
+	void			OnObserverViewModeReq(char* pData, INT32 i32Size);
+	void			OnObserverFollowPlayerReq(char* pData, INT32 i32Size);
+	void			OnObserverScoreboardReq(char* pData, INT32 i32Size);
+
 	void			OnRoomLoadingStartReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoEnterReq(char* pData, INT32 i32Size);
 	void			OnRoomInfoLeaveReq(char* pData, INT32 i32Size);
