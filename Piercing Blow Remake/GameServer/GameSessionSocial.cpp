@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "GameSessionManager.h"
+#include "ModuleDataServer.h"
 
 // ============================================================================
 // Social/Community Handlers (Protocol_Auth 0x0300)
@@ -136,6 +137,13 @@ void GameSession::OnFriendInsertReq(char* pData, INT32 i32Size)
 				pTarget->SendSimpleAck(PROTOCOL_AUTH_FRIEND_INFO_CHANGE_ACK, 0);
 			}
 
+			// Persist to DataServer (both directions)
+			if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+			{
+				g_pModuleDataServer->RequestFriendAdd(m_i64UID, pTarget->GetUID(), GetIndex());
+				g_pModuleDataServer->RequestFriendAdd(pTarget->GetUID(), m_i64UID, pTarget->GetIndex());
+			}
+
 			printf("[GameSession] Friend added - UID=%lld added %s (UID=%lld)\n",
 				m_i64UID, targetNick, pTarget->GetUID());
 		}
@@ -174,6 +182,13 @@ void GameSession::OnFriendDeleteReq(char* pData, INT32 i32Size)
 
 	if (!found)
 		result = 1;	// Friend not found
+
+	// Persist removal to DataServer (both directions)
+	if (found && g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestFriendRemove(m_i64UID, targetUID);
+		g_pModuleDataServer->RequestFriendRemove(targetUID, m_i64UID);
+	}
 
 	// Also remove from their list if online
 	if (found && g_pGameSessionManager)
@@ -309,6 +324,10 @@ void GameSession::OnBlockInsertReq(char* pData, INT32 i32Size)
 			block.i64UID = pTarget->GetUID();
 			strncpy_s(block.szNickname, targetNick, 63);
 			m_i32BlockCount++;
+
+			// Persist to DataServer
+			if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+				g_pModuleDataServer->RequestBlockAdd(m_i64UID, pTarget->GetUID(), GetIndex());
 		}
 	}
 
@@ -343,6 +362,10 @@ void GameSession::OnBlockDeleteReq(char* pData, INT32 i32Size)
 
 	if (!found)
 		result = 1;
+
+	// Persist removal to DataServer
+	if (found && g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+		g_pModuleDataServer->RequestBlockRemove(m_i64UID, targetUID);
 
 	SendSimpleAck(PROTOCOL_AUTH_BLOCK_DELETE_ACK, result);
 }
@@ -469,6 +492,13 @@ void GameSession::OnNoteSendReq(char* pData, INT32 i32Size)
 	{
 		if (!pTarget->ReceiveNote(m_i64UID, m_szNickname, subject, body, 0))
 			result = 4;	// Target mailbox full
+		else
+		{
+			// Persist to DataServer
+			if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+				g_pModuleDataServer->RequestNoteSend(m_i64UID, pTarget->GetUID(), GetIndex(),
+					m_szNickname, subject, body, 0);
+		}
 	}
 
 	SendSimpleAck(PROTOCOL_MESSENGER_NOTE_SEND_ACK, result);
@@ -543,6 +573,11 @@ void GameSession::OnNoteDeleteReq(char* pData, INT32 i32Size)
 			m_i32NoteCount--;
 			m_Notes[m_i32NoteCount].Reset();
 			result = 0;
+
+			// Persist deletion to DataServer
+			if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+				g_pModuleDataServer->RequestNoteDelete(m_i64UID, (int64_t)noteId);
+
 			break;
 		}
 	}

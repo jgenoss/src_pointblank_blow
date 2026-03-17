@@ -75,6 +75,14 @@ private:
 	// Clan load
 	void				OnClanLoadReq(char* pData, INT32 i32Size);
 
+	// Notes/Mail
+	void				OnNoteSendReq(char* pData, INT32 i32Size);
+	void				OnNoteListReq(char* pData, INT32 i32Size);
+	void				OnNoteDeleteReq(char* pData, INT32 i32Size);
+
+	// Ban
+	void				OnPlayerBanReq(char* pData, INT32 i32Size);
+
 	// Helpers
 	void				SendHeartbeatAck();
 

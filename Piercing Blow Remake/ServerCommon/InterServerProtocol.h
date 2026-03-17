@@ -124,6 +124,18 @@ enum Protocol_InterServer_Data
 	// Shop catalog (GameServer -> DataServer)
 	PROTOCOL_IS_SHOP_LIST_REQ,
 	PROTOCOL_IS_SHOP_LIST_ACK,
+
+	// Note/Mail operations (GameServer <-> DataServer)
+	PROTOCOL_IS_NOTE_SEND_REQ,
+	PROTOCOL_IS_NOTE_SEND_ACK,
+	PROTOCOL_IS_NOTE_LIST_REQ,
+	PROTOCOL_IS_NOTE_LIST_ACK,
+	PROTOCOL_IS_NOTE_DELETE_REQ,
+	PROTOCOL_IS_NOTE_DELETE_ACK,
+
+	// Ban operations (GameServer -> DataServer)
+	PROTOCOL_IS_PLAYER_BAN_REQ,
+	PROTOCOL_IS_PLAYER_BAN_ACK,
 };
 
 enum Protocol_InterServer_Battle
@@ -733,6 +745,78 @@ struct IS_BATTLE_PLAYER_RESULT
 	int			i32Deaths;
 	int			i32Headshots;
 	int			i32Team;
+};
+
+// Note/Mail (GameServer <-> DataServer)
+struct IS_NOTE_SEND_REQ
+{
+	int64_t		i64SenderUID;
+	int64_t		i64ReceiverUID;
+	int			i32SessionIdx;
+	char		szSenderNick[64];
+	char		szSubject[64];
+	char		szBody[256];
+	uint8_t		ui8Type;			// 0=normal, 1=system, 2=gift
+};
+
+struct IS_NOTE_SEND_ACK
+{
+	int			i32SessionIdx;
+	int			i32Result;			// 0=OK, 1=target_not_found, 2=mailbox_full, 3=error
+};
+
+struct IS_NOTE_LIST_REQ
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+};
+
+struct IS_NOTE_LIST_ACK
+{
+	int64_t		i64UID;
+	int			i32SessionIdx;
+	int			i32Count;
+	// Followed by IS_NOTE_ENTRY[i32Count]
+};
+
+struct IS_NOTE_ENTRY
+{
+	int64_t		i64NoteId;
+	int64_t		i64SenderUID;
+	char		szSenderNick[64];
+	char		szSubject[64];
+	char		szBody[256];
+	uint32_t	ui32Timestamp;		// Unix timestamp
+	uint8_t		ui8Type;
+	uint8_t		ui8Read;			// 0=unread, 1=read
+};
+
+struct IS_NOTE_DELETE_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64NoteId;
+};
+
+struct IS_NOTE_DELETE_ACK
+{
+	int64_t		i64UID;
+	int64_t		i64NoteId;
+	int			i32Result;
+};
+
+// Player Ban (GameServer -> DataServer)
+struct IS_PLAYER_BAN_REQ
+{
+	int64_t		i64UID;
+	int64_t		i64BannedByUID;
+	int			i32Duration;		// Seconds, 0 = permanent
+	char		szReason[128];
+};
+
+struct IS_PLAYER_BAN_ACK
+{
+	int64_t		i64UID;
+	int			i32Result;			// 0=OK, 1=not_found, 2=error
 };
 
 #pragma pack(pop)

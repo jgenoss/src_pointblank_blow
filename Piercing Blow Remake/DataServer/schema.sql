@@ -342,6 +342,25 @@ INSERT INTO pb_shop_items (goods_id, item_id, item_type, price_gp, price_cash, d
 ON CONFLICT (goods_id) DO NOTHING;
 
 -- ============================================
+-- ============================================
+-- Ban List
+-- ============================================
+CREATE TABLE IF NOT EXISTS pb_ban_list (
+    id              BIGSERIAL       PRIMARY KEY,
+    uid             BIGINT          NOT NULL REFERENCES pb_users(uid),
+    reason          VARCHAR(128)    DEFAULT '',
+    duration        INTEGER         DEFAULT 0,          -- 0 = permanent, >0 = seconds
+    banned_by_uid   BIGINT          DEFAULT 0,
+    created_at      TIMESTAMP       DEFAULT NOW(),
+    expire_at       TIMESTAMP       GENERATED ALWAYS AS (
+        CASE WHEN duration = 0 THEN '2099-12-31'::TIMESTAMP
+             ELSE created_at + (duration || ' seconds')::INTERVAL
+        END
+    ) STORED
+);
+CREATE INDEX IF NOT EXISTS idx_ban_uid ON pb_ban_list(uid);
+
+-- ============================================
 -- Verificar
 -- ============================================
 -- SELECT * FROM pb_users;
@@ -357,3 +376,4 @@ ON CONFLICT (goods_id) DO NOTHING;
 -- SELECT * FROM pb_friends;
 -- SELECT * FROM pb_blocks;
 -- SELECT * FROM pb_notes;
+-- SELECT * FROM pb_ban_list;

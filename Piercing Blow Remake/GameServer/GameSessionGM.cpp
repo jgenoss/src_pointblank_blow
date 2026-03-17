@@ -3,6 +3,7 @@
 #include "GameSessionManager.h"
 #include "GameProtocol.h"
 #include "GameContextMain.h"
+#include "ModuleDataServer.h"
 #include "Room.h"
 #include "RoomManager.h"
 #include "GameServerContext.h"
@@ -350,8 +351,10 @@ void GameSession::OnGMBlockUserReq(char* pData, INT32 i32Size)
 	printf("[GM] Blocking player - GM_UID=%lld, Target_UID=%lld (%s), Duration=%u min, Comment=%s\n",
 		m_i64UID, pTarget->GetUID(), pTarget->GetNickname(), duration, comment);
 
-	// TODO: Persist ban to DataServer (IS_PLAYER_BAN_REQ)
-	// For now, just kick and log
+	// Persist ban to DataServer
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+		g_pModuleDataServer->RequestPlayerBan(pTarget->GetUID(), m_i64UID,
+			(int)(duration * 60), comment);
 
 	// Send ban notification to target
 	{

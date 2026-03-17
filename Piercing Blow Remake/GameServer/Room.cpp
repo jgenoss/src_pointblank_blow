@@ -295,7 +295,7 @@ int Room::OnJoin(GameSession* pSession, int i32Team)
 	m_Slots[slot].ui8Team = (uint8_t)i32Team;
 	m_Slots[slot].i32SessionIdx = pSession->GetIndex();
 	m_Slots[slot].ui8Rank = (uint8_t)pSession->GetRankId();
-	m_Slots[slot].ui32ClanIdx = 0;	// TODO: from session clan info
+	m_Slots[slot].ui32ClanIdx = (uint32_t)pSession->GetClanId();
 	m_pSlotSession[slot] = pSession;
 	m_i32PlayerCount++;
 

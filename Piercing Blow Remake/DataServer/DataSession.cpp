@@ -168,6 +168,22 @@ INT32 DataSession::PacketParsing(char* pPacket, INT32 iSize)
 		OnClanLoadReq(pData, ui16DataSize);
 		break;
 
+	// Notes/Mail
+	case PROTOCOL_IS_NOTE_SEND_REQ:
+		OnNoteSendReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_NOTE_LIST_REQ:
+		OnNoteListReq(pData, ui16DataSize);
+		break;
+	case PROTOCOL_IS_NOTE_DELETE_REQ:
+		OnNoteDeleteReq(pData, ui16DataSize);
+		break;
+
+	// Ban
+	case PROTOCOL_IS_PLAYER_BAN_REQ:
+		OnPlayerBanReq(pData, ui16DataSize);
+		break;
+
 	default:
 		printf("[DataSession:%d] Unknown protocol: 0x%04X\n", m_SessionIdx, protocolID);
 		break;
@@ -727,6 +743,110 @@ void DataSession::OnClanLoadReq(char* pData, INT32 i32Size)
 		packet.WriteData(members, memberCount * sizeof(IS_CLAN_MEMBER_INFO));
 	SendMessage(&packet);
 }
+
+// ============================================================================
+// Note/Mail Handlers
+// ============================================================================
+
+void DataSession::OnNoteSendReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (INT32)sizeof(IS_NOTE_SEND_REQ))
+		return;
+
+	IS_NOTE_SEND_REQ* pReq = (IS_NOTE_SEND_REQ*)pData;
+
+	IS_NOTE_SEND_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i32SessionIdx = pReq->i32SessionIdx;
+
+	if (g_pDataServerContext->GetModuleDBSocial() && g_pDataServerContext->GetModuleDBSocial()->SaveNote(pReq))
+		ack.i32Result = 0;
+	else
+		ack.i32Result = 3;	// DB error
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_NOTE_SEND_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendMessage(&packet);
+}
+
+void DataSession::OnNoteListReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (INT32)sizeof(IS_NOTE_LIST_REQ))
+		return;
+
+	IS_NOTE_LIST_REQ* pReq = (IS_NOTE_LIST_REQ*)pData;
+
+	IS_NOTE_LIST_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i64UID = pReq->i64UID;
+	ack.i32SessionIdx = pReq->i32SessionIdx;
+
+	IS_NOTE_ENTRY entries[50];
+	memset(entries, 0, sizeof(entries));
+	int noteCount = 0;
+
+	if (g_pDataServerContext->GetModuleDBSocial())
+		noteCount = g_pDataServerContext->GetModuleDBSocial()->LoadNotes(pReq->i64UID, entries, 50);
+
+	ack.i32Count = noteCount;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_NOTE_LIST_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	if (noteCount > 0)
+		packet.WriteData(entries, noteCount * sizeof(IS_NOTE_ENTRY));
+	SendMessage(&packet);
+}
+
+void DataSession::OnNoteDeleteReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (INT32)sizeof(IS_NOTE_DELETE_REQ))
+		return;
+
+	IS_NOTE_DELETE_REQ* pReq = (IS_NOTE_DELETE_REQ*)pData;
+
+	IS_NOTE_DELETE_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i64UID = pReq->i64UID;
+	ack.i64NoteId = pReq->i64NoteId;
+
+	if (g_pDataServerContext->GetModuleDBSocial() && g_pDataServerContext->GetModuleDBSocial()->DeleteNote(pReq->i64UID, pReq->i64NoteId))
+		ack.i32Result = 0;
+	else
+		ack.i32Result = 1;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_NOTE_DELETE_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Ban Handler
+// ============================================================================
+
+void DataSession::OnPlayerBanReq(char* pData, INT32 i32Size)
+{
+	if (i32Size < (INT32)sizeof(IS_PLAYER_BAN_REQ))
+		return;
+
+	IS_PLAYER_BAN_REQ* pReq = (IS_PLAYER_BAN_REQ*)pData;
+
+	IS_PLAYER_BAN_ACK ack;
+	memset(&ack, 0, sizeof(ack));
+	ack.i64UID = pReq->i64UID;
+
+	if (g_pDataServerContext->GetModuleDBSocial() && g_pDataServerContext->GetModuleDBSocial()->BanPlayer(pReq))
+		ack.i32Result = 0;
+	else
+		ack.i32Result = 2;
+
+	i3NetworkPacket packet((PROTOCOL)PROTOCOL_IS_PLAYER_BAN_ACK);
+	packet.WriteData(&ack, sizeof(ack));
+	SendMessage(&packet);
+}
+
+// ============================================================================
+// Helpers
+// ============================================================================
 
 void DataSession::SendHeartbeatAck()
 {

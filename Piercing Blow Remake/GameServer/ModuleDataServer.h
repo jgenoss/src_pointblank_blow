@@ -74,6 +74,15 @@ public:
 	// Request operations - Clan Load
 	void		RequestClanLoad(int i32ClanId);
 
+	// Request operations - Notes/Mail
+	void		RequestNoteSend(int64_t i64SenderUID, int64_t i64ReceiverUID, int i32SessionIdx,
+							   const char* senderNick, const char* subject, const char* body, uint8_t type);
+	void		RequestNoteList(int64_t i64UID, int i32SessionIdx);
+	void		RequestNoteDelete(int64_t i64UID, int64_t i64NoteId);
+
+	// Request operations - Ban
+	void		RequestPlayerBan(int64_t i64UID, int64_t i64BannedByUID, int i32Duration, const char* reason);
+
 protected:
 	// ModuleBase overrides
 	virtual bool	OnConnect() override;
@@ -119,6 +128,14 @@ private:
 
 	// Response handlers - Clan Load
 	void		OnClanLoadAck(char* pData, int i32Size);
+
+	// Response handlers - Notes/Mail
+	void		OnNoteSendAck(char* pData, int i32Size);
+	void		OnNoteListAck(char* pData, int i32Size);
+	void		OnNoteDeleteAck(char* pData, int i32Size);
+
+	// Response handlers - Ban
+	void		OnPlayerBanAck(char* pData, int i32Size);
 
 	// Helper: build and send a packet with a struct body
 	void		SendRequest(uint16_t ui16Protocol, const void* pStruct, int i32StructSize);

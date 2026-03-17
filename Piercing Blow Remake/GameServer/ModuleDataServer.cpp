@@ -171,6 +171,14 @@ void ModuleDataServer::OnProcessPacket(char* pData, int i32Size)
 	// Clan load
 	case PROTOCOL_IS_CLAN_LOAD_ACK:			OnClanLoadAck(pPayload, payloadSize);		break;
 
+	// Notes/Mail
+	case PROTOCOL_IS_NOTE_SEND_ACK:			OnNoteSendAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_NOTE_LIST_ACK:			OnNoteListAck(pPayload, payloadSize);		break;
+	case PROTOCOL_IS_NOTE_DELETE_ACK:		OnNoteDeleteAck(pPayload, payloadSize);		break;
+
+	// Ban
+	case PROTOCOL_IS_PLAYER_BAN_ACK:		OnPlayerBanAck(pPayload, payloadSize);		break;
+
 	default:
 		printf("[ModuleDataServer] Unknown protocol 0x%04X\n", protocolId);
 		break;

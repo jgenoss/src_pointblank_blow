@@ -37,6 +37,14 @@ public:
 	bool RemoveBlock(int64_t i64UID, int64_t i64BlockedUID);
 	int  LoadBlockList(int64_t i64UID, IS_BLOCK_ENTRY* pOut, int i32MaxCount);
 
+	// Note/Mail operations
+	bool SaveNote(IS_NOTE_SEND_REQ* pReq);
+	int  LoadNotes(int64_t i64UID, IS_NOTE_ENTRY* pOut, int i32MaxCount);
+	bool DeleteNote(int64_t i64UID, int64_t i64NoteId);
+
+	// Ban operations
+	bool BanPlayer(IS_PLAYER_BAN_REQ* pReq);
+
 	// Placeholder para futuro async
 	void ProcessResponses(DataServerContext* pContext);
 

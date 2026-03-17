@@ -2,6 +2,7 @@
 #include "GameSession.h"
 #include "GameProtocol.h"
 #include "GameSessionManager.h"
+#include "ModuleDataServer.h"
 
 // ============================================================================
 // GM Chat Handlers (Protocol_GMCHAT 0x1A00)
@@ -290,9 +291,11 @@ void GameSession::OnGMChatPenaltyReq(char* pData, INT32 i32Size)
 			}
 			break;
 
-		case 3:	// Ban (TODO: persist in database)
+		case 3:	// Ban
 			printf("[GMChat] GM '%s' banned '%s' for %u minutes: %s\n",
 				m_szNickname, targetNick, duration, reason);
+			if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+				g_pModuleDataServer->RequestPlayerBan(pTarget->GetUID(), m_i64UID, (int)(duration * 60), reason);
 			break;
 
 		default:

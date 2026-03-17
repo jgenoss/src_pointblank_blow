@@ -390,19 +390,41 @@ void GameSession::OnShopGiftReq(char* pData, INT32 i32Size)
 			result = 6;	// Insufficient Cash
 		else
 		{
-			// Find target player online (simplified: search session manager)
-			// For now, just deduct currency - actual delivery needs session lookup
-			if (buyType == 0)
-				m_i32GP -= price;
+			// Find target player online
+			GameSession* pTarget = nullptr;
+			if (g_pGameSessionManager)
+				pTarget = g_pGameSessionManager->FindSessionByNickname(targetNick);
+
+			if (!pTarget)
+			{
+				result = 7;	// Target player offline
+			}
 			else
-				m_i32Cash -= price;
+			{
+				// Deduct currency
+				if (buyType == 0)
+					m_i32GP -= price;
+				else
+					m_i32Cash -= price;
 
-			// TODO: Find target session and add item to their inventory
-			// For now, log the gift attempt
-			printf("[GameSession] Gift - From=%s, To=%s, GoodsId=%u, Price=%d\n",
-				m_szNickname, targetNick, goodsId, price);
+				// Add item to target's inventory
+				GameInventoryItem giftItem;
+				giftItem.Reset();
+				giftItem.ui32ItemId = itemId;
+				giftItem.ui8ItemType = itemType;
+				giftItem.ui32ItemArg = 1;
+				giftItem.ui32Duration = duration;
+				if (pTarget->AddInventoryItem(giftItem) >= 0)
+				{
+					// Send note to target about the gift
+					pTarget->ReceiveNote(m_i64UID, m_szNickname, "Gift", "You received a gift!", 2);
 
-			result = 0;	// Success (item delivery pending)
+					printf("[GameSession] Gift delivered - From=%s, To=%s, GoodsId=%u, ItemId=0x%08X\n",
+						m_szNickname, targetNick, goodsId, itemId);
+				}
+
+				result = 0;	// Success
+			}
 		}
 	}
 

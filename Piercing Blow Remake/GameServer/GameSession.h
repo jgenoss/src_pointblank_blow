@@ -208,6 +208,7 @@ public:
 	void			OnFriendListLoaded(struct IS_FRIEND_ENTRY* pEntries, int i32Count);
 	void			OnBlockAddResult(int64_t i64BlockedUID, int i32Result);
 	void			OnBlockListLoaded(struct IS_BLOCK_ENTRY* pEntries, int i32Count);
+	void			OnNoteListLoaded(struct IS_NOTE_ENTRY* pEntries, int i32Count);
 	void			OnShopBuyResult(uint32_t ui32ItemId, int i32Result, int i32RemainingGP, int i32RemainingCash);
 
 	// Battle results from BattleServer (applied via ModuleBattleServer)

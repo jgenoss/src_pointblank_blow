@@ -2167,6 +2167,14 @@ void GameSession::OnPlayerDataLoaded(const char* pPayload, int i32PayloadSize)
 	m_eMainTask = GAME_TASK_INFO;
 	SendLoginAck(0);
 
+	// Load friend, block, and note lists from DataServer
+	if (g_pModuleDataServer && g_pModuleDataServer->IsConnected())
+	{
+		g_pModuleDataServer->RequestFriendList(m_i64UID, GetIndex());
+		g_pModuleDataServer->RequestBlockList(m_i64UID, GetIndex());
+		g_pModuleDataServer->RequestNoteList(m_i64UID, GetIndex());
+	}
+
 	printf("[GameSession] Player data loaded - UID=%lld, Nick=%s, Level=%d, Items=%d\n",
 		m_i64UID, m_szNickname, m_i32Level, m_i32InventoryCount);
 }
@@ -2350,6 +2358,27 @@ void GameSession::OnBlockListLoaded(IS_BLOCK_ENTRY* pEntries, int i32Count)
 	}
 
 	printf("[GameSession] Block list loaded - UID=%lld, Count=%d\n", m_i64UID, m_i32BlockCount);
+}
+
+void GameSession::OnNoteListLoaded(IS_NOTE_ENTRY* pEntries, int i32Count)
+{
+	m_i32NoteCount = 0;
+
+	for (int i = 0; i < i32Count && i < MAX_NOTE_COUNT; i++)
+	{
+		GameNoteData& note = m_Notes[m_i32NoteCount];
+		note.ui32NoteId = (uint32_t)pEntries[i].i64NoteId;
+		note.i64SenderUID = pEntries[i].i64SenderUID;
+		strncpy_s(note.szSenderNick, pEntries[i].szSenderNick, _TRUNCATE);
+		strncpy_s(note.szSubject, pEntries[i].szSubject, NOTE_SUBJECT_LEN - 1);
+		strncpy_s(note.szBody, pEntries[i].szBody, NOTE_BODY_LEN - 1);
+		note.dwTimestamp = pEntries[i].ui32Timestamp;
+		note.ui8Type = pEntries[i].ui8Type;
+		note.bRead = (pEntries[i].ui8Read != 0);
+		m_i32NoteCount++;
+	}
+
+	printf("[GameSession] Note list loaded - UID=%lld, Count=%d\n", m_i64UID, m_i32NoteCount);
 }
 
 void GameSession::ApplyBattleResult(int i32Kills, int i32Deaths, int i32Headshots, bool bWin)

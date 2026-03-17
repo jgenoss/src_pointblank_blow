@@ -526,6 +526,143 @@ bool ModuleDBSocial::LoadClan(int i32ClanId, IS_CLAN_LOAD_ACK* pOut,
 	return true;
 }
 
+// ============================================================================
+// Note/Mail Operations
+// ============================================================================
+
+bool ModuleDBSocial::SaveNote(IS_NOTE_SEND_REQ* pReq)
+{
+	if (!m_pPool || !pReq)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szSenderUID[32], szReceiverUID[32], szType[8];
+	snprintf(szSenderUID, sizeof(szSenderUID), "%lld", pReq->i64SenderUID);
+	snprintf(szReceiverUID, sizeof(szReceiverUID), "%lld", pReq->i64ReceiverUID);
+	snprintf(szType, sizeof(szType), "%d", pReq->ui8Type);
+
+	const char* params[6] = { szSenderUID, szReceiverUID, pReq->szSenderNick,
+							   pReq->szSubject, pReq->szBody, szType };
+	DBResult result = pConn->ExecuteParams(
+		"INSERT INTO pb_notes (sender_uid, receiver_uid, sender_nick, subject, body, note_type) "
+		"VALUES ($1, $2, $3, $4, $5, $6)",
+		6, params);
+
+	m_pPool->ReleaseConnection(pConn);
+	return result.IsSuccess();
+}
+
+int ModuleDBSocial::LoadNotes(int64_t i64UID, IS_NOTE_ENTRY* pOut, int i32MaxCount)
+{
+	if (!m_pPool || !pOut)
+		return 0;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return 0;
+
+	char szUID[32];
+	snprintf(szUID, sizeof(szUID), "%lld", i64UID);
+
+	const char* params[1] = { szUID };
+	DBResult result = pConn->ExecuteParams(
+		"SELECT id, sender_uid, sender_nick, subject, body, "
+		"EXTRACT(EPOCH FROM created_at)::INTEGER, note_type, is_read "
+		"FROM pb_notes WHERE receiver_uid = $1 "
+		"ORDER BY created_at DESC LIMIT 50",
+		1, params);
+
+	m_pPool->ReleaseConnection(pConn);
+
+	if (!result.IsSuccess())
+		return 0;
+
+	int i32Count = result.GetRowCount();
+	if (i32Count > i32MaxCount)
+		i32Count = i32MaxCount;
+
+	for (int i = 0; i < i32Count; i++)
+	{
+		memset(&pOut[i], 0, sizeof(IS_NOTE_ENTRY));
+		pOut[i].i64NoteId = result.GetInt64(i, 0);
+		pOut[i].i64SenderUID = result.GetInt64(i, 1);
+		const char* pszNick = result.GetString(i, 2);
+		if (pszNick)
+			strncpy(pOut[i].szSenderNick, pszNick, sizeof(pOut[i].szSenderNick) - 1);
+		const char* pszSubject = result.GetString(i, 3);
+		if (pszSubject)
+			strncpy(pOut[i].szSubject, pszSubject, sizeof(pOut[i].szSubject) - 1);
+		const char* pszBody = result.GetString(i, 4);
+		if (pszBody)
+			strncpy(pOut[i].szBody, pszBody, sizeof(pOut[i].szBody) - 1);
+		pOut[i].ui32Timestamp = (uint32_t)result.GetInt32(i, 5);
+		pOut[i].ui8Type = (uint8_t)result.GetInt32(i, 6);
+		pOut[i].ui8Read = result.GetBool(i, 7) ? 1 : 0;
+	}
+
+	return i32Count;
+}
+
+bool ModuleDBSocial::DeleteNote(int64_t i64UID, int64_t i64NoteId)
+{
+	if (!m_pPool)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szUID[32], szNoteId[32];
+	snprintf(szUID, sizeof(szUID), "%lld", i64UID);
+	snprintf(szNoteId, sizeof(szNoteId), "%lld", i64NoteId);
+
+	const char* params[2] = { szNoteId, szUID };
+	DBResult result = pConn->ExecuteParams(
+		"DELETE FROM pb_notes WHERE id = $1 AND receiver_uid = $2",
+		2, params);
+
+	m_pPool->ReleaseConnection(pConn);
+	return result.IsSuccess();
+}
+
+// ============================================================================
+// Ban Operations
+// ============================================================================
+
+bool ModuleDBSocial::BanPlayer(IS_PLAYER_BAN_REQ* pReq)
+{
+	if (!m_pPool || !pReq)
+		return false;
+
+	DBConnection* pConn = m_pPool->AcquireConnection();
+	if (!pConn)
+		return false;
+
+	char szUID[32], szBannedByUID[32], szDuration[32];
+	snprintf(szUID, sizeof(szUID), "%lld", pReq->i64UID);
+	snprintf(szBannedByUID, sizeof(szBannedByUID), "%lld", pReq->i64BannedByUID);
+	snprintf(szDuration, sizeof(szDuration), "%d", pReq->i32Duration);
+
+	// Insert ban record
+	const char* params1[4] = { szUID, pReq->szReason, szDuration, szBannedByUID };
+	pConn->ExecuteParams(
+		"INSERT INTO pb_ban_list (uid, reason, duration, banned_by_uid) "
+		"VALUES ($1, $2, $3, $4)",
+		4, params1);
+
+	// Update user banned flag
+	const char* params2[1] = { szUID };
+	DBResult result = pConn->ExecuteParams(
+		"UPDATE pb_users SET is_banned = TRUE WHERE uid = $1",
+		1, params2);
+
+	m_pPool->ReleaseConnection(pConn);
+	return result.IsSuccess();
+}
+
 void ModuleDBSocial::ProcessResponses(DataServerContext* pContext)
 {
 	// Placeholder para futuro async con ring buffers

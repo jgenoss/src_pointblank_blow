@@ -373,3 +373,121 @@ void ModuleDataServer::OnBlockListAck(char* pData, int i32Size)
 		pSession->OnBlockListLoaded(pEntries, pAck->i32Count);
 	}
 }
+
+// ============================================================================
+// Request operations - Notes/Mail
+// ============================================================================
+
+void ModuleDataServer::RequestNoteSend(int64_t i64SenderUID, int64_t i64ReceiverUID, int i32SessionIdx,
+									   const char* senderNick, const char* subject, const char* body, uint8_t type)
+{
+	IS_NOTE_SEND_REQ req;
+	memset(&req, 0, sizeof(req));
+	req.i64SenderUID = i64SenderUID;
+	req.i64ReceiverUID = i64ReceiverUID;
+	req.i32SessionIdx = i32SessionIdx;
+	if (senderNick)
+		strncpy_s(req.szSenderNick, senderNick, _TRUNCATE);
+	if (subject)
+		strncpy_s(req.szSubject, subject, _TRUNCATE);
+	if (body)
+		strncpy_s(req.szBody, body, _TRUNCATE);
+	req.ui8Type = type;
+	SendRequest(PROTOCOL_IS_NOTE_SEND_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::RequestNoteList(int64_t i64UID, int i32SessionIdx)
+{
+	IS_NOTE_LIST_REQ req;
+	req.i64UID = i64UID;
+	req.i32SessionIdx = i32SessionIdx;
+	SendRequest(PROTOCOL_IS_NOTE_LIST_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::RequestNoteDelete(int64_t i64UID, int64_t i64NoteId)
+{
+	IS_NOTE_DELETE_REQ req;
+	req.i64UID = i64UID;
+	req.i64NoteId = i64NoteId;
+	SendRequest(PROTOCOL_IS_NOTE_DELETE_REQ, &req, sizeof(req));
+}
+
+// ============================================================================
+// Response handlers - Notes/Mail
+// ============================================================================
+
+void ModuleDataServer::OnNoteSendAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_NOTE_SEND_ACK))
+		return;
+
+	IS_NOTE_SEND_ACK* pAck = (IS_NOTE_SEND_ACK*)pData;
+
+	if (pAck->i32Result != 0)
+		printf("[ModuleDataServer] Note send failed - SessionIdx=%d, Result=%d\n",
+			pAck->i32SessionIdx, pAck->i32Result);
+}
+
+void ModuleDataServer::OnNoteListAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_NOTE_LIST_ACK))
+		return;
+
+	IS_NOTE_LIST_ACK* pAck = (IS_NOTE_LIST_ACK*)pData;
+
+	if (!g_pGameServerContext)
+		return;
+
+	GameSessionManager* pMgr = g_pGameServerContext->GetSessionManager();
+	if (!pMgr)
+		return;
+
+	GameSession* pSession = pMgr->GetSession(pAck->i32SessionIdx);
+	if (pSession && pSession->GetUID() == pAck->i64UID)
+	{
+		IS_NOTE_ENTRY* pEntries = nullptr;
+		if (pAck->i32Count > 0)
+			pEntries = (IS_NOTE_ENTRY*)(pData + sizeof(IS_NOTE_LIST_ACK));
+
+		pSession->OnNoteListLoaded(pEntries, pAck->i32Count);
+	}
+}
+
+void ModuleDataServer::OnNoteDeleteAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_NOTE_DELETE_ACK))
+		return;
+
+	IS_NOTE_DELETE_ACK* pAck = (IS_NOTE_DELETE_ACK*)pData;
+
+	if (pAck->i32Result != 0)
+		printf("[ModuleDataServer] Note delete failed - UID=%lld, NoteId=%lld, Result=%d\n",
+			pAck->i64UID, pAck->i64NoteId, pAck->i32Result);
+}
+
+// ============================================================================
+// Request/Response - Ban
+// ============================================================================
+
+void ModuleDataServer::RequestPlayerBan(int64_t i64UID, int64_t i64BannedByUID, int i32Duration, const char* reason)
+{
+	IS_PLAYER_BAN_REQ req;
+	memset(&req, 0, sizeof(req));
+	req.i64UID = i64UID;
+	req.i64BannedByUID = i64BannedByUID;
+	req.i32Duration = i32Duration;
+	if (reason)
+		strncpy_s(req.szReason, reason, _TRUNCATE);
+	SendRequest(PROTOCOL_IS_PLAYER_BAN_REQ, &req, sizeof(req));
+}
+
+void ModuleDataServer::OnPlayerBanAck(char* pData, int i32Size)
+{
+	if (i32Size < (int)sizeof(IS_PLAYER_BAN_ACK))
+		return;
+
+	IS_PLAYER_BAN_ACK* pAck = (IS_PLAYER_BAN_ACK*)pData;
+
+	printf("[ModuleDataServer] Ban result - UID=%lld, Result=%d\n",
+		pAck->i64UID, pAck->i32Result);
+}
