@@ -51,7 +51,7 @@ public:
 	Room*		GetRoom(int i32ChannelNum, int i32Idx);
 	int			GetChannelUseRoomCount(int i32ChannelNum);
 	uint32_t	GetChannelCount() const		{ return m_ui32ChannelCount; }
-	int			GetTotalUseRoomCount() const	{ return m_i32UseRoomCount; }
+	int			GetTotalUseRoomCount() const	{ return (int)m_lUseRoomCount; }
 
 	// Room list for lobby
 	void		OnSendRoomList(GameSession* pSession, int i32Channel);
@@ -81,7 +81,7 @@ private:
 	uint32_t*		m_pChangeRoomListTime;
 
 	// Stats
-	int				m_i32UseRoomCount;
+	volatile LONG	m_lUseRoomCount;
 };
 
 extern RoomManager* g_pRoomManager;

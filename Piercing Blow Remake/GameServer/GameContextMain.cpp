@@ -274,21 +274,35 @@ void GameContextMain::UpdateMetrics()
 {
 	DWORD dwNow = GetTickCount();
 
-	// Gather current state
+	// Gather current state (thread-safe)
 	if (g_pGameSessionManager)
-		m_Metrics.i32CCU = g_pGameSessionManager->GetActiveCount();
+		InterlockedExchange(&m_Metrics.lCCU, g_pGameSessionManager->GetActiveCount());
 
 	if (g_pRoomManager)
-		m_Metrics.i32ActiveRooms = g_pRoomManager->GetTotalUseRoomCount();
+		InterlockedExchange(&m_Metrics.lActiveRooms, g_pRoomManager->GetTotalUseRoomCount());
 
 	if (g_pClanManager)
-		m_Metrics.i32ActiveClans = g_pClanManager->GetActiveClanCount();
+		InterlockedExchange(&m_Metrics.lActiveClans, g_pClanManager->GetActiveClanCount());
 
-	// Update peaks
-	if (m_Metrics.i32CCU > m_Metrics.i32PeakCCU)
-		m_Metrics.i32PeakCCU = m_Metrics.i32CCU;
-	if (m_Metrics.i32ActiveRooms > m_Metrics.i32PeakRooms)
-		m_Metrics.i32PeakRooms = m_Metrics.i32ActiveRooms;
+	// Update peaks (lock-free compare-and-swap)
+	{
+		LONG ccu = m_Metrics.lCCU;
+		LONG peak = m_Metrics.lPeakCCU;
+		while (ccu > peak) {
+			LONG old = InterlockedCompareExchange(&m_Metrics.lPeakCCU, ccu, peak);
+			if (old == peak) break;
+			peak = old;
+		}
+	}
+	{
+		LONG rooms = m_Metrics.lActiveRooms;
+		LONG peak = m_Metrics.lPeakRooms;
+		while (rooms > peak) {
+			LONG old = InterlockedCompareExchange(&m_Metrics.lPeakRooms, rooms, peak);
+			if (old == peak) break;
+			peak = old;
+		}
+	}
 
 	// Log every 60 seconds
 	if (dwNow - m_Metrics.dwLastMetricsLog >= 60000)
@@ -299,13 +313,13 @@ void GameContextMain::UpdateMetrics()
 		int hours = uptimeSec / 3600;
 		int mins = (uptimeSec % 3600) / 60;
 
-		printf("[Metrics] Uptime=%dh%dm | CCU=%d (peak=%d) | Rooms=%d (peak=%d) | "
-			"Clans=%d | Logins=%lld | Battles=%lld | PktIn=%lld PktOut=%lld\n",
+		printf("[Metrics] Uptime=%dh%dm | CCU=%ld (peak=%ld) | Rooms=%ld (peak=%ld) | "
+			"Clans=%ld | Logins=%lld | Battles=%lld | PktIn=%lld PktOut=%lld\n",
 			hours, mins,
-			m_Metrics.i32CCU, m_Metrics.i32PeakCCU,
-			m_Metrics.i32ActiveRooms, m_Metrics.i32PeakRooms,
-			m_Metrics.i32ActiveClans,
-			m_Metrics.i64TotalLogins, m_Metrics.i64TotalBattlesPlayed,
-			m_Metrics.i64TotalPacketsIn, m_Metrics.i64TotalPacketsOut);
+			m_Metrics.lCCU, m_Metrics.lPeakCCU,
+			m_Metrics.lActiveRooms, m_Metrics.lPeakRooms,
+			m_Metrics.lActiveClans,
+			m_Metrics.l64TotalLogins, m_Metrics.l64TotalBattlesPlayed,
+			m_Metrics.l64TotalPacketsIn, m_Metrics.l64TotalPacketsOut);
 	}
 }

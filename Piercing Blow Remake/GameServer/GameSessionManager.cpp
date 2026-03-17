@@ -15,8 +15,10 @@ GameSessionManager::GameSessionManager()
 	, m_pLobbyUserList(nullptr)
 	, m_pcsLobbyUser(nullptr)
 	, m_ui32ChannelCount(0)
-	, m_i32ActiveCount(0)
-	, m_i32SessionCheckIdx(0)
+	, m_lActiveCount(0)
+	, m_lPeakActive(0)
+	, m_lTotalConnections(0)
+	, m_lSessionCheckIdx(0)
 	, m_dwLastTimeoutCheck(0)
 {
 }
@@ -105,7 +107,17 @@ BOOL GameSessionManager::OnDestroy()
 
 ULONG_PTR GameSessionManager::ConnectSession_v(SOCKET Socket, struct sockaddr_in* pAddr)
 {
-	m_i32ActiveCount++;
+	LONG newVal = InterlockedIncrement(&m_lActiveCount);
+	InterlockedIncrement(&m_lTotalConnections);
+
+	// Peak tracking (lock-free compare-and-swap)
+	LONG peak = m_lPeakActive;
+	while (newVal > peak) {
+		LONG old = InterlockedCompareExchange(&m_lPeakActive, newVal, peak);
+		if (old == peak) break;
+		peak = old;
+	}
+
 	return i3NetworkSessionManager::ConnectSession_v(Socket, pAddr);
 }
 
@@ -309,9 +321,10 @@ void GameSessionManager::CheckTimeouts()
 	int sessionCount = g_pContextMain->m_i32SessionCount;
 	int checkCount = min(SESSION_CHECK_COUNT, sessionCount);
 
+	LONG baseIdx = m_lSessionCheckIdx;
 	for (int i = 0; i < checkCount; i++)
 	{
-		int idx = (m_i32SessionCheckIdx + i) % sessionCount;
+		int idx = (baseIdx + i) % sessionCount;
 		GameSession* pSession = &m_pSessions[idx];
 
 		if (pSession->GetTask() != GAME_TASK_NONE && pSession->IsTimedOut())
@@ -321,11 +334,11 @@ void GameSessionManager::CheckTimeouts()
 
 			// Disconnect timed out session
 			pSession->OnDisconnect(TRUE);
-			m_i32ActiveCount--;
+			InterlockedDecrement(&m_lActiveCount);
 		}
 	}
 
-	m_i32SessionCheckIdx = (m_i32SessionCheckIdx + checkCount) % sessionCount;
+	InterlockedExchange(&m_lSessionCheckIdx, (baseIdx + checkCount) % sessionCount);
 }
 
 GameSession* GameSessionManager::FindSessionByUID(int64_t i64UID)

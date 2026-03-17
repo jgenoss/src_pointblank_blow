@@ -160,21 +160,21 @@ public:
 	// Performance metrics
 	struct ServerMetrics
 	{
-		// Current state
-		int			i32CCU;					// Concurrent connected users
-		int			i32ActiveRooms;			// Active rooms across all channels
-		int			i32ActiveClans;			// Active clans
-		int			i32ActiveBattles;		// Rooms in BATTLE state
+		// Current state (thread-safe via Interlocked operations)
+		volatile LONG	lCCU;					// Concurrent connected users
+		volatile LONG	lActiveRooms;			// Active rooms across all channels
+		volatile LONG	lActiveClans;			// Active clans
+		volatile LONG	lActiveBattles;			// Rooms in BATTLE state
 
-		// Cumulative counters (since server start)
-		int64_t		i64TotalPacketsIn;		// Total packets received
-		int64_t		i64TotalPacketsOut;		// Total packets sent
-		int64_t		i64TotalLogins;			// Total login attempts
-		int64_t		i64TotalBattlesPlayed;	// Total battles completed
+		// Cumulative counters (since server start, thread-safe via Interlocked operations)
+		volatile LONG64	l64TotalPacketsIn;		// Total packets received
+		volatile LONG64	l64TotalPacketsOut;		// Total packets sent
+		volatile LONG64	l64TotalLogins;			// Total login attempts
+		volatile LONG64	l64TotalBattlesPlayed;	// Total battles completed
 
-		// Peak tracking
-		int			i32PeakCCU;				// Peak CCU since start
-		int			i32PeakRooms;			// Peak room count
+		// Peak tracking (thread-safe via Interlocked operations)
+		volatile LONG	lPeakCCU;				// Peak CCU since start
+		volatile LONG	lPeakRooms;				// Peak room count
 
 		// Timing
 		DWORD		dwStartTime;			// Server start time (GetTickCount)
@@ -182,10 +182,10 @@ public:
 
 		void Reset()
 		{
-			i32CCU = i32ActiveRooms = i32ActiveClans = i32ActiveBattles = 0;
-			i64TotalPacketsIn = i64TotalPacketsOut = 0;
-			i64TotalLogins = i64TotalBattlesPlayed = 0;
-			i32PeakCCU = i32PeakRooms = 0;
+			lCCU = lActiveRooms = lActiveClans = lActiveBattles = 0;
+			l64TotalPacketsIn = l64TotalPacketsOut = 0;
+			l64TotalLogins = l64TotalBattlesPlayed = 0;
+			lPeakCCU = lPeakRooms = 0;
 			dwStartTime = GetTickCount();
 			dwLastMetricsLog = dwStartTime;
 		}
@@ -194,10 +194,10 @@ public:
 	ServerMetrics	m_Metrics;
 
 	void			UpdateMetrics();		// Gather and optionally log metrics
-	void			IncrementPacketsIn()	{ m_Metrics.i64TotalPacketsIn++; }
-	void			IncrementPacketsOut()	{ m_Metrics.i64TotalPacketsOut++; }
-	void			IncrementLogins()		{ m_Metrics.i64TotalLogins++; }
-	void			IncrementBattles()		{ m_Metrics.i64TotalBattlesPlayed++; }
+	void			IncrementPacketsIn()	{ InterlockedIncrement64(&m_Metrics.l64TotalPacketsIn); }
+	void			IncrementPacketsOut()	{ InterlockedIncrement64(&m_Metrics.l64TotalPacketsOut); }
+	void			IncrementLogins()		{ InterlockedIncrement64(&m_Metrics.l64TotalLogins); }
+	void			IncrementBattles()		{ InterlockedIncrement64(&m_Metrics.l64TotalBattlesPlayed); }
 
 	// Medal/Quest system
 	MedalLoader*	m_pMedalLoader;

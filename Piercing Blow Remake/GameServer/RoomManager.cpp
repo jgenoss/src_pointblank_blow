@@ -21,7 +21,7 @@ RoomManager::RoomManager()
 	, m_pRoomInfoIdx1(nullptr)
 	, m_pRoomCount1(nullptr)
 	, m_pChangeRoomListTime(nullptr)
-	, m_i32UseRoomCount(0)
+	, m_lUseRoomCount(0)
 {
 }
 
@@ -111,7 +111,7 @@ void RoomManager::OnUpdate()
 			m_pChangeRoomListTime[ch] = dwNow;
 		}
 	}
-	m_i32UseRoomCount = totalRooms;
+	InterlockedExchange(&m_lUseRoomCount, totalRooms);
 }
 
 void RoomManager::OnDestroy()
@@ -500,5 +500,5 @@ void RoomManager::UpdateRoomInfo(int i32ChannelNum)
 	*pWriteCount = count;
 
 	// Atomic swap
-	m_InfoSide[i32ChannelNum] = writeSide;
+	InterlockedExchange((volatile LONG*)&m_InfoSide[i32ChannelNum], writeSide);
 }

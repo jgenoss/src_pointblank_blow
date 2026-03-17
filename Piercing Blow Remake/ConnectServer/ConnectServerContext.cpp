@@ -8,6 +8,7 @@
 
 // Global
 ConnectServerContext* g_pConnectServerContext = nullptr;
+ConnectServerStatistics* g_pConnectStats = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 // ConnectServerContext
@@ -44,6 +45,10 @@ BOOL ConnectServerContext::OnCreate(UINT8 SocketCount, UINT32* pAddress, UINT16*
 
 	g_pConnectServerContext = this;
 
+	m_Stats.Reset();
+	m_Statistics.Reset();
+	g_pConnectStats = &m_Statistics;
+
 	printf("[ConnectServerContext] Created. Listening for clients.\n");
 	return TRUE;
 }
@@ -75,6 +80,33 @@ void ConnectServerContext::OnUpdate(INT32 Command)
 	// Actualizar registry de GameServers (verificar heartbeats, remover muertos)
 	if (m_pRegistry)
 		m_pRegistry->Update();
+
+	LogStatsPeriodic();
+
+	// Log I/O statistics periodically
+	m_Statistics.LogStatistics();
+}
+
+void ConnectServerContext::LogStatsPeriodic()
+{
+	DWORD dwNow = GetTickCount();
+	if (dwNow - m_Stats.dwLastStatsLog < 60000)
+		return;
+	m_Stats.dwLastStatsLog = dwNow;
+
+	DWORD uptimeSec = (dwNow - m_Stats.dwStartTime) / 1000;
+	int hours = uptimeSec / 3600;
+	int mins = (uptimeSec % 3600) / 60;
+
+	int activeConns = m_pConnectSessionManager ? m_pConnectSessionManager->GetActiveCount() : 0;
+	int peakConns = m_pConnectSessionManager ? m_pConnectSessionManager->GetPeakActive() : 0;
+	int onlineServers = m_pRegistry ? m_pRegistry->GetOnlineServerCount() : 0;
+
+	printf("[ConnectServer Stats] Uptime=%dh%dm | Active=%d (peak=%d) | Servers=%d | "
+		   "Auths=%ld (ok=%ld fail=%ld) | Selects=%ld\n",
+		hours, mins, activeConns, peakConns, onlineServers,
+		m_Stats.lTotalAuths, m_Stats.lSuccessfulAuths, m_Stats.lFailedAuths,
+		m_Stats.lServerSelections);
 }
 
 BOOL ConnectServerContext::OnDestroy()
@@ -92,9 +124,46 @@ BOOL ConnectServerContext::OnDestroy()
 		m_pRegistry = nullptr;
 	}
 
+	g_pConnectStats = nullptr;
 	g_pConnectServerContext = nullptr;
 
 	return i3NetworkServerContext::OnDestroy();
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// ConnectServerStatistics
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+void ConnectServerStatistics::LogStatistics()
+{
+	DWORD dwNow = GetTickCount();
+	if (dwNow - dwLastLogTime < 60000)
+		return;
+	dwLastLogTime = dwNow;
+
+	DWORD uptimeSec = (dwNow - dwStartTime) / 1000;
+	int hours = uptimeSec / 3600;
+	int mins = (uptimeSec % 3600) / 60;
+	int secs = uptimeSec % 60;
+
+	LONG64 pktsIn = l64TotalPacketsIn;
+	LONG64 pktsOut = l64TotalPacketsOut;
+	LONG64 bytesIn = l64TotalBytesIn;
+	LONG64 bytesOut = l64TotalBytesOut;
+
+	// Convert bytes to KB for readability
+	double fKBIn = (double)bytesIn / 1024.0;
+	double fKBOut = (double)bytesOut / 1024.0;
+
+	// Auth throughput: total auths / uptime minutes
+	double fAuthPerMin = (uptimeSec > 0) ? ((double)lActiveAuths * 60.0 / (double)uptimeSec) : 0.0;
+
+	printf("[ConnectServer I/O] Uptime=%dh%dm%ds | PktsIn=%lld PktsOut=%lld | "
+		   "BytesIn=%.1fKB BytesOut=%.1fKB | ActiveAuths=%ld (peak=%ld)\n",
+		hours, mins, secs,
+		pktsIn, pktsOut,
+		fKBIn, fKBOut,
+		lActiveAuths, lPeakActiveAuths);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////

@@ -61,17 +61,21 @@ bool DataServerContext::InitializeDBModules(const DBConfig& config, int i32PoolS
 		return false;
 	}
 
-	// Crear TaskProcessor
-	m_pTaskProcessor = new TaskProcessor(this);
-
-	// Crear modulos de DB
+	// Crear modulos de DB (must be created before TaskProcessor since workers use them)
 	m_pModuleAuth = new ModuleDBAuth(m_pDBPool);
 	m_pModuleUserLoad = new ModuleDBUserLoad(m_pDBPool);
 	m_pModuleUserSave = new ModuleDBUserSave(m_pDBPool);
 	m_pModuleGameData = new ModuleDBGameData(m_pDBPool);
 	m_pModuleSocial = new ModuleDBSocial(m_pDBPool);
 
-	printf("[DataServerContext] DB modules initialized (5 modules)\n");
+	// Crear TaskProcessor with async worker threads (one worker per DB connection)
+	m_pTaskProcessor = new TaskProcessor(this);
+	if (!m_pTaskProcessor->Initialize(i32PoolSize))
+	{
+		printf("[DataServerContext] WARNING: TaskProcessor async workers failed, falling back to sync\n");
+	}
+
+	printf("[DataServerContext] DB modules initialized (5 modules, %d async workers)\n", i32PoolSize);
 	return true;
 }
 

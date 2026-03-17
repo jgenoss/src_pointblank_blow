@@ -49,7 +49,9 @@ public:
 	void				BroadcastAnnounce(const char* pszMessage, uint16_t ui16MsgLen);
 
 	// Stats
-	int					GetActiveCount() const		{ return m_i32ActiveCount; }
+	int					GetActiveCount() const		{ return (int)m_lActiveCount; }
+	int					GetPeakActive() const		{ return (int)m_lPeakActive; }
+	int					GetTotalConnections() const	{ return (int)m_lTotalConnections; }
 
 private:
 	void				CheckTimeouts();
@@ -71,8 +73,10 @@ private:
 	uint32_t			m_ui32ChannelCount;
 
 	// Stats
-	int					m_i32ActiveCount;
-	int					m_i32SessionCheckIdx;
+	volatile LONG		m_lActiveCount;
+	volatile LONG		m_lPeakActive;
+	volatile LONG		m_lTotalConnections;
+	volatile LONG		m_lSessionCheckIdx;
 	DWORD				m_dwLastTimeoutCheck;
 };
 
