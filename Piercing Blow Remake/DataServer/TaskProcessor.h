@@ -78,6 +78,9 @@ public:
 private:
 	static DWORD WINAPI WorkerThreadProc(LPVOID lpParam);
 	void		ProcessTask(TaskEntry* pTask, int i32WorkerIdx);
+	void		ProcessGameDataTask(TaskEntry* pTask, int i32WorkerIdx, TaskResponse* pResponse);
+	void		ProcessSocialTask(TaskEntry* pTask, int i32WorkerIdx, TaskResponse* pResponse);
+	void		LogStatistics();
 
 	// Ring buffer queues with CRITICAL_SECTION
 	TaskEntry			m_TaskQueue[TASK_QUEUE_SIZE];
@@ -106,6 +109,8 @@ private:
 	volatile LONG		m_lShutdown;
 
 	DataServerContext*	m_pContext;
+	LARGE_INTEGER		m_liFrequency;		// QPC frequency
+	DWORD				m_dwLastStatTime;	// For periodic stats logging
 };
 
 #endif // __TASKPROCESSOR_H__

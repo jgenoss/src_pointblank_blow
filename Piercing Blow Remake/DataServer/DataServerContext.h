@@ -54,6 +54,7 @@ public:
 	ModuleDBUserSave*	GetModuleDBUserSave()			{ return m_pModuleUserSave; }
 	ModuleDBGameData*	GetModuleDBGameData()			{ return m_pModuleGameData; }
 	ModuleDBSocial*		GetModuleDBSocial()				{ return m_pModuleSocial; }
+	DataSessionManager*	GetDataSessionManager()			{ return m_pDataSessionManager; }
 
 	// Inicializar modulos de DB (llamado despues de OnCreate)
 	bool				InitializeDBModules(const DBConfig& config, int i32PoolSize);
